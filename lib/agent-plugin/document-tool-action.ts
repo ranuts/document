@@ -1,3 +1,4 @@
+import { textToHtml, wordContent } from './word-content';
 import { getPdfDocument } from './pdf-tools';
 import { readWordBodyText } from './word-text-read';
 import { buildSeries, type SeriesInput } from './fill-series';
@@ -19,9 +20,11 @@ export interface DocumentToolTarget {
   readonly selectedText: string;
   readonly reviewText?: string;
   getReview?(plan: DocumentToolPlan): ChangeReview | undefined;
+  locate?(plan: DocumentToolPlan): void;
   isCurrent(write?: boolean): boolean;
   assertSupported?(plan: DocumentToolPlan): void;
   verify?(plan: DocumentToolPlan): Promise<boolean | undefined>;
+  captureAfterOperation?(plan: DocumentToolPlan): DocumentToolTarget;
 }
 interface History {
   Index: number;
@@ -64,7 +67,7 @@ interface ScopeApi extends EditorApi {
   getCurrentPage?(): number;
   asc_getActiveWorksheetIndex?(): number;
   asc_getWorksheetId?(index: number): string;
-  wb?: { getWorksheet(): { model: SheetModel } };
+  wb?: { getWorksheet(): { model: SheetModel }; scrollToCell?(row: number, column: number): void };
 }
 const interactions = new WeakMap<Document, { revision: number }>();
 function interaction(doc: Document): { revision: number } {
@@ -203,7 +206,9 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
           beforeText!,
           afterText!,
           selectedText,
-          String(plan.input.text),
+          plan.tool === 'insert_text'
+            ? wordContent(String(plan.input.text), plan.input.format as 'plain' | 'markdown' | undefined).text
+            : String(plan.input.text),
           reviewMode ? { before: beforeReview!, after: captureReviewCharacters(logic) ?? [] } : undefined,
         )
       )
@@ -239,6 +244,20 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
             ? `PDF · ${context.page ?? ''}`
             : 'DOCX',
     selectedText,
+    ...(context.kind === 'cell' && typeof api.wb?.scrollToCell === 'function'
+      ? {
+          locate: (plan: DocumentToolPlan) => {
+            if (!isCurrent(false)) throw new Error('agentPlanExpired');
+            const destination =
+              plan.tool === 'fill_series'
+                ? buildSeries(plan.input as unknown as SeriesInput).range
+                : String(plan.input.target ?? plan.input.cell ?? plan.input.range ?? context.range);
+            const bounds = parseOfficeRange(destination);
+            // Native viewport movement does not select or modify the range.
+            api.wb!.scrollToCell!(bounds.r1, bounds.c1);
+          },
+        }
+      : {}),
     reviewText: beforeText,
     getReview: (plan: DocumentToolPlan): ChangeReview | undefined => {
       if (!isCurrent(false)) return undefined;
@@ -256,7 +275,10 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
         return {
           kind: 'text',
           before: additive ? '' : selectedText,
-          after: plan.input.text,
+          after:
+            plan.tool === 'insert_text'
+              ? wordContent(plan.input.text, plan.input.format as 'plain' | 'markdown' | undefined).text
+              : plan.input.text,
           ...(additive && selectedText ? { anchor: selectedText } : {}),
         };
       }
@@ -270,11 +292,28 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
         beforeText === undefined
       )
         throw new Error('Document change could not be verified');
+      if (
+        reviewMode &&
+        plan.tool === 'insert_text' &&
+        plan.input.format === 'markdown' &&
+        wordContent(String(plan.input.text), 'markdown').html !== textToHtml(String(plan.input.text))
+      )
+        throw new Error('agentWordFormattingReviewUnsupported');
       if (reviewMode && ['insert_text', 'replace_selection'].includes(plan.tool))
         assertReviewSelection(beforeReview, selectedText);
     },
     isCurrent,
     verify,
+    captureAfterOperation: (plan: DocumentToolPlan) => {
+      if (
+        !sameDocument() ||
+        state.revision !== revision ||
+        (plan.tool !== 'set_review_mode' && currentReviewMode() !== reviewMode) ||
+        (!plan.readOnly && (getReadonlyMode() || api.isViewMode))
+      )
+        throw new Error('agentPlanExpired');
+      return captureDocumentToolTarget();
+    },
   });
 }
 
@@ -284,8 +323,20 @@ export class DocumentToolAction {
   readonly review?: ChangeReview;
   private consumed = false;
   private output: unknown;
+  private continuation?: DocumentToolTarget;
+  get continuationTarget(): DocumentToolTarget | undefined {
+    return this.continuation;
+  }
   get result(): unknown {
     return this.output;
+  }
+  get locate(): (() => void) | undefined {
+    if (!this.target.locate) return undefined;
+    return () => {
+      const owner = this.consumed ? this.continuation : this.target;
+      if (!owner?.isCurrent(false)) throw new Error('This proposal has expired. Generate a new proposal.');
+      owner.locate?.(this.plan);
+    };
   }
   constructor(
     readonly target: DocumentToolTarget,
@@ -333,13 +384,16 @@ export class DocumentToolAction {
     this.consumed = true;
     this.output = await agentTools[this.plan.tool].execute(this.plan.input, signal);
     const verified = await this.target.verify?.(this.plan);
+    signal?.throwIfAborted();
     if (verified === false)
       throw new Error('The change could not be verified. Check the document and use Undo if needed.');
     if (
       verified === true ||
       (this.output && typeof this.output === 'object' && 'verified' in this.output && this.output.verified === true)
-    )
+    ) {
+      this.continuation = this.target.captureAfterOperation?.(this.plan);
       return 'verified';
+    }
     return 'sent';
   }
 }

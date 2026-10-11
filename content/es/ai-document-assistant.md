@@ -7,7 +7,7 @@ Describe lo que necesitas: consultar contenido, trabajar con texto u organizar d
 
 ## Empezar
 
-Activa el asistente y elige un modelo local o conecta tu servicio de IA. Los archivos del modelo quedan en este navegador; al abrir otro documento puede ser necesario prepararlo de nuevo, aprovechando los archivos guardados.
+Activa el asistente y elige un modelo local o conecta tu servicio de IA. Una vez configurado, el asistente se abre en el chat. El modelo cargado sigue disponible al cambiar de archivo en la misma página. Después de recargar, puedes activar el modelo descargado desde el chat. Se reutilizan los archivos guardados; puede ser necesario descargar los que falten.
 
 El modelo predeterminado del navegador es Qwen3 4B. El uso estimado de memoria gráfica es de unos 3,43 GB; no corresponde al tamaño de descarga ni al uso total de memoria del dispositivo. Sigue siendo experimental. Puedes eliminar los modelos pequeños descargados anteriormente en la sección de modelos descargados.
 
@@ -19,7 +19,7 @@ Mientras el asistente trabaja, puedes redactar tu próxima solicitud. Envíala c
 
 - Excel y CSV: lee tablas, introduce datos, genera series, calcula totales u ordena.
 
-- PowerPoint: consulta texto de diapositivas, añade texto o crea, duplica y cambia diapositivas.
+- PowerPoint: pregunta por el texto, añade texto o agrega, duplica y cambia diapositivas. Una nueva diapositiva con título y contenido los coloca por separado. Una confirmación añade ambos y un solo Deshacer restaura la presentación anterior.
 
 - PDF: consulta, resume o traduce texto seleccionable de la página actual, o añade una nota a una página concreta.
 
@@ -46,5 +46,13 @@ Después de añadir notas, descarga el archivo como PDF para conservarlas. Segui
 ## Ten en cuenta
 
 La IA puede interpretar mal una petición u omitir detalles. Revisa cifras, fechas y nombres. Los modelos locales procesan texto en tu dispositivo; los servicios conectados reciben el texto solicitado. El reconocimiento de voz puede usar un servicio en línea. El dictado queda en el borrador y no se envía automáticamente.
+
+## Formato y alcance de lectura
+
+Los borradores de Word pueden conservar títulos, listas y énfasis. Las tablas con formato aún no son compatibles. Desactiva el control de cambios antes de insertar contenido con formato; el texto sin formato sigue disponible.
+
+Los borradores largos de diapositivas continúan en más páginas, con título y cuerpo separados. Acorta los títulos que no quepan. Una solicitud puede añadir hasta 20 páginas; Deshacer restaura la presentación anterior en un solo paso.
+
+El estado indica lo que se leyó: selección, rango de celdas, texto de diapositivas o página actual del PDF. «Contenido parcial» indica que faltó contenido por leer. Al revisar una tabla, la fórmula y su resultado se muestran por separado. Los cambios terminados conservan su ubicación y un recordatorio de Deshacer en un registro compacto.
 
 [Ayuda](/es/help)

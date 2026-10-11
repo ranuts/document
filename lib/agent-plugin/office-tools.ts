@@ -159,7 +159,7 @@ export function parseOfficeRanges(ranges: string): string[] {
   if (cells > 5000) fail('officeInvalidRange');
   return list;
 }
-export const getRangesTool: AgentTool<{ ranges: string }, { text: string }> = {
+export const getRangesTool: AgentTool<{ ranges: string }, { text: string; ranges: string[] }> = {
   name: 'get_ranges',
   description:
     'Excel only. Read all cells in up to 10 explicit comma-separated local regions, max 5000 cells total. Preserve each requested region. Never modifies cells or selection.',
@@ -182,7 +182,7 @@ export const getRangesTool: AgentTool<{ ranges: string }, { text: string }> = {
       results.push(result.text);
     }
     signal?.throwIfAborted();
-    return { text: results.join('\n\n') };
+    return { text: results.join('\n\n'), ranges: list };
   },
 };
 
@@ -352,6 +352,23 @@ export const slideActionTool: AgentTool<
     },
     required: ['action'],
     additionalProperties: false,
+    anyOf: [
+      {
+        type: 'object',
+        properties: { action: { type: 'string', enum: ['add', 'duplicate'] } },
+        required: ['action'],
+        additionalProperties: false,
+      },
+      {
+        type: 'object',
+        properties: {
+          action: { type: 'string', enum: ['navigate'] },
+          page: { type: 'integer', minimum: 1 },
+        },
+        required: ['action', 'page'],
+        additionalProperties: false,
+      },
+    ],
   },
   readOnlyHint: false,
   execute: async ({ action, page }) => {

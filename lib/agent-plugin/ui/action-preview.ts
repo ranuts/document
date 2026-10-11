@@ -14,11 +14,14 @@ export interface PreviewAction {
   plan: { tool: string; input: Readonly<Record<string, unknown>> };
   isCurrent(): boolean;
   cancel(): void;
+  locate?(): void;
   apply(signal?: AbortSignal): Promise<'sent' | 'verified'>;
   readonly review?: ChangeReview;
   readonly result?: unknown;
   revise?(text: string): PreviewAction;
 }
+
+export type ReviewOutcome = import('../review-outcome').ReviewOutcome<PreviewAction>;
 
 /** Transient, text-only preview. Proposed actions are never persisted/replayed. */
 export class ActionPreview {
@@ -29,12 +32,18 @@ export class ActionPreview {
   private readonly before = View('pre').class('agent-plan-before').build();
   private readonly afterLabel = Span().build();
   private readonly content = View('pre').class('agent-plan-content').build();
-  private readonly status = Span().class('agent-plan-status').attr('role', 'status').build();
+  private readonly status = Span()
+    .class('agent-plan-status')
+    .attr('role', 'status')
+    .attr('aria-atomic', 'true')
+    .build();
+  private readonly receiptLocate = View('r-button').attr('type', 'text').class('agent-plan-receipt-locate').build();
   private readonly applyButton = View('r-button').attr('type', 'primary').class('agent-plan-apply').build();
   private readonly copyButton = View('r-button').attr('type', 'text').class('agent-plan-copy').build();
   private readonly cancelButton = View('r-button').attr('type', 'text').class('agent-plan-cancel').build();
   private readonly editButton = View('r-button').attr('type', 'text').class('agent-plan-edit').build();
   private readonly refineButton = View('r-button').attr('type', 'text').class('agent-plan-refine').build();
+  private readonly locateButton = View('r-button').attr('type', 'text').class('agent-plan-locate').build();
   private readonly draft = document.createElement('textarea');
   private readonly saveButton = View('r-button').attr('type', 'primary').class('agent-plan-save').build();
   private readonly discardButton = View('r-button').attr('type', 'text').class('agent-plan-discard').build();
@@ -48,6 +57,7 @@ export class ActionPreview {
   private abort?: AbortController;
   private onApplied?: (outcome: 'sent' | 'verified', action: PreviewAction) => void;
   private onRefine?: (action: PreviewAction) => void;
+  private onSettled?: (outcome: ReviewOutcome) => void;
   private timer?: ReturnType<typeof setInterval>;
   private readonly updateLanguage = () => {
     this.labels();
@@ -63,6 +73,7 @@ export class ActionPreview {
     );
     this.record.className = 'agent-plan-record';
     this.record.hidden = true;
+    this.receiptLocate.hidden = true;
     this.el.hidden = true;
     this.el.append(
       this.title,
@@ -77,12 +88,37 @@ export class ActionPreview {
       this.editor,
       this.record,
       this.status,
+      this.receiptLocate,
       Div()
         .class('agent-plan-buttons agent-plan-primary-buttons')
-        .children([this.applyButton, this.editButton, this.refineButton, this.copyButton, this.cancelButton])
+        .children([
+          this.applyButton,
+          this.locateButton,
+          this.editButton,
+          this.refineButton,
+          this.copyButton,
+          this.cancelButton,
+        ])
         .build(),
     );
     this.applyButton.addEventListener('click', () => void this.apply());
+    this.locateButton.addEventListener('click', () => {
+      const action = this.pending();
+      if (!action || this.refining) return;
+      try {
+        action.locate?.();
+      } catch (error) {
+        this.status.textContent = displayError(error);
+      }
+    });
+    this.receiptLocate.addEventListener('click', () => {
+      if (this.el.dataset.state !== 'verified') return;
+      try {
+        this.action?.locate?.();
+      } catch (error) {
+        this.status.textContent = displayError(error);
+      }
+    });
     this.cancelButton.addEventListener('click', () => this.hide());
     this.copyButton.addEventListener('click', () => {
       void this.copy();
@@ -130,6 +166,21 @@ export class ActionPreview {
               ? 'agentReplaceContent'
               : 'agentPlanApply',
     );
+    if (this.action?.review?.kind === 'cells')
+      this.applyButton.textContent = t('agentWriteCells', { count: this.action.review.total });
+    else if (this.action?.plan.tool === 'slide_action')
+      this.applyButton.textContent = t(
+        this.action.plan.input.action === 'add'
+          ? 'agentReviewAddSlide'
+          : this.action.plan.input.action === 'duplicate'
+            ? 'agentReviewDuplicateSlide'
+            : 'agentLocateTarget',
+      );
+    else if (this.action?.plan.tool === 'create_slide') this.applyButton.textContent = t('agentCreateSlides');
+    else if (this.action?.plan.tool === 'add_slide_text') this.applyButton.textContent = t('agentAddSlideText');
+    else if (this.action?.plan.tool === 'sort_range') this.applyButton.textContent = t('agentSortRange');
+    else if (this.action?.plan.tool === 'add_comment') this.applyButton.textContent = t('agentAddComment');
+    this.locateButton.textContent = this.receiptLocate.textContent = t('agentLocateTarget');
     this.cancelButton.textContent = t(this.el.dataset.state === 'applying' ? 'agentStop' : 'agentPlanCancel');
     this.copyButton.textContent = t('agentCopy');
     this.editButton.textContent = t('agentEditProposal');
@@ -145,7 +196,9 @@ export class ActionPreview {
         this.status.textContent =
           action.plan.tool === 'clear_document' && action.target.reviewText !== undefined
             ? t('agentClearImpact').replace('{count}', String(Array.from(action.target.reviewText).length))
-            : t('agentPlanReady');
+            : action.plan.tool === 'create_slide'
+              ? t('agentSlideFlowHint')
+              : t('agentPlanReady');
       }
       const context = action.target.context;
       if (action.plan.tool === 'clear_document') {
@@ -171,6 +224,10 @@ export class ActionPreview {
         return;
       }
       if (context?.kind === 'slide') {
+        if (action.plan.tool === 'create_slide') {
+          this.target.textContent = t('agentCreateSlides');
+          return;
+        }
         const page =
           context.page === undefined ? t('agentCurrentDocument') : t('agentSlideContext', { page: context.page });
         this.target.textContent = [
@@ -200,6 +257,7 @@ export class ActionPreview {
     action: PreviewAction,
     onApplied?: (outcome: 'sent' | 'verified', action: PreviewAction) => void,
     onRefine?: (action: PreviewAction) => void,
+    onSettled?: (outcome: ReviewOutcome) => void,
   ): void {
     this.hide();
     this.action = action;
@@ -207,7 +265,9 @@ export class ActionPreview {
     this.abort = new AbortController();
     this.onApplied = onApplied;
     this.onRefine = onRefine;
+    this.onSettled = onSettled;
     this.refineButton.hidden = !onRefine;
+    this.locateButton.hidden = !action.locate;
     this.settled = false;
     this.refining = false;
     for (const button of [this.editButton, this.refineButton, this.saveButton]) button.removeAttribute('disabled');
@@ -220,31 +280,39 @@ export class ActionPreview {
     this.draft.disabled = false;
     this.editor.querySelector<HTMLElement>('.agent-plan-buttons')!.hidden = false;
     this.record.hidden = true;
+    this.receiptLocate.hidden = true;
     this.record.open = false;
     this.record.replaceChildren();
     this.content.hidden = this.afterLabel.hidden = false;
     this.copyButton.hidden = action.plan.tool === 'clear_document';
     this.el.hidden = false;
-    const original = action.plan.tool === 'clear_document' ? action.target.reviewText : action.target.selectedText;
+    const original =
+      action.plan.tool === 'create_slide'
+        ? undefined
+        : action.plan.tool === 'clear_document'
+          ? action.target.reviewText
+          : action.target.selectedText;
     this.before.textContent = original?.slice(0, 8000) ?? '';
     this.before.hidden = this.beforeLabel.hidden = !original;
     this.before.parentElement!.hidden = !original;
     this.content.textContent = String(
-      action.plan.tool === 'slide_action'
-        ? action.plan.input.action === 'add'
-          ? t('agentReviewAddSlide')
-          : action.plan.input.action === 'duplicate'
-            ? t('agentReviewDuplicateSlide')
-            : t('agentSlideContext', { page: String(action.plan.input.page ?? '') })
-        : action.plan.tool === 'clear_document'
-          ? t('agentClearDocument')
-          : action.plan.tool === 'fill_series'
-            ? buildSeries(action.plan.input as unknown as SeriesInput)
-                .values.map((row) => row.join('\t'))
-                .join('\n')
-            : action.plan.tool === 'set_cell'
-              ? action.plan.input.value
-              : (action.plan.input.text ?? JSON.stringify(action.plan.input)),
+      action.plan.tool === 'create_slide'
+        ? `${t('agentSlideTitleLabel')}: ${action.plan.input.title}\n\n${t('agentSlideBodyLabel')}:\n${action.plan.input.body}`
+        : action.plan.tool === 'slide_action'
+          ? action.plan.input.action === 'add'
+            ? t('agentReviewAddSlide')
+            : action.plan.input.action === 'duplicate'
+              ? t('agentReviewDuplicateSlide')
+              : t('agentSlideContext', { page: String(action.plan.input.page ?? '') })
+          : action.plan.tool === 'clear_document'
+            ? t('agentClearDocument')
+            : action.plan.tool === 'fill_series'
+              ? buildSeries(action.plan.input as unknown as SeriesInput)
+                  .values.map((row) => row.join('\t'))
+                  .join('\n')
+              : action.plan.tool === 'set_cell'
+                ? action.plan.input.value
+                : (action.plan.input.text ?? JSON.stringify(action.plan.input)),
     );
     this.status.textContent =
       action.plan.tool === 'clear_document' && original !== undefined
@@ -284,6 +352,8 @@ export class ActionPreview {
   private renderComparison(review?: ChangeReview): void {
     this.comparison.replaceChildren();
     this.comparison.hidden = !review;
+    this.comparison.tabIndex = review ? 0 : -1;
+    this.comparison.setAttribute('aria-label', t('agentViewChanges'));
     if (!review) return;
     if (review.kind === 'cells') {
       const table = document.createElement('table');
@@ -305,13 +375,13 @@ export class ActionPreview {
         th.textContent = change.address;
         row.append(th);
         const before = row.insertCell();
-        before.textContent = change.before || t('agentEmptyCell');
+        before.textContent = `${t(change.formula ? 'agentCalculatedValue' : 'agentReviewValue')}: ${change.before || t('agentEmptyCell')}`;
         if (change.formula) {
           const formula = document.createElement('code');
           formula.textContent = `${t('agentReviewFormula')}: ${change.formula}`;
           before.append(document.createElement('br'), formula);
         }
-        row.insertCell().textContent = change.after || t('agentEmptyCell');
+        row.insertCell().textContent = `${t('agentReviewValue')}: ${change.after || t('agentEmptyCell')}`;
       }
       this.comparison.append(table);
       if (review.sampled) {
@@ -370,7 +440,10 @@ export class ActionPreview {
     }
     try {
       const replacement = this.action.revise(this.draft.value);
-      this.show(replacement, this.onApplied, this.onRefine);
+      // Editing continues the same review; it must not cancel its awaiting task.
+      const onSettled = this.onSettled;
+      this.onSettled = undefined;
+      this.show(replacement, this.onApplied, this.onRefine, onSettled);
       this.focusReview();
     } catch (error) {
       this.status.textContent = displayError(error);
@@ -387,6 +460,7 @@ export class ActionPreview {
     this.applyButton.setAttribute('disabled', '');
     this.status.textContent = t('agentPlanExpired');
     this.finish('expired');
+    this.settle({ status: 'expired', action: this.action });
   }
   /** A successful refinement replaces the prior inert record; it never revives permission. */
   supersede(): void {
@@ -404,6 +478,7 @@ export class ActionPreview {
     const restore = this.el.contains(document.activeElement);
     this.abort?.abort();
     this.action?.cancel();
+    if (this.action) this.settle({ status: 'cancelled', action: this.action });
     this.action = null;
     clearInterval(this.timer);
     this.el.hidden = true;
@@ -437,13 +512,20 @@ export class ActionPreview {
         this.onApplied?.(result, action);
         this.status.textContent = t(result === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
         this.finish(result);
+        this.settle({ status: result, action });
       }
     } catch (error) {
       if (this.action === action) {
         this.status.textContent = this.abort?.signal.aborted ? t('agentStopped') : displayError(error);
         this.finish('failed');
+        this.settle({ status: 'failed', action, error });
       }
     }
+  }
+  private settle(outcome: ReviewOutcome): void {
+    const callback = this.onSettled;
+    this.onSettled = undefined;
+    callback?.(outcome);
   }
   private finish(state: string): void {
     const restore = this.el.contains(document.activeElement);
@@ -456,6 +538,21 @@ export class ActionPreview {
     const summary = document.createElement('summary');
     summary.textContent = t('agentViewChanges');
     this.record.append(summary);
+    this.receiptLocate.hidden = state !== 'verified' || !this.action?.locate;
+    if (state === 'verified') {
+      const undo = document.createElement('p');
+      undo.className = 'agent-plan-undo';
+      undo.textContent = t('agentUndoInEditor');
+      this.record.append(undo);
+      if (this.action?.plan.tool === 'create_slide') {
+        const result = this.action.result as { added?: number; page?: number } | undefined;
+        if (result?.added) this.status.textContent = t('agentSlidesAdded', { count: result.added });
+        if (result?.page)
+          this.target.textContent = t('agentSlideContext', {
+            page: result.added && result.added > 1 ? `${result.page}–${result.page + result.added - 1}` : result.page,
+          });
+      }
+    }
     if (this.comparison.childNodes.length) {
       const comparison = this.comparison.cloneNode(true) as HTMLElement;
       comparison.hidden = false;

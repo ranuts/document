@@ -460,3 +460,271 @@ shows that schema-valid operation selection is not sufficient evidence that the
 chosen operation satisfies the requested task. Review prevented execution in
 this trial; it does not resolve the routing limitation or justify accepting a
 different operation in place of an unavailable capability.
+
+## Reviewed tool-result continuation
+
+The existing bounded tool loop now waits for the actual inline review outcome.
+Native service calls and schema-constrained local calls receive matched tool-use
+and tool-result messages. Only verified edits continue; cancellation, expiration,
+failure and unverified dispatch stop the remaining steps. Directly editing the
+suggestion returns the edited arguments and native result. User navigation and
+editor/session changes still invalidate the captured target. A verified native
+operation refreshes its own continuation target without treating its history
+change as unrelated user activity.
+
+The task adapter lives outside the panel and reuses the existing runtime limits,
+argument validator and editor adapters. Waiting for review has a distinct polite
+status and releases the message region's busy flag; Stop and an editable unsent
+next draft remain available. No new framework, theme or confirmation surface was
+added. Stored history cannot replay an unexecuted proposal.
+
+A real 4B presentation probe exposed a shared schema mismatch: the advertised
+slide-action parameters allowed a page number for add/duplicate, while the host
+rejected those combinations. A new regression first failed on that mismatch.
+The shared tool now expresses the conditional parameters using standard JSON
+Schema, retaining host validation. Native and local providers see the same rule.
+
+Current whole-unit verification passed 168 files / 4,990 cases. Strict lint and
+TypeScript passed after the schema correction; focused task/panel tests also
+passed after adding the explicit PDF capability guidance. Controlled browser
+coverage includes reviewed, result-dependent slide steps, cancellation of the
+second step, all eight imported-format assistant cases with the public legacy
+corpus, native writes/Undo, PDF notes and composer focus. An initial parallel DOC
+run reported a post-write readback mismatch; isolated DOC and two subsequent
+complete serial runs passed. Its cause was not established, so those passes do
+not establish concurrency reliability.
+
+### Actual 4B outcomes and remaining acceptance gaps
+
+The synthetic source and requests contained no private data. Development reloads
+and the cancelled fresh-origin download are excluded from acceptance results.
+With the corrected slide-action schema, the actual cached Qwen3 4B model:
+
+- Proposed adding a slide and waited for confirmation. After verified addition,
+  continued the same request with a reviewed text insertion on page 2.
+- Exported PPTX had two slides. Slide 2 contained `项目预算，预算 120。` in one
+  added text shape. Two native Undo operations restored one slide. The loop and
+  supplied text were verified, but separate title/body layout was **not** fulfilled;
+  the model's full-completion sentence does not certify that requirement.
+- On the synthetic PDF generated from `Project budget: 120. Due date:
+2026-11-01.`, `把当前 PDF 第 1 页的预算改为 200。` still proposed a page note
+  instead of rejecting the unavailable body edit. It repeated that substitution
+  after explicit capability-boundary guidance. **Both trials failed acceptance.**
+  Both proposals were cancelled. The final export had no text annotations and
+  its decoded 253-byte page-content stream matched the original. Whole-file
+  bytes differed, so byte-identical restoration is not claimed.
+
+Prompt guidance and schema-valid arguments do not prove semantic task fulfillment.
+The architecture repair enables genuine result-dependent continuation and keeps
+review/cancellation protections, but it does not qualify this model for arbitrary
+compound layout or unsupported-operation decisions. The PDF substitution and
+presentation layout gap remain open; no phrase matcher or second small-model
+judge is presented as a general solution.
+
+Final current-code production browser run: **26/26 passed**, serial with the
+explicit public legacy corpus; no skipped legacy cases were counted. The final
+build, focused lint, TypeScript, formatting, diff and added-content privacy checks
+passed. These controlled-response passes do not close the actual-model semantic
+acceptance gaps recorded above.
+
+### Usability and capability follow-up
+
+Previously configured assistants reopen in chat. A downloaded model can be enabled
+there without returning to settings; service reconnection uses the same inline
+entry. Preparation preserves drafts and does not send them. The disabled send
+control references the visible readiness status. Speech language selection opens
+the existing seven-language list directly, with keyboard and Escape support.
+Service settings have no extra disclosure around the already selected form, and
+download management and advanced settings share one disclosure style.
+
+Review buttons name the actual effect, including cell counts. Spreadsheet target
+location scrolls the editor viewport without changing the selection, data or undo
+history. Empty selection previews remain hidden. Terminal records remain compact.
+
+PDF task handling classifies the requested effect independently of available
+tools, then restricts the registry. Body editing is reported as unsupported, and
+reads cannot obtain annotation permission. This is a conservative model-based
+boundary, not proof of universal semantic accuracy. In the actual Qwen3 4B trial,
+the earlier budget-change request was rejected without a note, while the factual
+budget/date question correctly returned 120 and November 1, 2026.
+
+The presentation registry now includes an Office API operation that creates one
+new slide with separate title and body areas. It preserves existing slides,
+checks native text, uses the presentation text theme color, and groups the
+change into one Undo. Native integration found and repaired an initial empty
+paragraph and inherited decorative text color; screenshots were inspected in
+addition to text readback. The controlled editor test verifies review before
+writing, separate objects, preservation of earlier slides and one-step Undo.
+
+Actual Qwen3 4B selected this operation for a title/body request, rendered both
+areas correctly and restored the original presentation with one native Undo.
+It then attempted to repeat the completed operation. The runtime refused it;
+this model therefore still does not qualify for general autonomous production
+use. Guard stops carry a typed reason. Product feedback reports the number of
+verified changes and why later steps stopped, rather than claiming total failure
+or total completion in both schema and native chat paths. Controlled-response
+repeat tests verify that no second write or second review occurs, and restored
+history keeps the same explanation. These remain distinct from model-quality
+tests. Native PDF requests now pass through the same capability check before
+receiving tools; ordinary conversation remains available and reading cannot
+turn into a note. Provider failure after verified changes preserves the actual
+change count and asks for only the unfinished work.
+
+The earlier serial supported-format run passed 31 cases with the explicit public
+legacy corpus. Whole-unit verification after the separate-slide implementation
+passed 169 files / 5,016 cases. Subsequent focused guard and product tests are
+recorded separately; no microphone-quality or seven-language interpretation
+acceptance is implied. Seven localized product guides explain chat reopening,
+cached-model activation and the separate title/body presentation operation.
+
+Latest verification after the guard-stop repair: 169 unit files / 5,016 cases
+passed; all four production editor task-loop cases passed, including refusal
+after one verified slide creation and native one-step Undo. TypeScript, focused
+strict lint, changed-file formatting and diff checks passed. Added and untracked
+text contained no matches for the checked personal-path, private-repository or
+credential patterns. These checks do not certify arbitrary model interpretation,
+long-content slide layout or microphone recognition quality.
+
+### Native transport and repair-scope audit
+
+The native controller and schema task path now share capability preparation and
+verified-change feedback. The editor-specific gate stays in the document task
+module; the generic controller receives a host callback and does not import PDF
+or presentation rules. Host guard metadata is validated when restoring history
+and is omitted by provider request converters.
+
+Regression sensitivity was checked by temporarily bypassing the PDF preflight:
+the real product incorrectly proposed a note for a body-edit request and the new
+native PDF test failed on that exact behavior. Restoring the old generic guard
+message also made the native repeated-slide test fail after one verified write.
+Both temporary reversals were restored. A separate provider-failure test verifies
+that an already completed write is not lost or repeated and its safe partial
+status survives history restoration.
+
+| Approved interaction                   | Evidence                                                                                                                                                         |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Configured chat and inline preparation | Panel tests cover cached models, service reconnection, cancellation and preserved drafts; product entry crosses editors without preparing a model automatically. |
+| Actionable disabled send               | Panel readiness tests and the composer's accessible description retain editable drafts and explain preparation or permission.                                    |
+| Selection scope and frozen target      | Context and panel tests hide empty previews, preserve editor-specific scope and discard stale results.                                                           |
+| Review and verified receipts           | Action preview tests check specific verbs/counts and location without applying; native writes and one-step Undo are checked in editor suites.                    |
+| Failure recovery and partial work      | Chat tests restore requests without sending; schema/native guard cases refuse a repeated mutation; native continuation failure preserves the verified count.     |
+| Direct speech language choice          | Speech tests cover all supported choices, draft-only recognition and late callbacks; prior real-browser keyboard checks cover open, Escape and restored focus.   |
+| Consistent disclosures                 | Settings no longer nest the service form in another disclosure; cache and advanced controls share the same component/style.                                      |
+| Theme, width and accessibility         | Production screenshots cover 1280, 375 and 320 px, including dark theme and reduced motion; pending draft/history focus is exercised in four editors.            |
+| PDF and structured presentation        | Native/schema PDF boundaries and separate title/body slide tests are separate from the actual cached 4B trials documented above.                                 |
+
+The scope does not certify arbitrary model judgment, real speech recognition in
+all languages, or long-content slide fitting. The observed 4B repeated operation
+remains evidence that the browser model is experimental, even though the host
+refuses the second write.
+
+Final verification for this audit passed 169 unit files / 5,021 cases with two
+workers and no relaxed assertions or timeouts. The 36-case serial production
+browser run passed 35 cases; the legacy PPT case timed out while applying a
+crowded-slide proposal under overlapping checks. In a fresh isolated production
+build, that same legacy PPT case passed its rollback, selected-text edit and
+Undo assertions, alongside native repeated-slide and PDF preflight cases (three
+passes). The earlier high-concurrency unit run also hit existing model-reader
+and worker timing limits; the complete two-worker rerun passed them unchanged.
+Focused strict lint, formatting and privacy checks passed before this final
+record. This is application-contract evidence with controlled service responses;
+actual 4B interpretation evidence and its remaining limitations are above.
+
+After rebuilding the shared, agent-core and chat-ui packages, a fresh production
+run passed all 36 browser cases in one serial run with the public legacy corpus
+explicitly supplied; none were skipped. The complete 169-file / 5,021-case unit
+suite also passed again. This final build verifies translated partial-result
+messages rather than a stale shared-package translation key. The original
+failed/time-limited runs remain recorded above instead of being counted as passes.
+
+The final root `tsc --noEmit` check passed after package rebuilding. Changed-file
+strict lint, formatting, diff checks and the added/untracked-text privacy scan
+also passed. No private repository content or personal-path evidence was added
+to the tracked acceptance record.
+
+### Formatted writing, read scope and task acceptance
+
+Word artifacts now preserve headings, lists and emphasis through an explicit
+format option. Plain insertion remains literal. The serializer escapes HTML,
+images and URLs; formatted tables are refused before native paste until their
+readback is supported. Structured formatting is refused under Track Changes;
+plain text retains its existing revision verification. Soft line breaks and
+repeated spaces reuse the literal whitespace-preserving adapter.
+
+Presentation content uses native text measurement rather than character-count
+estimates. Long body text continues at a readable size across up to 20 pages;
+titles that cannot fit are refused. Every appended title/body pair is checked
+against native text and shape bounds, with all pages owned by one Undo group.
+
+Read receipts share one host formatter across native and schema transports.
+Selection, Word body, explicit cell ranges, slide text and PDF page are named
+separately; clipped results say they are partial. Cell reviews distinguish
+formula source from calculated values. Completed records keep location and Undo
+guidance; success is never inferred from model prose.
+
+The independent final review found and repaired input-specific read handling:
+readonly navigation/sums no longer fail after succeeding, and completed reads
+continue compound requests instead of being mistaken for finished mutations.
+Regression tests failed on both original contracts before the repair.
+
+#### Task-based acceptance boundary
+
+| Task                                        | Host acceptance                                                            | Actual cached Qwen3 4B evidence                                                                           |
+| ------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Read and answer with factual grounding      | Explicit scope, unavailable/truncated handling, correct editor adapter     | Synthetic PDF budget/date returned 120 and November 1, 2026 in the earlier trial                          |
+| Add structured slides                       | Confirm, native title/body readback, preserved earlier pages, one Undo     | Earlier trial selected create_slide and rendered title/body, then attempted a repeated write              |
+| Reject unavailable PDF body edits           | Same effect boundary in native/schema paths; no annotation substitution    | Earlier corrected trial refused the budget body-edit request; prior failed trials remain recorded         |
+| Continue a compound task                    | Real feedback, input-specific reads continue; failed/cancelled writes stop | Earlier two-step slide trial continued, but did not fulfill title/body layout before create_slide existed |
+| Stop after a completed task                 | Repeated writes are refused, partial state retained, no automatic retry    | **Failed:** 4B attempted to repeat a completed slide operation                                            |
+| Long formatted writing                      | Native Word structure/whitespace and native slide pagination tests         | Not independently accepted with 4B in this round                                                          |
+| Seven-language speech and screen-reader use | Keyboard, focus and accessibility snapshots checked                        | Real microphone accuracy and actual screen-reader use remain unverified                                   |
+
+These are separate criteria, not a model-size certification. Controlled provider
+responses validate execution and review contracts; they do not qualify 4B task
+judgment. The browser model remains experimental. A provider should only be
+qualified after passing task selection, arguments, factual content, continuation,
+unsupported requests, cancellation and repetition on representative documents.
+
+Native long-slide continuation exposed a context failure after a verified write:
+unchanged arguments were repeated in the tool result, exceeding the conservative
+6,144-byte message budget. Results now reuse the original call arguments and
+include effective arguments only after a user revision. A focused regression
+failed before the repair and verifies both compact feedback and preservation of
+revised input. The real 60-line multilingual slide task now completes without an
+error receipt, preserves every code point across five added pages and restores
+the original deck with one Undo. The context budget was not relaxed.
+
+The new Word browser case exports DOCX, undoes the operation, then reopens the
+export. It checks heading/list meaning rather than unstable SDK style IDs, and
+retains repeated spaces and a soft line break. The initial export attempts used
+an unfocused save shortcut; explicit editor Save and the documented download
+fallback corrected that test harness. Temporarily disabling formatted insertion
+made the same native case fail; the fix was restored before final verification.
+The disclosure marker/text regression also failed before replacing block content
+inside summary with an inline element. No actual screen reader is claimed from
+these native, keyboard or accessibility-snapshot results.
+
+Root type checking initially reported a conflicting native text-content method
+declaration and an unchecked callable union in a test. The presentation adapter
+now explicitly owns its measured text-content surface, and the test narrows the
+turn-boundary callback before invocation. Generated isolated browser builds are
+excluded from TypeScript source discovery: repeated copies of bundled editor
+declarations had been included as source. The source checks remain enabled.
+
+The combined 39-case production run passed 38 cases and found one stale review
+label assertion: the formula test expected raw `9` after the review began
+explicitly distinguishing calculated values, formulas and values. The assertion
+now checks `Calculated value: 1`, `Formula: SUM(A1:A1)` and exact `Value: 9`; the
+native value, cancellation and separate Undo assertions remain unchanged. The
+corrected case passed against a fresh production build, including cancellation
+and separate native Undo checks. All 39 assistant cases therefore have passing
+production evidence; the initial 38/39 run is retained above.
+
+Final submission verification passed 171 unit files / 5,039 tests with coverage.
+Measured coverage was 88.15% statements, 83.69% branches, 90.54% functions and
+91.41% lines, exceeding the unchanged CI thresholds. Shared/core/chat-ui builds,
+root TypeScript, strict repository lint and formatting passed. All 39 production
+assistant cases have passing evidence as described above; no public legacy case
+was skipped. Added source, tests and documentation passed the privacy scan and
+diff hygiene checks. Actual 4B qualification and real speech/screen-reader gaps
+remain separate from these host checks.

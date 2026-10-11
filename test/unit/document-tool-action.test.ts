@@ -423,3 +423,103 @@ it('expires a PDF note when the document history changes before confirmation', (
   state.history.Index++;
   expect(target.isCurrent()).toBe(false);
 });
+it('captures continuation only after verified execution and rejects later user interaction', async () => {
+  const state = mount();
+  const action = new DocumentToolAction(
+    captureDocumentToolTarget(),
+    plan('add_slide_text', { text: 'Hello' }, 'slide'),
+  );
+  vi.spyOn(agentTools.add_slide_text, 'execute').mockImplementation(async () => {
+    state.history.Index = 0;
+    state.history.Points.push({ Items: [{}] });
+    return { verified: true };
+  });
+  expect(await action.apply()).toBe('verified');
+  expect(action.target.isCurrent()).toBe(false);
+  expect(action.continuationTarget?.isCurrent()).toBe(true);
+  state.frame.contentDocument!.dispatchEvent(new Event('pointerdown'));
+  expect(action.continuationTarget?.isCurrent()).toBe(false);
+});
+it('refuses continuation when the user interacts during native execution', async () => {
+  const state = mount();
+  const action = new DocumentToolAction(
+    captureDocumentToolTarget(),
+    plan('add_slide_text', { text: 'Hello' }, 'slide'),
+  );
+  vi.spyOn(agentTools.add_slide_text, 'execute').mockImplementation(async () => {
+    state.frame.contentDocument!.dispatchEvent(new Event('keydown'));
+    return { verified: true };
+  });
+  await expect(action.apply()).rejects.toThrow('agentPlanExpired');
+  expect(action.continuationTarget).toBeUndefined();
+});
+it('does not create a continuation for an unverified native result', async () => {
+  const scope = { ...target(), captureAfterOperation: vi.fn(() => target()) };
+  vi.spyOn(agentTools.add_slide_text, 'execute').mockResolvedValue({});
+  const action = new DocumentToolAction(scope, plan('add_slide_text', { text: 'Hello' }, 'slide'));
+  expect(await action.apply()).toBe('sent');
+  expect(scope.captureAfterOperation).not.toHaveBeenCalled();
+});
+
+it('reveals the explicit cell target without changing selection, values, or history', () => {
+  const state = mount();
+  const scrollToCell = vi.fn();
+  const model = {
+    selectionRange: { ranges: [{ c1: 0, c2: 0, r1: 0, r2: 0 }], activeCell: { col: 0, row: 0 } },
+    getRange3: () => ({ getValue: () => '', getFormula: () => '' }),
+  };
+  Object.assign(state.api, {
+    asc_getActiveRangeStr: () => 'A1',
+    asc_getActiveWorksheetIndex: () => 0,
+    asc_getWorksheetName: () => 'Budget',
+    wb: { getWorksheet: () => ({ model }), scrollToCell },
+  });
+  const action = new DocumentToolAction(
+    captureDocumentToolTarget(),
+    plan('set_cell', { cell: 'B20', value: '120' }, 'cell'),
+  );
+  expect(action.locate).toBeDefined();
+  action.locate!();
+  expect(scrollToCell).toHaveBeenCalledWith(19, 1);
+  expect(model.selectionRange.activeCell).toEqual({ col: 0, row: 0 });
+  expect(state.history.Index).toBe(-1);
+  expect(action.isCurrent()).toBe(true);
+  action.cancel();
+  expect(() => action.locate!()).toThrow(/expired/);
+  expect(scrollToCell).toHaveBeenCalledOnce();
+});
+it('blocks structured Word formatting while Track Changes is enabled before writing', async () => {
+  const { api } = mount();
+  const paragraph = { Content: [{ Type: 39, Content: [{ Type: 4 }], GetText: () => '\r\n', GetReviewType: () => 0 }] };
+  Object.assign(api, {
+    WordControl: {
+      m_oLogicDocument: {
+        GetDocPosType: () => 0,
+        GetSelectionState: () => [{ cursor: 0 }],
+        GetAllParagraphs: () => [paragraph],
+      },
+    },
+    pluginMethod_GetSelectedText: () => '',
+    asc_IsTrackRevisions: () => true,
+  });
+  const action = new DocumentToolAction(
+    captureDocumentToolTarget(),
+    plan('insert_text', { text: '# Heading', format: 'markdown' }, 'word'),
+  );
+  const execute = vi.spyOn(agentTools.insert_text, 'execute').mockResolvedValue({ inserted: true });
+  await expect(action.apply()).rejects.toThrow('agentWordFormattingReviewUnsupported');
+  expect(execute).not.toHaveBeenCalled();
+});
+
+it('refreshes the frozen target after verified navigation in a read-only editor', async () => {
+  const state = mount();
+  Object.assign(state.api, { isViewMode: true });
+  vi.spyOn(agentTools.slide_action, 'execute').mockResolvedValue({ verified: true });
+  const action = new DocumentToolAction(
+    captureDocumentToolTarget(),
+    plan('slide_action', { action: 'navigate', page: 1 }, 'slide'),
+  );
+  await expect(action.apply()).resolves.toBe('verified');
+  expect(action.continuationTarget?.isCurrent(false)).toBe(true);
+  expect(action.continuationTarget?.isCurrent(true)).toBe(false);
+});

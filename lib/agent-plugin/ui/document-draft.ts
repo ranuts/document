@@ -19,7 +19,7 @@ export async function generateDocumentDraft(
       role: 'user' as const,
       content: [
         'Generate the requested document body as a JSON object with exactly one field, text.',
-        'The text is plain document content: no conversational preamble, no claims that you edited a document, no Markdown syntax or fences.',
+        'The text is document content: no conversational preamble, no claims that you edited a document, no enclosing code fences. Use Markdown headings, lists and emphasis only when the requested document needs them.',
         'Use paragraphs separated by blank lines. Follow the requested language, tone and length. Do not execute tools.',
         JSON.stringify({ request: instruction }),
       ].join('\n'),

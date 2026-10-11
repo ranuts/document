@@ -450,3 +450,16 @@ it('announces the actual active phase once and resets it after completion', () =
   view.setRunning(true);
   expect(view.el.querySelector('[role="status"]')?.textContent).toBe('生成中');
 });
+
+it('announces human review and releases aria-busy while keeping Stop and the next draft editable', () => {
+  const { view } = mount();
+  view.setLabels({ reviewing: 'Review before applying' });
+  view.setRunning(true);
+  view.setActivity('reviewing');
+  expect(view.el.querySelector('[role="status"]')?.textContent).toBe('Review before applying');
+  expect(view.el.querySelector('.cui-messages')?.getAttribute('aria-busy')).toBe('false');
+  expect(view.el.querySelector('.cui-send-stop')).not.toBeNull();
+  expect((view.el.querySelector('.cui-input') as HTMLTextAreaElement).disabled).toBe(false);
+  view.setActivity('responding');
+  expect(view.el.querySelector('.cui-messages')?.getAttribute('aria-busy')).toBe('true');
+});

@@ -396,15 +396,22 @@ it('validates model arguments before dispatch without coercion', async () => {
 });
 it('refuses repeated mutations even if model argument key order changes', async () => {
   const execute = vi.fn().mockResolvedValue({ done: true });
+  const events: AgentEvent[] = [];
   const { provider } = scripted([
     toolResponse('one', 'write', { a: 1, b: 2 }),
     toolResponse('two', 'write', { b: 2, a: 1 }),
   ]);
   const result = await runAgent(provider, 'write', {
     tools: { write: { name: 'write', description: 'write', readOnlyHint: false, inputSchema: {}, execute } },
+    onEvent: (event) => events.push(event),
   });
   expect(execute).toHaveBeenCalledTimes(1);
   expect(result.stoppedOnLimit).toBe(true);
+  expect(result.limitReason).toBe('repeated_call');
+  expect(events.filter((event) => event.type === 'tool_result')).toEqual([
+    expect.objectContaining({ isError: false, readOnlyHint: false }),
+    expect.objectContaining({ isError: true, limitReason: 'repeated_call', readOnlyHint: false }),
+  ]);
 });
 it('concludes at a pending review and pairs skipped calls without dispatching them', async () => {
   const execute = vi.fn().mockResolvedValue({ status: 'pending_review' });
@@ -432,6 +439,48 @@ it('concludes at a pending review and pairs skipped calls without dispatching th
     expect.arrayContaining([expect.objectContaining({ toolUseId: 'two', isError: true })]),
   );
 });
+it.each(['verified', 'cancelled', 'failed'] as const)(
+  'uses the actual reviewed %s result to decide whether the tool loop continues',
+  async (status) => {
+    const { provider } = scripted([toolResponse('write', 'write', {}), textResponse('continued from tool result')]);
+    const result = await runAgent(provider, 'write and continue', {
+      tools: {
+        write: {
+          name: 'write',
+          description: 'write',
+          inputSchema: {},
+          readOnlyHint: false,
+          concludesTurn: ({ content }: { content: string; isError: boolean }) =>
+            JSON.parse(content).status !== 'verified',
+          execute: async () => ({ status }),
+        },
+      },
+    });
+    expect(result.text).toBe(status === 'verified' ? 'continued from tool result' : '');
+    expect(JSON.stringify(result.messages)).toContain(status);
+  },
+);
+it('lets a host stop the task after a tool execution error', async () => {
+  const { provider } = scripted([toolResponse('write', 'write', {}), textResponse('must not continue')]);
+  const result = await runAgent(provider, 'write', {
+    tools: {
+      write: {
+        name: 'write',
+        description: 'write',
+        inputSchema: {},
+        readOnlyHint: false,
+        concludesTurn: ({ isError }: { content: string; isError: boolean }) => isError,
+        execute: async () => {
+          throw new Error('Native execution failed');
+        },
+      },
+    },
+  });
+  expect(result.text).toBe('');
+  expect(result.messages.at(-1)?.content).toEqual([
+    expect.objectContaining({ toolUseId: 'write', isError: true, content: 'Native execution failed' }),
+  ]);
+});
 it('caps total dispatches even when the model varies read arguments', async () => {
   const execute = vi.fn().mockResolvedValue({ found: true });
   let index = 0;
@@ -446,6 +495,7 @@ it('caps total dispatches even when the model varies read arguments', async () =
   });
   expect(execute).toHaveBeenCalledTimes(2);
   expect(result.stoppedOnLimit).toBe(true);
+  expect(result.limitReason).toBe('tool_budget');
   expect(JSON.stringify(result.messages.at(-1))).toContain('Tool call budget exceeded');
 });
 it('does not dispatch names inherited from the registry prototype', async () => {
@@ -486,4 +536,24 @@ it.each([false, true])('does not present tool-call prose as completion (streamed
   expect(events.find((event) => event.type === 'tool_result')).toMatchObject({
     content: JSON.stringify({ status: 'pending_review', executed: false }),
   });
+});
+it('does not publish an inference result after the host scope changes', async () => {
+  let current = true;
+  const event = vi.fn();
+  const provider = scripted([textResponse('stale response')]).provider;
+  const chat = provider.chat.bind(provider);
+  provider.chat = async (...args) => {
+    const result = await chat(...args);
+    current = false;
+    return result;
+  };
+  await expect(
+    runAgent(provider, 'Read this document', {
+      assertCurrent: () => {
+        if (!current) throw new Error('expired scope');
+      },
+      onEvent: event,
+    }),
+  ).rejects.toThrow('expired scope');
+  expect(event).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'assistant' }));
 });

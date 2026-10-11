@@ -25,10 +25,16 @@ vi.mock('@ranuts/agent-core/llm/local', () => ({
     isReady = () => true;
   },
 }));
-vi.mock('../../lib/agent-plugin/tools', () => ({ agentTools: { insert_text: { execute: state.execute } } }));
-vi.mock('../../lib/agent-plugin/reviewed-action', async (original) => ({
-  ...(await original<typeof import('../../lib/agent-plugin/reviewed-action')>()),
-  captureActionTarget: state.capture,
+vi.mock('../../lib/agent-plugin/tools', async (original) => {
+  const actual = await original<typeof import('../../lib/agent-plugin/tools')>();
+  return {
+    ...actual,
+    agentTools: { ...actual.agentTools, insert_text: { ...actual.agentTools.insert_text, execute: state.execute } },
+  };
+});
+vi.mock('../../lib/agent-plugin/document-tool-action', async (original) => ({
+  ...(await original<typeof import('../../lib/agent-plugin/document-tool-action')>()),
+  captureDocumentToolTarget: state.capture,
 }));
 vi.mock('../../lib/agent-plugin/editor-bridge', () => ({
   getEditorApi: () => ({ isDocumentLoadComplete: true, isLoadFullApi: true, pluginMethod_GetSelectedText: () => '' }),
@@ -44,7 +50,7 @@ afterEach(() => {
   state.text = '';
   state.valid = true;
 });
-it('saves a completed direct write to its originating conversation after switching sessions', async () => {
+it('keeps cancellation feedback in the originating conversation after switching sessions', async () => {
   const panel = await mount();
   document.body.append(panel);
   let finish!: () => void;
@@ -73,8 +79,11 @@ it('saves a completed direct write to its originating conversation after switchi
   sessions.dispatchEvent(new Event('change'));
   const exported = await exportHistory(panel);
   const messages = exported.sessions.find((item: { id: string }) => item.id === original).messages;
-  expect(messages).toHaveLength(4);
-  expect(messages.at(-1).content[0].content).toContain('verified');
+  expect(messages).toHaveLength(3);
+  expect(messages.at(-1)).toMatchObject({ role: 'assistant', hostGuidance: 'status', content: t('agentStopped') });
+  expect(messages.some((message: { content: unknown }) => JSON.stringify(message.content).includes('verified'))).toBe(
+    false,
+  );
   expect(panel.textContent).toContain('秋日的天空明净。');
   expect(createHistoryStorage().load()).toHaveLength(1);
 });
@@ -96,7 +105,7 @@ async function exportHistory(panel: HTMLElement) {
 }
 async function mount() {
   state.capture.mockImplementation(() => ({
-    editor: 'word',
+    context: { kind: 'word' },
     label: 'DOCX',
     selectedText: '',
     isCurrent: () => state.valid,
@@ -119,7 +128,10 @@ it('writes the exact answer through the editor only after an explicit click and 
   button.click();
   button.click();
   await vi.waitFor(() => expect(button.textContent).toBe(t('agentReplyWritten')));
-  expect(state.execute).toHaveBeenCalledExactlyOnceWith({ text: '秋日的天空明净。' }, expect.any(AbortSignal));
+  expect(state.execute).toHaveBeenCalledExactlyOnceWith(
+    { text: '秋日的天空明净。', format: 'markdown' },
+    expect.any(AbortSignal),
+  );
   expect(state.capture).toHaveBeenCalledTimes(1);
 });
 it.each(['写到当前的文档上', '写入到文档中'])(
@@ -132,7 +144,10 @@ it.each(['写到当前的文档上', '写入到文档中'])(
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     await vi.waitFor(() =>
-      expect(state.execute).toHaveBeenCalledExactlyOnceWith({ text: '秋日的天空明净。' }, expect.any(AbortSignal)),
+      expect(state.execute).toHaveBeenCalledExactlyOnceWith(
+        { text: '秋日的天空明净。', format: 'markdown' },
+        expect.any(AbortSignal),
+      ),
     );
     expect(createHistoryStorage().load()).toHaveLength(1);
     await vi.waitFor(() => expect(panel.querySelector('.cui-activity')?.textContent).toContain(t('agentPlanVerified')));

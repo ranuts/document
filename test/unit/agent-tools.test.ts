@@ -122,6 +122,8 @@ describe('agent tools', () => {
     await expect(getPresentationTextTool.execute({})).resolves.toEqual({
       text: 'Slide 1:\nAlex 😀\tPayment\nNext',
       truncated: false,
+      slidesRead: 1,
+      totalSlides: 1,
     });
     expect(editSelectAll).not.toHaveBeenCalled();
   });
@@ -146,6 +148,8 @@ describe('agent tools', () => {
     await expect(getPresentationTextTool.execute({})).resolves.toEqual({
       text: 'Slide 1:\n第一行\nSecond line',
       truncated: false,
+      slidesRead: 1,
+      totalSlides: 1,
     });
   });
   it('reads presentation shape and group text without moving selection', async () => {
@@ -473,3 +477,24 @@ it.each([insertTextTool, replaceSelectionTool])(
     expect(completed).toBe(false);
   },
 );
+
+it('inserts explicitly formatted Word headings and lists without executing model HTML', async () => {
+  wordPaste.mockImplementation(async (api, html) => api.pluginMethod_PasteHtml(html));
+  await insertTextTool.execute({
+    text: '# Budget\n\n**Approved**\n\n- 120\n- November 1\n\n<script>alert(1)</script>',
+    format: 'markdown',
+  } as Parameters<typeof insertTextTool.execute>[0]);
+  const html = pasteHtml.mock.calls.at(-1)?.[0];
+  expect(html).toContain('<h1>Budget</h1>');
+  expect(html).toContain('<strong>Approved</strong>');
+  expect(html).toContain('<ul>');
+  expect(html).toContain('<li>120</li>');
+  expect(html).not.toContain('<script>');
+  expect(html).toContain('&lt;script&gt;');
+});
+
+it('keeps unformatted Markdown-looking literal text unchanged', async () => {
+  wordPaste.mockImplementation(async (api, html) => api.pluginMethod_PasteHtml(html));
+  await insertTextTool.execute({ text: '# literal\n- item' });
+  expect(pasteHtml.mock.calls.at(-1)?.[0]).toBe('# literal<br />- item');
+});

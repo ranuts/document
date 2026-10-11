@@ -86,6 +86,8 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       await page.waitForFunction(() => typeof window.__toggleAgentPanel === 'function');
       await page.evaluate(() => window.__toggleAgentPanel?.());
       await page.locator('.agent-enable-switch').click();
+      await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
+      await page.locator('.agent-panel-settings-toggle').click();
       await page.locator('.agent-panel-endpoint-connect').click();
       await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
       await page.locator('.agent-panel-settings-toggle').click();

@@ -45,6 +45,8 @@ export interface I18nMessages {
   agentWelcomeSlide: string;
 
   agentReviewAddSlide: string;
+  agentSlideTitleLabel: string;
+  agentSlideBodyLabel: string;
   agentReviewDuplicateSlide: string;
   agentSlideContext: string;
   agentSelectionContext: string;
@@ -110,6 +112,17 @@ export interface I18nMessages {
   agentExpand: string;
   agentSetupFailed: string;
   agentOffNote: string;
+  agentResumeModel: string;
+  agentReconnectService: string;
+  agentModelReleasing: string;
+  agentCacheBusy: string;
+  agentWriteCells: string;
+  agentLocateTarget: string;
+  agentAddSlideText: string;
+  agentSortRange: string;
+  agentAddComment: string;
+  agentUsingSelection: string;
+  agentPdfBodyUnsupported: string;
   agentPrepareRequired: string;
 
   // AI agent panel
@@ -238,6 +251,20 @@ export interface I18nMessages {
   agentCellImpact: string;
   agentReviewCell: string;
   agentEmptyCell: string;
+  agentWordFormatUnsupported: string;
+  agentWordFormattingReviewUnsupported: string;
+  agentCreateSlides: string;
+  agentReadScope: string;
+  agentDocumentBody: string;
+  agentReadSlideText: string;
+  agentReadPartial: string;
+  agentReviewValue: string;
+  agentCalculatedValue: string;
+  agentUndoInEditor: string;
+  agentSlideTitleTooLong: string;
+  agentSlideContentTooLong: string;
+  agentSlidesAdded: string;
+  agentSlideFlowHint: string;
   agentReviewFormula: string;
   agentReviewSample: string;
   agentRemoved: string;
@@ -311,6 +338,9 @@ export interface I18nMessages {
   agentModelQuota: string;
   agentStopped: string;
   agentMaxSteps: string;
+  agentTaskPartialFailed: string;
+  agentTaskRepeatStopped: string;
+  agentTaskLimitStopped: string;
   agentToolCallPrefix: string;
   agentToolErrorPrefix: string;
 

@@ -813,12 +813,10 @@ r-dropdown[role='listbox'] {
   list-style: none;
   cursor: pointer;
 }
-.agent-use-card summary::-webkit-details-marker,
-.agent-preferences summary::-webkit-details-marker {
+.agent-disclosure > summary::-webkit-details-marker {
   display: none;
 }
-.agent-use-card summary::after,
-.agent-preferences summary::after {
+.agent-disclosure > summary::after {
   content: '';
   width: 6px;
   height: 6px;
@@ -827,8 +825,7 @@ r-dropdown[role='listbox'] {
   border-bottom: 1.5px solid currentColor;
   transform: rotate(45deg);
 }
-.agent-use-card[open] > summary::after,
-.agent-preferences[open] > summary::after {
+.agent-disclosure[open] > summary::after {
   transform: rotate(225deg);
 }
 .agent-use-card .agent-panel-endpoint {
@@ -836,7 +833,7 @@ r-dropdown[role='listbox'] {
   border: 0;
   margin: 0;
 }
-.agent-preferences summary {
+.agent-disclosure > summary {
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -931,7 +928,7 @@ r-dropdown[role='listbox'] {
   font-size: 11px;
   color: var(--ran-color-text-secondary);
 }
-.agent-readiness:empty {
+.agent-readiness[hidden] {
   display: none;
 }
 .agent-panel .cui-footer {
@@ -1171,7 +1168,9 @@ r-dropdown[role='listbox'] {
   border-bottom: 1px solid var(--ran-color-border);
 }
 .agent-model-cache-row > span {
-  flex: 1 1 100%;
+  flex: 1 1 140px;
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: var(--ran-text-label-2);
 }
 .agent-cache-delete {
@@ -1270,38 +1269,39 @@ r-dropdown[role='listbox'] {
   border: 0;
   border-radius: 8px;
   background: transparent;
-  color: var(--ran-text-secondary, #666);
+  color: var(--ran-color-text-secondary);
   cursor: pointer;
 }
 .agent-speech-mic:hover,
 .agent-speech-mic[aria-pressed='true'] {
-  background: var(--ran-bg-secondary, #f3f3f3);
-  color: var(--ran-text-primary, #171717);
+  background: var(--ran-color-bg-container);
+  color: var(--ran-color-text);
 }
-.agent-speech-language,
 .agent-speech-cancel {
   min-height: 32px;
   padding: 4px 8px;
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: var(--ran-text-secondary, #666);
+  color: var(--ran-color-text-secondary);
   font-size: 12px;
   cursor: pointer;
 }
-.agent-speech-language:hover,
 .agent-speech-cancel:hover {
-  background: var(--ran-bg-secondary, #f3f3f3);
+  background: var(--ran-color-bg-container);
 }
-.agent-speech-language-picker {
-  position: absolute;
-  bottom: 44px;
-  left: 0;
-  width: min(180px, calc(100vw - 80px));
-  z-index: 4;
-}
-.agent-speech-language-picker r-select {
-  width: 100%;
+/* One compact select; its own ranui dropdown owns focus and keyboard behavior. */
+.agent-speech-language {
+  width: 108px;
+  --ran-select-background-color: transparent;
+  --ran-select-border: 1px solid transparent;
+  --ran-select-hover-border: 1px solid transparent;
+  --ran-select-height: 36px;
+  --ran-select-min-height: 36px;
+  --ran-select-font-size: var(--ran-text-label-2);
+  --ran-select-color: var(--ran-color-text-secondary);
+  --ran-select-item-hover-color: var(--ran-color-text);
+  --ran-select-search-focus-color: var(--ran-color-text);
 }
 .agent-speech-feedback {
   position: absolute;
@@ -1310,10 +1310,10 @@ r-dropdown[role='listbox'] {
   width: min(260px, calc(100vw - 80px));
   box-sizing: border-box;
   padding: 8px 12px;
-  border: 1px solid var(--ran-border, #ddd);
+  border: 1px solid var(--ran-color-border);
   border-radius: 8px;
-  background: var(--ran-bg-primary, #fff);
-  color: var(--ran-text-secondary, #666);
+  background: var(--ran-color-bg-elevated);
+  color: var(--ran-color-text-secondary);
   font-size: 12px;
   line-height: 1.6;
   z-index: 3;
@@ -1441,4 +1441,32 @@ r-dropdown[role='listbox'] {
 .agent-plan-preview :is(summary, textarea, r-button):focus-visible {
   outline: 2px solid var(--ran-focus-ring, #1677ff);
   outline-offset: 2px;
+}
+
+.agent-readiness {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--ran-space-2);
+  font-size: var(--ran-text-label-3);
+  line-height: 1.6;
+}
+.agent-prepare-action {
+  border: 0;
+  background: transparent;
+  color: var(--ran-color-text);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  min-height: 32px;
+  padding: 0;
+  cursor: pointer;
+}
+.agent-prepare-action[hidden] {
+  display: none;
+}
+.agent-custom-sources h3 {
+  font-size: var(--ran-text-label-2);
+  font-weight: 500;
+  margin: 0 0 var(--ran-space-3);
 }

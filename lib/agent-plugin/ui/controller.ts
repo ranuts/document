@@ -6,7 +6,15 @@
  * over this; all orchestration and state logic lives here so it can be unit
  * tested with a mock provider.
  */
-import { assistantPresentation, AssistantDisplayStream, toolLabel, displayError } from './presentation';
+import {
+  assistantPresentation,
+  AssistantDisplayStream,
+  toolLabel,
+  displayError,
+  isVerifiedDocumentChange,
+  documentTaskStopText,
+  documentTaskFailureText,
+} from './presentation';
 import { t } from '@ranuts/shared/i18n';
 import { runAgent } from '@ranuts/agent-core/runtime';
 import type { HistoryStorage } from './storage';
@@ -27,6 +35,8 @@ export interface AgentChatControllerOptions {
   tools?: Record<string, AgentTool>;
   /** Capture a fresh tool scope once at the start of each run. */
   getTools?: () => Record<string, AgentTool>;
+  /** Host capability preflight; a reply ends the turn before model/tool execution. */
+  prepareRun?: (request: string, signal: AbortSignal) => Promise<{ tools: Record<string, AgentTool>; reply?: string }>;
   maxIterations?: number;
   /** Called with each streamed assistant text delta (live-render the bubble). */
   onAgentDelta?: (delta: string) => void;
@@ -36,6 +46,7 @@ export interface AgentChatControllerOptions {
   storage?: HistoryStorage;
   onContextTrimmed?: () => void;
   getRequestContext?: () => string | undefined;
+  assertCurrent?: () => void;
 }
 
 export class AgentChatController {
@@ -81,6 +92,7 @@ export class AgentChatController {
     this.onTurn({ role: 'user', text });
     let visibleAnswer = false;
     let calledTool = false;
+    let verifiedChanges = 0;
     let interruptedText = '';
     const saveStoppedTurn = () => {
       if (interruptedText) this.history.push({ role: 'assistant', content: interruptedText, interrupted: true });
@@ -102,8 +114,24 @@ export class AgentChatController {
       displayStream = new AssistantDisplayStream(emitDelta);
     };
     try {
+      const prepared = this.options.prepareRun
+        ? await this.options.prepareRun(text, this.abortController.signal)
+        : undefined;
+      if (revision !== this.revision) return;
+      if (this.abortController.signal.aborted) {
+        saveStoppedTurn();
+        return;
+      }
+      this.options.assertCurrent?.();
+      if (prepared?.reply) {
+        const receipt = { role: 'assistant' as const, content: prepared.reply, hostGuidance: 'tool' as const };
+        this.history.push(receipt);
+        this.options.storage?.save(this.history);
+        this.onTurn({ role: 'tool', text: prepared.reply });
+        return;
+      }
       const result = await runAgent(this.provider, text, {
-        tools: this.options.getTools?.() ?? this.options.tools,
+        tools: prepared?.tools ?? this.options.getTools?.() ?? this.options.tools,
         maxIterations: this.options.maxIterations,
         history: priorHistory,
         onContextTrimmed: this.options.onContextTrimmed,
@@ -114,6 +142,7 @@ export class AgentChatController {
           this.options.storage?.save(this.history);
         },
         requestContext: this.options.getRequestContext?.(),
+        assertCurrent: this.options.assertCurrent,
         signal: this.abortController.signal,
         onEvent: (event) => {
           if (revision !== this.revision) return;
@@ -125,8 +154,9 @@ export class AgentChatController {
             resetSegment();
             calledTool = true;
             this.onTurn({ role: 'tool', text: toolLabel(event.name) });
-          } else if (event.type === 'tool_result' && event.isError) {
-            this.onTurn({ role: 'error', text: displayError(event.content) });
+          } else if (event.type === 'tool_result') {
+            if (isVerifiedDocumentChange(event)) verifiedChanges++;
+            if (event.isError && !event.limitReason) this.onTurn({ role: 'error', text: displayError(event.content) });
           } else if (event.type === 'assistant') {
             // A streamed turn was already rendered via deltas — just close the
             // live bubble. Without a delta handler wired, fall back to emitting
@@ -152,7 +182,11 @@ export class AgentChatController {
       if (result.aborted) {
         saveStoppedTurn();
       } else if (result.stoppedOnLimit) {
-        this.onTurn({ role: 'error', text: t('agentMaxSteps') });
+        const text = documentTaskStopText(result.limitReason, verifiedChanges);
+        const receipt = { role: 'assistant' as const, content: text, hostGuidance: 'tool' as const };
+        this.history.push(receipt);
+        this.options.storage?.save(this.history);
+        this.onTurn({ role: 'tool', text });
       } else if (!visibleAnswer && !calledTool) {
         this.onTurn({ role: 'error', text: t('agentRequestFailed') });
       }
@@ -160,10 +194,11 @@ export class AgentChatController {
       if (revision === this.revision) {
         if (this.abortController?.signal.aborted) saveStoppedTurn();
         else {
-          const guidance = displayError(error);
-          if (interruptedText) {
+          const guidance = documentTaskFailureText(error, verifiedChanges);
+          if (interruptedText || verifiedChanges > 0) {
             const failure = { role: 'assistant' as const, content: guidance, hostGuidance: 'error' as const };
-            this.history.push({ role: 'assistant', content: interruptedText, interrupted: true }, failure);
+            if (interruptedText) this.history.push({ role: 'assistant', content: interruptedText, interrupted: true });
+            this.history.push(failure);
             this.options.storage?.save(this.history);
           }
           this.onTurn({ role: 'error', text: guidance });

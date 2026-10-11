@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import { createAgentPanel } from '../../lib/agent-plugin/ui/panel';
+import { createAgentPanel, setAgentPanelOpen } from '../../lib/agent-plugin/ui/panel';
 import { t } from '@ranuts/shared/i18n';
 import { getEndpointKey } from '@ranuts/agent-core/llm/keys';
 import { AgentChatController } from '../../lib/agent-plugin/ui/controller';
@@ -32,7 +32,7 @@ const state = vi.hoisted(() => ({
   routing: vi.fn(),
   semanticResponse: undefined as string | undefined,
   targetCurrent: true,
-  toolContext: 'slide' as 'slide' | 'cell',
+  toolContext: 'slide' as 'slide' | 'cell' | 'word',
   apply: vi.fn().mockResolvedValue('verified'),
   writing: vi.fn(),
   source: '',
@@ -215,10 +215,74 @@ vi.mock('../../lib/agent-plugin/document-tool-plan', async (original) => ({
   ...(await original<typeof import('../../lib/agent-plugin/document-tool-plan')>()),
   generateDocumentToolPlan: state.toolPlan,
 }));
+// Panel lifecycle fixtures supply a deterministic provider boundary; schema parsing
+// and matched result continuation are tested against the real adapter separately.
+vi.mock('../../lib/agent-plugin/document-task', async (original) => {
+  const actual = await original<typeof import('../../lib/agent-plugin/document-task')>();
+  const { runAgent } = await import('@ranuts/agent-core/runtime');
+  const { createDocumentAgentTools } = await import('../../lib/agent-plugin/document-agent-tools');
+  const createSchemaTaskProvider = (
+    provider: import('@ranuts/agent-core/llm/types').LLMProvider & { backend?: string },
+    context: () => import('../../lib/agent-plugin/document-context').DocumentContext,
+  ): import('@ranuts/agent-core/llm/types').LLMProvider => ({
+    name: 'panel-fixture',
+    isReady: () => true,
+    chat: async (
+      messages: import('@ranuts/agent-core/llm/types').LLMMessage[],
+      _tools: unknown,
+      signal?: AbortSignal,
+    ) => {
+      const results = messages.flatMap((m) =>
+        typeof m.content === 'string' ? [] : m.content.filter((b) => b.type === 'tool_result'),
+      );
+      if (results.length) {
+        const name = messages.flatMap((m) =>
+          typeof m.content === 'string' ? [] : m.content.filter((b) => b.type === 'tool_use'),
+        )[0]?.name;
+        const text =
+          name && ['get_presentation_text', 'get_cell', 'get_range', 'get_document_text'].includes(name)
+            ? state.readText === ''
+              ? t('agentNoReadableText')
+              : await state.readAnswer(provider, messages[0].content, context(), messages.slice(1), signal)
+            : 'Reviewed operation finished.';
+        return { text, toolCalls: [], stopReason: 'end_turn', assistant: { role: 'assistant', content: text } };
+      }
+      const plan = await state.toolPlan(provider, messages[0].content, context(), signal, {
+        stableCapabilityPrefix: provider.backend === 'wllama',
+      });
+      const call = { id: 'fixture-call', name: plan.tool, input: plan.input };
+      return {
+        text: '',
+        toolCalls: [call],
+        stopReason: 'tool_use',
+        assistant: { role: 'assistant', content: [{ type: 'tool_use', ...call }] },
+      };
+    },
+  });
+  return {
+    ...actual,
+    createSchemaTaskProvider,
+    runDocumentTask: async (
+      provider: import('@ranuts/agent-core/llm/types').LLMProvider,
+      request: string,
+      options: Parameters<typeof import('../../lib/agent-plugin/document-task').runDocumentTask>[2],
+    ) =>
+      runAgent(
+        createSchemaTaskProvider(provider, () => options.target.context),
+        request,
+        { ...options, tools: createDocumentAgentTools(options) },
+      ),
+  };
+});
 vi.mock('../../lib/agent-plugin/document-read-answer', () => ({ generateReadAnswer: state.readAnswer }));
 vi.mock('../../lib/agent-plugin/document-tool-action', () => ({
   captureDocumentToolTarget: () => ({
-    context: state.toolContext === 'cell' ? { kind: 'cell' } : { kind: 'slide', page: 1 },
+    context:
+      state.toolContext === 'cell'
+        ? { kind: 'cell' }
+        : state.toolContext === 'word'
+          ? { kind: 'word' }
+          : { kind: 'slide', page: 1 },
     label: 'PPT · 1',
     selectedText: '',
     isCurrent: () => state.targetCurrent,
@@ -240,6 +304,7 @@ vi.mock('../../lib/agent-plugin/document-tool-action', () => ({
 }));
 afterEach(() => {
   localStorage.removeItem('agent-panel-provider');
+  localStorage.removeItem('agent-local-preset');
   localStorage.removeItem('agent-panel-gguf-url');
   localStorage.removeItem('agent-writing-endpoint');
   Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
@@ -317,6 +382,77 @@ it('opening the default model leaves preparation to the user', async () => {
   expect(state.preload).not.toHaveBeenCalled();
   panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledOnce());
+});
+it('opens first-use assistant settings without preparing a model', async () => {
+  const panel = createAgentPanel({ externalEntry: true });
+  await vi.waitFor(() => expect(panel.dataset.view).toBe('settings'));
+  expect(state.preload).not.toHaveBeenCalled();
+});
+it('opens chat for a remembered model even when its runtime is not loaded', () => {
+  localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+  const panel = createAgentPanel({ externalEntry: true });
+  expect(panel.dataset.view).toBe('chat');
+  expect(state.preload).not.toHaveBeenCalled();
+});
+it('opens chat for a previously downloaded default model in another editor', async () => {
+  state.cached = true;
+  state.editorKind = 'cell';
+  const panel = createAgentPanel({ externalEntry: true });
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(panel.dataset.view).toBe('chat');
+  expect(state.preload).not.toHaveBeenCalled();
+});
+it('opens chat for a remembered CPU model without starting inference', () => {
+  localStorage.setItem('agent-panel-provider', 'wllama');
+  localStorage.setItem('agent-panel-gguf-url', 'https://models.example/cpu-model.gguf');
+  const panel = createAgentPanel({ externalEntry: true });
+  expect(panel.dataset.view).toBe('chat');
+  expect(state.preload).not.toHaveBeenCalled();
+});
+it('opens chat for a configured service without connecting on its own', () => {
+  localStorage.setItem(
+    'agent-writing-endpoint',
+    JSON.stringify({ version: 1, kind: 'loopback', baseUrl: 'http://localhost:11434', model: 'model' }),
+  );
+  const panel = createAgentPanel({ externalEntry: true });
+  expect(panel.dataset.view).toBe('chat');
+  expect(panel.querySelector('.agent-panel-endpoint-connect')?.textContent).toBe(t('agentEndpointConnect'));
+});
+it('keeps setup reachable for an incomplete cloud service', async () => {
+  localStorage.setItem(
+    'agent-writing-endpoint',
+    JSON.stringify({ version: 1, kind: 'openai-compatible', baseUrl: 'https://missing-key.example', model: 'model' }),
+  );
+  const panel = createAgentPanel({ externalEntry: true });
+  await vi.waitFor(() => expect(panel.dataset.view).toBe('settings'));
+});
+it('keeps setup reachable when the remembered preset is no longer supported', async () => {
+  localStorage.setItem('agent-local-preset', 'Qwen3-1.7B-q4f16_1-MLC');
+  const panel = createAgentPanel({ externalEntry: true });
+  await vi.waitFor(() => expect(panel.dataset.view).toBe('settings'));
+});
+it('does not override an explicit view change while checking cached configuration', async () => {
+  const panel = createAgentPanel({ externalEntry: true });
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(panel.dataset.view).toBe('chat');
+});
+it('reopens a configured assistant in chat after closing its settings', () => {
+  localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+  const panel = createAgentPanel({ externalEntry: true });
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  expect(panel.dataset.view).toBe('settings');
+  setAgentPanelOpen(false);
+  setAgentPanelOpen(true);
+  expect(panel.dataset.view).toBe('chat');
+});
+it('remembers successful default-model preparation for the next opening', async () => {
+  state.preload.mockImplementation(async () => {
+    state.ready = true;
+  });
+  createPreparedPanel();
+  await vi.waitFor(() => expect(localStorage.getItem('agent-local-preset')).toBe('Qwen3-4B-q4f16_1-MLC'));
 });
 it('keeps the AI rail entry accessible before the model loads and after a load fails', async () => {
   const iframe = document.createElement('iframe');
@@ -1255,6 +1391,7 @@ it('identifies model download failures and retries without exposing network inte
 });
 
 it('cancels native writing of the previous answer from the visible Stop button', async () => {
+  state.toolContext = 'word';
   state.ready = true;
   state.editorReady = true;
   state.preload.mockResolvedValue(undefined);
@@ -1822,6 +1959,55 @@ it('allows the main button to warm a cached model in a new spreadsheet page', as
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledOnce());
   expect(panel.querySelector('.agent-panel-load')!.textContent).toBe(t('agentModelInUse'));
 });
+it('warms a downloaded model directly from chat, preserving the draft without sending it', async () => {
+  state.cached = true;
+  localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+  state.preload.mockImplementation(async () => {
+    state.ready = true;
+  });
+  const panel = createAgentPanel({ externalEntry: true });
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Keep my request';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  const resume = panel.querySelector<HTMLButtonElement>('.agent-prepare-action');
+  expect(resume).not.toBeNull();
+  await vi.waitFor(() => expect(resume!.textContent).toBe(t('agentResumeModel')));
+  resume!.click();
+  resume!.click();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-panel-load')?.textContent).toBe(t('agentModelInUse')));
+  expect(state.preload).toHaveBeenCalledOnce();
+  expect(panel.dataset.view).toBe('chat');
+  expect(input.value).toBe('Keep my request');
+  expect(state.generate).not.toHaveBeenCalled();
+});
+it('reconnects a remembered service directly from chat without submitting a draft', async () => {
+  localStorage.setItem(
+    'agent-writing-endpoint',
+    JSON.stringify({ version: 1, kind: 'loopback', baseUrl: 'http://localhost:11434', model: 'model' }),
+  );
+  const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ models: [{ name: 'model' }] })));
+  vi.stubGlobal('fetch', fetchMock);
+  try {
+    const panel = createAgentPanel({ externalEntry: true });
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = 'Unsent draft';
+    const resume = panel.querySelector<HTMLButtonElement>('.agent-prepare-action');
+    expect(resume).not.toBeNull();
+    expect(resume!.textContent).toBe(t('agentReconnectService'));
+    resume!.click();
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
+    expect(panel.dataset.view).toBe('chat');
+    expect(input.value).toBe('Unsent draft');
+    expect(fetchMock.mock.calls[0][0]).toContain('/tags');
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
+it('uses one advanced disclosure and no extra disclosure for the chosen service form', () => {
+  const panel = createAgentPanel();
+  expect(panel.querySelector('.agent-service-section')?.tagName).not.toBe('DETAILS');
+  expect(panel.querySelector('.agent-preferences details')).toBeNull();
+});
 
 it('keeps the prepared model when the editor changes in the same page', async () => {
   state.cached = true;
@@ -1927,7 +2113,7 @@ it('sends current-editor native tools and displays a proposal without executing 
     input.value = 'Put a title on this slide';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     await vi.waitFor(() => expect(panel.querySelector('.agent-plan-apply')).not.toBeNull());
-    await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
+    await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).not.toBeNull());
     const request = fetchMock.mock.calls
       .map(([, init]) => JSON.parse(String(init.body)))
       .find((body) => body.tools?.length);
@@ -2007,6 +2193,7 @@ it('preserves an unexecuted suggestion after stopping refinement and ignores a l
   await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
   const original = panel.querySelector<HTMLElement>('.agent-plan-preview')!;
   original.querySelector<HTMLElement>('.agent-plan-refine')!.click();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
   input.value = 'Shorten this suggestion';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalledTimes(2));
@@ -2040,6 +2227,7 @@ it('does not claim an unchanged suggestion is available after the document chang
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
   panel.querySelector<HTMLElement>('.agent-plan-refine')!.click();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
   input.value = 'Shorten this suggestion';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalledTimes(2));
@@ -2072,7 +2260,7 @@ it.each(['chat', 'tools'] as const)('keeps connected-service readiness accurate 
   const connect = panel.querySelector<HTMLElement>('.agent-panel-endpoint-connect')!;
   connect.click();
   await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
-  const readiness = panel.querySelector('.agent-readiness')!;
+  const readiness = panel.querySelector('.agent-readiness [role="status"]')!;
   expect(readiness.textContent).toBe('');
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Hello';

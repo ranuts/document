@@ -21,8 +21,8 @@ export interface AgentTool<P = Record<string, unknown>, R = unknown> {
    * skip review-mode wrapping and surfaces intent to the model.
    */
   readOnlyHint: boolean;
-  /** Host policy: a successful result concludes the turn (including a pending review). */
-  concludesTurn?: boolean;
+  /** Host policy evaluated after execution. A boolean retains the successful-result policy. */
+  concludesTurn?: boolean | ((result: { content: string; isError: boolean }) => boolean);
   /** Execute the tool. Throws on invalid input or when the editor isn't ready. */
   execute: (params: P, signal?: AbortSignal) => Promise<R>;
 }
