@@ -141,6 +141,12 @@ export class ActionPreview {
     if (summary) summary.textContent = t('agentViewChanges');
     const action = this.action;
     if (action) {
+      if (this.el.dataset.state === 'pending' && !this.refining) {
+        this.status.textContent =
+          action.plan.tool === 'clear_document' && action.target.reviewText !== undefined
+            ? t('agentClearImpact').replace('{count}', String(Array.from(action.target.reviewText).length))
+            : t('agentPlanReady');
+      }
       const context = action.target.context;
       if (action.plan.tool === 'clear_document') {
         this.target.textContent = t('agentCurrentDocument');
@@ -243,7 +249,7 @@ export class ActionPreview {
     this.status.textContent =
       action.plan.tool === 'clear_document' && original !== undefined
         ? t('agentClearImpact').replace('{count}', String(Array.from(original).length))
-        : '';
+        : t('agentPlanReady');
     if (action.plan.tool === 'clear_document') this.afterLabel.hidden = this.content.hidden = true;
     this.editButton.hidden =
       !action.revise ||

@@ -11,6 +11,8 @@ Ative o assistente e escolha um modelo local ou conecte seu serviço de IA. Os a
 
 O modelo padrão no navegador é o Qwen3 4B. O uso estimado de memória gráfica é de cerca de 3,43 GB; isso não representa o tamanho do download nem o uso total de memória do dispositivo. O recurso continua experimental. Modelos menores baixados anteriormente podem ser removidos na lista de modelos baixados.
 
+Enquanto o assistente trabalha, você pode preparar a próxima solicitação. Envie-a quando a atual terminar; rascunhos nunca são enviados automaticamente. Avisos breves indicam leitura, resposta e espera pela sua revisão. Novas respostas e propostas não levam você ao final enquanto lê mensagens anteriores.
+
 ## Por tipo de arquivo
 
 - Word: consulte conteúdo, crie textos ou melhore parágrafos selecionados.

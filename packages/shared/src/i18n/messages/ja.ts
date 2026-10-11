@@ -308,6 +308,8 @@ export const ja: Partial<I18nMessages> = {
   agentCopyFailed: 'コピーできませんでした',
   agentRestoreRequest: 'リクエストを復元',
   agentWaiting: '回答を生成中…',
+  agentReadingContent: '現在の内容を読み取り中…',
+  agentPreparingTask: 'リクエストを準備中…',
   agentScrollLatest: '最新のメッセージへ',
   agentModelSourceInvalid: 'ダウンロード先を入力するか、ダウンロード済みのファイルを選んでください。',
   agentModelCleanupFailed: '前のモデルを終了できませんでした。ページを更新してから再読み込みしてください。',

@@ -549,6 +549,8 @@ export function createAgentPanel(
     copyFailed: t('agentCopyFailed'),
     restore: t('agentRestoreRequest'),
     waiting: t('agentWaiting'),
+    reading: t('agentReadingContent'),
+    planning: t('agentPreparingTask'),
     scrollLatest: t('agentScrollLatest'),
     applyMessage: t('agentWriteReply'),
     applyTip: t('agentWriteReplyTip'),
@@ -1657,7 +1659,6 @@ export function createAgentPanel(
           if (directGeneration === controllerGeneration) {
             syncContext();
             chat.setRunning(false);
-            chat.focus();
           }
         }
       }
@@ -1730,6 +1731,7 @@ export function createAgentPanel(
         !literalToolRequest &&
         !isModelFreeToolRequest(trimmed, snapshot.context)
       ) {
+        chat.setActivity('responding');
         await ctl.send(trimmed);
         return;
       }
@@ -1743,6 +1745,7 @@ export function createAgentPanel(
         const abort = new AbortController();
         planning = abort;
         routingStarted = true;
+        chat.setActivity('planning');
         request = await resolveRequestIntent(routingProvider, trimmed, snapshot.context, abort.signal, {
           hasSelection: !!snapshot.text.trim() && !snapshot.truncated,
           pendingProposal,
@@ -1780,6 +1783,7 @@ export function createAgentPanel(
         appendTurn({ role: 'user', text: trimmed });
         const abort = new AbortController();
         planning = abort;
+        chat.setActivity('responding');
         const body = await generateDocumentDraft(routingProvider, trimmed, abort.signal);
         abort.signal.throwIfAborted();
         if (generation !== controllerGeneration || conversation !== conversationRevision)
@@ -1796,6 +1800,7 @@ export function createAgentPanel(
         const abort = new AbortController();
         planning = abort;
         appendTurn({ role: 'user', text });
+        chat.setActivity('planning');
         const plans = await generateDocumentToolSequence(
           useEndpointForChat() ? endpointProvider! : webllmProvider!,
           text,
@@ -1865,6 +1870,7 @@ export function createAgentPanel(
             chat.appendContent(preview.el);
             break;
           }
+          chat.setActivity('reading');
           const outcome = await action.apply(abort.signal);
           const exchangeId = crypto.randomUUID();
           operationHistory.push(
@@ -1912,6 +1918,7 @@ export function createAgentPanel(
           }
         }
         if (answerFromReads && !unavailableRead) {
+          chat.setActivity('responding');
           const answer = await generateReadAnswer(
             routingProvider!,
             trimmed,
@@ -1964,6 +1971,7 @@ export function createAgentPanel(
         // The gate above normally covers an unready browser-local model; this stays
         // as a guard for readiness that flipped between the gate and here.
         if (!writingProvider || !writingProvider.isReady()) throw new Error('agentWritingNeedsLocalService');
+        chat.setActivity('responding');
         const body = await generateWriting(
           writingProvider,
           {
@@ -2022,6 +2030,7 @@ export function createAgentPanel(
         operationHistory.push({ role: 'assistant', content: t('agentPlanReady'), hostGuidance: 'tool' });
       } else {
         invalidatePlans();
+        chat.setActivity('responding');
         await ctl.send(trimmed);
       }
     } catch (caughtError) {
@@ -2061,7 +2070,6 @@ export function createAgentPanel(
       if (generation === controllerGeneration && conversation === conversationRevision) {
         planning = null;
         chat.setRunning(false);
-        chat.focus();
         syncRuntimeStatus();
         if (webllmProvider && !webllmProvider.isReady()) {
           note.textContent = t('agentLoadModel');

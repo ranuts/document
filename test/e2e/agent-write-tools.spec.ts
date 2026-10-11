@@ -68,7 +68,8 @@ test.describe('agent document writes (real editor)', () => {
   /** Type a request into the panel and send it. */
   const send = async (page: Page, text: string): Promise<void> => {
     const input = page.locator('.cui-input');
-    // Sending is refused while the panel is busy; wait rather than race it.
+    // Drafts remain editable while busy; wait for submission to become available.
+    await expect(page.locator('.cui-send-stop')).toHaveCount(0);
     await expect(input).toBeEnabled();
     await input.fill(text);
     await input.press('Enter');
@@ -318,9 +319,11 @@ test.describe('agent document writes (real editor)', () => {
     await send(page, 'read A1:A5, then set A1 to 1.0');
     await confirmCellWrite(page, 'A1', '1.0');
     await expect.poll(() => readCell(page, 'A1')).toBe('1');
+    await expect(page.locator('.cui-send-stop')).toHaveCount(0);
     await expect(page.locator('.cui-input')).toBeEnabled();
     await send(page, 'sum A1:A1 into B1');
     await expect.poll(() => readCell(page, 'B1')).toBe('1');
+    await expect(page.locator('.cui-send-stop')).toHaveCount(0);
     await expect(page.locator('.cui-input')).toBeEnabled();
     expect(
       await page.evaluate(() => {
@@ -358,6 +361,7 @@ test.describe('agent document writes (real editor)', () => {
         await send(page, 'read A1:A5, then set A1 to 5');
         await confirmCellWrite(page, 'A1', '5');
         await expect.poll(() => readCell(page, 'A1')).toBe('5');
+        await expect(page.locator('.cui-send-stop')).toHaveCount(0);
         await expect(page.locator('.cui-input')).toBeEnabled();
       }
       await page.evaluate(() => {
@@ -386,6 +390,7 @@ test.describe('agent document writes (real editor)', () => {
         window.__releaseAgentPaste?.();
         await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
       });
+      await expect(page.locator('.cui-send-stop')).toHaveCount(0);
       await expect(page.locator('.cui-input')).toBeEnabled();
       expect(await readCell(page, 'B1')).toBe('');
       if (operation === 'sum') expect(await readCell(page, 'A1')).toBe('5');

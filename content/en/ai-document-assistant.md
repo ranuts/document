@@ -11,6 +11,8 @@ Enable the assistant, choose a local model or connect your AI service, then type
 
 The default browser model is Qwen3 4B. Its estimated graphics memory use is about 3.43 GB; this is not the download size or total device memory use. It remains experimental. Previously downloaded smaller models can be removed under Downloaded models.
 
+While the assistant is working, you can draft your next request. Send it yourself after the current request ends; drafts are never sent automatically. Reading, responding and waiting for your review have short status messages. New replies and proposals do not move you away from earlier messages you are reading.
+
 ## Work with each file type
 
 - Word: ask about content, draft text or refine selected paragraphs.

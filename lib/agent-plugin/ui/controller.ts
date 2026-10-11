@@ -55,7 +55,7 @@ export class AgentChatController {
     this.history = [...(options.storage?.load() ?? [])];
   }
 
-  /** Whether a run is currently in progress (input should be disabled). */
+  /** Whether a run is currently in progress (submission is unavailable). */
   isRunning(): boolean {
     return this.running;
   }

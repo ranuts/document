@@ -9,6 +9,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- **Keep writing while the assistant responds.** Prepare the next request without
+  sending it automatically. Reading older messages keeps your place, and activity
+  hints distinguish reading, responding and waiting for your review.
+
 - **Ask the assistant about the current PDF page and review notes before adding them.**
   It can read selectable page text and add page notes that you can undo. Scanned
   pages still need text recognition elsewhere; the assistant does not rewrite PDF text.

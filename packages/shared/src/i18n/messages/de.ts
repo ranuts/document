@@ -322,6 +322,8 @@ export const de: Partial<I18nMessages> = {
   agentCopyFailed: 'Kopieren fehlgeschlagen',
   agentRestoreRequest: 'Anfrage wiederherstellen',
   agentWaiting: 'Antwort wird erstellt…',
+  agentReadingContent: 'Aktueller Inhalt wird gelesen…',
+  agentPreparingTask: 'Anfrage wird vorbereitet…',
   agentScrollLatest: 'Zur neuesten Nachricht',
   agentModelSourceInvalid: 'Geben Sie eine Download-Adresse ein oder wählen Sie heruntergeladene Dateien.',
   agentModelCleanupFailed:

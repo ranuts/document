@@ -12,6 +12,18 @@ it('uses a generic document target for legacy text suggestions regardless of the
   expect(view.el.querySelector('.agent-plan-target')?.textContent).toBe('Current document · Current cursor');
   view.dispose();
 });
+it('announces a pending proposal through the existing inline status', () => {
+  const view = new ActionPreview();
+  view.show(
+    new ReviewedAction(
+      { editor: 'word', label: 'DOCX', selectedText: '', isCurrent: () => true },
+      { tool: 'insert_text', input: { text: 'Draft' } },
+    ),
+  );
+  expect(view.el.querySelector('[role="status"]')?.textContent).toBe('Review the proposal before applying it.');
+  expect(view.el.querySelectorAll('[role="status"]')).toHaveLength(1);
+  view.dispose();
+});
 it.each([
   [{ kind: 'word' }, 'clear_document', {}, 'Current document'],
   [{ kind: 'slide', page: 3 }, 'add_slide_text', { text: 'Draft' }, 'Slide 3'],

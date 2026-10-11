@@ -303,6 +303,8 @@ export const en: I18nMessages = {
   agentCopyFailed: 'Could not copy',
   agentRestoreRequest: 'Restore request',
   agentWaiting: 'Generating a response…',
+  agentReadingContent: 'Reading current content…',
+  agentPreparingTask: 'Preparing your request…',
   agentScrollLatest: 'Scroll to latest',
   agentModelSourceInvalid: 'Enter a download address or choose downloaded files.',
   agentModelCleanupFailed: 'The previous model could not exit. Refresh the page before loading another model.',

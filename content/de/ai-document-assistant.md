@@ -11,6 +11,8 @@ Aktivieren Sie den Assistenten und wählen Sie ein lokales Modell oder Ihren KI-
 
 Das Standardmodell im Browser ist Qwen3 4B. Der geschätzte Grafikspeicherbedarf beträgt etwa 3,43 GB; dies ist weder die Downloadgröße noch der gesamte Speicherbedarf des Geräts. Die Funktion ist weiterhin experimentell. Früher heruntergeladene kleinere Modelle können unter „Heruntergeladene Modelle“ entfernt werden.
 
+Während der Assistent arbeitet, können Sie die nächste Anfrage vorbereiten. Senden Sie sie selbst, sobald die aktuelle Anfrage beendet ist; Entwürfe werden nie automatisch gesendet. Kurze Hinweise zeigen Lesen, Antworten und die ausstehende Prüfung an. Neue Antworten und Vorschläge verschieben die Ansicht nicht, während Sie ältere Nachrichten lesen.
+
 ## Je nach Dateityp
 
 - Word: Inhalte erfragen, Texte entwerfen und ausgewählte Absätze verbessern.
