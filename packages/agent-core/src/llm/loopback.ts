@@ -83,13 +83,42 @@ export class LoopbackProvider implements LocalLLMProvider {
     signal?: AbortSignal,
   ): Promise<LLMResponse> {
     if (!this.isReady()) throw new Error('Connect the local model first');
-    if (messages.some((message) => typeof message.content !== 'string'))
-      throw new Error('Local service requires text messages');
+    // Translate completed host tool exchanges to Ollama's documented chat history.
+    const names = new Map<string, string>();
+    const nativeMessages: Array<Record<string, unknown>> = [];
+    for (const message of messages) {
+      if (typeof message.content === 'string') {
+        nativeMessages.push({ role: message.role, content: message.content });
+        continue;
+      }
+      const text = message.content
+        .filter((block) => block.type === 'text')
+        .map((block) => block.text)
+        .join('\n');
+      const calls = message.content.filter((block) => block.type === 'tool_use');
+      if (calls.length) {
+        for (const call of calls) names.set(call.id, call.name);
+        nativeMessages.push({
+          role: 'assistant',
+          content: text,
+          tool_calls: calls.map((call, index) => ({
+            type: 'function',
+            function: { index, name: call.name, arguments: call.input },
+          })),
+        });
+      } else if (text) nativeMessages.push({ role: message.role, content: text });
+      for (const block of message.content) {
+        if (block.type !== 'tool_result') continue;
+        const name = names.get(block.toolUseId);
+        if (!name) throw new Error('Unmatched local service tool result');
+        nativeMessages.push({ role: 'tool', tool_name: name, content: block.content });
+      }
+    }
     const result = (await this.request(
       'chat',
       {
         model: this.options.model,
-        messages,
+        messages: nativeMessages,
         stream: false,
         ...(schema ? { format: schema } : {}),
       },

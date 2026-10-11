@@ -753,16 +753,15 @@ it.each(['cancel', 'failure'] as const)(
       role: 'user',
       content: [{ type: 'tool_result', toolUseId: 'read', content: '{"text":"verified source"}', isError: false }],
     });
-    expect(saved.slice(3)).toEqual([
-      { role: 'assistant', content: 'Partial follow-up', interrupted: true },
-      mode === 'cancel'
-        ? { role: 'assistant', content: t('agentStopped'), hostGuidance: 'status' }
-        : { role: 'assistant', content: t('agentRequestFailed'), hostGuidance: 'error' },
-    ]);
+    // Tool-bearing partial streams are unclassified and never shown or archived
+    // as an answer. The completed read exchange remains paired and durable.
+    expect(saved.slice(3)).toEqual(
+      mode === 'cancel' ? [{ role: 'assistant', content: t('agentStopped'), hostGuidance: 'status' }] : [],
+    );
   },
 );
 
-it('starts a fresh display segment after a tool-only response with held JSON', async () => {
+it('does not display or archive unclassified follow-up after a tool response', async () => {
   let saved: LLMMessage[] = [];
   let fail!: () => void;
   let calls = 0;
@@ -798,6 +797,7 @@ it('starts a fresh display segment after a tool-only response with held JSON', a
   controller.stop();
   fail();
   await pending;
-  expect(deltas).toEqual(['Visible follow-up']);
-  expect(saved.at(-2)).toEqual({ role: 'assistant', content: 'Visible follow-up', interrupted: true });
+  expect(deltas).toEqual([]);
+  expect(saved.at(-1)).toEqual({ role: 'assistant', content: t('agentStopped'), hostGuidance: 'status' });
+  expect(saved).not.toContainEqual(expect.objectContaining({ content: 'Visible follow-up' }));
 });

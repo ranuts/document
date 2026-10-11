@@ -105,7 +105,7 @@ async function mount() {
   state.execute.mockImplementation(async (input: { text: string }) => {
     state.text = input.text;
   });
-  createHistoryStorage().save([{ role: 'assistant', content: '秋日的天空明净。' }]);
+  createHistoryStorage().save([{ role: 'assistant', content: '秋日的天空明净。', documentArtifact: true }]);
   const panel = createAgentPanel();
   panel.querySelector<HTMLButtonElement>('.agent-history-import')!.click();
   await vi.waitFor(() => expect(panel.querySelector('.cui-apply')).not.toBeNull());
@@ -122,19 +122,22 @@ it('writes the exact answer through the editor only after an explicit click and 
   expect(state.execute).toHaveBeenCalledExactlyOnceWith({ text: '秋日的天空明净。' }, expect.any(AbortSignal));
   expect(state.capture).toHaveBeenCalledTimes(1);
 });
-it('routes an explicit write instruction to the previous answer without asking a model', async () => {
-  const panel = await mount();
-  document.body.append(panel);
-  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  input.value = '写到当前的文档上';
-  input.dispatchEvent(new Event('input', { bubbles: true }));
-  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() =>
-    expect(state.execute).toHaveBeenCalledExactlyOnceWith({ text: '秋日的天空明净。' }, expect.any(AbortSignal)),
-  );
-  expect(createHistoryStorage().load()).toHaveLength(1);
-  await vi.waitFor(() => expect(panel.querySelector('.cui-activity')?.textContent).toContain(t('agentPlanVerified')));
-});
+it.each(['写到当前的文档上', '写入到文档中'])(
+  'routes %s to the previous answer without asking a model',
+  async (command) => {
+    const panel = await mount();
+    document.body.append(panel);
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = command;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await vi.waitFor(() =>
+      expect(state.execute).toHaveBeenCalledExactlyOnceWith({ text: '秋日的天空明净。' }, expect.any(AbortSignal)),
+    );
+    expect(createHistoryStorage().load()).toHaveLength(1);
+    await vi.waitFor(() => expect(panel.querySelector('.cui-activity')?.textContent).toContain(t('agentPlanVerified')));
+  },
+);
 it('does not claim success or allow a duplicate write if read-back fails after execution', async () => {
   const panel = await mount();
   state.execute.mockImplementation(async () => {});

@@ -11,6 +11,13 @@ import type { I18nMessages } from '../types';
  */
 export const ja: Partial<I18nMessages> = {
   editorBackHome: 'ホームに戻る',
+  agentSpeechNoResult: '音声を認識できませんでした。マイクを確認して再試行してください。',
+  agentClearImpact: '本文の {count} 文字を削除します。',
+  agentInsertContent: '内容を挿入',
+  agentReplaceContent: '内容を置換',
+  agentPlanApplying: '変更を適用中…',
+  agentClearDocument: '本文を消去（元に戻せます）',
+  agentFillSeries: '数値の連番を入力',
   agentSpeechInput: '音声入力',
   agentSpeechStop: '音声入力を停止',
   agentSpeechLanguage: '認識言語',
@@ -221,7 +228,7 @@ export const ja: Partial<I18nMessages> = {
   agentPlanBefore: '元のテキスト',
   agentPlanAfter: '提案されたテキスト',
   agentPlanTitle: '変更案を確認',
-  agentPlanApply: '選択した文章を置き換える',
+  agentPlanApply: '変更を適用',
   agentPlanCancel: 'キャンセル',
   agentPlanExpired: '提案が無効になりました。再生成してください。',
   agentPlanVerified: '完了しました。元に戻せます。',

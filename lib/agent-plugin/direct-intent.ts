@@ -50,7 +50,7 @@ export function parseDirectDocumentIntent(input: string): DirectDocumentIntent |
   const slide = /^(?:切换到|跳转到)第\s*(\d+)\s*页幻灯片$/.exec(text) || /^go to slide (\d+)$/.exec(text);
   if (slide) return { kind: 'slide', action: 'navigate', page: Number(slide[1]) };
   if (
-    /^(?:(?:把|将)(?:上面的?(?:文章|回答|内容)|上一条(?:回答|内容)))?(?:写入|写到|插入到?)(?:当前的?)?文档(?:上|中)?$/.test(
+    /^(?:(?:把|将)(?:上面的?(?:文章|回答|内容)|上一条(?:回答|内容)))?(?:写入到?|写到|插入到?)(?:当前的?)?文档(?:上|中)?$/.test(
       text,
     ) ||
     /^(?:write|insert) (?:the )?(?:last |previous )?(?:answer|response) (?:in|into|to) (?:the )?(?:current )?document$/.test(

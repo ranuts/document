@@ -1,3 +1,4 @@
+import { createDocumentAgentTools } from '../document-agent-tools';
 import { mountSpeechInput } from './speech-input';
 /**
  * Agent sidebar panel — a thin DOM view over {@link AgentChatController}.
@@ -55,6 +56,7 @@ import {
 import { captureActionTarget, ReviewedAction } from '../reviewed-action';
 import { generateDocumentToolSequence, isModelFreeToolRequest } from '../document-tool-sequence';
 import { captureDocumentToolTarget, DocumentToolAction } from '../document-tool-action';
+import { documentTools } from '../document-tool-plan';
 import { ChatView, type ChatViewLabels } from '@ranuts/chat-ui';
 import { AgentChatController, type ChatTurn } from './controller';
 import { displayError } from './presentation';
@@ -67,7 +69,9 @@ import { mountPanelResize } from './panel-resize';
 import { mountPanelViewport } from './panel-viewport';
 import { ActionPreview } from './action-preview';
 import { captureComposerContext } from './composer-context';
-import { classifyRequest } from './request-intent';
+import { captureRequestContext } from './request-context';
+import { classifyRequest, resolveRequestIntent } from './request-intent';
+import { generateDocumentDraft } from './document-draft';
 import {
   deleteCachedModel,
   listCachedGGUF,
@@ -546,7 +550,8 @@ export function createAgentPanel(
   });
   const directIntent = (text: string) => {
     const intent = parseDirectDocumentIntent(resolveContextCommand(text, captureDocumentContext()));
-    return writingSelect.value === 'tools' && intent?.kind === 'clarify' ? null : intent;
+    const provider = useEndpointForChat() ? endpointProvider : webllmProvider;
+    return intent?.kind === 'clarify' && (writingSelect.value === 'tools' || provider?.isReady()) ? null : intent;
   };
   const chat = new ChatView({
     canSend: (text) => {
@@ -565,6 +570,7 @@ export function createAgentPanel(
       );
     },
     onSend: (text) => void submit(text),
+    requireDocumentArtifact: true,
     canApplyMessage: () => captureDocumentContext()?.kind === 'word' && !getReadonlyMode(),
     onApplyMessage: (text) => applyReply(text),
     onStop: () => {
@@ -689,7 +695,7 @@ export function createAgentPanel(
     updateScope();
     const snapshot = captureComposerContext();
     const context = snapshot.context;
-    quoteContext.hidden = !context || (context.kind === 'word' && !snapshot.text);
+    quoteContext.hidden = !context || !snapshot.text.trim();
     const label =
       context?.kind === 'cell'
         ? `${context.sheet ?? 'Excel'} · ${context.range ?? ''}`
@@ -699,7 +705,8 @@ export function createAgentPanel(
             ? t('agentSelectionContext').replace('{count}', String(snapshot.text.length))
             : t('agentCurrentDocument');
     if (quoteSummary.textContent !== label) quoteSummary.textContent = label;
-    if (quoteText.textContent !== snapshot.text) quoteText.textContent = snapshot.text || t('agentContextOnSend');
+    quoteSummary.setAttribute('aria-label', `${t('agentReadSelection')} · ${label}`);
+    if (quoteText.textContent !== snapshot.text) quoteText.textContent = snapshot.text;
     const releaseControl = settings.querySelector<HTMLElement>('.agent-release-memory');
     if (releaseControl) releaseControl.hidden = !webllmProvider?.isReady();
     const welcome =
@@ -979,6 +986,11 @@ export function createAgentPanel(
     }
   };
   const syncRuntimeStatus = (): void => {
+    const localReady = !!webllmProvider?.isReady();
+    for (const button of [loadBtn, ggufLoad]) {
+      button.textContent = t(modelLoading ? 'agentPreparing' : localReady ? 'agentModelInUse' : 'agentLoadModel');
+      button.toggleAttribute('disabled', modelLoading || localReady || !enabled || cacheBusy);
+    }
     const ready =
       !!webllmProvider?.isReady() ||
       (writingSelect.value !== 'tools' &&
@@ -1066,6 +1078,7 @@ export function createAgentPanel(
         },
       );
     }
+    syncRuntimeStatus();
   };
   window.addEventListener('pagehide', resetController);
   window.addEventListener('pagehide', disconnectEndpoint);
@@ -1097,6 +1110,10 @@ export function createAgentPanel(
       return;
     }
     if (currentProvider() !== 'webllm' || modelLoading) return;
+    if (webllmProvider?.isReady()) {
+      note.textContent = t('agentModelLoaded');
+      return;
+    }
     const id = selectedLocalModel();
     const attempt = loadAttempt;
     note.textContent = t('agentCheckingCache');
@@ -1168,11 +1185,57 @@ export function createAgentPanel(
     const options = {
       ...controllerOptions,
       tools: {},
+      getTools: () => {
+        if (!endpointProvider?.isReady() || endpointProvider.toolCallingMode !== 'native' || !useEndpointForChat())
+          return {};
+        const target = captureDocumentToolTarget();
+        return createDocumentAgentTools({
+          target,
+          readonly: getReadonlyMode(),
+          review: (action) => {
+            if (generation !== controllerGeneration || conversation !== conversationRevision)
+              throw new Error(t('agentPlanExpired'));
+            const card = new ActionPreview();
+            previews.add(card);
+            card.show(action, (outcome) => {
+              if (generation === controllerGeneration && conversation === conversationRevision) {
+                const receipt = {
+                  role: 'assistant' as const,
+                  content: JSON.stringify({ status: outcome, result: action.result }),
+                  hostGuidance: 'tool' as const,
+                };
+                controller?.recordExternalMessages([receipt]);
+              }
+            });
+            chat.appendContent(card.el);
+          },
+          receipt: (_name, result) => {
+            if (generation !== controllerGeneration || conversation !== conversationRevision) return;
+            const value = result as { text?: string } | undefined;
+            appendTurn({
+              role: 'tool',
+              text:
+                typeof value?.text === 'string'
+                  ? value.text.trim() || t('agentNoReadableText')
+                  : JSON.stringify(result) || t('agentNoReadableText'),
+            });
+          },
+        });
+      },
       storage: historyStorage,
       getRequestContext: (): string | undefined => {
-        const context = captureComposerContext().context;
-        return context || quotedSelection
-          ? JSON.stringify({ ...context, ...(quotedSelection ? { quotedSelection } : {}) })
+        const reference = captureRequestContext();
+        return reference.editor
+          ? JSON.stringify({
+              ...reference,
+              availableOperations: documentTools(reference.editor)
+                .filter((tool) => !getReadonlyMode() || tool.readOnlyHint)
+                .map((tool) => ({
+                  name: tool.name,
+                  description: tool.description,
+                  requiresReview: !tool.readOnlyHint,
+                })),
+            })
           : undefined;
       },
       onContextTrimmed: (): void => {
@@ -1186,7 +1249,12 @@ export function createAgentPanel(
         if (generation === controllerGeneration && conversation === conversationRevision) chat.endStream();
       },
     };
-    if (!localOnly && !proposalMode && useEndpointForChat() && endpointProvider) {
+    if (
+      !localOnly &&
+      (!proposalMode || endpointProvider?.toolCallingMode === 'native') &&
+      useEndpointForChat() &&
+      endpointProvider
+    ) {
       const kind = `endpoint:${endpointAttempt}`;
       if (!controller || controllerKind !== kind) {
         controller?.dispose();
@@ -1280,7 +1348,16 @@ export function createAgentPanel(
   // Load (download + warm) the selected WebLLM model. Used by the Load button and
   // only triggered by a deliberate preparation action.
   const loadModel = async (): Promise<void> => {
-    if (!enabled || cacheBusy || modelLoading || planning || controller?.isRunning() || replyAbort) return;
+    if (
+      !enabled ||
+      cacheBusy ||
+      modelLoading ||
+      webllmProvider?.isReady() ||
+      planning ||
+      controller?.isRunning() ||
+      replyAbort
+    )
+      return;
     const generation = controllerGeneration;
     let loading: typeof webllmProvider = null;
     modelLoading = true;
@@ -1342,8 +1419,6 @@ export function createAgentPanel(
       if (generation === controllerGeneration) {
         modelLoading = false;
         syncRuntimeStatus();
-        loadBtn.removeAttribute('disabled');
-        ggufLoad.removeAttribute('disabled');
         ggufStop.hidden = true;
         loadStop.hidden = true;
       }
@@ -1383,13 +1458,23 @@ export function createAgentPanel(
   const submit = async (text: string): Promise<void> => {
     const trimmed = text.trim();
     if (!enabled || !trimmed) return;
-    const request = classifyRequest(trimmed);
+    let request = classifyRequest(trimmed);
     writingSelect.value = request.task;
     languageSelect.value = request.language;
     writingSelect.dispatchEvent(new Event('change'));
     const snapshot = captureComposerContext();
+    if (isModelFreeToolRequest(trimmed, snapshot.context)) {
+      request.task = 'tools';
+      writingSelect.value = 'tools';
+      writingSelect.dispatchEvent(new Event('change'));
+    }
     quotedSelection = snapshot.text;
-    if (['rewrite', 'summarize', 'translate'].includes(request.task) && (!snapshot.text.trim() || snapshot.truncated)) {
+    const intentProvider = useEndpointForChat() ? endpointProvider : webllmProvider;
+    if (
+      (!intentProvider || (!intentProvider.generateJSON && typeof intentProvider.chat !== 'function')) &&
+      ['rewrite', 'summarize', 'translate'].includes(request.task) &&
+      (!snapshot.text.trim() || snapshot.truncated)
+    ) {
       appendTurn({ role: 'user', text: trimmed });
       appendTurn({
         role: 'status',
@@ -1409,7 +1494,7 @@ export function createAgentPanel(
     }
     const intent = directIntent(trimmed);
     if (intent) {
-      const answer = chat.getLastAnswer();
+      const answer = chat.getLastDocumentBody();
       const chinese = getLanguage().startsWith('zh');
       const messages: (LLMMessage & { hostGuidance?: 'tool' | 'status' | 'error' })[] = [
         { role: 'user', content: trimmed },
@@ -1553,11 +1638,82 @@ export function createAgentPanel(
     const operationHistory: Array<LLMMessage & { hostGuidance?: 'tool' | 'status' | 'error'; copyOnly?: true }> = [];
     const operationStorage = historyStorage;
     const operationSession = conversations.activeId;
+    // Bind the request before any model await: selection changes must never retarget a write.
+    const requestTarget = (() => {
+      try {
+        return captureDocumentToolTarget();
+      } catch {
+        return null;
+      }
+    })();
+    let routingStarted = false;
     try {
+      const routingProvider = useEndpointForChat() ? endpointProvider : webllmProvider;
+      if (
+        routingProvider?.isReady() &&
+        routingProvider.toolCallingMode === 'native' &&
+        !['rewrite', 'summarize', 'translate'].includes(request.task) &&
+        !isModelFreeToolRequest(trimmed, snapshot.context)
+      ) {
+        await ctl.send(trimmed);
+        return;
+      }
+      if (
+        routingProvider?.isReady() &&
+        !isModelFreeToolRequest(trimmed, snapshot.context) &&
+        (routingProvider.generateJSON || typeof routingProvider.chat === 'function')
+      ) {
+        const abort = new AbortController();
+        planning = abort;
+        routingStarted = true;
+        request = await resolveRequestIntent(routingProvider, trimmed, snapshot.context, abort.signal, {
+          hasSelection: !!snapshot.text.trim() && !snapshot.truncated,
+        });
+        abort.signal.throwIfAborted();
+        if (generation !== controllerGeneration || conversation !== conversationRevision)
+          throw new Error(t('agentPlanExpired'));
+        if (request.task !== 'chat' && (!requestTarget || !requestTarget.isCurrent(false)))
+          throw new Error(t('agentPlanExpired'));
+        writingSelect.value = request.task === 'compose' ? 'chat' : request.task;
+        languageSelect.value = request.language;
+        proposalMode = !['chat', 'compose'].includes(request.task);
+        if (planning === abort) planning = null;
+        if (
+          ['rewrite', 'summarize', 'translate'].includes(request.task) &&
+          (!snapshot.text.trim() || snapshot.truncated)
+        )
+          throw new Error(
+            t(
+              snapshot.truncated
+                ? 'agentContextTooLarge'
+                : snapshot.context?.kind === 'cell'
+                  ? 'agentSelectCells'
+                  : snapshot.context?.kind === 'slide'
+                    ? 'agentSelectSlideText'
+                    : 'agentSelectText',
+            ),
+          );
+      }
+      if (request.task === 'compose') {
+        if (snapshot.context?.kind !== 'word') throw new Error(t('agentWordOnly'));
+        if (!routingProvider?.isReady()) throw new Error(t('agentLoadModel'));
+        operationHistory.push({ role: 'user', content: trimmed });
+        appendTurn({ role: 'user', text: trimmed });
+        const abort = new AbortController();
+        planning = abort;
+        const body = await generateDocumentDraft(routingProvider, trimmed, abort.signal);
+        abort.signal.throwIfAborted();
+        if (generation !== controllerGeneration || conversation !== conversationRevision)
+          throw new Error(t('agentPlanExpired'));
+        operationHistory.push({ role: 'assistant', content: body, documentArtifact: true });
+        appendTurn({ role: 'agent', text: body, documentArtifact: true });
+        return;
+      }
       if (writingSelect.value === 'tools') {
         operationHistory.push({ role: 'user', content: text });
         invalidatePlans();
-        const target = captureDocumentToolTarget();
+        const target = requestTarget;
+        if (!target || !target.isCurrent(false)) throw new Error(t('agentPlanExpired'));
         const abort = new AbortController();
         planning = abort;
         appendTurn({ role: 'user', text });
@@ -1585,16 +1741,47 @@ export function createAgentPanel(
             preview = new ActionPreview();
             previews.add(preview);
             preview.show(action, (outcome) => {
-              if (generation === controllerGeneration && conversation === conversationRevision)
-                appendTurn({
-                  role: 'status',
-                  text: t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied'),
-                });
+              if (generation === controllerGeneration && conversation === conversationRevision) {
+                const id = crypto.randomUUID();
+                const feedback: LLMMessage[] = [
+                  { role: 'assistant', content: [{ type: 'tool_use', id, name: plan.tool, input: { ...plan.input } }] },
+                  {
+                    role: 'user',
+                    content: [
+                      {
+                        type: 'tool_result',
+                        toolUseId: id,
+                        content: JSON.stringify({ outcome, result: action.result }),
+                      },
+                    ],
+                  },
+                ];
+                if (controller && conversations.activeId === operationSession)
+                  controller.recordExternalMessages(feedback);
+                else operationStorage.save([...operationStorage.load(), ...feedback]);
+              }
             });
-            chat.el.insertBefore(preview.el, chat.el.lastElementChild);
+            chat.appendContent(preview.el);
             break;
           }
           const outcome = await action.apply(abort.signal);
+          const exchangeId = crypto.randomUUID();
+          operationHistory.push(
+            {
+              role: 'assistant',
+              content: [{ type: 'tool_use', id: exchangeId, name: plan.tool, input: { ...plan.input } }],
+            },
+            {
+              role: 'user',
+              content: [
+                {
+                  type: 'tool_result',
+                  toolUseId: exchangeId,
+                  content: JSON.stringify({ outcome, result: action.result }),
+                },
+              ],
+            },
+          );
           const result = action.result as
             { text?: string; cell?: string; sum?: number; range?: string; page?: number; count?: number } | undefined;
           const resultText = plan.readOnly
@@ -1603,7 +1790,7 @@ export function createAgentPanel(
               : typeof result?.sum === 'number'
                 ? `${result.range ?? ''}: ${result.sum}`
                 : `${target.label} → ${result?.page ?? ''} / ${result?.count ?? ''}`
-            : t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
+            : `${result?.range ? result.range + ' · ' : ''}${t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied')}`;
           operationHistory.push({ role: 'assistant', content: resultText, hostGuidance: 'tool' });
           if (generation === controllerGeneration && conversation === conversationRevision)
             appendTurn({ role: 'tool', text: resultText });
@@ -1691,7 +1878,6 @@ export function createAgentPanel(
         preview.show(action, (outcome) => {
           if (!enabled || generation !== controllerGeneration || conversation !== conversationRevision) return;
           const text = t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
-          appendTurn({ role: 'tool', text });
           const messages: LLMMessage[] = [{ role: 'assistant', content: text, hostGuidance: 'tool' } as LLMMessage];
           if (controller && conversations.activeId === operationSession) controller.recordExternalMessages(messages);
           else operationStorage.save([...operationStorage.load(), ...messages]);
@@ -1705,6 +1891,13 @@ export function createAgentPanel(
     } catch (error) {
       const stopped = error instanceof Error && error.name === 'AbortError';
       const role = stopped ? 'status' : 'error';
+      // Routing happens before any branch records the request. Preserve failed
+      // requests too, without duplicating a chat/controller-owned user turn.
+      if (routingStarted && !operationHistory.length) {
+        operationHistory.push({ role: 'user', content: trimmed });
+        if (generation === controllerGeneration && conversation === conversationRevision)
+          appendTurn({ role: 'user', text: trimmed });
+      }
       if (operationHistory.length)
         operationHistory.push({
           role: 'assistant',
@@ -1856,7 +2049,6 @@ export function createAgentPanel(
     }
     providerSelect.setAttribute('value', selected); // nudge the closed label to retranslate
     syncFileChoice();
-    loadBtn.textContent = t('agentLoadModel');
     loadStop.textContent = t('agentStop');
     ggufStop.textContent = t('agentStop');
     loadProgress.setAttribute('aria-label', t('agentPreparing'));
@@ -2008,9 +2200,10 @@ export function createAgentPanel(
       const name = Span()
         .text(model.label + (active ? ' · ' + t('agentModelInUse') : ''))
         .build();
-      const use = ranButton(t('agentUseModel'), 'agent-cache-use');
+      const use = ranButton(t(active ? 'agentModelInUse' : 'agentUseModel'), 'agent-cache-use');
+      use.toggleAttribute('disabled', active);
       use.addEventListener('click', () => {
-        if (cacheBusy) return;
+        if (cacheBusy || active) return;
         providerSelect.value = 'webllm';
         providerSelect.dispatchEvent(new Event('change'));
         if (WEBLLM_MODELS.some((item) => item.id === model.id)) {
@@ -2075,15 +2268,17 @@ export function createAgentPanel(
       cacheRows.append(row);
     }
     for (const item of ggufs) {
+      const active = currentProvider() === 'wllama' && !!webllmProvider?.isReady() && ggufUrl.value.trim() === item.url;
       const row = Div().class('agent-model-cache-row').attr('role', 'group').build();
       const name = Span()
         .text(
           `${new URL(item.url).pathname.split('/').pop() ?? item.name} · ${(item.size / 1e9).toFixed(2)} GB${item.complete ? '' : ' · ' + t('agentDownloadIncomplete')}`,
         )
         .build();
-      const use = ranButton(t('agentUseModel'), 'agent-cache-use');
+      const use = ranButton(t(active ? 'agentModelInUse' : 'agentUseModel'), 'agent-cache-use');
+      use.toggleAttribute('disabled', active);
       use.addEventListener('click', () => {
-        if (cacheBusy) return;
+        if (cacheBusy || active) return;
         providerSelect.value = 'wllama';
         providerSelect.dispatchEvent(new Event('change'));
         ggufUrl.value = item.url;

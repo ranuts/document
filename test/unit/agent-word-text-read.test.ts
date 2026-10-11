@@ -10,3 +10,13 @@ it('rejects unknown native structures rather than trusting legacy readback', () 
     readWordBodyText({ GetAllParagraphs: () => [{ Content: [{ Type: 999 }] }], GetText: () => 'safe' }),
   ).toBeUndefined();
 });
+
+it('reads the live body after Undo instead of a cached empty paragraph list', () => {
+  const paragraph = { Content: [{ Type: 39, Content: [{ Type: 1, GetCodePoint: () => 65 }] }] };
+  expect(
+    readWordBodyText({
+      GetAllParagraphs: () => [],
+      Content: [{ GetAllParagraphs: (_options: object, target: unknown[]) => target.push(paragraph) }],
+    }),
+  ).toBe('A');
+});

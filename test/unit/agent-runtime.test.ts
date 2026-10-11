@@ -220,7 +220,7 @@ describe('runAgent', () => {
   });
 
   it('stops on the iteration cap when the model keeps calling tools', async () => {
-    const tools = { loop: makeTool('loop', async () => ({})) };
+    const tools = { loop: { ...makeTool('loop', async () => ({})), readOnlyHint: true } };
     const { provider, chat } = scripted([toolResponse('t', 'loop', {})]); // always a tool call
     const result = await runAgent(provider, 'go', { tools, maxIterations: 3 });
     expect(result.stoppedOnLimit).toBe(true);
@@ -369,4 +369,121 @@ it('passes long input intact to a provider that budgets the final request by tok
   await runAgent(provider, request);
   expect(chat.mock.calls[0][0]).toEqual([{ role: 'user', content: request }]);
   await expect(runAgent(provider, request, { maxContextBytes: 400 })).rejects.toThrow('agentContextTooLong');
+});
+it('validates model arguments before dispatch without coercion', async () => {
+  const execute = vi.fn();
+  const { provider } = scripted([toolResponse('bad', 'write', { value: '12' }), textResponse('clarify')]);
+  const result = await runAgent(provider, 'write', {
+    tools: {
+      write: {
+        name: 'write',
+        description: 'write',
+        readOnlyHint: false,
+        inputSchema: {
+          type: 'object',
+          required: ['value'],
+          additionalProperties: false,
+          properties: { value: { type: 'integer' } },
+        },
+        execute,
+      },
+    },
+  });
+  expect(execute).not.toHaveBeenCalled();
+  expect(result.messages[2].content).toEqual([
+    expect.objectContaining({ isError: true, content: expect.stringContaining('Invalid tool arguments') }),
+  ]);
+});
+it('refuses repeated mutations even if model argument key order changes', async () => {
+  const execute = vi.fn().mockResolvedValue({ done: true });
+  const { provider } = scripted([
+    toolResponse('one', 'write', { a: 1, b: 2 }),
+    toolResponse('two', 'write', { b: 2, a: 1 }),
+  ]);
+  const result = await runAgent(provider, 'write', {
+    tools: { write: { name: 'write', description: 'write', readOnlyHint: false, inputSchema: {}, execute } },
+  });
+  expect(execute).toHaveBeenCalledTimes(1);
+  expect(result.stoppedOnLimit).toBe(true);
+});
+it('concludes at a pending review and pairs skipped calls without dispatching them', async () => {
+  const execute = vi.fn().mockResolvedValue({ status: 'pending_review' });
+  const response = toolResponse('one', 'write', {});
+  response.toolCalls.push({ id: 'two', name: 'write', input: {} });
+  const result = await runAgent(
+    { name: 'test', isReady: () => true, chat: vi.fn().mockResolvedValue(response) },
+    'write',
+    {
+      tools: {
+        write: {
+          name: 'write',
+          description: 'write',
+          inputSchema: {},
+          readOnlyHint: false,
+          concludesTurn: true,
+          execute,
+        },
+      },
+    },
+  );
+  expect(execute).toHaveBeenCalledTimes(1);
+  expect(result.stoppedOnLimit).toBe(false);
+  expect(result.messages.at(-1)?.content).toEqual(
+    expect.arrayContaining([expect.objectContaining({ toolUseId: 'two', isError: true })]),
+  );
+});
+it('caps total dispatches even when the model varies read arguments', async () => {
+  const execute = vi.fn().mockResolvedValue({ found: true });
+  let index = 0;
+  const provider = {
+    name: 'scripted',
+    isReady: () => true,
+    chat: vi.fn(async () => toolResponse(String(index), 'read', { value: index++ })),
+  };
+  const result = await runAgent(provider, 'read', {
+    maxToolCalls: 2,
+    tools: { read: { name: 'read', description: 'read', inputSchema: {}, readOnlyHint: true, execute } },
+  });
+  expect(execute).toHaveBeenCalledTimes(2);
+  expect(result.stoppedOnLimit).toBe(true);
+  expect(JSON.stringify(result.messages.at(-1))).toContain('Tool call budget exceeded');
+});
+it('does not dispatch names inherited from the registry prototype', async () => {
+  const { provider } = scripted([toolResponse('bad', 'toString', {}), textResponse('handled')]);
+  const result = await runAgent(provider, 'go', { tools: {} });
+  expect(JSON.stringify(result.messages[2])).toContain('Unknown tool: toString');
+});
+it.each([false, true])('does not present tool-call prose as completion (streamed=%s)', async (streaming) => {
+  const events: AgentEvent[] = [];
+  const response = { ...toolResponse('pending', 'write', {}), text: 'I cleared the document' };
+  const provider: LLMProvider = {
+    name: 'test',
+    isReady: () => true,
+    chat: vi.fn().mockResolvedValue(response),
+    ...(streaming
+      ? {
+          chatStream: async (_messages: LLMMessage[], _tools: unknown[], delta: (text: string) => void) => {
+            delta(response.text);
+            return response;
+          },
+        }
+      : {}),
+  };
+  await runAgent(provider, 'clear', {
+    tools: {
+      write: {
+        name: 'write',
+        description: 'write',
+        inputSchema: {},
+        readOnlyHint: false,
+        concludesTurn: true,
+        execute: async () => ({ status: 'pending_review', executed: false }),
+      },
+    },
+    onEvent: (event) => events.push(event),
+  });
+  expect(events.some((event) => event.type === 'assistant' || event.type === 'assistant_delta')).toBe(false);
+  expect(events.find((event) => event.type === 'tool_result')).toMatchObject({
+    content: JSON.stringify({ status: 'pending_review', executed: false }),
+  });
 });

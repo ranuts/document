@@ -25,7 +25,7 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
   mic.innerHTML =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 10v2a6 6 0 0 0 12 0v-2M12 18v3M8 21h8"/></svg>';
   const details = document.createElement('div');
-  details.className = 'agent-speech-details';
+  details.className = 'agent-speech-language-picker';
   details.hidden = true;
   const language = document.createElement('r-select') as HTMLElement & { value: string; disabled: boolean };
   language.setAttribute('placement', 'top');
@@ -46,21 +46,30 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
   }
   const locale = () => languages.find(([code]) => code.startsWith(getLanguage().split('-')[0]))?.[0] ?? 'en-US';
   language.value = locale();
+  const languageButton = document.createElement('button');
+  languageButton.type = 'button';
+  languageButton.className = 'agent-speech-language';
   const hint = document.createElement('p');
+  hint.hidden = true;
   const status = document.createElement('span');
   status.setAttribute('role', 'status');
-  const start = document.createElement('button');
-  start.type = 'button';
+  status.setAttribute('aria-live', 'polite');
+  const feedback = document.createElement('div');
+  feedback.className = 'agent-speech-feedback';
   const cancel = document.createElement('button');
   cancel.type = 'button';
-  details.append(language, hint, start, cancel, status);
-  root.append(mic, details);
+  cancel.className = 'agent-speech-cancel';
+  feedback.append(status, hint, cancel);
+  details.append(language);
+  root.append(mic, languageButton, details, feedback);
   chat.actionsEl.append(root);
+  let disclosed = false;
+  let stopping = false;
   let recognition: Recognition | undefined;
   let busy = false;
   let original = '';
   let base = '';
-  let finalText = '';
+  let transcript = '';
   let revision = 0;
   let deadline: ReturnType<typeof setTimeout> | undefined;
   const render = () => {
@@ -68,12 +77,17 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
     mic.title = mic.getAttribute('aria-label') ?? '';
     mic.setAttribute('aria-pressed', String(busy));
     chat.refreshSendAvailability();
-    mic.setAttribute('aria-expanded', String(!details.hidden));
+    languageButton.setAttribute('aria-expanded', String(!details.hidden));
+    languageButton.setAttribute('aria-label', t('agentSpeechLanguage'));
+    languageButton.title = t('agentSpeechLanguage');
+    languageButton.textContent = languages.find(([code]) => code === language.value)?.[1] ?? 'English';
+    languageButton.disabled = busy;
+    cancel.hidden = !busy;
+    feedback.hidden = !busy && !status.textContent;
+    mic.disabled = stopping;
     language.setAttribute('aria-label', t('agentSpeechLanguage'));
     language.disabled = busy;
     hint.textContent = t('agentSpeechPrivacy');
-    start.textContent = t('agentSpeechStart');
-    start.disabled = busy || !Constructor;
     cancel.textContent = t('agentSpeechCancel');
   };
   const close = (discard = false, preserveDraft = false) => {
@@ -85,17 +99,24 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
       /* Already disconnected. */
     }
     recognition = undefined;
-    if (busy && !preserveDraft) chat.setInput(discard ? original : finalText ? base + finalText : original);
+    if (busy && !preserveDraft) chat.setInput(discard ? original : transcript ? base + transcript : original);
     busy = false;
+    stopping = false;
     details.hidden = true;
+    hint.hidden = true;
+    status.textContent = '';
     render();
   };
-  start.addEventListener('click', () => {
+  const begin = () => {
     if (!Constructor || busy || !allowed()) return;
     original = chat.getInput();
     base = original;
     if (base && !/\s$/.test(base)) base += ' ';
-    finalText = '';
+    transcript = '';
+    stopping = false;
+    details.hidden = true;
+    hint.hidden = disclosed;
+    disclosed = true;
     const token = ++revision;
     const instance = new Constructor();
     recognition = instance;
@@ -117,8 +138,8 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
         if (result.isFinal) confirmed += result[0].transcript;
         else interim += result[0].transcript;
       }
-      finalText = confirmed;
-      chat.setInput(base + confirmed + interim);
+      transcript = confirmed + interim;
+      chat.setInput(base + transcript);
     };
     instance.onerror = (event) => {
       if (token !== revision) return;
@@ -131,7 +152,17 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
     instance.onend = () => {
       if (token !== revision) return;
       clearTimeout(deadline);
-      chat.setInput(finalText ? base + finalText : original);
+      ++revision;
+      chat.setInput(transcript ? base + transcript : original);
+      if (
+        status.textContent === t('agentSpeechStarting') ||
+        status.textContent === t('agentSpeechListening') ||
+        status.textContent === t('agentSpeechFinishing')
+      ) {
+        status.textContent = transcript ? '' : t('agentSpeechNoResult');
+      }
+      hint.hidden = true;
+      stopping = false;
       busy = false;
       recognition = undefined;
       render();
@@ -143,6 +174,7 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
         if (token === revision && busy) {
           close();
           status.textContent = t('agentSpeechFailed');
+          render();
         }
       }, 60000);
     } catch {
@@ -151,10 +183,12 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
       status.textContent = t('agentSpeechFailed');
       render();
     }
-  });
+  };
   mic.addEventListener('click', () => {
     if (busy) {
+      stopping = true;
       status.textContent = t('agentSpeechFinishing');
+      render();
       try {
         recognition?.stop();
       } catch {
@@ -162,13 +196,22 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
       }
       return;
     }
-    details.hidden = !details.hidden;
-    if (!details.hidden) {
-      language.value = locale();
-      status.textContent = Constructor ? '' : t('agentSpeechUnsupported');
-      language.focus();
+    if (!Constructor) {
+      status.textContent = t('agentSpeechUnsupported');
+      render();
+      return;
     }
+    begin();
+  });
+  languageButton.addEventListener('click', () => {
+    details.hidden = !details.hidden;
+    if (!details.hidden) language.focus();
     render();
+  });
+  language.addEventListener('change', () => {
+    details.hidden = true;
+    render();
+    languageButton.focus();
   });
   cancel.addEventListener('click', () => {
     close(true);

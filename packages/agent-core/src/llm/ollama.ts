@@ -29,6 +29,7 @@ export interface OllamaProviderOptions {
 }
 
 export class OllamaProvider implements LLMProvider {
+  readonly toolCallingMode = 'native' as const;
   readonly name = 'ollama';
   private readonly apiKey?: string;
   private readonly model: string;

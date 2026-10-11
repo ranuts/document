@@ -134,3 +134,34 @@ it('rejects a response that never completed', async () => {
     'Incomplete local service response',
   );
 });
+
+it('continues after an editor tool using documented native tool history', async () => {
+  let body: unknown;
+  const provider = new LoopbackProvider({
+    model: 'local',
+    fetchImpl: async (url, init) => {
+      if (url.endsWith('/tags')) return Response.json({ models: [{ name: 'local' }] });
+      body = JSON.parse(init.body as string);
+      return Response.json({ done: true, message: { content: 'Done' } });
+    },
+  });
+  await provider.preload();
+  await provider.chat(
+    [
+      { role: 'assistant', content: [{ type: 'tool_use', id: 'one', name: 'fill_series', input: { cell: 'A1' } }] },
+      { role: 'user', content: [{ type: 'tool_result', toolUseId: 'one', content: '{"verified":true}' }] },
+      { role: 'user', content: 'What changed?' },
+    ],
+    [],
+  );
+  expect(body).toMatchObject({
+    messages: [
+      {
+        role: 'assistant',
+        tool_calls: [{ type: 'function', function: { name: 'fill_series', arguments: { cell: 'A1' } } }],
+      },
+      { role: 'tool', tool_name: 'fill_series', content: '{"verified":true}' },
+      { role: 'user', content: 'What changed?' },
+    ],
+  });
+});

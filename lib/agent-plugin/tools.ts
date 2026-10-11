@@ -1,4 +1,7 @@
 import { setDocumentReviewMode } from './review-mode';
+import { fillSeriesTool } from './fill-series';
+import { clearDocumentTool } from './clear-document';
+import { readWordBodyText } from './word-text-read';
 import { writeExcelCellText, writeExcelCellValue } from './excel-cell-write';
 import { pasteWordHtml } from './word-paste';
 import { addSlideTextTool, replaceSlideText } from './office-tools';
@@ -14,7 +17,7 @@ import { escapeHtml } from 'ranuts/utils';
 import { requireEditorApi, requireEditorContext } from './editor-bridge';
 import type { AgentTool } from '@ranuts/agent-core/types';
 import { setBoldTool, setParagraphAlignmentTool } from './formatting-tools';
-import { readSlideShapeText } from './slide-text-read';
+import { readPresentationShapeText } from './slide-text-read';
 import {
   getRangesTool,
   getRangeTool,
@@ -162,9 +165,7 @@ const DEFAULT_MAX_CHARS = 8000;
 export const getDocumentTextTool: AgentTool<GetDocumentTextParams, { text: string; truncated: boolean }> = {
   name: 'get_document_text',
   description:
-    'Read the full plain text of the document. Long documents are truncated ' +
-    '(default 8000 characters). Side effect: this clears the current selection ' +
-    'and moves the cursor — call it before editing, not mid-edit.',
+    'Word only. Read current main-body text without moving the caret or selection. Long text is truncated; unsupported structures are reported as unavailable.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -174,17 +175,14 @@ export const getDocumentTextTool: AgentTool<GetDocumentTextParams, { text: strin
   },
   readOnlyHint: true,
   execute: async ({ maxChars = DEFAULT_MAX_CHARS } = {}) => {
+    if (!Number.isInteger(maxChars) || maxChars < 1 || maxChars > 32000) throw new Error('Invalid maximum text length');
     const api = requireEditorApi();
     if ((api.WordControl as { m_oLogicDocument?: { Slides?: unknown[] } } | undefined)?.m_oLogicDocument?.Slides)
       throw new Error('Use get_presentation_text to read presentation shape text');
-    // The public plugin API lacks a non-destructive full-text read, so select
-    // all → read → clear. GetSelectedText returns CRLF; normalise to \n.
-    api.asc_EditSelectAll();
-    const full = api.pluginMethod_GetSelectedText({ TabSymbol: '\t', Numbering: false }).replace(/\r\n/g, '\n');
-    // asc_RemoveSelection exists in Word/Slide but not the spreadsheet editor.
-    api.asc_RemoveSelection?.();
-    const truncated = full.length > maxChars;
-    return { text: truncated ? full.slice(0, maxChars) : full, truncated };
+    const body = readWordBodyText((api.WordControl as { m_oLogicDocument?: unknown } | undefined)?.m_oLogicDocument);
+    if (body === undefined) throw new Error('Current document text is unavailable without changing selection');
+    const text = body.replace(/\r\n?/g, '\n');
+    return { text: text.slice(0, maxChars), truncated: text.length > maxChars };
   },
 };
 
@@ -208,16 +206,8 @@ export const getPresentationTextTool: AgentTool<GetDocumentTextParams, { text: s
     )?.m_oLogicDocument?.Slides;
     if (!slides) throw new Error('get_presentation_text is only available in the presentation editor');
     let text = '';
-    const readShape = (shape: PresentationShape): string => {
-      if (shape.spTree) return shape.spTree.map(readShape).filter(Boolean).join('\n');
-      return (
-        (readSlideShapeText(shape) ?? shape.getDocContent?.()?.GetText({}) ?? shape.getText?.())
-          ?.replace(/\r\n?/g, '\n')
-          .trim() ?? ''
-      );
-    };
     for (let index = 0; index < slides.length; index++) {
-      const content = slides[index].cSld.spTree.map(readShape).filter(Boolean).join('\n');
+      const content = slides[index].cSld.spTree.map(readPresentationShapeText).filter(Boolean).join('\n');
       if (content) text += `${text ? '\n\n' : ''}Slide ${index + 1}:\n${content}`;
       if (text.length > maxChars) return { text: text.slice(0, maxChars), truncated: true };
     }
@@ -355,6 +345,8 @@ export const getCellTool: AgentTool<GetCellParams, { cell: string; text: string 
 
 /** All registered agent tools, keyed by name for lookup by the runtime. */
 export const agentTools: Record<string, AgentTool> = {
+  [fillSeriesTool.name]: fillSeriesTool as unknown as AgentTool,
+  [clearDocumentTool.name]: clearDocumentTool as unknown as AgentTool,
   [addSlideTextTool.name]: addSlideTextTool as unknown as AgentTool,
   [getRangesTool.name]: getRangesTool as unknown as AgentTool,
   [getRangeTool.name]: getRangeTool as unknown as AgentTool,

@@ -8,6 +8,13 @@ import type { I18nMessages } from '../types';
  */
 export const zhCN: I18nMessages = {
   editorBackHome: '返回首页',
+  agentSpeechNoResult: '没有识别到语音，请检查麦克风后重试。',
+  agentClearImpact: '将删除正文中的 {count} 个字符。',
+  agentInsertContent: '插入内容',
+  agentReplaceContent: '替换内容',
+  agentPlanApplying: '正在应用修改…',
+  agentClearDocument: '清空正文（可撤销）',
+  agentFillSeries: '填入数字序列',
   agentSpeechInput: '语音输入',
   agentSpeechStop: '停止听写',
   agentSpeechLanguage: '识别语言',
@@ -206,7 +213,7 @@ export const zhCN: I18nMessages = {
   agentPlanBefore: '原文',
   agentPlanAfter: '提议内容',
   agentPlanTitle: '检查修改建议',
-  agentPlanApply: '替换所选内容',
+  agentPlanApply: '应用修改',
   agentPlanCancel: '取消',
   agentPlanExpired: '建议已失效，请重新生成。',
   agentPlanVerified: '已完成，可以撤销。',

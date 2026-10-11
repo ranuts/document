@@ -10,6 +10,8 @@ const tools = new Set([
   'insert_text',
   'replace_selection',
   'set_cell',
+  'fill_series',
+  'clear_document',
   'add_comment',
   'set_review_mode',
   'set_bold',
@@ -51,6 +53,8 @@ export function assistantPresentation(text: string): string {
 }
 
 export function toolLabel(name: string): string {
+  if (name === 'fill_series') return t('agentFillSeries');
+  if (name === 'clear_document') return t('agentClearDocument');
   if (name === 'sum_range') return t('agentReadCell');
   if (name === 'sort_range') return t('agentUpdateCell');
   if (name === 'slide_action') return t('agentExecute');

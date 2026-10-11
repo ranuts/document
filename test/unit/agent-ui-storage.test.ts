@@ -78,7 +78,6 @@ describe('historyToTurns', () => {
     ];
     expect(historyToTurns(messages)).toEqual([
       { role: 'user', text: 'do it' },
-      { role: 'agent', text: 'working' },
       { role: 'tool', text: t('agentUpdateDocument') },
       { role: 'error', text: t('agentRequestFailed') },
       { role: 'agent', text: 'done' },
@@ -104,4 +103,28 @@ it('marks legacy partial prose immediately followed by a stopped host status on 
     { role: 'agent', text: 'partial prose', interrupted: true },
     { role: 'status', text: 'Stopped.' },
   ]);
+});
+it('does not revive false completion prose when restoring a pending tool proposal', () => {
+  const messages: LLMMessage[] = [
+    {
+      role: 'assistant',
+      content: [
+        { type: 'text', text: 'I cleared the document' },
+        { type: 'tool_use', id: 'proposal', name: 'clear_document', input: {} },
+      ],
+    },
+    {
+      role: 'user',
+      content: [
+        {
+          type: 'tool_result',
+          toolUseId: 'proposal',
+          content: JSON.stringify({ status: 'pending_review', executed: false }),
+        },
+      ],
+    },
+  ];
+  const original = structuredClone(messages);
+  expect(historyToTurns(messages).some((turn) => turn.text.includes('I cleared'))).toBe(false);
+  expect(messages).toEqual(original);
 });

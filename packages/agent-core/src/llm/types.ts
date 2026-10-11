@@ -27,6 +27,8 @@ export interface LLMMessage {
   content: string | LLMContent[];
   /** Visible partial prose preserved after cancellation; never a complete answer. */
   interrupted?: true;
+  /** Host-created document body; never inferred from generic assistant prose. */
+  documentArtifact?: true;
 }
 
 /** A tool call the model requested. */
@@ -72,6 +74,8 @@ export interface LLMProvider {
   readonly name: string;
   /** True when the provider can make a request (e.g. an API key is present). */
   isReady(): boolean;
+  /** Native tool protocol supported by this transport; not a model-quality certification. */
+  readonly toolCallingMode?: 'native' | 'schema';
   /** True when the ready engine budgets the complete request using actual tokens. */
   hasExactContextBudget?(): boolean;
   /**

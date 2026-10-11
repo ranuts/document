@@ -11,6 +11,13 @@ import type { I18nMessages } from '../types';
  */
 export const de: Partial<I18nMessages> = {
   editorBackHome: 'Zur Startseite',
+  agentSpeechNoResult: 'Keine Sprache erkannt. Prüfen Sie Ihr Mikrofon und versuchen Sie es erneut.',
+  agentClearImpact: 'Löscht {count} Zeichen aus dem Dokumenttext.',
+  agentInsertContent: 'Inhalt einfügen',
+  agentReplaceContent: 'Inhalt ersetzen',
+  agentPlanApplying: 'Änderung wird angewendet…',
+  agentClearDocument: 'Dokumentinhalt leeren (rückgängig möglich)',
+  agentFillSeries: 'Zahlenreihe einfügen',
   agentSpeechInput: 'Spracheingabe',
   agentSpeechStop: 'Diktat stoppen',
   agentSpeechLanguage: 'Erkennungssprache',
@@ -230,7 +237,7 @@ export const de: Partial<I18nMessages> = {
   agentPlanBefore: 'Ausgangstext',
   agentPlanAfter: 'Vorgeschlagener Text',
   agentPlanTitle: 'Änderung prüfen',
-  agentPlanApply: 'Ausgewählten Text ersetzen',
+  agentPlanApply: 'Änderungen anwenden',
   agentPlanCancel: 'Abbrechen',
   agentPlanExpired: 'Dieser Vorschlag ist veraltet. Erstellen Sie einen neuen.',
   agentPlanVerified: 'Erledigt. Sie können die Änderung rückgängig machen.',

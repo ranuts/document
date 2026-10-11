@@ -8,6 +8,8 @@ export interface ChatMessage {
   interrupted?: true;
   /** Text-only result; no host write action may be reconstructed. */
   copyOnly?: true;
+  /** Host-validated document content, distinct from ordinary chat prose. */
+  documentArtifact?: true;
 }
 
 /** Text shown in the UI. Everything is optional so the component works untranslated. */
@@ -46,6 +48,8 @@ export interface ChatViewOptions {
   onStop?: () => void;
   /** Host-owned document operation; the model never executes this action. */
   canApplyMessage?: () => boolean;
+  /** Only explicitly marked artifacts may offer host write actions. */
+  requireDocumentArtifact?: boolean;
   onApplyMessage?: (text: string) => Promise<'verified' | 'sent' | 'retry' | 'failed'>;
   /** Initial labels; change later with {@link ChatView.setLabels}. */
   labels?: ChatViewLabels;

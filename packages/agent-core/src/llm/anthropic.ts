@@ -110,6 +110,7 @@ export interface AnthropicProviderOptions {
 }
 
 export class AnthropicProvider implements LLMProvider {
+  readonly toolCallingMode = 'native' as const;
   readonly name = 'anthropic';
   private readonly apiKey?: string;
   private readonly model: string;

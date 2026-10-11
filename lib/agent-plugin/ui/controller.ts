@@ -19,11 +19,14 @@ export interface ChatTurn {
   interrupted?: true;
   /** Text-only result; no host write action may be reconstructed. */
   copyOnly?: true;
+  documentArtifact?: true;
 }
 
 export interface AgentChatControllerOptions {
   onUsage?: (usage: NonNullable<LLMResponse['usage']>) => void;
   tools?: Record<string, AgentTool>;
+  /** Capture a fresh tool scope once at the start of each run. */
+  getTools?: () => Record<string, AgentTool>;
   maxIterations?: number;
   /** Called with each streamed assistant text delta (live-render the bubble). */
   onAgentDelta?: (delta: string) => void;
@@ -100,7 +103,7 @@ export class AgentChatController {
     };
     try {
       const result = await runAgent(this.provider, text, {
-        tools: this.options.tools,
+        tools: this.options.getTools?.() ?? this.options.tools,
         maxIterations: this.options.maxIterations,
         history: priorHistory,
         onContextTrimmed: this.options.onContextTrimmed,

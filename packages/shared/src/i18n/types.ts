@@ -7,6 +7,13 @@
  */
 export interface I18nMessages {
   editorBackHome: string;
+  agentSpeechNoResult: string;
+  agentClearImpact: string;
+  agentInsertContent: string;
+  agentReplaceContent: string;
+  agentPlanApplying: string;
+  agentClearDocument: string;
+  agentFillSeries: string;
   agentSpeechInput: string;
   agentSpeechStop: string;
   agentSpeechLanguage: string;

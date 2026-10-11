@@ -147,6 +147,13 @@ export class ChatView {
     return rows.length ? (rows[rows.length - 1].dataset.source ?? '') : '';
   }
 
+  getLastDocumentBody(): string {
+    const rows = this.messagesEl.querySelectorAll<HTMLElement>(
+      '.cui-msg-agent[data-document-artifact]:not(.cui-streaming):not([data-interrupted])',
+    );
+    return rows.length ? (rows[rows.length - 1].dataset.source ?? '') : '';
+  }
+
   /** Append a finished message and scroll to it. Returns the bubble element. */
   append(message: ChatMessage): HTMLDivElement {
     if ((message.role === 'status' || message.role === 'error') && this.liveMsg) {
@@ -212,6 +219,7 @@ export class ChatView {
       if (
         this.options.onApplyMessage &&
         (this.options.canApplyMessage?.() ?? true) &&
+        (!this.options.requireDocumentArtifact || message.documentArtifact === true) &&
         !message.interrupted &&
         !message.copyOnly
       ) {
@@ -255,6 +263,7 @@ export class ChatView {
     }
     if (actions.childElementCount) row.append(actions);
     row.dataset.source = message.text;
+    if (message.documentArtifact) row.dataset.documentArtifact = 'true';
     if (message.interrupted) row.dataset.interrupted = 'true';
 
     this.messagesEl.appendChild(row);

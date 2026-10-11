@@ -8,6 +8,13 @@ import type { I18nMessages } from '../types';
  */
 export const en: I18nMessages = {
   editorBackHome: 'Back to home',
+  agentSpeechNoResult: 'No speech recognized. Check your microphone and try again.',
+  agentClearImpact: 'Deletes {count} characters from the document body.',
+  agentInsertContent: 'Insert content',
+  agentReplaceContent: 'Replace content',
+  agentPlanApplying: 'Applying change…',
+  agentClearDocument: 'Clear document body (can be undone)',
+  agentFillSeries: 'Fill numeric series',
   agentSpeechInput: 'Voice input',
   agentSpeechStop: 'Stop dictation',
   agentSpeechLanguage: 'Recognition language',
@@ -217,7 +224,7 @@ export const en: I18nMessages = {
   agentPlanBefore: 'Original',
   agentPlanAfter: 'Proposed text',
   agentPlanTitle: 'Review proposed change',
-  agentPlanApply: 'Replace selected text',
+  agentPlanApply: 'Apply changes',
   agentPlanCancel: 'Cancel',
   agentPlanExpired: 'This proposal expired. Generate a new one.',
   agentPlanVerified: 'Done. You can undo this change.',
