@@ -90,6 +90,51 @@ it.each([true, false])('resize follows only a reader already at the end: %s', (a
     expect(messages.scrollTop).toBe(100);
   }
 });
+it.each(['delta', 'message', 'completion', 'review'] as const)(
+  'preserves following when %s arrives between reflow and its scheduled frame',
+  (arrival) => {
+    const { view, messages } = mount();
+    view.appendDelta('First');
+    Object.defineProperties(messages, {
+      scrollHeight: { configurable: true, value: 1000 },
+      clientHeight: { configurable: true, value: 200 },
+    });
+    messages.scrollTop = 800;
+    messages.dispatchEvent(new Event('scroll'));
+    Object.defineProperty(messages, 'clientHeight', { configurable: true, value: 100 });
+    messages.dispatchEvent(new Event('scroll'));
+    resize([resizeEntry(messages, 320)], {} as ResizeObserver);
+    vi.mocked(messages.scrollTo).mockClear();
+    if (arrival === 'delta') view.appendDelta(' streamed');
+    else if (arrival === 'message') view.append({ role: 'status', text: 'Done' });
+    else if (arrival === 'completion') view.endStream();
+    else view.appendContent(document.createElement('section'));
+    frames.splice(0).forEach((callback) => callback(0));
+    expect(messages.scrollTo).toHaveBeenCalledWith({ top: 1000, behavior: 'auto' });
+    view.dispose();
+  },
+);
+it('honors scrolling into history before a pending resize frame and the next streamed delta', () => {
+  const { view, messages } = mount();
+  view.appendDelta('First');
+  Object.defineProperties(messages, {
+    scrollHeight: { configurable: true, value: 1000 },
+    clientHeight: { configurable: true, value: 200 },
+  });
+  messages.scrollTop = 800;
+  messages.dispatchEvent(new Event('scroll'));
+  Object.defineProperty(messages, 'clientHeight', { configurable: true, value: 100 });
+  messages.dispatchEvent(new Event('scroll'));
+  resize([resizeEntry(messages, 320)], {} as ResizeObserver);
+  messages.scrollTop = 100;
+  messages.dispatchEvent(new Event('scroll'));
+  vi.mocked(messages.scrollTo).mockClear();
+  view.appendDelta(' streamed');
+  frames.splice(0).forEach((callback) => callback(0));
+  expect(messages.scrollTo).not.toHaveBeenCalled();
+  expect(messages.scrollTop).toBe(100);
+  view.dispose();
+});
 it('copy feedback restores the icon label, can retry, and does not replace running activity', async () => {
   vi.useFakeTimers();
   const writeText = vi.fn().mockRejectedValueOnce(new Error('Denied')).mockResolvedValue(undefined);

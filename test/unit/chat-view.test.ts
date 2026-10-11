@@ -300,6 +300,7 @@ it.each([true, false])(
     view.appendDelta('**Final reply**');
     Object.defineProperties(messages, { scrollHeight: { value: 1000 }, clientHeight: { value: 200 } });
     messages.scrollTop = atBottom ? 800 : 100;
+    messages.dispatchEvent(new Event('scroll'));
     vi.mocked(messages.scrollTo).mockClear();
     view.endStream();
     expect(view.el.querySelector('.cui-bubble strong')?.textContent).toBe('Final reply');
@@ -418,6 +419,7 @@ it('does not interrupt historical reading when a review is appended', () => {
   const messages = view.el.querySelector<HTMLElement>('.cui-messages')!;
   Object.defineProperties(messages, { scrollHeight: { value: 1000 }, clientHeight: { value: 200 } });
   messages.scrollTop = 100;
+  messages.dispatchEvent(new Event('scroll'));
   vi.mocked(messages.scrollTo).mockClear();
   const review = document.createElement('section');
   review.textContent = 'Review changes';
