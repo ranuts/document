@@ -1,4 +1,5 @@
 import { expect, test } from './lib/l0';
+import { waitForEditorReady } from './actions/editor';
 
 test('homepage is the static landing: hero present, no editor bundle', async ({ page }) => {
   const pageErrors: string[] = [];
@@ -35,6 +36,7 @@ test('/editor?new=docx mounts the editor shell; legacy /?new=docx redirects ther
 });
 
 test('the editor page fits the viewport and renders in the ranui typeface', async ({ page }) => {
+  test.setTimeout(150_000);
   // Two properties nothing else here asserted on, and both were broken.
   //
   // The typeface came from Tailwind's preflight (`html { font-family }`) and
@@ -51,6 +53,7 @@ test('the editor page fits the viewport and renders in the ranui typeface', asyn
   await page.setViewportSize({ width: 1280, height: 700 });
   await page.goto('/editor?new=docx');
   await expect(page.locator('#app')).toBeVisible();
+  await waitForEditorReady(page);
   await expect(page.locator('iframe[name="frameEditor"]')).toBeAttached();
 
   const layout = await page.evaluate(() => ({
