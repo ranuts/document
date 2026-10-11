@@ -216,7 +216,7 @@ export function buildTools(): WebMcpTool[] {
       description:
         'Read the plain text of the open document, so the content can be answered about without exporting it. ' +
         'Word-processing documents return their full text; spreadsheets and presentations do not expose one on ' +
-        'this engine -- use save_document for those. Side effect: clears the current selection.',
+        'this engine -- use save_document for those. Reading does not move the caret or selection.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -226,14 +226,13 @@ export function buildTools(): WebMcpTool[] {
       },
       async execute(input) {
         const maxChars = typeof input.maxChars === 'number' && input.maxChars > 0 ? input.maxChars : undefined;
-        const { text, truncated } = await getDocumentTextTool.execute(maxChars ? { maxChars } : {});
         const fileName = getDocmentObj()?.fileName || '';
         const kind = getDocumentType(fileName.split('.').pop() || '');
         // An empty answer is ambiguous -- an empty document and an editor that
         // has no full-text read look identical from here. Only the word editor
         // implements one (verified against v9 for docx/xlsx/pptx), so say which
         // case this is instead of letting an agent conclude "the file is empty".
-        if (!text && kind !== 'word') {
+        if (kind !== 'word') {
           return ok({
             ok: true,
             text: '',
@@ -242,6 +241,7 @@ export function buildTools(): WebMcpTool[] {
             note: `Full text is only available for word-processing documents; this is a ${kind || 'non-word'} document. Use save_document (targetExt TXT, CSV or PDF) and read the exported file instead.`,
           });
         }
+        const { text, truncated } = await getDocumentTextTool.execute(maxChars ? { maxChars } : {});
         return ok({ ok: true, text, truncated, supported: true });
       },
     },
