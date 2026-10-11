@@ -359,3 +359,104 @@ claimed as a browser-proven production regression.
 Actual screen-reader acceptance, the proposed layout responsibility split,
 unified settings/language interaction and broader multilingual model acceptance
 remain open. Passing the above cases does not close these requirements.
+
+### Actual local-model Excel probe on 2026-10-11
+
+At application commit `4b722e27`, a fresh Chinese-UI development session loaded
+cached `Qwen3-4B-q4f16_1-MLC` into an independently created empty XLSX. No provider
+substitution, prompt experiment or response postprocessing was used.
+
+1. `在当前工作表的 A1:A100 填入从 1 到 100 的连续整数。` produced a reviewed
+   A1:A100 proposal. CSV export before confirmation remained the original empty
+   file. After confirmation, export contained exactly 100 rows with every value
+   equal to its one-based row number, and their sum was 5050.
+2. `当前工作表 A100 中的数字是多少？请只回答数字。` answered exactly `100`.
+3. In a fresh conversation, `当前工作表 A1:A100 的合计是多少？请只回答数字，不修改表格。`
+   answered exactly `5050`. Export remained byte-identical to the filled CSV.
+4. One native Undo restored the original empty CSV. In a fresh conversation,
+   `你好` answered `你好！有什么可以帮助你的吗？` without the reported spreadsheet
+   operation refusal.
+5. After native Redo, the visible name box was used to select only A1. The same
+   sum question in another fresh conversation still answered exactly `5050`.
+   Export was unchanged; a final native Undo restored the empty CSV again.
+
+This records five actual-model requests, one confirmed write, independent CSV
+readback and native Undo/Redo. Initial sum reading had A1:A100 selected; the final
+sum reading had only A1 selected. Raw provider plans were not captured, so these
+results do not attest which read operation the model selected. This small
+Chinese-language development probe does not qualify all spreadsheet tasks,
+other languages, production delivery, formula generation or other document
+formats. The temporary browser tab was closed after restoring the test file.
+
+### Actual local-model presentation probe on 2026-10-11
+
+The same application commit and cached 4B model were used in a fresh Chinese-UI
+PPTX session starting with one empty slide. Native PPTX exports were inspected
+independently of the model response: slide XML parts were extracted from the ZIP
+central directory, decompressed and parsed for DrawingML text.
+
+- `在演示文稿末尾新增一页幻灯片，标题为“项目预算”，正文为“预算：120”。`
+  produced only a new-slide proposal. Before confirmation, exported slide parts
+  matched the baseline. Confirming added a second slide and preserved slide 1,
+  but slide 2 contained no text: both requested title and body were missing.
+  **The compound request failed acceptance.** A verified primitive operation and
+  the UI completion receipt do not establish completion of the user's request.
+- In a new conversation, `请在当前幻灯片中添加文字“预算：120”。` produced a
+  correct text-addition proposal. After confirmation, exported slide 2 contained
+  exactly one `预算：120` text value and three shapes.
+- In another new conversation, `当前幻灯片里的预算是多少？请只回答金额。`
+  answered exactly `120`; exported slide parts were unchanged by reading.
+- One native Undo restored the pre-text slide parts. A second native Undo removed
+  the added slide and restored all original slide XML parts. The temporary page
+  was closed after restoring the baseline.
+
+Code inspection explains the capacity boundary: `slide_action` accepts only an
+add/duplicate/navigate action and optional page; it cannot supply title/body.
+The schema planner explicitly chooses one operation and is instructed to refuse
+multiple-operation requests, yet this model selected a partial operation. The
+sequence wrapper provides a closed spreadsheet phrase sequence rather than a
+general multi-operation path. These are separate model-choice and orchestration
+limitations; neither language deletion nor a sentence-specific match repairs the
+requested presentation workflow.
+
+The provider-neutral runtime already has bounded tool-call/result round trips.
+Any general repair must retain scope checks, reviewed writes, cancellation,
+readback and Undo while distinguishing primitive success from whole-task
+completion. The documented
+[function-call loop](https://developers.openai.com/api/docs/guides/function-calling)
+and [composable agent workflows](https://www.anthropic.com/engineering/building-effective-agents)
+provide reference patterns; they do not prove that a 4B model can plan arbitrary
+multi-step edits. No multi-operation repair is claimed in this probe.
+
+### Actual local-model PDF probe on 2026-10-11
+
+At application commit `4b722e27`, the cached 4B model was used in a Chinese-UI PDF
+session. The fixture was generated locally from the synthetic Word source
+`Project budget: 120.Due date: 2026-11-01.`; the native editor confirmed that
+source before conversion. No private document or provider substitution was used.
+
+- `当前 PDF 第 1 页的预算是多少？请只回答金额。` answered exactly `120`.
+- In a fresh conversation, `在第 1 页添加批注：请核对预算。` proposed the
+  correct note and page and waited for review. Export before confirmation had no
+  text annotations. After confirmation, the exported PDF contained one `/Text`
+  annotation; its decoded UTF-16 contents were exactly `请核对预算。`, and its
+  page reference matched the single page in the PDF page tree. The page content
+  stream remained identical to the pre-confirmation export.
+- One native Undo removed the annotation. The exported page dictionary and body
+  content stream matched the pre-confirmation export. Whole-file bytes differed,
+  so byte-identical PDF restoration is not claimed.
+- In another fresh conversation, `把当前 PDF 第 1 页的预算改为 200。` produced
+  a pending **add-comment** proposal containing the entire request. The
+  application does not provide PDF body replacement, and a note is not the
+  requested modification. **This capability-boundary request failed acceptance.**
+  The proposal was cancelled. Export had no text annotations and its body
+  content stream remained unchanged. The temporary tab was then closed.
+
+This records three actual-model requests, one reviewed annotation write,
+independent inspection of the exported PDF and native Undo. It is one selectable
+page, not a test of scanned PDFs, multiple pages, all languages or arbitrary PDF
+editing. The raw provider plans were not captured. The wrong pending proposal
+shows that schema-valid operation selection is not sufficient evidence that the
+chosen operation satisfies the requested task. Review prevented execution in
+this trial; it does not resolve the routing limitation or justify accepting a
+different operation in place of an unavailable capability.
