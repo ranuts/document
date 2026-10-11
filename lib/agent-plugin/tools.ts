@@ -166,7 +166,11 @@ const DEFAULT_MAX_CHARS = 8000;
 export const getDocumentTextTool: AgentTool<GetDocumentTextParams, { text: string; truncated: boolean }> = {
   name: 'get_document_text',
   description:
-    'Word only. Read current main-body text without moving the caret or selection. Long text is truncated; unsupported structures are reported as unavailable.',
+    'Read source text from the current Word document so the application can answer factual questions about it. ' +
+    'Use this when a question refers to the open document, including when no text is selected. ' +
+    'This tool returns text, not a final answer; the application answers from the result. ' +
+    'Reading does not modify the document or move the caret. Main body only; long text is truncated ' +
+    'and unsupported structures are reported as unavailable.',
   inputSchema: {
     type: 'object',
     properties: {
