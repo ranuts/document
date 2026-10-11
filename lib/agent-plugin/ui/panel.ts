@@ -1,5 +1,8 @@
+import { readReceipt } from './read-receipt';
+import { runDocumentTask, prepareDocumentTask } from '../document-task';
+import type { ReviewOutcome } from '../review-outcome';
 import { generateReadAnswer } from '../document-read-answer';
-import { createDocumentAgentTools } from '../document-agent-tools';
+import type { DocumentAgentToolOptions } from '../document-agent-tools';
 import { mountSpeechInput } from './speech-input';
 /**
  * Agent sidebar panel — a thin DOM view over {@link AgentChatController}.
@@ -65,7 +68,13 @@ import { captureDocumentToolTarget, DocumentToolAction } from '../document-tool-
 import { documentTools, isLiteralDocumentToolRequest } from '../document-tool-plan';
 import { ChatView, type ChatViewLabels } from '@ranuts/chat-ui';
 import { AgentChatController, type ChatTurn } from './controller';
-import { assistantPresentation, displayError } from './presentation';
+import {
+  assistantPresentation,
+  displayError,
+  isVerifiedDocumentChange,
+  documentTaskStopText,
+  documentTaskFailureText,
+} from './presentation';
 import { historyToTurns } from './storage';
 import { createConversationStore } from './sessions';
 import { createHistoryControls } from './history-controls';
@@ -213,6 +222,8 @@ export function createAgentPanel(
 
   let open = true;
   let enabled = true;
+  let hasConfiguration = false;
+  let viewRevision = 0;
   const mountSidebar = () =>
     createSidebarEntry(
       () => setOpen(!open),
@@ -225,6 +236,7 @@ export function createAgentPanel(
   let speech: ReturnType<typeof mountSpeechInput> | undefined;
   const setOpen = (next: boolean): void => {
     if (!next) speech?.close();
+    if (next && !open && hasConfiguration) showView('chat');
     const returnToDocument = !next && panel.contains(document.activeElement);
     open = next;
     panel.classList.toggle('agent-panel-hidden', !next);
@@ -441,6 +453,8 @@ export function createAgentPanel(
   // text is sent there). The resolved destination is always shown, because the
   // two are not equivalent and the choice belongs to the user.
   let endpointSettings: EndpointSettings = readEndpointSettings(localStorageGetItem(ENDPOINT_SETTINGS_KEY));
+  let selectedSource = configuredEndpoint(endpointSettings) ? 'service' : 'local';
+  let cachedLocalModel = false;
   const endpointKind = ranSelect(
     'agent-endpoint-kind',
     [
@@ -551,6 +565,7 @@ export function createAgentPanel(
     waiting: t('agentWaiting'),
     reading: t('agentReadingContent'),
     planning: t('agentPreparingTask'),
+    reviewing: t('agentPlanReady'),
     scrollLatest: t('agentScrollLatest'),
     applyMessage: t('agentWriteReply'),
     applyTip: t('agentWriteReplyTip'),
@@ -590,12 +605,26 @@ export function createAgentPanel(
     },
     labels: chatLabels(),
   });
-  const readiness = document.createElement('p');
+  const readiness = document.createElement('div');
   window.addEventListener('pagehide', (event) => {
     if (!event.persisted) chat.dispose();
   });
   readiness.className = 'agent-readiness';
-  readiness.setAttribute('role', 'status');
+  const readinessText = Span().id('agent-readiness').attr('role', 'status').build();
+  const prepareAction = ButtonBuilder().class('agent-prepare-action').attr('type', 'button').build();
+  prepareAction.addEventListener('click', () => {
+    if (pendingEndpoint || modelLoading || runtimeCleanup || cacheBusy || !enabled) return;
+    if (selectedSource === 'service') {
+      const endpoint = configuredEndpoint(endpointSettings);
+      if (endpoint && (!isCloudEndpointKind(endpoint.kind) || getEndpointKey(endpointKeySlot(endpoint.kind))))
+        void connectEndpoint();
+      else showView('settings');
+    } else if (hasConfiguration || cachedLocalModel) void loadModel();
+    else showView('settings');
+  });
+  readiness.append(readinessText, prepareAction);
+  for (const control of chat.el.querySelectorAll('.cui-input, .cui-send'))
+    control.setAttribute('aria-describedby', 'agent-readiness');
   chat.el.append(readiness);
   let preview = new ActionPreview();
   let refiningPreview: ActionPreview | undefined;
@@ -701,6 +730,49 @@ export function createAgentPanel(
     refinementRow.hidden = false;
     chat.focus();
   };
+  const waitForToolReview = (
+    action: DocumentToolAction,
+    signal?: AbortSignal,
+  ): Promise<ReviewOutcome<DocumentToolAction>> => {
+    const generation = controllerGeneration;
+    const conversation = conversationRevision;
+    return new Promise((resolve, reject) => {
+      chat.setActivity('reviewing');
+      const card = new ActionPreview();
+      preview = card;
+      previews.add(card);
+      const abortReview = () => card.invalidate();
+      let settled = false;
+      const settle = (outcome: import('./action-preview').ReviewOutcome) => {
+        if (settled) return;
+        settled = true;
+        signal?.removeEventListener('abort', abortReview);
+        if (
+          !(outcome.action instanceof DocumentToolAction) ||
+          generation !== controllerGeneration ||
+          conversation !== conversationRevision
+        ) {
+          reject(new Error(t('agentPlanExpired')));
+          return;
+        }
+        chat.setActivity('responding');
+        resolve({ ...outcome, action: outcome.action });
+      };
+      // Refinement ends this execution attempt while retaining the unexecuted suggestion.
+      card.show(
+        action,
+        undefined,
+        () => {
+          settle({ status: 'cancelled', action });
+          selectRefinement(card);
+        },
+        settle,
+      );
+      signal?.addEventListener('abort', abortReview, { once: true });
+      if (signal?.aborted) abortReview();
+      chat.appendContent(card.el);
+    });
+  };
   const clearQuote = () => {
     quotedSelection = '';
     quoteText.textContent = '';
@@ -743,7 +815,7 @@ export function createAgentPanel(
     quoteContext.hidden = !context || !snapshot.text.trim();
     const label =
       context?.kind === 'cell'
-        ? `${context.sheet ?? 'Excel'} · ${context.range ?? ''}`
+        ? t('agentUsingSelection', { scope: `${context.sheet ?? 'Excel'} · ${context.range ?? ''}` })
         : context?.kind === 'slide'
           ? `${t('agentSlideContext').replace('{page}', String(context.page ?? ''))}`
           : snapshot.text
@@ -974,12 +1046,14 @@ export function createAgentPanel(
       const stored = isCloudEndpointKind(kind) ? getEndpointKey(endpointKeySlot(kind)) : undefined;
       const provider = createEndpointProvider(endpoint, endpointKey.value.trim() || stored);
       pendingEndpoint = provider;
+      syncRuntimeStatus();
       // Only the loopback service has a real connection check; a cloud endpoint
       // reports "configured" because readiness is not reachability.
       if ('preload' in provider && typeof provider.preload === 'function') await provider.preload();
       if (attempt !== endpointAttempt) return;
       if (!provider.isReady()) throw new Error('Writing endpoint is not ready');
       endpointProvider = provider;
+      hasConfiguration = true;
     } catch {
       if (attempt !== endpointAttempt) return;
       disconnectEndpoint();
@@ -1038,20 +1112,47 @@ export function createAgentPanel(
       button.toggleAttribute('disabled', modelLoading || localReady || !enabled || cacheBusy);
     }
     const ready = localReady || useEndpointForChat();
-    readiness.textContent = ready ? '' : t('agentPrepareRequired');
+    let reason = ready ? '' : t('agentPrepareRequired');
+    if (!enabled) reason = t('agentOffNote');
+    else if (runtimeCleanupFailed) reason = t('agentModelCleanupFailed');
+    else if (runtimeCleanup) reason = t('agentModelReleasing');
+    else if (cacheBusy) reason = t('agentCacheBusy');
+    else if (pendingEndpoint) reason = t('agentEndpointConnecting');
+    else if (modelLoading) reason = t('agentPreparing');
+    else if (!ready && selectedSource === 'service' && endpointStatus.textContent) reason = endpointStatus.textContent;
     if (proposalMode && writingSelect.value !== 'tools') {
       try {
         const route = resolveRoute();
         if (route.kind === 'blocked')
-          readiness.textContent = t(
+          reason = t(
             route.reason === 'offline-needs-device-destination'
               ? 'agentWritingOfflineNeedsDevice'
               : 'agentWritingNeedsLocalService',
           );
       } catch {
-        readiness.textContent = t('agentPrepareRequired');
+        reason = t('agentPrepareRequired');
       }
     }
+    readinessText.textContent = reason;
+    readiness.hidden = !reason;
+    const waiting = modelLoading || !!pendingEndpoint || !!runtimeCleanup || cacheBusy;
+    const endpoint = configuredEndpoint(endpointSettings);
+    const canReconnect = !!(
+      endpoint &&
+      (!isCloudEndpointKind(endpoint.kind) || getEndpointKey(endpointKeySlot(endpoint.kind)))
+    );
+    prepareAction.textContent = ready
+      ? ''
+      : t(
+          selectedSource === 'service' && canReconnect
+            ? 'agentReconnectService'
+            : selectedSource === 'local' && (hasConfiguration || cachedLocalModel)
+              ? cachedLocalModel
+                ? 'agentResumeModel'
+                : 'agentLoadModel'
+              : 'agentSettings',
+        );
+    prepareAction.hidden = ready || !enabled || waiting || runtimeCleanupFailed;
     chat.refreshSendAvailability();
     loadingStatus.textContent = modelLoading
       ? [
@@ -1165,8 +1266,10 @@ export function createAgentPanel(
       return;
     }
     if (currentProvider() !== 'webllm' || selectedLocalModel() !== id || attempt !== loadAttempt) return;
+    cachedLocalModel = cached;
     // The note carries only the cache/download status.
     note.textContent = cached ? t('agentModelCached') : t('agentModelFirstDownload');
+    syncRuntimeStatus();
   };
 
   // Writing and document-operation modes are available for browser-local engines.
@@ -1221,60 +1324,43 @@ export function createAgentPanel(
     const id = currentProvider();
     const generation = controllerGeneration;
     const conversation = conversationRevision;
+    let nativeTarget: ReturnType<typeof captureDocumentToolTarget> | undefined;
+    let nativeTools: Awaited<ReturnType<typeof prepareDocumentTask>>['tools'] = {};
     const emit = (turn: ChatTurn): void => {
       if (generation === controllerGeneration && conversation === conversationRevision) appendTurn(turn);
     };
     const options = {
       ...controllerOptions,
       tools: {},
-      getTools: () => {
+      assertCurrent: () => {
+        if (nativeTarget && !nativeTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
+      },
+      prepareRun: async (request: string, signal: AbortSignal) => {
+        nativeTarget = undefined;
+        nativeTools = {};
         if (!endpointProvider?.isReady() || endpointProvider.toolCallingMode !== 'native' || !useEndpointForChat())
-          return {};
+          return { tools: {} };
         const target = captureDocumentToolTarget();
-        return createDocumentAgentTools({
+        nativeTarget = target;
+        const prepared = await prepareDocumentTask(endpointProvider, request, {
           target,
           readonly: getReadonlyMode(),
-          review: (action) => {
-            if (generation !== controllerGeneration || conversation !== conversationRevision)
-              throw new Error(t('agentPlanExpired'));
-            const card = new ActionPreview();
-            preview = card;
-            previews.add(card);
-            card.show(
-              action,
-              (outcome, appliedAction) => {
-                if (generation === controllerGeneration && conversation === conversationRevision) {
-                  const receipt = {
-                    role: 'assistant' as const,
-                    content: JSON.stringify({
-                      status: outcome,
-                      tool: appliedAction.plan.tool,
-                      input: appliedAction.plan.input,
-                      result: appliedAction.result,
-                    }),
-                    hostGuidance: 'tool' as const,
-                  };
-                  controller?.recordExternalMessages([receipt]);
-                }
-              },
-              () => selectRefinement(card),
-            );
-            chat.appendContent(card.el);
+          signal,
+          assertCurrent: () => {
+            if (nativeTarget && !nativeTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
           },
+          onTargetChanged: (next) => {
+            nativeTarget = next;
+          },
+          review: waitForToolReview,
           receipt: (_name, result) => {
             if (generation !== controllerGeneration || conversation !== conversationRevision) return;
-            const value = result as { text?: string; page?: number } | undefined;
-            appendTurn({
-              role: 'tool',
-              text:
-                _name === 'get_pdf_text' && !value?.text?.trim()
-                  ? t('agentPdfTextUnavailable')
-                  : typeof value?.text === 'string'
-                    ? value.text.trim() || t('agentNoReadableText')
-                    : JSON.stringify(result) || t('agentNoReadableText'),
-            });
+            const text = readReceipt(_name, result, nativeTarget?.context ?? target.context);
+            if (text) appendTurn({ role: 'tool', text });
           },
         });
+        nativeTools = prepared.tools;
+        return prepared;
       },
       storage: historyStorage,
       getRequestContext: (): string | undefined => {
@@ -1282,7 +1368,7 @@ export function createAgentPanel(
         return reference.editor
           ? JSON.stringify({
               ...reference,
-              availableOperations: documentTools(reference.editor)
+              availableOperations: (nativeTarget ? Object.values(nativeTools) : documentTools(reference.editor))
                 .filter((tool) => !getReadonlyMode() || tool.readOnlyHint)
                 .map((tool) => ({
                   name: tool.name,
@@ -1435,6 +1521,9 @@ export function createAgentPanel(
       await loading.preload();
       if (loading === webllmProvider && generation === controllerGeneration) {
         note.textContent = t('agentModelLoaded');
+        hasConfiguration = true;
+        if (currentProvider() === 'webllm' && !localModelId.value.trim())
+          localStorageSetItem('agent-local-preset', modelSelect.value);
         if (currentProvider() === 'webllm')
           rememberModelSource({
             id: selectedLocalModel(),
@@ -1487,10 +1576,14 @@ export function createAgentPanel(
     let attempted = false;
     writingReply = true;
     try {
-      const target = captureActionTarget();
-      if (target.editor !== 'word') throw new Error(t('agentWordOnly'));
+      const target = captureDocumentToolTarget();
+      if (target.context.kind !== 'word') throw new Error(t('agentWordOnly'));
       invalidatePlans();
-      const action = new ReviewedAction(target, { tool: 'insert_text', input: { text } });
+      const action = new DocumentToolAction(target, {
+        tool: 'insert_text',
+        input: { text, format: 'markdown' },
+        readOnly: false,
+      });
       attempted = true;
       replyAbort = new AbortController();
       const outcome = await action.apply(replyAbort.signal);
@@ -1595,13 +1688,13 @@ export function createAgentPanel(
           let result: unknown;
           if (intent.kind === 'write_reply') {
             if (!answer.trim()) throw new Error('agentNoCompletedAnswer');
-            const target = captureActionTarget();
-            if (target.editor !== 'word') throw new Error(t('agentWordOnly'));
+            const target = captureDocumentToolTarget();
+            if (target.context.kind !== 'word') throw new Error(t('agentWordOnly'));
             if (intent.requireSelection && !target.selectedText.trim()) throw new Error(t('agentNoSelection'));
             name = 'insert_text';
-            input = { text: answer };
+            input = { text: answer, format: 'markdown' };
             result = {
-              outcome: await new ReviewedAction(target, { tool: 'insert_text', input: { text: answer } }).apply(
+              outcome: await new DocumentToolAction(target, { tool: 'insert_text', input, readOnly: false }).apply(
                 directAbort.signal,
               ),
             };
@@ -1689,7 +1782,7 @@ export function createAgentPanel(
       !webllmProvider?.isReady()
     ) {
       chat.setInput(text);
-      showView('settings');
+      syncRuntimeStatus();
       note.textContent = t(runtimeCleanupFailed ? 'agentModelCleanupFailed' : 'agentModelFirstDownload');
       return;
     }
@@ -1717,6 +1810,7 @@ export function createAgentPanel(
       }
     })();
     let routingStarted = false;
+    let verifiedTaskChanges = 0;
     if (previousPreview) {
       refiningPreview = previousPreview;
       previousPreview.setRefining(true);
@@ -1804,6 +1898,60 @@ export function createAgentPanel(
         planning = abort;
         appendTurn({ role: 'user', text });
         chat.setActivity('planning');
+        if (!request.refinement && !literalToolRequest && !isModelFreeToolRequest(trimmed, target.context)) {
+          let currentTarget = target;
+          const taskReceipts: typeof operationHistory = [];
+          let taskError: string | undefined;
+          const taskOptions: DocumentAgentToolOptions = {
+            target,
+            readonly: getReadonlyMode(),
+            review: waitForToolReview,
+            onTargetChanged: (next) => {
+              currentTarget = next;
+            },
+            receipt: (_name, result) => {
+              const text = readReceipt(_name, result, currentTarget.context);
+              if (text) {
+                taskReceipts.push({ role: 'assistant', content: text, hostGuidance: 'tool' });
+                appendTurn({ role: 'tool', text });
+              }
+            },
+          };
+          const historyStart = operationHistory.length - 1;
+          const record = (messages: LLMMessage[]) => {
+            operationHistory.splice(historyStart, operationHistory.length - historyStart, ...messages, ...taskReceipts);
+          };
+          const result = await runDocumentTask(routingProvider!, text, {
+            ...taskOptions,
+            signal: abort.signal,
+            assertCurrent: () => {
+              if (!currentTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
+            },
+            onToolExchange: record,
+            onEvent: (event) => {
+              if (generation !== controllerGeneration || conversation !== conversationRevision) return;
+              if (event.type === 'tool_call') chat.setActivity('reading');
+              else if (event.type === 'tool_result' && !event.isError) {
+                chat.setActivity('responding');
+                if (isVerifiedDocumentChange(event)) verifiedTaskChanges++;
+              } else if (event.type === 'tool_result' && event.isError) taskError = event.content;
+            },
+          });
+          record(result.messages);
+          abort.signal.throwIfAborted();
+          if (generation !== controllerGeneration || conversation !== conversationRevision)
+            throw new Error(t('agentPlanExpired'));
+          if (result.stoppedOnLimit) {
+            const text = documentTaskStopText(result.limitReason, verifiedTaskChanges);
+            operationHistory.push({ role: 'assistant', content: text, hostGuidance: 'tool' });
+            appendTurn({ role: 'tool', text });
+            return;
+          }
+          if (taskError) appendTurn({ role: 'error', text: displayError(taskError) });
+          if (!currentTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
+          if (result.text) appendTurn({ role: 'agent', text: assistantPresentation(result.text) });
+          return;
+        }
         const plans = await generateDocumentToolSequence(
           useEndpointForChat() ? endpointProvider! : webllmProvider!,
           text,
@@ -1904,11 +2052,13 @@ export function createAgentPanel(
                 count?: number;
               }
             | undefined;
+          const scopeReceipt = plan.readOnly ? readReceipt(plan.tool, result, target.context) : undefined;
+          if (scopeReceipt && answerFromReads) appendTurn({ role: 'tool', text: scopeReceipt });
           const resultText = plan.readOnly
             ? plan.tool === 'get_pdf_text' && (result?.unavailable || !result?.text?.trim())
               ? t('agentPdfTextUnavailable')
               : typeof result?.text === 'string'
-                ? `${plan.tool === 'get_pdf_text' ? t('agentPdfPageContext', { page: result.page ?? '' }) + '\n' : result.cell ? result.cell + '\n' : ''}${result.text.trim() ? result.text : t('agentNoReadableText')}`
+                ? `${scopeReceipt ? scopeReceipt + '\n' : ''}${plan.tool === 'get_pdf_text' ? t('agentPdfPageContext', { page: result.page ?? '' }) + '\n' : result.cell ? result.cell + '\n' : ''}${result.text.trim() ? result.text : t('agentNoReadableText')}`
                 : typeof result?.sum === 'number'
                   ? `${result.range ?? ''}: ${result.sum}`
                   : `${target.label} → ${result?.page ?? ''} / ${result?.count ?? ''}`
@@ -2054,13 +2204,13 @@ export function createAgentPanel(
       if (operationHistory.length)
         operationHistory.push({
           role: 'assistant',
-          content: stopped ? t('agentStopped') : displayError(error),
+          content: stopped ? t('agentStopped') : documentTaskFailureText(error, verifiedTaskChanges),
           hostGuidance: role,
         });
       if (generation === controllerGeneration && conversation === conversationRevision)
         appendTurn({
           role,
-          text: stopped ? t('agentStopped') : displayError(error),
+          text: stopped ? t('agentStopped') : documentTaskFailureText(error, verifiedTaskChanges),
         });
     } finally {
       previousPreview?.setRefining(false);
@@ -2247,7 +2397,7 @@ export function createAgentPanel(
   modelChoice.append(modelSelect, modelMemory);
   modelRow.replaceChildren(modelChoice, loadBtn);
   localCard.append(modelRow, ggufRow);
-  const serviceCard = View<HTMLDetailsElement>('details').build();
+  const serviceCard = View('section').build();
   serviceCard.className = 'agent-use-card agent-service-section';
   const serviceHint = View('p').build();
   const fieldLabels: Array<{ title: HTMLElement; key: keyof I18nMessages }> = [];
@@ -2267,10 +2417,9 @@ export function createAgentPanel(
     endpointConnect,
     endpointStatus,
   );
-  serviceCard.open = true;
   serviceCard.append(endpointRow, serviceHint);
   const advanced = View<HTMLDetailsElement>('details').build();
-  advanced.className = 'agent-preferences';
+  advanced.className = 'agent-preferences agent-disclosure';
   const advancedSummary = View('summary').build();
   const advancedTitle = Span().build();
   advancedSummary.append(advancedTitle);
@@ -2281,10 +2430,10 @@ export function createAgentPanel(
     field(writePreference, 'agentWritePreference'),
     reviewLabel,
   );
-  const customSources = View<HTMLDetailsElement>('details')
+  const customSources = View('section')
     .class('agent-custom-sources')
     .children(
-      View('summary').text(t('agentCustomModel')).build(),
+      View('h3').text(t('agentCustomModel')).build(),
       field(localModelId, 'agentModelId'),
       field(localModelUrl, 'agentModelUrl'),
       field(localModelLib, 'agentModelRuntimeUrl'),
@@ -2300,16 +2449,18 @@ export function createAgentPanel(
       { value: 'local', label: t('agentSourceLocal') },
       { value: 'service', label: t('agentSourceService') },
     ],
-    configuredEndpoint(endpointSettings) ? 'service' : 'local',
+    selectedSource,
   );
   sourcePicker.setAttribute('aria-label', t('agentSourceLabel'));
   const syncSource = () => {
+    selectedSource = sourcePicker.value;
     localCard.hidden = sourcePicker.value !== 'local';
     serviceCard.hidden = sourcePicker.value !== 'service';
     cacheList.hidden = sourcePicker.value !== 'local';
+    syncRuntimeStatus();
   };
   sourcePicker.addEventListener('change', syncSource);
-  const cacheList = View<HTMLDetailsElement>('details').class('agent-model-cache').build();
+  const cacheList = View<HTMLDetailsElement>('details').class('agent-model-cache agent-disclosure').build();
   const cacheSummary = View('summary')
     .attr('tabindex', '0')
     .text(t('agentDownloadedModels').replace('{count}', '…'))
@@ -2535,6 +2686,7 @@ export function createAgentPanel(
 
   chat.el.append(writeDestination);
   function showView(view: 'chat' | 'settings' | 'history'): void {
+    viewRevision++;
     speech?.close();
     panel.dataset.view = view;
     if (view === 'settings') settings.insertBefore(runtimeRow, note);
@@ -2545,6 +2697,7 @@ export function createAgentPanel(
     settingsBtn.setAttribute('aria-expanded', String(view === 'settings'));
     syncRuntimeStatus();
     historyBtn.setAttribute('aria-expanded', String(view === 'history'));
+    if (!open) return;
     if (view === 'settings') settingsHeading.focus();
     else if (view === 'history') sessionSelect.focus();
     else chat.focus();
@@ -2566,6 +2719,7 @@ export function createAgentPanel(
     settingsHeading.textContent = t('agentSettings');
     serviceHint.textContent = t('agentUseServiceHint');
     advancedTitle.textContent = t('agentPreferences');
+    customSources.querySelector('h3')!.textContent = t('agentCustomModel');
     disableLabel.textContent = t('agentEnable');
     disableHint.textContent = t('agentOffNote');
     disable.setAttribute('aria-label', t('agentEnable'));
@@ -2580,9 +2734,33 @@ export function createAgentPanel(
   clearBtn.setAttribute('aria-label', t('agentNewConversation'));
   panel.append(header, runtimeRow, settings, historyView, chat.el);
   document.body.append(panel);
+  const endpoint = configuredEndpoint(endpointSettings);
+  hasConfiguration =
+    !!(endpoint && (!isCloudEndpointKind(endpoint.kind) || getEndpointKey(endpointKeySlot(endpoint.kind)))) ||
+    (currentProvider() === 'webllm' ? WEBLLM_MODELS.some((model) => model.id === savedPreset) : !!ggufUrl.value.trim());
   setOpen(!options.background);
   void historyControls.start();
-  showView(options.externalEntry ? 'settings' : 'chat');
+  showView('chat');
+
+  // Older default-model loads may have cached files without a saved preset.
+  // Check those without warming the engine, and never replace a view the user
+  // has deliberately opened while the storage check was pending.
+  if (options.externalEntry && !hasConfiguration) {
+    const revision = viewRevision;
+    const attempt = loadAttempt;
+    const route = routeKey();
+    const configured =
+      currentProvider() === 'webllm'
+        ? isModelCached(selectedLocalModel(), localSource())
+        : listCachedGGUF().then((models) => models.some((model) => model.complete && model.url === ggufUrl.value));
+    void configured
+      .catch(() => false)
+      .then((cached) => {
+        if (hasConfiguration || !panel.isConnected || attempt !== loadAttempt || route !== routeKey()) return;
+        hasConfiguration = cached;
+        if (!cached && viewRevision === revision) showView('settings');
+      });
+  }
 
   // Opening only restores preferences, never starts a download or connection.
 

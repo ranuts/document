@@ -7,7 +7,7 @@ Say what you want to do. Ask about content, work on text or organize data, and r
 
 ## Get started
 
-Enable the assistant, choose a local model or connect your AI service, then type your request. Model files stay in this browser. Opening another file may require preparing the model again, using cached files where available.
+Enable the assistant, choose a local model or connect your AI service, then type your request. Once configured, reopening the assistant takes you to chat. A loaded model remains available when switching files within the same page. After a page reload, choose Use downloaded model in chat. Cached files are reused; missing files may still need downloading.
 
 The default browser model is Qwen3 4B. Its estimated graphics memory use is about 3.43 GB; this is not the download size or total device memory use. It remains experimental. Previously downloaded smaller models can be removed under Downloaded models.
 
@@ -19,7 +19,7 @@ While the assistant is working, you can draft your next request. Send it yoursel
 
 - Excel and CSV: read tables, enter data, generate number sequences, calculate totals or sort.
 
-- PowerPoint: ask about slide text, add text, or add, duplicate and navigate slides.
+- PowerPoint: ask about slide text, add text, or add, duplicate and navigate slides. A new slide with a title and body keeps them in separate areas; one confirmation adds both, and one Undo restores the previous presentation.
 
 - PDF: ask about, summarize or translate selectable text on the current page, or add a note to a specified page.
 
@@ -46,5 +46,13 @@ After adding notes, download the file as a PDF to keep them. The notes remain wh
 ## Keep in mind
 
 AI can misunderstand requests or miss details. Check numbers, dates and names before applying. Local models process text on your device; connected AI services receive the text in your requests. Browser speech recognition may also use an online service. Dictated text stays in your draft and is not sent automatically.
+
+## Formatting and reading scope
+
+Word drafts can keep headings, lists and emphasis when written into the document. Formatted tables are not supported yet. Turn off Track Changes before inserting formatted content; plain text can still be used.
+
+Long slide drafts continue on additional pages, with the title and body kept separate. Shorten a title that cannot fit. A single request can add up to 20 pages; Undo restores the previous presentation in one step.
+
+Reading progress states the part that was read: selected text, a cell range, slide text or the current PDF page. “Partial content” means some content was left out. In a spreadsheet review, the formula and its calculated value are shown separately. Finished changes keep their location and an Undo reminder in a compact record.
 
 [Help](/help)

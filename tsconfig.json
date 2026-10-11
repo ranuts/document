@@ -1,5 +1,5 @@
 {
-  "exclude": ["node_modules/**", "dist/**", "public"],
+  "exclude": ["node_modules/**", "dist/**", "dist-e2e-*/**", "public"],
   "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx"],
   "compilerOptions": {
     "module": "ESNext",

@@ -40,7 +40,11 @@ export function isMessage(value: unknown): value is LLMMessage {
         return (
           typeof block.toolUseId === 'string' &&
           typeof block.content === 'string' &&
-          (block.isError === undefined || typeof block.isError === 'boolean')
+          (block.isError === undefined || typeof block.isError === 'boolean') &&
+          (block.guardReason === undefined ||
+            (block.isError === true &&
+              typeof block.guardReason === 'string' &&
+              ['repeated_call', 'tool_budget'].includes(block.guardReason)))
         );
       return false;
     })
@@ -121,7 +125,7 @@ export function historyToTurns(messages: LLMMessage[]): ChatTurn[] {
           });
       } else if (block.type === 'tool_use') {
         turns.push({ role: 'tool', text: toolLabel(block.name) });
-      } else if (block.type === 'tool_result' && block.isError) {
+      } else if (block.type === 'tool_result' && block.isError && !block.guardReason) {
         turns.push({ role: 'error', text: displayError(block.content) });
       }
     }

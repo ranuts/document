@@ -25,7 +25,7 @@ const capabilities: Record<DocumentContext['kind'], readonly string[]> = {
     'set_review_mode',
   ],
   cell: ['get_ranges', 'get_range', 'get_cell', 'set_cell', 'fill_series', 'sum_range', 'sort_range'],
-  slide: ['get_presentation_text', 'slide_action', 'add_slide_text', 'replace_selection'],
+  slide: ['get_presentation_text', 'create_slide', 'slide_action', 'add_slide_text', 'replace_selection'],
 };
 export function documentTools(context: DocumentContext): AgentTool[] {
   return (capabilities[context.kind] ?? [])

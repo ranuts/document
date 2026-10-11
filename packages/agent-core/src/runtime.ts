@@ -22,7 +22,14 @@ export type AgentEvent =
   | { type: 'assistant'; text: string; streamed: boolean }
   | { type: 'assistant_delta'; text: string }
   | { type: 'tool_call'; name: string; input: Record<string, unknown> }
-  | { type: 'tool_result'; name: string; content: string; isError: boolean };
+  | {
+      type: 'tool_result';
+      name: string;
+      content: string;
+      isError: boolean;
+      readOnlyHint?: boolean;
+      limitReason?: AgentRunResult['limitReason'];
+    };
 
 export interface AgentRunOptions {
   /** Tool registry to expose (defaults to all registered agent tools). */
@@ -46,6 +53,8 @@ export interface AgentRunOptions {
   onEvent?: (event: AgentEvent) => void;
   /** Cancel inference, cooperative tools and subsequent loop iterations. */
   signal?: AbortSignal;
+  /** Host scope guard, checked around each inference before publishing its result. */
+  assertCurrent?: () => void;
 }
 
 export interface AgentRunResult {
@@ -57,6 +66,8 @@ export interface AgentRunResult {
   toolCallCount: number;
   /** True if the run stopped because it hit `maxIterations`. */
   stoppedOnLimit: boolean;
+  /** Identifies a guard stop without interpreting internal error prose in the UI. */
+  limitReason?: 'repeated_call' | 'tool_budget' | 'iterations';
   /** True if the run was aborted via `options.signal`. */
   aborted: boolean;
 }
@@ -92,6 +103,7 @@ export async function runAgent(
   let contextNoticeSent = false;
 
   for (let iteration = 0; iteration < maxIterations; iteration++) {
+    options.assertCurrent?.();
     if (options.signal?.aborted) {
       return { text: '', messages, toolCallCount, stoppedOnLimit: false, aborted: true };
     }
@@ -134,6 +146,7 @@ export async function runAgent(
         )
       : await provider.chat(requestMessages, toolDefs, options.signal);
     if (options.signal?.aborted) return { text: '', messages, toolCallCount, stoppedOnLimit: false, aborted: true };
+    options.assertCurrent?.();
     if (response.contextTrimmed && !contextNoticeSent) {
       contextNoticeSent = true;
       options.onContextTrimmed?.();
@@ -152,6 +165,7 @@ export async function runAgent(
     const results: LLMContent[] = [];
     let terminal = false;
     let limited = false;
+    let limitReason: Exclude<AgentRunResult['limitReason'], 'iterations'>;
     for (const call of response.toolCalls) {
       if (options.signal?.aborted || terminal) {
         results.push({
@@ -177,19 +191,47 @@ export async function runAgent(
       const { content, isError } = policyError
         ? { content: policyError, isError: true }
         : await executeToolCall(tools, call.name, call.input, options.signal);
-      if (policyError) limited = terminal = true;
-      if (!isError && tool?.concludesTurn) terminal = true;
-      options.onEvent?.({ type: 'tool_result', name: call.name, content, isError });
-      results.push({ type: 'tool_result', toolUseId: call.id, content, isError });
+      if (policyError) {
+        limited = terminal = true;
+        limitReason = toolCallCount > maxToolCalls ? 'tool_budget' : 'repeated_call';
+      }
+      if (
+        typeof tool?.concludesTurn === 'function'
+          ? tool.concludesTurn({ content, isError })
+          : !isError && tool?.concludesTurn
+      )
+        terminal = true;
+      options.onEvent?.({
+        type: 'tool_result',
+        name: call.name,
+        content,
+        isError,
+        ...(tool ? { readOnlyHint: tool.readOnlyHint } : {}),
+        ...(policyError ? { limitReason } : {}),
+      });
+      results.push({
+        type: 'tool_result',
+        toolUseId: call.id,
+        content,
+        isError,
+        ...(policyError ? { guardReason: limitReason } : {}),
+      });
     }
     messages.push({ role: 'user', content: results });
     options.onToolExchange?.(structuredClone(messages));
     if (terminal && !options.signal?.aborted)
-      return { text: '', messages, toolCallCount, stoppedOnLimit: limited, aborted: false };
+      return {
+        text: '',
+        messages,
+        toolCallCount,
+        stoppedOnLimit: limited,
+        aborted: false,
+        ...(limitReason ? { limitReason } : {}),
+      };
     if (options.signal?.aborted) return { text: '', messages, toolCallCount, stoppedOnLimit: false, aborted: true };
   }
 
-  return { text: '', messages, toolCallCount, stoppedOnLimit: true, aborted: false };
+  return { text: '', messages, toolCallCount, stoppedOnLimit: true, limitReason: 'iterations', aborted: false };
 }
 
 async function executeToolCall(

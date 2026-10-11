@@ -67,6 +67,136 @@ afterEach(() => {
   document.body.innerHTML = '';
   execute.mockReset();
 });
+it.each(['hide', 'invalidate', 'supersede', 'dispose'] as const)(
+  'settles a pending review once when %s interrupts it',
+  (method) => {
+    const view = new ActionPreview();
+    const outcomes: string[] = [];
+    view.show(
+      {
+        target: { label: 'Word', selectedText: '' },
+        plan: { tool: 'insert_text', input: { text: 'Draft' } },
+        isCurrent: () => true,
+        cancel: () => {},
+        apply: async () => 'verified',
+      },
+      undefined,
+      undefined,
+      (outcome) => outcomes.push(outcome.status),
+    );
+    view[method]();
+    view.dispose();
+    expect(outcomes).toEqual([method === 'invalidate' || method === 'supersede' ? 'expired' : 'cancelled']);
+  },
+);
+it('returns the applied action and native outcome before allowing a task to continue', async () => {
+  const view = new ActionPreview();
+  let release!: () => void;
+  const applied = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const outcomes: Array<{ status: string; action: unknown }> = [];
+  const action = {
+    target: { label: 'Word', selectedText: '' },
+    plan: { tool: 'insert_text', input: { text: 'Draft' } },
+    isCurrent: () => true,
+    cancel: () => {},
+    apply: async (): Promise<'verified'> => {
+      await applied;
+      return 'verified';
+    },
+  };
+  view.show(action, undefined, undefined, (outcome) => outcomes.push(outcome));
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  expect(outcomes).toEqual([]);
+  release();
+  await vi.waitFor(() => expect(outcomes).toEqual([{ status: 'verified', action }]));
+  view.dispose();
+  expect(outcomes).toHaveLength(1);
+});
+it('returns failure instead of leaving the reviewed tool waiting indefinitely', async () => {
+  const view = new ActionPreview();
+  const failure = new Error('Native readback failed');
+  const outcomes: Array<{ status: string; error?: unknown }> = [];
+  view.show(
+    {
+      target: { label: 'Word', selectedText: '' },
+      plan: { tool: 'insert_text', input: { text: 'Draft' } },
+      isCurrent: () => true,
+      cancel: () => {},
+      apply: async () => {
+        throw failure;
+      },
+    },
+    undefined,
+    undefined,
+    (outcome) => outcomes.push(outcome),
+  );
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(outcomes[0]).toMatchObject({ status: 'failed', error: failure }));
+  view.dispose();
+  expect(outcomes).toHaveLength(1);
+});
+it('keeps the same awaiting review when its suggested text is edited', async () => {
+  const view = new ActionPreview();
+  const outcomes: Array<{ status: string; action: { plan: { input: Readonly<Record<string, unknown>> } } }> = [];
+  const action = (text: string): import('../../lib/agent-plugin/ui/action-preview').PreviewAction => ({
+    target: { label: 'Word', selectedText: '' },
+    plan: { tool: 'insert_text', input: { text } },
+    isCurrent: () => true,
+    cancel: () => {},
+    apply: async () => 'verified',
+    revise: action,
+  });
+  view.show(action('Draft'), undefined, undefined, (outcome) => outcomes.push(outcome));
+  view.el.querySelector<HTMLElement>('.agent-plan-edit')!.click();
+  view.el.querySelector<HTMLTextAreaElement>('textarea')!.value = 'Reviewed text';
+  view.el.querySelector<HTMLElement>('.agent-plan-save')!.click();
+  expect(outcomes).toEqual([]);
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(outcomes[0]?.action.plan.input.text).toBe('Reviewed text'));
+  expect(outcomes[0].status).toBe('verified');
+  view.dispose();
+  expect(outcomes).toHaveLength(1);
+});
+it('does not deliver a late apply result to a replacement review', async () => {
+  const view = new ActionPreview();
+  let release!: () => void;
+  const hold = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const first: string[] = [],
+    second: string[] = [];
+  const base = {
+    target: { label: 'Word', selectedText: '' },
+    plan: { tool: 'insert_text', input: { text: 'Draft' } },
+    isCurrent: () => true,
+    cancel: () => {},
+  };
+  view.show(
+    {
+      ...base,
+      apply: async () => {
+        await hold;
+        return 'verified';
+      },
+    },
+    undefined,
+    undefined,
+    (outcome) => first.push(outcome.status),
+  );
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  view.show({ ...base, apply: async () => 'verified' }, undefined, undefined, (outcome) => second.push(outcome.status));
+  release();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(first).toEqual(['cancelled']);
+  expect(second).toEqual([]);
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(second).toEqual(['verified']));
+  view.dispose();
+  expect(first).toHaveLength(1);
+  expect(second).toHaveLength(1);
+});
 it('renders text safely, never executes before click and ignores duplicate confirmation', async () => {
   const view = new ActionPreview();
   document.body.append(view.el);
@@ -311,5 +441,83 @@ it.each([
   expect(view.el.querySelector('.agent-plan-content')?.textContent).toBe(description);
   expect(view.el.querySelector('.agent-plan-target')?.textContent).toBe('Slide 3');
   expect(apply).not.toHaveBeenCalled();
+  view.dispose();
+});
+
+it('names the effect and amount in the review action rather than using a generic apply label', () => {
+  const view = new ActionPreview();
+  view.show({
+    target: { label: 'Excel', selectedText: '', context: { kind: 'cell', sheet: 'Budget' } },
+    plan: { tool: 'fill_series', input: { cell: 'A1', first: 1, last: 100 } },
+    review: { kind: 'cells', total: 100, sampled: true, rows: [] },
+    isCurrent: () => true,
+    cancel: () => {},
+    apply: async () => 'verified',
+  });
+  expect(view.el.querySelector('.agent-plan-apply')?.textContent).toBe('Write 100 cells');
+  view.dispose();
+});
+it('locates a review target without consuming its permission or executing the operation', () => {
+  const view = new ActionPreview();
+  const locate = vi.fn();
+  const apply = vi.fn(async () => 'verified' as const);
+  view.show({
+    target: { label: 'Excel', selectedText: '', context: { kind: 'cell', sheet: 'Budget' } },
+    plan: { tool: 'set_cell', input: { cell: 'B20', value: '120' } },
+    isCurrent: () => true,
+    cancel: () => {},
+    locate,
+    apply,
+  });
+  view.el.querySelector<HTMLElement>('.agent-plan-locate')!.click();
+  expect(locate).toHaveBeenCalledOnce();
+  expect(apply).not.toHaveBeenCalled();
+  expect(view.pending()).toBeDefined();
+  view.dispose();
+});
+
+it('distinguishes formula source from its calculated value in the cell review', () => {
+  const view = new ActionPreview();
+  view.show({
+    target: { label: 'Sales', selectedText: '', context: { kind: 'cell', sheet: 'Sales' } },
+    plan: { tool: 'set_cell', input: { cell: 'B2', value: '20' } },
+    review: {
+      kind: 'cells',
+      total: 1,
+      sampled: false,
+      rows: [{ address: 'B2', before: '12', formula: '=SUM(A1:A3)', after: '20' }],
+    },
+    isCurrent: () => true,
+    cancel: () => {},
+    apply: async () => 'verified',
+  });
+  const cells = view.el.querySelectorAll('td');
+  expect(cells[0].textContent).toContain('Calculated value: 12');
+  expect(cells[0].textContent).toContain('Formula: =SUM(A1:A3)');
+  expect(cells[1].textContent).toBe('Value: 20');
+  view.dispose();
+});
+it('keeps verified records compact with native Undo guidance and location access', async () => {
+  const view = new ActionPreview();
+  document.body.append(view.el);
+  const locate = vi.fn();
+  view.show({
+    target: { label: 'Sales', selectedText: '', context: { kind: 'cell', sheet: 'Sales' } },
+    plan: { tool: 'set_cell', input: { cell: 'B2', value: '20' } },
+    isCurrent: () => true,
+    cancel: () => {},
+    locate,
+    apply: async () => 'verified',
+  });
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(view.el.dataset.state).toBe('verified'));
+  const location = view.el.querySelector<HTMLElement>('.agent-plan-receipt-locate');
+  expect(location?.hidden).toBe(false);
+  location!.click();
+  expect(locate).toHaveBeenCalledOnce();
+  expect(view.el.querySelector('.agent-plan-undo')?.textContent).toBe(
+    'Use Undo in the editor to restore the previous content.',
+  );
+  expect(view.el.querySelector('details.agent-plan-record')?.hasAttribute('open')).toBe(false);
   view.dispose();
 });

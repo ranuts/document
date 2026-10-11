@@ -155,6 +155,48 @@ function collect(provider: LLMProvider, options = {}) {
 }
 
 describe('AgentChatController', () => {
+  it('returns and persists host preflight guidance without invoking the model or tools', async () => {
+    let saved: LLMMessage[] = [];
+    const provider = scripted([toolResponse('must-not-run', 'write', {})]);
+    const write = vi.fn(async () => ({ status: 'verified' }));
+    const { controller, turns } = collect(provider, {
+      tools: { write: makeTool('write', write) },
+      prepareRun: async () => ({ tools: {}, reply: 'Body editing is unavailable; no change was made.' }),
+      storage: {
+        load: () => saved,
+        save: (messages: LLMMessage[]) => {
+          saved = structuredClone(messages);
+        },
+        clear: () => {},
+      },
+    });
+    await controller.send('Change body text');
+    expect(provider.chat).not.toHaveBeenCalled();
+    expect(write).not.toHaveBeenCalled();
+    expect(turns.at(-1)).toEqual({ role: 'tool', text: 'Body editing is unavailable; no change was made.' });
+    expect(historyToTurns(saved).at(-1)).toEqual(turns.at(-1));
+  });
+
+  it('stops while preflight is pending without publishing its late reply or starting inference', async () => {
+    let finish!: (value: { tools: Record<string, AgentTool>; reply: string }) => void;
+    const provider = scripted([textResponse('must-not-run')]);
+    const { controller, turns } = collect(provider, {
+      prepareRun: () =>
+        new Promise((resolve) => {
+          finish = resolve;
+        }),
+    });
+    const pending = controller.send('request');
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+    controller.stop();
+    finish({ tools: {}, reply: 'late host guidance' });
+    await pending;
+    expect(provider.chat).not.toHaveBeenCalled();
+    expect(turns).toEqual([
+      { role: 'user', text: 'request' },
+      { role: 'status', text: t('agentStopped') },
+    ]);
+  });
   it('disposes pending requests without clearing persisted history or saving late results', async () => {
     let finish!: (response: LLMResponse) => void;
     const provider: LLMProvider = {
@@ -248,12 +290,74 @@ describe('AgentChatController', () => {
     expect(turns).toContainEqual({ role: 'error', text: t('agentRequestFailed') });
   });
 
-  it('emits an error turn when the iteration cap is hit', async () => {
-    const tools = { loop: makeTool('loop', async () => ({})) };
-    const provider = scripted([toolResponse('t', 'loop', {})]);
+  it('reports one verified change when a native task repeats it, without a duplicate failure', async () => {
+    let writes = 0;
+    let saved: LLMMessage[] = [];
+    const tools = {
+      write: makeTool('write', async () => {
+        writes++;
+        return { status: 'verified' };
+      }),
+    };
+    const provider = scripted([toolResponse('first', 'write', {}), toolResponse('repeat', 'write', {})]);
+    const { controller, turns } = collect(provider, {
+      tools,
+      storage: {
+        load: () => saved,
+        save: (messages: LLMMessage[]) => {
+          saved = structuredClone(messages);
+        },
+        clear: () => {},
+      },
+    });
+    await controller.send('write');
+    expect(writes).toBe(1);
+    expect(turns.filter((turn) => turn.role === 'error')).toEqual([]);
+    expect(turns.at(-1)).toEqual({ role: 'tool', text: t('agentTaskRepeatStopped', { count: 1 }) });
+    expect(historyToTurns(saved).at(-1)).toEqual(turns.at(-1));
+    expect(historyToTurns(saved).filter((turn) => turn.role === 'error')).toEqual([]);
+  });
+
+  it('reports only verified mutations when a native task reaches its iteration limit', async () => {
+    const tools = {
+      write: makeTool('write', async () => ({ status: 'verified' })),
+      read: { ...makeTool('read', async () => ({ status: 'verified' })), readOnlyHint: true },
+    };
+    const provider = scripted([toolResponse('write', 'write', {}), toolResponse('read', 'read', {})]);
     const { controller, turns } = collect(provider, { tools, maxIterations: 2 });
-    await controller.send('go');
-    expect(turns).toContainEqual({ role: 'error', text: t('agentMaxSteps') });
+    await controller.send('write and read');
+    expect(turns.filter((turn) => turn.role === 'error')).toEqual([]);
+    expect(turns.at(-1)).toEqual({ role: 'tool', text: t('agentTaskLimitStopped', { count: 1 }) });
+  });
+
+  it('preserves verified changes and reports an interrupted remainder after a provider failure', async () => {
+    let saved: LLMMessage[] = [];
+    let calls = 0;
+    const write = vi.fn(async () => ({ status: 'verified' }));
+    const provider: LLMProvider = {
+      name: 'test',
+      isReady: () => true,
+      chat: async () => {
+        if (++calls === 1) return toolResponse('write', 'write', {});
+        throw new Error('network failed secret=private');
+      },
+    };
+    const { controller, turns } = collect(provider, {
+      tools: { write: makeTool('write', write) },
+      storage: {
+        load: () => saved,
+        save: (messages: LLMMessage[]) => {
+          saved = structuredClone(messages);
+        },
+        clear: () => {},
+      },
+    });
+    await controller.send('write then summarize');
+    expect(write).toHaveBeenCalledTimes(1);
+    expect(turns.at(-1)).toEqual({ role: 'error', text: t('agentTaskPartialFailed', { count: 1 }) });
+    expect(turns.at(-1)?.text).toContain('Approved changes applied: 1.');
+    expect(historyToTurns(saved).at(-1)).toEqual(turns.at(-1));
+    expect(JSON.stringify(saved)).not.toContain('private');
   });
 
   it('emits an error turn when the provider throws', async () => {

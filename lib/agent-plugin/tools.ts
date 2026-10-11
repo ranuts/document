@@ -14,9 +14,11 @@ import { addSlideTextTool, replaceSlideText } from './office-tools';
  * insert_text, get_selection, replace_selection, set_review_mode,
  * get_document_text, add_comment, plus spreadsheet-only set_cell / get_cell.
  */
-import { escapeHtml } from 'ranuts/utils';
+import { textToHtml, wordContent } from './word-content';
+export { textToHtml } from './word-content';
 import { requireEditorApi, requireEditorContext } from './editor-bridge';
 import type { AgentTool } from '@ranuts/agent-core/types';
+import { createSlideTool } from './presentation-content';
 import { setBoldTool, setParagraphAlignmentTool } from './formatting-tools';
 import { readPresentationShapeText } from './slide-text-read';
 import {
@@ -28,43 +30,35 @@ import {
   parseOfficeRange,
 } from './office-tools';
 
-/**
- * Convert plain text into the minimal HTML `pluginMethod_PasteHtml` expects.
- * Escapes HTML-significant characters (via ranuts `escapeHtml`) and maps newlines
- * to `<br />` so the inserted text keeps its line breaks without injecting markup.
- */
-export function textToHtml(text: string): string {
-  const html = escapeHtml(text).replace(/\r\n|\r|\n/g, '<br />');
-  // The SDK collapses HTML whitespace unless the text node's parent declares
-  // pre/pre-wrap. Keep ordinary single-space text unchanged for all editors.
-  return / {2,}|\t|(?:^|[\r\n]) | $| [\r\n]/.test(text) ? `<span style="white-space: pre-wrap">${html}</span>` : html;
-}
-
 export interface InsertTextParams {
   /** The plain text to insert at the cursor. */
   text: string;
+  /** Explicit formatting for document artifacts; literal text remains the default. */
+  format?: 'plain' | 'markdown';
 }
 
 export const insertTextTool: AgentTool<InsertTextParams, { inserted: true; length: number }> = {
   name: 'insert_text',
   description:
-    'Insert plain text at the current cursor position in the document. ' +
+    'Word only. Insert text at the current cursor position. Default format plain preserves literals. ' +
+    'Use format markdown for an explicitly formatted artifact with headings, lists and emphasis. ' +
     'Newlines are preserved as line breaks. Replaces the current selection if any text is selected.',
   inputSchema: {
     type: 'object',
     properties: {
-      text: { type: 'string', description: 'The plain text to insert at the cursor.' },
+      text: { type: 'string', description: 'Document content to insert at the cursor.' },
+      format: { type: 'string', enum: ['plain', 'markdown'] },
     },
     required: ['text'],
     additionalProperties: false,
   },
   readOnlyHint: false,
-  execute: async ({ text }, signal) => {
+  execute: async ({ text, format }, signal) => {
     if (typeof text !== 'string') {
       throw new TypeError('insert_text requires a string "text" parameter');
     }
     const api = requireEditorApi();
-    await pasteWordHtml(api, textToHtml(text), signal);
+    await pasteWordHtml(api, wordContent(text, format).html, signal);
     return { inserted: true, length: text.length };
   },
 };
@@ -196,7 +190,10 @@ interface PresentationShape {
   getText?(): string;
   spTree?: PresentationShape[];
 }
-export const getPresentationTextTool: AgentTool<GetDocumentTextParams, { text: string; truncated: boolean }> = {
+export const getPresentationTextTool: AgentTool<
+  GetDocumentTextParams,
+  { text: string; truncated: boolean; slidesRead: number; totalSlides: number }
+> = {
   name: 'get_presentation_text',
   description:
     'Presentation only. Read plain text from slide text shapes and groups without moving the selection. Does not read images, charts or speaker notes.',
@@ -214,9 +211,10 @@ export const getPresentationTextTool: AgentTool<GetDocumentTextParams, { text: s
     for (let index = 0; index < slides.length; index++) {
       const content = slides[index].cSld.spTree.map(readPresentationShapeText).filter(Boolean).join('\n');
       if (content) text += `${text ? '\n\n' : ''}Slide ${index + 1}:\n${content}`;
-      if (text.length > maxChars) return { text: text.slice(0, maxChars), truncated: true };
+      if (text.length > maxChars)
+        return { text: text.slice(0, maxChars), truncated: true, slidesRead: index + 1, totalSlides: slides.length };
     }
-    return { text, truncated: false };
+    return { text, truncated: false, slidesRead: slides.length, totalSlides: slides.length };
   },
 };
 
@@ -350,6 +348,7 @@ export const getCellTool: AgentTool<GetCellParams, { cell: string; text: string 
 
 /** All registered agent tools, keyed by name for lookup by the runtime. */
 export const agentTools: Record<string, AgentTool> = {
+  [createSlideTool.name]: createSlideTool as unknown as AgentTool,
   [getPdfTextTool.name]: getPdfTextTool,
   [addPdfCommentTool.name]: addPdfCommentTool,
   [fillSeriesTool.name]: fillSeriesTool as unknown as AgentTool,

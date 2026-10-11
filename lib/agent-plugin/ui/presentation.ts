@@ -1,4 +1,26 @@
 import { t, getLanguage, i18n, SHELL_LOCALES } from '@ranuts/shared/i18n';
+import type { AgentEvent, AgentRunResult } from '@ranuts/agent-core/runtime';
+
+/** Count host-verified mutations, never read results or a model's completion prose. */
+export function isVerifiedDocumentChange(event: AgentEvent): boolean {
+  if (event.type !== 'tool_result' || event.isError || event.readOnlyHint !== false) return false;
+  try {
+    const value = JSON.parse(event.content);
+    return value !== null && typeof value === 'object' && !Array.isArray(value) && value.status === 'verified';
+  } catch {
+    return false;
+  }
+}
+
+/** The same guard-stop presentation for schema and native tool transports. */
+export function documentTaskStopText(reason: AgentRunResult['limitReason'], count: number): string {
+  return t(reason === 'repeated_call' ? 'agentTaskRepeatStopped' : 'agentTaskLimitStopped', { count });
+}
+
+/** A failed continuation never erases already verified changes. */
+export function documentTaskFailureText(error: unknown, count: number): string {
+  return count > 0 ? t('agentTaskPartialFailed', { count }) : displayError(error);
+}
 
 const tools = new Set([
   'get_selection',
@@ -83,6 +105,13 @@ export function displayError(error: unknown): string {
   if (text === 'agentSummaryNotShorter') return t('agentSummaryNotShorter');
   if (['No rewrite was proposed', 'No summary was proposed', 'No translation was proposed'].includes(text))
     return t('agentWritingUnchanged');
+  if (
+    text === 'agentWordFormatUnsupported' ||
+    text === 'agentWordFormattingReviewUnsupported' ||
+    text === 'agentSlideTitleTooLong' ||
+    text === 'agentSlideContentTooLong'
+  )
+    return t(text);
   if (text === 'agentContextTooLong') return t('agentContextTooLong');
   if (text === 'agentWritingNeedsLocalService') return t('agentWritingNeedsLocalService');
   if (text === 'agentWritingOfflineNeedsDevice') return t('agentWritingOfflineNeedsDevice');

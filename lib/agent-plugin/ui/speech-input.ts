@@ -24,10 +24,8 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
   mic.className = 'agent-speech-mic';
   mic.innerHTML =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 10v2a6 6 0 0 0 12 0v-2M12 18v3M8 21h8"/></svg>';
-  const details = document.createElement('div');
-  details.className = 'agent-speech-language-picker';
-  details.hidden = true;
   const language = document.createElement('r-select') as HTMLElement & { value: string; disabled: boolean };
+  language.className = 'agent-speech-language';
   language.setAttribute('placement', 'top');
   const languages = [
     ['zh-CN', '中文'],
@@ -46,9 +44,6 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
   }
   const locale = () => languages.find(([code]) => code.startsWith(getLanguage().split('-')[0]))?.[0] ?? 'en-US';
   language.value = locale();
-  const languageButton = document.createElement('button');
-  languageButton.type = 'button';
-  languageButton.className = 'agent-speech-language';
   const hint = document.createElement('p');
   hint.hidden = true;
   const status = document.createElement('span');
@@ -60,8 +55,7 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
   cancel.type = 'button';
   cancel.className = 'agent-speech-cancel';
   feedback.append(status, hint, cancel);
-  details.append(language);
-  root.append(mic, languageButton, details, feedback);
+  root.append(mic, language, feedback);
   chat.actionsEl.append(root);
   let disclosed = false;
   let stopping = false;
@@ -77,11 +71,6 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
     mic.title = mic.getAttribute('aria-label') ?? '';
     mic.setAttribute('aria-pressed', String(busy));
     chat.refreshSendAvailability();
-    languageButton.setAttribute('aria-expanded', String(!details.hidden));
-    languageButton.setAttribute('aria-label', t('agentSpeechLanguage'));
-    languageButton.title = t('agentSpeechLanguage');
-    languageButton.textContent = languages.find(([code]) => code === language.value)?.[1] ?? 'English';
-    languageButton.disabled = busy;
     cancel.hidden = !busy;
     feedback.hidden = !busy && !status.textContent;
     mic.disabled = stopping;
@@ -102,7 +91,6 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
     if (busy && !preserveDraft) chat.setInput(discard ? original : transcript ? base + transcript : original);
     busy = false;
     stopping = false;
-    details.hidden = true;
     hint.hidden = true;
     status.textContent = '';
     render();
@@ -114,7 +102,6 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
     if (base && !/\s$/.test(base)) base += ' ';
     transcript = '';
     stopping = false;
-    details.hidden = true;
     hint.hidden = disclosed;
     disclosed = true;
     const token = ++revision;
@@ -203,15 +190,8 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
     }
     begin();
   });
-  languageButton.addEventListener('click', () => {
-    details.hidden = !details.hidden;
-    if (!details.hidden) language.focus();
-    render();
-  });
   language.addEventListener('change', () => {
-    details.hidden = true;
     render();
-    languageButton.focus();
   });
   cancel.addEventListener('click', () => {
     close(true);

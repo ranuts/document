@@ -1,5 +1,34 @@
 import { expect, test } from './lib/l0';
 
+test('a remembered model opens chat through the editor entry, after closing and across editors', async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.addInitScript(() => {
+    localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+  });
+  const inference: string[] = [];
+  page.on('request', (request) => {
+    if (/huggingface|mlc-ai|\.gguf(?:\?|$)/i.test(request.url())) inference.push(request.url());
+  });
+  for (const ext of ['docx', 'xlsx', 'pptx']) {
+    await page.goto(`/editor?new=${ext}`);
+    await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+    const entry = page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry');
+    await entry.click();
+    const panel = page.locator('.agent-runtime-panel');
+    await expect(panel).toHaveAttribute('data-view', 'chat');
+    await expect(page.locator('.cui-input')).toBeFocused();
+    await page.locator('.cui-input').fill('Keep this draft');
+    await page.locator('.agent-panel-settings-toggle').click();
+    await expect(panel).toHaveAttribute('data-view', 'settings');
+    await panel.locator('.agent-panel-close').click();
+    await entry.click();
+    await expect(panel).toHaveAttribute('data-view', 'chat');
+    await expect(page.locator('.cui-input')).toHaveValue('Keep this draft');
+  }
+  expect(inference).toEqual([]);
+});
+
 test('default off and remembered on never prepare models or connect services on navigation', async ({ page }) => {
   test.setTimeout(120_000);
   const inference: string[] = [];
@@ -62,6 +91,7 @@ for (const width of [1280, 375, 320]) {
     await page.evaluate(() => window.__toggleAgentPanel?.());
     await page.locator('.agent-onboarding .agent-enable-switch').click();
     await expect(page.locator('.agent-runtime-panel')).toBeVisible();
+    await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'settings');
     await page.screenshot({ path: testInfo.outputPath('settings.png') });
     await page.locator('.agent-panel-settings-toggle').click();
     await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');

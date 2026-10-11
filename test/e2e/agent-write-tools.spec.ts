@@ -1,3 +1,4 @@
+import { taskProtocol } from './lib/task-protocol';
 import type { Page } from '@playwright/test';
 import { expect, test } from './lib/l0';
 
@@ -41,7 +42,14 @@ test.describe('agent document writes (real editor)', () => {
     await page.evaluate(() => window.__toggleAgentPanel?.());
     await page.locator('.agent-enable-switch').click();
     await expect(page.locator('.agent-runtime-panel')).not.toHaveClass(/agent-panel-hidden/);
-    await page.locator('.agent-panel-settings-toggle').click();
+    const configuredService = await page.evaluate(
+      () => !!JSON.parse(localStorage.getItem('agent-writing-endpoint') ?? '{}').model,
+    );
+    await expect(page.locator('.agent-runtime-panel')).toHaveAttribute(
+      'data-view',
+      configuredService ? 'chat' : 'settings',
+    );
+    if (!configuredService) await page.locator('.agent-panel-settings-toggle').click();
     await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
   };
 
@@ -212,7 +220,9 @@ test.describe('agent document writes (real editor)', () => {
                   text: refining ? (refinements === 1 ? 'Edited draft' : 'Final reviewed text') : 'Initial draft',
                 },
               };
-      await route.fulfill({ json: { done: true, done_reason: 'stop', message: { content: JSON.stringify(output) } } });
+      await route.fulfill({
+        json: { done: true, done_reason: 'stop', message: { content: JSON.stringify(taskProtocol(request, output)) } },
+      });
     });
     await openEditorWithPanel(page, 'docx');
     await page.locator('.agent-panel-settings-toggle').click();
@@ -342,8 +352,9 @@ test.describe('agent document writes (real editor)', () => {
     const review = page.locator('.agent-plan-preview').last();
     await expect(review.locator('table')).toContainText('SUM(A1:A1)');
     const cells = review.locator('tbody tr').first().locator('td');
-    await expect(cells.nth(0)).toContainText('1');
-    await expect(cells.nth(1)).toHaveText('9');
+    await expect(cells.nth(0)).toContainText('Calculated value: 1');
+    await expect(cells.nth(0)).toContainText('Formula: SUM(A1:A1)');
+    await expect(cells.nth(1)).toHaveText('Value: 9');
     expect(await readCell(page, 'B1')).toBe('1');
     await review.locator('.agent-plan-cancel').click();
     await undo(page);
@@ -429,7 +440,9 @@ test.describe('agent document writes (real editor)', () => {
       const output = request.format?.properties?.task
         ? { task: 'tools', language: 'en' }
         : { tool: 'add_slide_text', input: { text: 'Initial slide draft' } };
-      await route.fulfill({ json: { done: true, done_reason: 'stop', message: { content: JSON.stringify(output) } } });
+      await route.fulfill({
+        json: { done: true, done_reason: 'stop', message: { content: JSON.stringify(taskProtocol(request, output)) } },
+      });
     });
     await openEditorWithPanel(page, 'pptx');
     await page.locator('.agent-panel-settings-toggle').click();
@@ -495,7 +508,9 @@ test.describe('agent document writes (real editor)', () => {
       const output = request.format?.properties?.task
         ? { task: 'tools', language: 'en' }
         : { tool: 'slide_action', input: { action: 'add' } };
-      await route.fulfill({ json: { done: true, done_reason: 'stop', message: { content: JSON.stringify(output) } } });
+      await route.fulfill({
+        json: { done: true, done_reason: 'stop', message: { content: JSON.stringify(taskProtocol(request, output)) } },
+      });
     });
     await openEditorWithPanel(page, 'pptx');
     await page.locator('.agent-panel-settings-toggle').click();

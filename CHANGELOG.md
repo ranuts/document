@@ -9,6 +9,12 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- **Keep document structure when writing an assistant draft.** Word headings,
+  lists and emphasis remain formatted; long slide content continues on fitted
+  pages without dropping text. Completed changes keep location and Undo guidance.
+  Reading progress names the actual scope, and spreadsheet reviews distinguish
+  formulas from calculated values.
+
 - **Keep writing while the assistant responds.** Prepare the next request without
   sending it automatically. Reading older messages keeps your place, and activity
   hints distinguish reading, responding and waiting for your review.
@@ -57,6 +63,16 @@ notes. Entries describe what users experience, not internal refactors.
   separate.
 
 ### Changed
+
+- **Configured assistants reopen in chat.** Enable a downloaded model or reconnect
+  your service without losing your draft. Preparation never sends the draft.
+  Speech language choices open directly, and model settings use one consistent
+  expansion style.
+- **Presentation drafts can have separate titles and body text.** Review the new
+  slide before adding it; one Undo restores the previous presentation.
+- **Interrupted tasks explain what happened.** Confirmed changes remain visible
+  when later steps fail or repeat an operation. Check the result before asking
+  for the unfinished work; completed changes can still be undone.
 
 - **Read requests now finish with an answer to your question.** After reading text
   or cells, the assistant answers from that content instead of showing the whole

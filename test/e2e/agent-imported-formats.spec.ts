@@ -1,3 +1,4 @@
+import { taskProtocol } from './lib/task-protocol';
 import { expect, test } from './lib/l0';
 import { buildOdf, ODF_FIXTURES } from './lib/odf';
 import { readFileSync } from 'node:fs';
@@ -96,6 +97,12 @@ for (const fixture of fixtures) {
         readContinuation = reading && grounded && JSON.stringify(request.messages).includes('Original question:');
         output = reading ? marker : `The file contains ${marker}.`;
       }
+      const taskOutput = taskProtocol(request, output, reading ? marker : 'The reviewed operation is finished.');
+      if ((taskOutput as { kind?: string }).kind === 'answer' && reading) {
+        grounded = JSON.stringify(request.messages).includes(marker);
+        readContinuation = grounded && JSON.stringify(request.messages).includes('tool_result');
+      }
+      output = taskOutput;
       await route.fulfill({
         json: {
           done: true,
@@ -139,6 +146,8 @@ for (const fixture of fixtures) {
     expect(before).toContain(marker);
     await page.evaluate(() => window.__toggleAgentPanel?.());
     await page.locator('.agent-enable-switch').click();
+    await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
+    await page.locator('.agent-panel-settings-toggle').click();
     await page.locator('.agent-panel-endpoint-connect').click();
     await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
     await page.locator('.agent-panel-settings-toggle').click();
@@ -170,7 +179,7 @@ for (const fixture of fixtures) {
     expect(await read()).toBe(before);
     const historyIndex = () => page.evaluate(() => (window.__ooFrames.readyEditor() as any).AscCommon.History.Index);
     const previousHistory = fixture.expectNoSpace ? await historyIndex() : undefined;
-    await expect(page.locator('.cui-send-stop')).toHaveCount(0);
+    // The task remains cancellable while its reviewed tool call awaits a decision.
     await review.locator('.agent-plan-apply').click();
     if (fixture.expectNoSpace) {
       await expect(review.locator('[role="status"]')).toContainText('There is not enough space on this slide');

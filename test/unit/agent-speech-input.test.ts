@@ -107,6 +107,16 @@ it('starts recognition with one microphone click, without a start form', () => {
   expect(recognition.start).toHaveBeenCalledOnce();
   expect(el.querySelector('.agent-speech-details')).toBeNull();
 });
+it('offers one language selector directly in the compose toolbar', () => {
+  const { el, recognition } = setup();
+  recognition.onend?.();
+  const selector = el.querySelector('r-select.agent-speech-language');
+  expect(selector).not.toBeNull();
+  expect(el.querySelector('button.agent-speech-language')).toBeNull();
+  expect(el.querySelector('.agent-speech-language-picker')).toBeNull();
+  expect(selector!.getAttribute('placement')).toBe('top');
+  expect(selector!.getAttribute('aria-label')).toBe('agentSpeechLanguage');
+});
 it('keeps interim-only results when recognition ends', () => {
   const { recognition, draft } = setup();
   recognition.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'Visible words' } }] });

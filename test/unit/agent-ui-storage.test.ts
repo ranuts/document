@@ -60,6 +60,23 @@ describe('createHistoryStorage', () => {
     expect(createHistoryStorage('b').load()).toEqual([]);
     createHistoryStorage('a').clear();
   });
+  it('rejects invalid guard metadata instead of hiding a stored execution error', () => {
+    const store = createHistoryStorage('test');
+    for (const fields of [
+      { guardReason: 'unknown', isError: true },
+      { guardReason: 'repeated_call', isError: false },
+      { guardReason: true, isError: true },
+      { guardReason: ['repeated_call'], isError: true },
+    ]) {
+      localStorage.setItem(
+        'agent_history_test',
+        JSON.stringify([
+          { role: 'user', content: [{ type: 'tool_result', toolUseId: 'x', content: 'refused', ...fields }] },
+        ]),
+      );
+      expect(store.load()).toEqual([]);
+    }
+  });
 });
 
 describe('historyToTurns', () => {

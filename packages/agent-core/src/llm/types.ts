@@ -19,7 +19,14 @@ export interface LLMToolDef {
 export type LLMContent =
   | { type: 'text'; text: string }
   | { type: 'tool_use'; id: string; name: string; input: Record<string, unknown> }
-  | { type: 'tool_result'; toolUseId: string; content: string; isError?: boolean };
+  | {
+      type: 'tool_result';
+      toolUseId: string;
+      content: string;
+      isError?: boolean;
+      /** Host guard metadata for restored UI; provider converters send the standard result only. */
+      guardReason?: 'repeated_call' | 'tool_budget';
+    };
 
 /** A conversation message. `content` is plain text or a list of blocks. */
 export interface LLMMessage {

@@ -1,4 +1,4 @@
-import { ButtonBuilder, Div, View } from 'ranui/builder';
+import { ButtonBuilder, Div, Span, View } from 'ranui/builder';
 import { throttle } from 'ranuts/utils';
 import { ensureChatUiStyles } from './styles';
 import { renderMarkdown } from './markdown';
@@ -50,7 +50,7 @@ export class ChatView {
   private readonly scrollBtn: HTMLButtonElement;
   private labels: ChatViewLabels;
   private running = false;
-  private activity: 'responding' | 'reading' | 'planning' = 'responding';
+  private activity: 'responding' | 'reading' | 'planning' | 'reviewing' = 'responding';
   private composing = false;
   private lastUserText = '';
   private readonly statusEl = Div().class('cui-status').attr('role', 'status').build();
@@ -210,7 +210,7 @@ export class ChatView {
   }
 
   /** Append a finished message and scroll to it. Returns the bubble element. */
-  append(message: ChatMessage): HTMLDivElement {
+  append(message: ChatMessage): HTMLElement {
     if ((message.role === 'status' || message.role === 'error') && this.liveMsg) {
       this.liveMsg.dataset.interrupted = 'true';
       this.liveMsg.querySelector('.cui-apply')?.remove();
@@ -222,7 +222,7 @@ export class ChatView {
     if (message.role === 'tool') {
       const last = this.messagesEl.lastElementChild;
       let group = last?.matches('.cui-activity') ? last : document.createElement('div');
-      const item = Div().text(message.text).build();
+      const item = Span().text(message.text).build();
       if (group !== last) {
         group.className = 'cui-activity';
         group.append(item);
@@ -398,19 +398,22 @@ export class ChatView {
   }
 
   /** Host-reported activity, not inferred model thoughts or estimated progress. */
-  setActivity(activity: 'responding' | 'reading' | 'planning'): void {
+  setActivity(activity: 'responding' | 'reading' | 'planning' | 'reviewing'): void {
     this.activity = activity;
+    this.messagesEl.setAttribute('aria-busy', String(this.running && activity !== 'reviewing'));
     this.updateActivity();
   }
 
   private updateActivity(): void {
     this.statusEl.textContent = !this.running
       ? ''
-      : this.activity === 'reading'
-        ? (this.labels.reading ?? 'Reading content…')
-        : this.activity === 'planning'
-          ? (this.labels.planning ?? 'Preparing task…')
-          : (this.labels.waiting ?? 'Generating a response…');
+      : this.activity === 'reviewing'
+        ? (this.labels.reviewing ?? 'Review the proposed change to continue.')
+        : this.activity === 'reading'
+          ? (this.labels.reading ?? 'Reading content…')
+          : this.activity === 'planning'
+            ? (this.labels.planning ?? 'Preparing task…')
+            : (this.labels.waiting ?? 'Generating a response…');
   }
 
   /** Remove all messages and restore the empty state. */

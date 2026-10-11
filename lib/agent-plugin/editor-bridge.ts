@@ -1,5 +1,6 @@
 import type { PdfDocument } from './pdf-tools';
 import type { RedoHistory } from './native-redo';
+import type { PresentationBuilder } from './presentation-content';
 
 /**
  * Same-origin bridge to the OnlyOffice editor's command API.
@@ -100,6 +101,7 @@ export interface EditorCommon {
 }
 
 export interface EditorContext {
+  presentationBuilder?: PresentationBuilder;
   AscDFH?: { historydescription_GroupPoints: number; historydescription_Pdf_AddComment?: number };
   AscPDF?: {
     ANNOTATIONS_TYPES: { Text: number };
@@ -117,6 +119,7 @@ export interface EditorContext {
  * from either. `Asc` also carries the namespace used to build SDK objects.
  */
 interface EditorWindow {
+  AscBuilder?: { Slide?: { Api?: PresentationBuilder } };
   AscPDF?: EditorContext['AscPDF'];
   AscDFH?: EditorContext['AscDFH'];
   AscCommon?: EditorCommon;
@@ -196,6 +199,7 @@ export function getEditorContext(): EditorContext | null {
     ? {
         api,
         Asc: win.Asc,
+        ...(win.AscBuilder?.Slide?.Api ? { presentationBuilder: win.AscBuilder.Slide.Api } : {}),
         ...(win.AscPDF ? { AscPDF: win.AscPDF } : {}),
         ...(win.AscCommon ? { AscCommon: win.AscCommon } : {}),
         ...(win.AscDFH ? { AscDFH: win.AscDFH } : {}),

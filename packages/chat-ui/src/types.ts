@@ -31,6 +31,7 @@ export interface ChatViewLabels {
   waiting?: string;
   reading?: string;
   planning?: string;
+  reviewing?: string;
   scrollLatest?: string;
   applyMessage?: string;
   applyTip?: string;

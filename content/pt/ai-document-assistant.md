@@ -7,7 +7,7 @@ Diga o que quer fazer: consultar conteúdo, trabalhar em textos ou organizar dad
 
 ## Começar
 
-Ative o assistente e escolha um modelo local ou conecte seu serviço de IA. Os arquivos do modelo ficam neste navegador; outro documento pode exigir uma nova preparação, reutilizando arquivos já armazenados.
+Ative o assistente e escolha um modelo local ou conecte seu serviço de IA. Depois da configuração, o assistente abre na conversa. O modelo carregado continua disponível ao trocar de arquivo na mesma página. Após recarregar, você pode ativar o modelo baixado na conversa. Os arquivos armazenados são reutilizados; os que faltarem ainda podem precisar de download.
 
 O modelo padrão no navegador é o Qwen3 4B. O uso estimado de memória gráfica é de cerca de 3,43 GB; isso não representa o tamanho do download nem o uso total de memória do dispositivo. O recurso continua experimental. Modelos menores baixados anteriormente podem ser removidos na lista de modelos baixados.
 
@@ -19,7 +19,7 @@ Enquanto o assistente trabalha, você pode preparar a próxima solicitação. En
 
 - Excel e CSV: leia tabelas, preencha dados, crie sequências, calcule totais ou ordene.
 
-- PowerPoint: consulte textos, adicione texto e crie, duplique ou mude slides.
+- PowerPoint: pergunte sobre o texto, adicione texto ou acrescente, duplique e navegue pelas páginas. Um novo slide com título e conteúdo mantém as duas partes separadas. Uma confirmação adiciona ambas, e um único Desfazer restaura a apresentação anterior.
 
 - PDF: consulte, resuma ou traduza texto selecionável da página atual; adicione uma nota a uma página específica.
 
@@ -46,5 +46,13 @@ Após adicionar notas, baixe o arquivo como PDF para guardá-las. Elas continuam
 ## Lembre-se
 
 A IA pode entender pedidos incorretamente ou omitir detalhes. Confira números, datas e nomes. Modelos locais processam texto no dispositivo; serviços conectados recebem o texto da solicitação. O reconhecimento de voz pode usar um serviço online. O ditado fica no rascunho e não é enviado automaticamente.
+
+## Formatação e alcance da leitura
+
+Os rascunhos do Word podem manter títulos, listas e destaques. Tabelas formatadas ainda não são suportadas. Desative o controle de alterações antes de inserir conteúdo formatado; texto simples continua disponível.
+
+Rascunhos longos de slides continuam em mais páginas, com título e corpo separados. Encurte títulos que não caibam. Uma solicitação pode adicionar até 20 páginas; Desfazer restaura a apresentação anterior em uma etapa.
+
+O estado informa o que foi lido: seleção, intervalo de células, texto de slides ou página atual do PDF. “Conteúdo parcial” indica que ficou conteúdo por ler. Na revisão da planilha, a fórmula e seu resultado aparecem separadamente. Alterações concluídas mantêm sua localização e um lembrete de Desfazer em um registro compacto.
 
 [Ajuda](/pt/help)
