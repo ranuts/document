@@ -273,3 +273,46 @@ composer UX suite passed all four DOCX, XLSX, PPTX and PDF cases, covering draft
 reflow, bottom following, historical position, focus and keyboard interaction.
 Those browser cases use controlled provider responses and do not qualify actual
 model accuracy or independently reproduce the exact frame interleaving.
+
+### Tool-purpose clarification follow-up on 2026-10-11
+
+Temporary diagnostics on the same synthetic source captured two fresh Spanish
+requests. Both selected the `tools` task and Spanish response language, then
+returned the valid `unsupported` operation. This locates those failures in
+operation choice rather than malformed JSON or initial task routing. Restricting
+the available operations to selection and document reading still returned
+`unsupported` in one trial; that experiment was removed.
+
+A separate description-only experiment retained the eight available Word tools
+and clarified that `get_document_text` supplies source text for answering factual
+questions, including when nothing is selected. Three fresh requests selected
+`get_document_text` with `maxChars: 8000` and answered exactly `120`. Temporary
+request matching and diagnostic logging were removed. The retained change is a
+generic tool description; schemas, permissions, execution and refusal handling
+are unchanged. This follows the tool-description guidance in
+[OpenAI function calling](https://developers.openai.com/api/docs/guides/function-calling)
+and [Anthropic tool design](https://www.anthropic.com/engineering/writing-tools-for-agents).
+Those guides do not establish this local model's reliability.
+
+The final development code was then tested in a fresh browser session with the
+same cached model, English UI and source. Every request used a new conversation.
+Native reads before and after returned the unchanged source and final newline.
+
+| Spanish request                                                                       | Trials | Visible results                                                | Strict requested-format passes |
+| ------------------------------------------------------------------------------------- | -----: | -------------------------------------------------------------- | -----------------------------: |
+| Original budget question above                                                        |      3 | `120` each time                                                |                              3 |
+| Indica únicamente la cantidad presupuestada que figura en este documento.             |      1 | La cantidad presupuestada que figura en este documento es 120. |                              0 |
+| ¿Qué fecha de entrega aparece en este documento? Responde solo en formato AAAA-MM-DD. |      1 | `2026-11-01`                                                   |                              1 |
+
+All five final-code requests produced the correct source fact without an
+operation-selection error. The paraphrase failed the requested answer format and
+remains a failure. Final-code trials captured visible results, not raw provider
+plans. These small, fixed-order experiments on one source are exploratory; they
+are not randomized comparisons, production qualification or full multilingual
+acceptance. Language support remains unchanged.
+
+For the generic description change, the full unit suite passed 4,961 tests
+(with the same two asynchronous Promise warnings), strict lint and TypeScript
+checks passed, and all ten production browser tests in the native editor write
+suite passed. The write suite uses controlled providers and protects execution
+behavior; it does not measure local model accuracy.
