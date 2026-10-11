@@ -316,3 +316,46 @@ For the generic description change, the full unit suite passed 4,961 tests
 checks passed, and all ten production browser tests in the native editor write
 suite passed. The write suite uses controlled providers and protects execution
 behavior; it does not measure local model accuracy.
+
+## Current-code cross-format acceptance on 2026-10-11
+
+At application commit `08aa6131`, a production-build run passed all 14 cases in
+`agent-composer-ux`, `agent-imported-formats` and `pdf-agent-contract` with one
+worker. The explicit public legacy corpus was supplied; all three file hashes
+matched the pinned fixture definitions and no legacy cases were skipped.
+
+- DOCX, XLSX, PPTX and PDF: editable next drafts, sidebar reflow, bottom following,
+  historical focus, stable copy feedback and keyboard scrolling of code/tables.
+- ODT, ODS, ODP, TXT, RTF, DOC and XLS: imported context reaches the service,
+  reviewed native modification is independently read back and one Undo restores
+  the original content.
+- PPT: a crowded insertion fails and rolls back, then reviewed selected-title
+  replacement succeeds and one Undo restores the original.
+- PDF: virtual text reads preserve the real selection; scoped reading and reviewed
+  page notes exercise cancellation, rollback, Undo, and saving/reopening; a
+  body-rewrite request produces an answer without offering a document write.
+
+These browser tests use controlled providers. They establish the tested editor
+and interaction contracts, not local model quality or universal document-layout
+compatibility. CSV native writes passed in the preceding ten-case write suite;
+CSV is not included in this 14-case run.
+
+### Remaining interaction acceptance
+
+Source review still finds a two-step speech-language interaction: a button opens
+a wrapper containing an `r-select`, then a second interaction opens its options.
+The service, download and advanced-settings disclosures also have different
+structures. These remain redesign work, rather than completed UX acceptance.
+
+A temporary layout unit probe additionally reproduced a boundary absent from the
+passing composer browser cases: upward wheel input, viewport-height change and a
+scroll event in the same interval retain bottom attachment. The next streamed
+update and pending layout frame both call scroll-to-end. Eleven existing layout
+cases passed while that new probe failed. The probe was removed after diagnosis;
+production code is unchanged. A real-browser reproduction and a repair covering
+wheel, touch, keyboard and scrollbar navigation are still required. This is not
+claimed as a browser-proven production regression.
+
+Actual screen-reader acceptance, the proposed layout responsibility split,
+unified settings/language interaction and broader multilingual model acceptance
+remain open. Passing the above cases does not close these requirements.
