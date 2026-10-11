@@ -52,6 +52,11 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- **Read requests now finish with an answer to your question.** After reading text
+  or cells, the assistant answers from that content instead of showing the whole
+  tool result. Empty files still show a clear message, and stopped requests cannot
+  add a late answer.
+
 - **Browser model choices now start at Qwen3 4B.** Smaller presets are no longer
   offered, and saved choices move to 4B. Previously downloaded smaller models can
   still be deleted in settings. Browser models remain experimental.

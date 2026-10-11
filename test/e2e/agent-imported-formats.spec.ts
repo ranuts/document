@@ -60,6 +60,8 @@ for (const fixture of fixtures) {
       ),
     );
     let grounded = false;
+    let reading = false;
+    let readContinuation = false;
     let editing = false;
     let replacing = false;
     await page.route('http://localhost:11434/api/**', async (route) => {
@@ -76,18 +78,23 @@ for (const fixture of fixtures) {
       }
       const request = route.request().postDataJSON();
       let output: unknown;
-      if (request.format?.properties?.task) output = { task: editing ? 'tools' : 'chat', language: 'en' };
+      if (request.format?.properties?.task) output = { task: editing || reading ? 'tools' : 'chat', language: 'en' };
       else if (request.format) {
-        output = replacing
-          ? { tool: 'replace_selection', input: { text: 'Reviewed replacement' } }
-          : fixture.kind === 'cell'
-            ? { tool: 'set_cell', input: { cell: 'A1', value: 'Reviewed replacement' } }
-            : fixture.kind === 'slide'
-              ? { tool: 'add_slide_text', input: { text: 'Reviewed replacement' } }
-              : { tool: 'insert_text', input: { text: 'Reviewed replacement' } };
+        output = reading
+          ? fixture.kind === 'cell'
+            ? { tool: 'get_cell', input: { cell: 'A1' } }
+            : { tool: fixture.kind === 'slide' ? 'get_presentation_text' : 'get_document_text', input: {} }
+          : replacing
+            ? { tool: 'replace_selection', input: { text: 'Reviewed replacement' } }
+            : fixture.kind === 'cell'
+              ? { tool: 'set_cell', input: { cell: 'A1', value: 'Reviewed replacement' } }
+              : fixture.kind === 'slide'
+                ? { tool: 'add_slide_text', input: { text: 'Reviewed replacement' } }
+                : { tool: 'insert_text', input: { text: 'Reviewed replacement' } };
       } else {
         grounded = JSON.stringify(request.messages).includes(marker);
-        output = `The file contains ${marker}.`;
+        readContinuation = reading && grounded && JSON.stringify(request.messages).includes('Original question:');
+        output = reading ? marker : `The file contains ${marker}.`;
       }
       await route.fulfill({
         json: {
@@ -140,6 +147,13 @@ for (const fixture of fixtures) {
     await input.press('Enter');
     await expect(page.locator('.cui-messages')).toContainText(`The file contains ${marker}.`);
     expect(grounded).toBe(true);
+    reading = true;
+    await input.fill('Read this file and answer with only its opening text.');
+    await input.press('Enter');
+    await expect(page.locator('.cui-msg-agent .cui-bubble').last()).toHaveText(marker);
+    expect(readContinuation).toBe(true);
+    expect(await read()).toBe(before);
+    reading = false;
     editing = true;
     await input.fill(
       fixture.kind === 'cell'

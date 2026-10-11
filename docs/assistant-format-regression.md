@@ -117,3 +117,15 @@ Without the explicit corpus directory, the three legacy assistant cases are repo
 The public legacy corpus run also passed three files with no findings, covering import, save, trusted editing, PDF export and read-only behavior. The first PPT test mixed multi-line native text with rendered paragraph text; its marker now uses the first native text line. A subsequent insertion attempt correctly rolled back because reserved boxes left no free area. The final PPT case checks that failure explicitly and then verifies a real selected-title edit and Undo. No product code was weakened to make a crowded insertion pass.
 
 Final current-code imported assistant run: all eight cases passed with the explicit public corpus, including the legacy PPT insertion rollback followed by reviewed title replacement and exact Undo. No skipped legacy cases were counted. Targeted lint, formatting and diff checks passed; added-content privacy scan found zero local-path, username or token-shaped-secret matches.
+
+## Read results followed by grounded answers
+
+The controlled-provider PDF case now verifies a schema-planned content read followed by a separate tool-free answer, rather than allowing an initial chat response to stand in for that path. The expected answer is exactly `120`, and the provider must receive the native page text and matching read receipt. All eight imported-format cases similarly require a read-tool continuation before their existing native edit/review/Undo checks.
+
+Helper tests cover all four editor kinds, unavailable completion, unexpected tool calls and a provider that ignores Stop. Panel tests verify late answers are discarded after Stop or captured target invalidation. The empty-presentation regression remains unchanged and still shows an explicit unavailable-source result. Full unit regression initially passed 4,940 tests; final follow-up includes two additional host boundary cases. These are application-contract tests, not default-model qualification.
+
+Final host boundary checks passed after restoration. Temporarily removing the post-answer target guard made the target-invalidation test fail by displaying `LATE ANSWER`; restoring the guard made both Stop and target-invalidation cases pass. Final full unit run passed 166 files / 4,943 tests, including the reasoning-display regression. The combined PDF and imported-format browser run passed all 10 cases. Strict lint, TypeScript and formatting checks passed.
+
+The new reasoning-display regression first failed by rendering the model's leading `<think>` block alongside `120`. The answer path now reuses the existing presentation filter; no parallel reasoning parser was introduced.
+
+A fresh browser run with the final presentation filter and actual Qwen3 4B model answered “当前文档里的预算是多少？请只回答金额。” with visible text exactly `120` on the synthetic TXT source. No reasoning protocol tags were displayed. This single final-code trial does not establish repeated multilingual model qualification.
