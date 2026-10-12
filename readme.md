@@ -34,30 +34,6 @@ device, so documents are never uploaded, and no account is involved.
 
 ---
 
-## AI document assistant
-
-**Experimental:** The AI assistant is still being developed. Answers and edits can be incomplete or incorrect; review suggestions and verify important changes. Speed and capabilities vary by model and device.
-
-**Watch the AI assistant in action** · English screen recordings with captions. Click a preview to watch the video.
-
-| Word · Draft, insert and undo                                                                       | Excel · Fill cells and calculate                                                                 |
-| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| [![Watch the Word AI demo](docs/media/ai-demos/word-ai.jpg)](docs/media/ai-demos/word-ai.mp4)       | [![Watch the Excel AI demo](docs/media/ai-demos/excel-ai.jpg)](docs/media/ai-demos/excel-ai.mp4) |
-| PowerPoint · Review and create a slide                                                              | PDF · Read a page and review a note                                                              |
-| [![Watch the PowerPoint AI demo](docs/media/ai-demos/pptx-ai.jpg)](docs/media/ai-demos/pptx-ai.mp4) | [![Watch the PDF AI demo](docs/media/ai-demos/pdf-ai.jpg)](docs/media/ai-demos/pdf-ai.mp4)       |
-
-[Demo details and text descriptions](docs/media/ai-demos/README.md). Recorded with the local Qwen3 4B model and fictional documents; model preparation is omitted.
-
-Say what you want to do: ask about content, work on text or organize data. Review changes before applying them. Off by default · This browser only.
-
-Choose a local model or connect your AI service. Model files stay in this browser and cached files can be reused when preparing the model for another document.
-
-Word supports drafting and selected-text work; Excel and CSV support data operations; PowerPoint supports slide text and pages. PDF supports questions, summaries and translations of selectable text on the current page, plus reviewed page notes. Scanned image text is not recognized, and page notes do not rewrite PDF body text.
-
-Suggestions show their location and content. Edit them or ask for adjustments before applying. Cancel unwanted changes, or use editor Undo after applying. Clearing or overwriting content requires confirmation; read-only files can only be viewed.
-
-[How to use it](https://edit.chaxus.com/ai-document-assistant)
-
 ## ✨ Features
 
 - 🔒 **Nothing is uploaded** — every conversion, edit and export happens in the tab
@@ -192,17 +168,6 @@ Also available as a component: this project powers the document preview in
 
 ---
 
-## 🤖 Browser AI agents (WebMCP)
-
-Where the browser supports it, the page registers tools an in-browser agent can
-call directly instead of driving the UI: `open_document_url`,
-`open_document_buffer`, `create_document`, `save_document`, `get_document_text`,
-`set_readonly`, `get_document_state`. Documents still never leave the device —
-the browser fetches and converts them itself. Where the API is absent, this is
-a no-op.
-
----
-
 ## 🚀 Deployment
 
 A static build — no runtime, no database.
@@ -278,6 +243,53 @@ The end-to-end suite drives the real editor and the real converter rather than
 mocks, including document round trips, the embed protocol and the recovery
 flow. `docs/explorations/` records why each non-obvious piece is the way it is —
 worth a look before changing the editor integration.
+
+---
+
+## AI document assistant (Experimental Beta)
+
+**Experimental Beta:** The AI assistant is still being developed. Answers and edits can be incomplete or incorrect; review suggestions and verify important changes. Speed and capabilities vary by model and device.
+
+**Watch the AI assistant in action** · English screen recordings. Play the videos below; caption files and text descriptions are linked in the demo details.
+
+**Word · Draft, insert and undo**
+
+https://github.com/user-attachments/assets/89b21740-0c96-4b21-885f-27efa6e7fa53
+
+**Excel · Fill cells and calculate**
+
+https://github.com/user-attachments/assets/18dbe96f-bb07-46e9-88f7-5a7a6370b630
+
+**PowerPoint · Review and create a slide**
+
+https://github.com/user-attachments/assets/3450551b-b557-4a0b-8a2a-5b05d2c458fe
+
+**PDF · Read a page and review a note**
+
+https://github.com/user-attachments/assets/e786a45c-f73a-48c0-8334-19544fa32c7e
+
+[Demo details and text descriptions](docs/media/ai-demos/README.md). Recorded with the local Qwen3 4B model and fictional documents; model preparation is omitted.
+
+Say what you want to do: ask about content, work on text or organize data. Review changes before applying them. Off by default · This browser only.
+
+Choose a local model or connect your AI service. Model files stay in this browser and cached files can be reused when preparing the model for another document.
+
+Word supports drafting and selected-text work; Excel and CSV support data operations; PowerPoint supports slide text and pages. PDF supports questions, summaries and translations of selectable text on the current page, plus reviewed page notes. Scanned image text is not recognized, and page notes do not rewrite PDF body text.
+
+Suggestions show their location and content. Edit them or ask for adjustments before applying. Cancel unwanted changes, or use editor Undo after applying. Clearing or overwriting content requires confirmation; read-only files can only be viewed.
+
+[How to use it](https://edit.chaxus.com/ai-document-assistant)
+
+---
+
+## 🤖 Browser AI agents (WebMCP)
+
+Where the browser supports it, the page registers tools an in-browser agent can
+call directly instead of driving the UI: `open_document_url`,
+`open_document_buffer`, `create_document`, `save_document`, `get_document_text`,
+`set_readonly`, `get_document_state`. Documents still never leave the device —
+the browser fetches and converts them itself. Where the API is absent, this is
+a no-op.
 
 ---
 

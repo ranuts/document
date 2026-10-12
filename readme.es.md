@@ -33,20 +33,6 @@ de quien visita la página, así que los documentos nunca se suben y no hace fal
 
 ---
 
-## Asistente de documentos con IA
-
-Describe lo que necesitas: consultar contenido, trabajar con texto u organizar datos. Revisa los cambios antes de aplicarlos.
-
-Activa el asistente y elige un modelo local o conecta tu servicio de IA. Los archivos del modelo quedan en este navegador; al abrir otro documento puede ser necesario prepararlo de nuevo, aprovechando los archivos guardados.
-
-Word: consulta contenido, redacta o mejora párrafos seleccionados. Excel y CSV: lee tablas, introduce datos, genera series, calcula totales u ordena. PowerPoint: consulta texto de diapositivas, añade texto o crea, duplica y cambia diapositivas. PDF: consulta, resume o traduce texto seleccionable de la página actual, o añade una nota a una página concreta.
-
-Las propuestas muestran dónde y qué cambiará. Puedes editarlas o pedir ajustes antes de aplicarlas. Cancela lo que no quieras y usa Deshacer tras aplicar. Borrar o sobrescribir contenido requiere confirmación. Los archivos de solo lectura solo pueden consultarse.
-
-Se lee la página actual, no todo el PDF. No se reconoce texto en imágenes escaneadas; se indica cuando el texto no está disponible. Las notas se adjuntan a la página y no reescriben el texto del PDF. Para cambiar la distribución del texto, usa el Word original.
-
-[Cómo usarlo](https://edit.chaxus.com/es/ai-document-assistant)
-
 ## ✨ Características
 
 - 🔒 **No se sube nada** — cada conversión, edición y exportación ocurre dentro de la pestaña
@@ -178,16 +164,6 @@ documentos de [@ranui/preview](https://www.npmjs.com/package/@ranui/preview)
 
 ---
 
-## 🤖 Agentes de IA en el navegador (WebMCP)
-
-Donde el navegador lo admite, la página registra herramientas que un agente puede invocar
-directamente en vez de manejar la interfaz: `open_document_url`, `open_document_buffer`,
-`create_document`, `save_document`, `get_document_text`, `set_readonly`,
-`get_document_state`. Los documentos siguen sin salir del dispositivo: es el propio
-navegador quien los descarga y los convierte. Donde no existe esa API, no ocurre nada.
-
----
-
 ## 🚀 Despliegue
 
 Una compilación estática: sin runtime y sin base de datos.
@@ -263,6 +239,32 @@ La suite de extremo a extremo mueve el editor real y el convertidor real en luga
 simulaciones, incluidos los viajes de ida y vuelta de documentos, el protocolo de
 integración y el flujo de recuperación. `docs/explorations/` deja por escrito por qué cada
 pieza poco evidente es como es: merece una lectura antes de tocar la integración del editor.
+
+---
+
+## Asistente de documentos con IA (Experimental Beta)
+
+Describe lo que necesitas: consultar contenido, trabajar con texto u organizar datos. Revisa los cambios antes de aplicarlos.
+
+Activa el asistente y elige un modelo local o conecta tu servicio de IA. Los archivos del modelo quedan en este navegador; al abrir otro documento puede ser necesario prepararlo de nuevo, aprovechando los archivos guardados.
+
+Word: consulta contenido, redacta o mejora párrafos seleccionados. Excel y CSV: lee tablas, introduce datos, genera series, calcula totales u ordena. PowerPoint: consulta texto de diapositivas, añade texto o crea, duplica y cambia diapositivas. PDF: consulta, resume o traduce texto seleccionable de la página actual, o añade una nota a una página concreta.
+
+Las propuestas muestran dónde y qué cambiará. Puedes editarlas o pedir ajustes antes de aplicarlas. Cancela lo que no quieras y usa Deshacer tras aplicar. Borrar o sobrescribir contenido requiere confirmación. Los archivos de solo lectura solo pueden consultarse.
+
+Se lee la página actual, no todo el PDF. No se reconoce texto en imágenes escaneadas; se indica cuando el texto no está disponible. Las notas se adjuntan a la página y no reescriben el texto del PDF. Para cambiar la distribución del texto, usa el Word original.
+
+[Cómo usarlo](https://edit.chaxus.com/es/ai-document-assistant)
+
+---
+
+## 🤖 Agentes de IA en el navegador (WebMCP)
+
+Donde el navegador lo admite, la página registra herramientas que un agente puede invocar
+directamente en vez de manejar la interfaz: `open_document_url`, `open_document_buffer`,
+`create_document`, `save_document`, `get_document_text`, `set_readonly`,
+`get_document_state`. Los documentos siguen sin salir del dispositivo: es el propio
+navegador quien los descarga y los convierte. Donde no existe esa API, no ocurre nada.
 
 ---
 
