@@ -83,6 +83,8 @@ export interface LLMProvider {
   isReady(): boolean;
   /** Native tool protocol supported by this transport; not a model-quality certification. */
   readonly toolCallingMode?: 'native' | 'schema';
+  /** Trusted adapter emits answer text only, never tool prose or arguments. */
+  readonly streamingTextMode?: 'answer-only';
   /** True when the ready engine budgets the complete request using actual tokens. */
   hasExactContextBudget?(): boolean;
   /**
@@ -91,6 +93,13 @@ export interface LLMProvider {
    */
   /** Optional schema-constrained, tool-free generation for bounded tasks. */
   generateJSON?(messages: LLMMessage[], schema: Record<string, unknown>, signal?: AbortSignal): Promise<LLMResponse>;
+  /** Schema-constrained JSON deltas; callers must validate the complete result. */
+  generateJSONStream?(
+    messages: LLMMessage[],
+    schema: Record<string, unknown>,
+    onDelta: (jsonDelta: string) => void,
+    signal?: AbortSignal,
+  ): Promise<LLMResponse>;
   chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse>;
   /**
    * Optional streaming variant: emit assistant text deltas via `onDelta` as they

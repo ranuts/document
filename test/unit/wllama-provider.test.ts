@@ -237,6 +237,37 @@ it('constrains JSON tasks without applying their schema to subsequent chat', asy
   await provider.dispose();
 });
 
+it('streams CPU schema output with the same grammar and cancellation contract', async () => {
+  const createChatCompletion = vi.fn(async (_body: Record<string, unknown>) =>
+    (async function* () {
+      yield { choices: [{ delta: { content: '{"text":"日本語' } }] };
+      yield { choices: [{ delta: { content: '"}' }, finish_reason: 'stop' }] };
+    })(),
+  );
+  const provider = new WllamaProvider({
+    engineFactory: async () => ({
+      isModelLoaded: () => true,
+      createChatCompletion,
+      exit: async () => {},
+    }),
+  });
+  await provider.preload();
+  const schema = { type: 'object', properties: { text: { type: 'string' } }, required: ['text'] };
+  const delta = vi.fn();
+  const result = await provider.generateJSONStream([{ role: 'user', content: 'Write' }], schema, delta);
+  expect(createChatCompletion.mock.calls[0][0]).toMatchObject({
+    stream: true,
+    response_format: { type: 'json_schema', json_schema: { name: 'local_task', schema, strict: true } },
+  });
+  expect(delta.mock.calls.flat().join('')).toBe('{"text":"日本語"}');
+  expect(result.text).toBe('{"text":"日本語"}');
+  const abort = new AbortController();
+  await expect(provider.generateJSONStream([], schema, () => abort.abort(), abort.signal)).rejects.toMatchObject({
+    name: 'AbortError',
+  });
+  await provider.dispose();
+});
+
 it.each(['RuntimeError', 'WllamaRuntimeError'])(
   'retires a %s engine with safe reload guidance and no replay',
   async (name) => {

@@ -191,4 +191,20 @@ export class LocalInferenceProvider implements LocalLLMProvider {
       return Promise.reject(error);
     }
   }
+
+  generateJSONStream(
+    messages: LLMMessage[],
+    schema: Record<string, unknown>,
+    onDelta: (text: string) => void,
+    signal?: AbortSignal,
+  ): Promise<LLMResponse> {
+    try {
+      const provider = this.requireReady(signal);
+      if (provider.generateJSONStream)
+        return provider.generateJSONStream(messages, schema, onDelta, signal).then(localResponse);
+      return this.generateJSON(messages, schema, signal);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

@@ -147,6 +147,28 @@ describe('WebLLMProvider', () => {
     expect(deltas).toEqual(['on', 'line']);
     expect(result.text).toBe('online');
   });
+
+  it('streams schema-constrained output without enabling tools or thinking', async () => {
+    const raw = '{"text":"Hello 中"}';
+    const create = vi.fn().mockResolvedValue(
+      (async function* () {
+        yield { choices: [{ delta: { content: '{"text":"Hello' } }] };
+        yield { choices: [{ delta: { content: ' 中"}' }, finish_reason: 'stop' }] };
+      })(),
+    );
+    const provider = new WebLLMProvider({ engine: { chat: { completions: { create } } } });
+    const schema = { type: 'object', properties: { text: { type: 'string' } }, required: ['text'] };
+    const delta = vi.fn();
+    const result = await provider.generateJSONStream([{ role: 'user', content: 'Write' }], schema, delta);
+    expect(create.mock.calls[0][0]).toMatchObject({
+      stream: true,
+      response_format: { type: 'json_object', schema: JSON.stringify(schema) },
+      extra_body: { enable_thinking: false },
+    });
+    expect(create.mock.calls[0][0]).not.toHaveProperty('tools');
+    expect(delta.mock.calls.flat().join('')).toBe(raw);
+    expect(result.text).toBe(raw);
+  });
 });
 
 describe('provider factory', () => {

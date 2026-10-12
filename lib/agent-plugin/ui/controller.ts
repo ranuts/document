@@ -79,7 +79,7 @@ export class AgentChatController {
   }
 
   /** Send a user instruction and run the agent loop, emitting turns as it goes. */
-  async send(userText: string): Promise<void> {
+  async send(userText: string, presentation: { echoUser?: boolean } = {}): Promise<void> {
     const text = userText.trim();
     if (!text || this.running) return;
 
@@ -89,7 +89,7 @@ export class AgentChatController {
     const priorHistory = [...this.history];
     this.history.push({ role: 'user', content: text });
     this.options.storage?.save(this.history);
-    this.onTurn({ role: 'user', text });
+    if (presentation.echoUser !== false) this.onTurn({ role: 'user', text });
     let visibleAnswer = false;
     let calledTool = false;
     let verifiedChanges = 0;

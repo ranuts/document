@@ -668,37 +668,49 @@ r-dropdown[role='listbox'] {
 
 /* A single compact loading surface beside the existing model status. */
 .agent-runtime-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   flex: 0 0 auto;
-  gap: 8px;
-  padding: 0 20px 12px;
+  gap: var(--ran-space-2);
+  padding: var(--ran-space-3) 20px;
 }
 .agent-runtime-row[hidden],
 .agent-runtime-row [hidden] {
   display: none !important;
 }
-.agent-runtime-main {
-  flex: 1;
-  min-width: 0;
-}
 .agent-runtime-row .agent-model-status {
   display: block;
   margin: 0;
+  min-width: 0;
+  padding: 0;
+  border: 0;
 }
 .agent-model-progress {
   display: block;
   width: 100%;
   height: 3px;
-  margin-top: 8px;
+  margin: 0;
+  grid-column: 1 / -1;
   accent-color: var(--ran-color-primary);
 }
 .agent-runtime-row r-button {
-  flex: 0 0 auto;
+  justify-self: end;
+}
+.agent-panel .agent-runtime-row r-button::part(content) {
+  min-height: 32px;
+  padding: 4px 8px;
+  font-size: var(--ran-text-label-2);
+}
+.agent-panel .agent-runtime-row r-button::part(button) {
+  box-shadow: none;
+}
+.agent-device-section > .agent-runtime-row {
+  padding: var(--ran-space-3) 0;
 }
 @media (max-height: 600px) {
   .agent-runtime-row {
-    padding: 0 16px 6px;
+    padding: var(--ran-space-2) 16px;
   }
 }
 

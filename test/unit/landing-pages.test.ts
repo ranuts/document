@@ -191,7 +191,7 @@ describe('landing pages', () => {
         if (!links.length) return;
         for (const link of links) {
           const carries = link.includes(`locale=${locale}`);
-          expect(locale === 'en' ? !link.includes('locale=') : carries, `${route}: ${link}`).toBe(true);
+          expect(carries, `${route}: ${link}`).toBe(true);
         }
       });
 
@@ -222,7 +222,7 @@ describe('landing pages', () => {
         const appLinks = [...html.matchAll(/(?:href|data-open-local)="(\/(?:editor|history)[^"]*)"/g)].map((m) => m[1]);
         for (const link of appLinks) {
           const carries = link.includes(`locale=${locale}`);
-          expect(locale === 'en' ? !link.includes('locale=') : carries, `${route}: ${link}`).toBe(true);
+          expect(carries, `${route}: ${link}`).toBe(true);
         }
       });
 

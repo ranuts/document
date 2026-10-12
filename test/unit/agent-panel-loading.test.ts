@@ -31,6 +31,8 @@ const state = vi.hoisted(() => ({
   toolPlan: vi.fn(),
   routing: vi.fn(),
   semanticResponse: undefined as string | undefined,
+  semanticGate: undefined as Promise<void> | undefined,
+  structuredStream: undefined as import('@ranuts/agent-core/llm/types').LLMProvider['generateJSONStream'],
   targetCurrent: true,
   toolContext: 'slide' as 'slide' | 'cell' | 'word',
   apply: vi.fn().mockResolvedValue('verified'),
@@ -157,7 +159,13 @@ vi.mock('@ranuts/agent-core/llm/local', async (original) => ({
     get generateJSON() {
       return state.semanticResponse === undefined
         ? undefined
-        : async () => ({ text: state.semanticResponse!, toolCalls: [], stopReason: 'stop' });
+        : async () => {
+            await state.semanticGate;
+            return { text: state.semanticResponse!, toolCalls: [], stopReason: 'stop' };
+          };
+    }
+    get generateJSONStream() {
+      return state.structuredStream;
     }
     async chatStream(_messages: unknown, _tools: unknown, delta: (text: string) => void, signal?: AbortSignal) {
       if (state.stalled)
@@ -224,14 +232,13 @@ vi.mock('../../lib/agent-plugin/document-task', async (original) => {
   const createSchemaTaskProvider = (
     provider: import('@ranuts/agent-core/llm/types').LLMProvider & { backend?: string },
     context: () => import('../../lib/agent-plugin/document-context').DocumentContext,
-  ): import('@ranuts/agent-core/llm/types').LLMProvider => ({
-    name: 'panel-fixture',
-    isReady: () => true,
-    chat: async (
+  ): import('@ranuts/agent-core/llm/types').LLMProvider => {
+    const chat = async (
       messages: import('@ranuts/agent-core/llm/types').LLMMessage[],
       _tools: unknown,
       signal?: AbortSignal,
-    ) => {
+      delta?: (text: string) => void,
+    ): Promise<import('@ranuts/agent-core/llm/types').LLMResponse> => {
       const results = messages.flatMap((m) =>
         typeof m.content === 'string' ? [] : m.content.filter((b) => b.type === 'tool_result'),
       );
@@ -243,7 +250,7 @@ vi.mock('../../lib/agent-plugin/document-task', async (original) => {
           name && ['get_presentation_text', 'get_cell', 'get_range', 'get_document_text'].includes(name)
             ? state.readText === ''
               ? t('agentNoReadableText')
-              : await state.readAnswer(provider, messages[0].content, context(), messages.slice(1), signal)
+              : await state.readAnswer(provider, messages[0].content, context(), messages.slice(1), signal, delta)
             : 'Reviewed operation finished.';
         return { text, toolCalls: [], stopReason: 'end_turn', assistant: { role: 'assistant', content: text } };
       }
@@ -257,8 +264,15 @@ vi.mock('../../lib/agent-plugin/document-task', async (original) => {
         stopReason: 'tool_use',
         assistant: { role: 'assistant', content: [{ type: 'tool_use', ...call }] },
       };
-    },
-  });
+    };
+    return {
+      name: 'panel-fixture',
+      isReady: () => true,
+      streamingTextMode: 'answer-only',
+      chat,
+      chatStream: (messages, tools, delta, signal) => chat(messages, tools, signal, delta),
+    };
+  };
   return {
     ...actual,
     createSchemaTaskProvider,
@@ -331,6 +345,8 @@ afterEach(() => {
   state.apply.mockClear();
   state.routing.mockReset();
   state.semanticResponse = undefined;
+  state.semanticGate = undefined;
+  state.structuredStream = undefined;
   state.targetCurrent = true;
   state.writing.mockReset();
   state.editorReady = true;
@@ -583,6 +599,43 @@ it('offers cancellation for WebLLM loading and rejects old progress and late com
   expect(document.activeElement).toBe(panel.querySelector('.cui-input'));
   expect(state.dispose).toHaveBeenCalled();
   expect(panel.querySelector('.agent-panel-load')?.hasAttribute('disabled')).toBe(false);
+});
+
+it('keeps loading feedback beside the chosen model across settings and chat', async () => {
+  state.preload.mockReturnValue(new Promise<void>(() => {}));
+  const panel = createPreparedPanel();
+  await Promise.resolve();
+  const load = panel.querySelector<HTMLElement>('.agent-panel-load')!;
+  load.click();
+  const stop = panel.querySelector<HTMLElement>('.agent-panel-load-stop')!;
+  expect(stop.getAttribute('type')).toBe('text');
+  const toggle = panel.querySelector<HTMLElement>('.agent-panel-settings-toggle')!;
+  toggle.click();
+  expect(panel.querySelector('.agent-device-section .agent-runtime-row')).not.toBeNull();
+  expect(load.hidden).toBe(true);
+  expect(panel.querySelector('.agent-model-cache .agent-runtime-row')).toBeNull();
+  toggle.click();
+  expect(stop.closest('.agent-panel-settings')).toBeNull();
+  expect(stop.hidden).toBe(false);
+  stop.click();
+  expect(load.hidden).toBe(false);
+  expect(panel.querySelector('.agent-runtime-row')?.hasAttribute('hidden')).toBe(true);
+});
+
+it('preserves keyboard focus when loading replaces its action with Stop', () => {
+  state.preload.mockReturnValue(new Promise<void>(() => {}));
+  const panel = createAgentPanel();
+  document.body.append(panel);
+  panel.querySelector<HTMLElement>('.agent-panel-settings-toggle')!.click();
+  const load = panel.querySelector<HTMLElement>('.agent-panel-load')!;
+  // jsdom has no ranui inner button; emulate the host's focused control.
+  load.tabIndex = -1;
+  load.focus();
+  load.click();
+  const stop = panel.querySelector<HTMLElement>('.agent-panel-load-stop')!;
+  expect(document.activeElement).toBe(stop);
+  stop.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', cancelable: true, bubbles: true }));
+  expect(document.activeElement).toBe(load);
 });
 
 it('requires selection before starting a writing task', async () => {
@@ -846,7 +899,9 @@ it('asks for the model to be loaded when consent is on but no model is ready', a
   // It asks for the model rather than telling the user to enable the switch they
   // already enabled, and it does not pretend to have run anything.
   expect(state.writing).not.toHaveBeenCalled();
-  expect(panel.textContent).toContain(t('agentModelFirstDownload'));
+  expect(input.value).toBe('Polish this');
+  expect(panel.querySelector('.agent-readiness [role="status"]')?.textContent).toBe(t('agentPrepareRequired'));
+  expect(panel.querySelector('.cui-send')?.textContent).toBe(t('agentLoadModel'));
 });
 it('serves a writing request through a connected endpoint with no local model loaded', async () => {
   // Regression: the first-download gate used to fire for every submit, so a user
@@ -1629,6 +1684,34 @@ it('waits for the previous runtime to exit before loading the newly selected mod
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(2));
 });
 
+it('restores the preparation action after runtime cleanup without another input event', async () => {
+  state.ready = true;
+  state.preload.mockResolvedValue(undefined);
+  const panel = createPreparedPanel();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-panel-load')?.textContent).toBe(t('agentModelInUse')));
+  let finish!: () => void;
+  state.dispose.mockImplementationOnce(
+    () =>
+      new Promise<void>((resolve) => {
+        finish = resolve;
+      }),
+  );
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  const send = panel.querySelector<HTMLButtonElement>('.cui-send')!;
+  input.value = 'Hello';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  state.ready = false;
+  panel.querySelector('.agent-panel-model')!.dispatchEvent(new Event('change'));
+  await vi.waitFor(() => expect(send.textContent).toBe(t('agentModelReleasing')));
+  expect(send.disabled).toBe(true);
+  finish();
+  await vi.waitFor(() => expect(send.disabled).toBe(false));
+  expect(send.textContent).toBe(t('agentLoadModel'));
+  expect(input.value).toBe('Hello');
+  expect(panel.querySelector('.cui-msg-user')).toBeNull();
+  expect(state.preload).toHaveBeenCalledOnce();
+});
+
 it('keeps a failed runtime exit from starting a replacement after further model changes', async () => {
   state.preload.mockResolvedValue(undefined);
   const panel = createPreparedPanel();
@@ -1980,6 +2063,46 @@ it('warms a downloaded model directly from chat, preserving the draft without se
   expect(input.value).toBe('Keep my request');
   expect(state.generate).not.toHaveBeenCalled();
 });
+
+it.each(['给选中的文字进行润色', '润色选中的文字', 'Hello', 'Polish the selected text'])(
+  'offers model preparation consistently for %s',
+  async (request) => {
+    state.cached = true;
+    state.editorReady = true;
+    state.source = 'Selected text';
+    state.semanticResponse = '{"task":"chat","language":"en"}';
+    localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+    let release!: () => void;
+    state.preload.mockImplementation(async () => {
+      await new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      state.ready = true;
+    });
+    const panel = createAgentPanel({ externalEntry: true });
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = request;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    const send = panel.querySelector<HTMLButtonElement>('.cui-send')!;
+    await vi.waitFor(() => expect(send.textContent).toBe(t('agentResumeModel')));
+    expect(send.disabled).toBe(false);
+    send.click();
+    try {
+      await vi.waitFor(() => expect(state.preload).toHaveBeenCalledOnce());
+      expect(input.value).toBe(request);
+      expect(send.disabled).toBe(true);
+      expect(panel.querySelector('.cui-msg-user')).toBeNull();
+    } finally {
+      release?.();
+      await vi.waitFor(() => expect(send.disabled).toBe(false));
+      await vi.waitFor(() => expect(send.getAttribute('aria-label')).toBe(t('agentSend')));
+    }
+    expect(panel.querySelector('.cui-msg-user')).toBeNull();
+    send.click();
+    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
+    expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
+  },
+);
 it('reconnects a remembered service directly from chat without submitting a draft', async () => {
   localStorage.setItem(
     'agent-writing-endpoint',
@@ -2411,3 +2534,112 @@ it('preserves external focus and the next draft when a grounded response complet
   expect(input.value).toBe('My next request');
   expect(document.activeElement).toBe(external);
 });
+
+it('shows an accepted request before task routing completes and never duplicates it', async () => {
+  state.ready = true;
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  let finish!: () => void;
+  state.semanticGate = new Promise<void>((resolve) => {
+    finish = resolve;
+  });
+  const panel = createPreparedPanel();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Hello there';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  try {
+    expect(panel.querySelector('.cui-msg-user .cui-bubble')?.textContent).toBe('Hello there');
+    expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentPreparingTask'));
+    expect(input.value).toBe('');
+  } finally {
+    finish();
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  }
+  expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
+  expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer');
+});
+
+it('streams a grounded answer before completion and stores one complete reply', async () => {
+  state.ready = true;
+  state.readText = 'Budget is 120';
+  state.toolPlan.mockResolvedValue({ tool: 'get_presentation_text', input: {}, readOnly: true });
+  let finish!: (text: string) => void;
+  state.readAnswer.mockImplementation((_provider, _request, _context, _exchange, _signal, delta) => {
+    delta?.('Budget: ');
+    return new Promise<string>((resolve) => {
+      finish = resolve;
+    });
+  });
+  const panel = createPreparedPanel();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Read this presentation';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  try {
+    await vi.waitFor(() => expect(panel.querySelector('.cui-streaming .cui-bubble')?.textContent).toBe('Budget: '));
+    expect(panel.querySelector('.cui-send-stop')).not.toBeNull();
+    expect(panel.querySelector('.cui-status')?.textContent).toBe('');
+    input.value = 'Next request';
+    input.dispatchEvent(new Event('input'));
+  } finally {
+    // Transport normally emits every token before resolving its final response.
+    const delta = state.readAnswer.mock.calls[0]?.[5] as ((text: string) => void) | undefined;
+    delta?.('120');
+    finish?.('Budget: 120');
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  }
+  expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
+  expect(panel.querySelectorAll('.cui-msg-agent')).toHaveLength(1);
+  expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('Budget: 120');
+  expect(input.value).toBe('Next request');
+});
+
+it.each(['complete', 'cancel'] as const)(
+  'preserves exact structured draft content on %s and protects unfinished bodies',
+  async (mode) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.editorKind = 'word';
+    state.toolContext = 'word';
+    state.semanticResponse = '{"task":"compose","language":"en"}';
+    let finish!: () => void;
+    const gate = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    const body = '[first] and **second**';
+    state.structuredStream = async (_messages, _schema, delta) => {
+      delta('{"text":"[first]');
+      await gate;
+      delta(' and **second**"}');
+      return {
+        text: JSON.stringify({ text: body }),
+        toolCalls: [],
+        stopReason: 'stop',
+        assistant: { role: 'assistant', content: body },
+      };
+    };
+    const panel = createPreparedPanel();
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = 'Write a short document';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    try {
+      await vi.waitFor(() => expect(panel.querySelector('.cui-streaming .cui-bubble')?.textContent).toBe('[first]'));
+      const write = panel.querySelector<HTMLButtonElement>('.cui-apply')!;
+      write.click();
+      expect(state.apply).not.toHaveBeenCalled();
+      if (mode === 'cancel') panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+    } finally {
+      finish();
+      await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    }
+    expect(panel.querySelectorAll('.cui-msg-agent')).toHaveLength(1);
+    expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
+    if (mode === 'complete') {
+      expect(panel.querySelector('.cui-msg-agent')?.getAttribute('data-source')).toBe(body);
+      expect(panel.querySelector('.cui-msg-agent')?.hasAttribute('data-interrupted')).toBe(false);
+    } else {
+      expect(panel.querySelector('.cui-msg-agent')?.getAttribute('data-source')).toBe('[first]');
+      expect(panel.querySelector('.cui-msg-agent')?.getAttribute('data-interrupted')).toBe('true');
+      expect(panel.querySelector('.cui-apply')).toBeNull();
+    }
+    expect(state.apply).not.toHaveBeenCalled();
+  },
+);

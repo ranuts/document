@@ -137,9 +137,9 @@ export async function runAgent(
           requestMessages,
           toolDefs,
           (delta) => {
-            if (!delta) return;
+            if (!delta || options.signal?.aborted) return;
             streamed = true;
-            if (toolDefs.length) deferredDeltas.push(delta);
+            if (toolDefs.length && provider.streamingTextMode !== 'answer-only') deferredDeltas.push(delta);
             else options.onEvent?.({ type: 'assistant_delta', text: delta });
           },
           options.signal,
@@ -154,7 +154,7 @@ export async function runAgent(
     if (response.usage) options.onEvent?.({ type: 'usage', usage: response.usage });
     messages.push(response.assistant);
     if (!response.toolCalls.length) {
-      for (const delta of deferredDeltas) options.onEvent?.({ type: 'assistant_delta', text: delta });
+      if (deferredDeltas.length) options.onEvent?.({ type: 'assistant_delta', text: deferredDeltas.join('') });
       if (response.text) options.onEvent?.({ type: 'assistant', text: response.text, streamed });
     }
 

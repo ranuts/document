@@ -10,6 +10,68 @@ const response = (value: unknown): LLMResponse => ({
   stopReason: 'end_turn',
   assistant: { role: 'assistant', content: JSON.stringify(value) },
 });
+
+it.each(['complete', 'cancel'] as const)(
+  'never exposes or executes partial streamed tool arguments on %s',
+  async (mode) => {
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    const abort = new AbortController();
+    const execute = vi.fn(async () => ({ status: 'verified' }));
+    const events = vi.fn();
+    let turns = 0;
+    const provider: LLMProvider = {
+      name: 'local',
+      isReady: () => true,
+      chat: vi.fn(),
+      generateJSONStream: async (_messages, _schema, delta) => {
+        if (turns++) {
+          const answer = { kind: 'answer', text: 'Written', disposition: 'answered' };
+          delta(JSON.stringify(answer));
+          return response(answer);
+        }
+        delta('{"kind":"tool","tool":"write","input":{"text":"Not yet');
+        await gate;
+        delta('"}}');
+        return response({ kind: 'tool', tool: 'write', input: { text: 'Not yet' } });
+      },
+    };
+    const result = runAgent(
+      createSchemaTaskProvider(provider, () => ({ kind: 'word' })),
+      'Write',
+      {
+        signal: abort.signal,
+        onEvent: events,
+        tools: {
+          write: {
+            name: 'write',
+            description: 'Write',
+            readOnlyHint: false,
+            inputSchema: { type: 'object', properties: { text: { type: 'string' } }, required: ['text'] },
+            execute,
+          },
+        },
+      },
+    );
+    const accepted = result.catch((error) => error);
+    await Promise.resolve();
+    expect(execute).not.toHaveBeenCalled();
+    expect(events.mock.calls.flat().filter((event) => event.type === 'assistant_delta')).toHaveLength(0);
+    if (mode === 'cancel') abort.abort();
+    release();
+    const finished = await accepted;
+    if (mode === 'complete') {
+      expect(execute).toHaveBeenCalledExactlyOnceWith({ text: 'Not yet' }, abort.signal);
+      expect(finished.text).toBe('Written');
+    } else {
+      expect(finished).toMatchObject({ name: 'AbortError' });
+      expect(execute).not.toHaveBeenCalled();
+      expect(turns).toBe(1);
+    }
+  },
+);
 it('adapts result-dependent schema steps to the existing matched tool loop', async () => {
   const generateJSON = vi
     .fn()
@@ -168,4 +230,42 @@ it('restricts a PDF read request to read tools even when a native provider tries
   );
   expect(review).not.toHaveBeenCalled();
   expect(JSON.stringify(result.messages)).toContain('Unknown tool');
+});
+
+it('streams only a schema answer through the tool loop before the completion closes', async () => {
+  let finish!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    finish = resolve;
+  });
+  const events: import('@ranuts/agent-core/runtime').AgentEvent[] = [];
+  const value = { kind: 'answer', text: 'Budget 120', disposition: 'answered' };
+  const provider: LLMProvider = {
+    name: 'local',
+    isReady: () => true,
+    chat: vi.fn(async () => response(value)),
+    generateJSONStream: async (_messages, _schema, emit) => {
+      emit('{"kind":"answer","text":"Budget ');
+      await gate;
+      emit('120","disposition":"answered"}');
+      return response(value);
+    },
+  };
+  const result = runAgent(
+    createSchemaTaskProvider(provider, () => ({ kind: 'cell' })),
+    'Budget?',
+    {
+      tools: { read: { name: 'read', description: 'Read', inputSchema: {}, readOnlyHint: true, execute: vi.fn() } },
+      onEvent: (event) => events.push(event),
+    },
+  );
+  await vi.waitFor(() => expect(events).toContainEqual({ type: 'assistant_delta', text: 'Budget ' }));
+  finish();
+  expect((await result).text).toBe('Budget 120');
+  expect(
+    events
+      .filter((event) => event.type === 'assistant_delta')
+      .map((event) => event.text)
+      .join(''),
+  ).toBe('Budget 120');
+  expect(events.some((event) => event.type === 'tool_call')).toBe(false);
 });

@@ -85,6 +85,9 @@ importers:
       '@mlc-ai/web-llm':
         specifier: 0.2.85
         version: 0.2.85(patch_hash=ab39c67b61b734014dc299766a9bffabb2e077b70bed48c7c4dec0af56af0599)
+      '@streamparser/json':
+        specifier: 0.0.22
+        version: 0.0.22
       '@wllama/wllama':
         specifier: 3.6.1
         version: 3.6.1(patch_hash=5eaac29afca7fbc57011df1f0d69005d9e590da3dd1e5ad74155e4f0525a1702)
@@ -543,6 +546,9 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  '@streamparser/json@0.0.22':
+    resolution: {integrity: sha512-b6gTSBjJ8G8SuO3Gbbj+zXbVx8NSs1EbpbMKpzGLWMdkR+98McH9bEjSz3+0mPJf68c5nxa3CrJHp5EQNXM6zQ==}
 
   '@svta/cml-608@1.0.2':
     resolution: {integrity: sha512-ZEJ68330gcLKfvVv6Qifr1HR7+GldDUxzkjqSbqRK7jHtHSLSV1JAyDwlYe8+C7ABuY1bp8MpgJ4/Gg+jl+pLQ==}
@@ -2094,6 +2100,8 @@ snapshots:
   '@stablelib/base64@1.0.1': {}
 
   '@standard-schema/spec@1.1.0': {}
+
+  '@streamparser/json@0.0.22': {}
 
   '@svta/cml-608@1.0.2': {}
 

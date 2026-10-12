@@ -9,6 +9,51 @@ const response = (text: string): LLMResponse => ({
   assistant: { role: 'assistant', content: text },
 });
 describe('grounded document read answers', () => {
+  it('publishes text while a tool-free answer is still generating', async () => {
+    let finish!: () => void;
+    const gate = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    const delta = vi.fn();
+    const provider: LLMProvider = {
+      name: 'test',
+      isReady: () => true,
+      chat: vi.fn(async () => response('120')),
+      chatStream: async (_messages, tools, emit) => {
+        expect(tools).toEqual([]);
+        emit('Budget: ');
+        await gate;
+        emit('120');
+        return response('Budget: 120');
+      },
+    };
+    const result = generateReadAnswer(provider, 'Budget?', { kind: 'cell' }, [], new AbortController().signal, delta);
+    expect(delta.mock.calls.flat().join('')).toBe('Budget: ');
+    finish();
+    await expect(result).resolves.toBe('Budget: 120');
+    expect(delta.mock.calls.flat().join('')).toBe('Budget: 120');
+    expect(provider.chat).not.toHaveBeenCalled();
+  });
+
+  it('ignores text arriving after cancellation even when a streaming transport ignores Stop', async () => {
+    const abort = new AbortController();
+    const delta = vi.fn();
+    const provider: LLMProvider = {
+      name: 'test',
+      isReady: () => true,
+      chat: vi.fn(async () => response('120')),
+      chatStream: async (_messages, _tools, emit) => {
+        emit('Partial');
+        abort.abort();
+        emit('Late');
+        return response('PartialLate');
+      },
+    };
+    await expect(
+      generateReadAnswer(provider, 'Budget?', { kind: 'pdf' }, [], abort.signal, delta),
+    ).rejects.toMatchObject({ name: 'AbortError' });
+    expect(delta.mock.calls.flat()).toEqual(['Partial']);
+  });
   it.each(['word', 'cell', 'slide', 'pdf'] as const)(
     'answers the original question from %s tool receipts without enabling writes',
     async (kind) => {

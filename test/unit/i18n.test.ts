@@ -1,7 +1,46 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getLanguage, getOnlyOfficeLang, LanguageCode, setLanguage, SHELL_LOCALES, t } from '@ranuts/shared/i18n';
+import {
+  getLanguage,
+  getOnlyOfficeLang,
+  LanguageCode,
+  setLanguage,
+  SHELL_LOCALES,
+  t,
+  withLocale,
+} from '@ranuts/shared/i18n';
 
 describe('i18n', () => {
+  it('carries an explicit English choice into the editor despite a previous Chinese preference', async () => {
+    localStorage.setItem('document-lang', LanguageCode.ZH);
+    document.cookie = 'locale=zh-CN;path=/';
+    window.history.pushState({}, '', withLocale('/editor?new=docx', LanguageCode.EN));
+    try {
+      vi.resetModules();
+      const fresh = await import('@ranuts/shared/i18n');
+      expect(fresh.getLanguage()).toBe(LanguageCode.EN);
+      expect(fresh.getOnlyOfficeLang()).toBe('en');
+    } finally {
+      document.cookie = 'locale=;path=/;max-age=0';
+      window.history.pushState({}, '', '/');
+      localStorage.clear();
+    }
+  });
+
+  it('replaces an existing locale and keeps query values and fragments', () => {
+    const result = new URL(withLocale('/editor?saved=example&locale=zh#section', LanguageCode.EN), location.origin);
+    expect(result.searchParams.getAll('locale')).toEqual(['en']);
+    expect(result.searchParams.get('saved')).toBe('example');
+    expect(result.hash).toBe('#section');
+  });
+
+  it('preserves question marks inside an existing query value', () => {
+    const result = new URL(
+      withLocale('/editor?file=https://example.com/a.docx?v=1#part#2', LanguageCode.EN),
+      location.origin,
+    );
+    expect(result.searchParams.get('file')).toBe('https://example.com/a.docx?v=1');
+    expect(result.hash).toBe('#part#2');
+  });
   afterEach(() => {
     setLanguage(LanguageCode.EN);
   });
@@ -57,6 +96,53 @@ describe('i18n', () => {
     afterEach(() => {
       window.history.pushState({}, '', '/');
       localStorage.clear();
+      document.cookie = 'locale=;path=/;max-age=0';
+      vi.restoreAllMocks();
+    });
+
+    it.each(['url', 'cookie', 'storage', 'browser'] as const)(
+      'uses English when the %s language is unsupported, without inheriting a different language',
+      async (source) => {
+        window.history.pushState({}, '', '/');
+        localStorage.clear();
+        document.cookie = 'locale=;path=/;max-age=0';
+        vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['fa-IR', 'de-DE']);
+        vi.spyOn(navigator, 'language', 'get').mockReturnValue('fa-IR');
+        if (source === 'url') {
+          window.history.pushState({}, '', '/?locale=fa');
+          document.cookie = 'locale=zh-CN;path=/';
+          localStorage.setItem('document-lang', LanguageCode.ZH);
+        } else if (source === 'cookie') {
+          document.cookie = 'locale=fa;path=/';
+          localStorage.setItem('document-lang', LanguageCode.ZH);
+        } else if (source === 'storage') localStorage.setItem('document-lang', 'fa');
+
+        vi.resetModules();
+        const fresh = await import('@ranuts/shared/i18n');
+        expect(fresh.getLanguage()).toBe(LanguageCode.EN);
+        expect(fresh.getOnlyOfficeLang()).toBe('en');
+        expect(fresh.t('agentTitle')).toBe('AI Assistant');
+      },
+    );
+
+    it('uses English when no language preference is available', async () => {
+      localStorage.clear();
+      vi.spyOn(navigator, 'languages', 'get').mockReturnValue([]);
+      vi.spyOn(navigator, 'language', 'get').mockReturnValue('');
+      vi.resetModules();
+      const fresh = await import('@ranuts/shared/i18n');
+      expect(fresh.getLanguage()).toBe(LanguageCode.EN);
+      expect(fresh.getOnlyOfficeLang()).toBe('en');
+    });
+
+    it('uses English shell copy for an editor-only language despite a previous Chinese choice', async () => {
+      window.history.pushState({}, '', '/?locale=fr-FR');
+      document.cookie = 'locale=zh-CN;path=/';
+      localStorage.setItem('document-lang', LanguageCode.ZH);
+      vi.resetModules();
+      const fresh = await import('@ranuts/shared/i18n');
+      expect(fresh.getLanguage()).toBe(LanguageCode.EN);
+      expect(fresh.getOnlyOfficeLang()).toBe('fr');
     });
 
     it.each([
@@ -184,13 +270,14 @@ describe('editor UI locale (getOnlyOfficeLang) follows the visitor beyond en/zh'
     expect(m.t('uploadDocument')).toBe('View/Edit Document');
   });
 
-  it('an unsupported ?locale (fa) falls back to the browser language for the editor', async () => {
+  it('an unsupported ?locale (fa) falls back to English even with other browser languages', async () => {
     window.history.pushState({}, '', '/?locale=fa');
     const spy = vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['fa-IR', 'de-DE', 'en']);
     try {
       vi.resetModules();
       const m = await import('@ranuts/shared/i18n');
-      expect(m.getOnlyOfficeLang()).toBe('de');
+      expect(m.getLanguage()).toBe(LanguageCode.EN);
+      expect(m.getOnlyOfficeLang()).toBe('en');
     } finally {
       spy.mockRestore();
     }
