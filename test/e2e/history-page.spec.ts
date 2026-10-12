@@ -203,10 +203,11 @@ test.describe('local history page', () => {
     await page.goto('/');
     const line = page.locator('#landing-hero .recent');
     await expect(line).toContainText('7 days');
-    await expect(line.locator('a.recent-all')).toHaveAttribute('href', '/history');
+    await expect(line.locator('a.recent-all')).toHaveAttribute('href', '/history?locale=en');
 
     await line.locator('a.recent-all').click();
-    await page.waitForURL(/\/history/);
+    await page.waitForURL('**/history?locale=en');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.locator('.history-title')).toBeVisible();
   });
 
