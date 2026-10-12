@@ -71,6 +71,7 @@ export const CHAT_UI_CSS = `
 .cui-input::placeholder { color:var(--cui-muted); }
 .cui-send { flex:0 0 auto; width:30px; height:30px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:0; border-radius:8px; cursor:pointer; background:var(--cui-accent); color:var(--cui-accent-contrast); }
 .cui-send:disabled { opacity:.35; cursor:default; }
+.cui-root .cui-send.cui-send-prepare { width:auto; max-width:100%; padding:0 8px; font:inherit; font-size:12px; background:transparent; color:var(--cui-text); text-decoration:underline; text-underline-offset:3px; }
 .cui-streaming .cui-bubble::after { content:''; display:inline-block; width:6px; height:6px; margin-left:5px; border-radius:50%; background:currentColor; vertical-align:middle; }
 `;
 

@@ -28,6 +28,35 @@ function engine(name: string, load: () => Promise<void> = async () => {}) {
   } satisfies LocalLLMProvider;
 }
 
+it.each([true, false])('delegates JSON streaming to the active local backend (GPU: %s)', async (gpuAvailable) => {
+  const raw = '{"text":"Hello"}';
+  const generateJSONStream = vi.fn<NonNullable<LocalLLMProvider['generateJSONStream']>>(
+    async (_messages, _schema, delta) => {
+      delta(raw);
+      return { text: raw, toolCalls: [], stopReason: 'stop', assistant: { role: 'assistant', content: raw } };
+    },
+  );
+  const active = { ...engine(gpuAvailable ? 'webllm' : 'wllama'), generateJSONStream };
+  const provider = new LocalInferenceProvider({
+    detectGPU: async () => gpuAvailable,
+    gpu: () => active,
+    cpu: () => active,
+  });
+  await provider.preload();
+  const delta = vi.fn();
+  const schema = { type: 'object' };
+  const abort = new AbortController();
+  expect((await provider.generateJSONStream([], schema, delta, abort.signal)).text).toBe(raw);
+  expect(generateJSONStream).toHaveBeenCalledWith([], schema, delta, abort.signal);
+  expect(delta).toHaveBeenCalledWith(raw);
+  abort.abort();
+  await expect(provider.generateJSONStream([], schema, delta, abort.signal)).rejects.toMatchObject({
+    name: 'AbortError',
+  });
+  expect(generateJSONStream).toHaveBeenCalledOnce();
+  await provider.dispose();
+});
+
 it('uses CPU when no GPU adapter exists, without loading GPU or implicitly downloading on chat', async () => {
   const gpu = engine('webllm');
   const cpu = engine('wllama');

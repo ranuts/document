@@ -88,14 +88,20 @@ export const isRtlLanguage = (lang: Language): boolean => RTL_LANGUAGES.includes
 export const localeHomePath = (lang: Language): string => (lang === LanguageCode.EN ? '/' : `/${lang}/`);
 
 /**
- * Add `?locale=` to an app URL when the language is not the default. The app
+ * Carry the page's language explicitly into an app URL, including English. The app
  * resolves its language from the URL first, so a link that carries it works
  * even for a reader who has never chosen one explicitly (a shared link, a new
  * browser) -- the cookie only covers people who used the switch.
  */
 export const withLocale = (url: string, lang: Language): string => {
-  if (lang === LanguageCode.EN) return url;
-  return `${url}${url.includes('?') ? '&' : '?'}locale=${lang}`;
+  const fragmentIndex = url.indexOf('#');
+  const path = fragmentIndex < 0 ? url : url.slice(0, fragmentIndex);
+  const fragment = fragmentIndex < 0 ? '' : url.slice(fragmentIndex);
+  const queryIndex = path.indexOf('?');
+  const pathname = queryIndex < 0 ? path : path.slice(0, queryIndex);
+  const params = new URLSearchParams(queryIndex < 0 ? '' : path.slice(queryIndex + 1));
+  params.set('locale', lang);
+  return `${pathname}?${params}${fragment}`;
 };
 
 /**
@@ -251,51 +257,28 @@ class I18n {
    */
   private normalizeLanguage(lang: string | null): Language | null {
     if (!lang) return null;
-    const normalized = lang.toLowerCase().split(/[-_]/)[0];
+    const normalized = lang.trim().toLowerCase().split(/[-_]/)[0];
     return (SHELL_LOCALES as readonly string[]).includes(normalized) ? (normalized as Language) : null;
   }
 
   constructor() {
-    // Priority: URL locale -> cookie -> localStorage -> navigator.language -> 'en'
-    // The same chain feeds two results: the shell language (en / zh only) and
-    // the editor UI locale (any vendor-supported tag). The first source that
-    // yields a value for a given result wins for that result, so `?locale=ja`
-    // gives an English shell with a Japanese editor.
-    let detectedLang: Language | null = null;
-    let editorLocale: string | null = null;
-
-    // 1. Try to get from URL parameter 'locale' (highest priority)
-    const urlLocale = this.getUrlParameter('locale');
-    detectedLang = this.normalizeLanguage(urlLocale);
-    editorLocale = resolveEditorLocale(urlLocale);
-
-    // 2. If not found in URL, try cookies (locale field)
-    const cookieLang = this.getCookie('locale');
-    if (!detectedLang) detectedLang = this.normalizeLanguage(cookieLang);
-    if (!editorLocale) editorLocale = resolveEditorLocale(cookieLang);
-
-    // 3. If not found in cookies, try localStorage (an explicit shell choice)
-    const savedLang = this.normalizeLanguage(localStorageGetItem('document-lang'));
-    if (savedLang) {
-      if (!detectedLang) detectedLang = savedLang;
-      if (!editorLocale) editorLocale = resolveEditorLocale(savedLang);
-    }
-
-    // 4. If not found in localStorage, try navigator.language(s)
+    // Pick one preference source for the whole app. An unsupported language
+    // falls back to English rather than inheriting a different saved choice.
+    // Priority: URL -> cookie -> saved choice -> preferred browser language.
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
-    const nav = typeof navigator !== 'undefined' ? navigator : undefined;
-    const browserLangs = nav ? [...(nav.languages || []), nav.language].filter(Boolean) : [];
-    if (!detectedLang) detectedLang = this.normalizeLanguage(browserLangs[0] || null);
-    if (!editorLocale) {
-      for (const candidate of browserLangs) {
-        editorLocale = resolveEditorLocale(candidate);
-        if (editorLocale) break;
-      }
-    }
+    const nav = typeof navigator === 'undefined' ? undefined : navigator;
+    const preferredLocale =
+      this.getUrlParameter('locale') ||
+      this.getCookie('locale') ||
+      localStorageGetItem('document-lang') ||
+      nav?.languages?.[0] ||
+      nav?.language ||
+      null;
 
-    // 5. Default to 'en' if nothing found
-    this.currentLanguage = detectedLang || LanguageCode.EN;
-    this.editorLocale = editorLocale || OnlyOfficeLanguageCode.EN;
+    this.currentLanguage = this.normalizeLanguage(preferredLocale) || LanguageCode.EN;
+    // The editor supports additional languages; shell copy still uses English
+    // when it has no translations for that otherwise valid editor language.
+    this.editorLocale = resolveEditorLocale(preferredLocale) || OnlyOfficeLanguageCode.EN;
   }
 
   /**

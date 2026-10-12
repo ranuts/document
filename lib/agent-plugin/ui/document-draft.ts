@@ -1,3 +1,4 @@
+import { JsonTextStream } from '@ranuts/agent-core/llm/json-text-stream';
 import type { LLMProvider } from '@ranuts/agent-core/llm/types';
 
 /** A document artifact is a separate structured output, never scraped from chat prose. */
@@ -5,6 +6,7 @@ export async function generateDocumentDraft(
   provider: LLMProvider,
   instruction: string,
   signal: AbortSignal,
+  onDelta?: (text: string) => void,
 ): Promise<string> {
   signal.throwIfAborted();
   if (!instruction.trim() || instruction.length > 8000) throw new Error('Invalid writing request');
@@ -25,9 +27,20 @@ export async function generateDocumentDraft(
       ].join('\n'),
     },
   ];
-  const response = provider.generateJSON
-    ? await provider.generateJSON(messages, schema, signal)
-    : await provider.chat(messages, [], signal);
+  const display = onDelta ? new JsonTextStream(onDelta) : undefined;
+  const response =
+    display && provider.generateJSONStream
+      ? await provider.generateJSONStream(
+          messages,
+          schema,
+          (delta) => {
+            if (!signal.aborted) display.push(delta);
+          },
+          signal,
+        )
+      : provider.generateJSON
+        ? await provider.generateJSON(messages, schema, signal)
+        : await provider.chat(messages, [], signal);
   signal.throwIfAborted();
   if (
     response.toolCalls.length ||
@@ -47,5 +60,6 @@ export async function generateDocumentDraft(
     result.text.length > 8000
   )
     throw new Error('Invalid writing response');
+  display?.finish(result.text);
   return result.text;
 }

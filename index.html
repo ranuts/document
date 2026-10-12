@@ -250,10 +250,10 @@
           <h1 class="reveal d2">Open Word, Excel &amp; PowerPoint files, <span class="accent">right in your browser.</span></h1>
           <p class="sub reveal d3">Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.</p>
           <div class="cta reveal d4">
-            <r-button type="primary" id="hero-open" data-open-local="/editor?open=local">Open a file</r-button>
-            <a href="/editor?new=docx" data-prefetch="docx"><r-button id="hero-new-docx">New Word</r-button></a>
-            <a href="/editor?new=xlsx" data-prefetch="xlsx"><r-button id="hero-new-xlsx">New Excel</r-button></a>
-            <a href="/editor?new=pptx" data-prefetch="pptx"><r-button id="hero-new-pptx">New PowerPoint</r-button></a>
+            <r-button type="primary" id="hero-open" data-open-local="/editor?locale=en&open=local">Open a file</r-button>
+            <a href="/editor?locale=en&new=docx" data-prefetch="docx"><r-button id="hero-new-docx">New Word</r-button></a>
+            <a href="/editor?locale=en&new=xlsx" data-prefetch="xlsx"><r-button id="hero-new-xlsx">New Excel</r-button></a>
+            <a href="/editor?locale=en&new=pptx" data-prefetch="pptx"><r-button id="hero-new-pptx">New PowerPoint</r-button></a>
           </div>
           <!-- Autosave is a promise about the user's data, so it is served HTML
                rather than drawn by script: the retention window and the way to
@@ -262,7 +262,7 @@
           <div class="recent reveal d5">
             <span data-recent-slot data-recent-label="Continue editing" hidden></span>
             <span class="recent-note">Recovery copies stay in this browser for 7 days after the last edit or open when autosave is enabled. Delete them or turn autosave off in Saved documents. Browser storage can be cleared; save your file too.</span>
-            <a class="recent-all" href="/history"
+            <a class="recent-all" href="/history?locale=en"
               >Saved documents</a
             >
           </div>

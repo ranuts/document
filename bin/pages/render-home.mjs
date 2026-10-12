@@ -36,7 +36,7 @@ export function renderHome({ locale, data, locales }) {
    * how the hand-written Chinese homepage always did it, and what the first
    * generated version of this template dropped.
    */
-  const editor = (query) => `/editor?${locale === DEFAULT_LOCALE ? '' : `locale=${locale}&`}${query}`;
+  const editor = (query) => `/editor?locale=${locale}&${query}`;
   const alternates = locales
     .map((l) => `    <link rel="alternate" hreflang="${l}" href="${ORIGIN + LOCALES[l].home}" />`)
     .join('\n');
@@ -232,7 +232,7 @@ ${langMenu(locale, locales, ui, (l) => LOCALES[l].home)}
           <div class="recent reveal d5">
             <span data-recent-slot data-recent-label="${e(data.recent.label)}" hidden></span>
             <span class="recent-note">${e(data.recent.note)}</span>
-            <a class="recent-all" href="${locale === DEFAULT_LOCALE ? '/history' : `/history?locale=${locale}`}"
+            <a class="recent-all" href="/history?locale=${locale}"
               >${e(data.recent.all)}</a
             >
           </div>

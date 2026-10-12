@@ -15,6 +15,50 @@ function mount() {
   document.body.append(view.el);
   return { view, onSend, input: view.el.querySelector('textarea')! };
 }
+it('batches a burst of streamed text into a frame without repeated layout reads', () => {
+  const frames = new Map<number, FrameRequestCallback>();
+  let id = 0;
+  const schedule = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+    frames.set(++id, callback);
+    return id;
+  });
+  const cancel = vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((frame) => frames.delete(frame));
+  const { view } = mount();
+  try {
+    view.setRunning(true);
+    const list = view.el.querySelector<HTMLElement>('.cui-messages')!;
+    const scroll = vi.spyOn(list, 'scrollTo');
+    for (let chunk = 0; chunk < 1000; chunk++) view.appendDelta('word ');
+    expect(scroll.mock.calls.length).toBeLessThanOrEqual(1);
+    expect(frames.size).toBe(1);
+    for (const [frame, callback] of frames) {
+      frames.delete(frame);
+      callback(16);
+    }
+    expect(view.el.querySelector('.cui-bubble')?.textContent).toBe('word '.repeat(1000));
+    expect(scroll.mock.calls.length).toBeLessThanOrEqual(2);
+    const textNode = view.el.querySelector('.cui-bubble')!.firstChild;
+    view.appendDelta('tail');
+    view.endStream();
+    expect(view.getLastAnswer()).toBe('word '.repeat(1000) + 'tail');
+    expect(textNode?.textContent).toContain('tail');
+  } finally {
+    view.dispose();
+    schedule.mockRestore();
+    cancel.mockRestore();
+  }
+});
+
+it('shows a real waiting stage only until streamed text begins', () => {
+  const { view } = mount();
+  view.setRunning(true);
+  expect(view.el.querySelector('.cui-status')?.textContent).toBe('Thinking');
+  view.appendDelta('Visible answer');
+  expect(view.el.querySelector('.cui-status')?.textContent).toBe('');
+  view.setActivity('reading');
+  expect(view.el.querySelector('.cui-status')?.textContent).toBe('Reading content…');
+  view.dispose();
+});
 it('offers document writes only for explicit artifacts when the host requires them', async () => {
   const apply = vi.fn().mockResolvedValue('verified');
   const view = new ChatView({ onSend: vi.fn(), onApplyMessage: apply, requireDocumentArtifact: true });
@@ -292,6 +336,57 @@ it('keeps drafts editable while sending is unavailable and never queues them for
   expect(send.disabled).toBe(false);
 });
 
+it('notifies composer controls when a draft is restored, dictated or consumed', () => {
+  const view = new ChatView({ onSend: vi.fn() });
+  const drafts: string[] = [];
+  view.el.addEventListener('input', () => drafts.push(view.getInput()));
+  view.setInput('Restored draft');
+  view.el.querySelector<HTMLButtonElement>('.cui-send')!.click();
+  expect(drafts).toEqual(['Restored draft', '']);
+  view.dispose();
+});
+
+it.each(['click', 'enter'] as const)(
+  'offers a host preparation action on %s without consuming or queuing the draft',
+  (method) => {
+    let ready = false;
+    let busy = false;
+    const prepare = vi.fn(() => {
+      busy = true;
+      view.refreshSendAvailability();
+    });
+    const onSend = vi.fn();
+    const view = new ChatView({
+      onSend,
+      canSend: () => ready,
+      getSendPreparation: () => ({ label: busy ? 'Preparing model' : 'Enable model', run: prepare, disabled: busy }),
+    });
+    document.body.append(view.el);
+    view.setInput('Polish my selected text');
+    const input = view.el.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    const button = view.el.querySelector<HTMLButtonElement>('.cui-send')!;
+    expect(button.disabled).toBe(false);
+    expect(button.textContent).toBe('Enable model');
+    expect(button.getAttribute('aria-label')).toBe('Enable model');
+    if (method === 'click') button.click();
+    else input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(prepare).toHaveBeenCalledOnce();
+    expect(view.getInput()).toBe('Polish my selected text');
+    expect(button.disabled).toBe(true);
+    expect(button.textContent).toBe('Preparing model');
+    button.click();
+    expect(prepare).toHaveBeenCalledOnce();
+    ready = true;
+    busy = false;
+    view.refreshSendAvailability();
+    expect(onSend).not.toHaveBeenCalled();
+    expect(button.getAttribute('aria-label')).toBe('Send');
+    button.click();
+    expect(onSend).toHaveBeenCalledExactlyOnceWith('Polish my selected text');
+    view.dispose();
+  },
+);
+
 it.each([true, false])(
   'final Markdown follows the bottom only when already reading the latest reply: %s',
   (atBottom) => {
@@ -386,6 +481,31 @@ it('does not offer a restored interrupted answer for insertion', () => {
   expect(view.getLastAnswer()).toBe('');
   expect(view.el.querySelector('.cui-apply')).toBeNull();
   expect(view.el.querySelector('.cui-copy')).not.toBeNull();
+});
+
+it('keeps a streamed document preview unavailable for insertion after cancellation', () => {
+  const view = new ChatView({ onSend: vi.fn(), onApplyMessage: vi.fn(), requireDocumentArtifact: true });
+  view.appendDelta('Unfinished body', { documentArtifact: true });
+  expect(view.getLastDocumentBody()).toBe('');
+  view.append({ role: 'status', text: 'Stopped' });
+  expect(view.getLastDocumentBody()).toBe('');
+  expect(view.el.querySelector('.cui-apply')).toBeNull();
+  expect(view.el.querySelector('.cui-msg-agent')?.getAttribute('data-interrupted')).toBe('true');
+  expect(view.el.querySelector('.cui-bubble')?.textContent).toBe('Unfinished body');
+  view.dispose();
+});
+
+it('never promotes an unfinished document stream when the host resets a running provider', () => {
+  const view = new ChatView({ onSend: vi.fn(), onApplyMessage: vi.fn(), requireDocumentArtifact: true });
+  view.setRunning(true);
+  view.appendDelta('Unvalidated body', { documentArtifact: true });
+  view.setRunning(false);
+  expect(view.getLastDocumentBody()).toBe('');
+  expect(view.getLastAnswer()).toBe('');
+  expect(view.el.querySelector('.cui-apply')).toBeNull();
+  expect(view.el.querySelector('.cui-copy')).not.toBeNull();
+  expect(view.el.querySelector('.cui-bubble')?.textContent).toBe('Unvalidated body');
+  view.dispose();
 });
 
 it('preserves interrupted block-array protection through history restoration into the view', () => {

@@ -36,6 +36,18 @@ device, so documents are never uploaded, and no account is involved.
 
 ## AI document assistant
 
+**Experimental:** The AI assistant is still being developed. Answers and edits can be incomplete or incorrect; review suggestions and verify important changes. Speed and capabilities vary by model and device.
+
+**Watch the AI assistant in action** · English screen recordings with captions. Click a preview to watch the video.
+
+| Word · Draft, insert and undo                                                                       | Excel · Fill cells and calculate                                                                 |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| [![Watch the Word AI demo](docs/media/ai-demos/word-ai.jpg)](docs/media/ai-demos/word-ai.mp4)       | [![Watch the Excel AI demo](docs/media/ai-demos/excel-ai.jpg)](docs/media/ai-demos/excel-ai.mp4) |
+| PowerPoint · Review and create a slide                                                              | PDF · Read a page and review a note                                                              |
+| [![Watch the PowerPoint AI demo](docs/media/ai-demos/pptx-ai.jpg)](docs/media/ai-demos/pptx-ai.mp4) | [![Watch the PDF AI demo](docs/media/ai-demos/pdf-ai.jpg)](docs/media/ai-demos/pdf-ai.mp4)       |
+
+[Demo details and text descriptions](docs/media/ai-demos/README.md). Recorded with the local Qwen3 4B model and fictional documents; model preparation is omitted.
+
 Say what you want to do: ask about content, work on text or organize data. Review changes before applying them. Off by default · This browser only.
 
 Choose a local model or connect your AI service. Model files stay in this browser and cached files can be reused when preparing the model for another document.

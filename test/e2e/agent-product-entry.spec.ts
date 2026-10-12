@@ -55,7 +55,9 @@ test('default off and remembered on never prepare models or connect services on 
   await page.locator('.agent-panel-settings-toggle').click();
   await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
   await page.locator('.cui-input').fill('My draft');
-  await expect(page.locator('.cui-send')).toBeDisabled();
+  await expect(page.locator('.cui-send')).toHaveClass(/cui-send-prepare/);
+  await expect(page.locator('.cui-send')).toBeEnabled();
+  await expect(page.locator('.cui-msg-user')).toHaveCount(0);
   await page.locator('.agent-panel-settings-toggle').click();
   await page.locator('.agent-panel-settings-toggle').click();
   await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');

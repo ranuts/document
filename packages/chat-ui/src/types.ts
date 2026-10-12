@@ -45,6 +45,8 @@ export interface ChatViewLabels {
 export interface ChatViewOptions {
   /** Host readiness check; false preserves editable drafts and prevents submission. */
   canSend?: (text: string) => boolean;
+  /** Optional explicit setup action while unavailable. It never consumes or queues the draft. */
+  getSendPreparation?: () => { label: string; run: () => void; disabled?: boolean } | undefined;
   /** Called when the user submits the input (Enter or Send). Receives the original non-empty text. */
   onSend: (text: string) => void;
   /** Called when the user clicks Send while a turn is running (i.e. Stop). */

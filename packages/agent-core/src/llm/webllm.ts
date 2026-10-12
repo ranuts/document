@@ -364,6 +364,15 @@ export class WebLLMProvider implements LocalLLMProvider {
     return this.enqueue(() => this.generate(messages, [], undefined, signal, schema));
   }
 
+  generateJSONStream(
+    messages: LLMMessage[],
+    schema: Record<string, unknown>,
+    onDelta: (text: string) => void,
+    signal?: AbortSignal,
+  ): Promise<LLMResponse> {
+    return this.enqueue(() => this.generate(messages, [], onDelta, signal, schema));
+  }
+
   async chatStream(
     messages: LLMMessage[],
     tools: LLMToolDef[],

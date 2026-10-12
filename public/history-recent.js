@@ -81,7 +81,7 @@
       // Keep the page's language on the way into the editor: this script runs
       // on /ja/, /pt/ and the rest, and the editor resolves ?locale= first.
       var pageLang = document.documentElement.lang || 'en';
-      var localeParam = pageLang && pageLang !== 'en' ? '&locale=' + encodeURIComponent(pageLang) : '';
+      var localeParam = '&locale=' + encodeURIComponent(pageLang || 'en');
       resume.href = '/editor?saved=' + encodeURIComponent(doc.id) + localeParam + suffix;
       resume.textContent = (slot.getAttribute('data-recent-label') || 'Continue') + ' ' + doc.title;
 

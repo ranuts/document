@@ -69,6 +69,8 @@ export class ChatView {
   /** The agent bubble currently receiving streamed deltas, if any. */
   private liveMsg: HTMLDivElement | null = null;
   private liveText = '';
+  private liveNode: Text | null = null;
+  private pendingText = '';
 
   constructor(private readonly options: ChatViewOptions) {
     ensureChatUiStyles();
@@ -173,20 +175,7 @@ export class ChatView {
         }
         // Write in the next frame, outside observer delivery. Resizing a sibling
         // viewport here can otherwise produce undelivered-notification errors.
-        if (this.layoutFrame !== undefined) return;
-        this.layoutFrame = requestAnimationFrame(() => {
-          this.layoutFrame = undefined;
-          if (this.disposed) return;
-          if (this.inputNeedsResize) {
-            this.inputNeedsResize = false;
-            this.autoGrow();
-          }
-          if (this.following) this.scrollToEnd();
-          else {
-            this.recordScrollGeometry();
-            this.updateScrollBtn();
-          }
-        });
+        this.scheduleLayout();
       });
       this.observeLayout();
     }
@@ -212,9 +201,7 @@ export class ChatView {
   /** Append a finished message and scroll to it. Returns the bubble element. */
   append(message: ChatMessage): HTMLElement {
     if ((message.role === 'status' || message.role === 'error') && this.liveMsg) {
-      this.liveMsg.dataset.interrupted = 'true';
-      this.liveMsg.querySelector('.cui-apply')?.remove();
-      this.endStream();
+      this.interruptStream();
     }
     if (message.role === 'user') this.lastUserText = message.text;
     const stick = this.following;
@@ -350,29 +337,40 @@ export class ChatView {
    * Append streamed text to a live agent bubble, creating it on the first delta.
    * Call {@link endStream} when the turn completes.
    */
-  appendDelta(delta: string): void {
-    if (!delta) return;
-    const stick = this.following;
+  appendDelta(delta: string, metadata: Pick<ChatMessage, 'documentArtifact'> = {}): void {
+    if (!delta || this.disposed) return;
     if (!this.liveMsg) {
-      this.liveMsg = this.append({ role: 'agent', text: '' }).parentElement as HTMLDivElement;
+      this.liveMsg = this.append({ role: 'agent', text: '', ...metadata }).parentElement as HTMLDivElement;
       this.liveMsg.classList.add('cui-streaming');
+      this.liveNode = document.createTextNode('');
+      this.liveMsg.querySelector('.cui-bubble')?.replaceChildren(this.liveNode);
+      this.updateActivity();
     }
-    const bubble = this.liveMsg.querySelector('.cui-bubble');
     this.liveText += delta;
-    if (bubble) bubble.textContent = this.liveText;
-    this.liveMsg.dataset.source = this.liveText;
-    if (stick) this.scrollToEnd();
+    this.pendingText += delta;
+    this.scheduleLayout();
   }
 
   /** Finalise the current streaming bubble (removes the caret). */
   endStream(): void {
     const stick = this.following;
+    this.flushStream();
     const bubble = this.liveMsg?.querySelector<HTMLElement>('.cui-bubble');
     if (bubble) renderMarkdown(bubble, this.liveText);
     this.liveMsg?.classList.remove('cui-streaming');
     this.liveMsg = null;
+    this.liveNode = null;
     this.liveText = '';
+    this.updateActivity();
     if (bubble && stick) this.scrollToEnd();
+  }
+
+  /** Only explicit stream completion can make a preview available for writing. */
+  private interruptStream(): void {
+    if (!this.liveMsg) return;
+    this.liveMsg.dataset.interrupted = 'true';
+    this.liveMsg.querySelector('.cui-apply')?.remove();
+    this.endStream();
   }
 
   /** Mount a host-owned review card in chronological conversation order. */
@@ -391,7 +389,7 @@ export class ChatView {
     this.running = running;
     if (!running) this.activity = 'responding';
     this.updateActivity();
-    if (!running) this.endStream();
+    if (!running) this.interruptStream();
     this.messagesEl.setAttribute('aria-busy', String(running));
     this.updateSendState();
     if (restore) this.input.focus({ preventScroll: true });
@@ -405,25 +403,31 @@ export class ChatView {
   }
 
   private updateActivity(): void {
-    this.statusEl.textContent = !this.running
-      ? ''
-      : this.activity === 'reviewing'
-        ? (this.labels.reviewing ?? 'Review the proposed change to continue.')
-        : this.activity === 'reading'
-          ? (this.labels.reading ?? 'Reading content…')
-          : this.activity === 'planning'
-            ? (this.labels.planning ?? 'Preparing task…')
-            : (this.labels.waiting ?? 'Generating a response…');
+    this.statusEl.textContent =
+      !this.running || (this.liveMsg && this.activity === 'responding')
+        ? ''
+        : this.activity === 'reviewing'
+          ? (this.labels.reviewing ?? 'Review the proposed change to continue.')
+          : this.activity === 'reading'
+            ? (this.labels.reading ?? 'Reading content…')
+            : this.activity === 'planning'
+              ? (this.labels.planning ?? 'Preparing task…')
+              : (this.labels.waiting ?? 'Generating a response…');
   }
 
   /** Remove all messages and restore the empty state. */
   clear(): void {
+    if (this.layoutFrame !== undefined) cancelAnimationFrame(this.layoutFrame);
+    this.layoutFrame = undefined;
+    this.pendingText = '';
+    this.liveNode = null;
     this.clearCopyFeedback();
     this.resizeObserver?.disconnect();
     this.messagesEl.replaceChildren(this.emptyEl);
     this.emptyTitle.textContent = this.labels.empty ?? '';
     this.liveMsg = null;
     this.liveText = '';
+    this.updateActivity();
     this.lastUserText = '';
     this.following = true;
     this.observeLayout();
@@ -435,11 +439,10 @@ export class ChatView {
     return this.input.value;
   }
 
-  /** Replace the input text (e.g. to prepend a quoted selection). */
+  /** Replace the draft and notify composer controls, including host readiness. */
   setInput(text: string): void {
     this.input.value = text;
-    this.autoGrow();
-    this.updateSendState();
+    this.input.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
   /** Refresh host readiness without changing the draft or submitting it. */
@@ -481,23 +484,33 @@ export class ChatView {
 
   private submit(): void {
     const text = this.input.value;
-    if (!text.trim() || this.running || this.options.canSend?.(text) === false) return;
-    this.input.value = '';
-    this.autoGrow();
-    this.updateSendState();
+    if (!text.trim() || this.running) return;
+    if (this.options.canSend?.(text) === false) {
+      const preparation = this.options.getSendPreparation?.();
+      if (preparation && !preparation.disabled) preparation.run();
+      this.updateSendState();
+      return;
+    }
+    this.setInput('');
     this.options.onSend(text);
   }
 
   /** Reflect run state + empty input on the send button (icon, disabled, title). */
   private updateSendState(): void {
     this.updateRestoreState();
-    this.sendBtn.innerHTML = this.running ? ICON_STOP : ICON_SEND;
+    const hasDraft = !!this.input.value.trim();
+    const unavailable = !this.running && hasDraft && this.options.canSend?.(this.input.value) === false;
+    const preparation = unavailable ? this.options.getSendPreparation?.() : undefined;
+    if (preparation) this.sendBtn.textContent = preparation.label;
+    else this.sendBtn.innerHTML = this.running ? ICON_STOP : ICON_SEND;
+    this.sendBtn.classList.toggle('cui-send-prepare', !!preparation);
     this.sendBtn.classList.toggle('cui-send-stop', this.running);
-    this.sendBtn.title = this.running ? (this.labels.stop ?? 'Stop') : (this.labels.send ?? 'Send');
+    this.sendBtn.title = this.running
+      ? (this.labels.stop ?? 'Stop')
+      : (preparation?.label ?? this.labels.send ?? 'Send');
     this.sendBtn.setAttribute('aria-label', this.sendBtn.title);
     // Disable unavailable submissions while idle; a running turn always keeps Stop available.
-    this.sendBtn.disabled =
-      !this.running && (this.input.value.trim() === '' || this.options.canSend?.(this.input.value) === false);
+    this.sendBtn.disabled = !this.running && (!hasDraft || (unavailable && (!preparation || !!preparation.disabled)));
   }
 
   private updateRestoreState(): void {
@@ -518,6 +531,8 @@ export class ChatView {
     this.disposed = true;
     if (this.layoutFrame !== undefined) cancelAnimationFrame(this.layoutFrame);
     this.layoutFrame = undefined;
+    this.pendingText = '';
+    this.liveNode = null;
     this.resizeObserver?.disconnect();
     this.clearCopyFeedback();
   }
@@ -525,6 +540,32 @@ export class ChatView {
   private observeLayout(): void {
     if (this.disposed) return;
     for (const element of [this.messagesEl, this.input, this.emptyEl]) this.resizeObserver?.observe(element);
+  }
+
+  /** One DOM write and scroll measurement per frame, shared with resize work. */
+  private scheduleLayout(): void {
+    if (this.disposed || this.layoutFrame !== undefined) return;
+    this.layoutFrame = requestAnimationFrame(() => {
+      this.layoutFrame = undefined;
+      if (this.disposed) return;
+      this.flushStream();
+      if (this.inputNeedsResize) {
+        this.inputNeedsResize = false;
+        this.autoGrow();
+      }
+      if (this.following) this.scrollToEnd();
+      else {
+        this.recordScrollGeometry();
+        this.updateScrollBtn();
+      }
+    });
+  }
+
+  private flushStream(): void {
+    if (!this.liveMsg || !this.pendingText) return;
+    this.liveNode?.appendData(this.pendingText);
+    this.pendingText = '';
+    this.liveMsg.dataset.source = this.liveText;
   }
 
   private clearCopyFeedback(): void {

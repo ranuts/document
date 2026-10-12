@@ -207,6 +207,14 @@ export class WllamaProvider implements LocalLLMProvider {
   generateJSON(messages: LLMMessage[], schema: Record<string, unknown>, signal?: AbortSignal) {
     return this.run(messages, undefined, signal, schema);
   }
+  generateJSONStream(
+    messages: LLMMessage[],
+    schema: Record<string, unknown>,
+    onDelta: (text: string) => void,
+    signal?: AbortSignal,
+  ) {
+    return this.run(messages, onDelta, signal, schema);
+  }
   chat(messages: LLMMessage[], _tools: LLMToolDef[], signal?: AbortSignal) {
     return this.run(messages, undefined, signal);
   }
