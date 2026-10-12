@@ -8,6 +8,7 @@
 export interface I18nMessages {
   editorBackHome: string;
   agentSpeechNoResult: string;
+  agentSendContextChanged: string;
   agentClearImpact: string;
   agentInsertContent: string;
   agentReplaceContent: string;

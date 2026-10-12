@@ -8,6 +8,7 @@ import type { I18nMessages } from '../types';
  */
 export const zhCN: I18nMessages = {
   editorBackHome: '返回首页',
+  agentSendContextChanged: '文档或选区已改变。请确认当前选区后重新发送。',
   agentSpeechNoResult: '没有识别到语音，请检查麦克风后重试。',
   agentClearImpact: '将删除正文中的 {count} 个字符。',
   agentInsertContent: '插入内容',

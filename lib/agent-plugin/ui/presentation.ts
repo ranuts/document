@@ -195,6 +195,8 @@ export function displayError(error: unknown): string {
   ]);
   if (guidance.has(text)) return guidance.get(text)!;
   const known = [
+    'agentWritingNeedsLocalService',
+    'agentWritingOfflineNeedsDevice',
     'agentSummaryNotShorter',
     'agentWritingUnchanged',
     'agentWritingLanguageMismatch',

@@ -13,6 +13,9 @@
   <a href="https://edit.chaxus.com/">
     <img src="https://img.shields.io/badge/Live-edit.chaxus.com-brightgreen" alt="Live site">
   </a>
+  <a href="#assistente-de-documentos-com-ia-experimental-beta">
+    <img src="https://img.shields.io/badge/AI_Assistant-Experimental_Beta-orange" alt="AI Assistant: Experimental Beta">
+  </a>
 </p>
 <p align="center">
   <a href="readme.md">English</a> |
@@ -25,9 +28,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-Abra e edite ficheiros do Word, do Excel e do PowerPoint num separador do navegador. Não há
-servidor: o motor do OnlyOffice e o respetivo conversor WASM correm no próprio dispositivo de
-quem visita, por isso os documentos nunca são enviados para lado nenhum e não é preciso conta.
+Edite ficheiros do Word, Excel e PowerPoint e anote PDFs diretamente no navegador. Não é preciso instalar o Office nem criar uma conta. A edição e conversão são locais; pode ativar o assistente experimental de IA quando precisar.
 
 **Site: [edit.chaxus.com](https://edit.chaxus.com/)**
 
@@ -35,14 +36,35 @@ quem visita, por isso os documentos nunca são enviados para lado nenhum e não 
 
 ## ✨ Funcionalidades
 
-- 🔒 **Nada é enviado** — cada conversão, edição e exportação acontece dentro do separador
+- 🔒 **Edição local** — a conversão, edição e exportação acontecem no navegador; escolhe onde os pedidos opcionais de IA são processados
 - 📝 **Edição a sério, não pré-visualização** — DOCX, XLSX, PPTX e CSV, além de ODF, RTF, TXT e os antigos formatos binários; os PDF abrem e podem ser anotados
-- 🕓 **Nada se perde ao fechar o separador** — o que edita é guardado no seu próprio navegador, mantido 7 dias e apagável a qualquer momento ([pormenores](#-edição-local-e-tratamento-de-dados))
+- 🕓 **Retome o trabalho** — as cópias de recuperação locais ajudam a reabrir as edições recentes; ficam guardadas 7 dias e podem ser apagadas a qualquer momento ([pormenores](#-edição-local-e-tratamento-de-dados))
 - 📴 **Funciona sem ligação** — instalável como PWA; os recursos do editor em cache podem ser reutilizados offline; recursos não guardados e ficheiros remotos precisam de rede
 - 🌍 **Multilingue** — 7 idiomas de interface para o site e 45 para o editor
 - 🧩 **Incorporável** — API completa de postMessage para integração em iframe
+- ✨ **Assistente de documentos com IA (Experimental Beta)** — Crie textos, trabalhe com tabelas, gere slides e faça perguntas sobre PDFs com um modelo local ou seu próprio serviço de IA.
 - 🤖 **Pronto para agentes** — expõe ferramentas WebMCP para que um agente de IA do navegador abra, converta e leia documentos
 - 🚀 **Implanta-se em qualquer lado** — uma compilação estática; uma pasta de ficheiros atrás de qualquer servidor web
+
+---
+
+## Assistente de documentos com IA (Experimental Beta)
+
+Descreva o que precisa e confira o resultado no documento. Crie um texto, preencha uma coluna, gere um slide ou faça perguntas sobre a página atual de um PDF. Revise ou cancele as sugestões; as alterações aplicadas podem ser desfeitas.
+
+**Ainda experimental.** As respostas e alterações podem estar erradas. Confira os resultados importantes. O assistente vem desativado. Escolha um modelo local ou conecte seu próprio serviço de IA. Serviços externos recebem o conteúdo necessário para sua solicitação.
+
+| Word                                                                                                                                                         | Excel                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [![Word: draft, insert and undo](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/97bf02e6-293c-44e3-b042-4334e03a7db5)          | [![Excel: fill cells and calculate](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/fc68c9d5-4cb5-4a80-a29d-46665af1a409)  |
+| PowerPoint                                                                                                                                                   | PDF                                                                                                                                                      |
+| [![PowerPoint: review and create a slide](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/c8dda2cc-80f1-4c12-acc2-80469bd41007) | [![PDF: read a page and review a note](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/25355bc0-57cb-4a3d-a465-87dff2b68b4e) |
+
+Os vídeos estão em inglês e foram gravados novamente com Qwen3 4B local e informações fictícias. A preparação do modelo foi omitida e as esperas foram encurtadas. A velocidade real depende do modelo e do dispositivo.
+
+[Vídeos, legendas em inglês e descrições](docs/media/ai-demos/README.md)
+
+A assistência para PDF usa o texto selecionável da página atual e notas de página. Não reconhece texto em imagens digitalizadas nem reescreve o corpo do PDF.
 
 ---
 
@@ -122,7 +144,7 @@ eliminar em cada linha, um para eliminar tudo e um interruptor para desligar por
 gravação automática. Eliminar ali tem efeito imediato. Num computador partilhado, é a página
 a visitar.
 
-Desativado por padrão · Só este navegador. Os módulos de IA no repositório são experimentais e não significam que o assistente esteja pronto. Testes de desenvolvimento com um provedor na nuvem podem transmitir instruções e resultados das ferramentas. No modo incorporado, o app anfitrião recebe os arquivos exportados e controla seus envios posteriores.
+O assistente de IA vem desativado. Com um modelo local, o conteúdo fica no seu dispositivo. Ao ligar o seu próprio serviço de IA, o conteúdo necessário para o pedido é enviado a esse serviço. O ditado do navegador pode usar um serviço de reconhecimento de voz online. No modo incorporado, os ficheiros exportados voltam à aplicação anfitriã, que controla os envios posteriores.
 
 ---
 
@@ -239,22 +261,6 @@ A suíte de ponta a ponta usa o editor verdadeiro e o conversor verdadeiro em ve
 simulações, incluindo idas e voltas de documentos, o protocolo de incorporação e o fluxo de
 recuperação. `docs/explorations/` regista por que razão cada peça menos óbvia é como é —
 vale a pena ler antes de mexer na integração do editor.
-
----
-
-## Assistente de documentos com IA (Experimental Beta)
-
-Diga o que quer fazer: consultar conteúdo, trabalhar em textos ou organizar dados. Revise as alterações antes de aplicar.
-
-Ative o assistente e escolha um modelo local ou conecte seu serviço de IA. Os arquivos do modelo ficam neste navegador; outro documento pode exigir uma nova preparação, reutilizando arquivos já armazenados.
-
-Word: consulte conteúdo, crie textos ou melhore parágrafos selecionados. Excel e CSV: leia tabelas, preencha dados, crie sequências, calcule totais ou ordene. PowerPoint: consulte textos, adicione texto e crie, duplique ou mude slides. PDF: consulte, resuma ou traduza texto selecionável da página atual; adicione uma nota a uma página específica.
-
-As sugestões mostram o local e o conteúdo. Edite ou peça ajustes antes de aplicar. Cancele o que não quiser; depois de aplicar, use Desfazer no editor. Limpar ou sobrescrever conteúdo exige confirmação. Arquivos somente leitura permitem apenas consulta.
-
-O assistente lê a página atual, não o PDF inteiro. Texto em imagens digitalizadas não é reconhecido; a indisponibilidade é informada. Notas são anexadas à página e não reescrevem o texto do PDF. Para alterar a disposição do texto, use o Word original.
-
-[Como usar](https://edit.chaxus.com/pt/ai-document-assistant)
 
 ---
 

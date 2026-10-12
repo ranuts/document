@@ -8,6 +8,7 @@ import type { I18nMessages } from '../types';
  */
 export const en: I18nMessages = {
   editorBackHome: 'Back to home',
+  agentSendContextChanged: 'The document or selection changed. Check the current selection, then send again.',
   agentSpeechNoResult: 'No speech recognized. Check your microphone and try again.',
   agentClearImpact: 'Deletes {count} characters from the document body.',
   agentInsertContent: 'Insert content',

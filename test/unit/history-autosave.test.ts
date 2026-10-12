@@ -247,14 +247,14 @@ describe('autosave session', () => {
   });
 
   it('keeps documents with the same name apart', async () => {
-    // Every blank document is called New_Document.docx, and plenty of people
+    // Every blank document is called Untitled.docx, and plenty of people
     // have two unrelated Report.docx files. Identity is the id, never the name.
-    requestSaveDocument.mockResolvedValue(fileOf([1], 'New_Document.docx'));
-    await beginAutosaveSession({ docId: 'first-blank', title: 'New_Document.docx', origin: 'new' });
+    requestSaveDocument.mockResolvedValue(fileOf([1], 'Untitled.docx'));
+    await beginAutosaveSession({ docId: 'first-blank', title: 'Untitled.docx', origin: 'new' });
     const first = await takeSnapshot();
 
     stopAutosaveSession();
-    await beginAutosaveSession({ docId: 'second-blank', title: 'New_Document.docx', origin: 'new' });
+    await beginAutosaveSession({ docId: 'second-blank', title: 'Untitled.docx', origin: 'new' });
     const second = await takeSnapshot();
 
     expect(second?.id).not.toBe(first?.id);

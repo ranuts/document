@@ -13,6 +13,9 @@
   <a href="https://edit.chaxus.com/">
     <img src="https://img.shields.io/badge/在线-edit.chaxus.com-brightgreen" alt="在线站点">
   </a>
+  <a href="#ai-文档助手-experimental-beta">
+    <img src="https://img.shields.io/badge/AI_Assistant-Experimental_Beta-orange" alt="AI 助手：实验性功能">
+  </a>
 </p>
 
 <p align="center">
@@ -26,8 +29,8 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-在浏览器标签页里打开和编辑 Word、Excel、PPT 文件。没有服务器：OnlyOffice 引擎和它的
-WASM 转换器都跑在访问者自己的设备上，文档不会被上传，也不需要注册账号。
+在浏览器里编辑 Word、Excel 和 PowerPoint，或为 PDF 添加批注，无需安装 Office 或注册账号。
+日常编辑与转换在本地完成；也可以开启实验性 AI 助手，用自然语言起草内容、处理表格和创建幻灯片。
 
 **线上地址：[edit.chaxus.com](https://edit.chaxus.com/)**
 
@@ -35,15 +38,38 @@ WASM 转换器都跑在访问者自己的设备上，文档不会被上传，也
 
 ## ✨ 主要特性
 
-- 🔒 **不上传任何文件** — 转换、编辑、导出全部发生在这个标签页里
-- 📝 **是编辑，不是预览** — DOCX、XLSX、PPTX、CSV，另支持 ODF、RTF、TXT 与旧版二进制格式；PDF 可打开并批注
-- 💾 **直接存回你自己的文件** — 选一次文件，之后每次保存都写回它（Chromium 系；其它浏览器仍是下载）
-- 🕓 **误关标签页也不会丢** — 编辑内容自动保存进你自己的浏览器，保留 7 天，随时可手动删除（[说明](#-本地编辑与数据去向)）
+- 🔒 **本地编辑** — 文档转换、编辑与导出在浏览器内完成；可选 AI 服务的数据去向由你选择
+- 📝 **直接编辑 Office 文件** — DOCX、XLSX、PPTX、CSV，另支持 ODF、RTF、TXT 与旧版二进制格式；PDF 可打开并批注
+- 💾 **保存到你选择的位置** — 支持的浏览器可持续写回所选位置；其它浏览器会下载导出的文件
+- 🕓 **继续最近的工作** — 浏览器内的恢复副本帮助你重新打开最近的编辑，保留 7 天，随时可删除（[说明](#-本地编辑与数据去向)）
 - 📴 **可离线使用** — 可安装为 PWA，已缓存的编辑器资源可离线复用；未缓存的资源和远程文件仍需联网
 - 🌍 **多语言** — 站点界面 7 种语言，编辑器界面 45 种
 - 🧩 **可嵌入** — 完整的 iframe postMessage API
+- ✨ **AI 文档助手（Experimental Beta）** — 起草与润色文字、填写表格、创建幻灯片、询问 PDF；支持本机模型或自己的 AI 服务
 - 🤖 **面向 Agent** — 提供 WebMCP 工具，浏览器内的 AI Agent 可直接打开、转换、读取文档
 - 🚀 **随处部署** — 纯静态产物，放在任意 Web 服务器后面即可
+
+---
+
+## AI 文档助手 (Experimental Beta)
+
+**把要求说出来，在文档里完成。** 起草一份更新、填写一列数据、创建幻灯片，或询问 PDF 当前页的内容。助手与编辑器协作，你可以检查修改、取消建议，或在应用后撤销。
+
+**仍属实验性功能。** 回答和修改可能有误，请核对重要结果。助手默认关闭；可选择本机模型，或连接自己的 AI 服务。使用外部服务时，请求内容会发送给所选服务。
+
+| Word                                                                                                                                                | Excel                                                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| [![Word：起草、写入与撤销](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/97bf02e6-293c-44e3-b042-4334e03a7db5)       | [![Excel：填写数据与求和](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/fc68c9d5-4cb5-4a80-a29d-46665af1a409)   |
+| **起草、写入与撤销**                                                                                                                                | **填写数据与求和**                                                                                                                              |
+| PowerPoint                                                                                                                                          | PDF                                                                                                                                             |
+| [![PowerPoint：审阅并创建幻灯片](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/c8dda2cc-80f1-4c12-acc2-80469bd41007) | [![PDF：读取当前页与审阅批注](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/25355bc0-57cb-4a3d-a465-87dff2b68b4e) |
+| **审阅并创建幻灯片**                                                                                                                                | **读取当前页与审阅批注**                                                                                                                        |
+
+点击预览观看英文演示。视频使用本机 Qwen3 4B 与虚构资料录制；模型准备已省略，等待片段经过剪辑，实际速度取决于模型和设备。
+
+[视频、英文字幕与文字说明](docs/media/ai-demos/README.md) · [使用指南](https://edit.chaxus.com/zh-CN/ai-document-assistant)
+
+PDF 功能面向当前页可选中的文字与页面批注；暂不识别扫描图片中的文字，也不改写 PDF 正文。
 
 ---
 
@@ -118,7 +144,7 @@ pnpm run dev
 [`/history`](https://edit.chaxus.com/history) 列出当前保存了哪些文档，每一行都能删除，
 也可以一次全部删除，还能直接关掉自动保存。在那里删除立即生效。共用电脑上，先看这一页。
 
-AI 助手默认关闭，目前属于实验性功能。选择本机模型时，内容在此设备处理；连接自己的 AI 服务时，请求内容会发送给所选服务。嵌入模式会把导出文件返回给父应用，后续是否上传由父应用决定。
+AI 助手默认关闭，目前属于实验性功能。选择本机模型时，内容在此设备处理；连接自己的 AI 服务时，请求内容会发送给所选服务。浏览器听写可能通过在线语音服务识别。嵌入模式会把导出文件返回给父应用，后续是否上传由父应用决定。
 
 ---
 
@@ -229,44 +255,6 @@ pnpm run test:e2e       # 端到端测试（Playwright，真实编辑器 + 真�
 
 端到端测试跑的是真实编辑器和真实转换器，不是 mock，覆盖文档往返、嵌入协议与恢复流程。
 `docs/explorations/` 记录了每一处不显然的设计为什么是现在这样——改编辑器集成之前值得先读。
-
----
-
-## AI 文档助手 (Experimental Beta)
-
-**Experimental Beta（实验性功能）：** AI 助手仍在持续完善。回答和修改可能不完整或有误，请检查建议并核对重要修改；速度和能力会随模型及设备而变化。
-
-**AI 功能演示** · 以下视频使用英文界面，可直接播放；字幕文件和文字说明见演示详情。
-
-**Word · 起草、写入与撤销**
-
-https://github.com/user-attachments/assets/89b21740-0c96-4b21-885f-27efa6e7fa53
-
-**Excel · 填写数据与计算**
-
-https://github.com/user-attachments/assets/18dbe96f-bb07-46e9-88f7-5a7a6370b630
-
-**PowerPoint · 确认并创建幻灯片**
-
-https://github.com/user-attachments/assets/3450551b-b557-4a0b-8a2a-5b05d2c458fe
-
-**PDF · 读取当前页与审阅批注**
-
-https://github.com/user-attachments/assets/e786a45c-f73a-48c0-8334-19544fa32c7e
-
-[演示详情与文字说明（英文）](docs/media/ai-demos/README.md)。视频使用本机 Qwen3 4B 模型与虚构资料录制，省略模型准备过程。
-
-直接说出你想做的事。查看内容、处理文字或整理数据，修改前可以先检查。
-
-开启助手，选择本机模型或连接自己的 AI 服务，再输入要求。模型文件会保留在当前浏览器；换文档后可能需要重新准备运行环境，不必重复下载已缓存的文件。
-
-Word：询问内容、起草文字或润色选中的段落。 Excel 和 CSV：读取表格、填写数据、生成数字序列、计算总和或排序。 PowerPoint：询问幻灯片内容、添加文字，或新增、复制和切换页面。 PDF：询问、总结或翻译当前页可选中的文字，也可以为指定页添加批注。
-
-修改建议会显示位置和内容。可以直接编辑建议，或继续告诉助手怎么调整；满意后再应用。不想修改时可以取消，完成后可用编辑器的撤销恢复。清空或覆盖已有内容需要确认。只读文件只能查看。
-
-助手读取的是当前页，不代表已经看过整份 PDF。扫描图片中的文字暂时不能识别；读取不到时会说明。批注添加为页面便笺，不会改写 PDF 正文，也不会自动覆盖页面上的文字。要调整正文排版，请使用原始 Word 文件。
-
-[使用说明](https://edit.chaxus.com/zh-CN/ai-document-assistant)
 
 ---
 

@@ -479,7 +479,7 @@ describe('onlyoffice-editor', () => {
 
     it('creates a blank document (no url) when binData is absent', async () => {
       const config = await createAndGetConfig({
-        fileName: 'New_Document.xlsx',
+        fileName: 'Untitled.xlsx',
         fileType: 'xlsx',
       });
 

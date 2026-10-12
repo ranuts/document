@@ -583,3 +583,25 @@ it('announces human review and releases aria-busy while keeping Stop and the nex
   view.setActivity('responding');
   expect(view.el.querySelector('.cui-messages')?.getAttribute('aria-busy')).toBe('true');
 });
+
+it('does not send into a new conversation after an asynchronous preparation', async () => {
+  let release!: (ready: boolean) => void;
+  const onSend = vi.fn();
+  const view = new ChatView({
+    onSend,
+    beforeSend: () =>
+      new Promise<boolean>((resolve) => {
+        release = resolve;
+      }),
+  });
+  document.body.append(view.el);
+  view.setInput('Old draft');
+  view.el.querySelector<HTMLButtonElement>('.cui-send')!.click();
+  view.clear();
+  view.setInput('New draft');
+  release(true);
+  await Promise.resolve();
+  expect(onSend).not.toHaveBeenCalled();
+  expect(view.getInput()).toBe('New draft');
+  view.dispose();
+});

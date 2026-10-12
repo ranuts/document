@@ -13,6 +13,9 @@
   <a href="https://edit.chaxus.com/">
     <img src="https://img.shields.io/badge/Live-edit.chaxus.com-brightgreen" alt="Live site">
   </a>
+  <a href="#ki-dokumentassistent-experimental-beta">
+    <img src="https://img.shields.io/badge/AI_Assistant-Experimental_Beta-orange" alt="AI Assistant: Experimental Beta">
+  </a>
 </p>
 <p align="center">
   <a href="readme.md">English</a> |
@@ -25,9 +28,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-Word-, Excel- und PowerPoint-Dateien in einem Browser-Tab öffnen und bearbeiten. Ohne Server:
-Die OnlyOffice-Engine und ihr WASM-Konverter laufen auf dem Gerät der Besucherin selbst,
-Dokumente werden also nie hochgeladen, und ein Konto braucht es auch nicht.
+Bearbeiten Sie Word-, Excel- und PowerPoint-Dateien und kommentieren Sie PDFs direkt im Browser. Eine Office-Installation oder ein Konto ist nicht erforderlich. Bearbeitung und Konvertierung erfolgen lokal; bei Bedarf können Sie den experimentellen KI-Assistenten aktivieren.
 
 **Live-Website: [edit.chaxus.com](https://edit.chaxus.com/)**
 
@@ -35,14 +36,35 @@ Dokumente werden also nie hochgeladen, und ein Konto braucht es auch nicht.
 
 ## ✨ Funktionen
 
-- 🔒 **Nichts wird hochgeladen** — jede Umwandlung, jede Änderung, jeder Export passiert im Tab
+- 🔒 **Lokale Bearbeitung** — Konvertierung, Bearbeitung und Export erfolgen im Browser; Sie wählen, wo optionale KI-Anfragen verarbeitet werden
 - 📝 **Echtes Bearbeiten, keine Vorschau** — DOCX, XLSX, PPTX und CSV, dazu ODF, RTF, TXT und die alten Binärformate; PDFs lassen sich öffnen und kommentieren
-- 🕓 **Nichts geht verloren, wenn der Tab zugeht** — Änderungen werden im eigenen Browser gesichert, 7 Tage aufbewahrt, jederzeit löschbar ([Einzelheiten](#-lokale-bearbeitung-und-datenverarbeitung))
+- 🕓 **Arbeit fortsetzen** — Lokale Wiederherstellungskopien helfen beim erneuten Öffnen; sie werden 7 Tage aufbewahrt und können jederzeit gelöscht werden ([Einzelheiten](#-lokale-bearbeitung-und-datenverarbeitung))
 - 📴 **Funktioniert offline** — als PWA installierbar; zwischengespeicherte Editor-Ressourcen sind offline nutzbar; nicht gespeicherte Ressourcen und entfernte Dateien benötigen Netz
 - 🌍 **Mehrsprachig** — 7 Oberflächensprachen für die Website, 45 für den Editor selbst
 - 🧩 **Einbettbar** — vollständige postMessage-API für die iframe-Integration
+- ✨ **KI-Dokumentassistent (Experimental Beta)** — Texte entwerfen, Tabellen bearbeiten, Folien erstellen und Fragen zu PDFs stellen – mit einem lokalen Modell oder Ihrem eigenen KI-Dienst.
 - 🤖 **Bereit für Agenten** — stellt WebMCP-Werkzeuge bereit, mit denen ein KI-Agent im Browser Dokumente öffnen, umwandeln und lesen kann
 - 🚀 **Überall betreibbar** — ein statischer Build; ein Verzeichnis hinter irgendeinem Webserver
+
+---
+
+## KI-Dokumentassistent (Experimental Beta)
+
+Beschreiben Sie die Aufgabe und prüfen Sie das Ergebnis im Dokument. Entwerfen Sie einen Text, füllen Sie eine Spalte, erstellen Sie eine Folie oder stellen Sie Fragen zur aktuellen PDF-Seite. Prüfen oder verwerfen Sie Änderungsvorschläge; angewendete Änderungen können Sie rückgängig machen.
+
+**Noch experimentell.** Antworten und Änderungen können falsch sein. Prüfen Sie wichtige Ergebnisse. Der Assistent ist standardmäßig deaktiviert. Wählen Sie ein lokales Modell oder Ihren eigenen KI-Dienst. Externe Dienste erhalten die für Ihre Anfrage benötigten Inhalte.
+
+| Word                                                                                                                                                         | Excel                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [![Word: draft, insert and undo](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/97bf02e6-293c-44e3-b042-4334e03a7db5)          | [![Excel: fill cells and calculate](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/fc68c9d5-4cb5-4a80-a29d-46665af1a409)  |
+| PowerPoint                                                                                                                                                   | PDF                                                                                                                                                      |
+| [![PowerPoint: review and create a slide](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/c8dda2cc-80f1-4c12-acc2-80469bd41007) | [![PDF: read a page and review a note](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/25355bc0-57cb-4a3d-a465-87dff2b68b4e) |
+
+Die Videos sind auf Englisch und wurden mit dem lokalen Qwen3-4B-Modell und fiktiven Informationen neu aufgenommen. Die Modellvorbereitung ist ausgelassen; Wartezeiten wurden gekürzt. Die tatsächliche Geschwindigkeit hängt von Modell und Gerät ab.
+
+[Videos, englische Untertitel und Beschreibungen](docs/media/ai-demos/README.md)
+
+PDF-Funktionen nutzen auswählbaren Text der aktuellen Seite und Seitennotizen. Sie erkennen keinen Text in gescannten Bildern und schreiben keinen PDF-Fließtext um.
 
 ---
 
@@ -122,7 +144,7 @@ Löschen pro Zeile, einem Alles-Löschen und einem Schalter, der das automatisch
 ganz abstellt. Löschen wirkt dort sofort. Auf einem gemeinsam genutzten Rechner ist das
 die Seite, die man aufsucht.
 
-Standardmäßig aus · Nur dieser Browser. Die KI-Module im Repository sind experimentell und bedeuten nicht, dass der Assistent einsatzbereit ist. Entwicklungstests mit Cloud-Anbietern können Eingaben und Werkzeugergebnisse übertragen. Im eingebetteten Modus gehen Exporte an die übergeordnete Anwendung, die weitere Uploads kontrolliert.
+Der KI-Assistent ist standardmäßig deaktiviert. Mit einem lokalen Modell bleiben Inhalte auf Ihrem Gerät. Wenn Sie Ihren eigenen KI-Dienst verbinden, erhält dieser die für Ihre Anfrage benötigten Inhalte. Die Browser-Diktierfunktion kann einen Online-Spracherkennungsdienst nutzen. Im eingebetteten Modus gehen Exporte an die übergeordnete Anwendung, die weitere Uploads kontrolliert.
 
 ---
 
@@ -240,22 +262,6 @@ Die End-to-End-Suite fährt den echten Editor und den echten Konverter statt Moc
 Dokument-Rundläufen, dem Einbettprotokoll und dem Wiederherstellungsablauf.
 `docs/explorations/` hält fest, warum jede nicht offensichtliche Stelle so ist, wie sie
 ist — ein Blick lohnt sich, bevor Sie die Editor-Integration anfassen.
-
----
-
-## KI-Dokumentassistent (Experimental Beta)
-
-Beschreiben Sie Ihren Wunsch: Inhalte lesen, Texte bearbeiten oder Daten ordnen. Änderungen können Sie vorher prüfen.
-
-Aktivieren Sie den Assistenten und wählen Sie ein lokales Modell oder Ihren KI-Dienst. Modelldateien bleiben in diesem Browser; beim Öffnen einer anderen Datei kann eine erneute Vorbereitung nötig sein. Vorhandene Dateien werden wiederverwendet.
-
-Word: Inhalte erfragen, Texte entwerfen und ausgewählte Absätze verbessern. Excel und CSV: Tabellen lesen, Daten eintragen, Zahlenfolgen erzeugen, Summen berechnen oder sortieren. PowerPoint: Folientexte erfragen, Texte und Folien hinzufügen, Folien kopieren oder wechseln. PDF: auswählbaren Text der aktuellen Seite erfragen, zusammenfassen oder übersetzen; Notizen auf einer bestimmten Seite hinzufügen.
-
-Vorschläge zeigen Ort und Inhalt. Bearbeiten Sie den Vorschlag oder bitten Sie um Anpassungen, bevor Sie ihn anwenden. Unerwünschte Vorschläge können Sie abbrechen; Änderungen lassen sich im Editor rückgängig machen. Löschen und Überschreiben erfordern Bestätigung. Schreibgeschützte Dateien lassen sich nur ansehen.
-
-Der Assistent liest die aktuelle Seite, nicht die gesamte PDF-Datei. Text in gescannten Bildern wird nicht erkannt; fehlender Zugriff wird angezeigt. Seitennotizen ändern keinen PDF-Fließtext. Für Änderungen am Textlayout verwenden Sie die ursprüngliche Word-Datei.
-
-[Anleitung](https://edit.chaxus.com/de/ai-document-assistant)
 
 ---
 

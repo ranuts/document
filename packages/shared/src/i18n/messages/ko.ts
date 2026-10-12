@@ -11,6 +11,7 @@ import type { I18nMessages } from '../types';
  */
 export const ko: Partial<I18nMessages> = {
   editorBackHome: '홈으로 돌아가기',
+  agentSendContextChanged: '문서 또는 선택 영역이 변경되었습니다. 현재 선택 영역을 확인한 후 다시 보내세요.',
   agentSpeechNoResult: '음성을 인식하지 못했습니다. 마이크를 확인하고 다시 시도하세요.',
   agentClearImpact: '문서 본문의 {count}자를 삭제합니다.',
   agentInsertContent: '내용 삽입',

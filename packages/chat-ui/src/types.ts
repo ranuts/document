@@ -47,6 +47,8 @@ export interface ChatViewOptions {
   canSend?: (text: string) => boolean;
   /** Optional explicit setup action while unavailable. It never consumes or queues the draft. */
   getSendPreparation?: () => { label: string; run: () => void; disabled?: boolean } | undefined;
+  /** Finalize host input (e.g. dictation) after an explicit send. False cancels submission. */
+  beforeSend?: () => boolean | Promise<boolean>;
   /** Called when the user submits the input (Enter or Send). Receives the original non-empty text. */
   onSend: (text: string) => void;
   /** Called when the user clicks Send while a turn is running (i.e. Stop). */

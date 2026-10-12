@@ -13,6 +13,9 @@
   <a href="https://edit.chaxus.com/">
     <img src="https://img.shields.io/badge/Live-edit.chaxus.com-brightgreen" alt="Live site">
   </a>
+  <a href="#asistente-de-documentos-con-ia-experimental-beta">
+    <img src="https://img.shields.io/badge/AI_Assistant-Experimental_Beta-orange" alt="AI Assistant: Experimental Beta">
+  </a>
 </p>
 <p align="center">
   <a href="readme.md">English</a> |
@@ -25,9 +28,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-Abre y edita archivos de Word, Excel y PowerPoint en una pestaña del navegador. No hay
-servidor: el motor de OnlyOffice y su convertidor WASM se ejecutan en el propio dispositivo
-de quien visita la página, así que los documentos nunca se suben y no hace falta ninguna cuenta.
+Edita archivos de Word, Excel y PowerPoint, y anota PDF directamente en el navegador. No necesitas instalar Office ni crear una cuenta. La edición y conversión se realizan localmente; puedes activar el asistente experimental de IA cuando lo necesites.
 
 **Sitio en línea: [edit.chaxus.com](https://edit.chaxus.com/)**
 
@@ -35,14 +36,35 @@ de quien visita la página, así que los documentos nunca se suben y no hace fal
 
 ## ✨ Características
 
-- 🔒 **No se sube nada** — cada conversión, edición y exportación ocurre dentro de la pestaña
+- 🔒 **Edición local** — la conversión, edición y exportación se realizan en el navegador; tú eliges dónde se procesan las solicitudes opcionales de IA
 - 📝 **Edición de verdad, no una vista previa** — DOCX, XLSX, PPTX y CSV, además de ODF, RTF, TXT y los antiguos formatos binarios; los PDF se abren y se pueden anotar
-- 🕓 **Nada se pierde al cerrar la pestaña** — lo que editas se guarda solo en tu navegador, se conserva 7 días y puedes borrarlo cuando quieras ([detalles](#-edición-local-y-tratamiento-de-datos))
+- 🕓 **Retoma tu trabajo** — las copias de recuperación locales ayudan a reabrir las ediciones recientes; se conservan 7 días y puedes borrarlas cuando quieras ([detalles](#-edición-local-y-tratamiento-de-datos))
 - 📴 **Funciona sin conexión** — se instala como PWA; los recursos del editor en caché se reutilizan sin conexión; los recursos no almacenados y archivos remotos requieren red
 - 🌍 **Multilingüe** — 7 idiomas de interfaz para el sitio y 45 para el editor
 - 🧩 **Integrable** — API completa de postMessage para integrarlo en un iframe
+- ✨ **Asistente de documentos con IA (Experimental Beta)** — Redacta textos, trabaja con tablas, crea diapositivas y pregunta sobre PDF con un modelo local o tu propio servicio de IA.
 - 🤖 **Preparado para agentes** — expone herramientas WebMCP para que un agente de IA del navegador abra, convierta y lea documentos
 - 🚀 **Se despliega en cualquier sitio** — una compilación estática; una carpeta de archivos detrás de cualquier servidor web
+
+---
+
+## Asistente de documentos con IA (Experimental Beta)
+
+Describe lo que necesitas y comprueba el resultado en el documento. Redacta un texto, rellena una columna, crea una diapositiva o pregunta sobre la página actual de un PDF. Revisa o cancela las propuestas; puedes deshacer los cambios aplicados.
+
+**Todavía experimental.** Las respuestas y los cambios pueden ser incorrectos. Comprueba los resultados importantes. El asistente está desactivado por defecto. Elige un modelo local o conecta tu propio servicio de IA. Los servicios externos reciben el contenido necesario para tu solicitud.
+
+| Word                                                                                                                                                         | Excel                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [![Word: draft, insert and undo](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/97bf02e6-293c-44e3-b042-4334e03a7db5)          | [![Excel: fill cells and calculate](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/fc68c9d5-4cb5-4a80-a29d-46665af1a409)  |
+| PowerPoint                                                                                                                                                   | PDF                                                                                                                                                      |
+| [![PowerPoint: review and create a slide](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/c8dda2cc-80f1-4c12-acc2-80469bd41007) | [![PDF: read a page and review a note](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/25355bc0-57cb-4a3d-a465-87dff2b68b4e) |
+
+Los vídeos están en inglés y se han vuelto a grabar con Qwen3 4B local e información ficticia. Se omite la preparación del modelo y se acortan las esperas. La velocidad real depende del modelo y del dispositivo.
+
+[Vídeos, subtítulos en inglés y descripciones](docs/media/ai-demos/README.md)
+
+La asistencia para PDF usa el texto seleccionable de la página actual y notas de página. No reconoce el texto de imágenes escaneadas ni reescribe el cuerpo del PDF.
 
 ---
 
@@ -122,7 +144,7 @@ borrar en cada fila, otro para borrarlo todo y un interruptor para desactivar po
 el guardado automático. Borrar ahí surte efecto de inmediato. En un ordenador compartido,
 esa es la página a la que ir.
 
-Desactivado por defecto · Solo este navegador. Los módulos de IA del repositorio son experimentales y no implican que el asistente esté listo. Las pruebas de desarrollo conectadas a un proveedor en la nube pueden transmitir instrucciones y resultados de herramientas. En modo integrado, la aplicación anfitriona recibe los archivos exportados y controla sus subidas posteriores.
+El asistente de IA está desactivado por defecto. Con un modelo local, el contenido permanece en tu dispositivo. Si conectas tu propio servicio de IA, el contenido necesario para la solicitud se envía a ese servicio. El dictado del navegador puede usar un servicio de reconocimiento de voz en línea. En modo integrado, los archivos exportados vuelven a la aplicación anfitriona, que controla las subidas posteriores.
 
 ---
 
@@ -239,22 +261,6 @@ La suite de extremo a extremo mueve el editor real y el convertidor real en luga
 simulaciones, incluidos los viajes de ida y vuelta de documentos, el protocolo de
 integración y el flujo de recuperación. `docs/explorations/` deja por escrito por qué cada
 pieza poco evidente es como es: merece una lectura antes de tocar la integración del editor.
-
----
-
-## Asistente de documentos con IA (Experimental Beta)
-
-Describe lo que necesitas: consultar contenido, trabajar con texto u organizar datos. Revisa los cambios antes de aplicarlos.
-
-Activa el asistente y elige un modelo local o conecta tu servicio de IA. Los archivos del modelo quedan en este navegador; al abrir otro documento puede ser necesario prepararlo de nuevo, aprovechando los archivos guardados.
-
-Word: consulta contenido, redacta o mejora párrafos seleccionados. Excel y CSV: lee tablas, introduce datos, genera series, calcula totales u ordena. PowerPoint: consulta texto de diapositivas, añade texto o crea, duplica y cambia diapositivas. PDF: consulta, resume o traduce texto seleccionable de la página actual, o añade una nota a una página concreta.
-
-Las propuestas muestran dónde y qué cambiará. Puedes editarlas o pedir ajustes antes de aplicarlas. Cancela lo que no quieras y usa Deshacer tras aplicar. Borrar o sobrescribir contenido requiere confirmación. Los archivos de solo lectura solo pueden consultarse.
-
-Se lee la página actual, no todo el PDF. No se reconoce texto en imágenes escaneadas; se indica cuando el texto no está disponible. Las notas se adjuntan a la página y no reescriben el texto del PDF. Para cambiar la distribución del texto, usa el Word original.
-
-[Cómo usarlo](https://edit.chaxus.com/es/ai-document-assistant)
 
 ---
 

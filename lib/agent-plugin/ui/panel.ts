@@ -596,7 +596,7 @@ export function createAgentPanel(
   };
   const chat = new ChatView({
     canSend: (text) => {
-      if (!enabled || runtimeCleanup || runtimeCleanupFailed || cacheBusy || speech?.isBusy()) return false;
+      if (!enabled || runtimeCleanup || runtimeCleanupFailed || cacheBusy) return false;
       // Ordinary typing with a ready model does not need to query the editor.
       if (
         !!webllmProvider?.isReady() ||
@@ -610,7 +610,7 @@ export function createAgentPanel(
       );
     },
     getSendPreparation: () => {
-      if (!enabled || runtimeCleanupFailed || speech?.isBusy()) return;
+      if (!enabled || runtimeCleanupFailed) return;
       const endpoint = configuredEndpoint(endpointSettings);
       if (
         (selectedSource === 'service' || endpointProvider?.isReady()) &&
@@ -622,6 +622,30 @@ export function createAgentPanel(
       if (runtimeCleanup || cacheBusy || modelLoading || pendingEndpoint)
         return { label: readinessText.textContent || t('agentPreparing'), run: prepareSelectedSource, disabled: true };
       return { label: prepareAction.textContent || t('agentSettings'), run: prepareSelectedSource };
+    },
+    beforeSend: () => {
+      if (!speech?.isBusy()) return true;
+      const target = (() => {
+        try {
+          return captureDocumentToolTarget();
+        } catch {
+          return null;
+        }
+      })();
+      if (!target) {
+        speech.close();
+        appendTurn({ role: 'status', text: t('agentEditorLoading') });
+        return false;
+      }
+      const finishing = speech.finish();
+      if (typeof finishing === 'boolean') return finishing;
+      return finishing.then((ready) => {
+        if (ready && !target.isCurrent(false)) {
+          appendTurn({ role: 'status', text: t('agentSendContextChanged') });
+          return false;
+        }
+        return ready;
+      });
     },
     onSend: (text) => void submit(text),
     requireDocumentArtifact: true,
@@ -643,6 +667,13 @@ export function createAgentPanel(
   const prepareAction = ButtonBuilder().class('agent-prepare-action').attr('type', 'button').build();
   function prepareSelectedSource(): void {
     if (pendingEndpoint || modelLoading || runtimeCleanup || cacheBusy || !enabled) return;
+    if (proposalMode && writingSelect.value !== 'tools' && resolveRoute().kind === 'blocked') {
+      showView('settings');
+      const disclosure = localWritingConsent.closest('details');
+      if (disclosure) disclosure.open = true;
+      localWritingConsent.focus();
+      return;
+    }
     if (selectedSource === 'service') {
       const endpoint = configuredEndpoint(endpointSettings);
       if (endpoint && (!isCloudEndpointKind(endpoint.kind) || getEndpointKey(endpointKeySlot(endpoint.kind))))
@@ -1151,15 +1182,18 @@ export function createAgentPanel(
     else if (pendingEndpoint) reason = t('agentEndpointConnecting');
     else if (modelLoading) reason = t('agentPreparing');
     else if (!ready && selectedSource === 'service' && endpointStatus.textContent) reason = endpointStatus.textContent;
+    let writingBlocked = false;
     if (proposalMode && writingSelect.value !== 'tools') {
       try {
         const route = resolveRoute();
-        if (route.kind === 'blocked')
+        if (route.kind === 'blocked') {
+          writingBlocked = true;
           reason = t(
             route.reason === 'offline-needs-device-destination'
               ? 'agentWritingOfflineNeedsDevice'
               : 'agentWritingNeedsLocalService',
           );
+        }
       } catch {
         reason = t('agentPrepareRequired');
       }
@@ -1173,18 +1207,26 @@ export function createAgentPanel(
       endpoint &&
       (!isCloudEndpointKind(endpoint.kind) || getEndpointKey(endpointKeySlot(endpoint.kind)))
     );
-    prepareAction.textContent = ready
-      ? ''
-      : t(
-          selectedSource === 'service' && canReconnect
-            ? 'agentReconnectService'
-            : selectedSource === 'local' && (hasConfiguration || cachedLocalModel)
-              ? cachedLocalModel
-                ? 'agentResumeModel'
-                : 'agentLoadModel'
-              : 'agentSettings',
-        );
-    prepareAction.hidden = ready || !enabled || waiting || runtimeCleanupFailed || !!chat.getInput().trim();
+    prepareAction.textContent =
+      ready && !writingBlocked
+        ? ''
+        : t(
+            writingBlocked
+              ? 'agentSettings'
+              : selectedSource === 'service' && canReconnect
+                ? 'agentReconnectService'
+                : selectedSource === 'local' && (hasConfiguration || cachedLocalModel)
+                  ? cachedLocalModel
+                    ? 'agentResumeModel'
+                    : 'agentLoadModel'
+                  : 'agentSettings',
+          );
+    prepareAction.hidden =
+      (ready && !writingBlocked) ||
+      !enabled ||
+      waiting ||
+      runtimeCleanupFailed ||
+      (!!chat.getInput().trim() && !writingBlocked);
     chat.refreshSendAvailability();
     loadingStatus.textContent = modelLoading
       ? [
@@ -2270,6 +2312,12 @@ export function createAgentPanel(
         await ctl.send(trimmed, { echoUser: false });
       }
     } catch (caughtError) {
+      if (
+        caughtError instanceof Error &&
+        ['agentWritingNeedsLocalService', 'agentWritingOfflineNeedsDevice'].includes(caughtError.message) &&
+        !chat.getInput().trim()
+      )
+        chat.setInput(text);
       const error =
         caughtError instanceof Error && caughtError.message === 'agentProposalUnchanged' && !previousPreview?.pending()
           ? new Error(t('agentPlanExpired'))

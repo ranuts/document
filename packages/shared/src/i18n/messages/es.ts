@@ -11,6 +11,7 @@ import type { I18nMessages } from '../types';
  */
 export const es: Partial<I18nMessages> = {
   editorBackHome: 'Volver al inicio',
+  agentSendContextChanged: 'El documento o la selección ha cambiado. Comprueba la selección actual y vuelve a enviar.',
   agentSpeechNoResult: 'No se reconoció ninguna voz. Comprueba el micrófono e inténtalo de nuevo.',
   agentClearImpact: 'Elimina {count} caracteres del cuerpo del documento.',
   agentInsertContent: 'Insertar contenido',

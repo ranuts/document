@@ -76,7 +76,7 @@ test.describe('standalone site (real editor)', () => {
     const downloadPromise = page.waitForEvent('download', { timeout: 60_000 });
     await page.keyboard.press('Control+s');
     const download = await downloadPromise;
-    expect(download.suggestedFilename()).toBe('New_Document.xlsx');
+    expect(download.suggestedFilename()).toBe('Untitled.xlsx');
     const bytes = new Uint8Array(readFileSync(await download.path()));
     expect(bytes[0]).toBe(0x50);
     expect((await zipEntryText(bytes, 'xl/sharedStrings.xml')) || '').toContain('hello');
