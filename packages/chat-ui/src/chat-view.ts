@@ -50,6 +50,8 @@ export class ChatView {
   private readonly scrollBtn: HTMLButtonElement;
   private labels: ChatViewLabels;
   private running = false;
+  private preparingSend = false;
+  private submissionRevision = 0;
   private activity: 'responding' | 'reading' | 'planning' | 'reviewing' = 'responding';
   private composing = false;
   private lastUserText = '';
@@ -417,6 +419,7 @@ export class ChatView {
 
   /** Remove all messages and restore the empty state. */
   clear(): void {
+    this.submissionRevision++;
     if (this.layoutFrame !== undefined) cancelAnimationFrame(this.layoutFrame);
     this.layoutFrame = undefined;
     this.pendingText = '';
@@ -482,17 +485,39 @@ export class ChatView {
     if (this.emptyEl.parentElement) this.emptyTitle.textContent = labels.empty ?? '';
   }
 
-  private submit(): void {
+  private async submit(): Promise<void> {
     const text = this.input.value;
-    if (!text.trim() || this.running) return;
+    if (!text.trim() || this.running || this.preparingSend || this.disposed) return;
     if (this.options.canSend?.(text) === false) {
       const preparation = this.options.getSendPreparation?.();
       if (preparation && !preparation.disabled) preparation.run();
       this.updateSendState();
       return;
     }
+    const revision = this.submissionRevision;
+    if (this.options.beforeSend) {
+      try {
+        const preparation = this.options.beforeSend();
+        if (typeof preparation === 'boolean') {
+          if (!preparation) return;
+        } else {
+          this.preparingSend = true;
+          this.updateSendState();
+          if (!(await preparation)) return;
+        }
+      } catch {
+        // A failed input preparation must leave the editable draft intact.
+        return;
+      } finally {
+        this.preparingSend = false;
+        this.updateSendState();
+      }
+    }
+    const readyText = this.input.value;
+    if (this.disposed || revision !== this.submissionRevision || this.running || !readyText.trim()) return;
+    if (this.options.canSend?.(readyText) === false) return;
     this.setInput('');
-    this.options.onSend(text);
+    this.options.onSend(readyText);
   }
 
   /** Reflect run state + empty input on the send button (icon, disabled, title). */
@@ -510,7 +535,8 @@ export class ChatView {
       : (preparation?.label ?? this.labels.send ?? 'Send');
     this.sendBtn.setAttribute('aria-label', this.sendBtn.title);
     // Disable unavailable submissions while idle; a running turn always keeps Stop available.
-    this.sendBtn.disabled = !this.running && (!hasDraft || (unavailable && (!preparation || !!preparation.disabled)));
+    this.sendBtn.disabled =
+      !this.running && (this.preparingSend || !hasDraft || (unavailable && (!preparation || !!preparation.disabled)));
   }
 
   private updateRestoreState(): void {

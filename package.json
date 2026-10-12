@@ -2,7 +2,7 @@
   "name": "document",
   "version": "1.0.0",
   "packageManager": "pnpm@11.4.0",
-  "description": "A local web-based document editor based on OnlyOffice, allowing you to edit documents directly in your browser without server-side processing, ensuring your privacy and security.",
+  "description": "A local-first browser editor for Word, Excel, PowerPoint and PDF, with an experimental AI assistant and optional user-configured AI services.",
   "type": "module",
   "scripts": {
     "dev": "vite --host --force",
@@ -45,7 +45,11 @@
     "local-editor",
     "browser-editor",
     "document-converter",
-    "office-suite"
+    "office-suite",
+    "ai-assistant",
+    "webllm",
+    "webgpu",
+    "local-llm"
   ],
   "author": "ranuts",
   "license": "AGPL-3.0",

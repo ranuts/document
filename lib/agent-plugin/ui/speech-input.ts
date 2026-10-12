@@ -14,7 +14,11 @@ interface Recognition {
   abort(): void;
 }
 type Constructor = new () => Recognition;
-export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
+type SpeechComposer = Pick<
+  ChatView,
+  'el' | 'actionsEl' | 'getInput' | 'setInput' | 'focus' | 'refreshSendAvailability'
+>;
+export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
   const host = window as unknown as { SpeechRecognition?: Constructor; webkitSpeechRecognition?: Constructor };
   const Constructor = host.SpeechRecognition ?? host.webkitSpeechRecognition;
   const root = document.createElement('div');
@@ -51,12 +55,18 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
   status.setAttribute('aria-live', 'polite');
   const feedback = document.createElement('div');
   feedback.className = 'agent-speech-feedback';
+  feedback.id = 'agent-speech-feedback';
+  mic.setAttribute('aria-describedby', feedback.id);
   const cancel = document.createElement('button');
   cancel.type = 'button';
   cancel.className = 'agent-speech-cancel';
-  feedback.append(status, hint, cancel);
-  root.append(mic, language, feedback);
+  feedback.append(status, cancel, hint);
+  root.append(mic, language);
   chat.actionsEl.append(root);
+  // Keep feedback in normal composer flow; it must never cover the draft or editor.
+  const composer = chat.el.querySelector('.cui-composer');
+  if (composer) composer.insertBefore(feedback, composer.querySelector('.cui-composer-bar'));
+  else root.append(feedback);
   let disclosed = false;
   let stopping = false;
   let recognition: Recognition | undefined;
@@ -66,6 +76,13 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
   let transcript = '';
   let revision = 0;
   let deadline: ReturnType<typeof setTimeout> | undefined;
+  let finishPromise: Promise<boolean> | undefined;
+  let finishResolve: ((ready: boolean) => void) | undefined;
+  const settleFinish = (ready: boolean) => {
+    finishResolve?.(ready);
+    finishResolve = undefined;
+    finishPromise = undefined;
+  };
   const render = () => {
     mic.setAttribute('aria-label', t(busy ? 'agentSpeechStop' : 'agentSpeechInput'));
     mic.title = mic.getAttribute('aria-label') ?? '';
@@ -79,7 +96,7 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
     hint.textContent = t('agentSpeechPrivacy');
     cancel.textContent = t('agentSpeechCancel');
   };
-  const close = (discard = false, preserveDraft = false) => {
+  const close = (discard = false, preserveDraft = false, ready = false) => {
     clearTimeout(deadline);
     ++revision;
     try {
@@ -93,7 +110,29 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
     stopping = false;
     hint.hidden = true;
     status.textContent = '';
+    settleFinish(ready);
     render();
+  };
+  const finish = (): boolean | Promise<boolean> => {
+    if (!busy) return true;
+    if (finishPromise) return finishPromise;
+    const pending = new Promise<boolean>((resolve) => {
+      finishResolve = resolve;
+    });
+    finishPromise = pending;
+    stopping = true;
+    status.textContent = t('agentSpeechFinishing');
+    render();
+    clearTimeout(deadline);
+    // Some services never emit end after stop. Keep the visible transcript and
+    // release the microphone rather than stranding an explicit send indefinitely.
+    deadline = setTimeout(() => close(false, false, true), 2000);
+    try {
+      recognition?.stop();
+    } catch {
+      close(false, false, true);
+    }
+    return pending;
   };
   const begin = () => {
     if (!Constructor || busy || !allowed()) return;
@@ -130,11 +169,13 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
     };
     instance.onerror = (event) => {
       if (token !== revision) return;
+      close(false, false, true);
       status.textContent = t(
         event.error === 'not-allowed' || event.error === 'service-not-allowed'
           ? 'agentSpeechDenied'
           : 'agentSpeechFailed',
       );
+      render();
     };
     instance.onend = () => {
       if (token !== revision) return;
@@ -152,6 +193,7 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
       stopping = false;
       busy = false;
       recognition = undefined;
+      settleFinish(true);
       render();
       chat.focus();
     };
@@ -165,22 +207,14 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
         }
       }, 60000);
     } catch {
-      busy = false;
-      recognition = undefined;
+      close();
       status.textContent = t('agentSpeechFailed');
       render();
     }
   };
   mic.addEventListener('click', () => {
     if (busy) {
-      stopping = true;
-      status.textContent = t('agentSpeechFinishing');
-      render();
-      try {
-        recognition?.stop();
-      } catch {
-        close();
-      }
+      void finish();
       return;
     }
     if (!Constructor) {
@@ -204,9 +238,22 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
       mic.focus();
     }
   });
+  feedback.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !event.defaultPrevented && !event.isComposing && busy) {
+      close(true);
+      mic.focus();
+    }
+  });
   const input = chat.el.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.addEventListener('beforeinput', () => {
     if (busy) close(false, true);
+  });
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !event.defaultPrevented && !event.isComposing && busy) {
+      event.preventDefault();
+      close(true);
+      mic.focus();
+    }
   });
   const changed = () => {
     close();
@@ -216,5 +263,5 @@ export function mountSpeechInput(chat: ChatView, allowed: () => boolean) {
   window.addEventListener('languagechange', changed);
   window.addEventListener('pagehide', () => close());
   render();
-  return { close, isBusy: () => busy };
+  return { close, finish, isBusy: () => busy };
 }

@@ -1,53 +1,64 @@
 # AI assistant demos
 
-**Experimental Beta.** The AI assistant is still being developed. It can misunderstand requests or produce incomplete or incorrect answers and edits. Review suggestions and check important results before relying on them. Capabilities and response times depend on your model and device.
+**Experimental Beta.** AI answers and edits can be incomplete or incorrect. Check important results and review changes before relying on them.
 
-These silent screen recordings use the English interface, English captions and fictional project information. They were recorded with the local Qwen3 4B model in a browser. Model preparation is left out; the prompts, replies, reviews and editor changes are recorded from the running application.
+Four short, silent demos show the English interface with fictional project information and the local Qwen3 4B model. All prompts, replies and changes come from the running app. Model preparation is omitted and waiting intervals are cut for a concise tour; the clips are not a speed benchmark. The videos also display **Experimental Beta · Waits shortened** throughout.
 
-To try a demo yourself, open a document, open **AI Assistant**, then load a local model or connect your AI service. Type the request shown below. Some changes require review before applying; you can cancel them or use the editor's **Undo** after applying.
+To try these yourself, open a file, open **AI Assistant**, turn it on, then load an on-device model or connect your AI service. Type a request, inspect any proposed changes and apply only what you want. You can cancel a proposal or undo an applied change.
 
-## Word: draft and insert
+| Demo                                                                                          | Length     | Shows                                 |
+| --------------------------------------------------------------------------------------------- | ---------- | ------------------------------------- |
+| [Word](https://github.com/user-attachments/assets/97bf02e6-293c-44e3-b042-4334e03a7db5)       | 16 seconds | Draft, insert, undo and redo          |
+| [Excel](https://github.com/user-attachments/assets/fc68c9d5-4cb5-4a80-a29d-46665af1a409)      | 14 seconds | Fill a column and calculate its total |
+| [PowerPoint](https://github.com/user-attachments/assets/c8dda2cc-80f1-4c12-acc2-80469bd41007) | 16 seconds | Review and create a slide             |
+| [PDF](https://github.com/user-attachments/assets/25355bc0-57cb-4a3d-a465-87dff2b68b4e)        | 17 seconds | Read a page and review a note         |
 
-https://github.com/user-attachments/assets/89b21740-0c96-4b21-885f-27efa6e7fa53
+## Word: draft, insert and undo
 
-[Watch video](https://github.com/user-attachments/assets/89b21740-0c96-4b21-885f-27efa6e7fa53) · [Download MP4](word-ai.mp4) · [English captions](word-ai.vtt)
+https://github.com/user-attachments/assets/97bf02e6-293c-44e3-b042-4334e03a7db5
 
-Request: “Write a short project update about our spring launch. Include a heading and three concise bullet points. Mention the design review is complete, user testing is next, and launch is May 15.”
+[Download MP4](word-ai.mp4) · [English captions](word-ai.vtt)
 
-The assistant drafts a heading and three bullet points. **Write into document** inserts the formatted content into the Word document. The demo then uses **Undo** and **Redo** in the editor to show that the change is reversible.
+Request: “Draft a launch update with a heading and three short bullets: design review done; user testing next; launch May 15.”
+
+The assistant produces a short update. **Write to document** inserts the heading and bullet points in the actual Word file. **Undo** removes the change; **Redo** restores it.
 
 ## Excel: fill and calculate
 
-https://github.com/user-attachments/assets/18dbe96f-bb07-46e9-88f7-5a7a6370b630
+https://github.com/user-attachments/assets/fc68c9d5-4cb5-4a80-a29d-46665af1a409
 
-[Watch video](https://github.com/user-attachments/assets/18dbe96f-bb07-46e9-88f7-5a7a6370b630) · [Download MP4](excel-ai.mp4) · [English captions](excel-ai.vtt)
+[Download MP4](excel-ai.mp4) · [English captions](excel-ai.vtt)
 
 Requests:
 
-1. “Fill cells A1:A10 with the numbers 1 through 10, one number per row.”
+1. “Fill A1:A10 with the numbers 1 through 10.”
 2. “Sum A1:A10 into B1.”
 
-Review the proposed cell changes and apply them. The assistant fills A1:A10 with the requested numbers, then puts their sum, **55**, in B1. The results appear in the actual worksheet.
+Review and apply the proposed cell changes. A1:A10 contains the numbers **1–10**; B1 shows their total, **55**. Both results were read back from the worksheet.
 
 ## PowerPoint: create a slide
 
-https://github.com/user-attachments/assets/3450551b-b557-4a0b-8a2a-5b05d2c458fe
+https://github.com/user-attachments/assets/c8dda2cc-80f1-4c12-acc2-80469bd41007
 
-[Watch video](https://github.com/user-attachments/assets/3450551b-b557-4a0b-8a2a-5b05d2c458fe) · [Download MP4](pptx-ai.mp4) · [English captions](pptx-ai.vtt)
+[Download MP4](pptx-ai.mp4) · [English captions](pptx-ai.vtt)
 
 Request: “Create a slide titled ‘Spring launch’ with these three points: Design review complete; User testing next; Launch on May 15.”
 
-Review the proposed slide content and apply it. The new slide appears in the presentation. Answers about slides can be inaccurate with a small local model; check them against the presentation.
+Inspect the proposed title and content, then apply them. The new slide appears in the presentation. This is a content creation demo, not automatic slide design.
 
 ## PDF: read and review a note
 
-https://github.com/user-attachments/assets/e786a45c-f73a-48c0-8334-19544fa32c7e
+https://github.com/user-attachments/assets/25355bc0-57cb-4a3d-a465-87dff2b68b4e
 
-[Watch video](https://github.com/user-attachments/assets/e786a45c-f73a-48c0-8334-19544fa32c7e) · [Download MP4](pdf-ai.mp4) · [English captions](pdf-ai.vtt)
+[Download MP4](pdf-ai.mp4) · [English captions](pdf-ai.vtt)
 
 Requests:
 
 1. “Read the text on PDF page 1.”
 2. “Add a note to page 1: Check the launch date.”
 
-The assistant reads and displays the selectable text on page 1, then prepares a page note for review. The demo chooses **Cancel**, leaving the PDF unchanged. **Current limitation:** A page note can be saved even when the assistant’s follow-up reply fails. Check the note on the page before retrying to avoid adding it twice. A page note does **not** rewrite PDF body text. These features do not recognize text in scanned page images, and an answer about the current page is not a review of the entire PDF.
+The assistant reads the selectable text on page 1 and prepares a page note for review. **Cancel** dismisses the proposal, leaving the PDF unchanged.
+
+## What to keep in mind
+
+The local model can misunderstand requests or return unchanged text. A PDF page note may be saved even if the assistant’s follow-up reply fails; check the page before retrying to avoid duplicates. PDF assistance uses selectable text on the current page; it does not recognize scanned page images or rewrite PDF body text. Response times vary by model, document and device.

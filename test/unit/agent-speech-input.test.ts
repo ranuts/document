@@ -168,3 +168,78 @@ it('cleans up a recognition service that never finishes', () => {
     vi.useRealTimers();
   }
 });
+
+it('finishes dictation before an explicit send and includes the final result exactly once', async () => {
+  const onSend = vi.fn();
+  let speech: ReturnType<typeof mountSpeechInput>;
+  const chat = new ComposerView({ onSend, beforeSend: () => speech.finish() });
+  document.body.append(chat.el);
+  speech = mountSpeechInput(chat, () => true);
+  chat.el.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+  const recognition = FakeRecognition.current;
+  recognition.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'interim' } }] });
+  const send = chat.el.querySelector<HTMLButtonElement>('.cui-send')!;
+  expect(send.disabled).toBe(false);
+  send.click();
+  expect(recognition.stop).toHaveBeenCalledOnce();
+  expect(onSend).not.toHaveBeenCalled();
+  expect(send.disabled).toBe(true);
+  recognition.onresult?.({ results: [{ isFinal: true, 0: { transcript: 'Final words' } }] });
+  recognition.onend?.();
+  await vi.waitFor(() => expect(onSend).toHaveBeenCalledExactlyOnceWith('Final words'));
+  recognition.onresult?.({ results: [{ isFinal: true, 0: { transcript: 'Late' } }] });
+  expect(chat.getInput()).toBe('');
+  chat.dispose();
+});
+it('cancelling dictation cancels an in-flight explicit send', async () => {
+  const { speech, recognition, el, draft } = setup();
+  recognition.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'discard me' } }] });
+  const finish = speech.finish();
+  el.querySelector<HTMLButtonElement>('.agent-speech-cancel')!.click();
+  await expect(finish).resolves.toBe(false);
+  expect(draft()).toBe('Original');
+});
+it('bounds stop even when the recognition service never emits end', async () => {
+  vi.useFakeTimers();
+  try {
+    const { speech, recognition, draft } = setup();
+    recognition.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'Keep visible text' } }] });
+    const finish = speech.finish();
+    await vi.advanceTimersByTimeAsync(2000);
+    await expect(finish).resolves.toBe(true);
+    expect(speech.isBusy()).toBe(false);
+    expect(draft()).toBe('Original Keep visible text');
+    expect(recognition.abort).toHaveBeenCalledOnce();
+  } finally {
+    vi.useRealTimers();
+  }
+});
+it('releases recognition immediately on error without relying on end', () => {
+  const { speech, recognition, el } = setup();
+  recognition.onerror?.({ error: 'network' });
+  expect(speech.isBusy()).toBe(false);
+  expect(el.querySelector('[role="status"]')!.textContent).toBe('agentSpeechFailed');
+});
+
+it('editing while an explicit send is finishing cancels that send and preserves the edited draft', async () => {
+  const onSend = vi.fn();
+  let speech: ReturnType<typeof mountSpeechInput>;
+  const chat = new ComposerView({ onSend, beforeSend: () => speech.finish() });
+  document.body.append(chat.el);
+  speech = mountSpeechInput(chat, () => true);
+  chat.setInput('Draft');
+  chat.el.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+  const recognition = FakeRecognition.current;
+  recognition.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'spoken' } }] });
+  const input = chat.el.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  expect(recognition.stop).toHaveBeenCalledOnce();
+  input.dispatchEvent(new InputEvent('beforeinput', { inputType: 'insertText', data: 'x', bubbles: true }));
+  chat.setInput('User correction');
+  recognition.onresult?.({ results: [{ isFinal: true, 0: { transcript: 'Late transcript' } }] });
+  recognition.onend?.();
+  await Promise.resolve();
+  expect(onSend).not.toHaveBeenCalled();
+  expect(chat.getInput()).toBe('User correction');
+  chat.dispose();
+});

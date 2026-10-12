@@ -138,3 +138,11 @@ describe('local open retains its reload source', () => {
     expect(await (await readActiveSource(currentId))?.text()).toBe('newer');
   });
 });
+
+it.each(['.docx', '.xlsx', '.pptx', '.pdf', '.csv'])(
+  'names a new %s document Untitled without losing its extension',
+  async (ext) => {
+    await onCreateNew(ext);
+    expect(convert).toHaveBeenCalledWith(expect.objectContaining({ fileName: `Untitled${ext}`, isNew: true }));
+  },
+);

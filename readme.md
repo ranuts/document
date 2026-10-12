@@ -13,6 +13,9 @@
   <a href="https://edit.chaxus.com/">
     <img src="https://img.shields.io/badge/Live-edit.chaxus.com-brightgreen" alt="Live site">
   </a>
+  <a href="#ai-document-assistant-experimental-beta">
+    <img src="https://img.shields.io/badge/AI_Assistant-Experimental_Beta-orange" alt="AI Assistant: Experimental Beta">
+  </a>
 </p>
 
 <p align="center">
@@ -26,9 +29,9 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-Open and edit Word, Excel and PowerPoint files in a browser tab. There is no
-server: the OnlyOffice engine and its WASM converter run on the visitor's own
-device, so documents are never uploaded, and no account is involved.
+Edit Word, Excel and PowerPoint files, and annotate PDFs—all in your browser.
+No Office installation or account required. Everyday editing stays local; turn on
+an experimental AI assistant to draft content, work with data and create slides.
 
 **Live site: [edit.chaxus.com](https://edit.chaxus.com/)**
 
@@ -36,15 +39,38 @@ device, so documents are never uploaded, and no account is involved.
 
 ## ✨ Features
 
-- 🔒 **Nothing is uploaded** — every conversion, edit and export happens in the tab
-- 📝 **Real editing, not preview** — DOCX, XLSX, PPTX and CSV, plus ODF, RTF, TXT and the legacy binary formats; PDFs open and can be annotated
-- 💾 **Saves into your own file** — pick it once, every save after writes back to it (Chromium; elsewhere it downloads as before)
-- 🕓 **Nothing is lost if you close the tab** — edits autosave into your own browser, kept for 7 days, deletable any time ([details](#-local-editing-and-data-handling))
+- 🔒 **Local editing** — conversion, editing and export happen in the browser; you choose where optional AI requests are processed
+- 📝 **Editable office files** — DOCX, XLSX, PPTX and CSV, plus ODF, RTF, TXT and the legacy binary formats; PDFs open and can be annotated
+- 💾 **Save where you want** — choose a save location and keep saving to it where supported; other browsers download your exports
+- 🕓 **Resume your work** — local recovery copies help you reopen recent edits; kept for 7 days and deletable any time ([details](#-local-editing-and-data-handling))
 - 📴 **Works offline** — installable as a PWA; cached editor resources can be reused offline; uncached assets and remote files still require a network
 - 🌍 **Multi-language** — 7 languages end to end (English, 中文, 日本語, Deutsch, Español, 한국어, Português): the pages, the app UI and the editor all follow the one you pick; the editor itself ships 45
 - 🧩 **Embeddable** — full postMessage API for iframe integration
+- ✨ **AI document assistant (Experimental Beta)** — draft and polish text, fill spreadsheets, create slides and ask about PDFs; use an on-device model or your own AI service
 - 🤖 **Agent-ready** — exposes WebMCP tools so a browser AI agent can open, convert and read documents
 - 🚀 **Deploy anywhere** — a static build; a directory of files behind any web server
+
+---
+
+## AI document assistant (Experimental Beta)
+
+**Say what you need. See the result in your document.** Draft an update, fill a column, create a slide or ask about the current PDF page. The assistant works alongside the editor: inspect changes, cancel suggestions and use Undo after applying.
+
+**Still experimental.** Answers and edits can be wrong; check important results. The assistant is off by default. Choose an on-device model or connect your own AI service. External services receive the content needed for your request.
+
+| Word                                                                                                                                                         | Excel                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [![Word: draft, insert and undo](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/97bf02e6-293c-44e3-b042-4334e03a7db5)          | [![Excel: fill cells and calculate](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/fc68c9d5-4cb5-4a80-a29d-46665af1a409)  |
+| **Draft, insert and undo**                                                                                                                                   | **Fill cells and calculate**                                                                                                                             |
+| PowerPoint                                                                                                                                                   | PDF                                                                                                                                                      |
+| [![PowerPoint: review and create a slide](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/c8dda2cc-80f1-4c12-acc2-80469bd41007) | [![PDF: read a page and review a note](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/25355bc0-57cb-4a3d-a465-87dff2b68b4e) |
+| **Review and create a slide**                                                                                                                                | **Read a page and review a note**                                                                                                                        |
+
+Click a preview to watch. English demos use the local Qwen3 4B model and fictional information. Model preparation is omitted and waits are shortened for the demo; actual response times depend on your model and device.
+
+[Videos, English captions and text descriptions](docs/media/ai-demos/README.md) · [User guide](https://edit.chaxus.com/ai-document-assistant)
+
+PDF assistance works with selectable text on the current page and page notes. It does not recognize text in scanned images or rewrite PDF body text.
 
 ---
 
@@ -126,7 +152,7 @@ delete on every row, a delete-all, and a switch to turn autosave off entirely.
 Deleting there takes effect immediately. On a shared machine, that is the page
 to visit.
 
-Off by default · This browser only. Selected text goes to the destination you choose. In embed mode, exported files are returned to the parent application, which controls subsequent uploads.
+The optional AI assistant is off by default. With an on-device model, document content stays on your device. When you connect an AI service, the content needed for your request is sent to that service. Browser dictation may use an online speech service. In embed mode, exported files are returned to the parent application, which controls subsequent uploads.
 
 ---
 
@@ -243,42 +269,6 @@ The end-to-end suite drives the real editor and the real converter rather than
 mocks, including document round trips, the embed protocol and the recovery
 flow. `docs/explorations/` records why each non-obvious piece is the way it is —
 worth a look before changing the editor integration.
-
----
-
-## AI document assistant (Experimental Beta)
-
-**Experimental Beta:** The AI assistant is still being developed. Answers and edits can be incomplete or incorrect; review suggestions and verify important changes. Speed and capabilities vary by model and device.
-
-**Watch the AI assistant in action** · English screen recordings. Play the videos below; caption files and text descriptions are linked in the demo details.
-
-**Word · Draft, insert and undo**
-
-https://github.com/user-attachments/assets/89b21740-0c96-4b21-885f-27efa6e7fa53
-
-**Excel · Fill cells and calculate**
-
-https://github.com/user-attachments/assets/18dbe96f-bb07-46e9-88f7-5a7a6370b630
-
-**PowerPoint · Review and create a slide**
-
-https://github.com/user-attachments/assets/3450551b-b557-4a0b-8a2a-5b05d2c458fe
-
-**PDF · Read a page and review a note**
-
-https://github.com/user-attachments/assets/e786a45c-f73a-48c0-8334-19544fa32c7e
-
-[Demo details and text descriptions](docs/media/ai-demos/README.md). Recorded with the local Qwen3 4B model and fictional documents; model preparation is omitted.
-
-Say what you want to do: ask about content, work on text or organize data. Review changes before applying them. Off by default · This browser only.
-
-Choose a local model or connect your AI service. Model files stay in this browser and cached files can be reused when preparing the model for another document.
-
-Word supports drafting and selected-text work; Excel and CSV support data operations; PowerPoint supports slide text and pages. PDF supports questions, summaries and translations of selectable text on the current page, plus reviewed page notes. Scanned image text is not recognized, and page notes do not rewrite PDF body text.
-
-Suggestions show their location and content. Edit them or ask for adjustments before applying. Cancel unwanted changes, or use editor Undo after applying. Clearing or overwriting content requires confirmation; read-only files can only be viewed.
-
-[How to use it](https://edit.chaxus.com/ai-document-assistant)
 
 ---
 

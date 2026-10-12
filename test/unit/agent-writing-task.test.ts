@@ -451,3 +451,43 @@ it.each([
     generateWriting(provider as never, { task: 'rewrite', text: source }, new AbortController().signal),
   ).resolves.toBe(output);
 });
+
+it('repairs one unchanged rewrite with explicit feedback and validates the second result', async () => {
+  const { generateWriting } = await import('../../packages/agent-core/src/llm/writing-task');
+  let calls = 0;
+  const provider = {
+    generateJSON: async (messages: Array<{ role: string; content: string }>) => {
+      calls++;
+      if (calls === 2) {
+        expect(messages.at(-1)?.content).toContain('unchanged');
+        expect(messages.at(-2)?.role).toBe('assistant');
+      }
+      return {
+        text: JSON.stringify({ text: calls === 1 ? 'We need 12 chairs.' : 'Please provide 12 chairs.' }),
+        toolCalls: [],
+        stopReason: 'stop',
+      };
+    },
+  };
+  await expect(
+    generateWriting(provider as never, { task: 'rewrite', text: 'We need 12 chairs.' }, new AbortController().signal),
+  ).resolves.toBe('Please provide 12 chairs.');
+  expect(calls).toBe(2);
+});
+it('does not endlessly retry an unchanged rewrite or accept changed facts after repair', async () => {
+  const { generateWriting } = await import('../../packages/agent-core/src/llm/writing-task');
+  for (const second of ['We need 12 chairs.', 'Please provide 15 chairs.']) {
+    let calls = 0;
+    const provider = {
+      generateJSON: async () => ({
+        text: JSON.stringify({ text: ++calls === 1 ? 'We need 12 chairs.' : second }),
+        toolCalls: [],
+        stopReason: 'stop',
+      }),
+    };
+    await expect(
+      generateWriting(provider as never, { task: 'rewrite', text: 'We need 12 chairs.' }, new AbortController().signal),
+    ).rejects.toThrow();
+    expect(calls).toBe(2);
+  }
+});

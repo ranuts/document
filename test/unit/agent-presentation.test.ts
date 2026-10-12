@@ -246,3 +246,18 @@ it.each(SHELL_LOCALES)(
     }
   },
 );
+
+it.each(SHELL_LOCALES)('preserves writing setup guidance through formatting and history in %s', (language) => {
+  try {
+    setLanguage(language);
+    for (const key of ['agentWritingNeedsLocalService', 'agentWritingOfflineNeedsDevice'] as const) {
+      const guidance = t(key);
+      expect(displayError(displayError(key))).toBe(guidance);
+      setLanguage(language === LanguageCode.EN ? LanguageCode.ZH : LanguageCode.EN);
+      expect(displayError(guidance)).toBe(t(key));
+      setLanguage(language);
+    }
+  } finally {
+    setLanguage(LanguageCode.EN);
+  }
+});

@@ -2643,3 +2643,93 @@ it.each(['complete', 'cancel'] as const)(
     expect(state.apply).not.toHaveBeenCalled();
   },
 );
+
+it('preserves a naturally routed rewrite request and offers settings when local writing is not enabled', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.source = 'Original selected text';
+  state.semanticResponse = '{"task":"rewrite","language":"en"}';
+  const panel = createPreparedPanel();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Improve this selection';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingNeedsLocalService'));
+  expect(input.value).toBe('Improve this selection');
+  expect(state.writing).not.toHaveBeenCalled();
+  const setup = panel.querySelector<HTMLButtonElement>('.agent-prepare-action')!;
+  expect(setup.hidden).toBe(false);
+  setup.click();
+  expect(panel.getAttribute('data-view')).toBe('settings');
+});
+
+it('keeps the draft unsent if the editor selection changes while dictation is finishing', async () => {
+  const recognition: { current?: { onresult?: (event: unknown) => void; onend?: () => void } } = {};
+  vi.stubGlobal(
+    'SpeechRecognition',
+    class {
+      constructor() {
+        recognition.current = this;
+      }
+      onresult?: (event: unknown) => void;
+      onend?: () => void;
+      start() {}
+      stop() {}
+      abort() {}
+    },
+  );
+  try {
+    state.ready = true;
+    state.editorReady = true;
+    state.source = 'Original selected text';
+    const panel = createPreparedPanel();
+    panel.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+    recognition.current!.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'Improve the selection' } }] });
+    panel.querySelector<HTMLButtonElement>('.cui-send')!.click();
+    state.targetCurrent = false;
+    recognition.current!.onend?.();
+    await vi.waitFor(() => expect(panel.textContent).toContain(t('agentSendContextChanged')));
+    expect(state.routing).not.toHaveBeenCalled();
+    expect(panel.querySelector<HTMLTextAreaElement>('.cui-input')!.value).toBe('Improve the selection');
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
+
+it('keeps dictation unsent when no editor target can be bound at the Send gesture', async () => {
+  const recognition: { current?: { onresult?: (event: unknown) => void; onend?: () => void } } = {};
+  vi.stubGlobal(
+    'SpeechRecognition',
+    class {
+      constructor() {
+        recognition.current = this;
+      }
+      onresult?: (event: unknown) => void;
+      onend?: () => void;
+      start() {}
+      stop() {}
+      abort() {}
+    },
+  );
+  const targetModule = await import('../../lib/agent-plugin/document-tool-action');
+  const capture = vi.spyOn(targetModule, 'captureDocumentToolTarget');
+  try {
+    state.ready = true;
+    state.editorReady = true;
+    const panel = createPreparedPanel();
+    capture.mockImplementation(() => {
+      throw new Error('Editor is still loading');
+    });
+    panel.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+    recognition.current!.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'Improve the selection' } }] });
+    panel.querySelector<HTMLButtonElement>('.cui-send')!.click();
+    capture.mockRestore();
+    recognition.current!.onend?.();
+    await vi.waitFor(() => expect(panel.textContent).toContain(t('agentEditorLoading')));
+    expect(state.routing).not.toHaveBeenCalled();
+    expect(panel.querySelector<HTMLTextAreaElement>('.cui-input')!.value).toBe('Improve the selection');
+  } finally {
+    capture.mockRestore();
+    vi.unstubAllGlobals();
+  }
+});

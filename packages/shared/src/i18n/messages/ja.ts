@@ -11,6 +11,7 @@ import type { I18nMessages } from '../types';
  */
 export const ja: Partial<I18nMessages> = {
   editorBackHome: 'ホームに戻る',
+  agentSendContextChanged: '文書または選択範囲が変わりました。現在の選択範囲を確認して、もう一度送信してください。',
   agentSpeechNoResult: '音声を認識できませんでした。マイクを確認して再試行してください。',
   agentClearImpact: '本文の {count} 文字を削除します。',
   agentInsertContent: '内容を挿入',
