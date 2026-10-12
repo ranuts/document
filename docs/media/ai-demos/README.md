@@ -1,6 +1,6 @@
 # AI assistant demos
 
-**Experimental feature.** The AI assistant is still being developed. It can misunderstand requests or produce incomplete or incorrect answers and edits. Review suggestions and check important results before relying on them. Capabilities and response times depend on your model and device.
+**Experimental Beta.** The AI assistant is still being developed. It can misunderstand requests or produce incomplete or incorrect answers and edits. Review suggestions and check important results before relying on them. Capabilities and response times depend on your model and device.
 
 These silent screen recordings use the English interface, English captions and fictional project information. They were recorded with the local Qwen3 4B model in a browser. Model preparation is left out; the prompts, replies, reviews and editor changes are recorded from the running application.
 
@@ -8,9 +8,9 @@ To try a demo yourself, open a document, open **AI Assistant**, then load a loca
 
 ## Word: draft and insert
 
-[![Watch the Word demo](word-ai.jpg)](word-ai.mp4)
+https://github.com/user-attachments/assets/89b21740-0c96-4b21-885f-27efa6e7fa53
 
-[Watch video](word-ai.mp4) · [English captions](word-ai.vtt)
+[Watch video](https://github.com/user-attachments/assets/89b21740-0c96-4b21-885f-27efa6e7fa53) · [Download MP4](word-ai.mp4) · [English captions](word-ai.vtt)
 
 Request: “Write a short project update about our spring launch. Include a heading and three concise bullet points. Mention the design review is complete, user testing is next, and launch is May 15.”
 
@@ -18,9 +18,9 @@ The assistant drafts a heading and three bullet points. **Write into document** 
 
 ## Excel: fill and calculate
 
-[![Watch the Excel demo](excel-ai.jpg)](excel-ai.mp4)
+https://github.com/user-attachments/assets/18dbe96f-bb07-46e9-88f7-5a7a6370b630
 
-[Watch video](excel-ai.mp4) · [English captions](excel-ai.vtt)
+[Watch video](https://github.com/user-attachments/assets/18dbe96f-bb07-46e9-88f7-5a7a6370b630) · [Download MP4](excel-ai.mp4) · [English captions](excel-ai.vtt)
 
 Requests:
 
@@ -31,9 +31,9 @@ Review the proposed cell changes and apply them. The assistant fills A1:A10 with
 
 ## PowerPoint: create a slide
 
-[![Watch the PowerPoint demo](pptx-ai.jpg)](pptx-ai.mp4)
+https://github.com/user-attachments/assets/3450551b-b557-4a0b-8a2a-5b05d2c458fe
 
-[Watch video](pptx-ai.mp4) · [English captions](pptx-ai.vtt)
+[Watch video](https://github.com/user-attachments/assets/3450551b-b557-4a0b-8a2a-5b05d2c458fe) · [Download MP4](pptx-ai.mp4) · [English captions](pptx-ai.vtt)
 
 Request: “Create a slide titled ‘Spring launch’ with these three points: Design review complete; User testing next; Launch on May 15.”
 
@@ -41,9 +41,9 @@ Review the proposed slide content and apply it. The new slide appears in the pre
 
 ## PDF: read and review a note
 
-[![Watch the PDF demo](pdf-ai.jpg)](pdf-ai.mp4)
+https://github.com/user-attachments/assets/e786a45c-f73a-48c0-8334-19544fa32c7e
 
-[Watch video](pdf-ai.mp4) · [English captions](pdf-ai.vtt)
+[Watch video](https://github.com/user-attachments/assets/e786a45c-f73a-48c0-8334-19544fa32c7e) · [Download MP4](pdf-ai.mp4) · [English captions](pdf-ai.vtt)
 
 Requests:
 

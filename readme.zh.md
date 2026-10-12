@@ -33,32 +33,6 @@ WASM 转换器都跑在访问者自己的设备上，文档不会被上传，也
 
 ---
 
-## AI 文档助手
-
-**实验性功能：** AI 助手仍在持续完善。回答和修改可能不完整或有误，请检查建议并核对重要修改；速度和能力会随模型及设备而变化。
-
-**AI 功能演示** · 以下视频均使用英文界面并附有英文字幕，点击预览图观看。
-
-| Word · 起草、写入与撤销                                                                        | Excel · 填写数据与计算                                                                      |
-| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| [![观看 Word AI 演示](docs/media/ai-demos/word-ai.jpg)](docs/media/ai-demos/word-ai.mp4)       | [![观看 Excel AI 演示](docs/media/ai-demos/excel-ai.jpg)](docs/media/ai-demos/excel-ai.mp4) |
-| PowerPoint · 确认并创建幻灯片                                                                  | PDF · 读取当前页与审阅批注                                                                  |
-| [![观看 PowerPoint AI 演示](docs/media/ai-demos/pptx-ai.jpg)](docs/media/ai-demos/pptx-ai.mp4) | [![观看 PDF AI 演示](docs/media/ai-demos/pdf-ai.jpg)](docs/media/ai-demos/pdf-ai.mp4)       |
-
-[演示详情与文字说明（英文）](docs/media/ai-demos/README.md)。视频使用本机 Qwen3 4B 模型与虚构资料录制，省略模型准备过程。
-
-直接说出你想做的事。查看内容、处理文字或整理数据，修改前可以先检查。
-
-开启助手，选择本机模型或连接自己的 AI 服务，再输入要求。模型文件会保留在当前浏览器；换文档后可能需要重新准备运行环境，不必重复下载已缓存的文件。
-
-Word：询问内容、起草文字或润色选中的段落。 Excel 和 CSV：读取表格、填写数据、生成数字序列、计算总和或排序。 PowerPoint：询问幻灯片内容、添加文字，或新增、复制和切换页面。 PDF：询问、总结或翻译当前页可选中的文字，也可以为指定页添加批注。
-
-修改建议会显示位置和内容。可以直接编辑建议，或继续告诉助手怎么调整；满意后再应用。不想修改时可以取消，完成后可用编辑器的撤销恢复。清空或覆盖已有内容需要确认。只读文件只能查看。
-
-助手读取的是当前页，不代表已经看过整份 PDF。扫描图片中的文字暂时不能识别；读取不到时会说明。批注添加为页面便笺，不会改写 PDF 正文，也不会自动覆盖页面上的文字。要调整正文排版，请使用原始 Word 文件。
-
-[使用说明](https://edit.chaxus.com/zh-CN/ai-document-assistant)
-
 ## ✨ 主要特性
 
 - 🔒 **不上传任何文件** — 转换、编辑、导出全部发生在这个标签页里
@@ -184,15 +158,6 @@ window.addEventListener('message', (e) => {
 
 ---
 
-## 🤖 浏览器 AI Agent（WebMCP）
-
-在支持该能力的浏览器上，页面会注册一组工具，浏览器内的 Agent 可以直接调用，而不必去"看"和"点"
-界面：`open_document_url`、`open_document_buffer`、`create_document`、`save_document`、
-`get_document_text`、`set_readonly`、`get_document_state`。文档同样不会离开设备——由浏览器
-自己抓取和转换。浏览器没有这套 API 时整体无操作，对普通用户零影响。
-
----
-
 ## 🚀 部署
 
 纯静态产物——没有运行时，没有数据库。
@@ -264,6 +229,53 @@ pnpm run test:e2e       # 端到端测试（Playwright，真实编辑器 + 真�
 
 端到端测试跑的是真实编辑器和真实转换器，不是 mock，覆盖文档往返、嵌入协议与恢复流程。
 `docs/explorations/` 记录了每一处不显然的设计为什么是现在这样——改编辑器集成之前值得先读。
+
+---
+
+## AI 文档助手 (Experimental Beta)
+
+**Experimental Beta（实验性功能）：** AI 助手仍在持续完善。回答和修改可能不完整或有误，请检查建议并核对重要修改；速度和能力会随模型及设备而变化。
+
+**AI 功能演示** · 以下视频使用英文界面，可直接播放；字幕文件和文字说明见演示详情。
+
+**Word · 起草、写入与撤销**
+
+https://github.com/user-attachments/assets/89b21740-0c96-4b21-885f-27efa6e7fa53
+
+**Excel · 填写数据与计算**
+
+https://github.com/user-attachments/assets/18dbe96f-bb07-46e9-88f7-5a7a6370b630
+
+**PowerPoint · 确认并创建幻灯片**
+
+https://github.com/user-attachments/assets/3450551b-b557-4a0b-8a2a-5b05d2c458fe
+
+**PDF · 读取当前页与审阅批注**
+
+https://github.com/user-attachments/assets/e786a45c-f73a-48c0-8334-19544fa32c7e
+
+[演示详情与文字说明（英文）](docs/media/ai-demos/README.md)。视频使用本机 Qwen3 4B 模型与虚构资料录制，省略模型准备过程。
+
+直接说出你想做的事。查看内容、处理文字或整理数据，修改前可以先检查。
+
+开启助手，选择本机模型或连接自己的 AI 服务，再输入要求。模型文件会保留在当前浏览器；换文档后可能需要重新准备运行环境，不必重复下载已缓存的文件。
+
+Word：询问内容、起草文字或润色选中的段落。 Excel 和 CSV：读取表格、填写数据、生成数字序列、计算总和或排序。 PowerPoint：询问幻灯片内容、添加文字，或新增、复制和切换页面。 PDF：询问、总结或翻译当前页可选中的文字，也可以为指定页添加批注。
+
+修改建议会显示位置和内容。可以直接编辑建议，或继续告诉助手怎么调整；满意后再应用。不想修改时可以取消，完成后可用编辑器的撤销恢复。清空或覆盖已有内容需要确认。只读文件只能查看。
+
+助手读取的是当前页，不代表已经看过整份 PDF。扫描图片中的文字暂时不能识别；读取不到时会说明。批注添加为页面便笺，不会改写 PDF 正文，也不会自动覆盖页面上的文字。要调整正文排版，请使用原始 Word 文件。
+
+[使用说明](https://edit.chaxus.com/zh-CN/ai-document-assistant)
+
+---
+
+## 🤖 浏览器 AI Agent（WebMCP）
+
+在支持该能力的浏览器上，页面会注册一组工具，浏览器内的 Agent 可以直接调用，而不必去"看"和"点"
+界面：`open_document_url`、`open_document_buffer`、`create_document`、`save_document`、
+`get_document_text`、`set_readonly`、`get_document_state`。文档同样不会离开设备——由浏览器
+自己抓取和转换。浏览器没有这套 API 时整体无操作，对普通用户零影响。
 
 ---
 
