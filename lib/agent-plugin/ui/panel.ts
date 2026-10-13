@@ -888,7 +888,7 @@ export function createAgentPanel(
   };
 
   // Restore a previous conversation into the view on load.
-  for (const turn of historyToTurns(historyStorage.load())) chat.append(turn);
+  chat.appendMany(historyToTurns(historyStorage.load()));
 
   // ── Controller wiring ───────────────────────────────────────────────────
   const currentProvider = (): 'webllm' | 'wllama' =>
@@ -2329,7 +2329,7 @@ export function createAgentPanel(
     chat.clear();
     chat.setRunning(false);
     chat.setInput('');
-    for (const turn of historyToTurns(historyStorage.load())) chat.append(turn);
+    chat.appendMany(historyToTurns(historyStorage.load()));
     renderSessions();
     if (focus) chat.focus();
   };

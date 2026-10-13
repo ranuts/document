@@ -44,6 +44,7 @@ container.appendChild(chat.el); // mount the root element
 | Method                                               | Purpose                                                                               |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | `append({ role, text })`                             | Add a finished message. `role`: `'user' \| 'agent' \| 'tool' \| 'status' \| 'error'`. |
+| `appendMany(messages)`                               | Add finished messages in order with one final layout update, for restoring history.   |
 | `appendDelta(text)`                                  | Stream into a live agent bubble (auto-created on first delta).                        |
 | `endStream()`                                        | Finalise the streaming bubble (drops the caret).                                      |
 | `setRunning(bool)`                                   | Toggle Send⇄Stop; keep the next draft editable, without queuing it.                   |
@@ -81,6 +82,7 @@ onSend: async (text) => {
 - Modern look: assistant messages are bubble-less/full-width, the user gets an accent bubble, tool/error render as subtle chips; a jump-to-latest button appears when scrolled up and new content only auto-scrolls when already near the bottom.
 - Width changes reflow the draft. Layout changes keep following the latest reply only while the reader is attached to the end; browsing history preserves its position.
 - Message arrivals consume the current following state. They must not recompute it from post-reflow geometry: scroll handling owns reader attachment, while jumping to the end and clearing reset it.
+- Use `appendMany` for history restoration. It keeps the same message rendering and tool grouping as `append`, while deferring intermediate scroll measurements. Completed and interrupted streams publish their original source when finalized; streaming actions stay hidden.
 - Copy feedback uses fixed-size icons and a separate polite announcement. Clipboard failure leaves the action available to retry; feedback never replaces running activity.
 - Restyle via CSS custom properties on `.cui-root` (`--cui-accent`, `--cui-user-bg`, …) — don't depend on internal `cui-*` class names.
 - DOM is built with the ranui `builder` (View/Div/Span/ButtonBuilder) and the scroll handler is throttled via ranuts; the package depends on `ranui` + `ranuts`.
