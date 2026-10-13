@@ -1,4 +1,4 @@
-# <img src="public/icons/document.svg" width="24" height="24" alt=""> Online Document Editor
+# Online Document Editor
 
 <p align="center">
   <a href="https://github.com/ranuts/document/actions/workflows/ci.yml">
