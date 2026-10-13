@@ -1,4 +1,4 @@
-# <img src="public/icons/document.svg" width="28" height="28" align="absmiddle" alt=""> 在线文档编辑器
+# <img src="public/icons/document.svg" width="24" height="24" alt=""> 在线文档编辑器
 
 <p align="center">
   <a href="https://github.com/ranuts/document/actions/workflows/ci.yml">
