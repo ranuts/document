@@ -1,8 +1,4 @@
-<p align="center">
-  <img src="public/icons/document.svg" width="88" height="88" alt="Document Editor">
-</p>
-
-# オンライン ドキュメント エディター
+# <img src="public/icons/document.svg" width="28" height="28" alt=""> オンライン ドキュメント エディター
 
 <p align="center">
   <a href="https://github.com/ranuts/document/actions/workflows/ci.yml">
