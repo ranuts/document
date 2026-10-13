@@ -58,13 +58,15 @@
 
 **실험적 기능입니다.** 답변과 수정이 틀릴 수 있으므로 중요한 결과를 확인하세요. 기본적으로 꺼져 있습니다. 로컬 모델을 선택하거나 자신의 AI 서비스에 연결할 수 있습니다. 외부 서비스에는 요청에 필요한 내용이 전송됩니다.
 
-| Word                                                                                                                                                         | Excel                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [![Word: draft, insert and undo](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/97bf02e6-293c-44e3-b042-4334e03a7db5)          | [![Excel: fill cells and calculate](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/fc68c9d5-4cb5-4a80-a29d-46665af1a409)  |
-| PowerPoint                                                                                                                                                   | PDF                                                                                                                                                      |
-| [![PowerPoint: review and create a slide](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/c8dda2cc-80f1-4c12-acc2-80469bd41007) | [![PDF: read a page and review a note](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/25355bc0-57cb-4a3d-a465-87dff2b68b4e) |
+| Word                                                                                                                                                 | Excel                                                                                                                                            |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [![초안 작성·삽입·요약·실행 취소](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/8d1d6386-e33a-45f2-b968-b8695c8f7da9) | [![입력·계산·정렬·실행 취소](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/5bb253d7-3cc5-4f31-989e-0c88dcb1615c) |
+| **초안 작성·삽입·요약·실행 취소**                                                                                                                    | **입력·계산·정렬·실행 취소**                                                                                                                     |
+| PowerPoint                                                                                                                                           | PDF                                                                                                                                              |
+| [![만들기·복제·실행 취소](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/db3fc7a7-b54e-4147-a7ca-e7f16243618e)         | [![읽기·질문·메모 검토](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/f01c2da6-0669-4111-87c1-c4440f4a60e9)        |
+| **만들기·복제·실행 취소**                                                                                                                            | **읽기·질문·메모 검토**                                                                                                                          |
 
-영상은 영어입니다. 로컬 Qwen3 4B와 가상의 자료로 새로 녹화했습니다. 모델 준비 과정은 생략하고 대기 시간을 줄여 편집했습니다. 실제 속도는 모델과 기기에 따라 다릅니다.
+미리보기를 클릭하면 결과를 읽을 시간을 충분히 둔 전체 작업을 정상 속도로 볼 수 있습니다. 영어 화면, 로컬 Qwen3 4B와 가상의 자료를 사용했습니다. 녹화 시작 전에 모델을 불러왔으며, 응답 속도는 모델과 기기에 따라 다릅니다.
 
 [영상, 영어 자막과 설명](docs/media/ai-demos/README.md)
 

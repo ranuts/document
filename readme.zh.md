@@ -61,15 +61,15 @@
 
 **仍属实验性功能。** 回答和修改可能有误，请核对重要结果。助手默认关闭；可选择本机模型，或连接自己的 AI 服务。使用外部服务时，请求内容会发送给所选服务。
 
-| Word                                                                                                                                                | Excel                                                                                                                                           |
-| --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| [![Word：起草、写入与撤销](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/97bf02e6-293c-44e3-b042-4334e03a7db5)       | [![Excel：填写数据与求和](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/fc68c9d5-4cb5-4a80-a29d-46665af1a409)   |
-| **起草、写入与撤销**                                                                                                                                | **填写数据与求和**                                                                                                                              |
-| PowerPoint                                                                                                                                          | PDF                                                                                                                                             |
-| [![PowerPoint：审阅并创建幻灯片](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/c8dda2cc-80f1-4c12-acc2-80469bd41007) | [![PDF：读取当前页与审阅批注](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/25355bc0-57cb-4a3d-a465-87dff2b68b4e) |
-| **审阅并创建幻灯片**                                                                                                                                | **读取当前页与审阅批注**                                                                                                                        |
+| Word                                                                                                                                          | Excel                                                                                                                                          |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [![起草、写入、摘要与撤销](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/8d1d6386-e33a-45f2-b968-b8695c8f7da9) | [![填充、求和、排序与撤销](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/5bb253d7-3cc5-4f31-989e-0c88dcb1615c) |
+| **起草、写入、摘要与撤销**                                                                                                                    | **填充、求和、排序与撤销**                                                                                                                     |
+| PowerPoint                                                                                                                                    | PDF                                                                                                                                            |
+| [![创建、复制与撤销](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/db3fc7a7-b54e-4147-a7ca-e7f16243618e)       | [![读取、问答与批注预览](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/f01c2da6-0669-4111-87c1-c4440f4a60e9)     |
+| **创建、复制与撤销**                                                                                                                          | **读取、问答与批注预览**                                                                                                                       |
 
-点击预览观看英文演示。视频使用本机 Qwen3 4B 与虚构资料录制；模型准备已省略，等待片段经过剪辑，实际速度取决于模型和设备。
+点击预览观看正常速度的完整操作，每一步都留有阅读结果的时间。视频使用英文界面、本机 Qwen3 4B 与虚构资料录制，开始时模型已加载；实际响应速度取决于模型和设备。
 
 [视频、英文字幕与文字说明](docs/media/ai-demos/README.md) · [使用指南](https://edit.chaxus.com/zh-CN/ai-document-assistant)
 
