@@ -28,7 +28,9 @@
 
 **Un espacio para tus documentos y tus agentes de IA, en el navegador.**
 
-Abre, edita y guarda Word, Excel y PowerPoint en el navegador. Añade anotaciones a PDF. Sin cuenta ni instalación de Office.
+Abre, edita, convierte y guarda Word, Excel y PowerPoint, y añade anotaciones a PDF en el navegador. El procesamiento básico de documentos es local, sin cuenta ni instalación de Office.
+
+Usa asistencia de IA opcional (Experimental Beta), herramientas de documentos para agentes mediante WebMCP o la instalación como PWA. Los recursos del editor en caché funcionan sin conexión; también puedes alojarlo tú mismo o integrarlo en tu aplicación.
 
 **Probar en línea: [edit.chaxus.com](https://edit.chaxus.com/)**
 

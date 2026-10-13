@@ -28,7 +28,9 @@
 
 **A document workspace for you and your AI agents.**
 
-Open, edit and save Word, Excel and PowerPoint files. Annotate PDFs. All in your browser, with no account or Office installation required.
+Open, edit, convert and save Word, Excel and PowerPoint files, and annotate PDFs in your browser. Core document processing runs locally, with no account or Office installation required.
+
+Use optional AI assistance (Experimental Beta), let browser agents call document tools through WebMCP, or install it as a PWA. Cached editor resources work offline; you can also self-host or embed the editor in your app.
 
 **Try it online: [edit.chaxus.com](https://edit.chaxus.com/)**
 
