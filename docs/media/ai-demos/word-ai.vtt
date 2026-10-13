@@ -1,19 +1,28 @@
 WEBVTT
 
-00:00:00.000 --> 00:00:02.002
-Word · AI document assistant. Experimental Beta. Waits shortened.
+00:00:00.000 --> 00:00:02.004
+Word - AI assistant. Experimental Beta. Normal speed.
 
-00:00:02.002 --> 00:00:08.126
-Ask for a first draft. Experimental Beta. Waits shortened.
+00:00:02.004 --> 00:00:29.851
+Ask for a first draft. Experimental Beta. Normal speed.
 
-00:00:08.126 --> 00:00:11.175
-Write the draft into the document. Experimental Beta. Waits shortened.
+00:00:29.851 --> 00:00:51.004
+Ask the assistant to write the draft. Experimental Beta. Normal speed.
 
-00:00:11.175 --> 00:00:13.190
-Undo in the editor. Experimental Beta. Waits shortened.
+00:00:51.004 --> 00:01:14.796
+Select text and ask for a summary. Experimental Beta. Normal speed.
 
-00:00:13.190 --> 00:00:14.121
-Redo the change. Experimental Beta. Waits shortened.
+00:01:14.796 --> 00:01:20.797
+Review the summary before applying. Experimental Beta. Normal speed.
 
-00:00:14.121 --> 00:00:15.921
-Result checked in the editor. Experimental Beta. Waits shortened.
+00:01:20.797 --> 00:01:28.894
+Apply the reviewed summary. Experimental Beta. Normal speed.
+
+00:01:28.894 --> 00:01:35.991
+Undo the summary. Experimental Beta. Normal speed.
+
+00:01:35.991 --> 00:01:39.136
+Redo the change. Experimental Beta. Normal speed.
+
+00:01:39.136 --> 00:01:43.136
+Result checked in the editor. Experimental Beta. Normal speed.

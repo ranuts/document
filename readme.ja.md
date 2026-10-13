@@ -58,13 +58,15 @@
 
 **実験的な機能です。** 回答や変更が誤っている場合があります。重要な結果は確認してください。初期状態では無効です。ローカルモデルを選ぶか、自分の AI サービスに接続できます。外部サービスにはリクエストに必要な内容が送信されます。
 
-| Word                                                                                                                                                         | Excel                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [![Word: draft, insert and undo](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/97bf02e6-293c-44e3-b042-4334e03a7db5)          | [![Excel: fill cells and calculate](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/fc68c9d5-4cb5-4a80-a29d-46665af1a409)  |
-| PowerPoint                                                                                                                                                   | PDF                                                                                                                                                      |
-| [![PowerPoint: review and create a slide](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/c8dda2cc-80f1-4c12-acc2-80469bd41007) | [![PDF: read a page and review a note](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/25355bc0-57cb-4a3d-a465-87dff2b68b4e) |
+| Word                                                                                                                                              | Excel                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [![作成・挿入・要約・取り消し](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/8d1d6386-e33a-45f2-b968-b8695c8f7da9) | [![入力・計算・並べ替え・取り消し](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/5bb253d7-3cc5-4f31-989e-0c88dcb1615c) |
+| **作成・挿入・要約・取り消し**                                                                                                                    | **入力・計算・並べ替え・取り消し**                                                                                                                     |
+| PowerPoint                                                                                                                                        | PDF                                                                                                                                                    |
+| [![作成・複製・取り消し](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/db3fc7a7-b54e-4147-a7ca-e7f16243618e)       | [![読み取り・質問・メモの確認](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/f01c2da6-0669-4111-87c1-c4440f4a60e9)       |
+| **作成・複製・取り消し**                                                                                                                          | **読み取り・質問・メモの確認**                                                                                                                         |
 
-動画は英語です。ローカルの Qwen3 4B と架空の情報を使って収録しました。モデルの準備は省略し、待ち時間を短く編集しています。実際の速度はモデルと端末によって異なります。
+プレビューをクリックすると、結果を読む時間を確保した通常速度の一連の操作を視聴できます。英語の画面、ローカルの Qwen3 4B、架空の情報を使用しています。録画開始時にはモデルを読み込み済みです。応答速度はモデルと端末によって異なります。
 
 [動画・英語字幕・説明](docs/media/ai-demos/README.md)
 
