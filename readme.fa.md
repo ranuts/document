@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/icons/document.svg" width="88" height="88" alt="Document Editor">
+</p>
+
 # ویرایشگر آنلاین سند
 
 <p align="center">
