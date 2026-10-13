@@ -26,7 +26,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-**A document workspace for you and your AI agents.**
+**An open source document workspace for you and your AI agents.**
 
 Open, edit, convert and save Word, Excel and PowerPoint files, and annotate PDFs in your browser. Core document processing runs locally, with no account or Office installation required.
 
@@ -73,6 +73,8 @@ Multilingual interfaces, light and dark themes, and read-only preview are also s
 Recovery copies stay in this browser for 7 days after the last edit or open. Delete them in [Saved documents](https://edit.chaxus.com/history). Export anything you want to keep; recovery is not a backup.
 
 Optional AI services receive the content needed for your request. On-device models keep it local. Browser dictation may use an online speech service; embedded exports are handled by the host app.
+
+Your chosen browser AI agent controls how it handles content returned by document tools.
 
 ## Documentation
 

@@ -26,7 +26,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-**あなたと AI エージェントのための、ブラウザーの文書ワークスペース。**
+**あなたと AI エージェントのための、オープンソースの文書ワークスペース。**
 
 ブラウザーで Word、Excel、PowerPoint を開き、編集・変換・保存し、PDF に注釈を追加。基本的な文書処理は端末内で行い、アカウントも Office のインストールも不要です。
 
@@ -74,9 +74,11 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 
 外部 AI サービスにはリクエストに必要な内容が送信されます。端末内モデルはローカルで処理します。音声入力はオンライン音声サービスを使う場合があり、埋め込み時の書き出しはホストアプリが扱います。
 
+ブラウザーの AI エージェントは、文書ツールから受け取った内容の処理方法を管理します。
+
 ## ドキュメントと連携
 
-[使い方](https://edit.chaxus.com/help) · [ホスティング・URL・連携](docs/reference.md) · [埋め込み API](docs/embed-api.md) · [フォント](docs/fonts.md)
+[使い方](https://edit.chaxus.com/ja/help) · [ホスティング・URL・連携](docs/reference.md) · [埋め込み API](docs/embed-api.md) · [フォント](docs/fonts.md)
 
 オフライン利用にはキャッシュ済みの編集リソースが必要です。未取得のリソースやリモートファイルには通信が必要です。
 
