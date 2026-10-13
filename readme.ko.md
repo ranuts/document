@@ -28,7 +28,9 @@
 
 **사용자와 AI 에이전트를 위한 브라우저 문서 작업 공간.**
 
-브라우저에서 Word, Excel, PowerPoint를 열고 편집하고 저장하세요. PDF에는 주석을 추가할 수 있습니다. 계정이나 Office 설치가 필요 없습니다.
+브라우저에서 Word, Excel, PowerPoint를 열고 편집·변환·저장하며 PDF에 주석을 추가하세요. 기본 문서 처리는 기기에서 이루어지며 계정이나 Office 설치가 필요 없습니다.
+
+선택형 AI 도우미(Experimental Beta), WebMCP를 통한 에이전트의 문서 도구 호출, PWA 설치를 지원합니다. 캐시된 편집기 리소스는 오프라인에서 사용할 수 있고, 자체 호스팅하거나 앱에 임베드할 수도 있습니다.
 
 **온라인으로 사용: [edit.chaxus.com](https://edit.chaxus.com/)**
 

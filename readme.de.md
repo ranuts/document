@@ -28,7 +28,9 @@
 
 **Ein Dokumenten-Arbeitsplatz für dich und deine KI-Agenten im Browser.**
 
-Word, Excel und PowerPoint im Browser öffnen, bearbeiten und speichern. PDFs kommentieren. Ohne Konto oder Office-Installation.
+Word, Excel und PowerPoint im Browser öffnen, bearbeiten, konvertieren und speichern sowie PDFs kommentieren. Die grundlegende Dokumentenverarbeitung läuft lokal, ohne Konto oder Office-Installation.
+
+Nutze optionale KI-Unterstützung (Experimental Beta), Dokumentenwerkzeuge für Browser-Agenten über WebMCP oder die PWA-Installation. Zwischengespeicherte Editor-Ressourcen funktionieren offline; du kannst den Editor auch selbst hosten oder in deine App einbetten.
 
 **Online ausprobieren: [edit.chaxus.com](https://edit.chaxus.com/)**
 

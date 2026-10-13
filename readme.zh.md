@@ -28,7 +28,9 @@
 
 **浏览器里的文档工作台，为你和 AI Agent 准备。**
 
-在浏览器里打开、编辑并保存 Word、Excel 和 PowerPoint，为 PDF 添加批注。无需注册，也不用安装 Office。
+在浏览器里打开、编辑、转换并保存 Word、Excel 和 PowerPoint，为 PDF 添加批注。基础文档处理在本地完成，无需注册或安装 Office。
+
+支持可选 AI 助手（Experimental Beta）、WebMCP Agent 调用和 PWA 安装；已缓存的编辑器资源可离线使用，也可自行部署或嵌入应用。
 
 **在线体验：[edit.chaxus.com](https://edit.chaxus.com/)**
 
