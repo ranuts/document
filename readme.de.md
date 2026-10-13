@@ -14,6 +14,7 @@
     <img src="https://img.shields.io/badge/Live-edit.chaxus.com-brightgreen" alt="Live site">
   </a>
 </p>
+
 <p align="center">
   <a href="readme.md">English</a> |
   <a href="readme.zh.md">简体中文</a> |
@@ -25,6 +26,8 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
+**Ein Dokumenten-Arbeitsplatz für dich und deine KI-Agenten im Browser.**
+
 Word, Excel und PowerPoint im Browser öffnen, bearbeiten und speichern. PDFs kommentieren. Ohne Konto oder Office-Installation.
 
 **[Online ausprobieren](https://edit.chaxus.com/)** · [Quellcode ansehen](https://github.com/ranuts/document)
@@ -33,14 +36,16 @@ Word, Excel und PowerPoint im Browser öffnen, bearbeiten und speichern. PDFs ko
 
 ## ✨ Funktionen
 
-- **Lokal bearbeiten.** Konvertierung, Bearbeitung und Export laufen auf deinem Gerät.
-- **Flexibel speichern.** Direkt in die gewählte Datei, wenn der Browser es unterstützt, sonst als Download.
-- **Weiterarbeiten.** Zuletzt bearbeitete Dokumente aus diesem Browser wieder öffnen.
-- **Für deinen Workflow.** Als PWA installieren, selbst hosten oder in eine App einbetten.
+- **Lokal bearbeiten und konvertieren.** Dokumente werden auf deinem Gerät verarbeitet, ohne erforderlichen Upload.
+- **Flexibel speichern.** Direkt in die gewählte Datei, wenn der Browser es unterstützt, sonst als Download. Öffne zuletzt bearbeitete Dokumente aus diesem Browser erneut.
+- **Mit KI arbeiten (Experimental Beta).** Texte entwerfen und überarbeiten, Tabellendaten bearbeiten, Folien erstellen oder Fragen zur aktuellen PDF-Seite stellen. Änderungen vor dem Anwenden prüfen.
+- **Agenten nutzen Dokumentenwerkzeuge.** In [WebMCP](docs/reference.md#webmcp-agent-tools)-kompatiblen Browsern können KI-Agenten Dateien öffnen, konvertieren und exportieren sowie Text aus Textdokumenten lesen.
+- **Als PWA installieren.** Wie eine App nutzen; zwischengespeicherte Editor-Ressourcen funktionieren auch offline.
+- **Selbst hosten oder einbetten.** Als statische Website betreiben oder über die iframe-API in deine App integrieren.
 
 ## 🚀 Schnellstart
 
-**[Online ausprobieren](https://edit.chaxus.com/)** · [Quellcode ansehen](https://github.com/ranuts/document)
+[Neues Dokument](https://edit.chaxus.com/editor?new=docx&locale=de-DE) · [Neue Tabelle](https://edit.chaxus.com/editor?new=xlsx&locale=de-DE) · [Neue Präsentation](https://edit.chaxus.com/editor?new=pptx&locale=de-DE)
 
 Oder selbst betreiben:
 
@@ -59,6 +64,8 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 
 Unterstützte Dokumente lassen sich als PDF exportieren.
 
+Mehrsprachige Oberflächen, helle und dunkle Designs sowie schreibgeschützte Vorschauen werden ebenfalls unterstützt.
+
 ## 🔐 Lokale Bearbeitung und Datenverarbeitung
 
 Wiederherstellungskopien bleiben nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Lösche sie unter [Gespeicherte Dokumente](https://edit.chaxus.com/history). Sie sind kein Backup; exportiere wichtige Dateien.
@@ -74,6 +81,8 @@ Offline sind zwischengespeicherte Editor-Ressourcen nötig. Nicht gespeicherte R
 ## KI-Dokumentassistent (Experimental Beta)
 
 Texte entwerfen und überarbeiten, Tabellendaten bearbeiten, Folien erstellen oder Fragen zur aktuellen PDF-Seite stellen. Änderungen vor dem Anwenden prüfen und bei Bedarf rückgängig machen.
+
+Wähle ein Modell auf deinem Gerät oder verbinde deinen eigenen KI-Dienst. In unterstützten Browsern kannst du Eingaben diktieren.
 
 **Experimental Beta.** Standardmäßig deaktiviert. Antworten und Änderungen können falsch sein; wichtige Ergebnisse prüfen.
 

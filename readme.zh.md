@@ -26,6 +26,8 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
+**浏览器里的文档工作台，为你和 AI Agent 准备。**
+
 在浏览器里打开、编辑并保存 Word、Excel 和 PowerPoint，为 PDF 添加批注。无需注册，也不用安装 Office。
 
 **[在线体验](https://edit.chaxus.com/)** · [查看源码](https://github.com/ranuts/document)
@@ -34,14 +36,16 @@
 
 ## ✨ 主要特性
 
-- **本地编辑。** 文档转换、编辑和导出都在你的设备上完成。
-- **自由保存。** 浏览器支持时可直接存回选定文件，也可下载导出。
-- **继续上次的工作。** 从当前浏览器恢复最近编辑的文档。
-- **融入你的工作流。** 可安装为 PWA、自行部署或嵌入应用。
+- **本地编辑与转换。** 文档处理在你的设备上完成，无需上传文档即可编辑和转换。
+- **自由保存，继续工作。** 浏览器支持时可存回选定文件，也可下载导出；从当前浏览器恢复最近的编辑。
+- **与 AI 协作（Experimental Beta）。** 起草和润色文字、处理表格数据、创建幻灯片，或询问当前 PDF 页面的内容；审阅后再应用修改。
+- **让 Agent 调用文档工具。** 支持 [WebMCP](docs/reference.md#webmcp-agent-tools) 的浏览器中，AI Agent 可打开、转换、导出文档，读取文字文档正文。
+- **安装为 PWA。** 像应用一样使用，已缓存的编辑器资源可离线复用。
+- **自行部署与集成。** 可作为静态站点部署，也可通过 iframe API 嵌入你的应用。
 
 ## 🚀 快速开始
 
-**[在线体验](https://edit.chaxus.com/)** · [查看源码](https://github.com/ranuts/document)
+[新建文档](https://edit.chaxus.com/editor?new=docx&locale=zh-CN) · [新建表格](https://edit.chaxus.com/editor?new=xlsx&locale=zh-CN) · [新建演示](https://edit.chaxus.com/editor?new=pptx&locale=zh-CN)
 
 也可以运行自己的版本：
 
@@ -60,6 +64,8 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 
 支持的文档可导出为 PDF。
 
+还支持多语言界面、明暗主题和只读预览。
+
 ## 🔐 本地编辑与数据去向
 
 恢复副本保存在当前浏览器，最后编辑或打开后保留 7 天，可在[已保存的文档](https://edit.chaxus.com/history)中删除。恢复副本不是备份，重要文件请及时导出。
@@ -75,6 +81,8 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 ## AI 文档助手 (Experimental Beta)
 
 起草和润色文字、处理表格数据、创建幻灯片，或询问当前 PDF 页面的内容。先审阅修改建议，再决定是否应用；需要时可撤销。
+
+可选择本机模型或连接自己的 AI 服务；浏览器支持时可通过语音输入指令。
 
 **Experimental Beta.** 默认关闭。回答和修改可能有误，请核对重要结果。
 

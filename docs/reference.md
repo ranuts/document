@@ -153,7 +153,7 @@ mocks, including document round trips, the embed protocol and the recovery
 flow. [`explorations/`](explorations/) records why each non-obvious piece is the way it is —
 worth a look before changing the editor integration.
 
-## 🤖 Browser AI agents (WebMCP)
+## WebMCP agent tools
 
 Where the browser supports it, the page registers tools an in-browser agent can
 call directly instead of driving the UI: `open_document_url`,
@@ -161,3 +161,5 @@ call directly instead of driving the UI: `open_document_url`,
 `set_readonly`, `get_document_state`. The browser fetches and converts files
 locally; an external agent controls how it handles returned content. Where
 the API is absent, this is a no-op.
+
+Tools are available on top-level editor pages when the browser provides the WebMCP API. Direct full-text reading currently supports word-processing documents; other document types can be exported with `save_document` for the agent to read.

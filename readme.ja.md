@@ -14,6 +14,7 @@
     <img src="https://img.shields.io/badge/Live-edit.chaxus.com-brightgreen" alt="Live site">
   </a>
 </p>
+
 <p align="center">
   <a href="readme.md">English</a> |
   <a href="readme.zh.md">简体中文</a> |
@@ -25,6 +26,8 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
+**あなたと AI エージェントのための、ブラウザーの文書ワークスペース。**
+
 ブラウザーで Word、Excel、PowerPoint を開き、編集して保存。PDF には注釈を追加できます。アカウントも Office のインストールも不要です。
 
 **[オンラインで試す](https://edit.chaxus.com/)** · [ソースを見る](https://github.com/ranuts/document)
@@ -33,14 +36,16 @@
 
 ## ✨ 特長
 
-- **ローカル編集。** 文書の変換・編集・書き出しは自分の端末で実行。
-- **保存先を選べる。** 対応ブラウザーでは選んだファイルに保存。それ以外はダウンロード。
-- **続きから作業。** このブラウザーに保存された最近の文書を再開。
-- **自分の環境で。** PWA としてインストール、自分でホスト、アプリに組み込み。
+- **ローカルで編集・変換。** 文書を端末内で処理。編集や変換のためのアップロードは不要です。
+- **好きな方法で保存。** 対応ブラウザーでは選んだファイルに保存、それ以外はダウンロード。このブラウザーで最近の作業を再開できます。
+- **AI と作業（Experimental Beta）。** 文章の下書きや推敲、表のデータ操作、スライド作成、現在の PDF ページへの質問に。変更を確認してから適用できます。
+- **エージェントから文書ツールを呼び出し。** [WebMCP](docs/reference.md#webmcp-agent-tools) 対応ブラウザーでは、AI エージェントが文書を開き、変換・書き出しを行い、文字文書の本文を読めます。
+- **PWA としてインストール。** アプリのように使え、キャッシュ済みの編集リソースはオフラインでも利用できます。
+- **自分でホスト・組み込み。** 静的サイトとして配信するか、iframe API でアプリに組み込めます。
 
 ## 🚀 はじめかた
 
-**[オンラインで試す](https://edit.chaxus.com/)** · [ソースを見る](https://github.com/ranuts/document)
+[文書を作成](https://edit.chaxus.com/editor?new=docx&locale=ja-JP) · [表計算を作成](https://edit.chaxus.com/editor?new=xlsx&locale=ja-JP) · [スライドを作成](https://edit.chaxus.com/editor?new=pptx&locale=ja-JP)
 
 自分の環境で実行するには：
 
@@ -59,6 +64,8 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 
 対応文書は PDF に書き出せます。
 
+多言語 UI、ライト・ダークテーマ、読み取り専用プレビューにも対応しています。
+
 ## 🔐 ローカル編集とデータの扱い
 
 復元用コピーは最後の編集・閲覧から 7 日間、このブラウザーに保存されます。[保存済み文書](https://edit.chaxus.com/history)から削除できます。バックアップではないため、大切なファイルは書き出してください。
@@ -74,6 +81,8 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 ## AI 文書アシスタント (Experimental Beta)
 
 文章の下書きや推敲、表のデータ操作、スライド作成、現在の PDF ページへの質問に。変更を確認してから適用し、必要なら元に戻せます。
+
+端末内モデルを選ぶか、自分の AI サービスに接続できます。対応ブラウザーでは音声入力も使えます。
 
 **Experimental Beta.** 初期状態では無効です。回答や変更が間違うことがあるため、重要な結果は確認してください。
 
