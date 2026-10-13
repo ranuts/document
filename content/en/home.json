@@ -1,7 +1,7 @@
 {
   "title": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor",
   "description": "Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.",
-  "ogDescription": "Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.",
+  "ogDescription": "Edit Word, Excel and PowerPoint locally; annotate PDFs. No signup or Office installation. Optional AI (Experimental Beta), WebMCP and PWA support.",
   "chip": "Local-first · <b>open source</b>",
   "h1": {
     "plain": "Open Word, Excel & PowerPoint files,",
@@ -245,5 +245,6 @@
     "Offline with cached resources",
     "Embeddable via postMessage API",
     "Free and open source (AGPL-3.0)"
-  ]
+  ],
+  "ogTitle": "Open-source document editor for you and AI agents"
 }

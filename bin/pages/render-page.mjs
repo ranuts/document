@@ -8,6 +8,7 @@ import { DEFAULT_LOCALE, LOCALES } from './locales.mjs';
 import { langMenu, routeFor } from './chrome.mjs';
 import { escapeHtml, renderInline } from './markdown.mjs';
 import { UI } from './ui.mjs';
+import { socialImageTags } from './social-image.mjs';
 
 export function renderPage({ page, locale, meta, body, headings, faq, steps, source }) {
   const L = LOCALES[locale];
@@ -168,7 +169,7 @@ ${ogAlternates}
     <meta property="og:title" content="${escapeHtml(title)}" />
     <meta property="og:description" content="${escapeHtml(cardDescription)}" />
     <meta property="og:url" content="${url}" />
-    <meta name="twitter:card" content="summary" />
+${socialImageTags()}
     <meta name="twitter:title" content="${escapeHtml(title)}" />
     <meta name="twitter:description" content="${escapeHtml(cardDescription)}" />
 

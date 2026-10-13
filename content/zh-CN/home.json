@@ -1,7 +1,7 @@
 {
   "title": "在浏览器打开 DOCX、XLSX、PPT 文件——免装 Office 的在线查看与编辑器",
   "description": "无需 Office 或账号，即可在浏览器中打开、查看和编辑 DOCX、XLSX、PPTX 和 CSV。核心编辑不要求上传文档；离线使用取决于已缓存的资源。",
-  "ogDescription": "无需 Office 或账号，即可在浏览器中打开、查看和编辑 DOCX、XLSX、PPTX 和 CSV。核心编辑不要求上传文档；离线使用取决于已缓存的资源。",
+  "ogDescription": "浏览器内本地编辑 Word、Excel、PowerPoint，为 PDF 添加批注。无需注册或安装 Office，支持可选 AI 助手 (Experimental Beta)、WebMCP 和 PWA。",
   "chip": "本地优先 · <b>开源</b>",
   "h1": {
     "plain": "在浏览器里直接打开 Word、Excel 和 PPT，",
@@ -245,5 +245,6 @@
     "已缓存资源可离线使用",
     "可通过 postMessage API 嵌入",
     "免费且开源（AGPL-3.0）"
-  ]
+  ],
+  "ogTitle": "为你和 AI Agent 准备的开源文档编辑器"
 }

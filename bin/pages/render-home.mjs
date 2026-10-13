@@ -11,6 +11,7 @@ import { DEFAULT_LOCALE, LOCALES } from './locales.mjs';
 import { langMenu } from './chrome.mjs';
 import { escapeHtml } from './markdown.mjs';
 import { UI } from './ui.mjs';
+import { socialImageTags } from './social-image.mjs';
 
 /**
  * The homepage.
@@ -177,11 +178,11 @@ ${alternates}
     <meta property="og:site_name" content="Online Document Editor" />
     <meta property="og:locale" content="${L.og}" />
 ${ogAlternates}
-    <meta property="og:title" content="${e(data.title)}" />
+    <meta property="og:title" content="${e(data.ogTitle || data.title)}" />
     <meta property="og:description" content="${e(data.ogDescription || data.description)}" />
     <meta property="og:url" content="${url}" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="${e(data.title)}" />
+${socialImageTags()}
+    <meta name="twitter:title" content="${e(data.ogTitle || data.title)}" />
     <meta name="twitter:description" content="${e(data.ogDescription || data.description)}" />
 
     <script type="application/ld+json">
