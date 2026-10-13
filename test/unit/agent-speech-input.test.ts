@@ -243,3 +243,18 @@ it('editing while an explicit send is finishing cancels that send and preserves 
   expect(chat.getInput()).toBe('User correction');
   chat.dispose();
 });
+
+it('shows distinct microphone states and ignores a late start after requesting stop', () => {
+  const { el, recognition } = setup();
+  const root = el.querySelector<HTMLElement>('.agent-speech')!;
+  expect(root.dataset.state).toBe('starting');
+  recognition.onstart?.();
+  expect(root.dataset.state).toBe('listening');
+  root.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+  expect(root.dataset.state).toBe('finishing');
+  recognition.onstart?.();
+  expect(root.dataset.state).toBe('finishing');
+  expect(el.querySelector('[role="status"]')?.textContent).toBe('agentSpeechFinishing');
+  recognition.onend?.();
+  expect(root.dataset.state).toBe('idle');
+});

@@ -1280,8 +1280,8 @@ r-dropdown[role='listbox'] {
 .agent-speech-mic {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: 0;
   border-radius: 8px;
   background: transparent;
@@ -1294,8 +1294,11 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text);
 }
 .agent-speech-cancel {
+  display: grid;
+  place-items: center;
+  width: 32px;
   min-height: 32px;
-  padding: 4px 8px;
+  padding: 0;
   border: 0;
   border-radius: 6px;
   background: transparent;
@@ -1312,8 +1315,8 @@ r-dropdown[role='listbox'] {
   --ran-select-background-color: transparent;
   --ran-select-border: 1px solid transparent;
   --ran-select-hover-border: 1px solid transparent;
-  --ran-select-height: 36px;
-  --ran-select-min-height: 36px;
+  --ran-select-height: 32px;
+  --ran-select-min-height: 32px;
   --ran-select-font-size: var(--ran-text-label-2);
   --ran-select-color: var(--ran-color-text-secondary);
   --ran-select-item-hover-color: var(--ran-color-text);
@@ -1492,4 +1495,50 @@ r-dropdown[role='listbox'] {
   align-items: center;
   flex-wrap: wrap;
   gap: var(--ran-space-2);
+}
+
+/* Match the voice button's idle, listening and finishing states without
+   moving the draft or duplicating a Stop action above it. */
+.agent-speech[data-state='listening'] .agent-speech-mic {
+  color: var(--ran-color-text);
+  background: var(--ran-color-bg-muted);
+  animation: agent-speech-pulse 1.4s ease-in-out infinite;
+}
+.agent-speech-processing svg {
+  display: none;
+}
+.agent-speech-processing::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: agent-speech-spin 1s linear infinite;
+}
+.agent-speech-feedback[data-state='listening'] > [role='status'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.agent-speech-feedback[data-state='listening']:has(p[hidden]) {
+  padding: 0;
+}
+@keyframes agent-speech-pulse {
+  50% {
+    opacity: 0.6;
+  }
+}
+@keyframes agent-speech-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .agent-speech[data-state='listening'] .agent-speech-mic,
+  .agent-speech-processing::before {
+    animation: none;
+  }
 }
