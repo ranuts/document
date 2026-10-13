@@ -6,7 +6,8 @@
 import { setDiskWriter, setSavedToDiskListener } from '../onlyoffice/save-stream';
 import { saveToDiskFile } from '../save-target';
 import { getAutosaveDocId } from './autosave';
-import { markSavedToDisk, pruneExpired } from './store';
+import { extensionOf, markSavedToDisk, pruneExpired } from './store';
+import { getDocmentObj } from '@ranuts/shared/store';
 
 export function initDocumentHistory(): void {
   // Expiry has to happen on its own, not when someone thinks to visit the
@@ -19,12 +20,11 @@ export function initDocumentHistory(): void {
   // is wired here rather than inside the save channel.
   setDiskWriter(async (file) => {
     const docId = getAutosaveDocId();
-    if (!docId) return false;
-    const outcome = await saveToDiskFile(docId, file, 'Document');
-    // 'cancelled' means the user closed the picker: they decided not to save,
-    // so downloading a copy anyway would be answering a question they declined.
-    if (outcome === 'cancelled') return true;
-    return outcome === 'written';
+    if (!docId) return 'unavailable';
+    const sourceName = getDocmentObj()?.fileName || file.name;
+    return saveToDiskFile(docId, file, 'Document', {
+      rememberTarget: extensionOf(sourceName) === extensionOf(file.name),
+    });
   });
 
   setSavedToDiskListener(() => {

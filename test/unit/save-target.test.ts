@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { clearAllHistory, deleteDoc } from '../../lib/history/store';
 import { DB_NAME, resetHistoryDbForTests } from '../../lib/history/db';
 import {
   canWriteToDisk,
@@ -18,7 +19,7 @@ function fakeHandle(name = 'Report.docx', permission: PermissionState = 'granted
       name,
       createWritable: vi.fn(async () => ({
         write: async (data: Blob) => void written.push(data),
-        close: async () => undefined,
+        close: async (): Promise<void> => undefined,
       })),
       queryPermission: vi.fn(async () => permission),
       requestPermission: vi.fn(async () => permission),
@@ -138,6 +139,87 @@ describe("saving into the document's own file", () => {
     // Nothing is linked any more: the fallback download covers this save, and
     // the next one starts from the picker again -- which is also how a user
     // saves somewhere else.
+    expect(await getSaveTargetName('doc-1')).toBeNull();
+  });
+
+  it('exports another format without overwriting or replacing the original target', async () => {
+    const original = fakeHandle('Report.docx');
+    const picker = usePicker(original.handle);
+    await saveToDiskFile('doc-1', file(), 'Document');
+    const exported = fakeHandle('Report.pdf');
+    picker.mockResolvedValue(exported.handle);
+    const pdf = new File(['%PDF-1.7'], 'Report.pdf', { type: 'application/pdf' });
+    expect(await saveToDiskFile('doc-1', pdf, 'Document')).toBe('written');
+    expect(original.written).toHaveLength(1);
+    expect(exported.written).toEqual([pdf]);
+    expect(await getSaveTargetName('doc-1')).toBe('Report.docx');
+    await saveToDiskFile('doc-1', file(), 'Document');
+    expect(original.written).toHaveLength(2);
+    expect(picker).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps the original target after cancelling an export to another format', async () => {
+    const original = fakeHandle();
+    const picker = usePicker(original.handle);
+    await saveToDiskFile('doc-1', file(), 'Document');
+    picker.mockRejectedValue(new DOMException('Cancelled', 'AbortError'));
+    expect(await saveToDiskFile('doc-1', new File(['%PDF'], 'Report.pdf'), 'Document')).toBe('cancelled');
+    expect(original.written).toHaveLength(1);
+    expect(await getSaveTargetName('doc-1')).toBe('Report.docx');
+  });
+
+  it('does not associate an initial export with later ordinary saves', async () => {
+    const pdfTarget = fakeHandle('Report.pdf');
+    const picker = usePicker(pdfTarget.handle);
+    await saveToDiskFile('doc-1', new File(['%PDF'], 'Report.pdf'), 'Document', { rememberTarget: false });
+    expect(await getSaveTargetName('doc-1')).toBeNull();
+    const original = fakeHandle('Report.docx');
+    picker.mockResolvedValue(original.handle);
+    await saveToDiskFile('doc-1', file(), 'Document');
+    expect(original.written).toHaveLength(1);
+    expect(pdfTarget.written).toHaveLength(1);
+    expect(await getSaveTargetName('doc-1')).toBe('Report.docx');
+  });
+
+  it('keeps the original target when writing an export fails', async () => {
+    const original = fakeHandle();
+    const picker = usePicker(original.handle);
+    await saveToDiskFile('doc-1', file(), 'Document');
+    const exported = fakeHandle('Report.pdf');
+    exported.handle.createWritable.mockRejectedValue(new Error('disk full'));
+    picker.mockResolvedValue(exported.handle);
+    expect(await saveToDiskFile('doc-1', new File(['%PDF'], 'Report.pdf'), 'Document')).toBe('unavailable');
+    expect(await getSaveTargetName('doc-1')).toBe('Report.docx');
+  });
+
+  it.each(['first save', 'existing target'])(
+    'does not revive a cleared link after a pending %s commits',
+    async (mode) => {
+      const target = fakeHandle();
+      usePicker(target.handle);
+      if (mode === 'existing target') await saveToDiskFile('doc-1', file(), 'Document');
+      let finish!: () => void;
+      const pendingClose = new Promise<void>((resolve) => {
+        finish = resolve;
+      });
+      target.handle.createWritable.mockImplementation(async () => ({
+        write: async (data: Blob) => void target.written.push(data),
+        close: () => pendingClose,
+      }));
+      const saving = saveToDiskFile('doc-1', file(), 'Document');
+      await vi.waitFor(() => expect(target.written.length).toBe(mode === 'existing target' ? 2 : 1));
+      await clearAllHistory();
+      finish();
+      expect(await saving).toBe('written');
+      expect(await getSaveTargetName('doc-1')).toBeNull();
+    },
+  );
+
+  it.each(['delete', 'clear'])('forgets in-memory targets when history is removed by %s', async (mode) => {
+    usePicker(fakeHandle().handle);
+    await saveToDiskFile('doc-1', file(), 'Document');
+    expect(await getSaveTargetName('doc-1')).toBe('Report.docx');
+    expect(await (mode === 'delete' ? deleteDoc('doc-1') : clearAllHistory())).toBe(true);
     expect(await getSaveTargetName('doc-1')).toBeNull();
   });
 

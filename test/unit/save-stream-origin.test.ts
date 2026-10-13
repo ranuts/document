@@ -17,7 +17,7 @@ describe('editor save message boundary', () => {
     document.body.appendChild(frame);
     setDiskWriter(async (file) => {
       files.push(file);
-      return true;
+      return 'written';
     });
   });
 

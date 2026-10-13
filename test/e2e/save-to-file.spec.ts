@@ -160,6 +160,62 @@ test.describe('saving into the document own file (real editor)', () => {
     test.skip(!writableStreams, 'this engine has no origin-private writable streams to stub the picker with');
   });
 
+  test('cancelling a save keeps the unsaved-changes warning armed', async ({ page }) => {
+    await page.goto('/editor?new=docx');
+    await waitForEditorReady(page);
+    const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.type('work that has not reached disk', { delay: 30 });
+    await page.evaluate(() => {
+      (window as unknown as { showSaveFilePicker: () => Promise<FileSystemFileHandle> }).showSaveFilePicker =
+        async () => {
+          (window as any).__pickerCalls += 1;
+          throw new DOMException('Cancelled', 'AbortError');
+        };
+    });
+    await page.keyboard.press('Control+s');
+    await expect.poll(() => pickerCalls(page), { timeout: 120_000 }).toBe(1);
+    expect(await writesCommitted(page)).toBe(0);
+    expect(await page.evaluate(() => !window.dispatchEvent(new Event('beforeunload', { cancelable: true })))).toBe(
+      true,
+    );
+  });
+
+  test('exporting PDF preserves the DOCX file and its next save target', async ({ page }) => {
+    await page.goto('/editor?new=docx');
+    await waitForEditorReady(page);
+    const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.type('content saved in the original document', { delay: 30 });
+    await page.keyboard.press('Control+s');
+    await waitForWrites(page, 1);
+    const original = await savedBytes(page);
+    await page.evaluate(() => {
+      (window as unknown as { showSaveFilePicker: () => Promise<FileSystemFileHandle> }).showSaveFilePicker =
+        async () => {
+          (window as any).__pickerCalls += 1;
+          return (await navigator.storage.getDirectory()).getFileHandle('saved-export.pdf', { create: true });
+        };
+      const frame = document.querySelector<HTMLIFrameElement>('iframe[name="frameEditor"]')!;
+      const win = frame.contentWindow as any;
+      win.Asc.editor.asc_DownloadAs(new win.Asc.asc_CDownloadOptions(513));
+    });
+    await waitForWrites(page, 2);
+    expect(await savedBytes(page)).toEqual(original);
+    expect(await pickerCalls(page)).toBe(2);
+    expect(
+      await page.evaluate(async () => {
+        const handle = await (await navigator.storage.getDirectory()).getFileHandle('saved-export.pdf');
+        return (await handle.getFile()).slice(0, 4).text();
+      }),
+    ).toBe('%PDF');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.press('Control+s');
+    await waitForWrites(page, 3);
+    expect(await pickerCalls(page)).toBe(2);
+    expect(await savedText(page)).toMatch(/content saved in the original document/i);
+  });
+
   test('picks a file once, then writes to it on every later save', async ({ page }) => {
     const dir = join('test-results', 'save-to-file');
     mkdirSync(dir, { recursive: true });

@@ -7,6 +7,15 @@ notes. Entries describe what users experience, not internal refactors.
 
 ## [Unreleased]
 
+### Fixed
+
+- Cancelling a save keeps the unsaved-changes warning and recovery status intact.
+- Exporting another format, such as PDF, preserves the original document file
+  and its ordinary save target, including when the export is cancelled or fails.
+- Deleting, clearing or expiring local recovery records also forgets their saved
+  file associations. Unchanged documents no longer create duplicate recovery
+  versions or repeatedly run a full export.
+
 ### Added
 
 - **Keep document structure when writing an assistant draft.** Word headings,

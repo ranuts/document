@@ -149,6 +149,49 @@ describe('autosave session', () => {
     expect((await listDocs()).total).toBe(1);
   });
 
+  it('keeps distinct recovery points and skips exports of an unchanged SDK history', async () => {
+    const frame = document.createElement('iframe');
+    document.body.append(frame);
+    const history = { Index: 0, Points: [{ Items: [{}] }] };
+    Object.assign(frame.contentWindow!, { AscCommon: { History: history }, Asc: { editor: {} } });
+    try {
+      requestSaveDocument.mockResolvedValue(fileOf([1]));
+      await beginAutosaveSession({ docId: 'report', title: 'Report.docx', origin: 'local' });
+      await takeSnapshot();
+      expect(await takeSnapshot()).toBeNull();
+      expect((await listDocs()).items[0].revCount).toBe(1);
+      // Undo and a new edit can reuse the same index with a different point.
+      history.Points[0] = { Items: [{}] };
+      requestSaveDocument.mockResolvedValue(fileOf([2]));
+      await takeSnapshot();
+      expect((await listDocs()).items[0].revCount).toBe(2);
+      expect((await getLatestSnapshot('report'))?.bytes[0]).toBe(2);
+      expect(requestSaveDocument).toHaveBeenCalledTimes(2);
+    } finally {
+      frame.remove();
+    }
+  });
+
+  it.each(['append', 'replace'])('recovers %s changes inside the same undo point', async (mode) => {
+    const frame = document.createElement('iframe');
+    document.body.append(frame);
+    const history = { Index: 0, Points: [{ Items: [{}] }] };
+    Object.assign(frame.contentWindow!, { AscCommon: { History: history }, Asc: { editor: {} } });
+    try {
+      requestSaveDocument.mockResolvedValue(fileOf([1]));
+      await beginAutosaveSession({ docId: 'report', title: 'Report.docx', origin: 'local' });
+      await takeSnapshot();
+      if (mode === 'append') history.Points[0].Items.push({});
+      else history.Points[0].Items[0] = {};
+      requestSaveDocument.mockResolvedValue(fileOf([2]));
+      await takeSnapshot();
+      expect((await getLatestSnapshot('report'))?.bytes[0]).toBe(2);
+      expect((await listDocs()).items[0].revCount).toBe(2);
+    } finally {
+      frame.remove();
+    }
+  });
+
   it('does not start in embed mode', async () => {
     window.history.replaceState(null, '', '/editor?embed=1');
 

@@ -24,6 +24,7 @@ import { requestSaveDocument } from '../onlyoffice/save-stream';
 import { getReadonlyMode } from '../onlyoffice/readonly';
 import { getLastEditAt, hasUnsavedChanges } from '../unsaved-guard';
 import { isEmbedMode } from '../embed-mode';
+import { captureSavePoint, type SavePoint } from '../onlyoffice/save-point';
 import { extensionOf, markOpened, putSnapshot } from './store';
 import type { HistoryDoc, HistoryOrigin } from './types';
 
@@ -130,6 +131,8 @@ interface ActiveSession {
   lastSnapshotAt: number;
   exporting: boolean;
   lastExportMs: number | null;
+  lastSnapshotPoint: SavePoint | null;
+  lastSnapshotItems: unknown[] | null;
   failures: number;
   holdsLock: boolean;
   releaseLock: (() => void) | null;
@@ -187,6 +190,24 @@ export async function takeSnapshot(): Promise<HistoryDoc | null> {
   const active = session;
   if (!active || active.cached || active.exporting || !active.ext) return null;
 
+  const point = captureSavePoint();
+  const pointItems = (point?.head as { Items?: unknown[] } | undefined)?.Items;
+  const items = Array.isArray(pointItems) ? [...pointItems] : null;
+  const previous = active.lastSnapshotPoint;
+  const previousItems = active.lastSnapshotItems;
+  if (
+    point &&
+    previous &&
+    point.frame === previous.frame &&
+    point.index === previous.index &&
+    point.head === previous.head &&
+    items &&
+    previousItems &&
+    items.length === previousItems.length &&
+    items.every((item, index) => item === previousItems[index])
+  )
+    return null;
+
   active.exporting = true;
   const startedAt = Date.now();
   try {
@@ -219,6 +240,10 @@ export async function takeSnapshot(): Promise<HistoryDoc | null> {
     // What this export cost sets the next interval: a slow device asks for
     // snapshots less often without anyone having to identify it as slow.
     active.lastExportMs = active.lastSnapshotAt - startedAt;
+    // Capture before export, so an edit made during conversion still needs a
+    // later recovery point. With no SDK history, retain the conservative cadence.
+    active.lastSnapshotPoint = point;
+    active.lastSnapshotItems = items;
     active.failures = 0;
     return doc;
   } catch (error) {
@@ -324,6 +349,8 @@ export async function beginAutosaveSession(input: AutosaveSessionInput): Promise
     lastSnapshotAt: Date.now(),
     exporting: false,
     lastExportMs: null,
+    lastSnapshotPoint: null,
+    lastSnapshotItems: null,
     failures: 0,
     holdsLock: held,
     releaseLock: release,

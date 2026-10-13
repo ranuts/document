@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
+import { workspaceSourceAliases } from './bin/workspace-aliases.mjs';
 import { PAGES, generate as generatePages } from './bin/build-pages.mjs';
 import { generate as generateLlmsFull } from './bin/llms-full.mjs';
 
@@ -122,7 +123,8 @@ const modelWorkerCsp = (): Plugin => {
     const pathname = (req.url ?? '/').split('?')[0];
     if (
       /^\/assets\/webllm\.worker-[A-Za-z0-9_-]+\.js$/.test(pathname) ||
-      pathname.endsWith('/packages/agent-core/dist/llm/webllm.worker.js')
+      pathname.endsWith('/packages/agent-core/dist/llm/webllm.worker.js') ||
+      pathname.endsWith('/packages/agent-core/src/llm/webllm.worker.ts')
     ) {
       res.setHeader('Content-Security-Policy', MODEL_WORKER_CSP);
     }
@@ -176,7 +178,7 @@ const generatedPages = (): Plugin => {
   };
 };
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
   const publicDirName = 'public';
 
   return {
@@ -233,7 +235,7 @@ export default defineConfig(() => {
       // resolves the same way for tsc and for the bundler. The five
       // directory-specific aliases that used to live here pointed at
       // `store/` and `assets/`, which do not exist in this repo.
-      alias: { '@': __dirname },
+      alias: [{ find: '@', replacement: __dirname }, ...(command === 'serve' ? workspaceSourceAliases(__dirname) : [])],
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
     },
   };

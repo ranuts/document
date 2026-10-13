@@ -61,35 +61,50 @@ export function canWriteToDisk(): boolean {
  * exactly the session the user is in the middle of.
  */
 const sessionTargets = new Map<string, StoredTarget>();
+const persistedTargets = new Set<string>();
+
+/** Retire cached links after their IndexedDB deletion has committed. */
+export function clearSessionSaveTargets(docId?: string): void {
+  if (docId === undefined) {
+    sessionTargets.clear();
+    persistedTargets.clear();
+  } else {
+    sessionTargets.delete(docId);
+    persistedTargets.delete(docId);
+  }
+}
 
 async function readTarget(docId: string): Promise<StoredTarget | null> {
   const held = sessionTargets.get(docId);
-  if (held) return held;
+  if (held && !persistedTargets.has(docId)) return held;
   try {
-    return (
-      (await withStores([HANDLES_STORE], 'readonly', async (tx) => {
-        return ((await requestToPromise(tx.objectStore(HANDLES_STORE).get(docId))) as StoredTarget | undefined) ?? null;
-      })) ?? null
-    );
+    const record = await withStores([HANDLES_STORE], 'readonly', async (tx) => ({
+      target: ((await requestToPromise(tx.objectStore(HANDLES_STORE).get(docId))) as StoredTarget | undefined) ?? null,
+    }));
+    if (!record) return held ?? null;
+    // A different tab may have deleted this link since our last save.
+    if (!record.target) clearSessionSaveTargets(docId);
+    return record.target;
   } catch {
-    return null;
+    return held ?? null;
   }
 }
 
 async function writeTarget(target: StoredTarget): Promise<void> {
   sessionTargets.set(target.docId, target);
   try {
-    await withStores([HANDLES_STORE], 'readwrite', async (tx) => {
+    const stored = await withStores([HANDLES_STORE], 'readwrite', async (tx) => {
       tx.objectStore(HANDLES_STORE).put(target);
       return true;
     });
+    if (stored) persistedTargets.add(target.docId);
   } catch {
     // Not being able to remember the file costs a picker next time, nothing more.
   }
 }
 
 export async function forgetSaveTarget(docId: string): Promise<void> {
-  sessionTargets.delete(docId);
+  clearSessionSaveTargets(docId);
   try {
     await withStores([HANDLES_STORE], 'readwrite', async (tx) => {
       tx.objectStore(HANDLES_STORE).delete(docId);
@@ -135,12 +150,20 @@ function notifySaved(name: string): void {
  * offers the picker instead of failing the same way again; that doubles as the
  * way to save somewhere else.
  */
-export async function saveToDiskFile(docId: string, file: File, description: string): Promise<SaveOutcome> {
+export async function saveToDiskFile(
+  docId: string,
+  file: File,
+  description: string,
+  options: { rememberTarget?: boolean } = {},
+): Promise<SaveOutcome> {
   const picker = (globalThis as { showSaveFilePicker?: SavePicker }).showSaveFilePicker;
   if (typeof picker !== 'function') return 'unavailable';
 
   const existing = await readTarget(docId);
-  let handle = existing?.handle ?? null;
+  const extensionOf = (name: string) => /\.([a-z0-9]+)$/i.exec(name)?.[1]?.toLowerCase();
+  const isExport =
+    options.rememberTarget === false || (!!existing && extensionOf(existing.name) !== extensionOf(file.name));
+  let handle = isExport ? null : (existing?.handle ?? null);
 
   if (handle && !(await ensureWritable(handle))) {
     await forgetSaveTarget(docId);
@@ -166,23 +189,28 @@ export async function saveToDiskFile(docId: string, file: File, description: str
     }
   }
 
+  // Establish the chosen link before asynchronous I/O. History deletion can
+  // then retire it while the write runs, without a late commit reviving it.
+  if (!isExport && handle !== existing?.handle) {
+    await writeTarget({ docId, handle, name: handle.name || file.name, linkedAt: Date.now() });
+  }
+
   try {
     const writable = await handle.createWritable();
     await writable.write(file);
     await writable.close();
   } catch {
-    await forgetSaveTarget(docId);
+    if (!isExport) await forgetSaveTarget(docId);
     return 'unavailable';
   }
 
-  await writeTarget({ docId, handle, name: handle.name || file.name, linkedAt: Date.now() });
   notifySaved(handle.name || file.name);
   return 'written';
 }
 
 /** Test seam: forget every handle this page is holding. */
 export function resetSaveTargetsForTests(): void {
-  sessionTargets.clear();
+  clearSessionSaveTargets();
 }
 
 /** The file name this document writes to, if it is linked to one. */
