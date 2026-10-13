@@ -26,8 +26,11 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
   const mic = document.createElement('button');
   mic.type = 'button';
   mic.className = 'agent-speech-mic';
-  mic.innerHTML =
+  const microphoneIcon =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 10v2a6 6 0 0 0 12 0v-2M12 18v3M8 21h8"/></svg>';
+  mic.innerHTML = microphoneIcon;
+  const stopIcon =
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
   const language = document.createElement('r-select') as HTMLElement & { value: string; disabled: boolean };
   language.className = 'agent-speech-language';
   language.setAttribute('placement', 'top');
@@ -60,8 +63,8 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
   const cancel = document.createElement('button');
   cancel.type = 'button';
   cancel.className = 'agent-speech-cancel';
-  feedback.append(status, cancel, hint);
-  root.append(mic, language);
+  feedback.append(status, hint);
+  root.append(mic, language, cancel);
   chat.actionsEl.append(root);
   // Keep feedback in normal composer flow; it must never cover the draft or editor.
   const composer = chat.el.querySelector('.cui-composer');
@@ -69,6 +72,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
   else root.append(feedback);
   let disclosed = false;
   let stopping = false;
+  let listening = false;
   let recognition: Recognition | undefined;
   let busy = false;
   let original = '';
@@ -84,6 +88,10 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     finishPromise = undefined;
   };
   const render = () => {
+    root.dataset.state = !busy ? 'idle' : stopping ? 'finishing' : listening ? 'listening' : 'starting';
+    feedback.dataset.state = root.dataset.state;
+    mic.innerHTML = busy ? stopIcon : microphoneIcon;
+    mic.classList.toggle('agent-speech-processing', busy && (!listening || stopping));
     mic.setAttribute('aria-label', t(busy ? 'agentSpeechStop' : 'agentSpeechInput'));
     mic.title = mic.getAttribute('aria-label') ?? '';
     mic.setAttribute('aria-pressed', String(busy));
@@ -94,7 +102,10 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     language.setAttribute('aria-label', t('agentSpeechLanguage'));
     language.disabled = busy;
     hint.textContent = t('agentSpeechPrivacy');
-    cancel.textContent = t('agentSpeechCancel');
+    cancel.setAttribute('aria-label', t('agentSpeechCancel'));
+    cancel.title = t('agentSpeechCancel');
+    cancel.innerHTML =
+      '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg>';
   };
   const close = (discard = false, preserveDraft = false, ready = false) => {
     clearTimeout(deadline);
@@ -108,6 +119,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     if (busy && !preserveDraft) chat.setInput(discard ? original : transcript ? base + transcript : original);
     busy = false;
     stopping = false;
+    listening = false;
     hint.hidden = true;
     status.textContent = '';
     settleFinish(ready);
@@ -141,6 +153,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     if (base && !/\s$/.test(base)) base += ' ';
     transcript = '';
     stopping = false;
+    listening = false;
     hint.hidden = disclosed;
     disclosed = true;
     const token = ++revision;
@@ -153,7 +166,10 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     render();
     status.textContent = t('agentSpeechStarting');
     instance.onstart = () => {
-      if (token === revision) status.textContent = t('agentSpeechListening');
+      if (token !== revision || stopping) return;
+      listening = true;
+      status.textContent = t('agentSpeechListening');
+      render();
     };
     instance.onresult = (event) => {
       if (token !== revision) return;
