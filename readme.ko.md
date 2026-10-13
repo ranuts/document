@@ -1,4 +1,4 @@
-# <img src="public/icons/document.svg" width="28" height="28" alt=""> 온라인 문서 편집기
+# <img src="public/icons/document.svg" width="28" height="28" align="absmiddle" alt=""> 온라인 문서 편집기
 
 <p align="center">
   <a href="https://github.com/ranuts/document/actions/workflows/ci.yml">
