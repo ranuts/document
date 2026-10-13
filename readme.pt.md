@@ -17,9 +17,6 @@
   <a href="https://edit.chaxus.com/">
     <img src="https://img.shields.io/badge/Live-edit.chaxus.com-brightgreen" alt="Live site">
   </a>
-  <a href="#assistente-de-documentos-com-ia-experimental-beta">
-    <img src="https://img.shields.io/badge/AI_Assistant-Experimental_Beta-orange" alt="AI Assistant: Experimental Beta">
-  </a>
 </p>
 <p align="center">
   <a href="readme.md">English</a> |
@@ -32,68 +29,28 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-Edite ficheiros do Word, Excel e PowerPoint e anote PDFs diretamente no navegador. Não é preciso instalar o Office nem criar uma conta. A edição e conversão são locais; pode ativar o assistente experimental de IA quando precisar.
+Abra, edite e guarde Word, Excel e PowerPoint no navegador. Anote PDFs. Sem conta nem instalação do Office.
 
-**Site: [edit.chaxus.com](https://edit.chaxus.com/)**
+**[Experimentar online](https://edit.chaxus.com/)** · [Ver código](https://github.com/ranuts/document)
 
 ---
 
 ## ✨ Funcionalidades
 
-- 🔒 **Edição local** — a conversão, edição e exportação acontecem no navegador; escolhe onde os pedidos opcionais de IA são processados
-- 📝 **Edição a sério, não pré-visualização** — DOCX, XLSX, PPTX e CSV, além de ODF, RTF, TXT e os antigos formatos binários; os PDF abrem e podem ser anotados
-- 🕓 **Retome o trabalho** — as cópias de recuperação locais ajudam a reabrir as edições recentes; ficam guardadas 7 dias e podem ser apagadas a qualquer momento ([pormenores](#-edição-local-e-tratamento-de-dados))
-- 📴 **Funciona sem ligação** — instalável como PWA; os recursos do editor em cache podem ser reutilizados offline; recursos não guardados e ficheiros remotos precisam de rede
-- 🌍 **Multilingue** — 7 idiomas de interface para o site e 45 para o editor
-- 🧩 **Incorporável** — API completa de postMessage para integração em iframe
-- ✨ **Assistente de documentos com IA (Experimental Beta)** — Crie textos, trabalhe com tabelas, gere slides e faça perguntas sobre PDFs com um modelo local ou seu próprio serviço de IA.
-- 🤖 **Pronto para agentes** — expõe ferramentas WebMCP para que um agente de IA do navegador abra, converta e leia documentos
-- 🚀 **Implanta-se em qualquer lado** — uma compilação estática; uma pasta de ficheiros atrás de qualquer servidor web
-
----
-
-## Assistente de documentos com IA (Experimental Beta)
-
-Descreva o que precisa e confira o resultado no documento. Crie um texto, preencha uma coluna, gere um slide ou faça perguntas sobre a página atual de um PDF. Revise ou cancele as sugestões; as alterações aplicadas podem ser desfeitas.
-
-**Ainda experimental.** As respostas e alterações podem estar erradas. Confira os resultados importantes. O assistente vem desativado. Escolha um modelo local ou conecte seu próprio serviço de IA. Serviços externos recebem o conteúdo necessário para sua solicitação.
-
-| Word                                                                                                                                                        | Excel                                                                                                                                                           |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [![Redigir, inserir, resumir e desfazer](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/8d1d6386-e33a-45f2-b968-b8695c8f7da9) | [![Preencher, calcular, ordenar e desfazer](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/5bb253d7-3cc5-4f31-989e-0c88dcb1615c) |
-| **Redigir, inserir, resumir e desfazer**                                                                                                                    | **Preencher, calcular, ordenar e desfazer**                                                                                                                     |
-| PowerPoint                                                                                                                                                  | PDF                                                                                                                                                             |
-| [![Criar, duplicar e desfazer](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/db3fc7a7-b54e-4147-a7ca-e7f16243618e)           | [![Ler, perguntar e rever notas](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/f01c2da6-0669-4111-87c1-c4440f4a60e9)              |
-| **Criar, duplicar e desfazer**                                                                                                                              | **Ler, perguntar e rever notas**                                                                                                                                |
-
-Clique numa prévia para assistir a um fluxo completo em velocidade normal, com tempo para ler os resultados. Os vídeos usam a interface em inglês, Qwen3 4B local e informações fictícias. O modelo já está carregado no início; o tempo de resposta depende do modelo e do dispositivo.
-
-[Vídeos, legendas em inglês e descrições](docs/media/ai-demos/README.md)
-
-A assistência para PDF usa o texto selecionável da página atual e notas de página. Não reconhece texto em imagens digitalizadas nem reescreve o corpo do PDF.
-
----
+- **Edição local.** Conversão, edição e exportação são executadas no seu dispositivo.
+- **Guarde como preferir.** No ficheiro escolhido, quando o navegador permite, ou por download.
+- **Retome o trabalho.** Reabra documentos recentes guardados neste navegador.
+- **No seu ambiente.** Instale como PWA, hospede por conta própria ou incorpore numa aplicação.
 
 ## 🚀 Começar
 
-**Usar já:** [edit.chaxus.com](https://edit.chaxus.com/) — nada a instalar.
+**[Experimentar online](https://edit.chaxus.com/)** · [Ver código](https://github.com/ranuts/document)
 
-**Alojar por si com Docker:**
+Ou execute a sua própria cópia:
 
 ```bash
 docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 ```
-
-**Correr a partir do código:**
-
-```bash
-git clone https://github.com/ranuts/document.git
-cd document
-pnpm install
-pnpm run dev
-```
-
----
 
 ## 📄 Formatos
 
@@ -104,181 +61,57 @@ pnpm run dev
 | Apresentações     | `.pptx`                     | `.ppt` `.odp`               |
 | PDF               | anotar, preencher, exportar | `.pdf`                      |
 
-Qualquer um deles pode ser exportado para PDF. O CSV mantém a codificação à saída (na
-abertura são detetados UTF-8, GB18030 e Latin-1).
-
----
-
-## 🔗 Rotas e parâmetros de URL
-
-| Rota                  | O que é                                                           |
-| --------------------- | ----------------------------------------------------------------- |
-| `/`                   | Página inicial. O editor só é carregado quando abre alguma coisa. |
-| `/editor`             | O editor.                                                         |
-| `/history`            | Documentos que este navegador tem guardados (ver abaixo).         |
-| `/help`, `/changelog` | Gerados a partir do markdown em `content/`.                       |
-
-Parâmetros de `/editor`:
-
-| Parâmetro    | Descrição                                                                                                                               |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `src=<url>`  | Abrir um documento a partir de um URL (esse URL tem de permitir CORS)                                                                   |
-| `file=<url>` | O mesmo, na grafia antiga; se ambos existirem, prevalece este                                                                           |
-| `new=docx`   | Criar um documento em branco (`docx`, `xlsx`, `pptx`)                                                                                   |
-| `doc=<id>`   | Reabrir um documento do histórico deste navegador — o editor coloca aqui o seu próprio id, por isso recarregar volta ao mesmo documento |
-| `readonly=1` | Abrir só para consulta: edição e exportação ficam desativadas                                                                           |
-| `embed=1`    | Modo incorporado; a página anfitriã comanda o editor por postMessage                                                                    |
-| `locale=pt`  | Idioma da interface                                                                                                                     |
-
----
+Os documentos compatíveis podem ser exportados para PDF.
 
 ## 🔐 Edição local e tratamento de dados
 
-A edição e a conversão são realizadas localmente. Só ficam duas coisas guardadas localmente,
-e ambas pode remover:
+As cópias de recuperação ficam neste navegador durante 7 dias após a última edição ou abertura. Apague-as em [Documentos guardados](https://edit.chaxus.com/history). Não são um backup; exporte os ficheiros importantes.
 
-- **Cópias daquilo que editou.** Enquanto trabalha, o editor guarda o documento neste
-  navegador (IndexedDB) para que recarregar, fechar um separador ou uma falha não lhe custem
-  o trabalho. Ao reabrir o editor, ele volta a oferecê-las. Estas cópias existem para poder
-  retomar o que estava a meio — não são uma cópia de segurança, por isso continue a exportar
-  tudo o que quiser guardar.
-- **Sete dias e desaparecem.** Cada documento é apagado automaticamente sete dias depois da
-  última vez que o editou ou abriu, quer volte ou não.
+Os serviços de IA externos recebem o conteúdo necessário para o pedido. Os modelos locais processam-no no dispositivo. O ditado pode usar um serviço de voz online; a aplicação anfitriã trata as exportações incorporadas.
 
-[`/history`](https://edit.chaxus.com/history) lista o que está guardado, com um botão de
-eliminar em cada linha, um para eliminar tudo e um interruptor para desligar por completo a
-gravação automática. Eliminar ali tem efeito imediato. Num computador partilhado, é a página
-a visitar.
+## Documentação e integração
 
-O assistente de IA vem desativado. Com um modelo local, o conteúdo fica no seu dispositivo. Ao ligar o seu próprio serviço de IA, o conteúdo necessário para o pedido é enviado a esse serviço. O ditado do navegador pode usar um serviço de reconhecimento de voz online. No modo incorporado, os ficheiros exportados voltam à aplicação anfitriã, que controla os envios posteriores.
+[Guia de utilização](https://edit.chaxus.com/help) · [Hospedagem, URLs e integração](docs/reference.md) · [API de incorporação](docs/embed-api.md) · [Tipos de letra](docs/fonts.md)
 
----
+A utilização offline exige recursos do editor em cache. Recursos não guardados e ficheiros remotos precisam de ligação.
 
-## 🧩 Incorporar num iframe
+## Assistente de documentos com IA (Experimental Beta)
 
-Incorpore o editor e comande-o por postMessage. A divisão habitual é: o seu sistema trata da
-autenticação e do armazenamento, o iframe trata da edição.
+Redija e melhore textos, trabalhe com dados de folhas de cálculo, crie diapositivos ou faça perguntas sobre a página PDF atual. Reveja as alterações antes de aplicar e desfaça-as quando necessário.
 
-```html
-<iframe
-  id="documentEditor"
-  src="https://your-deployment/editor?embed=1"
-  style="width: 100%; height: 720px; border: 0"
-></iframe>
-```
+**Experimental Beta.** Desativado por predefinição. Respostas e alterações podem estar erradas; confirme resultados importantes.
 
-```js
-// Abrir um documento
-iframe.contentWindow.postMessage(
-  { id: '1', type: 'document:open-url', payload: { url: 'https://example.com/doc.xlsx' } },
-  'https://your-deployment',
-);
+<details>
+<summary>Ver as quatro demos</summary>
 
-// Ouvir o resultado
-window.addEventListener('message', (e) => {
-  if (e.data?.type === 'document:opened') console.log('Pronto a editar');
-  if (e.data?.type === 'document:saved') uploadFile(e.data.payload.file);
-});
-```
+| Word                                                                                                                                                        | Excel                                                                                                                                                           |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [![Redigir, inserir, resumir e desfazer](docs/media/ai-demos/word-ai.jpg)](https://github.com/user-attachments/assets/8d1d6386-e33a-45f2-b968-b8695c8f7da9) | [![Preencher, calcular, ordenar e desfazer](docs/media/ai-demos/excel-ai.jpg)](https://github.com/user-attachments/assets/5bb253d7-3cc5-4f31-989e-0c88dcb1615c) |
+| **Redigir, inserir, resumir e desfazer**                                                                                                                    | **Preencher, calcular, ordenar e desfazer**                                                                                                                     |
+| PowerPoint                                                                                                                                                  | PDF                                                                                                                                                             |
+| [![Criar, duplicar e desfazer](docs/media/ai-demos/pptx-ai.jpg)](https://github.com/user-attachments/assets/db3fc7a7-b54e-4147-a7ca-e7f16243618e)           | [![Ler, perguntar e rever notas](docs/media/ai-demos/pdf-ai.jpg)](https://github.com/user-attachments/assets/f01c2da6-0669-4111-87c1-c4440f4a60e9)              |
+| **Criar, duplicar e desfazer**                                                                                                                              | **Ler, perguntar e rever notas**                                                                                                                                |
 
-Os editores incorporados não mantêm histórico local — o documento pertence à página anfitriã.
+Fluxos completos à velocidade normal, em inglês, com o modelo local Qwen3 4B já carregado. O tempo de resposta depende do modelo e do dispositivo.
 
-→ **[Referência completa da API](docs/embed-api.md)** — todos os tipos de mensagem, a lista
-de origens permitidas, o modo de leitura e o fluxo de gravação.
+[Vídeos, legendas e descrições](docs/media/ai-demos/README.md)
 
-Também disponível como componente: é este projeto que move a pré-visualização de documentos
-do [@ranui/preview](https://www.npmjs.com/package/@ranui/preview)
-([documentação](https://chaxus.github.io/ran/src/ranui/preview/)).
+O PDF suporta texto selecionável e notas de página, não reconhece texto em imagens digitalizadas nem reescreve o corpo do PDF.
 
----
-
-## 🚀 Implantação
-
-Uma compilação estática — sem runtime, sem base de dados.
-
-```bash
-pnpm build   # sai para dist/
-```
-
-### Alojamento estático (Cloudflare Pages, Nginx, Vercel, Netlify…)
-
-Carregue `dist/`. O ficheiro `public/_headers` traz o contrato de cache que o site pressupõe
-(recursos com hash imutáveis, service worker nunca em cache); alojamentos que o ignorem
-continuam a funcionar, apenas revalidam mais vezes.
-
-No Nginx, sirva `index.html` como alternativa para rotas desconhecidas:
-
-```nginx
-location / {
-  root /var/www/document;
-  try_files $uri $uri/ /index.html;
-}
-```
-
-### GitHub Pages
-
-`.github/workflows/pages-build-site.yml` compila e publica a cada push para `main`. Ative as
-Pages nas definições do repositório com **GitHub Actions** como origem.
-
-### Docker
-
-```bash
-# Básico
-docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
-
-# Com HTTPS e autenticação básica
-docker run -d --name document -p 443:443 \
-  -v /path/to/certs:/ssl \
-  -e SERVER_BASIC_AUTH='user:$2y$...' \
-  -e SERVER_HTTP2_TLS=true \
-  -e SERVER_HTTP2_TLS_CERT=/ssl/cert.pem \
-  -e SERVER_HTTP2_TLS_KEY=/ssl/key.pem \
-  ghcr.io/ranuts/document:latest
-```
-
-`SERVER_BASIC_AUTH` recebe um hash BCrypt; duplique os caracteres `$` para os escapar na
-shell. A cache da imagem é configurada em `sws.toml`.
-
----
-
-## 🔤 Tipos de letra
-
-A compilação do OnlyOffice incluída traz a biblioteca de tipos de letra em `public/fonts/`,
-indexada por `public/sdkjs/common/AllFonts.js`. Os tipos de letra são obtidos a pedido — um
-documento só descarrega aqueles que realmente usa.
-
-→ **[Guia de gestão de tipos de letra](docs/fonts.md)** — o formato do catálogo indexado, os
-registos e como acrescentar tipos de letra com `bin/font-catalog.mjs`.
-
----
+</details>
 
 ## 🛠 Desenvolvimento
 
+Executar a partir do código:
+
 ```bash
+git clone https://github.com/ranuts/document.git
+cd document
 pnpm install --frozen-lockfile
-pnpm run dev            # servidor de desenvolvimento
-pnpm run build          # compilação de produção (bin/build.sh)
-pnpm run lint           # oxlint + tsc + configuração do docker
-pnpm run test           # testes unitários (Vitest)
-pnpm run test:e2e       # testes de ponta a ponta (Playwright, editor real + WASM real)
+pnpm run dev
 ```
 
-A suíte de ponta a ponta usa o editor verdadeiro e o conversor verdadeiro em vez de
-simulações, incluindo idas e voltas de documentos, o protocolo de incorporação e o fluxo de
-recuperação. `docs/explorations/` regista por que razão cada peça menos óbvia é como é —
-vale a pena ler antes de mexer na integração do editor.
-
----
-
-## 🤖 Agentes de IA no navegador (WebMCP)
-
-Onde o navegador o suporta, a página regista ferramentas que um agente pode invocar
-diretamente em vez de manobrar a interface: `open_document_url`, `open_document_buffer`,
-`create_document`, `save_document`, `get_document_text`, `set_readonly`,
-`get_document_state`. Também aqui os documentos não saem do dispositivo — é o próprio
-navegador que os obtém e converte. Onde a API não existe, nada acontece.
-
----
+Comentários e contribuições são bem-vindos: [Issues](https://github.com/ranuts/document/issues) · [Pull requests](https://github.com/ranuts/document/pulls)
 
 ## 📚 Construído sobre
 
@@ -287,15 +120,12 @@ navegador que os obtém e converte. Onde a API não existe, nada acontece.
 - [ranui / ranuts](https://github.com/chaxus/ran) — o sistema de design e os utilitários com que este site é feito
 - [se-office](https://github.com/Qihoo360/se-office), [onlyoffice-web-local](https://github.com/sweetwisdom/onlyoffice-web-local) — trabalho anterior sobre usar o OnlyOffice sem servidor de documentos
 
-## 🤝 Contribuir
-
-Issues e pull requests são bem-vindos. O `main` está protegido: trabalhe num ramo e abra um
-PR, que corre o lint, os testes unitários e três suítes de ponta a ponta (servidor de
-desenvolvimento, comportamento do Cloudflare Pages e imagem Docker de produção).
-
 ## 📄 Licença
 
-[AGPL-3.0](LICENSE).
+[AGPL-3.0](LICENSE) · [NOTICE](NOTICE)
+
+<details>
+<summary>Avisos do projeto original e marcas</summary>
 
 Este projeto é uma versão modificada dos editores ONLYOFFICE (sdkjs e web-apps,
 copyright de Ascensio System SIA). A interface usa nomes funcionais neutros, sem
@@ -315,3 +145,5 @@ não a marca deste projeto.
 
 A instalação PWA e as abas do navegador usam um ícone de documento neutro desenhado
 de forma independente, sem logótipos, marcas ou iniciais do projeto.
+
+</details>
