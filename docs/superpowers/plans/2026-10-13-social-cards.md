@@ -13,6 +13,6 @@
 - [x] Add generic static cards to editor/history and a contextual card to the iframe demo.
 - [x] Render a deterministic product image using the existing brand mark and inspect it.
 - [x] Generate pages; verify all page cards, metadata escaping, image bytes and dimensions, formatting, lint and production build.
-- [ ] Review changes, commit by function, push and create a PR. Provide the repository image for the user to upload in Social preview settings (user follow-up).
+- [x] Review changes, commit by function, push and create a PR. Provide the repository image for the user to upload in Social preview settings (user follow-up).
 
 **Simplest implementation:** Static metadata and one shared raster image. No dynamic image service, user-document previews, browser-language rewriting or per-page artwork.

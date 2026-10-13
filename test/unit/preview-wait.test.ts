@@ -8,7 +8,7 @@ const workflow = readFileSync(resolve(__dirname, '../../.github/workflows/previe
 const wait = workflow.split('id: preview')[1].split('run: |\n')[1].split('\n      - name:')[0];
 const script = wait.replace(/^ {10}/gm, '').replaceAll('${{ github.repository }}', 'ranuts/document');
 
-function runPreview(responses: string[], apiFails = false) {
+function runPreview(responses: string[], apiFails = false, headRepository = 'ranuts/document') {
   const dir = mkdtempSync(join(tmpdir(), 'preview-wait-'));
   try {
     responses.forEach((response, i) => writeFileSync(join(dir, `response-${i + 1}`), response));
@@ -29,6 +29,7 @@ function runPreview(responses: string[], apiFails = false) {
         CHECK_WAIT_MINUTES: '1',
         SHA: 'abc',
         GITHUB_REPOSITORY: 'ranuts/document',
+        HEAD_REPOSITORY: headRepository,
         GITHUB_OUTPUT: join(dir, 'output'),
       },
     });
@@ -38,12 +39,39 @@ function runPreview(responses: string[], apiFails = false) {
   }
 }
 
-it('fails early with instructions when no deployment was triggered', () => {
-  const result = runPreview(['', '', '', '', '', '']);
+it('fails early with instructions when a fork has no mirrored deployment', () => {
+  const result = runPreview(['', '', '', '', '', ''], false, 'fork/document');
   expect(result.status).toBe(1);
   expect(result.stdout).toContain('never appeared');
   expect(result.stdout).toContain('fork');
   expect(result.polls).toBeLessThan(6);
+});
+
+it('waits for a same-repository check that appears after the fork grace window', () => {
+  const result = runPreview([
+    '',
+    '',
+    '',
+    '',
+    '{"status":"completed","conclusion":"success","summary":"https://123.document-7hm.pages.dev"}',
+  ]);
+  expect(result.status).toBe(0);
+  expect(result.polls).toBe(5);
+  expect(result.stdout).toContain('https://123.document-7hm.pages.dev');
+});
+
+it('bounds missing same-repository checks by the overall deployment window', () => {
+  const result = runPreview(['', '', '', '', '', '']);
+  expect(result.status).toBe(1);
+  expect(result.polls).toBe(6);
+  expect(result.stdout).toContain('did not finish within 2 minutes');
+});
+
+it('fails on a concluded deployment failure instead of bypassing the preview gate', () => {
+  const result = runPreview(['{"status":"completed","conclusion":"failure"}']);
+  expect(result.status).toBe(1);
+  expect(result.polls).toBe(1);
+  expect(result.stdout).toContain('preview deployment concluded: failure');
 });
 
 it('keeps waiting for a deployment that has appeared, even if a later poll is empty', () => {

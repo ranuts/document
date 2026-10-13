@@ -38,13 +38,16 @@ jobs:
       # preview clones ~616 MiB, checks out ~625 MB and uploads ~697 MB of
       # output. The build script itself runs in about seven seconds.
       # Fork heads need a maintainer to mirror the exact SHA into a preview
-      # branch here; waiting longer cannot create a missing deployment. Only
-      # install dependencies and browsers once there is a preview to test.
+      # branch here; waiting longer cannot create a missing deployment. Limit
+      # their missing-check grace window, but let same-repository checks use
+      # the full deployment window: Pages can queue before publishing a check.
+      # Install dependencies and browsers only once there is a preview to test.
       - name: Wait for the Cloudflare Pages preview of this commit
         id: preview
         env:
           GH_TOKEN: ${{ github.token }}
           SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
           WAIT_MINUTES: "45"
           CHECK_WAIT_MINUTES: "5"
         run: |
@@ -56,20 +59,18 @@ jobs:
               --jq '.check_runs | map(select(.name=="Cloudflare Pages")) | max_by(.id) | if . == null then empty else {status, conclusion, summary: .output.summary} end')
             STATUS=$(printf '%s' "$RUN" | jq -r '.status // empty' 2>/dev/null | head -1)
             if [ -n "$STATUS" ]; then SEEN_CHECK=true; fi
-            if [ "$SEEN_CHECK" = false ] && [ "$i" -ge "$CHECK_ATTEMPTS" ]; then
+            if [ "$SEEN_CHECK" = false ] && [ "$HEAD_REPOSITORY" != "$GITHUB_REPOSITORY" ] && [ "$i" -ge "$CHECK_ATTEMPTS" ]; then
               echo "::error::Cloudflare Pages check never appeared for $SHA within $CHECK_WAIT_MINUTES minutes. For a fork PR, a maintainer must push the exact head SHA to a preview branch in this repository, then rerun this workflow. For same-repository PRs, check Pages branch deployment controls and the GitHub integration."
               exit 1
             fi
             if [ "$STATUS" = "completed" ]; then
               CONCLUSION=$(printf '%s' "$RUN" | jq -r '.conclusion' | head -1)
               if [ "$CONCLUSION" != "success" ]; then
-                # Cloudflare builds this repository close to its limits, so a
-                # failure here is not automatically a defect in the commit. Check
-                # whether `E2E (Cloudflare Pages semantics)` passed: it runs the
-                # same bin/build.sh, so green there and red here means the build
-                # is fine and Cloudflare fell over. There is no API to retry a
-                # Git-integration deployment -- pushing again is the way.
-                echo "::error::Cloudflare Pages preview deployment concluded: $CONCLUSION. If the 'E2E (Cloudflare Pages semantics)' checks are green, the build itself is fine (they run the same bin/build.sh) and this was Cloudflare-side; push again to trigger a new deployment. See docs/explorations/2026-08-21-cloudflare-preview-flake.md"
+                # The Pages-semantics suite uses the same build script, but its
+                # success cannot diagnose a failed provider deployment. Inspect
+                # the actual Pages logs to distinguish clone, build and upload
+                # failures. Pushing again triggers a new Git-integration deploy.
+                echo "::error::Cloudflare Pages preview deployment concluded: $CONCLUSION. Inspect the Pages deployment logs and compare the 'E2E (Cloudflare Pages semantics)' checks to identify the failed stage. For a transient failure, retry in the Pages dashboard or push again to trigger a new deployment. See docs/explorations/2026-08-21-cloudflare-preview-flake.md"
                 exit 1
               fi
               URL=$(printf '%s' "$RUN" | jq -r '.summary' | grep -oE 'https://[a-z0-9-]+\.document-[a-z0-9]+\.pages\.dev' | head -1)
