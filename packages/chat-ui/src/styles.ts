@@ -57,8 +57,11 @@ export const CHAT_UI_CSS = `
 .cui-activity li { padding:4px 0; }
 .cui-msg-status { color:var(--cui-muted); font-size:12px; }
 .cui-msg-error .cui-bubble { padding:12px; border:1px solid var(--cui-border); border-radius:10px; font-size:13px; }
-.cui-status { flex:0 0 auto; padding:0 20px 12px; color:var(--cui-muted); font-size:12px; }
+.cui-status { flex:0 0 auto; display:flex; align-items:center; gap:8px; padding:0 20px 12px; color:var(--cui-muted); font-size:12px; line-height:1.5; }
 .cui-status:empty { display:none; }
+/* One activity cue at a time: the waiting row gives way to the live-text
+   cursor when responding. A human review is a resting state, not loading. */
+.cui-root:is([data-activity="responding"],[data-activity="reading"],[data-activity="planning"]) .cui-status::before { content:''; flex:0 0 auto; width:12px; height:12px; box-sizing:border-box; border:1.5px solid var(--cui-border); border-top-color:currentColor; border-right-color:currentColor; border-radius:50%; animation:cui-loading-turn 1s linear infinite; }
 .cui-footer { position:relative; flex:0 0 auto; padding:12px 16px 16px; }
 .cui-scroll-bottom { position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:32px; height:32px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:1px solid var(--cui-border); border-radius:50%; background:var(--cui-bg); color:var(--cui-muted); cursor:pointer; box-shadow:0 2px 6px #00000012; }
 .cui-scroll-bottom[hidden] { display:none; }
@@ -73,6 +76,12 @@ export const CHAT_UI_CSS = `
 .cui-send:disabled { opacity:.35; cursor:default; }
 .cui-root .cui-send.cui-send-prepare { width:auto; max-width:100%; padding:0 8px; font:inherit; font-size:12px; background:transparent; color:var(--cui-text); text-decoration:underline; text-underline-offset:3px; }
 .cui-streaming .cui-bubble::after { content:''; display:inline-block; width:6px; height:6px; margin-left:5px; border-radius:50%; background:currentColor; vertical-align:middle; }
+.cui-root[data-activity="responding"] .cui-streaming .cui-bubble::after { animation:cui-answer-pulse 1.4s ease-in-out infinite; }
+@keyframes cui-loading-turn { to { transform:rotate(360deg); } }
+@keyframes cui-answer-pulse { 0%,100% { opacity:.45; transform:scale(.85); } 50% { opacity:1; transform:scale(1.15); } }
+@media (prefers-reduced-motion:reduce) {
+  .cui-root[data-activity] .cui-status::before,.cui-root[data-activity] .cui-streaming .cui-bubble::after { animation:none; transform:none; opacity:1; }
+}
 `;
 
 let injected = false;
