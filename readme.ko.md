@@ -14,6 +14,7 @@
     <img src="https://img.shields.io/badge/Live-edit.chaxus.com-brightgreen" alt="Live site">
   </a>
 </p>
+
 <p align="center">
   <a href="readme.md">English</a> |
   <a href="readme.zh.md">简体中文</a> |
@@ -25,6 +26,8 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
+**사용자와 AI 에이전트를 위한 브라우저 문서 작업 공간.**
+
 브라우저에서 Word, Excel, PowerPoint를 열고 편집하고 저장하세요. PDF에는 주석을 추가할 수 있습니다. 계정이나 Office 설치가 필요 없습니다.
 
 **[온라인으로 사용](https://edit.chaxus.com/)** · [소스 보기](https://github.com/ranuts/document)
@@ -33,14 +36,16 @@
 
 ## ✨ 특징
 
-- **로컬 편집.** 문서 변환, 편집, 내보내기를 기기에서 처리합니다.
-- **원하는 방식으로 저장.** 지원되는 브라우저에서는 선택한 파일에 저장하고, 그 외에는 다운로드합니다.
-- **작업 이어가기.** 이 브라우저에 보관된 최근 문서를 다시 엽니다.
-- **작업 환경에 맞게.** PWA 설치, 자체 호스팅, 앱 임베드를 지원합니다.
+- **로컬 편집과 변환.** 문서를 기기에서 처리하므로 편집과 변환을 위해 업로드할 필요가 없습니다.
+- **원하는 방식으로 저장.** 지원되는 브라우저에서는 선택한 파일에 저장하고, 그 외에는 다운로드합니다. 이 브라우저에서 최근 작업을 다시 열 수 있습니다.
+- **AI와 함께 작업 (Experimental Beta).** 글 초안과 수정, 표 데이터 처리, 슬라이드 생성, 현재 PDF 페이지에 대한 질문을 지원합니다. 변경 내용을 확인한 뒤 적용하세요.
+- **에이전트가 문서 도구 호출.** [WebMCP](docs/reference.md#webmcp-agent-tools) 지원 브라우저에서는 AI 에이전트가 파일을 열고 변환하고 내보내며, 텍스트 문서의 본문을 읽을 수 있습니다.
+- **PWA로 설치.** 앱처럼 사용하고 캐시된 편집기 리소스를 오프라인에서 이용할 수 있습니다.
+- **자체 호스팅과 통합.** 정적 사이트로 배포하거나 iframe API로 앱에 임베드하세요.
 
 ## 🚀 빠른 시작
 
-**[온라인으로 사용](https://edit.chaxus.com/)** · [소스 보기](https://github.com/ranuts/document)
+[새 문서](https://edit.chaxus.com/editor?new=docx&locale=ko-KR) · [새 스프레드시트](https://edit.chaxus.com/editor?new=xlsx&locale=ko-KR) · [새 프레젠테이션](https://edit.chaxus.com/editor?new=pptx&locale=ko-KR)
 
 직접 실행할 수도 있습니다:
 
@@ -59,6 +64,8 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 
 지원 문서를 PDF로 내보낼 수 있습니다.
 
+다국어 UI, 밝은 테마와 어두운 테마, 읽기 전용 미리보기도 지원합니다.
+
 ## 🔐 로컬 편집과 데이터 처리
 
 복구 사본은 마지막 편집 또는 열기 후 7일 동안 이 브라우저에 보관됩니다. [저장된 문서](https://edit.chaxus.com/history)에서 삭제할 수 있습니다. 백업이 아니므로 중요한 파일은 내보내세요.
@@ -74,6 +81,8 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 ## AI 문서 도우미 (Experimental Beta)
 
 글 초안과 수정, 표 데이터 처리, 슬라이드 생성, 현재 PDF 페이지에 대한 질문을 지원합니다. 변경 내용을 확인한 뒤 적용하고 필요하면 실행 취소하세요.
+
+기기 내 모델을 선택하거나 자체 AI 서비스에 연결하세요. 지원되는 브라우저에서는 음성 입력도 사용할 수 있습니다.
 
 **Experimental Beta.** 기본적으로 꺼져 있습니다. 답변과 수정이 틀릴 수 있으므로 중요한 결과는 확인하세요.
 

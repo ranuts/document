@@ -14,6 +14,7 @@
     <img src="https://img.shields.io/badge/Live-edit.chaxus.com-brightgreen" alt="Live site">
   </a>
 </p>
+
 <p align="center">
   <a href="readme.md">English</a> |
   <a href="readme.zh.md">简体中文</a> |
@@ -25,6 +26,8 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
+**Um espaço para os seus documentos e agentes de IA, no navegador.**
+
 Abra, edite e guarde Word, Excel e PowerPoint no navegador. Anote PDFs. Sem conta nem instalação do Office.
 
 **[Experimentar online](https://edit.chaxus.com/)** · [Ver código](https://github.com/ranuts/document)
@@ -33,14 +36,16 @@ Abra, edite e guarde Word, Excel e PowerPoint no navegador. Anote PDFs. Sem cont
 
 ## ✨ Funcionalidades
 
-- **Edição local.** Conversão, edição e exportação são executadas no seu dispositivo.
-- **Guarde como preferir.** No ficheiro escolhido, quando o navegador permite, ou por download.
-- **Retome o trabalho.** Reabra documentos recentes guardados neste navegador.
-- **No seu ambiente.** Instale como PWA, hospede por conta própria ou incorpore numa aplicação.
+- **Edição e conversão local.** Os documentos são processados no dispositivo sem precisar de upload para editar ou converter.
+- **Guarde como preferir.** No ficheiro escolhido quando o navegador permite, ou por download. Retome documentos recentes neste navegador.
+- **Trabalhe com IA (Experimental Beta).** Redija e melhore textos, trabalhe com dados de folhas de cálculo, crie diapositivos ou faça perguntas sobre a página PDF atual. Reveja as alterações antes de aplicar.
+- **Agentes usam ferramentas de documentos.** Em navegadores compatíveis com [WebMCP](docs/reference.md#webmcp-agent-tools), os agentes de IA podem abrir, converter e exportar ficheiros e ler texto de documentos de texto.
+- **Instale como PWA.** Utilize como uma aplicação; os recursos do editor em cache funcionam offline.
+- **Hospede ou incorpore.** Publique um site estático ou incorpore o editor na sua aplicação através da API de iframe.
 
 ## 🚀 Começar
 
-**[Experimentar online](https://edit.chaxus.com/)** · [Ver código](https://github.com/ranuts/document)
+[Novo documento](https://edit.chaxus.com/editor?new=docx&locale=pt-PT) · [Nova folha de cálculo](https://edit.chaxus.com/editor?new=xlsx&locale=pt-PT) · [Nova apresentação](https://edit.chaxus.com/editor?new=pptx&locale=pt-PT)
 
 Ou execute a sua própria cópia:
 
@@ -59,6 +64,8 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 
 Os documentos compatíveis podem ser exportados para PDF.
 
+Também suporta interfaces multilingues, temas claro e escuro e pré-visualização só de leitura.
+
 ## 🔐 Edição local e tratamento de dados
 
 As cópias de recuperação ficam neste navegador durante 7 dias após a última edição ou abertura. Apague-as em [Documentos guardados](https://edit.chaxus.com/history). Não são um backup; exporte os ficheiros importantes.
@@ -74,6 +81,8 @@ A utilização offline exige recursos do editor em cache. Recursos não guardado
 ## Assistente de documentos com IA (Experimental Beta)
 
 Redija e melhore textos, trabalhe com dados de folhas de cálculo, crie diapositivos ou faça perguntas sobre a página PDF atual. Reveja as alterações antes de aplicar e desfaça-as quando necessário.
+
+Escolha um modelo local ou ligue o seu próprio serviço de IA. Pode ditar instruções em navegadores com entrada de voz.
 
 **Experimental Beta.** Desativado por predefinição. Respostas e alterações podem estar erradas; confirme resultados importantes.
 

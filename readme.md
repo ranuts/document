@@ -26,6 +26,8 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
+**A document workspace for you and your AI agents.**
+
 Open, edit and save Word, Excel and PowerPoint files. Annotate PDFs. All in your browser, with no account or Office installation required.
 
 **[Try it online](https://edit.chaxus.com/)** · [View source](https://github.com/ranuts/document)
@@ -34,14 +36,16 @@ Open, edit and save Word, Excel and PowerPoint files. Annotate PDFs. All in your
 
 ## ✨ Features
 
-- **Local editing.** Document conversion, editing and export run on your device.
-- **Save your way.** Write back to your chosen file where supported, or download an export.
-- **Pick up where you left off.** Reopen recent work from this browser.
-- **Ready for your workflow.** Install as a PWA, self-host or embed in your app.
+- **Edit locally.** Open, edit and convert documents on your device, without a required document upload.
+- **Save your way.** Write back to your chosen file where supported, or download an export. Reopen recent work from this browser.
+- **Work with AI (Experimental Beta).** Draft and refine text, work with spreadsheet data, create slides or ask about the current PDF page. Review changes before applying them.
+- **Let agents handle documents.** In [WebMCP](docs/reference.md#webmcp-agent-tools)-compatible browsers, AI agents can open, convert and export files, and read text from word-processing documents.
+- **Install as a PWA.** Use it as an app; cached editor resources can work offline.
+- **Host or embed it.** Self-host a static site or add the editor to your app through its iframe API.
 
 ## 🚀 Quick start
 
-**[Try it online](https://edit.chaxus.com/)** · [View source](https://github.com/ranuts/document)
+[New document](https://edit.chaxus.com/editor?new=docx&locale=en) · [New spreadsheet](https://edit.chaxus.com/editor?new=xlsx&locale=en) · [New presentation](https://edit.chaxus.com/editor?new=pptx&locale=en)
 
 Or run your own copy:
 
@@ -60,6 +64,8 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 
 Export supported documents to PDF.
 
+Multilingual interfaces, light and dark themes, and read-only preview are also supported.
+
 ## 🔐 Local editing and data handling
 
 Recovery copies stay in this browser for 7 days after the last edit or open. Delete them in [Saved documents](https://edit.chaxus.com/history). Export anything you want to keep; recovery is not a backup.
@@ -75,6 +81,8 @@ Offline use needs cached editor assets; uncached resources and remote files stil
 ## AI document assistant (Experimental Beta)
 
 Draft and refine text, work with spreadsheet data, create slides or ask about the current PDF page. Review changes before applying and use Undo when needed.
+
+Choose an on-device model or connect your own AI service. Dictate prompts where the browser supports speech input.
 
 **Experimental Beta.** Off by default. Answers and edits can be wrong; check important results.
 
