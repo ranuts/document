@@ -462,3 +462,36 @@ it('keeps readiness and does not notify for an ordinary request failure', async 
   expect(provider.isReady()).toBe(true);
   expect(unavailable).not.toHaveBeenCalled();
 });
+
+it('reports cancellation immediately while keeping subsequent inference queued until the engine settles', async () => {
+  let release!: (value: never) => void;
+  const create = vi
+    .fn()
+    .mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          release = resolve;
+        }),
+    )
+    .mockResolvedValue({ choices: [{ message: { content: 'next' }, finish_reason: 'stop' }] });
+  const interruptGenerate = vi.fn();
+  const provider = new WebLLMProvider({ engine: { chat: { completions: { create } }, interruptGenerate } });
+  const abort = new AbortController();
+  let cancelled = false;
+  const first = provider
+    .generateJSON([{ role: 'user', content: 'route' }], { type: 'object' }, abort.signal)
+    .catch((error) => {
+      expect(error.name).toBe('AbortError');
+      cancelled = true;
+    });
+  await vi.waitFor(() => expect(create).toHaveBeenCalledOnce());
+  abort.abort();
+  await vi.waitFor(() => expect(cancelled).toBe(true), { timeout: 100 });
+  expect(interruptGenerate).toHaveBeenCalledOnce();
+  const next = provider.chat([{ role: 'user', content: 'next' }], []);
+  await Promise.resolve();
+  expect(create).toHaveBeenCalledOnce();
+  release({ choices: [{ message: { content: 'discarded' }, finish_reason: 'stop' }] } as never);
+  await first;
+  expect((await next).text).toBe('next');
+});

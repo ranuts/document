@@ -214,10 +214,12 @@ export class WebLLMProvider implements LocalLLMProvider {
     await engine?.unload?.();
   }
 
-  private enqueue<T>(operation: () => Promise<T>): Promise<T> {
+  private enqueue<T>(operation: () => Promise<T>, signal?: AbortSignal): Promise<T> {
     const request = this.queue.then(operation);
     this.queue = request.catch(() => undefined);
-    return request;
+    // Release the caller on cancellation, but keep the engine queue bound to
+    // the underlying operation until its interrupt/drain completes.
+    return waitForSignals(request, [this.lifetime.signal, ...(signal ? [signal] : [])]);
   }
 
   /**
@@ -279,7 +281,7 @@ export class WebLLMProvider implements LocalLLMProvider {
   }
 
   async chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
-    return this.enqueue(() => this.generate(messages, tools, undefined, signal));
+    return this.enqueue(() => this.generate(messages, tools, undefined, signal), signal);
   }
 
   private async generate(
@@ -361,7 +363,7 @@ export class WebLLMProvider implements LocalLLMProvider {
     schema: Record<string, unknown>,
     signal?: AbortSignal,
   ): Promise<LLMResponse> {
-    return this.enqueue(() => this.generate(messages, [], undefined, signal, schema));
+    return this.enqueue(() => this.generate(messages, [], undefined, signal, schema), signal);
   }
 
   generateJSONStream(
@@ -370,7 +372,7 @@ export class WebLLMProvider implements LocalLLMProvider {
     onDelta: (text: string) => void,
     signal?: AbortSignal,
   ): Promise<LLMResponse> {
-    return this.enqueue(() => this.generate(messages, [], onDelta, signal, schema));
+    return this.enqueue(() => this.generate(messages, [], onDelta, signal, schema), signal);
   }
 
   async chatStream(
@@ -379,7 +381,7 @@ export class WebLLMProvider implements LocalLLMProvider {
     onDelta: (textDelta: string) => void,
     signal?: AbortSignal,
   ): Promise<LLMResponse> {
-    return this.enqueue(() => this.generate(messages, tools, onDelta, signal));
+    return this.enqueue(() => this.generate(messages, tools, onDelta, signal), signal);
   }
 }
 
