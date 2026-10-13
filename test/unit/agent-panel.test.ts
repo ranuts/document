@@ -1,7 +1,7 @@
 import { t } from '@ranuts/shared/i18n';
 import type { EditorApi } from '../../lib/agent-plugin/editor-bridge';
 import { afterEach, expect, it, vi } from 'vitest';
-import { createAgentPanel } from '../../lib/agent-plugin/ui/panel';
+import { createAgentPanel, setAgentPanelOpen, setAgentPanelEnabled } from '../../lib/agent-plugin/ui/panel';
 HTMLElement.prototype.scrollTo = vi.fn();
 const editorState = vi.hoisted(() => ({ api: null as null | Partial<EditorApi> }));
 vi.mock('@ranuts/agent-core/llm/local', () => ({
@@ -34,6 +34,97 @@ afterEach(() => {
   window.dispatchEvent(new Event('pagehide'));
   document.body.innerHTML = '';
   editorState.api = null;
+  vi.useRealTimers();
+  vi.unstubAllGlobals();
+});
+
+it('avoids context reads while closed or disabled and refreshes immediately on reopening', async () => {
+  vi.useFakeTimers();
+  const read = vi.fn(() => 'selected text');
+  editorState.api = {
+    isDocumentLoadComplete: true,
+    isLoadFullApi: true,
+    pluginMethod_GetSelectedText: read,
+    pluginMethod_GetSelectionType: () => 'text',
+  };
+  const panel = createAgentPanel({ background: true });
+  read.mockClear();
+  vi.advanceTimersByTime(3000);
+  expect(read).not.toHaveBeenCalled();
+  setAgentPanelOpen(true);
+  expect(panel.querySelector('.agent-quote-context')?.textContent).toContain('selected text');
+  expect(read).toHaveBeenCalled();
+  setAgentPanelOpen(false);
+  read.mockClear();
+  vi.advanceTimersByTime(3000);
+  expect(read).not.toHaveBeenCalled();
+  await setAgentPanelEnabled(false);
+  setAgentPanelOpen(true);
+  read.mockClear();
+  vi.advanceTimersByTime(3000);
+  expect(read).not.toHaveBeenCalled();
+});
+
+it('keeps background tabs idle and updates the selection chip as soon as the tab resumes', () => {
+  vi.useFakeTimers();
+  let visible = true;
+  vi.spyOn(document, 'visibilityState', 'get').mockImplementation(() => (visible ? 'visible' : 'hidden'));
+  let selection = 'before background';
+  const read = vi.fn(() => selection);
+  editorState.api = { isDocumentLoadComplete: true, isLoadFullApi: true, pluginMethod_GetSelectedText: read };
+  const panel = createAgentPanel();
+  visible = false;
+  document.dispatchEvent(new Event('visibilitychange'));
+  read.mockClear();
+  selection = 'after background';
+  vi.advanceTimersByTime(3000);
+  expect(read).not.toHaveBeenCalled();
+  visible = true;
+  document.dispatchEvent(new Event('visibilitychange'));
+  expect(panel.querySelector('.agent-quoted-text')?.textContent).toBe('after background');
+  vi.restoreAllMocks();
+});
+
+it('updates selection chips through SDK callbacks and detaches context subscriptions when closed', () => {
+  vi.useFakeTimers();
+  let selection = 'before selection';
+  const callbacks = new Map<string, (...args: unknown[]) => void>();
+  editorState.api = {
+    isDocumentLoadComplete: true,
+    isLoadFullApi: true,
+    pluginMethod_GetSelectedText: () => selection,
+    asc_registerCallback: (event, callback) => {
+      callbacks.set(event, callback);
+    },
+    asc_unregisterCallback: (event, callback) => {
+      if (callbacks.get(event) === callback) callbacks.delete(event);
+    },
+  };
+  const panel = createAgentPanel();
+  selection = 'after selection';
+  callbacks.get('asc_onSelectionEnd')!();
+  vi.advanceTimersByTime(20);
+  expect(panel.querySelector('.agent-quoted-text')?.textContent).toBe('after selection');
+  setAgentPanelOpen(false);
+  expect(callbacks.has('asc_onSelectionEnd')).toBe(false);
+  selection = 'while closed';
+  setAgentPanelOpen(true);
+  expect(panel.querySelector('.agent-quoted-text')?.textContent).toBe('while closed');
+});
+
+it('does not reattach native review callbacks after a terminal pagehide', () => {
+  const register = vi.fn();
+  editorState.api = {
+    isDocumentLoadComplete: true,
+    isLoadFullApi: true,
+    asc_registerCallback: register,
+    asc_unregisterCallback: vi.fn(),
+  };
+  createAgentPanel();
+  window.dispatchEvent(new PageTransitionEvent('pagehide'));
+  register.mockClear();
+  window.dispatchEvent(new Event('document:content-ready'));
+  expect(register).not.toHaveBeenCalled();
 });
 
 it('offers only browser-local backends and keeps remote credentials out of the product', () => {
@@ -204,9 +295,11 @@ it('names the review-mode checkbox with its visible localized label', () => {
 
 it('syncs native tracking changes without writing settings and detaches on pagehide', () => {
   let enabled = false;
-  let callback: (() => void) | undefined;
+  const callbacks = new Set<(...args: unknown[]) => void>();
   const setter = vi.fn();
-  const unregister = vi.fn();
+  const unregister = vi.fn((event: string, handler: (...args: unknown[]) => void) => {
+    if (event === 'asc_onOnTrackRevisionsChange') callbacks.delete(handler);
+  });
   editorState.api = {
     isDocumentLoadComplete: true,
     isLoadFullApi: true,
@@ -214,8 +307,8 @@ it('syncs native tracking changes without writing settings and detaches on pageh
     asc_GetGlobalTrackRevisions: () => enabled,
     asc_SetGlobalTrackRevisions: setter,
     asc_SetLocalTrackRevisions: vi.fn(),
-    asc_registerCallback: (_event, handler) => {
-      callback = handler;
+    asc_registerCallback: (event, handler) => {
+      if (event === 'asc_onOnTrackRevisionsChange') callbacks.add(handler);
     },
     asc_unregisterCallback: unregister,
   };
@@ -223,11 +316,12 @@ it('syncs native tracking changes without writing settings and detaches on pageh
   const checkbox = panel.querySelector('.agent-panel-review r-checkbox')!;
   expect(checkbox.getAttribute('checked')).toBe('false');
   enabled = true;
-  callback?.();
+  for (const callback of callbacks) callback();
   expect(checkbox.getAttribute('checked')).toBe('true');
   expect(setter).not.toHaveBeenCalled();
   window.dispatchEvent(new Event('pagehide'));
-  expect(unregister).toHaveBeenCalledWith('asc_onOnTrackRevisionsChange', callback);
+  expect(unregister).toHaveBeenCalledWith('asc_onOnTrackRevisionsChange', expect.any(Function));
+  expect(callbacks.size).toBe(0);
 });
 
 it('returns keyboard focus to the document rail when closing a focused panel', async () => {

@@ -20,15 +20,12 @@ export default defineConfig({
       reporter: ['text', 'html', 'lcov'],
       reportsDirectory: 'coverage',
       thresholds: {
-        lines: 35,
-        branches: 25,
-        functions: 35,
-        // 34, not 35: patchHeaderSerializeCrash (onlyoffice-editor.ts) added
-        // defensive SDK-crash-guard code that, like its sibling patch
-        // functions in the same file, only runs against a real OnlyOffice
-        // iframe and isn't meaningfully unit-testable (see the "为什么
-        // onlyoffice-editor.ts 覆盖率低" section in CLAUDE.md).
-        statements: 34,
+        // Application regressions must not hide behind vendor-only E2E coverage.
+        lines: 80,
+        branches: 75,
+        functions: 80,
+        statements: 80,
+        'lib/agent-plugin/**/*.ts': { lines: 85, branches: 80, functions: 85, statements: 80 },
         'lib/history/**/*.ts': { lines: 85, branches: 75, functions: 85, statements: 85 },
         'packages/shared/src/**/*.ts': { lines: 90, branches: 80, functions: 90, statements: 90 },
         'packages/converter/src/**/*.ts': { lines: 60, branches: 55, functions: 65, statements: 60 },

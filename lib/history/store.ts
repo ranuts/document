@@ -17,7 +17,15 @@
  * Everything here resolves to a null/empty result when IndexedDB is missing;
  * see lib/history/db.ts for why.
  */
-import { BLOBS_BY_DOC, BLOBS_STORE, DOCS_STORE, HANDLES_STORE, requestToPromise, withStores } from './db';
+import {
+  BLOBS_BY_DOC,
+  BLOBS_BY_REVISION,
+  BLOBS_STORE,
+  DOCS_STORE,
+  HANDLES_STORE,
+  requestToPromise,
+  withStores,
+} from './db';
 import type { HistoryDoc, HistoryOrigin, HistorySnapshot } from './types';
 import { MAX_AGE_MS, expiresAt, hasUnsavedWork } from './types';
 import { deleteDocumentSources } from '../active-document-source';
@@ -123,20 +131,36 @@ async function deleteDocumentData(tx: IDBTransaction, docId: string): Promise<vo
   tx.addEventListener('complete', () => clearSessionSaveTargets(docId), { once: true });
 }
 
-/** Drop revisions past MAX_REVS_PER_DOC, oldest first. Returns bytes freed. */
+/** Keep the newest MAX_REVS_PER_DOC revisions. Returns bytes freed. */
 async function trimRevisions(tx: IDBTransaction, docId: string): Promise<number> {
   const store = tx.objectStore(BLOBS_STORE);
-  const rows = ((await requestToPromise(store.index(BLOBS_BY_DOC).getAll(IDBKeyRange.only(docId)))) ??
-    []) as HistorySnapshot[];
-  if (rows.length <= MAX_REVS_PER_DOC) return 0;
-
-  const doomed = rows.sort((a, b) => a.rev - b.rev).slice(0, rows.length - MAX_REVS_PER_DOC);
-  let freed = 0;
-  for (const row of doomed) {
-    store.delete([row.docId, row.rev]);
-    freed += row.byteLength;
-  }
-  return freed;
+  // Array-valued keys sort after numeric revisions. These bounds include
+  // exactly this document's [docId, rev, byteLength] keys, even with rev gaps.
+  const range = IDBKeyRange.bound([docId], [docId, []]);
+  return new Promise<number>((resolve, reject) => {
+    const request = store.index(BLOBS_BY_REVISION).openKeyCursor(range, 'prev');
+    let kept = 0;
+    let freed = 0;
+    request.onerror = () => reject(request.error ?? new Error('Revision cursor failed'));
+    request.onsuccess = () => {
+      const cursor = request.result;
+      if (!cursor) {
+        resolve(freed);
+        return;
+      }
+      try {
+        if (kept < MAX_REVS_PER_DOC) {
+          kept += 1;
+        } else {
+          store.delete(cursor.primaryKey);
+          freed += (cursor.key as [string, number, number])[2];
+        }
+        cursor.continue();
+      } catch (error) {
+        reject(error);
+      }
+    };
+  });
 }
 
 /**
@@ -364,11 +388,12 @@ export async function getLatestSnapshot(id: string): Promise<HistorySnapshot | n
   try {
     return (
       (await withStores([BLOBS_STORE], 'readonly', async (tx) => {
-        const rows = ((await requestToPromise(
-          tx.objectStore(BLOBS_STORE).index(BLOBS_BY_DOC).getAll(IDBKeyRange.only(id)),
-        )) ?? []) as HistorySnapshot[];
-        if (!rows.length) return null;
-        return rows.sort((a, b) => b.rev - a.rev)[0];
+        // Equal index keys are ordered by the [docId, rev] primary key, so a
+        // reverse cursor clones only the highest revision and never advances.
+        const cursor = await requestToPromise(
+          tx.objectStore(BLOBS_STORE).index(BLOBS_BY_DOC).openCursor(IDBKeyRange.only(id), 'prev'),
+        );
+        return (cursor?.value as HistorySnapshot | undefined) ?? null;
       })) ?? null
     );
   } catch {

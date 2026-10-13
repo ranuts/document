@@ -38,7 +38,7 @@ export default defineConfig({
   webServer: REMOTE
     ? undefined
     : {
-        command: `./node_modules/.bin/vite build --outDir ${OUT_DIR} && ./node_modules/.bin/vite preview --outDir ${OUT_DIR} --host 127.0.0.1 --port ${PORT}`,
+        command: `./node_modules/.bin/vite build --outDir ${OUT_DIR} && node bin/offline-assets.mjs ${OUT_DIR} && ./node_modules/.bin/vite preview --outDir ${OUT_DIR} --host 127.0.0.1 --port ${PORT}`,
         url: `http://127.0.0.1:${PORT}`,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,

@@ -1,6 +1,7 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, expect, it, vi } from 'vitest';
 import { createConversationStore } from '../../lib/agent-plugin/ui/sessions';
+import { createConversationRepository } from '../../lib/agent-plugin/ui/conversation-db';
 import { createHistoryStorage } from '../../lib/agent-plugin/ui/storage';
 beforeEach(async () => {
   localStorage.clear();
@@ -298,4 +299,90 @@ it('retains current and legacy history when confirmed disk deletion cannot commi
   expect(store.history().load()[0].content).toBe('current private');
   expect(createHistoryStorage().load()[0].content).toBe('legacy private');
   expect(store.exportJSON()).toContain('current private');
+});
+
+it('coalesces a synchronous burst before cloning snapshots and commits only its latest messages', async () => {
+  const repository = createConversationRepository();
+  const store = createConversationStore(undefined, { repository });
+  await store.setSaving(true);
+  const clone = vi.spyOn(globalThis, 'structuredClone');
+  try {
+    for (let index = 0; index < 40; index++) store.history().save([{ role: 'user', content: `update ${index}` }]);
+    const snapshotClones = clone.mock.calls.filter(
+      ([value]) =>
+        value && typeof value === 'object' && !Array.isArray(value) && ('sessions' in value || 'messages' in value),
+    );
+    expect(snapshotClones).toHaveLength(0);
+    await store.flush();
+    const saved = await repository.load();
+    expect(saved?.revision).toBe(2);
+    expect(saved?.sessions[0].messages).toEqual([{ role: 'user', content: 'update 39' }]);
+  } finally {
+    clone.mockRestore();
+  }
+});
+
+it('coalesces updates arriving during a commit into one trailing latest save', async () => {
+  const repository = createConversationRepository();
+  const save = repository.save.bind(repository);
+  let finish!: () => void;
+  let commits = 0;
+  repository.save = async (data, revision) => {
+    commits++;
+    if (revision === 1)
+      await new Promise<void>((resolve) => {
+        finish = resolve;
+      });
+    return save(data, revision);
+  };
+  const store = createConversationStore(undefined, { repository });
+  await store.setSaving(true);
+  store.history().save([{ role: 'user', content: 'in flight' }]);
+  await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+  for (let index = 0; index < 40; index++) store.history().save([{ role: 'user', content: `trailing ${index}` }]);
+  finish();
+  await store.flush();
+  expect(commits).toBe(3);
+  expect((await repository.load())?.sessions[0].messages).toEqual([{ role: 'user', content: 'trailing 39' }]);
+});
+
+it('turning saving off cancels a queued burst without replacing previously saved history', async () => {
+  const repository = createConversationRepository();
+  const store = createConversationStore(undefined, { repository });
+  store.history().save([{ role: 'user', content: 'saved' }]);
+  await store.setSaving(true);
+  store.history().save([{ role: 'user', content: 'queued private edit' }]);
+  await store.setSaving(false);
+  await store.flush();
+  expect((await repository.load())?.sessions[0].messages).toEqual([{ role: 'user', content: 'saved' }]);
+  expect(store.history().load()).toEqual([{ role: 'user', content: 'queued private edit' }]);
+});
+
+it('erasing while a save is in flight cancels its queued successor and retains the tombstone', async () => {
+  const repository = createConversationRepository();
+  const save = repository.save.bind(repository);
+  let finish!: () => void;
+  let commits = 0;
+  repository.save = async (data, revision) => {
+    commits++;
+    if (revision === 1)
+      await new Promise<void>((resolve) => {
+        finish = resolve;
+      });
+    return save(data, revision);
+  };
+  const store = createConversationStore(undefined, { repository });
+  await store.setSaving(true);
+  const captured = store.history();
+  captured.save([{ role: 'user', content: 'in flight' }]);
+  await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+  captured.save([{ role: 'user', content: 'queued' }]);
+  const clearing = store.clearAll();
+  finish();
+  await clearing;
+  captured.save([{ role: 'assistant', content: 'late response' }]);
+  await store.flush();
+  expect(commits).toBe(2);
+  expect(await repository.load()).toEqual({ version: 1, revision: 3, activeId: '', sessions: [] });
+  expect(store.history().load()).toEqual([]);
 });

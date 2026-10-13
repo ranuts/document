@@ -38,7 +38,7 @@ pnpm install --frozen-lockfile   # 安装依赖
 pnpm run dev                     # 启动开发服务器（含热更新）
 pnpm run build                   # 生产构建（执行 bin/build.sh）
 pnpm run build:single            # 打包为单个 HTML 文件
-pnpm run lint:ts                 # oxlint + tsc --noEmit（CI 必跑）
+pnpm run lint:ts                 # oxlint + workspace rebuild + tsc --noEmit（CI 必跑）
 pnpm run format:check            # prettier 格式检查（CI 必跑）
 pnpm run test                    # 单元测试（Vitest）
 pnpm run test:coverage           # 带覆盖率的单元测试
@@ -204,7 +204,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 ```
 
 覆盖率统计 `lib/**/*.ts` 与 `packages/*/src/**/*.ts`，排除类型声明。
-全局最低门槛保留在 `vitest.config.ts`，历史、shared、converter、agent-core 与 chat-ui
+全局门槛为 lines/functions/statements 80%、branches 75%；Agent 应用层、历史、shared、converter、agent-core 与 chat-ui
 另有独立模块门槛。实际数字以 `pnpm run test:coverage` 为准。
 
 开发与 Vitest 通过 `bin/workspace-aliases.mjs` 从 workspace 的 `exports` 派生源码别名，
@@ -1140,3 +1140,10 @@ E2E 回归套件覆盖**（`pnpm run test:e2e` 的 embed-regression.spec：打�
 ### AI assistant product entry
 
 `lib/agent-entry.ts` owns the discoverable entry and browser-local default-off preference. URL `agent` flags do not enable it. Opening restores only UI/preferences; loading a model or connecting a service requires an explicit user action. Generated writing must be reviewed before applying. Developer transport and provider details belong in developer references, not product onboarding.
+
+## Runtime and storage maintenance (2026-10-13)
+
+- `bin/offline-assets.mjs` derives mandatory app dependencies from Vite's emitted manifest. Inference chunks/WASM are optional; the small assistant UI static graph stays in core for live-page compatibility. `PREPARE_ASSISTANT` follows explicit or persisted opt-in, and a prepared marker refreshes runtime assets before later worker activation. Model weights and external endpoints remain outside app caches. Preserve the vendor precache for first offline export.
+- `pnpm run tsc` rebuilds workspace declarations before checking the app; `lint:ts` calls it. Do not rely on an earlier production build to refresh package contracts.
+- History v3 uses key-only revision/size indexing for retention; latest snapshot reads only one value. Conversation storage keeps explicit opt-in and atomic revision conflicts while updating individual sessions.
+- Panel context synchronization is lifecycle-owned: no periodic reads while closed, disabled or hidden, and BFCache restoration reinstalls observers. Keep extracted settings/context owners rather than adding them back to `panel.ts`.
