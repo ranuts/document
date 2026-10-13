@@ -26,7 +26,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-**Ein Dokumenten-Arbeitsplatz für dich und deine KI-Agenten im Browser.**
+**Ein quelloffener Dokumentenarbeitsplatz für dich und deine KI-Agenten.**
 
 Word, Excel und PowerPoint im Browser öffnen, bearbeiten, konvertieren und speichern sowie PDFs kommentieren. Die grundlegende Dokumentenverarbeitung läuft lokal, ohne Konto oder Office-Installation.
 
@@ -74,9 +74,11 @@ Wiederherstellungskopien bleiben nach dem letzten Bearbeiten oder Öffnen 7 Tage
 
 Externe KI-Dienste erhalten die für deine Anfrage benötigten Inhalte. Gerätemodelle verarbeiten sie lokal. Diktieren kann einen Online-Sprachdienst nutzen; eingebettete Exporte verarbeitet die Host-App.
 
+Der gewählte Browser-KI-Agent bestimmt, wie er die von Dokumentenwerkzeugen zurückgegebenen Inhalte verarbeitet.
+
 ## Dokumentation und Integration
 
-[Benutzerhandbuch](https://edit.chaxus.com/help) · [Hosting, URLs und Integration](docs/reference.md) · [Einbettungs-API](docs/embed-api.md) · [Schriften](docs/fonts.md)
+[Benutzerhandbuch](https://edit.chaxus.com/de/help) · [Hosting, URLs und Integration](docs/reference.md) · [Einbettungs-API](docs/embed-api.md) · [Schriften](docs/fonts.md)
 
 Offline sind zwischengespeicherte Editor-Ressourcen nötig. Nicht gespeicherte Ressourcen und entfernte Dateien benötigen eine Verbindung.
 

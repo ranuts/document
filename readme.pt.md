@@ -26,7 +26,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-**Um espaço para os seus documentos e agentes de IA, no navegador.**
+**Um espaço de documentos de código aberto para si e os seus agentes de IA.**
 
 Abra, edite, converta e guarde Word, Excel e PowerPoint e anote PDFs no navegador. O processamento básico de documentos é local, sem conta nem instalação do Office.
 
@@ -74,9 +74,11 @@ As cópias de recuperação ficam neste navegador durante 7 dias após a última
 
 Os serviços de IA externos recebem o conteúdo necessário para o pedido. Os modelos locais processam-no no dispositivo. O ditado pode usar um serviço de voz online; a aplicação anfitriã trata as exportações incorporadas.
 
+O agente de IA do navegador escolhido controla como processa o conteúdo devolvido pelas ferramentas de documentos.
+
 ## Documentação e integração
 
-[Guia de utilização](https://edit.chaxus.com/help) · [Hospedagem, URLs e integração](docs/reference.md) · [API de incorporação](docs/embed-api.md) · [Tipos de letra](docs/fonts.md)
+[Guia de utilização](https://edit.chaxus.com/pt/help) · [Hospedagem, URLs e integração](docs/reference.md) · [API de incorporação](docs/embed-api.md) · [Tipos de letra](docs/fonts.md)
 
 A utilização offline exige recursos do editor em cache. Recursos não guardados e ficheiros remotos precisam de ligação.
 

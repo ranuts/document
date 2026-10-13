@@ -26,7 +26,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-**浏览器里的文档工作台，为你和 AI Agent 准备。**
+**开源文档工作台，为你和 AI Agent 准备。**
 
 在浏览器里打开、编辑、转换并保存 Word、Excel 和 PowerPoint，为 PDF 添加批注。基础文档处理在本地完成，无需注册或安装 Office。
 
@@ -74,9 +74,11 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 
 使用外部 AI 服务时，请求所需内容会发送到该服务；本机模型在设备上处理。浏览器听写可能使用在线语音服务，嵌入模式下的导出由宿主应用处理。
 
+浏览器 AI Agent 对文档工具返回内容的后续处理，由所用 Agent 决定。
+
 ## 文档与集成
 
-[使用指南](https://edit.chaxus.com/help) · [自行部署、URL 参数与集成](docs/reference.md) · [嵌入 API](docs/embed-api.zh.md) · [字体管理](docs/fonts.zh.md)
+[使用指南](https://edit.chaxus.com/zh-CN/help) · [自行部署、URL 参数与集成](docs/reference.md) · [嵌入 API](docs/embed-api.zh.md) · [字体管理](docs/fonts.zh.md)
 
 离线使用需要已缓存的编辑器资源，未缓存的资源和远程文件仍需联网。
 

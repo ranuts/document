@@ -26,7 +26,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-**사용자와 AI 에이전트를 위한 브라우저 문서 작업 공간.**
+**사용자와 AI 에이전트를 위한 오픈 소스 문서 작업 공간.**
 
 브라우저에서 Word, Excel, PowerPoint를 열고 편집·변환·저장하며 PDF에 주석을 추가하세요. 기본 문서 처리는 기기에서 이루어지며 계정이나 Office 설치가 필요 없습니다.
 
@@ -74,9 +74,11 @@ docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 
 외부 AI 서비스에는 요청에 필요한 내용이 전송됩니다. 기기 내 모델은 로컬에서 처리합니다. 음성 입력은 온라인 서비스를 사용할 수 있고, 임베드 내보내기는 호스트 앱이 처리합니다.
 
+문서 도구가 반환한 내용의 후속 처리는 사용하는 브라우저 AI 에이전트가 관리합니다.
+
 ## 문서 및 통합
 
-[사용 안내](https://edit.chaxus.com/help) · [호스팅, URL 및 통합](docs/reference.md) · [임베드 API](docs/embed-api.md) · [글꼴](docs/fonts.md)
+[사용 안내](https://edit.chaxus.com/ko/help) · [호스팅, URL 및 통합](docs/reference.md) · [임베드 API](docs/embed-api.md) · [글꼴](docs/fonts.md)
 
 오프라인 사용에는 캐시된 편집기 리소스가 필요합니다. 캐시되지 않은 리소스와 원격 파일에는 네트워크가 필요합니다.
 
