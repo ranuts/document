@@ -54,7 +54,9 @@ export async function deleteCachedGGUF(name: string): Promise<void> {
   const manager = await ggufCache();
   const group = groupGGUF(await manager.list()).find((item) => item.name === name);
   if (!group) throw new Error('Cached model is no longer available');
-  for (const file of group.files) await manager.delete(file);
+  // Avoid a full inventory scan per shard (body reads on the Cache API fallback).
+  const files = new Set(group.files);
+  await manager.deleteMany((entry) => files.has(entry.name));
 }
 
 export interface CachedModelSource extends ModelSource {
