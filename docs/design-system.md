@@ -128,17 +128,19 @@ Notion 正文 708）。**不存在"一个正确的宽度"，只存在按内容�
 
 ## Application icon
 
-The PWA and browser icon is two overlapping pages with an offset rear outline and a detached diagonal fold,
-without lettering or product marks. SVG sources live in `public/icons/`.
-The palette resolves the light-theme tokens `--ran-gray-1000` (#171717),
-`--ran-background-100` (#ffffff) and `--ran-gray-300` (#e6e6e6).
-Exported application assets use these fixed values because launcher icons do not
-inherit the page's CSS variables. The front page has two broad cutout lines; the staggered silhouette and open fold
-remain legible at favicon size. Rounded corners and line caps match the interface.
+The PWA and browser icon uses two offset angular bands around an open center.
+The mark is abstract rather than a file illustration, with solid monochrome fills,
+broad negative space and restrained rounded corners that match the interface.
+SVG sources live in `public/icons/`.
+The universal launcher icon resolves the light-theme tokens
+`--ran-gray-1000` (#171717) and `--ran-background-100` (#ffffff).
+Exported assets use these fixed values because launcher icons do not inherit
+page CSS variables. There are no additional accent colors, gradients or shadows.
+The same silhouette is used at every size, including the 16 px browser display.
 
 The ordinary icon has a rounded background; the maskable variant has an opaque,
-full-bleed background. All document content fits within the central 80%-diameter
-safe circle, so platform masks can crop the background without clipping the page.
+full-bleed background. The entire mark fits within the central 80%-diameter
+safe circle, so platform masks can crop the background without clipping the mark.
 The 32 px favicon, 180 px touch icon, 192/512 px PWA icons and 512 px maskable icon
 are checked in. Regenerate PNG files from the SVG sources with:
 
@@ -152,10 +154,9 @@ Keep this functional icon separate from legal attribution and from page headers.
 ### Light and dark browser presentation
 
 Browser favicons use `document-light.svg` / `document-dark.svg` and their 32 px
-PNG fallbacks. Both share the document geometry. The light variant uses the
+PNG fallbacks. Both share the abstract mark geometry. The light variant uses the
 light background / foreground tokens; the dark variant resolves
-`--ran-background-100` to #000000, `--ran-gray-1000` to #ededed and
-`--ran-gray-300` to #292929. Regenerate these PNGs with the same command above.
+`--ran-background-100` to #000000, `--ran-gray-1000` to #ededed. Regenerate these PNGs with the same command above.
 
 `public/theme-presentation.js` follows the effective `data-ran-theme`, then the
 stored choice, then the system preference. It updates the favicon, native
@@ -163,7 +164,7 @@ stored choice, then the system preference. It updates the favicon, native
 runtime changes. A manual choice takes precedence over an opposite OS theme.
 The helper is precached and treated as a deploy-coupled, revalidated asset.
 
-The manifest and Apple touch icons retain the universal document design.
+The manifest and Apple touch icons retain the universal monochrome design.
 Manifest icon entries have no theme selector; publishing competing light/dark
 entries at the same size would not establish a reliable selection rule.
 The manifest's white startup background is a fallback; the page's browser color
