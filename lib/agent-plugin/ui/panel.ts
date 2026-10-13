@@ -5,15 +5,15 @@ import { generateReadAnswer } from '../document-read-answer';
 import type { DocumentAgentToolOptions } from '../document-agent-tools';
 import { mountSpeechInput } from './speech-input';
 /**
- * Agent sidebar panel — a thin DOM view over {@link AgentChatController}.
+ * Assistant sidebar product orchestration over {@link AgentChatController}.
  *
  * Header (title + gear + close); a collapsible settings block (provider selector
  * → automatic local inference or manually imported GGUF models), hidden behind the gear so the
  * main panel is a clean chat; a toolbar (review-mode toggle + quote + clear); and
  * the reusable @ranuts/chat-ui ChatView. Form controls are ranui Web Components
- * built with the ranui `builder` (View/Div/... fluent factories). All
- * orchestration lives in the controller and the LLM factory; this file only
- * builds DOM and forwards events. Loaded after an explicit product opt-in.
+ * built with the ranui `builder` (View/Div/... fluent factories). Context, model-cache settings and review controls have dedicated lifecycle
+ * owners. This module coordinates request routes and delegates execution to
+ * the controller, document-task modules and provider factory. Loaded after an explicit product opt-in.
  */
 import 'ranui/button';
 import 'ranui/input';
@@ -23,19 +23,17 @@ import { ButtonBuilder, Div, Label, Span, View, createEffect, signal } from 'ran
 import { localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
 import { getLanguage, type I18nMessages, t } from '@ranuts/shared/i18n';
 import { getReadonlyMode } from '../../onlyoffice/readonly';
-import { getEditorApi, type EditorApi } from '../editor-bridge';
+import { getEditorApi } from '../editor-bridge';
+import { mountReviewSettings } from './review-settings';
+import { createModelCacheSettings } from './model-cache-settings';
+import { mountPanelContext, syncPanelContext } from './panel-context';
 import { agentTools } from '../tools';
 import { parseDirectDocumentIntent } from '../direct-intent';
 import { captureDocumentContext, resolveContextCommand } from '../document-context';
 import type { LLMMessage, LLMProvider } from '@ranuts/agent-core/llm/types';
 import type { ProviderId } from '@ranuts/agent-core/llm/factory';
 import { DEFAULT_CPU_MODEL_URL, LocalInferenceProvider } from '@ranuts/agent-core/llm/local';
-import {
-  DEFAULT_WEBLLM_MODEL,
-  isModelCached,
-  RETIRED_WEBLLM_MODELS,
-  WEBLLM_MODELS,
-} from '@ranuts/agent-core/llm/webllm';
+import { DEFAULT_WEBLLM_MODEL, isModelCached, WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
 import type { LocalLLMProvider } from '@ranuts/agent-core/llm/types';
 import { resolveModelArtifactUrl } from '@ranuts/agent-core/llm/model-source';
 import { resolveTaskModel, type ModelTask } from '@ranuts/agent-core/llm/task-model';
@@ -89,13 +87,7 @@ import { captureComposerContext } from './composer-context';
 import { captureRequestContext } from './request-context';
 import { classifyRequest, resolveRequestIntent } from './request-intent';
 import { generateDocumentDraft } from './document-draft';
-import {
-  deleteCachedModel,
-  listCachedGGUF,
-  deleteCachedGGUF,
-  rememberedModelSources,
-  rememberModelSource,
-} from '@ranuts/agent-core/llm/model-cache';
+import { listCachedGGUF, rememberModelSource } from '@ranuts/agent-core/llm/model-cache';
 
 /** ranui custom elements expose a `value` accessor (r-select / r-input). */
 type ValueEl = HTMLElement & { value: string };
@@ -108,9 +100,6 @@ function rememberedModelUrl(value: string | null): string {
     return '';
   }
 }
-
-/** The r-checkbox `change` event detail (a real boolean). */
-type CheckedDetail = CustomEvent<{ checked: boolean }>;
 
 function compactSelect(
   className: string,
@@ -223,16 +212,14 @@ export function createAgentPanel(
     sidebar.dispose();
     sidebar = mountSidebar();
     syncSidebar();
-    clearInterval(scopeTimer);
-    scopeTimer = setInterval(syncContext, 1000);
-    syncContext();
-    syncReviewControl();
+    reviewSettings.sync();
     syncProviderUi();
     syncRuntimeStatus();
   });
   window.addEventListener('pagehide', () => disposeResize());
 
-  let open = true;
+  let contextLifecycle: ReturnType<typeof mountPanelContext> | undefined;
+  let open = !options.background;
   let enabled = true;
   let hasConfiguration = false;
   let viewRevision = 0;
@@ -251,6 +238,7 @@ export function createAgentPanel(
     if (next && !open && hasConfiguration) showView('chat');
     const returnToDocument = !next && panel.contains(document.activeElement);
     open = next;
+    contextLifecycle?.update();
     panel.classList.toggle('agent-panel-hidden', !next);
     syncSidebar();
     // Dock mode: shrink the editor so the panel takes layout space instead of
@@ -282,6 +270,7 @@ export function createAgentPanel(
         }
       }
       enabled = next;
+      contextLifecycle?.update();
       if (!next) {
         resetController();
         disconnectEndpoint();
@@ -853,53 +842,17 @@ export function createAgentPanel(
   sessionSelect.className = 'agent-session-select';
   const sessionRow = Div().class('agent-session-row').children(sessionSelect, clearBtn).build();
   const sessionBar = Div().class('agent-session-bar').children(sessionRow).build();
-  const scopeLabel = Span().class('agent-document-scope').build();
-  scopeLabel.setAttribute('role', 'note');
-
-  const updateScope = (): void => {
-    const context = captureDocumentContext();
-    const label = context
-      ? context.kind === 'cell'
-        ? `Excel · ${context.sheet ?? ''} ${context.range ?? ''}`
-        : context.kind === 'slide'
-          ? `PPT · ${context.page ?? ''}`
-          : context.kind === 'pdf'
-            ? 'PDF'
-            : 'DOCX'
-      : '';
-    if (scopeLabel.textContent !== label) scopeLabel.textContent = label;
-  };
   const syncContext = () => {
-    updateScope();
-    const snapshot = captureComposerContext();
-    const context = snapshot.context;
-    quoteContext.hidden = !context || !snapshot.text.trim();
-    const label =
-      context?.kind === 'cell'
-        ? t('agentUsingSelection', { scope: `${context.sheet ?? 'Excel'} · ${context.range ?? ''}` })
-        : context?.kind === 'slide'
-          ? `${t('agentSlideContext').replace('{page}', String(context.page ?? ''))}`
-          : snapshot.text
-            ? t('agentSelectionContext').replace('{count}', String(snapshot.text.length))
-            : t('agentCurrentDocument');
-    if (quoteSummary.textContent !== label) quoteSummary.textContent = label;
-    quoteSummary.setAttribute('aria-label', `${t('agentReadSelection')} · ${label}`);
-    if (quoteText.textContent !== snapshot.text) quoteText.textContent = snapshot.text;
-    const releaseControl = settings.querySelector<HTMLElement>('.agent-release-memory');
-    if (releaseControl) releaseControl.hidden = !webllmProvider?.isReady();
-    const welcome =
-      context?.kind === 'cell'
-        ? 'agentWelcomeCell'
-        : context?.kind === 'pdf'
-          ? 'agentWelcomePdf'
-          : context?.kind === 'slide'
-            ? 'agentWelcomeSlide'
-            : 'agentWelcomeWord';
-    if (welcomeHint.textContent !== t(welcome)) welcomeHint.textContent = t(welcome);
+    if (!open || !enabled || document.visibilityState === 'hidden') return;
+    syncPanelContext({
+      quoteContext,
+      quoteSummary,
+      quoteText,
+      welcomeHint,
+      settings,
+      ready: () => !!webllmProvider?.isReady(),
+    });
   };
-  let scopeTimer = setInterval(syncContext, 1000);
-  window.addEventListener('pagehide', () => clearInterval(scopeTimer));
-  syncContext();
   let historyControls: ReturnType<typeof createHistoryControls> | undefined;
   const conversations = createConversationStore(
     () => {
@@ -1168,6 +1121,8 @@ export function createAgentPanel(
   };
   function syncRuntimeStatus(): void {
     const localReady = !!webllmProvider?.isReady();
+    const release = settings.querySelector<HTMLElement>('.agent-release-memory');
+    if (release) release.hidden = !localReady;
     for (const button of [loadBtn, ggufLoad]) {
       button.textContent = t(modelLoading ? 'agentPreparing' : localReady ? 'agentModelInUse' : 'agentLoadModel');
       button.toggleAttribute('disabled', modelLoading || localReady || !enabled || cacheBusy);
@@ -2403,65 +2358,7 @@ export function createAgentPanel(
   });
   settings.append(historyControls.el);
 
-  // Review-mode toggle reads/sets track-changes directly on the editor. r-checkbox
-  // reports the new state via the change event's detail (a real boolean), and its
-  // initial state is set through the `checked` attribute.
-  // Persistent track-changes is Word-only; detect the runtime settings APIs.
-  let syncingReview = false;
-  let reviewApi: EditorApi | undefined;
-  const detachReview = (): void => {
-    reviewApi?.asc_unregisterCallback?.('asc_onOnTrackRevisionsChange', syncReviewControl);
-    reviewApi = undefined;
-  };
-  const syncReviewControl = (): void => {
-    const api = getEditorApi();
-    if (api !== reviewApi) {
-      detachReview();
-      if (
-        api?.isDocumentLoadComplete &&
-        api.isLoadFullApi &&
-        typeof api.asc_registerCallback === 'function' &&
-        typeof api.asc_unregisterCallback === 'function'
-      ) {
-        reviewApi = api;
-        api.asc_registerCallback('asc_onOnTrackRevisionsChange', syncReviewControl);
-      }
-    }
-    const canReview =
-      !!api &&
-      captureDocumentContext()?.kind === 'word' &&
-      api.isDocumentLoadComplete &&
-      api.isLoadFullApi &&
-      !api.isViewMode &&
-      !getReadonlyMode() &&
-      typeof api.asc_IsTrackRevisions === 'function' &&
-      typeof api.asc_SetGlobalTrackRevisions === 'function' &&
-      typeof api.asc_GetGlobalTrackRevisions === 'function' &&
-      typeof api.asc_SetLocalTrackRevisions === 'function';
-    reviewCheck.toggleAttribute('disabled', !canReview);
-    reviewLabel.hidden = !canReview;
-    const checked = String(typeof api?.asc_IsTrackRevisions === 'function' && !!api.asc_IsTrackRevisions());
-    syncingReview = true;
-    try {
-      if (reviewCheck.getAttribute('checked') !== checked) reviewCheck.setAttribute('checked', checked);
-    } finally {
-      syncingReview = false;
-    }
-  };
-  syncReviewControl();
-  window.addEventListener('document:content-ready', syncReviewControl);
-  window.addEventListener('pagehide', detachReview);
-  reviewCheck.addEventListener('change', async (e: Event) => {
-    if (syncingReview) return;
-    try {
-      await agentTools.set_review_mode.execute({ enabled: (e as CheckedDetail).detail.checked });
-    } catch (error) {
-      appendTurn({ role: 'error', text: displayError(error) });
-    } finally {
-      syncReviewControl();
-    }
-  });
-
+  const reviewSettings = mountReviewSettings({ reviewCheck, reviewLabel, appendTurn });
   // Reactive labels: a `lang` signal bumped on languagechange drives one effect
   // that re-applies every translatable label — replacing a manual re-render pass.
   const [lang, setLang] = signal(getLanguage());
@@ -2512,6 +2409,7 @@ export function createAgentPanel(
     languageSelect.setAttribute('aria-label', t('agentTaskLanguage'));
     chat.setLabels(chatLabels()); // Send/Stop/placeholder/empty + role chips
     syncProviderUi(); // refresh key placeholder / model hint in the new language
+    contextLifecycle?.update();
   });
 
   const historyBtn = document.createElement('button');
@@ -2592,203 +2490,32 @@ export function createAgentPanel(
     syncRuntimeStatus();
   };
   sourcePicker.addEventListener('change', syncSource);
-  const cacheList = View<HTMLDetailsElement>('details').class('agent-model-cache agent-disclosure').build();
-  const cacheSummary = View('summary')
-    .attr('tabindex', '0')
-    .text(t('agentDownloadedModels').replace('{count}', '…'))
-    .build();
-  const cacheRows = Div().class('agent-model-cache-rows').build();
-  const cacheStatus = Span().attr('role', 'status').build();
-  cacheList.append(cacheSummary, cacheRows, cacheStatus);
-  let cacheRevision = 0;
-  const refreshCache = async () => {
-    const revision = ++cacheRevision;
-    const sources = [...WEBLLM_MODELS, ...RETIRED_WEBLLM_MODELS, ...rememberedModelSources()];
-    const unique = sources.filter(
-      (model, index) =>
-        sources.findIndex(
-          (item) =>
-            item.id === model.id &&
-            ('modelUrl' in item ? item.modelUrl : undefined) === ('modelUrl' in model ? model.modelUrl : undefined),
-        ) === index,
-    );
-    const cached = await Promise.all(
-      unique.map(async (model) => ({ model, cached: await isModelCached(model.id, 'modelUrl' in model ? model : {}) })),
-    );
-
-    let ggufs: Awaited<ReturnType<typeof listCachedGGUF>> = [];
-    try {
-      ggufs = await listCachedGGUF();
-    } catch {
-      cacheStatus.textContent = t('agentCacheUnavailable');
-    }
-    if (revision !== cacheRevision) return;
-    cacheSummary.textContent = t('agentDownloadedModels').replace(
-      '{count}',
-      String(cached.filter((item) => item.cached).length + ggufs.length),
-    );
-    cacheRows.replaceChildren();
-    for (const { model, cached: exists } of cached) {
-      if (!exists) continue;
-      const row = Div().class('agent-model-cache-row').attr('role', 'group').build();
-      const active =
-        !!webllmProvider?.isReady() &&
-        selectedLocalModel() === model.id &&
-        !(webllmProvider instanceof LocalInferenceProvider && webllmProvider.backend === 'wllama');
-      const name = Span()
-        .text(model.label + (active ? ' · ' + t('agentModelInUse') : ''))
-        .build();
-      const use = ranButton(t(active ? 'agentModelInUse' : 'agentUseModel'), 'agent-cache-use');
-      use.toggleAttribute('disabled', active);
-      use.addEventListener('click', () => {
-        if (cacheBusy || active) return;
-        providerSelect.value = 'webllm';
-        providerSelect.dispatchEvent(new Event('change'));
-        if (WEBLLM_MODELS.some((item) => item.id === model.id)) {
-          localModelId.value = '';
-          localModelUrl.value = '';
-          localModelLib.value = '';
-          localModelId.dispatchEvent(new Event('change'));
-          modelSelect.value = model.id;
-          modelSelect.dispatchEvent(new Event('change'));
-        } else {
-          localModelId.value = model.id;
-          localModelUrl.value = 'modelUrl' in model ? String(model.modelUrl ?? '') : '';
-          localModelLib.value = 'modelLibUrl' in model ? String(model.modelLibUrl ?? '') : '';
-          localModelId.dispatchEvent(new Event('change'));
-        }
-        void loadModel();
-      });
-      const remove = ranButton(t('agentDeleteDownload'), 'agent-cache-delete');
-      let confirming = false;
-      const cancel = ranButton(t('agentPlanCancel'), 'agent-cache-cancel');
-      cancel.hidden = true;
-      cancel.addEventListener('click', () => {
-        confirming = false;
-        cancel.hidden = true;
-        remove.textContent = t('agentDeleteDownload');
-        remove.focus();
-      });
-      remove.addEventListener('click', () => {
-        if (cacheBusy) return;
-        if (!confirming) {
-          confirming = true;
-          remove.textContent = t('agentConfirmDeleteDownload');
-          cancel.hidden = false;
-          cacheStatus.textContent = t('agentDeleteDownloadHint');
-          return;
-        }
-        void (async () => {
-          remove.setAttribute('disabled', '');
-          cacheBusy = true;
-          chat.refreshSendAvailability();
-          try {
-            if (selectedLocalModel() === model.id) {
-              resetController();
-              if (runtimeCleanup) await runtimeCleanup;
-              if (runtimeCleanupFailed) throw new Error(t('agentModelCleanupFailed'));
-            }
-            await deleteCachedModel(model.id, 'modelUrl' in model ? model : {});
-            cacheStatus.textContent = t('agentDownloadDeleted');
-            await refreshCache();
-            cacheSummary.focus();
-          } catch {
-            cacheStatus.textContent = t(runtimeCleanupFailed ? 'agentModelCleanupFailed' : 'agentCacheDeleteFailed');
-            remove.removeAttribute('disabled');
-          } finally {
-            cacheBusy = false;
-            chat.refreshSendAvailability();
-          }
-        })();
-      });
-      row.setAttribute('aria-label', name.textContent ?? '');
-      row.append(name);
-      if (!RETIRED_WEBLLM_MODELS.some((item) => item.id === model.id)) row.append(use);
-      row.append(remove, cancel);
-      cacheRows.append(row);
-    }
-    for (const item of ggufs) {
-      const active = currentProvider() === 'wllama' && !!webllmProvider?.isReady() && ggufUrl.value.trim() === item.url;
-      const row = Div().class('agent-model-cache-row').attr('role', 'group').build();
-      const name = Span()
-        .text(
-          `${new URL(item.url).pathname.split('/').pop() ?? item.name} · ${(item.size / 1e9).toFixed(2)} GB${item.complete ? '' : ' · ' + t('agentDownloadIncomplete')}`,
-        )
-        .build();
-      const use = ranButton(t(active ? 'agentModelInUse' : 'agentUseModel'), 'agent-cache-use');
-      use.toggleAttribute('disabled', active);
-      use.addEventListener('click', () => {
-        if (cacheBusy || active) return;
-        providerSelect.value = 'wllama';
-        providerSelect.dispatchEvent(new Event('change'));
-        ggufUrl.value = item.url;
-        ggufUrl.dispatchEvent(new Event('change'));
-        void loadModel();
-      });
-      const remove = ranButton(t('agentDeleteDownload'), 'agent-cache-delete');
-      const cancel = ranButton(t('agentPlanCancel'), 'agent-cache-cancel');
-      cancel.hidden = true;
-      let confirming = false;
-      cancel.addEventListener('click', () => {
-        confirming = false;
-        cancel.hidden = true;
-        remove.textContent = t('agentDeleteDownload');
-        remove.focus();
-      });
-      remove.addEventListener('click', () => {
-        if (cacheBusy) return;
-        if (!confirming) {
-          confirming = true;
-          remove.textContent = t('agentConfirmDeleteDownload');
-          cacheStatus.textContent = t('agentDeleteDownloadHint');
-          cancel.hidden = false;
-          return;
-        }
-        remove.setAttribute('disabled', '');
-        cacheBusy = true;
-        chat.refreshSendAvailability();
-        void (async () => {
-          try {
-            // Automatic CPU fallback may own this GGUF even when the GPU picker is selected.
-            resetController();
-            if (runtimeCleanup) await runtimeCleanup;
-            if (runtimeCleanupFailed) throw new Error(t('agentModelCleanupFailed'));
-            await deleteCachedGGUF(item.name);
-            await refreshCache();
-            cacheStatus.textContent = t('agentDownloadDeleted');
-            cacheSummary.focus();
-          } catch {
-            cacheStatus.textContent = t(runtimeCleanupFailed ? 'agentModelCleanupFailed' : 'agentCacheDeleteFailed');
-            remove.removeAttribute('disabled');
-          } finally {
-            cacheBusy = false;
-            chat.refreshSendAvailability();
-          }
-        })();
-      });
-      row.setAttribute('aria-label', name.textContent ?? '');
-      row.append(name, use, remove, cancel);
-      cacheRows.append(row);
-    }
-  };
-  cacheList.addEventListener('toggle', () => {
-    if (cacheList.open) void refreshCache();
+  const modelCacheSettings = createModelCacheSettings({
+    providerSelect,
+    modelSelect,
+    localModelId,
+    localModelUrl,
+    localModelLib,
+    ggufUrl,
+    note,
+    selectedLocalModel,
+    currentProvider,
+    getProvider: () => webllmProvider,
+    isBusy: () => cacheBusy,
+    setBusy: (busy) => {
+      cacheBusy = busy;
+    },
+    resetController,
+    cleanup: async () => {
+      if (runtimeCleanup) await runtimeCleanup;
+    },
+    cleanupFailed: () => runtimeCleanupFailed,
+    loadModel,
+    chat,
   });
-  const release = ranButton(t('agentReleaseMemory'), 'agent-release-memory');
-  release.hidden = true;
-  release.addEventListener('click', () => {
-    if (cacheBusy) return;
-    resetController();
-    void (async () => {
-      try {
-        if (runtimeCleanup) await runtimeCleanup;
-        note.textContent = t('agentMemoryReleased');
-      } catch (error) {
-        note.textContent = displayError(error);
-      }
-    })();
-  });
-  modelActions.append(release);
+  const cacheList = modelCacheSettings.el;
+  const refreshCache = modelCacheSettings.refresh;
+  modelActions.append(modelCacheSettings.release);
   syncSource();
   void refreshCache();
   settings.replaceChildren(settingsHero, sourcePicker, localCard, serviceCard, cacheList, note, advanced);
@@ -2870,6 +2597,10 @@ export function createAgentPanel(
   hasConfiguration =
     !!(endpoint && (!isCloudEndpointKind(endpoint.kind) || getEndpointKey(endpointKeySlot(endpoint.kind)))) ||
     (currentProvider() === 'webllm' ? WEBLLM_MODELS.some((model) => model.id === savedPreset) : !!ggufUrl.value.trim());
+  contextLifecycle = mountPanelContext({
+    isActive: () => panel.isConnected && open && enabled,
+    refresh: syncContext,
+  });
   setOpen(!options.background);
   void historyControls.start();
   showView('chat');

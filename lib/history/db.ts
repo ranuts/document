@@ -14,7 +14,7 @@
  * takes for the landing-page handoff.
  */
 export const DB_NAME = 'document-history';
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
 
 export const DOCS_STORE = 'docs';
 export const BLOBS_STORE = 'blobs';
@@ -30,6 +30,8 @@ export const HANDLES_STORE = 'handles';
 export const DOCS_BY_UPDATED = 'by_updatedAt';
 /** All revisions of one document, for retention trimming and deletion. */
 export const BLOBS_BY_DOC = 'by_docId';
+/** Revision order and byte accounting available to key cursors, without bytes. */
+export const BLOBS_BY_REVISION = 'by_docId_rev_byteLength';
 
 let dbPromise: Promise<IDBDatabase | null> | null = null;
 
@@ -45,6 +47,7 @@ export function openHistoryDb(): Promise<IDBDatabase | null> {
       return;
     }
     let request: IDBOpenDBRequest;
+    let blocked = false;
     try {
       request = indexedDB.open(DB_NAME, DB_VERSION);
     } catch {
@@ -61,6 +64,13 @@ export function openHistoryDb(): Promise<IDBDatabase | null> {
         const blobs = db.createObjectStore(BLOBS_STORE, { keyPath: ['docId', 'rev'] });
         blobs.createIndex(BLOBS_BY_DOC, 'docId');
       }
+      const blobs = request.transaction!.objectStore(BLOBS_STORE);
+      if (!blobs.indexNames.contains(BLOBS_BY_REVISION)) {
+        // Added in v3. IndexedDB backfills the small index keys from existing
+        // v1/v2 snapshots within this upgrade transaction; no JS byte reads or
+        // payload rewrites are needed, and an aborted upgrade preserves v2.
+        blobs.createIndex(BLOBS_BY_REVISION, ['docId', 'rev', 'byteLength']);
+      }
       // Added in v2. The guard is what makes the upgrade incremental: a
       // database created at v1 gains this store and keeps its documents.
       if (!db.objectStoreNames.contains(HANDLES_STORE)) {
@@ -69,6 +79,12 @@ export function openHistoryDb(): Promise<IDBDatabase | null> {
     };
     request.onsuccess = () => {
       const db = request.result;
+      if (blocked) {
+        // The caller already received null. Do not leak a late connection or
+        // let it replace a newer retry after the blocking tab finally closes.
+        db.close();
+        return;
+      }
       // Another tab opened a newer version: let go rather than block it, and
       // stop serving reads from a connection whose schema is behind.
       db.onversionchange = () => {
@@ -78,7 +94,11 @@ export function openHistoryDb(): Promise<IDBDatabase | null> {
       resolve(db);
     };
     request.onerror = () => resolve(null);
-    request.onblocked = () => resolve(null);
+    request.onblocked = () => {
+      blocked = true;
+      dbPromise = null;
+      resolve(null);
+    };
   });
   return dbPromise;
 }

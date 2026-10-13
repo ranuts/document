@@ -1,5 +1,7 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import { createAgentEntry } from '../../lib/agent-entry';
+const prepare = vi.hoisted(() => vi.fn().mockResolvedValue(true));
+vi.mock('../../lib/assistant-offline', () => ({ prepareAssistantOffline: prepare }));
 const runtime = vi.hoisted(() => ({ create: vi.fn(), enable: vi.fn().mockResolvedValue(undefined), open: vi.fn() }));
 vi.mock('../../lib/agent-plugin/agent-plugin', () => ({
   createAgentPanel: runtime.create,
@@ -20,6 +22,7 @@ it('opens a default-off welcome without importing the runtime or honoring the ol
   expect(toggle.getAttribute('aria-checked')).toBe('false');
   expect(document.querySelector('.agent-onboarding')?.classList.contains('agent-panel-hidden')).toBe(false);
   expect(runtime.create).not.toHaveBeenCalled();
+  expect(prepare).not.toHaveBeenCalled();
 });
 it('enables explicitly, remembers the choice and never prepares a model on its own', async () => {
   const entry = createAgentEntry();
@@ -28,11 +31,13 @@ it('enables explicitly, remembers the choice and never prepares a model on its o
   await vi.waitFor(() => expect(runtime.create).toHaveBeenCalledOnce());
   expect(localStorage.getItem('document-assistant-enabled')).toBe('true');
   expect(runtime.enable).toHaveBeenCalledWith(true);
+  expect(prepare).toHaveBeenCalledOnce();
 });
-it('a remembered choice stays lazy until the user opens the assistant', async () => {
+it('a remembered choice prepares offline assets but keeps runtime execution lazy until opening', async () => {
   localStorage.setItem('document-assistant-enabled', 'true');
   const entry = createAgentEntry();
   expect(runtime.create).not.toHaveBeenCalled();
+  expect(prepare).toHaveBeenCalledOnce();
   entry.toggle();
   await vi.waitFor(() => expect(runtime.create).toHaveBeenCalledOnce());
 });

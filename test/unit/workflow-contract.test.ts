@@ -417,7 +417,8 @@ describe('.github/workflows/nightly-corpus.yml', () => {
     const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8')) as {
       scripts: Record<string, string>;
     };
-    expect(pkg.scripts['lint:ts']).toBe('node bin/archive-quality.mjs lint && tsc --noEmit');
+    expect(pkg.scripts['lint:ts']).toBe('node bin/archive-quality.mjs lint && pnpm run tsc');
+    expect(pkg.scripts.tsc).toBe("pnpm --recursive --filter '@ranuts/*' build && tsc --noEmit");
     const archiveGate = readFileSync(resolve(ROOT, 'bin/archive-quality.mjs'), 'utf8');
     expect(archiveGate).toContain("'oxlint'");
     expect(archiveGate).toContain("'--deny-warnings'");

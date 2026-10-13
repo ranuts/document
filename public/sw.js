@@ -44,6 +44,8 @@ const ASSETS_TO_CACHE = [
   './icons/document-maskable-512.png',
 ];
 const APP_ASSETS_TO_CACHE = []; // BUILD_APP_ASSETS
+const ASSISTANT_ASSETS_TO_CACHE = []; // BUILD_ASSISTANT_ASSETS
+const ASSISTANT_PREPARED_KEY = '/__document-assistant-prepared__';
 const EDITOR_BOOTSTRAP_HTML = [
   '/web-apps/apps/documenteditor/main/index.html',
   '/web-apps/apps/spreadsheeteditor/main/index.html',
@@ -270,6 +272,10 @@ self.addEventListener('install', (event) => {
         await cache.addAll([...ASSETS_TO_CACHE, ...APP_ASSETS_TO_CACHE]);
         await precacheBootAssets(cache);
       }),
+      // Keep a previously prepared assistant usable after updates, even if its
+      // panel stays closed while this build installs. Default-off visitors have
+      // no marker and never download the optional graph.
+      restorePreparedAssistant(),
       // Take over at once unless doing so would discard vendor assets an open
       // page of the outgoing build still needs (see wouldDiscardVendorAssets).
       // When it would, stay waiting: a page with a document open is
@@ -284,11 +290,53 @@ self.addEventListener('install', (event) => {
         .then((wouldDiscard) => {
           if (!wouldDiscard) self.skipWaiting();
         }),
-    ]),
+    ]).then(restorePreparedAssistant),
   );
 });
 
+function restorePreparedAssistant() {
+  if (assistantPreparation) return assistantPreparation;
+  return Promise.resolve(caches.match?.(ASSISTANT_PREPARED_KEY)).then((prepared) => {
+    if (prepared?.headers?.get('X-Document-Assistant-Prepared') === '1') return prepareAssistantAssets();
+  });
+}
+
+let assistantPreparation;
+function prepareAssistantAssets() {
+  if (!assistantPreparation) {
+    assistantPreparation = caches
+      .open(CORE_CACHE)
+      .then(async (cache) => {
+        const missing = [];
+        for (const asset of ASSISTANT_ASSETS_TO_CACHE) {
+          if (!(await cache.match(asset))) missing.push(asset);
+        }
+        if (missing.length) await cache.addAll(missing);
+        await cache.put(
+          ASSISTANT_PREPARED_KEY,
+          new Response('1', { headers: { 'X-Document-Assistant-Prepared': '1' } }),
+        );
+      })
+      .finally(() => {
+        assistantPreparation = undefined;
+      });
+  }
+  return assistantPreparation;
+}
+
 self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'PREPARE_ASSISTANT') {
+    const port = event.ports && event.ports[0];
+    if (!port) return;
+    // The page cannot supply URLs: only this build's generated allowlist is cached.
+    event.waitUntil(
+      prepareAssistantAssets().then(
+        () => port.postMessage({ type: 'ASSISTANT_PREPARED', ok: true }),
+        () => port.postMessage({ type: 'ASSISTANT_PREPARED', ok: false }),
+      ),
+    );
+  }
+
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
@@ -379,9 +427,10 @@ self.addEventListener('activate', (event) => {
       })
       // The runtime cache can be one we inherited from the previous build (same
       // vendor content, different app code), and nothing else ever clears it.
-      .then(() => pruneAppAssets(RUNTIME_CACHE)),
+      .then(() => pruneAppAssets(RUNTIME_CACHE))
+      .then(restorePreparedAssistant)
+      .then(() => self.clients.claim()),
   );
-  self.clients.claim();
 });
 
 // Fetch event: Strategy-based resource handling

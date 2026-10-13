@@ -66,6 +66,208 @@ vi.mock('../../lib/agent-plugin/tools', () => ({ agentTools: { insert_text: { ex
 afterEach(() => {
   document.body.innerHTML = '';
   execute.mockReset();
+  vi.useRealTimers();
+});
+
+function previewEditor() {
+  const frame = document.createElement('iframe');
+  document.body.append(frame);
+  const callbacks = new Map<string, () => void>();
+  Object.assign(frame.contentWindow!, {
+    editor: {
+      asc_registerCallback: (name: string, callback: () => void) => callbacks.set(name, callback),
+      asc_unregisterCallback: (name: string, callback: () => void) => {
+        if (callbacks.get(name) === callback) callbacks.delete(name);
+      },
+    },
+  });
+  return { frame, callbacks };
+}
+
+it('does no repeated target validation while a pending preview is idle', () => {
+  vi.useFakeTimers();
+  const view = new ActionPreview();
+  let reads = 0;
+  view.show(
+    new ReviewedAction(
+      {
+        editor: 'word',
+        label: 'Word',
+        selectedText: '',
+        isCurrent: () => {
+          reads++;
+          return true;
+        },
+      },
+      { tool: 'insert_text', input: { text: 'Draft' } },
+    ),
+  );
+  const initialReads = reads;
+  vi.advanceTimersByTime(60000);
+  view.dispose();
+  expect(reads).toBe(initialReads);
+});
+
+it('expires a stale preview when the editor selection notification arrives', () => {
+  vi.useFakeTimers();
+  const sdk = previewEditor();
+  const view = new ActionPreview();
+  let current = true;
+  const outcomes: string[] = [];
+  view.show(
+    new ReviewedAction(
+      { editor: 'word', label: 'Word', selectedText: '', isCurrent: () => current },
+      { tool: 'insert_text', input: { text: 'Draft' } },
+    ),
+    undefined,
+    undefined,
+    (outcome) => outcomes.push(outcome.status),
+  );
+  current = false;
+  sdk.callbacks.get('asc_onSelectionEnd')?.();
+  vi.advanceTimersByTime(20);
+  expect(view.el.dataset.state).toBe('expired');
+  expect(outcomes).toEqual(['expired']);
+  expect(sdk.callbacks.size).toBe(0);
+  view.dispose();
+});
+
+it('expires a stale preview after an interaction in the editor frame', () => {
+  vi.useFakeTimers();
+  const { frame } = previewEditor();
+  const view = new ActionPreview();
+  let current = true;
+  frame.contentDocument!.addEventListener('pointerdown', () => {
+    current = false;
+  });
+  view.show(
+    new ReviewedAction(
+      { editor: 'word', label: 'Word', selectedText: '', isCurrent: () => current },
+      { tool: 'insert_text', input: { text: 'Draft' } },
+    ),
+  );
+  frame.contentDocument!.dispatchEvent(new Event('pointerdown'));
+  vi.advanceTimersByTime(20);
+  expect(view.el.dataset.state).toBe('expired');
+  view.dispose();
+});
+
+it('expires a stale preview immediately when a replacement document becomes ready', () => {
+  const view = new ActionPreview();
+  let current = true;
+  view.show(
+    new ReviewedAction(
+      { editor: 'word', label: 'Word', selectedText: '', isCurrent: () => current },
+      { tool: 'insert_text', input: { text: 'Draft' } },
+    ),
+  );
+  current = false;
+  window.dispatchEvent(new Event('document:content-ready'));
+  expect(view.el.dataset.state).toBe('expired');
+  view.dispose();
+});
+
+it.each(['hide', 'invalidate', 'dispose', 'apply'] as const)(
+  'removes preview observers and queued validation when %s ends review',
+  (method) => {
+    vi.useFakeTimers();
+    const sdk = previewEditor();
+    const view = new ActionPreview();
+    let reads = 0;
+    view.show({
+      target: { label: 'Word', selectedText: '' },
+      plan: { tool: 'insert_text', input: { text: 'Draft' } },
+      isCurrent: () => {
+        reads++;
+        return true;
+      },
+      cancel: () => {},
+      apply: async () => 'verified',
+    });
+    expect(sdk.callbacks.size).toBeGreaterThan(0);
+    sdk.callbacks.get('asc_onSelectionEnd')?.();
+    if (method === 'apply') view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+    else view[method]();
+    const endedReads = reads;
+    window.dispatchEvent(new Event('document:content-ready'));
+    vi.advanceTimersByTime(1000);
+    expect(reads).toBe(endedReads);
+    expect(sdk.callbacks.size).toBe(0);
+    view.dispose();
+  },
+);
+
+it('tears down observers when initial validation finds an already stale preview', () => {
+  const sdk = previewEditor();
+  const view = new ActionPreview();
+  view.show(
+    new ReviewedAction(
+      { editor: 'word', label: 'Word', selectedText: '', isCurrent: () => false },
+      { tool: 'insert_text', input: { text: 'Draft' } },
+    ),
+  );
+  expect(view.el.dataset.state).toBe('expired');
+  expect(sdk.callbacks.size).toBe(0);
+  view.dispose();
+});
+
+it('does not validate a replaced preview from its previously queued notification', () => {
+  vi.useFakeTimers();
+  const sdk = previewEditor();
+  const view = new ActionPreview();
+  let firstReads = 0;
+  const first = new ReviewedAction(
+    {
+      editor: 'word',
+      label: 'Word',
+      selectedText: '',
+      isCurrent: () => {
+        firstReads++;
+        return true;
+      },
+    },
+    { tool: 'insert_text', input: { text: 'First' } },
+  );
+  view.show(first);
+  sdk.callbacks.get('asc_onSelectionEnd')!();
+  const replacement = new ReviewedAction(
+    { editor: 'word', label: 'Word', selectedText: '', isCurrent: () => true },
+    { tool: 'insert_text', input: { text: 'Replacement' } },
+  );
+  view.show(replacement);
+  const previousReads = firstReads;
+  vi.advanceTimersByTime(20);
+  expect(firstReads).toBe(previousReads);
+  expect(view.pending()).toBe(replacement);
+  view.dispose();
+  expect(sdk.callbacks.size).toBe(0);
+});
+
+it('keeps the replacement observer when initial expiry starts another review synchronously', () => {
+  vi.useFakeTimers();
+  const sdk = previewEditor();
+  const view = new ActionPreview();
+  let current = true;
+  const replacement = new ReviewedAction(
+    { editor: 'word', label: 'Word', selectedText: '', isCurrent: () => current },
+    { tool: 'insert_text', input: { text: 'Replacement' } },
+  );
+  view.show(
+    new ReviewedAction(
+      { editor: 'word', label: 'Word', selectedText: '', isCurrent: () => false },
+      { tool: 'insert_text', input: { text: 'Expired' } },
+    ),
+    undefined,
+    undefined,
+    () => view.show(replacement),
+  );
+  expect(view.pending()).toBe(replacement);
+  current = false;
+  sdk.callbacks.get('asc_onSelectionEnd')!();
+  vi.advanceTimersByTime(20);
+  expect(view.el.dataset.state).toBe('expired');
+  expect(sdk.callbacks.size).toBe(0);
+  view.dispose();
 });
 it.each(['hide', 'invalidate', 'supersede', 'dispose'] as const)(
   'settles a pending review once when %s interrupts it',

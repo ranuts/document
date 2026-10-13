@@ -66,13 +66,13 @@ describe('agent editor-bridge', () => {
 
     it('skips iframes whose contentWindow access throws (cross-origin) and keeps scanning', () => {
       const crossOrigin = document.createElement('iframe');
+      document.body.appendChild(crossOrigin);
       Object.defineProperty(crossOrigin, 'contentWindow', {
         get() {
           throw new Error('cross-origin');
         },
         configurable: true,
       });
-      document.body.appendChild(crossOrigin);
       const api = { pluginMethod_PasteHtml: () => {} };
       mountIframe({ editor: api }, { name: 'frameEditor' });
       expect(getEditorApi()).toBe(api);

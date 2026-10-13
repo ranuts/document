@@ -3,6 +3,7 @@ import { t } from '@ranuts/shared/i18n';
 import { displayError } from './presentation';
 import { buildSeries, type SeriesInput } from '../fill-series';
 import { textDifference, type ChangeReview } from './change-review';
+import { mountPanelContext } from './panel-context';
 export interface PreviewAction {
   target: {
     label: string;
@@ -58,7 +59,7 @@ export class ActionPreview {
   private onApplied?: (outcome: 'sent' | 'verified', action: PreviewAction) => void;
   private onRefine?: (action: PreviewAction) => void;
   private onSettled?: (outcome: ReviewOutcome) => void;
-  private timer?: ReturnType<typeof setInterval>;
+  private context?: ReturnType<typeof mountPanelContext>;
   private readonly updateLanguage = () => {
     this.labels();
     if (this.action && !this.settled && this.editor.hidden) this.renderComparison(this.action.review);
@@ -327,9 +328,21 @@ export class ActionPreview {
     this.renderComparison(action.review);
     this.applyButton.removeAttribute('disabled');
     this.labels();
-    this.timer = setInterval(() => {
-      if (!action.isCurrent()) this.invalidate();
-    }, 500);
+    const context = mountPanelContext({
+      isActive: () => this.action === action && !this.settled && !this.el.hidden,
+      refresh: () => {
+        if (this.action === action && !this.settled && !action.isCurrent()) this.invalidate();
+      },
+    });
+    // Mount validates synchronously; it can settle or replace this review before
+    // returning its owner. Dispose that owner instead of retaining stale listeners.
+    if (this.action === action && !this.settled) this.context = context;
+    else context.dispose();
+  }
+  private stopObserving(): void {
+    const context = this.context;
+    this.context = undefined;
+    context?.dispose();
   }
   /** Only a live pending proposal can be used as unexecuted refinement context. */
   pending(): PreviewAction | undefined {
@@ -456,7 +469,7 @@ export class ActionPreview {
     if (this.settled) return;
     this.action.cancel();
     this.settled = true;
-    clearInterval(this.timer);
+    this.stopObserving();
     this.applyButton.setAttribute('disabled', '');
     this.status.textContent = t('agentPlanExpired');
     this.finish('expired');
@@ -480,7 +493,7 @@ export class ActionPreview {
     this.action?.cancel();
     if (this.action) this.settle({ status: 'cancelled', action: this.action });
     this.action = null;
-    clearInterval(this.timer);
+    this.stopObserving();
     this.el.hidden = true;
     if (restore && this.returnFocus?.isConnected) this.returnFocus.focus();
   }
@@ -498,7 +511,7 @@ export class ActionPreview {
     if (!this.action || this.settled || this.refining) return;
     const action = this.action;
     this.settled = true;
-    clearInterval(this.timer);
+    this.stopObserving();
     this.applyButton.setAttribute('disabled', '');
     this.el.dataset.state = 'applying';
     this.el.setAttribute('aria-busy', 'true');

@@ -41,12 +41,29 @@ export function createConversationStore(onChange?: () => void, options: Conversa
   let savedIds = new Set<string>();
   let queue: Promise<unknown> = Promise.resolve();
   let lastError: unknown;
+  let savePending = false;
+  let saveQueued = false;
+  const detached = new WeakMap<ConversationRecord, ConversationRecord>();
 
   const snapshot = (): ConversationData => structuredClone({ version: 1, activeId: active, sessions });
+  // Session records are replaced on edits, so unchanged messages need only one detached copy.
+  const persistenceSnapshot = (): ConversationData => ({
+    version: 1,
+    activeId: active,
+    sessions: sessions.map((item) => {
+      let copy = detached.get(item);
+      if (!copy) {
+        copy = structuredClone(item);
+        detached.set(item, copy);
+      }
+      return copy;
+    }),
+  });
   const enqueue = <T>(operation: () => Promise<T>): Promise<T> => {
     const task = queue.then(operation);
     queue = task.catch((error) => {
       saving = false;
+      savePending = false;
       epoch++;
       lastError = error;
       options.onError?.(error);
@@ -56,17 +73,27 @@ export function createConversationStore(onChange?: () => void, options: Conversa
   };
   const persist = (): void => {
     if (!saving) return;
-    const data = snapshot();
+    savePending = true;
+    if (saveQueued) return;
+    saveQueued = true;
     const attempt = epoch;
-    const revision = memoryRevision;
     void enqueue(async () => {
-      if (!saving || attempt !== epoch) return;
-      knownRevision = await repository.save(data, knownRevision ?? 0);
-      savedIds = new Set(data.sessions.map((item) => item.id));
-      if (revision === memoryRevision) {
-        dirty = false;
-        touched.clear();
-        removed.clear();
+      try {
+        // Keep only one in-flight snapshot and one pending latest state, including streaming bursts.
+        while (savePending && saving && attempt === epoch) {
+          savePending = false;
+          const data = persistenceSnapshot();
+          const revision = memoryRevision;
+          knownRevision = await repository.save(data, knownRevision ?? 0);
+          savedIds = new Set(data.sessions.map((item) => item.id));
+          if (revision === memoryRevision) {
+            dirty = false;
+            touched.clear();
+            removed.clear();
+          }
+        }
+      } finally {
+        saveQueued = false;
       }
     });
   };
@@ -119,10 +146,12 @@ export function createConversationStore(onChange?: () => void, options: Conversa
       const item = sessions.find((item) => item.id === id);
       // A detached controller may finish after deletion. It must never resurrect history.
       if (!item) return;
-      item.messages = structuredClone(messages);
+      sessions = sessions.map((session) =>
+        session.id === id
+          ? { ...session, messages: structuredClone(messages), title: titleFor(messages), updatedAt: Date.now() }
+          : session,
+      );
       touched.add(id);
-      item.title = titleFor(messages);
-      item.updatedAt = Date.now();
       changed();
     };
     return {
@@ -195,6 +224,7 @@ export function createConversationStore(onChange?: () => void, options: Conversa
     setSaving: async (enabled: boolean): Promise<void> => {
       if (!enabled) {
         saving = false;
+        savePending = false;
         epoch++;
         onChange?.();
         await queue;
@@ -206,7 +236,7 @@ export function createConversationStore(onChange?: () => void, options: Conversa
         const stored = await repository.load();
         if (attempt !== epoch) return;
         mergeSaved(stored);
-        const data = snapshot();
+        const data = persistenceSnapshot();
         const revision = memoryRevision;
         if (
           !stored ||
@@ -264,6 +294,7 @@ export function createConversationStore(onChange?: () => void, options: Conversa
     },
     clearAll: (): Promise<void> => {
       saving = false;
+      savePending = false;
       epoch++;
       return enqueue(async () => {
         lastError = undefined;

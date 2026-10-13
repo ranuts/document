@@ -42,6 +42,10 @@ export function isConversationRecord(value: unknown): value is ConversationRecor
   );
 }
 
+function normalizeRecord({ id, title, createdAt, updatedAt, messages }: ConversationRecord): ConversationRecord {
+  return { id, title, createdAt, updatedAt, messages };
+}
+
 function validateStored(value: unknown): StoredConversations | null {
   if (value === undefined) return null;
   if (typeof value !== 'object' || value === null) throw new Error('Saved conversation data is invalid');
@@ -60,13 +64,7 @@ function validateStored(value: unknown): StoredConversations | null {
     version: 1,
     revision: stored.revision,
     activeId: stored.activeId,
-    sessions: stored.sessions.map(({ id, title, createdAt, updatedAt, messages }) => ({
-      id,
-      title,
-      createdAt,
-      updatedAt,
-      messages,
-    })),
+    sessions: stored.sessions.map(normalizeRecord),
   };
 }
 
@@ -77,15 +75,67 @@ export class ConversationConflictError extends Error {
   }
 }
 
+interface ConversationIndex {
+  version: 2;
+  revision: number;
+  activeId: string;
+  sessionIds: string[];
+}
+
+function indexFor(data: StoredConversations): ConversationIndex {
+  return {
+    version: 2,
+    revision: data.revision,
+    activeId: data.activeId,
+    sessionIds: data.sessions.map((item) => item.id),
+  };
+}
+
+function validateIndex(value: unknown): ConversationIndex | null {
+  if (value === undefined) return null;
+  const index = value as ConversationIndex;
+  if (
+    !index ||
+    index.version !== 2 ||
+    !Number.isSafeInteger(index.revision) ||
+    index.revision < 1 ||
+    !Array.isArray(index.sessionIds) ||
+    !index.sessionIds.every(validConversationId) ||
+    new Set(index.sessionIds).size !== index.sessionIds.length ||
+    (index.sessionIds.length ? !index.sessionIds.includes(index.activeId) : index.activeId !== '')
+  )
+    throw new Error('Saved conversation data is invalid');
+  return index;
+}
+
 function openDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     if (typeof indexedDB === 'undefined') {
       reject(new Error('Conversation storage is unavailable'));
       return;
     }
-    const request = indexedDB.open(CONVERSATION_DB_NAME, 1);
+    const request = indexedDB.open(CONVERSATION_DB_NAME, 2);
     let abandoned = false;
-    request.onupgradeneeded = () => request.result.createObjectStore('conversations');
+    request.onupgradeneeded = (event) => {
+      const db = request.result;
+      const transaction = request.transaction!;
+      if (event.oldVersion === 0) db.createObjectStore('conversations');
+      const sessions = db.createObjectStore('sessions');
+      const conversations = transaction.objectStore('conversations');
+      const old = conversations.get('state');
+      old.onsuccess = () => {
+        let stored: StoredConversations | null;
+        try {
+          stored = validateStored(old.result);
+        } catch {
+          // Keep damaged v1 data available for explicit erasure; load/save still reject it.
+          return;
+        }
+        if (!stored) return;
+        for (const item of stored.sessions) sessions.put(item, item.id);
+        conversations.put(indexFor(stored), 'state');
+      };
+    };
     request.onblocked = () => {
       abandoned = true;
       reject(new Error('Close other tabs to open conversation storage'));
@@ -102,8 +152,12 @@ function openDatabase(): Promise<IDBDatabase> {
   });
 }
 
-/** One transaction compares the revision and commits the entire conversation index. */
+/** Session changes, deletions and the global revision/index commit in one transaction. */
 export function createConversationRepository(): ConversationRepository {
+  // Exact serialized records avoid rereading/structured-cloning unchanged persisted messages.
+  // They are usable only after comparing the cached global revision in the transaction.
+  let cachedRevision: number | undefined;
+  let cachedSessions = new Map<string, string>();
   async function transact(
     data?: ConversationData,
     expectedRevision?: number,
@@ -113,16 +167,23 @@ export function createConversationRepository(): ConversationRepository {
     return new Promise((resolve, reject) => {
       let result: StoredConversations | null = null;
       let failure: unknown;
+      let serialized = new Map<string, string>();
       let transaction: IDBTransaction;
       try {
-        transaction = db.transaction('conversations', data || clear ? 'readwrite' : 'readonly');
+        transaction = db.transaction(['conversations', 'sessions'], data || clear ? 'readwrite' : 'readonly');
       } catch (error) {
         db.close();
         reject(error);
         return;
       }
+      const fail = (error: unknown) => {
+        failure = error;
+        transaction.abort();
+      };
       transaction.oncomplete = () => {
         db.close();
+        cachedRevision = result?.revision ?? 0;
+        cachedSessions = serialized;
         resolve(result);
       };
       transaction.onabort = () => {
@@ -130,12 +191,12 @@ export function createConversationRepository(): ConversationRepository {
         reject(failure ?? transaction.error ?? new Error('Conversation storage transaction aborted'));
       };
       const store = transaction.objectStore('conversations');
+      const sessions = transaction.objectStore('sessions');
       const request = store.get('state');
       request.onsuccess = () => {
         try {
           if (clear) {
-            // Confirmed erasure must not depend on parsing potentially damaged messages.
-            // Read and replace in one transaction so another tab cannot slip in a write.
+            // Erasure also works for damaged legacy/index/messages, without decoding their contents.
             const previous = request.result?.revision;
             const revision =
               Number.isSafeInteger(previous) && previous >= 0 && previous < Number.MAX_SAFE_INTEGER
@@ -144,20 +205,61 @@ export function createConversationRepository(): ConversationRepository {
                   ? 1
                   : Date.now();
             result = { version: 1, revision, activeId: '', sessions: [] };
-            store.put(result, 'state');
+            sessions.clear();
+            store.put(indexFor(result), 'state');
             return;
           }
-          result = validateStored(request.result);
+          const index = validateIndex(request.result);
           if (data) {
-            if ((result?.revision ?? 0) !== expectedRevision) throw new ConversationConflictError();
-            result = { ...data, revision: (result?.revision ?? 0) + 1 };
-            // Validate the host snapshot too; malformed input must not replace existing history.
-            validateStored(result);
-            store.put(result, 'state');
+            if ((index?.revision ?? 0) !== expectedRevision) throw new ConversationConflictError();
+            // Normalize host records too, so unrelated properties never enter saved history.
+            result = validateStored({ ...data, revision: (index?.revision ?? 0) + 1 })!;
+            serialized = new Map(result.sessions.map((item) => [item.id, JSON.stringify(item)]));
+            const nextIds = new Set(serialized.keys());
+            for (const id of index?.sessionIds ?? []) if (!nextIds.has(id)) sessions.delete(id);
+            for (const item of result.sessions) {
+              const text = serialized.get(item.id)!;
+              if (cachedRevision === (index?.revision ?? 0)) {
+                if (cachedSessions.get(item.id) !== text) sessions.put(item, item.id);
+              } else if (!index?.sessionIds.includes(item.id)) {
+                sessions.put(item, item.id);
+              } else {
+                // A fresh repository may be used to save without loading. Compare existing records once.
+                const previous = sessions.get(item.id);
+                previous.onsuccess = () => {
+                  try {
+                    if (!isConversationRecord(previous.result) || previous.result.id !== item.id)
+                      throw new Error('Saved conversation data is invalid');
+                    if (JSON.stringify(normalizeRecord(previous.result)) !== text) sessions.put(item, item.id);
+                  } catch (error) {
+                    fail(error);
+                  }
+                };
+              }
+            }
+            store.put(indexFor(result), 'state');
+          } else if (index) {
+            result = { version: 1, revision: index.revision, activeId: index.activeId, sessions: [] };
+            const records = new Map<string, ConversationRecord>();
+            for (const id of index.sessionIds) {
+              const record = sessions.get(id);
+              record.onsuccess = () => {
+                try {
+                  if (!isConversationRecord(record.result) || record.result.id !== id)
+                    throw new Error('Saved conversation data is invalid');
+                  const item = normalizeRecord(record.result);
+                  records.set(id, item);
+                  serialized.set(id, JSON.stringify(item));
+                  if (records.size === index.sessionIds.length)
+                    result!.sessions = index.sessionIds.map((sessionId) => records.get(sessionId)!);
+                } catch (error) {
+                  fail(error);
+                }
+              };
+            }
           }
         } catch (error) {
-          failure = error;
-          transaction.abort();
+          fail(error);
         }
       };
     });

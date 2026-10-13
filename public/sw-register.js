@@ -128,15 +128,37 @@
       });
     }
 
+    // Bridge persisted opt-in from older releases, whose worker cannot read localStorage.
+    function prepareRememberedAssistant(registration) {
+      try {
+        if (global.localStorage?.getItem('document-assistant-enabled') !== 'true') return;
+        var worker = registration.installing || registration.waiting || registration.active;
+        if (!worker || typeof worker.postMessage !== 'function') return;
+        var channel = new MessageChannel();
+        var done = function () {
+          global.clearTimeout(timer);
+          channel.port1.close();
+          channel.port2.close();
+        };
+        var timer = global.setTimeout(done, 60000);
+        channel.port1.onmessage = done;
+        worker.postMessage({ type: 'PREPARE_ASSISTANT' }, [channel.port2]);
+      } catch {
+        // Preparation is optional; ordinary navigation remains available.
+      }
+    }
+
     /** Promote a worker that is already waiting, installing, or yet to be found. */
     function wire(registration) {
       // Browser automation or a restricted environment may return no handle.
       if (!registration) return;
+      prepareRememberedAssistant(registration);
       void maybePromote(registration);
       // `updatefound` for an update found during registration itself can fire
       // before this listener exists, so pick up an in-flight install too.
       if (registration.installing) watchInstalling(registration, registration.installing);
       registration.addEventListener('updatefound', function () {
+        prepareRememberedAssistant(registration);
         watchInstalling(registration, registration.installing);
       });
     }

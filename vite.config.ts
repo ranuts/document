@@ -212,6 +212,7 @@ export default defineConfig(({ command }) => {
     },
     build: {
       outDir: 'dist',
+      manifest: true,
       // Three HTML entries: / (static landing, no editor bundle), /editor (the
       // app) and /history (the local library, which reads IndexedDB metadata
       // and never loads the editor stack).
