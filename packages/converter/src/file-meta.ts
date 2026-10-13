@@ -48,17 +48,18 @@ const FILE_DESCRIPTION_MAP: Record<string, string> = {
  * failure rejects so the caller can surface it. Shared by the convert-and-
  * download path and the v9 file-stream save path (lib/onlyoffice-editor.ts).
  */
-export async function saveFileToDisk(data: Blob | Uint8Array, fileName: string, mimeType?: string): Promise<void> {
+export async function saveFileToDisk(data: Blob | Uint8Array, fileName: string, mimeType?: string): Promise<boolean> {
   const extension = fileName.split('.').pop()?.toLowerCase() || '';
   const written = await ranutsSaveFileToDisk(data, fileName, {
     mimeType: mimeType || getDocumentMimeType(fileName),
     description: FILE_DESCRIPTION_MAP[extension] || 'Document',
   });
-  if (!written) return;
+  if (!written) return false;
   // ranui/message registers a global `window.message` toast API (untyped).
   (window as unknown as { message?: { success?: (msg: string) => void } }).message?.success?.(
     `${t('fileSavedSuccess')}${fileName}`,
   );
+  return true;
 }
 
 export const MIME_MAP: Record<string, string> = {

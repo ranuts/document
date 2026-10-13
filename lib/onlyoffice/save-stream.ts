@@ -7,6 +7,7 @@ import { getDocumentOpenError, waitForDocumentContentReady } from './open-state'
 import { getReadonlyMode } from './readonly';
 import { isEmbedMode } from '../embed-mode';
 import { markDocumentSaved } from '../unsaved-guard';
+import type { SaveOutcome } from '../save-target';
 
 /**
  * Notified when bytes actually reach the user's disk.
@@ -27,12 +28,12 @@ export function setSavedToDiskListener(listener: (() => void) | null): void {
  *
  * Injected for the same reason as the listener above -- it needs the document's
  * identity, which lives in the history layer, and that layer exports through
- * this module. Returns true when the user's document is saved and there is
- * nothing left to do; false means "carry on with the download".
+ * this module. Returns the write outcome: cancellation stops without clearing dirty state,
+ * and unavailable writers fall back to the download.
  */
-let diskWriter: ((file: File) => Promise<boolean>) | null = null;
+let diskWriter: ((file: File) => Promise<SaveOutcome>) | null = null;
 
-export function setDiskWriter(writer: ((file: File) => Promise<boolean>) | null): void {
+export function setDiskWriter(writer: ((file: File) => Promise<SaveOutcome>) | null): void {
   diskWriter = writer;
 }
 
@@ -139,12 +140,13 @@ function routeSavedFile(file: File): void {
   // view: the bytes are on the user's disk.
   void (async () => {
     try {
-      if (await diskWriter?.(file)) {
+      const outcome = await diskWriter?.(file);
+      if (outcome === 'cancelled') return;
+      if (outcome === 'written') {
         reachedDisk();
         return;
       }
-      await saveFileToDisk(file, file.name);
-      reachedDisk();
+      if (await saveFileToDisk(file, file.name)) reachedDisk();
     } catch (error) {
       notifyOperationFailed(error);
     }

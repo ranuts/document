@@ -203,9 +203,13 @@ test/unit/
 test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL、localStorage
 ```
 
-覆盖率阈值（全局）：语句 34%、分支 25%、函数 35%、行 35%（当前实际约
-45%/49%/49%，具体以 `pnpm run test:coverage` 输出为准，不要在本文件里维护
-逐文件数字——它们过期得很快）。
+覆盖率统计 `lib/**/*.ts` 与 `packages/*/src/**/*.ts`，排除类型声明。
+全局最低门槛保留在 `vitest.config.ts`，历史、shared、converter、agent-core 与 chat-ui
+另有独立模块门槛。实际数字以 `pnpm run test:coverage` 为准。
+
+开发与 Vitest 通过 `bin/workspace-aliases.mjs` 从 workspace 的 `exports` 派生源码别名，
+避免读取旧 `dist`。生产构建继续使用编译包，并由 `bin/build.sh` 先重建。源码别名
+必须精确匹配包入口与子路径；WebLLM 的开发 Worker 响应策略同时覆盖源码路径。
 
 **注意事项：**
 

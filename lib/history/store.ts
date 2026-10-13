@@ -17,10 +17,11 @@
  * Everything here resolves to a null/empty result when IndexedDB is missing;
  * see lib/history/db.ts for why.
  */
-import { BLOBS_BY_DOC, BLOBS_STORE, DOCS_STORE, requestToPromise, withStores } from './db';
+import { BLOBS_BY_DOC, BLOBS_STORE, DOCS_STORE, HANDLES_STORE, requestToPromise, withStores } from './db';
 import type { HistoryDoc, HistoryOrigin, HistorySnapshot } from './types';
 import { MAX_AGE_MS, expiresAt, hasUnsavedWork } from './types';
 import { deleteDocumentSources } from '../active-document-source';
+import { clearSessionSaveTargets } from '../save-target';
 
 /** Revisions kept per document: the newest plus two recovery points behind it. */
 export const MAX_REVS_PER_DOC = 3;
@@ -112,11 +113,14 @@ export async function storageBudget(): Promise<number> {
   return MAX_TOTAL_BYTES;
 }
 
-/** Delete every revision of one document. Caller owns the transaction. */
-async function deleteBlobsOf(tx: IDBTransaction, docId: string): Promise<void> {
+/** Delete all history data and its disk link atomically. Caller owns the transaction. */
+async function deleteDocumentData(tx: IDBTransaction, docId: string): Promise<void> {
   const store = tx.objectStore(BLOBS_STORE);
   const keys = await requestToPromise(store.index(BLOBS_BY_DOC).getAllKeys(IDBKeyRange.only(docId)));
   for (const key of keys) store.delete(key);
+  tx.objectStore(DOCS_STORE).delete(docId);
+  tx.objectStore(HANDLES_STORE).delete(docId);
+  tx.addEventListener('complete', () => clearSessionSaveTargets(docId), { once: true });
 }
 
 /** Drop revisions past MAX_REVS_PER_DOC, oldest first. Returns bytes freed. */
@@ -144,8 +148,7 @@ async function sweepExpired(tx: IDBTransaction, now: number): Promise<string[]> 
   const docs = await readAllDocs(tx);
   const expired = docs.filter((doc) => expiresAt(doc) <= now);
   for (const doc of expired) {
-    await deleteBlobsOf(tx, doc.id);
-    tx.objectStore(DOCS_STORE).delete(doc.id);
+    await deleteDocumentData(tx, doc.id);
   }
   return expired.map((doc) => doc.id);
 }
@@ -164,8 +167,7 @@ async function enforceBudget(tx: IDBTransaction, budget: number, protectedId: st
 
   for (const doc of candidates) {
     if (total <= budget) break;
-    await deleteBlobsOf(tx, doc.id);
-    tx.objectStore(DOCS_STORE).delete(doc.id);
+    await deleteDocumentData(tx, doc.id);
     total -= doc.totalBytes || 0;
   }
 }
@@ -201,7 +203,7 @@ async function writeSnapshot(
   const now = stamp();
   const title = input.title.trim() || 'Untitled';
 
-  return withStores([DOCS_STORE, BLOBS_STORE], 'readwrite', async (tx) => {
+  return withStores([DOCS_STORE, BLOBS_STORE, HANDLES_STORE], 'readwrite', async (tx) => {
     if (!watchSnapshotCancellation(tx, signal)) return null;
     const docs = tx.objectStore(DOCS_STORE);
     const existing = input.id ? ((await requestToPromise(docs.get(input.id))) as HistoryDoc | undefined) : undefined;
@@ -287,13 +289,12 @@ export async function putSnapshot(input: SnapshotInput, signal?: AbortSignal): P
 async function evictColdest(protectedId?: string, signal?: AbortSignal): Promise<boolean> {
   try {
     return (
-      (await withStores([DOCS_STORE, BLOBS_STORE], 'readwrite', async (tx) => {
+      (await withStores([DOCS_STORE, BLOBS_STORE, HANDLES_STORE], 'readwrite', async (tx) => {
         if (!watchSnapshotCancellation(tx, signal)) return false;
         const docs = (await readAllDocs(tx)).filter((doc) => doc.id !== protectedId);
         if (!docs.length) return false;
         const coldest = docs.sort((a, b) => a.lastOpenedAt - b.lastOpenedAt)[0];
-        await deleteBlobsOf(tx, coldest.id);
-        tx.objectStore(DOCS_STORE).delete(coldest.id);
+        await deleteDocumentData(tx, coldest.id);
         return true;
       })) ?? false
     );
@@ -380,9 +381,8 @@ export async function deleteDoc(id: string): Promise<boolean> {
   try {
     const originalsDeleted = await deleteDocumentSources(id);
     const historyDeleted =
-      (await withStores([DOCS_STORE, BLOBS_STORE], 'readwrite', async (tx) => {
-        await deleteBlobsOf(tx, id);
-        tx.objectStore(DOCS_STORE).delete(id);
+      (await withStores([DOCS_STORE, BLOBS_STORE, HANDLES_STORE], 'readwrite', async (tx) => {
+        await deleteDocumentData(tx, id);
         return true;
       })) ?? false;
     return originalsDeleted && historyDeleted;
@@ -400,9 +400,11 @@ export async function clearAllHistory(): Promise<boolean> {
   try {
     const originalsDeleted = await deleteDocumentSources();
     const historyDeleted =
-      (await withStores([DOCS_STORE, BLOBS_STORE], 'readwrite', async (tx) => {
+      (await withStores([DOCS_STORE, BLOBS_STORE, HANDLES_STORE], 'readwrite', async (tx) => {
         tx.objectStore(DOCS_STORE).clear();
         tx.objectStore(BLOBS_STORE).clear();
+        tx.objectStore(HANDLES_STORE).clear();
+        tx.addEventListener('complete', () => clearSessionSaveTargets(), { once: true });
         return true;
       })) ?? false;
     return originalsDeleted && historyDeleted;
@@ -455,7 +457,10 @@ export function resetHistoryClockForTests(): void {
 
 export async function pruneExpired(): Promise<string[]> {
   try {
-    return (await withStores([DOCS_STORE, BLOBS_STORE], 'readwrite', (tx) => sweepExpired(tx, Date.now()))) ?? [];
+    return (
+      (await withStores([DOCS_STORE, BLOBS_STORE, HANDLES_STORE], 'readwrite', (tx) => sweepExpired(tx, Date.now()))) ??
+      []
+    );
   } catch {
     return [];
   }

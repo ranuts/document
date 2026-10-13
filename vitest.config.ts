@@ -1,19 +1,14 @@
-import path, { resolve } from 'node:path';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
+import { workspaceSourceAliases } from './bin/workspace-aliases.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   resolve: {
-    alias: {
-      '@/lib': resolve(__dirname, 'lib'),
-      '@/store': resolve(__dirname, 'store'),
-      '@/assets': resolve(__dirname, 'assets'),
-      '@/types': resolve(__dirname, 'types'),
-      '@/styles': resolve(__dirname, 'styles'),
-    },
+    alias: [{ find: '@', replacement: __dirname }, ...workspaceSourceAliases(__dirname)],
   },
   test: {
     environment: 'jsdom',
@@ -34,14 +29,14 @@ export default defineConfig({
         // iframe and isn't meaningfully unit-testable (see the "为什么
         // onlyoffice-editor.ts 覆盖率低" section in CLAUDE.md).
         statements: 34,
+        'lib/history/**/*.ts': { lines: 85, branches: 75, functions: 85, statements: 85 },
+        'packages/shared/src/**/*.ts': { lines: 90, branches: 80, functions: 90, statements: 90 },
+        'packages/converter/src/**/*.ts': { lines: 60, branches: 55, functions: 65, statements: 60 },
+        'packages/agent-core/src/**/*.ts': { lines: 80, branches: 75, functions: 75, statements: 75 },
+        'packages/chat-ui/src/**/*.ts': { lines: 90, branches: 80, functions: 90, statements: 90 },
       },
-      include: [
-        'lib/document-utils.ts',
-        'lib/i18n.ts',
-        'lib/embed-api.ts',
-        'lib/onlyoffice-editor.ts',
-        'lib/agent-plugin/**/*.ts',
-      ],
+      include: ['lib/**/*.ts', 'packages/*/src/**/*.ts'],
+      exclude: ['**/*.d.ts'],
     },
   },
 });
