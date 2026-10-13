@@ -540,13 +540,14 @@ r-dropdown[role='listbox'] {
   border-color: transparent;
 }
 .agent-panel .cui-messages {
-  padding: 28px 22px;
+  padding: 24px 16px;
   gap: var(--ran-space-4);
   line-height: 1.75;
 }
 .agent-panel .cui-empty {
   width: 100%;
-  max-width: 320px;
+  max-width: none;
+  margin: auto 0;
   box-sizing: border-box;
   padding: 20px 0;
   font-size: 20px;
@@ -620,7 +621,7 @@ r-dropdown[role='listbox'] {
     flex-basis: 44px;
   }
   .agent-panel .cui-messages {
-    padding: 24px 20px;
+    padding: 24px 16px;
   }
   .agent-panel .cui-footer {
     padding-bottom: max(16px, env(safe-area-inset-bottom));
@@ -651,7 +652,7 @@ r-dropdown[role='listbox'] {
     padding: 0 16px;
   }
   .agent-panel .cui-footer {
-    padding: 8px 12px;
+    padding: 8px 16px;
     padding-bottom: max(8px, env(safe-area-inset-bottom));
   }
   .agent-panel .cui-composer {
@@ -705,7 +706,7 @@ r-dropdown[role='listbox'] {
 .agent-panel .agent-runtime-row r-button::part(button) {
   box-shadow: none;
 }
-.agent-device-section > .agent-runtime-row {
+.agent-device-section .agent-runtime-row {
   padding: var(--ran-space-3) 0;
 }
 @media (max-height: 600px) {
@@ -762,7 +763,7 @@ r-dropdown[role='listbox'] {
   box-sizing: border-box;
   min-height: 56px;
   flex: 0 0 auto;
-  padding: 8px 20px;
+  padding: 8px 16px;
   gap: 2px;
 }
 .agent-panel-title {
@@ -779,7 +780,7 @@ r-dropdown[role='listbox'] {
   overflow: auto;
   flex: 1 1 auto;
   max-height: none;
-  padding: var(--ran-space-6);
+  padding: 16px;
   gap: var(--ran-space-4);
   border-bottom: 0;
   scrollbar-width: thin;
@@ -945,7 +946,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-panel .cui-footer {
   border-top: 0;
-  padding: 12px 20px 18px;
+  padding: 12px 16px 16px;
 }
 .agent-panel .cui-composer {
   border-color: var(--ran-color-border);
@@ -980,7 +981,7 @@ r-dropdown[role='listbox'] {
 }
 @media (max-width: 480px) {
   .agent-panel-header {
-    padding: 8px 14px;
+    padding: 8px 16px;
   }
   .agent-panel-header button {
     width: 34px;
@@ -989,7 +990,7 @@ r-dropdown[role='listbox'] {
   }
   .agent-panel-settings,
   .agent-history-view {
-    padding: 20px;
+    padding: 16px;
   }
   .agent-panel-title {
     font-size: 14px;
@@ -1070,21 +1071,24 @@ r-dropdown[role='listbox'] {
   width: 100%;
   min-width: 0;
   --ran-input-border-radius: 8px;
-  --ran-input-min-height: 40px;
-  --ran-input-content-min-height: 38px;
+  --ran-input-min-height: 32px;
+  --ran-input-content-min-height: 30px;
   --ran-input-content-font-size: 13px;
   --ran-input-content-padding: 0 12px;
   --ran-select-border-radius: 8px;
-  --ran-select-height: 40px;
+  --ran-select-height: 32px;
   --ran-select-font-size: 13px;
+}
+.agent-panel-settings r-button {
+  --ran-btn-padding: 0;
 }
 .agent-panel-settings r-button::part(content) {
   box-sizing: border-box;
-  min-height: 40px;
+  min-height: 32px;
   display: flex;
   align-items: center;
-  font-size: 13px;
-  padding: 9px 14px;
+  font-size: 12px;
+  padding: 5px 10px;
 }
 .agent-panel-load::part(content),
 .agent-panel-endpoint-connect::part(content) {
@@ -1190,7 +1194,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-release-memory {
   align-self: flex-start;
-  margin-top: var(--ran-space-2);
+  margin-top: 0;
 }
 .agent-preferences {
   color: var(--ran-color-text-secondary);
@@ -1481,4 +1485,11 @@ r-dropdown[role='listbox'] {
   font-size: var(--ran-text-label-2);
   font-weight: 500;
   margin: 0 0 var(--ran-space-3);
+}
+
+.agent-model-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ran-space-2);
 }
