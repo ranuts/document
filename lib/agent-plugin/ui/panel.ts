@@ -2526,7 +2526,8 @@ export function createAgentPanel(
   const modelChoice = Div().build();
   modelChoice.className = 'agent-model-choice';
   modelChoice.append(modelSelect, modelMemory);
-  modelRow.replaceChildren(modelChoice, loadBtn);
+  const modelActions = Div().class('agent-model-actions').children(loadBtn).build();
+  modelRow.replaceChildren(modelChoice, modelActions);
   localCard.append(modelRow, ggufRow);
   const serviceCard = View('section').build();
   serviceCard.className = 'agent-use-card agent-service-section';
@@ -2787,7 +2788,7 @@ export function createAgentPanel(
       }
     })();
   });
-  localCard.append(release);
+  modelActions.append(release);
   syncSource();
   void refreshCache();
   settings.replaceChildren(settingsHero, sourcePicker, localCard, serviceCard, cacheList, note, advanced);
@@ -2820,7 +2821,7 @@ export function createAgentPanel(
     viewRevision++;
     speech?.close();
     panel.dataset.view = view;
-    if (view === 'settings') localCard.insertBefore(runtimeRow, release);
+    if (view === 'settings') modelRow.insertBefore(runtimeRow, modelActions);
     else panel.insertBefore(runtimeRow, settings);
     settings.classList.toggle('agent-panel-settings-hidden', view !== 'settings');
     chat.el.hidden = view !== 'chat';
