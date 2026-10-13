@@ -30,7 +30,7 @@
 
 ブラウザーで Word、Excel、PowerPoint を開き、編集して保存。PDF には注釈を追加できます。アカウントも Office のインストールも不要です。
 
-**[オンラインで試す](https://edit.chaxus.com/)** · [ソースを見る](https://github.com/ranuts/document)
+**オンラインで試す：[edit.chaxus.com](https://edit.chaxus.com/)**
 
 ---
 

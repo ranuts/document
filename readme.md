@@ -30,7 +30,7 @@
 
 Open, edit and save Word, Excel and PowerPoint files. Annotate PDFs. All in your browser, with no account or Office installation required.
 
-**[Try it online](https://edit.chaxus.com/)** · [View source](https://github.com/ranuts/document)
+**Try it online: [edit.chaxus.com](https://edit.chaxus.com/)**
 
 ---
 
