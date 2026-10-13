@@ -73,6 +73,10 @@ export class ChatView {
   private liveText = '';
   private liveNode: Text | null = null;
   private pendingText = '';
+  private actionRunning = false;
+  private actionHasDraft = false;
+  private appendBatchDepth = 0;
+  private appendBatchChanged = false;
 
   constructor(private readonly options: ChatViewOptions) {
     ensureChatUiStyles();
@@ -234,8 +238,7 @@ export class ChatView {
         group.querySelector('ul')!.append(li);
         group.querySelector('summary')!.replaceChildren(item);
       }
-      if (stick) this.scrollToEnd();
-      else this.updateScrollBtn();
+      this.finishAppendLayout(stick);
       this.resizeObserver?.observe(group);
       return item;
     }
@@ -329,10 +332,36 @@ export class ChatView {
 
     this.messagesEl.appendChild(row);
     this.resizeObserver?.observe(row);
-    this.updateRestoreState();
-    if (stick) this.scrollToEnd();
-    else this.updateScrollBtn();
+    this.updateRestoreState(row);
+    this.finishAppendLayout(stick);
     return bubble;
+  }
+
+  /** Append finished messages in order, measuring and scrolling only after the batch. */
+  appendMany(messages: readonly ChatMessage[]): void {
+    if (this.disposed || !messages.length) return;
+    this.appendBatchDepth++;
+    try {
+      for (const message of messages) {
+        if (this.disposed) break;
+        this.append(message);
+      }
+    } finally {
+      this.appendBatchDepth--;
+      if (!this.appendBatchDepth && this.appendBatchChanged) {
+        this.appendBatchChanged = false;
+        if (!this.disposed) {
+          if (!this.following) this.recordScrollGeometry();
+          this.finishAppendLayout(this.following);
+        }
+      }
+    }
+  }
+
+  private finishAppendLayout(stick: boolean): void {
+    if (this.appendBatchDepth) this.appendBatchChanged = true;
+    else if (stick) this.scrollToEnd();
+    else this.updateScrollBtn();
   }
 
   /**
@@ -357,6 +386,7 @@ export class ChatView {
   endStream(): void {
     const stick = this.following;
     this.flushStream();
+    if (this.liveMsg) this.liveMsg.dataset.source = this.liveText;
     const bubble = this.liveMsg?.querySelector<HTMLElement>('.cui-bubble');
     if (bubble) renderMarkdown(bubble, this.liveText);
     this.liveMsg?.classList.remove('cui-streaming');
@@ -364,7 +394,7 @@ export class ChatView {
     this.liveNode = null;
     this.liveText = '';
     this.updateActivity();
-    if (bubble && stick) this.scrollToEnd();
+    if (bubble && stick) this.finishAppendLayout(stick);
   }
 
   /** Only explicit stream completion can make a preview available for writing. */
@@ -381,8 +411,7 @@ export class ChatView {
     const stick = this.following;
     this.messagesEl.append(content);
     this.resizeObserver?.observe(content);
-    if (stick) this.scrollToEnd();
-    else this.updateScrollBtn();
+    this.finishAppendLayout(stick);
   }
 
   /** Toggle Send/Stop while keeping the next draft editable and never queued. */
@@ -525,8 +554,12 @@ export class ChatView {
 
   /** Reflect run state + empty input on the send button (icon, disabled, title). */
   private updateSendState(): void {
-    this.updateRestoreState();
     const hasDraft = !!this.input.value.trim();
+    if (this.actionRunning !== this.running || this.actionHasDraft !== hasDraft) {
+      this.actionRunning = this.running;
+      this.actionHasDraft = hasDraft;
+      this.updateRestoreState();
+    }
     const unavailable = !this.running && hasDraft && this.options.canSend?.(this.input.value) === false;
     const preparation = unavailable ? this.options.getSendPreparation?.() : undefined;
     if (preparation) this.sendBtn.textContent = preparation.label;
@@ -542,10 +575,10 @@ export class ChatView {
       !this.running && (this.preparingSend || !hasDraft || (unavailable && (!preparation || !!preparation.disabled)));
   }
 
-  private updateRestoreState(): void {
-    for (const button of this.messagesEl.querySelectorAll<HTMLButtonElement>('.cui-restore'))
+  private updateRestoreState(parent: HTMLElement = this.messagesEl): void {
+    for (const button of parent.querySelectorAll<HTMLButtonElement>('.cui-restore'))
       button.disabled = this.running || !!this.input.value.trim();
-    for (const button of this.messagesEl.querySelectorAll<HTMLButtonElement>('.cui-apply'))
+    for (const button of parent.querySelectorAll<HTMLButtonElement>('.cui-apply'))
       button.disabled = this.running || (!!button.dataset.state && button.dataset.state !== 'retry');
   }
 
@@ -597,7 +630,6 @@ export class ChatView {
     if (!this.liveMsg || !this.pendingText) return;
     this.liveNode?.appendData(this.pendingText);
     this.pendingText = '';
-    this.liveMsg.dataset.source = this.liveText;
   }
 
   private clearCopyFeedback(): void {
