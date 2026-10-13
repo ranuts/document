@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <title>Online Document Editor</title>
+  <desc>
+    Open-source document editing in your browser. Word, Excel, PowerPoint and PDF. Local editing, no signup, optional AI
+    (Experimental Beta), WebMCP and PWA.
+  </desc>
+  <rect width="1280" height="640" fill="#f7f7f4" />
+  <g transform="translate(40 5)">
+    <g transform="translate(76 58) scale(.135)">
+      <path d="M264 62Q282 52 282 74V162L140 246L194 288V400L86 314Q74 304 74 286V178Q74 163 87 155Z" />
+      <path
+        d="M264 62Q282 52 282 74V162L140 246L194 288V400L86 314Q74 304 74 286V178Q74 163 87 155Z"
+        transform="rotate(180 256 256)"
+      />
+    </g>
+    <g font-family="Arial, Helvetica, sans-serif" fill="#171717">
+      <text x="160" y="103" font-size="28" font-weight="700">Online Document Editor</text>
+      <text x="80" y="243" font-size="66" font-weight="700" letter-spacing="-2">Your documents.</text>
+      <text x="80" y="322" font-size="66" font-weight="700" letter-spacing="-2">Right in your browser.</text>
+      <text x="83" y="384" font-size="26" fill="#525252">Word · Excel · PowerPoint · PDF</text>
+      <text x="83" y="443" font-size="22" fill="#525252">Local editing. Open source. No signup.</text>
+      <path d="M80 480H1120" stroke="#d8d8d2" />
+      <text x="83" y="526" font-size="19" fill="#525252">AI (Experimental Beta) · WebMCP · PWA</text>
+      <text x="83" y="568" font-size="20" font-weight="700">edit.chaxus.com</text>
+      <text x="1120" y="568" text-anchor="end" font-size="18" fill="#737373">github.com/ranuts/document</text>
+    </g>
+  </g>
+</svg>
