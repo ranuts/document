@@ -1,7 +1,7 @@
 {
   "title": "ブラウザで DOCX・XLSX・PPTX を開く — 無料のドキュメントビューア＆エディタ",
   "description": "Office やアカウントなしで DOCX、XLSX、PPTX、CSV をブラウザで開き、表示・編集できます。基本編集にアップロードは不要で、オフライン利用はキャッシュ済みリソースに依存します。",
-  "ogDescription": "Office やアカウントなしで DOCX、XLSX、PPTX、CSV をブラウザで開き、表示・編集できます。基本編集にアップロードは不要で、オフライン利用はキャッシュ済みリソースに依存します。",
+  "ogDescription": "ブラウザーで Word、Excel、PowerPoint をローカル編集し、PDF に注釈を追加。登録や Office のインストールは不要。任意の AI アシスタント (Experimental Beta)、WebMCP、PWA に対応。",
   "chip": "ローカル優先 · <b>オープンソース</b>",
   "h1": {
     "plain": "Word・Excel・PowerPoint のファイルを、",
@@ -241,5 +241,6 @@
     "キャッシュ済みリソースでオフライン利用",
     "postMessage API で埋め込み可能",
     "無料でオープンソース（AGPL-3.0）"
-  ]
+  ],
+  "ogTitle": "あなたと AI エージェントのためのオープンソース文書エディター"
 }

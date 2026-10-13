@@ -1,7 +1,7 @@
 {
   "title": "브라우저에서 DOCX, XLSX, PPTX 열기 — 무료 문서 뷰어 및 편집기",
   "description": "Office나 계정 없이 브라우저에서 DOCX, XLSX, PPTX, CSV를 열고 보고 편집하세요. 기본 편집에는 문서 업로드가 필수가 아니며 오프라인 사용은 캐시된 리소스에 달려 있습니다.",
-  "ogDescription": "Office나 계정 없이 브라우저에서 DOCX, XLSX, PPTX, CSV를 열고 보고 편집하세요. 기본 편집에는 문서 업로드가 필수가 아니며 오프라인 사용은 캐시된 리소스에 달려 있습니다.",
+  "ogDescription": "브라우저에서 Word, Excel, PowerPoint를 로컬로 편집하고 PDF에 주석을 추가하세요. 가입이나 Office 설치 없이 사용하며, 선택적 AI (Experimental Beta), WebMCP, PWA를 지원합니다.",
   "chip": "로컬 우선 · <b>오픈 소스</b>",
   "h1": {
     "plain": "Word, Excel, PowerPoint 파일을",
@@ -241,5 +241,6 @@
     "캐시된 리소스로 오프라인 사용",
     "postMessage API로 임베드 가능",
     "무료이며 오픈 소스(AGPL-3.0)"
-  ]
+  ],
+  "ogTitle": "사용자와 AI 에이전트를 위한 오픈 소스 문서 편집기"
 }
