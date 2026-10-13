@@ -34,3 +34,19 @@ Validated with 120 focused chat/controller/storage tests, package type generatio
 Use the existing updatedAt index to fetch only snapshots at or before the inclusive expiry cutoff. The precise expiresAt predicate still renews retention after reopening, and a stable descending sort of expired candidates preserves returned ID ordering, including equal timestamps. Deletions and save-target cleanup retain their original transactional behavior. No database schema change.
 
 A fixture with 2,000 recent documents and five old metadata rows reads five candidates instead of all 2,005. Snapshot writes still perform the required full budget check: total metadata results fall from 4,008 to 2,008 (five expiry candidates and 2,003 budget rows); full metadata scans fall from two to one. Eleven focused history suites / 98 tests passed, including exact boundaries/ties, reopened retention, blob/handle cleanup and cancellation rollback.
+
+## Batched GGUF deletion
+
+Resolve the requested cache group, then delete its exact known filenames in one SDK deleteMany call. The installed SDK still owns body/metadata deletion and error propagation. Unrelated models, shared runtimes and the missing-group error remain unchanged.
+
+Real installed SDK/storage-boundary tests show three-shard deletion uses two inventory scans instead of four. An eight-shard, four-unrelated-file small-body adapter probe shows nine scans become two, with identical deleted and remaining filenames; Blob reads fall from 240 to 72. These are aggregate operation counts on small fixtures, not a browser heap or transfer measurement. Eleven focused model-cache/storage tests pass, including metadata cleanup and failure propagation.
+
+## Final assembled verification
+
+- Full repository-pinned unit coverage: 5,394 tests / 181 files pass; 85.75% lines, 80.12% branches, all coverage gates pass.
+- Thirty-eight impacted Chromium cases pass: long saved conversation restore, context notifications, assistant entry/native writes, history pagination/search/retention/export and autosave recovery.
+- Lint, workspace declaration rebuild, application/package type checking, Docker Compose configuration, complete format check and production Vite build pass.
+- Independent read-only review approves all three new feature scopes with no unresolved findings.
+- New commits stay separate by feature. Earlier optional-cache/storage/UI changes remain in the previously reviewed commit; no dependencies, schemas, model defaults or vendor code changed in this pass.
+
+The previous revision was separately checked with the user's pending upgraded dependencies. This follow-up was verified with repository-pinned dependencies; that distinction remains explicit in the PR. Real-user field metrics, production-network timing and deployment are outside the local evidence.
