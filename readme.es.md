@@ -30,7 +30,7 @@
 
 Abre, edita y guarda Word, Excel y PowerPoint en el navegador. Añade anotaciones a PDF. Sin cuenta ni instalación de Office.
 
-**[Probar en línea](https://edit.chaxus.com/)** · [Ver código](https://github.com/ranuts/document)
+**Probar en línea: [edit.chaxus.com](https://edit.chaxus.com/)**
 
 ---
 

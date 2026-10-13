@@ -30,7 +30,7 @@
 
 在浏览器里打开、编辑并保存 Word、Excel 和 PowerPoint，为 PDF 添加批注。无需注册，也不用安装 Office。
 
-**[在线体验](https://edit.chaxus.com/)** · [查看源码](https://github.com/ranuts/document)
+**在线体验：[edit.chaxus.com](https://edit.chaxus.com/)**
 
 ---
 

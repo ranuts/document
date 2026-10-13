@@ -30,7 +30,7 @@
 
 Word, Excel und PowerPoint im Browser öffnen, bearbeiten und speichern. PDFs kommentieren. Ohne Konto oder Office-Installation.
 
-**[Online ausprobieren](https://edit.chaxus.com/)** · [Quellcode ansehen](https://github.com/ranuts/document)
+**Online ausprobieren: [edit.chaxus.com](https://edit.chaxus.com/)**
 
 ---
 

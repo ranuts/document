@@ -30,7 +30,7 @@
 
 فایل‌های Word، Excel و PowerPoint را در مرورگر باز، ویرایش و ذخیره کنید و به PDF یادداشت اضافه کنید. بدون حساب کاربری یا نصب Office.
 
-**[امتحان آنلاین](https://edit.chaxus.com/)** · [مشاهدهٔ کد](https://github.com/ranuts/document)
+**امتحان آنلاین: [edit.chaxus.com](https://edit.chaxus.com/)**
 
 ---
 

@@ -30,7 +30,7 @@
 
 브라우저에서 Word, Excel, PowerPoint를 열고 편집하고 저장하세요. PDF에는 주석을 추가할 수 있습니다. 계정이나 Office 설치가 필요 없습니다.
 
-**[온라인으로 사용](https://edit.chaxus.com/)** · [소스 보기](https://github.com/ranuts/document)
+**온라인으로 사용: [edit.chaxus.com](https://edit.chaxus.com/)**
 
 ---
 
