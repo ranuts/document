@@ -55,7 +55,7 @@ export class ChatView {
   private activity: 'responding' | 'reading' | 'planning' | 'reviewing' = 'responding';
   private composing = false;
   private lastUserText = '';
-  private readonly statusEl = Div().class('cui-status').attr('role', 'status').build();
+  private readonly statusEl = Div().class('cui-status').attr('role', 'status').attr('aria-atomic', 'true').build();
   private readonly feedbackEl = Div().class('cui-feedback').attr('role', 'status').attr('aria-atomic', 'true').build();
   private readonly resizeObserver?: ResizeObserver;
   private inputWidth = 0;
@@ -405,6 +405,9 @@ export class ChatView {
   }
 
   private updateActivity(): void {
+    // CSS follows the existing host-reported phase; no animation timers or
+    // model-specific "thinking" events are needed by this reusable view.
+    this.el.dataset.activity = this.running ? this.activity : 'idle';
     this.statusEl.textContent =
       !this.running || (this.liveMsg && this.activity === 'responding')
         ? ''
@@ -555,6 +558,9 @@ export class ChatView {
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
+    this.running = false;
+    this.updateActivity();
+    this.messagesEl.setAttribute('aria-busy', 'false');
     if (this.layoutFrame !== undefined) cancelAnimationFrame(this.layoutFrame);
     this.layoutFrame = undefined;
     this.pendingText = '';
