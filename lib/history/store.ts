@@ -21,6 +21,7 @@ import {
   BLOBS_BY_DOC,
   BLOBS_BY_REVISION,
   BLOBS_STORE,
+  DOCS_BY_UPDATED,
   DOCS_STORE,
   HANDLES_STORE,
   requestToPromise,
@@ -169,8 +170,17 @@ async function trimRevisions(tx: IDBTransaction, docId: string): Promise<number>
  * not something that waits for the user to visit a page.
  */
 async function sweepExpired(tx: IDBTransaction, now: number): Promise<string[]> {
-  const docs = await readAllDocs(tx);
-  const expired = docs.filter((doc) => expiresAt(doc) <= now);
+  // A recent snapshot cannot expire, regardless of when it was last opened.
+  // Read only old snapshot metadata, then keep the opening-time renewal rule.
+  const docs = (await requestToPromise(
+    tx
+      .objectStore(DOCS_STORE)
+      .index(DOCS_BY_UPDATED)
+      .getAll(IDBKeyRange.upperBound(now - MAX_AGE_MS)),
+  )) as HistoryDoc[];
+  // The forward index orders timestamp ties by ascending primary key, just
+  // like getAll did. A stable sort preserves the returned expiry ID order.
+  const expired = docs.filter((doc) => expiresAt(doc) <= now).sort((a, b) => b.updatedAt - a.updatedAt);
   for (const doc of expired) {
     await deleteDocumentData(tx, doc.id);
   }
