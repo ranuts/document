@@ -22,6 +22,18 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- **Start with a task for the document in front of you.** Assistant suggestions
+  follow the editor and selection. Choose a task to prepare an editable request,
+  then send. If the document scope changes, your draft is kept for you to confirm
+  again.
+- **Read drafts and review changes more clearly.** Document drafts and incomplete
+  responses have distinct labels. Change reviews emphasize Apply and Cancel,
+  with editing, refinement, copying and location in More actions.
+
+- **See what the assistant is doing while you wait.** Request understanding,
+  generation and review show their actual stage. A compact elapsed-time hint
+  clears when content arrives or you stop, while your next draft stays editable.
+
 - **Find earlier assistant conversations.** Search titles and messages locally,
   browse recent chats by date and see the current conversation at a glance.
   Compact row actions confirm which conversation will be deleted; history
