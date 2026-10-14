@@ -1258,47 +1258,49 @@ r-dropdown[role='listbox'] {
   width: fit-content;
 }
 
+/* One fixed voice toolbar across idle, permission, listening and finishing.
+   Status and cancellation own lanes so no state resizes the composer. */
 .agent-speech {
   position: relative;
   display: flex;
+  flex: 1;
+  min-width: 0;
   align-items: center;
-  gap: 2px;
+  gap: var(--ran-space-1);
 }
-.agent-speech-mic {
+.agent-speech-mic,
+.agent-speech-cancel,
+.agent-speech-privacy button {
   display: grid;
+  flex: 0 0 auto;
   place-items: center;
   width: 32px;
   height: 32px;
+  padding: 0;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--ran-radius-sm);
   background: transparent;
   color: var(--ran-color-text-secondary);
   cursor: pointer;
 }
 .agent-speech-mic:hover,
-.agent-speech-mic[aria-pressed='true'] {
-  background: var(--ran-color-bg-container);
+.agent-speech-mic[aria-pressed='true'],
+.agent-speech-cancel:hover,
+.agent-speech-privacy button:hover,
+.agent-speech-privacy[open] button {
+  background: var(--ran-color-bg-muted);
   color: var(--ran-color-text);
 }
-.agent-speech-cancel {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  min-height: 32px;
-  padding: 0;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--ran-color-text-secondary);
-  font-size: 12px;
-  cursor: pointer;
+.agent-speech-mic svg:last-child,
+.agent-speech-mic[aria-pressed='true'] svg:first-child {
+  display: none;
 }
-.agent-speech-cancel:hover {
-  background: var(--ran-color-bg-container);
+.agent-speech-mic[aria-pressed='true'] svg:last-child {
+  display: block;
 }
-/* One compact select; its own ranui dropdown owns focus and keyboard behavior. */
 .agent-speech-language {
-  width: 108px;
+  flex: 0 0 96px;
+  width: 96px;
   --ran-select-background-color: transparent;
   --ran-select-border: 1px solid transparent;
   --ran-select-hover-border: 1px solid transparent;
@@ -1311,32 +1313,61 @@ r-dropdown[role='listbox'] {
 }
 .agent-speech-feedback {
   display: flex;
-  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
   align-items: center;
-  gap: 4px 8px;
-  box-sizing: border-box;
-  padding-block-start: 8px;
+  height: 32px;
   color: var(--ran-color-text-secondary);
-  font-size: 12px;
-  line-height: 1.6;
+  font-size: var(--ran-text-label-3);
+  line-height: 1.5;
 }
-.agent-speech-feedback p {
-  flex-basis: 100%;
-  margin: 0;
+.agent-speech-feedback > [role='status'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.agent-speech [hidden],
+/* While dictating, the fixed language lane displays the live state instead.
+   Its disabled selector keeps its bounds, and the trailing controls stay put. */
+.agent-speech[data-feedback='true'] .agent-speech-language {
+  visibility: hidden;
+}
+.agent-speech[data-feedback='true'] .agent-speech-feedback > [role='status'] {
+  position: absolute;
+  inset-inline-start: calc(var(--ran-size-7) + var(--ran-space-1));
+  inset-inline-end: calc(var(--ran-size-7) * 2 + var(--ran-space-1) * 2);
+  height: var(--ran-size-7);
+  line-height: var(--ran-size-7);
+}
 .agent-speech-feedback[hidden],
-.agent-speech-feedback [hidden] {
-  display: none;
+.agent-speech-cancel[hidden] {
+  display: flex;
+  visibility: hidden;
+}
+.agent-speech-privacy {
+  flex: 0 0 auto;
+}
+.agent-speech-privacy {
+  --ran-popover-host-display: block;
+  --ran-popover-content-padding: var(--ran-space-3);
+}
+/* Match the existing select portal layer above the assistant panel. */
+.agent-speech-popover {
+  z-index: 100000;
+}
+.agent-speech-hint {
+  box-sizing: border-box;
+  width: min(256px, calc(100vw - 64px));
+  margin: 0;
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+  line-height: 1.6;
 }
 .agent-speech button:disabled {
   cursor: default;
   opacity: 0.6;
 }
-.agent-speech button:focus-visible,
-.agent-speech-feedback button:focus-visible,
-.agent-speech r-select:focus-visible {
-  outline: 2px solid var(--ran-focus-ring, #1677ff);
+.agent-speech :is(button, r-select):focus-visible {
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 
@@ -1484,15 +1515,13 @@ r-dropdown[role='listbox'] {
   gap: var(--ran-space-2);
 }
 
-/* Match the voice button's idle, listening and finishing states without
-   moving the draft or duplicating a Stop action above it. */
+/* Listening is an actual state, not simulated microphone activity. */
 .agent-speech[data-state='listening'] .agent-speech-mic {
   color: var(--ran-color-text);
   background: var(--ran-color-bg-muted);
-  animation: agent-speech-pulse 1.4s ease-in-out infinite;
 }
 .agent-speech-processing svg {
-  display: none;
+  display: none !important;
 }
 .agent-speech-processing::before {
   content: '';
@@ -1503,28 +1532,12 @@ r-dropdown[role='listbox'] {
   border-radius: 50%;
   animation: agent-speech-spin 1s linear infinite;
 }
-.agent-speech-feedback[data-state='listening'] > [role='status'] {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-}
-.agent-speech-feedback[data-state='listening']:has(p[hidden]) {
-  padding: 0;
-}
-@keyframes agent-speech-pulse {
-  50% {
-    opacity: 0.6;
-  }
-}
 @keyframes agent-speech-spin {
   to {
     transform: rotate(360deg);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .agent-speech[data-state='listening'] .agent-speech-mic,
   .agent-speech-processing::before {
     animation: none;
   }

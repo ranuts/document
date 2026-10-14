@@ -258,3 +258,106 @@ it('shows distinct microphone states and ignores a late start after requesting s
   recognition.onend?.();
   expect(root.dataset.state).toBe('idle');
 });
+
+it('keeps one toolbar and stable microphone nodes across every recognition state', () => {
+  const chat = new ComposerView({ onSend: vi.fn() });
+  document.body.append(chat.el);
+  mountSpeechInput(chat, () => true);
+  const root = chat.el.querySelector('.agent-speech')!;
+  const feedback = chat.el.querySelector('.agent-speech-feedback')!;
+  const mic = root.querySelector<HTMLButtonElement>('.agent-speech-mic')!;
+  const icons = Array.from(mic.querySelectorAll('svg'));
+  expect(feedback.parentElement).toBe(root);
+  expect(icons).toHaveLength(2);
+  mic.click();
+  FakeRecognition.current.onstart?.();
+  expect(Array.from(mic.querySelectorAll('svg'))).toEqual(icons);
+  mic.click();
+  expect(Array.from(mic.querySelectorAll('svg'))).toEqual(icons);
+  FakeRecognition.current.onend?.();
+  expect(Array.from(mic.querySelectorAll('svg'))).toEqual(icons);
+  chat.dispose();
+});
+
+it('dismisses speech privacy with Escape before cancelling active dictation', () => {
+  const { el, recognition, speech } = setup();
+  recognition.onstart?.();
+  const privacy = el.querySelector<HTMLElement>('.agent-speech-privacy')!;
+  const toggle = privacy.querySelector<HTMLButtonElement>('button')!;
+  privacy.setAttribute('open', '');
+  toggle.focus();
+  toggle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  expect(privacy.hasAttribute('open')).toBe(false);
+  expect(document.activeElement).toBe(toggle);
+  expect(speech.isBusy()).toBe(true);
+  expect(recognition.abort).not.toHaveBeenCalled();
+  el.querySelector<HTMLButtonElement>('.agent-speech-mic')!.dispatchEvent(
+    new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+  );
+  expect(speech.isBusy()).toBe(false);
+});
+
+it('expires the initial speech disclosure without ending listening', () => {
+  vi.useFakeTimers();
+  try {
+    const { el, recognition, speech } = setup();
+    recognition.onstart?.();
+    const privacy = el.querySelector('r-popover.agent-speech-privacy')!;
+    expect(privacy.hasAttribute('open')).toBe(true);
+    vi.advanceTimersByTime(2999);
+    expect(privacy.hasAttribute('open')).toBe(true);
+    vi.advanceTimersByTime(1);
+    expect(privacy.hasAttribute('open')).toBe(false);
+    expect(speech.isBusy()).toBe(true);
+    expect(recognition.stop).not.toHaveBeenCalled();
+  } finally {
+    vi.useRealTimers();
+  }
+});
+it('keeps the speech disclosure while hovered and grants three seconds after leaving', () => {
+  vi.useFakeTimers();
+  try {
+    const { el } = setup();
+    const privacy = el.querySelector('r-popover.agent-speech-privacy')!;
+    privacy.dispatchEvent(new Event('pointerenter'));
+    vi.advanceTimersByTime(10000);
+    expect(privacy.hasAttribute('open')).toBe(true);
+    privacy.dispatchEvent(new Event('pointerleave'));
+    vi.advanceTimersByTime(3000);
+    expect(privacy.hasAttribute('open')).toBe(false);
+  } finally {
+    vi.useRealTimers();
+  }
+});
+it('keeps the speech disclosure while focused and clears its timeout when closing', () => {
+  vi.useFakeTimers();
+  try {
+    const { el, speech } = setup();
+    const privacy = el.querySelector('r-popover.agent-speech-privacy')!;
+    privacy.querySelector<HTMLButtonElement>('button')!.focus();
+    vi.advanceTimersByTime(10000);
+    expect(privacy.hasAttribute('open')).toBe(true);
+    speech.close();
+    vi.advanceTimersByTime(10000);
+    expect(privacy.hasAttribute('open')).toBe(false);
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
+it('expires the error popover but retains the error and a readable detail entry', () => {
+  vi.useFakeTimers();
+  try {
+    const { el, recognition, draft } = setup();
+    recognition.onerror?.({ error: 'not-allowed' });
+    const privacy = el.querySelector('r-popover.agent-speech-privacy')!;
+    expect(privacy.hasAttribute('open')).toBe(true);
+    vi.advanceTimersByTime(3000);
+    expect(privacy.hasAttribute('open')).toBe(false);
+    expect(el.querySelector('[role="status"]')!.textContent).toBe('agentSpeechDenied');
+    expect(privacy.querySelector('button')!.getAttribute('aria-label')).toBe('agentSpeechDenied');
+    expect(draft()).toBe('Original');
+  } finally {
+    vi.useRealTimers();
+  }
+});
