@@ -569,6 +569,8 @@ export function createAgentPanel(
     copied: t('agentCopied'),
     copyFailed: t('agentCopyFailed'),
     restore: t('agentRestoreRequest'),
+    documentDraft: t('agentDocumentDraft'),
+    incomplete: t('agentIncompleteResponse'),
     waiting: t('agentWaiting'),
     reading: t('agentReadingContent'),
     planning: t('agentPreparingTask'),

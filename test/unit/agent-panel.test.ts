@@ -1,4 +1,5 @@
-import { t } from '@ranuts/shared/i18n';
+import { t, getLanguage, setLanguage, LanguageCode } from '@ranuts/shared/i18n';
+import { ChatView } from '@ranuts/chat-ui';
 import type { EditorApi } from '../../lib/agent-plugin/editor-bridge';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createAgentPanel, setAgentPanelOpen, setAgentPanelEnabled } from '../../lib/agent-plugin/ui/panel';
@@ -160,6 +161,36 @@ it('labels provider and model controls in settings', () => {
   const panel = createAgentPanel();
   expect(panel.querySelector('.agent-panel-provider')?.getAttribute('aria-label')).toBeTruthy();
   expect(panel.querySelector('.agent-panel-model')?.getAttribute('aria-label')).toBeTruthy();
+});
+
+it('passes localized result identities to the chat renderer after language changes', async () => {
+  const original = getLanguage();
+  const labels = vi.spyOn(ChatView.prototype, 'setLabels');
+  try {
+    setLanguage(LanguageCode.EN);
+    createAgentPanel();
+    setLanguage(LanguageCode.ZH);
+    await vi.waitFor(() =>
+      expect(labels).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          documentDraft: t('agentDocumentDraft'),
+          incomplete: t('agentIncompleteResponse'),
+        }),
+      ),
+    );
+    setLanguage(LanguageCode.DE);
+    await vi.waitFor(() =>
+      expect(labels).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          documentDraft: t('agentDocumentDraft'),
+          incomplete: t('agentIncompleteResponse'),
+        }),
+      ),
+    );
+  } finally {
+    setLanguage(original);
+    labels.mockRestore();
+  }
 });
 
 it.each([{ isComposing: true }, { keyCode: 229 }])(

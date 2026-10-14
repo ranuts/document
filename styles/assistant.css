@@ -1221,7 +1221,7 @@ r-dropdown[role='listbox'] {
   margin-bottom: var(--ran-space-4);
 }
 .agent-panel :is(button, summary, r-select, r-input, r-button):focus-visible {
-  outline: var(--ran-focus-ring, 2px solid var(--ran-color-link));
+  outline: 2px solid var(--ran-color-link, #0070f3);
   outline-offset: 2px;
 }
 .agent-quote-context {
