@@ -344,6 +344,8 @@ export const ja: Partial<I18nMessages> = {
   agentCopied: 'コピーしました',
   agentCopyFailed: 'コピーできませんでした',
   agentRestoreRequest: 'リクエストを復元',
+  agentRoutingRequest: 'リクエストを確認中…',
+  agentWaitElapsed: '{seconds} 秒経過',
   agentWaiting: '回答を生成中…',
   agentReadingContent: '現在の内容を読み取り中…',
   agentPreparingTask: 'リクエストを準備中…',

@@ -337,6 +337,8 @@ export interface I18nMessages {
   agentCopyFailed: string;
   agentRestoreRequest: string;
   agentWaiting: string;
+  agentRoutingRequest: string;
+  agentWaitElapsed: string;
   agentReadingContent: string;
   agentPreparingTask: string;
   agentScrollLatest: string;

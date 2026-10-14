@@ -41,18 +41,18 @@ container.appendChild(chat.el); // mount the root element
 
 ## Methods
 
-| Method                                               | Purpose                                                                               |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `append({ role, text })`                             | Add a finished message. `role`: `'user' \| 'agent' \| 'tool' \| 'status' \| 'error'`. |
-| `appendMany(messages)`                               | Add finished messages in order with one final layout update, for restoring history.   |
-| `appendDelta(text)`                                  | Stream into a live agent bubble (auto-created on first delta).                        |
-| `endStream()`                                        | Finalise the streaming bubble (drops the caret).                                      |
-| `setRunning(bool)`                                   | Toggle Send⇄Stop; keep the next draft editable, without queuing it.                   |
-| `setActivity('reading' / 'planning' / 'responding')` | Announce the host's actual running phase through the existing polite status.          |
-| `clear()`                                            | Remove all messages, restore empty state.                                             |
-| `getInput()` / `setInput(text)` / `focus()`          | Input helpers (e.g. prepend a quote).                                                 |
-| `setLabels(labels)`                                  | Re-apply labels live (e.g. language change).                                          |
-| `dispose()`                                          | Release resize observers and copy-feedback timers when unmounting.                    |
+| Method                                                                         | Purpose                                                                               |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `append({ role, text })`                                                       | Add a finished message. `role`: `'user' \| 'agent' \| 'tool' \| 'status' \| 'error'`. |
+| `appendMany(messages)`                                                         | Add finished messages in order with one final layout update, for restoring history.   |
+| `appendDelta(text)`                                                            | Stream into a live agent bubble (auto-created on first delta).                        |
+| `endStream()`                                                                  | Finalise the streaming bubble (drops the caret).                                      |
+| `setRunning(bool)`                                                             | Toggle Send⇄Stop; keep the next draft editable, without queuing it.                   |
+| `setActivity('routing' / 'reading' / 'planning' / 'responding' / 'reviewing')` | Announce the host's actual phase through a polite status; review is a resting state.  |
+| `clear()`                                                                      | Remove all messages, restore empty state.                                             |
+| `getInput()` / `setInput(text)` / `focus()`                                    | Input helpers (e.g. prepend a quote).                                                 |
+| `setLabels(labels)`                                                            | Re-apply labels live (e.g. language change).                                          |
+| `dispose()`                                                                    | Release resize observers and copy-feedback timers when unmounting.                    |
 
 `chat.actionsEl` is a host-populated slot directly above the input (an IM-style
 compose toolbar) — append your own controls; it collapses when empty.
@@ -84,6 +84,16 @@ onSend: async (text) => {
 - Message arrivals consume the current following state. They must not recompute it from post-reflow geometry: scroll handling owns reader attachment, while jumping to the end and clearing reset it.
 - Use `appendMany` for history restoration. It keeps the same message rendering and tool grouping as `append`, while deferring intermediate scroll measurements. Completed and interrupted streams publish their original source when finalized; streaming actions stay hidden.
 - Copy feedback uses fixed-size icons and a separate polite announcement. Clipboard failure leaves the action available to retry; feedback never replaces running activity.
+- Actual waiting phases appear immediately. `labels.routing` names request
+  classification; use it only while the host is classifying, never for a task
+  that already has known intent. `labels.elapsed(seconds)` formats a visual
+  waiting clock measured with monotonic local time. Its ticks stay outside live
+  regions. It ends on the first response text, Stop/completion or disposal;
+  human review shows no clock or loading cue. The clock is not estimated
+  progress, model reasoning or a promise of faster computation.
+- `clear()` clears rendered waiting feedback and its timer, without cancelling
+  the host operation or removing Stop. Feedback resumes only after a new
+  `setRunning(false)` → `setRunning(true)` transition.
 - Explicit `documentArtifact: true` identifies a document-draft surface. Ordinary
   prose and tool receipts never acquire this identity by mentioning a document.
   `labels.documentDraft` and `labels.incomplete` localize the result header;

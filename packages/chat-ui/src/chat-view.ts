@@ -54,10 +54,17 @@ export class ChatView {
   private running = false;
   private preparingSend = false;
   private submissionRevision = 0;
-  private activity: 'responding' | 'reading' | 'planning' | 'reviewing' = 'responding';
+  private activity: 'responding' | 'routing' | 'reading' | 'planning' | 'reviewing' = 'responding';
+  private respondingHasText = false;
+  private presentationCleared = false;
+  private waitStartedAt: number | null = null;
+  private elapsedTimer?: ReturnType<typeof setInterval>;
   private composing = false;
   private lastUserText = '';
   private readonly statusEl = Div().class('cui-status').attr('role', 'status').attr('aria-atomic', 'true').build();
+  // The visual clock is outside live regions so its ticks do not interrupt reading.
+  private readonly elapsedEl = Span().class('cui-elapsed').attr('aria-hidden', 'true').build();
+  private readonly progressEl = Div().class('cui-progress').children(this.statusEl, this.elapsedEl).build();
   private readonly feedbackEl = Div().class('cui-feedback').attr('role', 'status').attr('aria-atomic', 'true').build();
   private readonly resizeObserver?: ResizeObserver;
   private inputWidth = 0;
@@ -167,7 +174,7 @@ export class ChatView {
     // slot, and the composer.
     const footer = Div().class('cui-footer').children(this.scrollBtn, composer).build();
 
-    this.el = Div().class('cui-root').children(this.messagesEl, this.statusEl, footer, this.feedbackEl).build();
+    this.el = Div().class('cui-root').children(this.messagesEl, this.progressEl, footer, this.feedbackEl).build();
     if (typeof ResizeObserver !== 'undefined') {
       this.resizeObserver = new ResizeObserver((entries) => {
         if (this.disposed) return;
@@ -373,13 +380,15 @@ export class ChatView {
    */
   appendDelta(delta: string, metadata: Pick<ChatMessage, 'documentArtifact'> = {}): void {
     if (!delta || this.disposed) return;
+    const firstForPhase = !this.respondingHasText;
+    this.respondingHasText = true;
     if (!this.liveMsg) {
       this.liveMsg = this.append({ role: 'agent', text: '', ...metadata }).parentElement as HTMLDivElement;
       this.liveMsg.classList.add('cui-streaming');
       this.liveNode = document.createTextNode('');
       this.liveMsg.querySelector('.cui-bubble')?.replaceChildren(this.liveNode);
-      this.updateActivity();
     }
+    if (firstForPhase) this.updateActivity();
     this.liveText += delta;
     this.pendingText += delta;
     this.scheduleLayout();
@@ -439,41 +448,78 @@ export class ChatView {
   /** Toggle Send/Stop while keeping the next draft editable and never queued. */
   setRunning(running: boolean): void {
     const restore = !running && this.running && document.activeElement === this.sendBtn;
+    if (running && !this.running) {
+      this.respondingHasText = false;
+      this.presentationCleared = false;
+    }
     this.running = running;
     if (!running) this.activity = 'responding';
     this.updateActivity();
     if (!running) this.interruptStream();
-    this.messagesEl.setAttribute('aria-busy', String(running));
+    this.messagesEl.setAttribute('aria-busy', String(running && this.activity !== 'reviewing'));
     this.updateSendState();
     if (restore) this.input.focus({ preventScroll: true });
   }
 
   /** Host-reported activity, not inferred model thoughts or estimated progress. */
-  setActivity(activity: 'responding' | 'reading' | 'planning' | 'reviewing'): void {
+  setActivity(activity: 'responding' | 'routing' | 'reading' | 'planning' | 'reviewing'): void {
+    if (activity !== this.activity) this.respondingHasText = false;
     this.activity = activity;
     this.messagesEl.setAttribute('aria-busy', String(this.running && activity !== 'reviewing'));
     this.updateActivity();
   }
 
   private updateActivity(): void {
-    // CSS follows the existing host-reported phase; no animation timers or
-    // model-specific "thinking" events are needed by this reusable view.
+    // Host phases describe actual work; the clock measures waiting, not inference progress.
     this.el.dataset.activity = this.running ? this.activity : 'idle';
-    this.statusEl.textContent =
-      !this.running || (this.liveMsg && this.activity === 'responding')
+    const text =
+      !this.running ||
+      this.disposed ||
+      this.presentationCleared ||
+      (this.respondingHasText && this.activity === 'responding')
         ? ''
         : this.activity === 'reviewing'
           ? (this.labels.reviewing ?? 'Review the proposed change to continue.')
           : this.activity === 'reading'
             ? (this.labels.reading ?? 'Reading content…')
-            : this.activity === 'planning'
-              ? (this.labels.planning ?? 'Preparing task…')
-              : (this.labels.waiting ?? 'Generating a response…');
+            : this.activity === 'routing'
+              ? (this.labels.routing ?? 'Understanding your request…')
+              : this.activity === 'planning'
+                ? (this.labels.planning ?? 'Preparing task…')
+                : (this.labels.waiting ?? 'Generating a response…');
+    if (this.statusEl.textContent !== text) this.statusEl.textContent = text;
+    this.progressEl.hidden = !text;
+    this.updateWaitClock(!!text && this.activity !== 'reviewing');
+  }
+
+  private updateWaitClock(waiting: boolean): void {
+    this.elapsedEl.hidden = !waiting;
+    if (!waiting) {
+      if (this.elapsedTimer !== undefined) clearInterval(this.elapsedTimer);
+      this.elapsedTimer = undefined;
+      this.waitStartedAt = null;
+      this.elapsedEl.textContent = '';
+      return;
+    }
+    this.waitStartedAt ??= performance.now();
+    this.updateElapsed();
+    this.elapsedTimer ??= setInterval(() => this.updateElapsed(), 1000);
+  }
+
+  private updateElapsed(): void {
+    if (this.waitStartedAt === null || this.disposed) return;
+    const seconds = Math.max(0, Math.floor((performance.now() - this.waitStartedAt) / 1000));
+    const text = this.labels.elapsed?.(seconds) ?? `${seconds}s`;
+    if (this.elapsedEl.textContent !== text) this.elapsedEl.textContent = text;
   }
 
   /** Remove all messages and restore the empty state. */
   clear(): void {
     this.submissionRevision++;
+    // Clear the rendered feedback without claiming that the host's run stopped.
+    this.presentationCleared = true;
+    this.respondingHasText = false;
+    this.updateWaitClock(false);
     if (this.layoutFrame !== undefined) cancelAnimationFrame(this.layoutFrame);
     this.layoutFrame = undefined;
     this.pendingText = '';

@@ -572,6 +572,8 @@ export function createAgentPanel(
     documentDraft: t('agentDocumentDraft'),
     incomplete: t('agentIncompleteResponse'),
     waiting: t('agentWaiting'),
+    routing: t('agentRoutingRequest'),
+    elapsed: (seconds) => t('agentWaitElapsed', { seconds: new Intl.NumberFormat(getLanguage()).format(seconds) }),
     reading: t('agentReadingContent'),
     planning: t('agentPreparingTask'),
     reviewing: t('agentPlanReady'),
@@ -1880,6 +1882,7 @@ export function createAgentPanel(
     let partialTaskAnswer = '';
     const taskDisplay = new AssistantDisplayStream((delta) => {
       partialTaskAnswer += delta;
+      chat.setActivity('responding');
       chat.appendDelta(delta);
     });
     if (previousPreview) {
@@ -1914,13 +1917,14 @@ export function createAgentPanel(
         const abort = new AbortController();
         planning = abort;
         routingStarted = true;
-        chat.setActivity('planning');
-        request =
-          stagedIntent ??
-          (await resolveRequestIntent(routingProvider, trimmed, snapshot.context, abort.signal, {
+        if (stagedIntent) request = stagedIntent;
+        else {
+          chat.setActivity('routing');
+          request = await resolveRequestIntent(routingProvider, trimmed, snapshot.context, abort.signal, {
             hasSelection: !!snapshot.text.trim() && !snapshot.truncated,
             pendingProposal,
-          }));
+          });
+        }
         abort.signal.throwIfAborted();
         if (generation !== controllerGeneration || conversation !== conversationRevision)
           throw new Error(t('agentPlanExpired'));

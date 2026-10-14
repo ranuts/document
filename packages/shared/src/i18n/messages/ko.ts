@@ -336,6 +336,8 @@ export const ko: Partial<I18nMessages> = {
   agentCopied: '복사됨',
   agentCopyFailed: '복사 실패',
   agentRestoreRequest: '요청 복원',
+  agentRoutingRequest: '요청을 파악하는 중…',
+  agentWaitElapsed: '{seconds}초 경과',
   agentWaiting: '응답 생성 중…',
   agentReadingContent: '현재 내용을 읽는 중…',
   agentPreparingTask: '요청을 준비하는 중…',

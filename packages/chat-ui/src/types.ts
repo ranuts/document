@@ -33,6 +33,10 @@ export interface ChatViewLabels {
   /** Identifies retained output from a response that did not complete. */
   incomplete?: string;
   waiting?: string;
+  /** Actual host request classification, distinct from tool planning. */
+  routing?: string;
+  /** Format locally measured waiting seconds; visual only, never a live announcement. */
+  elapsed?: (seconds: number) => string;
   reading?: string;
   planning?: string;
   reviewing?: string;
