@@ -905,8 +905,12 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   `x2t.wasm.br`（6,898,179 字节，`brotli -q 11`；对比最好的 gzip（zopfli `--i15`）
   9,483,006、裸 42,111,200——全站最大的那个下载省掉 2.58 MB。brotli 不是仓库依赖，
   vendor 升级后手动重跑 `brotli -q 11 -c x2t.wasm > x2t.wasm.br`，`vendor-contract`
-  的尺寸门会提醒）。三处托管各自声明 `Content-Encoding: br`（`public/_headers` /
-  `sws.toml` / `vite.config.ts` 的 `precompressedAssets` 中间件），**浏览器在网络层
+  的尺寸门会提醒）。Pages 与 Vite 声明 `Content-Encoding: br`（`public/_headers` /
+  `vite.config.ts` 的 `precompressedAssets` 中间件）。Docker 在构建容器中运行
+  `bin/prepare-docker-wasm.mjs public`，把同一 URL 的文件转换为 gzip，`sws.toml`
+  对应声明 `Content-Encoding: gzip`：Chrome 不解码普通 HTTP 非 localhost 来源的
+  Brotli（#267）。转换必须在 `pnpm run build` 前做，使 SW 指纹对应实际投递的字节；
+  不改仓库里的 Brotli 文件或 Pages/Vite 的响应头。**浏览器在网络层
   就解压完了，我们这边一行解压代码都没有**。
   **`.br` 这个扩展名和 `_headers` 里"没有 Content-Type 规则"两件事都是承重的**：
   `wrangler pages dev`（`e2e-pages` 跑的那个）会按可压缩性**重新压一遍并覆盖掉

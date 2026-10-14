@@ -160,13 +160,11 @@ describe('sws.toml (self-hosted Docker)', () => {
     expect(cc('**')).toBe('no-cache');
   });
 
-  it('declares the x2t wasm pre-encoded, the same as _headers', () => {
-    // Same reason as the Pages rule: the file holds brotli bytes under its
-    // plain name, so without this the self-hosted image serves an opaque blob
-    // and no document opens. test/e2e/docker-cache-headers.spec.ts checks the
-    // header on a running container.
+  it('declares gzip for x2t so ordinary HTTP self-hosting can decode it', () => {
+    // Chrome only decodes Brotli on trustworthy origins. Docker must serve
+    // gzip for http://<server-ip>, while HTTPS Pages keeps its Brotli payload.
     const rule = rules.find((entry) => entry.source === WASM_PATH);
-    expect(rule?.headers['content-encoding']).toBe('br');
+    expect(rule?.headers['content-encoding']).toBe('gzip');
   });
 
   it('pins the same immutable set as _headers (hashed assets, font catalog, x2t wasm)', () => {
@@ -192,6 +190,8 @@ describe('sws.toml (self-hosted Docker)', () => {
     const dockerfile = read('Dockerfile');
     expect(dockerfile).toMatch(/COPY sws\.toml \/sws\.toml/);
     expect(dockerfile).toMatch(/ENV SERVER_CONFIG_FILE=\/sws\.toml/);
+    // Re-encode before the build hashes the served vendor tree for sw.js.
+    expect(dockerfile).toMatch(/node bin\/prepare-docker-wasm\.mjs public\s*&&\s*pnpm run build/);
   });
 });
 

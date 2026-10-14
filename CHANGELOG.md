@@ -9,6 +9,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Docker deployments accessed over ordinary HTTP can load the document converter
+  in Chrome without a WASM content-decoding error ([#267](https://github.com/ranuts/document/issues/267)).
 - Stopping a browser-local assistant response no longer prevents the next question
   from being answered.
 - Cancelling a save keeps the unsaved-changes warning and recovery status intact.
