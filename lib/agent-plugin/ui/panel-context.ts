@@ -1,5 +1,5 @@
 import { getEditorApi, type EditorApi } from '../editor-bridge';
-import { captureComposerContext } from './composer-context';
+import { captureComposerContext, type ComposerContext } from './composer-context';
 import { t } from '@ranuts/shared/i18n';
 
 // SDK events verified in the bundled Word, spreadsheet and slide runtimes.
@@ -160,8 +160,10 @@ export function syncPanelContext(options: {
   welcomeHint: HTMLElement;
   settings: HTMLElement;
   ready: () => boolean;
+  onSnapshot?: (snapshot: ComposerContext) => void;
 }): void {
   const snapshot = captureComposerContext();
+  options.onSnapshot?.(snapshot);
   const context = snapshot.context;
   options.quoteContext.hidden = !context || !snapshot.text.trim();
   const label =

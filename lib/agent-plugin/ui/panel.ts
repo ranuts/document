@@ -27,6 +27,7 @@ import { getEditorApi } from '../editor-bridge';
 import { mountReviewSettings } from './review-settings';
 import { createModelCacheSettings } from './model-cache-settings';
 import { mountPanelContext, syncPanelContext } from './panel-context';
+import { createTaskEntry } from './task-entry';
 import { agentTools } from '../tools';
 import { parseDirectDocumentIntent } from '../direct-intent';
 import { captureDocumentContext, resolveContextCommand } from '../document-context';
@@ -614,6 +615,12 @@ export function createAgentPanel(
       return { label: prepareAction.textContent || t('agentSettings'), run: prepareSelectedSource };
     },
     beforeSend: () => {
+      if (!taskEntry.check(chat.getInput())) {
+        stagedGuidance.hidden = false;
+        stagedGuidance.textContent = t('agentEntryChanged');
+        return false;
+      }
+      stagedGuidance.hidden = true;
       if (!speech?.isBusy()) return true;
       const target = (() => {
         try {
@@ -634,6 +641,7 @@ export function createAgentPanel(
           appendTurn({ role: 'status', text: t('agentSendContextChanged') });
           return false;
         }
+        if (ready && !taskEntry.check(chat.getInput())) return false;
         return ready;
       });
     },
@@ -746,7 +754,24 @@ export function createAgentPanel(
   const welcomeHint = document.createElement('p');
   welcomeHint.className = 'agent-welcome-hint';
   welcomeHint.textContent = t('agentWelcomeHint');
-  chat.emptyActionsEl.prepend(welcomeHint);
+  const taskEntry = createTaskEntry({
+    getInput: () => chat.getInput(),
+    setInput: (text) => chat.setInput(text),
+    focus: () => chat.focus(),
+    session: () => `${conversations.activeId}:${controllerGeneration}:${conversationRevision}`,
+    readonly: getReadonlyMode,
+    capture: captureComposerContext,
+    captureTarget: captureDocumentToolTarget,
+    onStage: (intent) => {
+      writingSelect.value = intent.task === 'compose' ? 'chat' : intent.task;
+      proposalMode = !['chat', 'compose'].includes(intent.task);
+      syncRuntimeStatus();
+    },
+  });
+  chat.emptyActionsEl.prepend(welcomeHint, taskEntry.el);
+  chat.el.querySelector('textarea')!.addEventListener('input', (event) => {
+    if (event.isTrusted || chat.getInput()) taskEntry.inputChanged(chat.getInput());
+  });
   let quotedSelection = '';
   const quoteContext = document.createElement('div');
   quoteContext.className = 'agent-quote-context';
@@ -758,6 +783,11 @@ export function createAgentPanel(
   quoteDetails.append(quoteSummary, quoteText);
   quoteContext.append(quoteDetails);
   chat.contextEl.append(quoteContext);
+  const stagedGuidance = document.createElement('p');
+  stagedGuidance.className = 'agent-staged-guidance';
+  stagedGuidance.hidden = true;
+  stagedGuidance.setAttribute('role', 'status');
+  chat.contextEl.append(stagedGuidance);
   const refinement = new ProposalContext();
   const refinementRow = Div().class('agent-refinement-context').build();
   const refinementLabel = Span().build();
@@ -848,6 +878,7 @@ export function createAgentPanel(
       welcomeHint,
       settings,
       ready: () => !!webllmProvider?.isReady(),
+      onSnapshot: (snapshot) => taskEntry.update(snapshot),
     });
   };
   let historyControls: ReturnType<typeof createHistoryControls> | undefined;
@@ -1627,6 +1658,15 @@ export function createAgentPanel(
   const submit = async (text: string): Promise<void> => {
     const trimmed = text.trim();
     if (!enabled || !trimmed) return;
+    // Context may change while speech finalization or send preparation yields.
+    if (!taskEntry.check(text)) {
+      chat.setInput(text);
+      stagedGuidance.hidden = false;
+      stagedGuidance.textContent = t('agentEntryChanged');
+      chat.focus();
+      return;
+    }
+    const stagedIntent = taskEntry.consume(text);
     const refinementContext = refinement.capture();
     if (refinementContext.kind === 'expired') {
       clearRefinement();
@@ -1639,7 +1679,7 @@ export function createAgentPanel(
     // data only: a fresh target is still captured before the next model request.
     const previousPreview = preview.pending() ? preview : undefined;
     const pendingProposal = refinementContext.kind === 'selected' ? refinementContext.plan : preview.pending()?.plan;
-    let request = classifyRequest(trimmed);
+    let request = stagedIntent ?? classifyRequest(trimmed);
     if (refinementContext.kind === 'selected') request.task = 'tools';
     writingSelect.value = request.task;
     languageSelect.value = request.language;
@@ -1678,7 +1718,7 @@ export function createAgentPanel(
       chat.focus();
       return;
     }
-    const intent = refinementContext.kind === 'selected' ? null : directIntent(trimmed);
+    const intent = stagedIntent || refinementContext.kind === 'selected' ? null : directIntent(trimmed);
     if (intent) {
       const answer = chat.getLastDocumentBody();
       const chinese = getLanguage().startsWith('zh');
@@ -1852,6 +1892,7 @@ export function createAgentPanel(
       } else if (
         routingProvider?.isReady() &&
         routingProvider.toolCallingMode === 'native' &&
+        !stagedIntent &&
         !pendingProposal &&
         !['rewrite', 'summarize', 'translate'].includes(request.task) &&
         !literalToolRequest &&
@@ -1872,10 +1913,12 @@ export function createAgentPanel(
         planning = abort;
         routingStarted = true;
         chat.setActivity('planning');
-        request = await resolveRequestIntent(routingProvider, trimmed, snapshot.context, abort.signal, {
-          hasSelection: !!snapshot.text.trim() && !snapshot.truncated,
-          pendingProposal,
-        });
+        request =
+          stagedIntent ??
+          (await resolveRequestIntent(routingProvider, trimmed, snapshot.context, abort.signal, {
+            hasSelection: !!snapshot.text.trim() && !snapshot.truncated,
+            pendingProposal,
+          }));
         abort.signal.throwIfAborted();
         if (generation !== controllerGeneration || conversation !== conversationRevision)
           throw new Error(t('agentPlanExpired'));
