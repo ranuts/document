@@ -1684,3 +1684,92 @@ r-dropdown[role='listbox'] {
 .agent-history-options button:hover:not(:disabled) {
   background: var(--ran-color-bg-hover);
 }
+
+/* Contextual document tasks share the transcript and composer's leading edge. */
+.agent-panel .cui-empty {
+  margin: auto 0;
+  font-size: 24px;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+}
+.agent-panel .cui-empty-actions {
+  display: block;
+  margin-top: var(--ran-space-3);
+}
+.agent-welcome-hint {
+  margin: 0 0 var(--ran-space-5);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.agent-task-entry {
+  font-weight: 400;
+  letter-spacing: 0;
+  font-size: 13px;
+  width: 100%;
+  min-width: 0;
+}
+.agent-task-scope {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 5px 8px;
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg-muted);
+  color: var(--ran-color-text-secondary);
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.agent-task-list {
+  display: grid;
+  gap: var(--ran-space-2);
+  margin-top: var(--ran-space-4);
+}
+.agent-task-action {
+  display: flex;
+  align-items: center;
+  text-align: start;
+  min-height: 40px;
+  padding: 10px 12px;
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-md);
+  background: var(--ran-color-bg-elevated);
+  color: var(--ran-color-text);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 120ms,
+    border-color 120ms;
+}
+.agent-task-action::after {
+  content: '↗';
+  margin-inline-start: auto;
+  padding-inline-start: 12px;
+  color: var(--ran-color-text-secondary);
+}
+.agent-task-action:hover {
+  background: var(--ran-color-bg-muted);
+  border-color: var(--ran-color-text-secondary);
+}
+.agent-task-action:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 3px;
+}
+.agent-task-help,
+.agent-staged-guidance {
+  margin: var(--ran-space-3) 0 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--ran-color-text-secondary);
+  overflow-wrap: anywhere;
+}
+.agent-staged-guidance {
+  margin: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .agent-task-action {
+    transition: none;
+  }
+}
