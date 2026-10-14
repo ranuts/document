@@ -1,3 +1,4 @@
+import { completionStream } from './lib/webllm-fixture';
 import { describe, expect, it, vi } from 'vitest';
 import {
   checkWebGPUSupport,
@@ -5,6 +6,7 @@ import {
   isWebGPUAvailable,
   WEBLLM_MODELS,
   WebLLMProvider,
+  type WebLLMEngine,
 } from '@ranuts/agent-core/llm/webllm';
 import { createProvider, defaultProviderId } from '@ranuts/agent-core/llm/factory';
 import { CHAT_ONLY_SYSTEM_PROMPT, DEFAULT_SYSTEM_PROMPT } from '@ranuts/agent-core/llm/prompt';
@@ -33,7 +35,11 @@ describe('WebLLMProvider', () => {
   });
 
   it('chat() sends the OpenAI-shaped request and parses the result', async () => {
-    const create = vi.fn().mockResolvedValue({ choices: [{ message: { content: 'done' }, finish_reason: 'stop' }] });
+    const create = vi
+      .fn()
+      .mockImplementation(async () =>
+        completionStream({ choices: [{ message: { content: 'done' }, finish_reason: 'stop' }] }),
+      );
     const provider = new WebLLMProvider({
       model: 'Hermes-3-Llama-3.1-8B-q4f16_1-MLC',
       engine: { chat: { completions: { create } } },
@@ -55,7 +61,11 @@ describe('WebLLMProvider', () => {
   });
 
   it('chatOnly drops tools: no tools/tool_choice sent, and a real system prompt is kept', async () => {
-    const create = vi.fn().mockResolvedValue({ choices: [{ message: { content: 'hi' }, finish_reason: 'stop' }] });
+    const create = vi
+      .fn()
+      .mockImplementation(async () =>
+        completionStream({ choices: [{ message: { content: 'hi' }, finish_reason: 'stop' }] }),
+      );
     const provider = new WebLLMProvider({ engine: { chat: { completions: { create } } }, chatOnly: true });
     await provider.chat(
       [{ role: 'user', content: 'go' }],
@@ -76,7 +86,11 @@ describe('WebLLMProvider', () => {
     expect(new WebLLMProvider({ chatOnly: true, systemPrompt: 'custom' })['systemPrompt']).toContain('custom');
   });
   it('adapts legacy tool history for text-only models without mutating saved history', async () => {
-    const create = vi.fn().mockResolvedValue({ choices: [{ message: { content: 'hi' }, finish_reason: 'stop' }] });
+    const create = vi
+      .fn()
+      .mockImplementation(async () =>
+        completionStream({ choices: [{ message: { content: 'hi' }, finish_reason: 'stop' }] }),
+      );
     const provider = new WebLLMProvider({ engine: { chat: { completions: { create } } }, chatOnly: true });
     const history = [
       { role: 'user' as const, content: 'Read selection' },
@@ -104,16 +118,22 @@ describe('WebLLMProvider', () => {
   });
 
   it.each(WEBLLM_MODELS.map(({ id }) => id))('disables thinking for writing with %s', async (model) => {
-    const create = vi.fn().mockResolvedValue({ choices: [{ message: { content: 'text' }, finish_reason: 'stop' }] });
+    const create = vi
+      .fn()
+      .mockImplementation(async () =>
+        completionStream({ choices: [{ message: { content: 'text' }, finish_reason: 'stop' }] }),
+      );
     const provider = new WebLLMProvider({ model, engine: { chat: { completions: { create } } }, chatOnly: true });
     await provider.chat([{ role: 'user', content: 'Rewrite this text.' }], []);
     expect(create.mock.calls[0][0].extra_body).toEqual({ enable_thinking: false });
   });
 
   it('uses schema-constrained tool-free generation without the chat advisor prompt', async () => {
-    const create = vi.fn().mockResolvedValue({
-      choices: [{ message: { content: '{"status":"ready","content":"Hello"}' }, finish_reason: 'stop' }],
-    });
+    const create = vi.fn().mockImplementation(async () =>
+      completionStream({
+        choices: [{ message: { content: '{"status":"ready","content":"Hello"}' }, finish_reason: 'stop' }],
+      }),
+    );
     const provider = new WebLLMProvider({ engine: { chat: { completions: { create } } }, chatOnly: true });
     const schema = { type: 'object', required: ['status', 'content'] };
     await provider.generateJSON([{ role: 'user', content: 'bounded task' }], schema);
@@ -191,7 +211,7 @@ describe('local model lifecycle', () => {
     const provider = new WebLLMProvider({
       engineFactory: async () => {
         if (++attempts === 1) throw new Error('download failed');
-        return { chat: { completions: { create: async () => completion } } };
+        return { chat: { completions: { create: async () => completionStream(completion) } } };
       },
     });
     await expect(provider.preload()).rejects.toThrow('download failed');
@@ -210,7 +230,7 @@ describe('local model lifecycle', () => {
   });
 
   it('does not generate if cancelled during initialization', async () => {
-    let resolveLoad!: (engine: { chat: { completions: { create: () => Promise<typeof completion> } } }) => void;
+    let resolveLoad!: (engine: WebLLMEngine) => void;
     let generated = false;
     const provider = new WebLLMProvider({
       engineFactory: () =>
@@ -228,7 +248,7 @@ describe('local model lifecycle', () => {
         completions: {
           create: async () => {
             generated = true;
-            return completion;
+            return completionStream(completion);
           },
         },
       },
@@ -249,7 +269,7 @@ describe('local model lifecycle', () => {
                 await new Promise<void>((resolve) => {
                   finishFirst = resolve;
                 });
-              return completion;
+              return completionStream(completion);
             },
           },
         },
@@ -268,7 +288,7 @@ describe('local model lifecycle', () => {
     let unloaded = false;
     const provider = new WebLLMProvider({
       engine: {
-        chat: { completions: { create: async () => completion } },
+        chat: { completions: { create: async () => completionStream(completion) } },
         unload: async () => {
           unloaded = true;
         },
@@ -288,7 +308,7 @@ describe('local model lifecycle', () => {
           completions: {
             create: async (request) => {
               body = request;
-              return completion;
+              return completionStream(completion);
             },
           },
         },
@@ -347,7 +367,7 @@ it('drains the interrupted worker stream so the next request can acquire its mod
   const create = vi.fn().mockImplementation(async () => {
     if (create.mock.calls.length > 1) {
       if (!released) throw new Error('Worker model lock still held');
-      return { choices: [{ message: { content: 'next reply' }, finish_reason: 'stop' }] };
+      return completionStream({ choices: [{ message: { content: 'next reply' }, finish_reason: 'stop' }] });
     }
     return (async function* () {
       yield { choices: [{ delta: { content: 'visible' } }] };
@@ -395,7 +415,7 @@ it.each(['json', 'stream'] as const)(
       ).rejects.toThrow('agentContextTooLong');
       expect(delta).not.toHaveBeenCalled();
       create.mockImplementationOnce(
-        async () => ({ choices: [{ message: { content: 'hello' }, finish_reason: 'stop' }] }) as never,
+        async () => completionStream({ choices: [{ message: { content: 'hello' }, finish_reason: 'stop' }] }) as never,
       );
       expect((await provider.chat([{ role: 'user', content: 'Short request' }], [])).text).toBe('hello');
       expect(provider.isReady()).toBe(true);
@@ -473,7 +493,9 @@ it('reports cancellation immediately while keeping subsequent inference queued u
           release = resolve;
         }),
     )
-    .mockResolvedValue({ choices: [{ message: { content: 'next' }, finish_reason: 'stop' }] });
+    .mockImplementation(async () =>
+      completionStream({ choices: [{ message: { content: 'next' }, finish_reason: 'stop' }] }),
+    );
   const interruptGenerate = vi.fn();
   const provider = new WebLLMProvider({ engine: { chat: { completions: { create } }, interruptGenerate } });
   const abort = new AbortController();
@@ -491,7 +513,72 @@ it('reports cancellation immediately while keeping subsequent inference queued u
   const next = provider.chat([{ role: 'user', content: 'next' }], []);
   await Promise.resolve();
   expect(create).toHaveBeenCalledOnce();
-  release({ choices: [{ message: { content: 'discarded' }, finish_reason: 'stop' }] } as never);
+  release(completionStream({ choices: [{ message: { content: 'discarded' }, finish_reason: 'stop' }] }) as never);
   await first;
   expect((await next).text).toBe('next');
+});
+
+it('preserves distinct Hermes tool IDs when the SDK stream supplies only indices', async () => {
+  const create = vi.fn(async () =>
+    (async function* () {
+      yield {
+        choices: [
+          {
+            delta: {
+              tool_calls: [
+                { index: 0, function: { name: 'first_tool', arguments: '{}' } },
+                { index: 1, function: { name: 'second_tool', arguments: '{}' } },
+              ],
+            },
+            finish_reason: 'tool_calls',
+          },
+        ],
+      };
+    })(),
+  );
+  const provider = new WebLLMProvider({
+    model: 'Hermes-3-Llama-3.1-8B-q4f16_1-MLC',
+    engine: { chat: { completions: { create } } },
+  });
+  const result = await provider.chat(
+    [{ role: 'user', content: 'Use both tools' }],
+    [
+      { name: 'first_tool', description: 'First', inputSchema: {} },
+      { name: 'second_tool', description: 'Second', inputSchema: {} },
+    ],
+  );
+  expect(result.toolCalls.map((call) => call.id)).toEqual(['0', '1']);
+  expect(result.assistant.content).toEqual([
+    { type: 'tool_use', id: '0', name: 'first_tool', input: {} },
+    { type: 'tool_use', id: '1', name: 'second_tool', input: {} },
+  ]);
+});
+
+it('keeps explicit streamed tool IDs across later argument-only fragments', async () => {
+  const create = vi.fn(async () =>
+    (async function* () {
+      yield {
+        choices: [
+          {
+            delta: { tool_calls: [{ index: 0, id: 'provided-id', function: { name: 'first_tool', arguments: '{' } }] },
+          },
+        ],
+      };
+      yield {
+        choices: [{ delta: { tool_calls: [{ index: 0, function: { arguments: '}' } }] }, finish_reason: 'tool_calls' }],
+      };
+    })(),
+  );
+  const provider = new WebLLMProvider({
+    model: 'Hermes-3-Llama-3.1-8B-q4f16_1-MLC',
+    engine: { chat: { completions: { create } } },
+  });
+  expect(
+    (
+      await provider.chat(
+        [{ role: 'user', content: 'Use a tool' }],
+        [{ name: 'first_tool', description: 'First', inputSchema: {} }],
+      )
+    ).toolCalls,
+  ).toEqual([{ id: 'provided-id', name: 'first_tool', input: {} }]);
 });

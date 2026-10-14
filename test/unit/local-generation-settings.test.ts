@@ -1,10 +1,11 @@
+import { completionStream } from './lib/webllm-fixture';
 import { expect, it, vi } from 'vitest';
 import { WebLLMProvider } from '../../packages/agent-core/src/llm/webllm';
 import { WllamaProvider } from '../../packages/agent-core/src/llm/wllama';
 
 const reply = { choices: [{ message: { content: 'answer' }, finish_reason: 'stop' }] };
 it('applies local generation settings to WebLLM without reloading its engine', async () => {
-  const create = vi.fn(async (_body: Record<string, unknown>) => reply);
+  const create = vi.fn(async (_body: Record<string, unknown>) => completionStream(reply));
   const provider = new WebLLMProvider({ engine: { chat: { completions: { create } } } });
   provider.setGenerationOptions({ systemPrompt: 'Respond briefly.', temperature: 0.2, topP: 0.9, maxTokens: 128 });
   await provider.chat([{ role: 'user', content: 'hello' }], []);
@@ -58,7 +59,7 @@ it.each([
 });
 
 it('keeps schema-constrained writing deterministic for models without a sampling requirement', async () => {
-  const create = vi.fn(async (_body: Record<string, unknown>) => reply);
+  const create = vi.fn(async (_body: Record<string, unknown>) => completionStream(reply));
   const provider = new WebLLMProvider({
     model: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',
     engine: { chat: { completions: { create } } },
@@ -73,7 +74,7 @@ it('keeps schema-constrained writing deterministic for models without a sampling
 });
 
 it.each([undefined, 0.2])('retains Qwen3 sampling for constrained JSON (%s)', async (temperature) => {
-  const create = vi.fn(async (_body: Record<string, unknown>) => reply);
+  const create = vi.fn(async (_body: Record<string, unknown>) => completionStream(reply));
   const provider = new WebLLMProvider({
     model: 'Qwen3-1.7B-q4f16_1-MLC',
     engine: { chat: { completions: { create } } },
