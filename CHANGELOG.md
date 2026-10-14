@@ -9,6 +9,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Stopping a browser-local assistant response no longer prevents the next question
+  from being answered.
 - Cancelling a save keeps the unsaved-changes warning and recovery status intact.
 - Exporting another format, such as PDF, preserves the original document file
   and its ordinary save target, including when the export is cancelled or fails.

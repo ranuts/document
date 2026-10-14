@@ -54,7 +54,11 @@ export const DEFAULT_WEBLLM_MODEL = 'Qwen3-4B-q4f16_1-MLC';
 
 /** The slice of the WebLLM engine this provider uses (eases test mocking). */
 export interface WebLLMEngine {
-  chat: { completions: { create(body: Record<string, unknown>): Promise<OpenAICompletion> } };
+  chat: {
+    completions: {
+      create(body: Record<string, unknown>): Promise<OpenAICompletion | AsyncIterable<OpenAIStreamChunk>>;
+    };
+  };
   /** Stop the in-flight generation (so Stop works mid-stream). */
   interruptGenerate?(): void | Promise<void>;
   unload?(): Promise<void>;
@@ -318,16 +322,24 @@ export class WebLLMProvider implements LocalLLMProvider {
                 response_format: { type: 'json_object', schema: JSON.stringify(schema) },
               }
             : {}),
-          ...(onDelta ? { stream: true, stream_options: { include_usage: true } } : {}),
+          // SDK 0.2.85 keeps its interrupt flag after Stop. Its non-streaming
+          // entry skips generation before resetting that flag; the streaming
+          // entry resets it on every run. Collect internal streams even for
+          // chat/JSON callers that only need the completed response.
+          stream: true,
+          stream_options: { include_usage: true },
         }),
         failureSignals,
       );
       const completion = await waitForSignals(
-        onDelta
-          ? accumulateOpenAIStream(response as unknown as AsyncIterable<OpenAIStreamChunk>, onDelta, signal, {
-              drainOnAbort: true,
-            })
-          : Promise.resolve(response),
+        accumulateOpenAIStream(
+          webLLMStream(response as AsyncIterable<OpenAIStreamChunk>),
+          onDelta ?? (() => {}),
+          signal,
+          {
+            drainOnAbort: true,
+          },
+        ),
         failureSignals,
       );
       signal?.throwIfAborted();
@@ -382,6 +394,32 @@ export class WebLLMProvider implements LocalLLMProvider {
     signal?: AbortSignal,
   ): Promise<LLMResponse> {
     return this.enqueue(() => this.generate(messages, tools, onDelta, signal), signal);
+  }
+}
+
+/** Hermes streams carry an index instead of the IDs used by non-streamed SDK calls. */
+async function* webLLMStream(chunks: AsyncIterable<OpenAIStreamChunk>): AsyncIterable<OpenAIStreamChunk> {
+  const ids = new Map<number, string>();
+  for await (const chunk of chunks) {
+    yield {
+      ...chunk,
+      choices: chunk.choices?.map((choice) => ({
+        ...choice,
+        ...(choice.delta?.tool_calls
+          ? {
+              delta: {
+                ...choice.delta,
+                tool_calls: choice.delta.tool_calls.map((call) => {
+                  const index = call.index ?? 0;
+                  const id = call.id ?? ids.get(index) ?? String(index);
+                  ids.set(index, id);
+                  return { ...call, id };
+                }),
+              },
+            }
+          : {}),
+      })),
+    };
   }
 }
 
