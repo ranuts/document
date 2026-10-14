@@ -314,6 +314,13 @@ export interface I18nMessages {
   agentHistoryConfirmDelete: string;
 
   agentConversations: string;
+  agentSearchConversations: string;
+  agentCurrentConversation: string;
+  agentHistoryToday: string;
+  agentHistoryYesterday: string;
+  agentHistoryEarlier: string;
+  agentNoConversationsFound: string;
+  agentHistoryDataControls: string;
   agentContextTrimmed: string;
   agentContextTooLong: string;
   agentClear: string;

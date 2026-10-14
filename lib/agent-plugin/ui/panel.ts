@@ -77,6 +77,7 @@ import {
 import { historyToTurns } from './storage';
 import { createConversationStore } from './sessions';
 import { createHistoryControls } from './history-controls';
+import { createConversationList } from './history-list';
 import { normalizeGenerationOptions } from '@ranuts/agent-core/llm/generation';
 import { createSidebarEntry } from './sidebar-entry';
 import { mountPanelResize } from './panel-resize';
@@ -253,7 +254,7 @@ export function createAgentPanel(
       queueMicrotask(() => {
         if (open) {
           if (panel.dataset.view === 'settings') settingsHeading.focus();
-          else if (panel.dataset.view === 'history') sessionSelect.focus();
+          else if (panel.dataset.view === 'history') conversationList?.focus();
           else chat.focus();
         }
       });
@@ -837,11 +838,7 @@ export function createAgentPanel(
     planning?.abort();
     planning = null;
   };
-  // Persist the conversation so a reload keeps it (model context + display).
-  const sessionSelect = document.createElement('select');
-  sessionSelect.className = 'agent-session-select';
-  const sessionRow = Div().class('agent-session-row').children(sessionSelect, clearBtn).build();
-  const sessionBar = Div().class('agent-session-bar').children(sessionRow).build();
+  let conversationList: ReturnType<typeof createConversationList> | undefined;
   const syncContext = () => {
     if (!open || !enabled || document.visibilityState === 'hidden') return;
     syncPanelContext({
@@ -863,17 +860,7 @@ export function createAgentPanel(
   );
   let historyStorage = conversations.history();
   function renderSessions(): void {
-    sessionSelect.replaceChildren(
-      ...conversations.list().map((session) => {
-        const option = document.createElement('option');
-        option.value = session.id;
-        option.textContent = session.title || t('agentNewConversation');
-        return option;
-      }),
-    );
-    sessionSelect.value = conversations.activeId;
-    sessionSelect.setAttribute('aria-label', t('agentConversations'));
-    sessionSelect.title = t('agentConversations');
+    conversationList?.sync();
   }
   renderSessions();
 
@@ -2337,12 +2324,9 @@ export function createAgentPanel(
     speech?.close();
     switchConversation(conversations.create().id);
   });
-  sessionSelect.addEventListener('change', () => {
-    speech?.close();
-    switchConversation(sessionSelect.value);
-  });
   historyControls = createHistoryControls({
     store: conversations,
+    onFocusAfterDeletion: () => conversationList?.focus(),
     onBeforeRestore: () => {
       conversationRevision++;
       invalidatePlans();
@@ -2538,10 +2522,18 @@ export function createAgentPanel(
   const historyView = document.createElement('section');
   historyView.className = 'agent-history-view';
   historyView.hidden = true;
-  historyView.append(sessionBar, historyControls.el);
+  conversationList = createConversationList({
+    store: conversations,
+    onSelect: (id) => {
+      speech?.close();
+      switchConversation(id);
+      showView('chat');
+    },
+    onDelete: (id, trigger) => historyControls?.requestDelete(id, trigger),
+  });
+  historyView.append(conversationList.el, historyControls.el);
   header.insertBefore(historyBtn, settingsBtn);
   header.insertBefore(clearBtn, settingsBtn);
-  sessionRow.replaceChildren(sessionSelect);
 
   chat.el.append(writeDestination);
   function showView(view: 'chat' | 'settings' | 'history'): void {
@@ -2558,7 +2550,7 @@ export function createAgentPanel(
     historyBtn.setAttribute('aria-expanded', String(view === 'history'));
     if (!open) return;
     if (view === 'settings') settingsHeading.focus();
-    else if (view === 'history') sessionSelect.focus();
+    else if (view === 'history') conversationList?.focus();
     else chat.focus();
   }
   historyBtn.addEventListener('click', () => showView(panel.dataset.view === 'history' ? 'chat' : 'history'));
@@ -2588,7 +2580,6 @@ export function createAgentPanel(
   syncProductLabels();
   window.addEventListener('languagechange', syncProductLabels);
   clearBtn.addEventListener('click', () => showView('chat'));
-  sessionSelect.addEventListener('change', () => showView('chat'));
   clearBtn.title = t('agentNewConversation');
   clearBtn.setAttribute('aria-label', t('agentNewConversation'));
   panel.append(header, runtimeRow, settings, historyView, chat.el);

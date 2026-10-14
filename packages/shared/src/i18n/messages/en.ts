@@ -316,6 +316,13 @@ export const en: I18nMessages = {
   agentDeleteConversationConfirm: 'Delete this conversation? This cannot be undone.',
   agentHistoryConfirmDelete: 'Delete',
   agentConversations: 'Conversations',
+  agentSearchConversations: 'Search conversations',
+  agentCurrentConversation: 'Current',
+  agentHistoryToday: 'Today',
+  agentHistoryYesterday: 'Yesterday',
+  agentHistoryEarlier: 'Earlier',
+  agentNoConversationsFound: 'No matching conversations',
+  agentHistoryDataControls: 'History & data',
   agentContextTrimmed: 'Earlier turns were omitted from this request. Full history remains available.',
   agentContextTooLong:
     'This request is too long. Shorten the selected passage or your custom system prompt, or split the task.',

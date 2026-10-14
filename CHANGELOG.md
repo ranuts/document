@@ -20,6 +20,11 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- **Find earlier assistant conversations.** Search titles and messages locally,
+  browse recent chats by date and see the current conversation at a glance.
+  Compact row actions confirm which conversation will be deleted; history
+  saving and data tools stay available in a collapsed section.
+
 - **Keep document structure when writing an assistant draft.** Word headings,
   lists and emphasis remain formatted; long slide content continues on fitted
   pages without dropping text. Completed changes keep location and Undo guidance.

@@ -490,7 +490,7 @@ it('creates a fresh conversation without disposing or reloading the local model'
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(1));
   (panel.querySelector('.agent-panel-clear') as HTMLElement).click();
   expect(state.dispose).not.toHaveBeenCalled();
-  expect(panel.querySelectorAll('.agent-session-select option').length).toBeGreaterThan(1);
+  expect(panel.querySelectorAll('.agent-conversation-open').length).toBeGreaterThan(1);
   expect(state.preload).toHaveBeenCalledTimes(1);
 });
 
@@ -1065,12 +1065,12 @@ it('records a writing request and verified outcome without copying selected docu
       { role: 'assistant', content: t('agentPlanReady'), hostGuidance: 'tool' },
       { role: 'assistant', content: t('agentPlanVerified'), hostGuidance: 'tool' },
     ]);
-    const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
-    const originalSession = sessions.value;
+    const sessions = () =>
+      panel.querySelector<HTMLButtonElement>('.agent-conversation-open[aria-current="true"]')!.dataset.id!;
+    const originalSession = sessions();
     panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
     expect(panel.querySelector('.cui-messages')?.textContent ?? '').not.toContain('Rewrite it more clearly');
-    sessions.value = originalSession;
-    sessions.dispatchEvent(new Event('change'));
+    panel.querySelector<HTMLButtonElement>(`.agent-conversation-open[data-id="${originalSession}"]`)!.click();
     expect(panel.textContent).toContain('Rewrite it more clearly');
     expect(panel.textContent).toContain('Private rewritten body');
     expect(panel.querySelector('.agent-plan-apply')).toBeNull();
@@ -1127,8 +1127,9 @@ it.each(['resolve', 'reject'] as const)(
     );
     allowBrowserLocalWriting();
     const panel = createPreparedPanel();
-    const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
-    const originalSession = sessions.value;
+    const sessions = () =>
+      panel.querySelector<HTMLButtonElement>('.agent-conversation-open[aria-current="true"]')!.dataset.id!;
+    const originalSession = sessions();
     const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
     task.value = 'rewrite';
     task.dispatchEvent(new Event('change'));
@@ -1146,8 +1147,7 @@ it.each(['resolve', 'reject'] as const)(
     expect(panel.querySelector('.cui-messages')?.textContent).not.toContain('Rewrite this old request');
     expect(panel.querySelector('.cui-msg-error')).toBeNull();
     expect(input.disabled).toBe(false);
-    sessions.value = originalSession;
-    sessions.dispatchEvent(new Event('change'));
+    panel.querySelector<HTMLButtonElement>(`.agent-conversation-open[data-id="${originalSession}"]`)!.click();
     expect(panel.textContent).toContain('Rewrite this old request');
     expect(panel.querySelector(settlement === 'resolve' ? '.cui-msg-status' : '.cui-msg-error')?.textContent).toContain(
       t(settlement === 'resolve' ? 'agentStopped' : 'agentWritingUnchanged'),
@@ -1168,8 +1168,9 @@ it.each(['rewrite', 'tools'])('retains a late %s failure when returning before i
   else state.toolPlan.mockReturnValue(pending);
   allowBrowserLocalWriting();
   const panel = createPreparedPanel();
-  const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
-  const original = sessions.value;
+  const sessions = () =>
+    panel.querySelector<HTMLButtonElement>('.agent-conversation-open[aria-current="true"]')!.dataset.id!;
+  const original = sessions();
   const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   task.value = mode;
   task.dispatchEvent(new Event('change'));
@@ -1178,8 +1179,7 @@ it.each(['rewrite', 'tools'])('retains a late %s failure when returning before i
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(mode === 'rewrite' ? state.writing : state.toolPlan).toHaveBeenCalledOnce());
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
-  sessions.value = original;
-  sessions.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>(`.agent-conversation-open[data-id="${original}"]`)!.click();
   task.value = 'chat';
   task.dispatchEvent(new Event('change'));
   input.value = 'Subsequent message';
@@ -1191,8 +1191,7 @@ it.each(['rewrite', 'tools'])('retains a late %s failure when returning before i
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
-  sessions.value = original;
-  sessions.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>(`.agent-conversation-open[data-id="${original}"]`)!.click();
   expect(panel.querySelector('.cui-messages')?.textContent).toContain(
     mode === 'rewrite' ? 'Rewrite pending original request' : 'Create a slide from this request',
   );
@@ -1205,8 +1204,9 @@ it('restores a failed document operation with its error in the original conversa
   state.ready = true;
   state.toolPlan.mockRejectedValue(new Error('agentToolNotChosen'));
   const panel = createPreparedPanel();
-  const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
-  const original = sessions.value;
+  const sessions = () =>
+    panel.querySelector<HTMLButtonElement>('.agent-conversation-open[aria-current="true"]')!.dataset.id!;
+  const original = sessions();
   const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   mode.value = 'tools';
   mode.dispatchEvent(new Event('change'));
@@ -1215,8 +1215,7 @@ it('restores a failed document operation with its error in the original conversa
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
-  sessions.value = original;
-  sessions.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>(`.agent-conversation-open[data-id="${original}"]`)!.click();
   expect(panel.querySelector('.cui-messages')?.textContent).toContain('Read cell A1');
   expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentToolNotChosen'));
   expect(state.apply).not.toHaveBeenCalled();
@@ -1235,11 +1234,11 @@ it('shows a clear result when the current document has no readable text', async 
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(panel.querySelector('.cui-activity')?.textContent).toContain('No readable text was found.');
-  const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
-  const original = sessions.value;
+  const sessions = () =>
+    panel.querySelector<HTMLButtonElement>('.agent-conversation-open[aria-current="true"]')!.dataset.id!;
+  const original = sessions();
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
-  sessions.value = original;
-  sessions.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>(`.agent-conversation-open[data-id="${original}"]`)!.click();
   expect(panel.querySelector('.cui-activity')?.textContent).toContain('No readable text was found.');
   expect(panel.querySelector('.cui-msg-error')).toBeNull();
 });
@@ -1558,12 +1557,13 @@ it.each(['stop', 'new conversation', 'switch conversation'] as const)(
         }),
     );
     const panel = createPreparedPanel();
-    const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
-    const originalSession = sessions.value;
+    const sessions = () =>
+      panel.querySelector<HTMLButtonElement>('.agent-conversation-open[aria-current="true"]')!.dataset.id!;
+    const originalSession = sessions();
     if (interruption === 'switch conversation') {
       panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
     }
-    const operationSession = sessions.value;
+    const operationSession = sessions();
     const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
     mode.value = 'tools';
     mode.dispatchEvent(new Event('change'));
@@ -1577,8 +1577,7 @@ it.each(['stop', 'new conversation', 'switch conversation'] as const)(
     if (interruption === 'stop') panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
     else if (interruption === 'new conversation') panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
     else {
-      sessions.value = originalSession;
-      sessions.dispatchEvent(new Event('change'));
+      panel.querySelector<HTMLButtonElement>(`.agent-conversation-open[data-id="${originalSession}"]`)!.click();
     }
     expect(signal.aborted).toBe(true);
     // Simulate a read that finishes despite cancellation. The second action must still be suppressed.
@@ -1590,8 +1589,7 @@ it.each(['stop', 'new conversation', 'switch conversation'] as const)(
     expect(panel.textContent).not.toContain(t('agentPlanVerified'));
     if (interruption !== 'stop') {
       expect(panel.querySelectorAll('.cui-msg-user, .cui-activity, .cui-msg-status')).toHaveLength(0);
-      sessions.value = operationSession;
-      sessions.dispatchEvent(new Event('change'));
+      panel.querySelector<HTMLButtonElement>(`.agent-conversation-open[data-id="${operationSession}"]`)!.click();
     }
     expect(input.disabled).toBe(false);
     expect(panel.textContent).toContain(request);
@@ -1635,8 +1633,9 @@ it('retains the completed read and verification error without reporting sequence
     .mockResolvedValueOnce('sent')
     .mockRejectedValueOnce(new Error('The change could not be verified. Check the document and use Undo if needed.'));
   const panel = createPreparedPanel();
-  const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
-  const originalSession = sessions.value;
+  const sessions = () =>
+    panel.querySelector<HTMLButtonElement>('.agent-conversation-open[aria-current="true"]')!.dataset.id!;
+  const originalSession = sessions();
   const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   mode.value = 'tools';
   mode.dispatchEvent(new Event('change'));
@@ -1658,8 +1657,7 @@ it('retains the completed read and verification error without reporting sequence
   check();
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
   expect(panel.querySelector('.cui-msg-error')).toBeNull();
-  sessions.value = originalSession;
-  sessions.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>(`.agent-conversation-open[data-id="${originalSession}"]`)!.click();
   check();
 });
 
