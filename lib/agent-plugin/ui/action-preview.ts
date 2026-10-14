@@ -27,11 +27,11 @@ export type ReviewOutcome = import('../review-outcome').ReviewOutcome<PreviewAct
 /** Transient, text-only preview. Proposed actions are never persisted/replayed. */
 export class ActionPreview {
   readonly el = Div().class('agent-plan-preview').attr('role', 'region').attr('tabindex', '-1').build();
-  private readonly title = Span().build();
+  private readonly title = Span().class('agent-plan-heading').build();
   private readonly target = Span().class('agent-plan-target').build();
   private readonly beforeLabel = Span().build();
   private readonly before = View('pre').class('agent-plan-before').build();
-  private readonly afterLabel = Span().build();
+  private readonly afterLabel = Span().class('agent-plan-proposed-label').build();
   private readonly content = View('pre').class('agent-plan-content').build();
   private readonly status = Span()
     .class('agent-plan-status')
@@ -50,6 +50,8 @@ export class ActionPreview {
   private readonly discardButton = View('r-button').attr('type', 'text').class('agent-plan-discard').build();
   private readonly editor = Div().class('agent-plan-editor').build();
   private readonly comparison = Div().class('agent-plan-comparison').build();
+  private readonly secondary = View('details').class('agent-plan-secondary').build() as HTMLDetailsElement;
+  private readonly secondarySummary = View('summary').build();
   private readonly record = document.createElement('details');
   private action: PreviewAction | null = null;
   private settled = false;
@@ -72,6 +74,21 @@ export class ActionPreview {
       this.draft,
       Div().class('agent-plan-buttons').children(this.saveButton, this.discardButton).build(),
     );
+    this.secondary.append(
+      this.secondarySummary,
+      Div()
+        .class('agent-plan-buttons')
+        .children(this.editButton, this.refineButton, this.copyButton, this.locateButton)
+        .build(),
+    );
+    this.secondary.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && this.secondary.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.secondary.open = false;
+        this.secondarySummary.focus();
+      }
+    });
     this.record.className = 'agent-plan-record';
     this.record.hidden = true;
     this.receiptLocate.hidden = true;
@@ -87,20 +104,14 @@ export class ActionPreview {
       this.content,
       this.comparison,
       this.editor,
-      this.record,
       this.status,
+      this.record,
       this.receiptLocate,
       Div()
         .class('agent-plan-buttons agent-plan-primary-buttons')
-        .children([
-          this.applyButton,
-          this.locateButton,
-          this.editButton,
-          this.refineButton,
-          this.copyButton,
-          this.cancelButton,
-        ])
+        .children(this.applyButton, this.cancelButton)
         .build(),
+      this.secondary,
     );
     this.applyButton.addEventListener('click', () => void this.apply());
     this.locateButton.addEventListener('click', () => {
@@ -154,6 +165,7 @@ export class ActionPreview {
       this.action?.review?.kind === 'text' && this.action.review.anchor ? 'agentSelectionAnchor' : 'agentPlanBefore',
     );
     this.afterLabel.textContent = t('agentPlanAfter');
+    this.secondarySummary.textContent = t('agentReviewActions');
     this.applyButton.textContent = t(
       this.action?.plan.tool === 'add_pdf_comment'
         ? 'agentAddPdfComment'
@@ -273,6 +285,9 @@ export class ActionPreview {
     this.refining = false;
     for (const button of [this.editButton, this.refineButton, this.saveButton]) button.removeAttribute('disabled');
     this.el.dataset.state = 'pending';
+    this.secondary.open = false;
+    this.secondary.hidden = false;
+    this.el.querySelector<HTMLDetailsElement>('.agent-plan-original')!.open = false;
     this.el.removeAttribute('aria-busy');
     this.title.hidden = false;
     this.el.querySelector<HTMLElement>('.agent-plan-primary-buttons')!.hidden = false;
@@ -325,6 +340,9 @@ export class ActionPreview {
       !['insert_text', 'replace_selection', 'add_slide_text', 'add_comment', 'add_pdf_comment'].includes(
         action.plan.tool,
       );
+    this.secondary.hidden = [this.editButton, this.refineButton, this.copyButton, this.locateButton].every(
+      (button) => button.hidden,
+    );
     this.renderComparison(action.review);
     this.applyButton.removeAttribute('disabled');
     this.labels();
@@ -435,12 +453,14 @@ export class ActionPreview {
     if (this.refining || !this.pending() || !this.action?.revise || this.editButton.hidden) return;
     this.draft.value = String(this.action.plan.input.text ?? '');
     this.editor.hidden = false;
+    this.secondary.hidden = true;
     this.comparison.hidden = true;
     this.el.querySelector<HTMLElement>('.agent-plan-primary-buttons')!.hidden = true;
     this.draft.focus();
   }
   private discard(): void {
     this.editor.hidden = true;
+    this.secondary.hidden = this.settled;
     this.comparison.hidden = !this.action?.review;
     this.el.querySelector<HTMLElement>('.agent-plan-primary-buttons')!.hidden = this.settled;
     if (!this.settled) this.focusReview();
@@ -515,6 +535,8 @@ export class ActionPreview {
     this.applyButton.setAttribute('disabled', '');
     this.el.dataset.state = 'applying';
     this.el.setAttribute('aria-busy', 'true');
+    this.secondary.open = false;
+    this.secondary.hidden = true;
     this.editButton.hidden = this.refineButton.hidden = true;
     this.copyButton.hidden = true;
     this.status.textContent = t('agentPlanApplying');
@@ -543,6 +565,8 @@ export class ActionPreview {
   private finish(state: string): void {
     const restore = this.el.contains(document.activeElement);
     this.el.dataset.state = state;
+    this.secondary.open = false;
+    this.secondary.hidden = true;
     this.el.removeAttribute('aria-busy');
     this.el.querySelector<HTMLElement>('.agent-plan-primary-buttons')!.hidden = true;
     this.editor.hidden = true;

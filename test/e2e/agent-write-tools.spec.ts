@@ -231,6 +231,30 @@ test.describe('agent document writes (real editor)', () => {
     await page.locator('.agent-panel-settings-toggle').click();
     await send(page, 'Insert exactly this plain text at the cursor: Initial draft');
     const first = page.locator('.agent-plan-preview').first();
+    await expect(first.locator('.agent-plan-primary-buttons r-button')).toHaveCount(2);
+    await expect(first.locator('.agent-plan-edit')).toBeHidden();
+    await first.screenshot({ path: testInfo.outputPath('review-light.png') });
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await first.screenshot({ path: testInfo.outputPath('review-dark.png') });
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.setViewportSize({ width: 1000, height: 900 });
+    await page.locator('.agent-runtime-panel').evaluate((element) => {
+      (element as HTMLElement).style.width = '320px';
+    });
+    await expect(first).toBeVisible();
+    expect(await first.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+    await first.screenshot({ path: testInfo.outputPath('review-narrow.png') });
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.locator('.agent-runtime-panel').evaluate((element) => {
+      (element as HTMLElement).style.removeProperty('width');
+    });
+    await first.locator('.agent-plan-secondary > summary').click();
+    await expect(first.locator('.agent-plan-edit')).toBeVisible();
+    await first.locator('.agent-plan-secondary > summary').focus();
+    await first.locator('.agent-plan-secondary > summary').press('Escape');
+    await expect(first.locator('.agent-plan-secondary')).not.toHaveAttribute('open', '');
+    await expect(first.locator('.agent-plan-secondary > summary')).toBeFocused();
+    await first.locator('.agent-plan-secondary > summary').press('Enter');
     await expect(first.locator('.agent-plan-edit')).toBeVisible();
     await first.locator('.agent-plan-edit').click();
     await expect(first.locator('.agent-plan-draft')).toBeFocused();
@@ -242,6 +266,7 @@ test.describe('agent document writes (real editor)', () => {
     await first.locator('.agent-plan-draft').fill('Edited draft');
     await first.locator('.agent-plan-save').click();
     await expect(first.locator('.agent-plan-comparison')).toContainText('Edited draft');
+    await first.locator('.agent-plan-secondary > summary').click();
     await first.locator('.agent-plan-refine').click();
     await expect(page.locator('.agent-refinement-context')).toBeVisible();
     await send(page, 'Make this suggestion more concise');
@@ -295,6 +320,9 @@ test.describe('agent document writes (real editor)', () => {
     expect(await readWordText(page)).not.toContain('Initial draft');
     expect(await readWordText(page)).not.toContain('Edited draft');
     await expect(replacement.locator('.agent-plan-primary-buttons')).toBeHidden();
+    await expect(replacement.locator('.agent-plan-secondary')).toBeHidden();
+    await expect(replacement).toHaveAttribute('data-state', 'verified');
+    await replacement.screenshot({ path: testInfo.outputPath('review-verified.png') });
     await expect(page.locator('.agent-readiness')).toHaveText('');
     await replacement.locator('.agent-plan-record summary').click();
     await expect(replacement.locator('.agent-plan-record')).toContainText('Final reviewed text');
@@ -471,6 +499,7 @@ test.describe('agent document writes (real editor)', () => {
     const before = await shapeTexts();
     await send(page, 'Add a short text box to this slide');
     const review = page.locator('.agent-plan-preview').last();
+    await review.locator('.agent-plan-secondary > summary').click();
     await expect(review.locator('.agent-plan-edit')).toBeVisible();
     await expect(review.locator('.agent-plan-target')).toHaveText('Slide 1');
     expect(await shapeTexts()).toEqual(before);
