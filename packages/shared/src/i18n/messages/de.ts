@@ -359,6 +359,8 @@ export const de: Partial<I18nMessages> = {
   agentCopied: 'Kopiert',
   agentCopyFailed: 'Kopieren fehlgeschlagen',
   agentRestoreRequest: 'Anfrage wiederherstellen',
+  agentRoutingRequest: 'Anfrage wird eingeordnet…',
+  agentWaitElapsed: '{seconds} s vergangen',
   agentWaiting: 'Antwort wird erstellt…',
   agentReadingContent: 'Aktueller Inhalt wird gelesen…',
   agentPreparingTask: 'Anfrage wird vorbereitet…',

@@ -4,6 +4,7 @@ import { t } from '@ranuts/shared/i18n';
 import { getEndpointKey } from '@ranuts/agent-core/llm/keys';
 import { AgentChatController } from '../../lib/agent-plugin/ui/controller';
 import { createHistoryStorage } from '../../lib/agent-plugin/ui/storage';
+import { ChatView } from '@ranuts/chat-ui';
 HTMLElement.prototype.scrollTo = vi.fn();
 // Runtime tests explicitly prepare, as a user must now do from settings.
 function createPreparedPanel() {
@@ -40,6 +41,7 @@ const state = vi.hoisted(() => ({
   source: '',
   readText: undefined as string | undefined,
   readAnswer: vi.fn().mockResolvedValue('120'),
+  directTaskAnswer: undefined as undefined | ((delta?: (text: string) => void) => Promise<string>),
   editorReady: false,
   backend: undefined as undefined | ((backend: 'webllm' | 'wllama') => void),
   cpuProgress: undefined as undefined | ((value: { loaded: number; total: number }) => void),
@@ -239,6 +241,10 @@ vi.mock('../../lib/agent-plugin/document-task', async (original) => {
       signal?: AbortSignal,
       delta?: (text: string) => void,
     ): Promise<import('@ranuts/agent-core/llm/types').LLMResponse> => {
+      if (state.directTaskAnswer) {
+        const text = await state.directTaskAnswer(delta);
+        return { text, toolCalls: [], stopReason: 'end_turn', assistant: { role: 'assistant', content: text } };
+      }
       const results = messages.flatMap((m) =>
         typeof m.content === 'string' ? [] : m.content.filter((b) => b.type === 'tool_result'),
       );
@@ -341,6 +347,7 @@ afterEach(() => {
   state.generate.mockReset();
   state.toolPlan.mockReset();
   state.readAnswer.mockReset().mockResolvedValue('120');
+  state.directTaskAnswer = undefined;
   state.toolContext = 'slide';
   state.apply.mockClear();
   state.routing.mockReset();
@@ -2546,7 +2553,7 @@ it('shows an accepted request before task routing completes and never duplicates
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   try {
     expect(panel.querySelector('.cui-msg-user .cui-bubble')?.textContent).toBe('Hello there');
-    expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentPreparingTask'));
+    expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentRoutingRequest'));
     expect(input.value).toBe('');
   } finally {
     finish();
@@ -2554,6 +2561,67 @@ it('shows an accepted request before task routing completes and never duplicates
   }
   expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
   expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer');
+});
+
+it('does not show classification for a trusted staged task that skips the routing model', async () => {
+  allowBrowserLocalWriting();
+  state.ready = true;
+  // Expose real routing capability so this exercises the staged-intent branch,
+  // rather than passing because the fixture has no classification method.
+  state.semanticResponse = '{"task":"rewrite","language":"en"}';
+  state.editorReady = true;
+  state.source = 'Original selected text';
+  let finish!: (text: string) => void;
+  state.writing.mockImplementation(() => new Promise<string>((resolve) => (finish = resolve)));
+  const activity = vi.spyOn(ChatView.prototype, 'setActivity');
+  const panel = createPreparedPanel();
+  try {
+    panel.querySelector<HTMLButtonElement>('[data-task="polish"]')!.click();
+    panel.querySelector<HTMLButtonElement>('.cui-send')!.click();
+    await vi.waitFor(() => expect(state.writing).toHaveBeenCalledOnce());
+    expect(state.routing).not.toHaveBeenCalled();
+    expect(activity).not.toHaveBeenCalledWith('routing');
+    expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentWaiting'));
+    expect(panel.querySelector('.cui-elapsed')?.textContent).toBe(t('agentWaitElapsed', { seconds: 0 }));
+  } finally {
+    finish?.('Polished text');
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    activity.mockRestore();
+  }
+});
+
+it('ends planning feedback on visible direct task text without requiring a tool result', async () => {
+  state.ready = true;
+  state.semanticResponse = '{"task":"tools","language":"en"}';
+  let emit!: (text: string) => void;
+  let finish!: (text: string) => void;
+  state.directTaskAnswer = (delta) => {
+    emit = delta!;
+    return new Promise<string>((resolve) => (finish = resolve));
+  };
+  const panel = createPreparedPanel();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Explain what should happen next in this presentation.';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  try {
+    await vi.waitFor(() => expect(emit).toBeDefined());
+    emit('<think>Internal reasoning');
+    expect(panel.querySelector('.cui-root')?.getAttribute('data-activity')).toBe('planning');
+    expect(panel.querySelector('.cui-msg-agent')).toBeNull();
+    expect(panel.querySelector<HTMLElement>('.cui-progress')?.hidden).toBe(false);
+    emit('</think>Direct useful answer');
+    await vi.waitFor(() =>
+      expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('Direct useful answer'),
+    );
+    expect(panel.querySelector('.cui-root')?.getAttribute('data-activity')).toBe('responding');
+    expect(panel.querySelector<HTMLElement>('.cui-progress')?.hidden).toBe(true);
+    expect(panel.querySelector('.cui-elapsed')?.textContent).toBe('');
+    expect(state.toolPlan).not.toHaveBeenCalled();
+    expect(state.apply).not.toHaveBeenCalled();
+  } finally {
+    finish?.('Direct useful answer');
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  }
 });
 
 it('streams a grounded answer before completion and stores one complete reply', async () => {

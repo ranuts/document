@@ -339,6 +339,8 @@ export const en: I18nMessages = {
   agentCopied: 'Copied',
   agentCopyFailed: 'Could not copy',
   agentRestoreRequest: 'Restore request',
+  agentRoutingRequest: 'Understanding your request…',
+  agentWaitElapsed: '{seconds}s elapsed',
   agentWaiting: 'Generating a response…',
   agentReadingContent: 'Reading current content…',
   agentPreparingTask: 'Preparing your request…',

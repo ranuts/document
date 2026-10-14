@@ -344,6 +344,8 @@ export const pt: Partial<I18nMessages> = {
   agentCopied: 'Copiado',
   agentCopyFailed: 'Falha ao copiar',
   agentRestoreRequest: 'Restaurar pedido',
+  agentRoutingRequest: 'Interpretando sua solicitação…',
+  agentWaitElapsed: '{seconds} s decorridos',
   agentWaiting: 'Gerando resposta…',
   agentReadingContent: 'Lendo o conteúdo atual…',
   agentPreparingTask: 'Preparando sua solicitação…',

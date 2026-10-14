@@ -91,6 +91,13 @@ test('formatted Word content retains native headings and lists with safe readbac
   await page.locator('.cui-input').press('Enter');
   const preview = page.locator('.agent-plan-preview').last();
   await expect(preview.locator('.agent-plan-diff')).toContainText('Budget');
+  await expect(page.locator('.cui-root')).toHaveAttribute('data-activity', 'reviewing');
+  await expect(page.locator('.cui-elapsed')).toBeHidden();
+  await expect(page.locator('.cui-elapsed')).toHaveText('');
+  await expect(page.getByRole('log')).toHaveAttribute('aria-busy', 'false');
+  expect(await page.locator('.cui-status').evaluate((el) => getComputedStyle(el, '::before').animationName)).toBe(
+    'none',
+  );
   expect(await read()).toEqual(before);
   await preview.locator('.agent-plan-apply').click();
   await expect.poll(() => preview.getAttribute('data-state')).not.toBe('applying');

@@ -70,11 +70,15 @@ export const CHAT_UI_CSS = `
 .cui-activity li { padding:4px 0; }
 .cui-msg-status { color:var(--cui-muted); font-size:12px; }
 .cui-msg-error .cui-bubble { padding:12px; border:1px solid var(--cui-border); border-radius:10px; font-size:13px; }
-.cui-status { flex:0 0 auto; display:flex; align-items:center; gap:8px; padding:0 var(--ran-space-4, 16px) var(--ran-space-3, 12px); color:var(--cui-muted); font-size:12px; line-height:1.5; }
+.cui-progress { flex:0 0 auto; display:flex; align-items:center; gap:var(--ran-space-3, 12px); margin:0 var(--ran-space-4, 16px); padding:var(--ran-space-2, 8px) var(--ran-space-3, 12px); border:1px solid var(--cui-border); border-radius:var(--ran-radius-sm, 6px); background:var(--cui-surface); }
+.cui-status { flex:1; min-width:0; display:flex; align-items:center; gap:var(--ran-space-2, 8px); color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); line-height:1.5; }
+.cui-elapsed { flex:0 0 auto; color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); line-height:1.5; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.cui-progress[hidden],.cui-elapsed[hidden] { display:none; }
+.cui-root[data-activity="reviewing"] .cui-progress { border-color:transparent; background:transparent; padding-inline:0; }
 .cui-status:empty { display:none; }
 /* One activity cue at a time: the waiting row gives way to the live-text
    cursor when responding. A human review is a resting state, not loading. */
-.cui-root:is([data-activity="responding"],[data-activity="reading"],[data-activity="planning"]) .cui-status::before { content:''; flex:0 0 auto; width:12px; height:12px; box-sizing:border-box; border:1.5px solid var(--cui-border); border-top-color:currentColor; border-right-color:currentColor; border-radius:50%; animation:cui-loading-turn 1s linear infinite; }
+.cui-root:is([data-activity="responding"],[data-activity="routing"],[data-activity="reading"],[data-activity="planning"]) .cui-status::before { content:''; flex:0 0 auto; width:12px; height:12px; box-sizing:border-box; border:1.5px solid var(--cui-border); border-top-color:currentColor; border-right-color:currentColor; border-radius:50%; animation:cui-loading-turn 1s linear infinite; }
 .cui-footer { position:relative; flex:0 0 auto; padding:12px 16px 16px; }
 .cui-scroll-bottom { position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:32px; height:32px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:1px solid var(--cui-border); border-radius:50%; background:var(--cui-bg); color:var(--cui-muted); cursor:pointer; box-shadow:0 2px 6px #00000012; }
 .cui-scroll-bottom[hidden] { display:none; }

@@ -43,10 +43,18 @@ Override the look via the `--cui-*` custom properties on `.cui-root`.
 - `appendDelta(text)` — stream text into a live agent bubble (auto-created).
 - `endStream()` — finalise the streaming bubble.
 - `setRunning(bool)` — toggle Send⇄Stop while keeping the next draft editable; never queue it.
-- `clear()` — remove all messages.
+- `setActivity(phase)` — display the host's actual `routing`, `reading`, `planning`,
+  `responding` or `reviewing` phase. Classification must be reported only when it runs.
+- `clear()` — remove messages and waiting feedback; it does not stop the host's run.
 - `getInput()` / `setInput(text)` / `focus()` — input helpers.
 - `setLabels(labels)` — update labels live (e.g. language change).
 - `actionsEl` — host-populated slot above the input (compose toolbar); collapses when empty.
+
+Waiting feedback appears immediately, with a locally measured clock formatted
+by `labels.elapsed(seconds)` and a classification label from `labels.routing`.
+Clock ticks are visual only and stay outside live regions. First response text,
+Stop/completion and disposal end the clock; human review shows a resting status.
+Elapsed seconds describe waiting, without estimating model progress or speed.
 
 Hosts may mark validated document content with `documentArtifact: true` in
 `append(...)` or the metadata argument to `appendDelta(...)`. It receives a

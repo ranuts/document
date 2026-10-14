@@ -325,6 +325,8 @@ export const zhCN: I18nMessages = {
   agentCopied: '已复制',
   agentCopyFailed: '复制失败',
   agentRestoreRequest: '恢复请求',
+  agentRoutingRequest: '正在理解你的请求…',
+  agentWaitElapsed: '已等待 {seconds} 秒',
   agentWaiting: '正在生成回复…',
   agentReadingContent: '正在读取当前内容…',
   agentPreparingTask: '正在准备任务…',
