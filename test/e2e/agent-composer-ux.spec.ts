@@ -119,6 +119,17 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       await expect(page.locator('.cui-msg-user')).toHaveCount(2);
       await expect(page.locator('.cui-send-stop')).toHaveCount(0);
       await expect(page.locator('.cui-msg-agent')).toHaveCount(2);
+      // Prose remains unframed; its heading has a real typographic level rather
+      // than the same size as body text. Draft identity comes from host metadata.
+      await expect(page.locator('.cui-result-header')).toHaveCount(0);
+      const typeHierarchy = await page
+        .locator('.cui-msg-agent')
+        .last()
+        .evaluate((row) => ({
+          heading: Number.parseFloat(getComputedStyle(row.querySelector('h2')!).fontSize),
+          body: Number.parseFloat(getComputedStyle(row.querySelector('p')!).fontSize),
+        }));
+      expect(typeHierarchy.heading - typeHierarchy.body).toBeGreaterThanOrEqual(2);
       const resize = page.getByRole('separator', { name: 'Resize AI panel' });
       const draft = 'Keep this next draft editable while I resize the sidebar. '.repeat(8);
       await resize.press('Home');

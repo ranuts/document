@@ -84,6 +84,14 @@ onSend: async (text) => {
 - Message arrivals consume the current following state. They must not recompute it from post-reflow geometry: scroll handling owns reader attachment, while jumping to the end and clearing reset it.
 - Use `appendMany` for history restoration. It keeps the same message rendering and tool grouping as `append`, while deferring intermediate scroll measurements. Completed and interrupted streams publish their original source when finalized; streaming actions stay hidden.
 - Copy feedback uses fixed-size icons and a separate polite announcement. Clipboard failure leaves the action available to retry; feedback never replaces running activity.
+- Explicit `documentArtifact: true` identifies a document-draft surface. Ordinary
+  prose and tool receipts never acquire this identity by mentioning a document.
+  `labels.documentDraft` and `labels.incomplete` localize the result header;
+  updating labels also updates existing results. Interrupted streams keep their
+  source available for copying and show the incomplete identity, with no write
+  action. Set `requireDocumentArtifact: true` when a host must restrict its
+  explicit `onApplyMessage` callback to marked document content. Result labels
+  never become part of the original source used for copy or apply.
 - Restyle via CSS custom properties on `.cui-root` (`--cui-accent`, `--cui-user-bg`, …) — don't depend on internal `cui-*` class names.
 - DOM is built with the ranui `builder` (View/Div/Span/ButtonBuilder) and the scroll handler is throttled via ranuts; the package depends on `ranui` + `ranuts`.
 

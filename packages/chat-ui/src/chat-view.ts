@@ -16,6 +16,8 @@ const ICON_COPIED =
   '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>';
 const ICON_COPY_ERROR =
   '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6m0 4h.01"/></svg>';
+const ICON_DRAFT =
+  '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>';
 
 /** Distance (px) from the bottom within which we keep auto-scrolling on new content. */
 const STICK_THRESHOLD = 60;
@@ -311,7 +313,7 @@ export class ChatView {
                 : (this.labels.checkDocument ?? 'Check document');
           apply.disabled = result !== 'retry' || this.running;
         });
-        actions.append(apply);
+        actions.prepend(apply);
       }
     }
     if ((message.role === 'error' || message.role === 'status') && this.lastUserText) {
@@ -329,6 +331,7 @@ export class ChatView {
     row.dataset.source = message.text;
     if (message.documentArtifact) row.dataset.documentArtifact = 'true';
     if (message.interrupted) row.dataset.interrupted = 'true';
+    if (message.role === 'agent') this.updateResultPresentation(row);
 
     this.messagesEl.appendChild(row);
     this.resizeObserver?.observe(row);
@@ -402,7 +405,26 @@ export class ChatView {
     if (!this.liveMsg) return;
     this.liveMsg.dataset.interrupted = 'true';
     this.liveMsg.querySelector('.cui-apply')?.remove();
+    this.updateResultPresentation(this.liveMsg);
     this.endStream();
+  }
+
+  /** Result identity follows host metadata, never model prose or tool receipts. */
+  private updateResultPresentation(row: HTMLElement): void {
+    if (!row.hasAttribute('data-document-artifact') && !row.hasAttribute('data-interrupted')) return;
+    let header = row.querySelector<HTMLElement>('.cui-result-header');
+    if (!header) {
+      const icon = Span().class('cui-result-icon').attr('aria-hidden', 'true').build();
+      icon.innerHTML = ICON_DRAFT;
+      header = Div().class('cui-result-header').children(icon, Span().class('cui-result-label').build()).build();
+      row.prepend(header);
+    }
+    const label = row.hasAttribute('data-interrupted')
+      ? (this.labels.incomplete ?? 'Incomplete response')
+      : (this.labels.documentDraft ?? 'Document draft');
+    header.querySelector<HTMLElement>('.cui-result-label')!.textContent = label;
+    row.setAttribute('role', 'article');
+    row.setAttribute('aria-label', label);
   }
 
   /** Mount a host-owned review card in chronological conversation order. */
@@ -513,6 +535,8 @@ export class ChatView {
     }
     for (const button of this.messagesEl.querySelectorAll('.cui-restore'))
       button.textContent = labels.restore ?? 'Restore request';
+    for (const header of this.messagesEl.querySelectorAll<HTMLElement>('.cui-result-header'))
+      this.updateResultPresentation(header.parentElement!);
     this.updateSendState();
     if (this.emptyEl.parentElement) this.emptyTitle.textContent = labels.empty ?? '';
   }

@@ -28,6 +28,10 @@ export interface ChatViewLabels {
   copied?: string;
   copyFailed?: string;
   restore?: string;
+  /** Identifies only explicitly host-marked document content. */
+  documentDraft?: string;
+  /** Identifies retained output from a response that did not complete. */
+  incomplete?: string;
   waiting?: string;
   reading?: string;
   planning?: string;
