@@ -2,6 +2,7 @@ import 'fake-indexeddb/auto';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { createConversationStore } from '../../lib/agent-plugin/ui/sessions';
 import { createHistoryControls } from '../../lib/agent-plugin/ui/history-controls';
+import { ConversationConflictError } from '../../lib/agent-plugin/ui/conversation-db';
 import { t } from '@ranuts/shared/i18n';
 
 beforeEach(async () => {
@@ -207,4 +208,101 @@ it('keeps keyboard focus on retry when deleting all history fails', async () => 
   expect(confirm.disabled).toBe(false);
   expect(document.activeElement).toBe(confirm);
   expect(store.history().load()[0].content).toBe('preserve on failure');
+});
+
+it('keeps data management collapsed while leaving conversation browsing prominent', () => {
+  const controls = createHistoryControls({ store: createConversationStore(), onRestore: vi.fn() });
+  const disclosure = controls.el.querySelector('details');
+  expect(disclosure).not.toBeNull();
+  expect(disclosure!.open).toBe(false);
+  expect(disclosure!.querySelector('.agent-history-export')).not.toBeNull();
+});
+
+it('names the requested row before deleting it and preserves the current conversation', async () => {
+  const store = createConversationStore();
+  const target = store.activeId;
+  store.history().save([{ role: 'user', content: 'Quarterly review' }]);
+  store.create();
+  store.history().save([{ role: 'user', content: 'Current work' }]);
+  const current = store.activeId;
+  const controls = createHistoryControls({ store, onRestore: vi.fn() });
+  const trigger = document.createElement('button');
+  document.body.append(controls.el, trigger);
+  controls.requestDelete(target, trigger);
+  expect(controls.el.querySelector('.agent-history-confirmation')?.textContent).toContain('Quarterly review');
+  controls.el.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+  await vi.waitFor(() => expect(store.list().some((item) => item.id === target)).toBe(false));
+  expect(store.activeId).toBe(current);
+  expect(store.history().load()[0].content).toBe('Current work');
+});
+
+it('dismisses the deletion decision with Escape before the history view handles it', () => {
+  const controls = createHistoryControls({ store: createConversationStore(), onRestore: vi.fn() });
+  document.body.append(controls.el);
+  const trigger = controls.el.querySelector<HTMLButtonElement>('.agent-history-delete-current')!;
+  trigger.click();
+  const bubbled = vi.fn();
+  controls.el.addEventListener('keydown', bubbled);
+  controls.el
+    .querySelector<HTMLButtonElement>('.agent-history-cancel')!
+    .dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true);
+  expect(document.activeElement).toBe(trigger);
+  expect(bubbled).not.toHaveBeenCalled();
+});
+
+it.each([
+  [new ConversationConflictError(), 'agentHistoryConflict'],
+  [new DOMException('Unavailable', 'UnknownError'), 'agentHistorySaveFailed'],
+] as const)('exposes %s after deleting a row while data controls are collapsed', async (error, key) => {
+  const target = crypto.randomUUID();
+  const current = crypto.randomUUID();
+  const now = Date.now();
+  const store = createConversationStore(undefined, {
+    repository: {
+      load: async () => ({
+        version: 1,
+        revision: 1,
+        activeId: current,
+        sessions: [
+          {
+            id: target,
+            title: 'Earlier work',
+            createdAt: now,
+            updatedAt: now,
+            messages: [{ role: 'user', content: 'Earlier work' }],
+          },
+          {
+            id: current,
+            title: 'Current work',
+            createdAt: now,
+            updatedAt: now,
+            messages: [{ role: 'user', content: 'Current work' }],
+          },
+        ],
+      }),
+      save: async () => {
+        throw error;
+      },
+      clear: async () => 1,
+    },
+  });
+  await store.restoreSaved();
+  const trigger = document.createElement('button');
+  const search = document.createElement('input');
+  const controls = createHistoryControls({
+    store,
+    onRestore: () => trigger.remove(),
+    onFocusAfterDeletion: () => search.focus(),
+  });
+  document.body.append(search, trigger, controls.el);
+  const details = controls.el.querySelector('details')!;
+  expect(details.open).toBe(false);
+  controls.requestDelete(target, trigger);
+  controls.el.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+  await vi.waitFor(() => expect(controls.el.querySelector('.agent-history-status')?.textContent).toBe(t(key)));
+  expect(details.open).toBe(true);
+  expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true);
+  expect(document.activeElement).toBe(search);
+  expect(store.activeId).toBe(current);
 });

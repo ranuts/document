@@ -145,8 +145,9 @@ it('offers only browser-local backends and keeps remote credentials out of the p
 
 it('groups conversation switching and creation ahead of the transcript', () => {
   const panel = createAgentPanel();
-  const bar = panel.querySelector('.agent-session-bar')!;
-  expect(bar.querySelector('.agent-session-select')).not.toBeNull();
+  const bar = panel.querySelector('.agent-conversations')!;
+  expect(bar.querySelector('.agent-history-search')).not.toBeNull();
+  expect(bar.querySelector('.agent-conversation-open[aria-current="true"]')).not.toBeNull();
   expect(bar.closest('.agent-history-view')?.hasAttribute('hidden')).toBe(true);
   expect(panel.querySelector('.agent-panel-header .agent-panel-clear')).not.toBeNull();
   panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();

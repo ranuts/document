@@ -321,6 +321,13 @@ export const ja: Partial<I18nMessages> = {
   agentDeleteConversationConfirm: 'この会話を削除しますか？元に戻せません。',
   agentHistoryConfirmDelete: '削除',
   agentConversations: '会話履歴',
+  agentSearchConversations: '会話を検索',
+  agentCurrentConversation: '現在の会話',
+  agentHistoryToday: '今日',
+  agentHistoryYesterday: '昨日',
+  agentHistoryEarlier: 'それ以前',
+  agentNoConversationsFound: '一致する会話がありません',
+  agentHistoryDataControls: '履歴とデータ',
   agentContextTrimmed: 'このリクエストでは古い会話を省略しました。履歴は保存されています。',
   agentContextTooLong:
     'リクエストが長すぎます。選択した内容やカスタムシステム指示を短くするか、タスクを分割してください。',

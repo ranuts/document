@@ -325,6 +325,13 @@ export const es: Partial<I18nMessages> = {
   agentDeleteConversationConfirm: '¿Eliminar esta conversación? Esta acción no se puede deshacer.',
   agentHistoryConfirmDelete: 'Eliminar',
   agentConversations: 'Conversaciones',
+  agentSearchConversations: 'Buscar conversaciones',
+  agentCurrentConversation: 'Actual',
+  agentHistoryToday: 'Hoy',
+  agentHistoryYesterday: 'Ayer',
+  agentHistoryEarlier: 'Anteriores',
+  agentNoConversationsFound: 'No se encontraron conversaciones',
+  agentHistoryDataControls: 'Historial y datos',
   agentContextTrimmed: 'Se omitieron turnos anteriores en esta solicitud. El historial completo se conserva.',
   agentContextTooLong:
     'La solicitud es demasiado larga. Acorta el fragmento seleccionado o tus instrucciones de sistema personalizadas, o divide la tarea.',

@@ -7,6 +7,7 @@ export interface HistoryControlsOptions {
   store: ReturnType<typeof createConversationStore>;
   onRestore(): void;
   onBeforeRestore?(): void;
+  onFocusAfterDeletion?(): void;
 }
 
 /** Local-only download. The export contains conversation data, never provider settings. */
@@ -21,9 +22,11 @@ export function downloadConversations(json: string): void {
 
 export function createHistoryControls(options: HistoryControlsOptions) {
   const { store } = options;
-  const el = document.createElement('fieldset');
+  const el = document.createElement('div');
   el.className = 'agent-history-options';
-  const legend = document.createElement('legend');
+  const details = document.createElement('details');
+  details.className = 'agent-history-management';
+  const legend = document.createElement('summary');
   const label = document.createElement('label');
   const toggle = document.createElement('input');
   toggle.type = 'checkbox';
@@ -54,7 +57,8 @@ export function createHistoryControls(options: HistoryControlsOptions) {
   const confirm = button('agent-history-confirm');
   const cancel = button('agent-history-cancel');
   confirmation.append(question, confirm, cancel);
-  el.append(legend, label, status, actions, confirmation);
+  details.append(legend, label, status, actions);
+  el.append(details, confirmation);
   let busy = 0;
   let requestedSaving: boolean | undefined;
   let failure: keyof I18nMessages | undefined;
@@ -67,18 +71,22 @@ export function createHistoryControls(options: HistoryControlsOptions) {
     for (const item of actions.querySelectorAll('button')) item.disabled = busy > 0;
     confirm.disabled = busy > 0;
     cancel.disabled = busy > 0;
-    legend.textContent = t('agentConversations');
+    legend.textContent = t('agentHistoryDataControls');
     saveText.textContent = t('agentSaveHistory');
     restore.textContent = t('agentRestoreHistory');
     legacy.textContent = t('agentImportHistory');
     exported.textContent = t('agentExportHistory');
     remove.textContent = t('agentDeleteConversation');
     clear.textContent = t('agentDeleteHistory');
+    const target = store.list().find((item) => item.id === deletion);
     question.textContent = t(deletion === 'all' ? 'agentDeleteHistoryConfirm' : 'agentDeleteConversationConfirm');
+    if (target) question.textContent += ` ${target.title || t('agentNewConversation')}`;
     confirm.textContent = t('agentHistoryConfirmDelete');
     cancel.textContent = t('agentPlanCancel');
   };
   const showError = (error: unknown) => {
+    // Row actions live outside the disclosure, so failures must reveal its status.
+    details.open = true;
     requestedSaving = undefined;
     failure =
       typeof error === 'object' && error !== null && 'name' in error && error.name === 'ConversationConflictError'
@@ -150,6 +158,7 @@ export function createHistoryControls(options: HistoryControlsOptions) {
     confirmation.hidden = false;
     sync();
     cancel.focus();
+    confirmation.scrollIntoView?.({ block: 'nearest' });
   };
   remove.addEventListener('click', () => askDeletion(store.activeId, remove));
   clear.addEventListener('click', () => askDeletion('all', clear));
@@ -158,6 +167,11 @@ export function createHistoryControls(options: HistoryControlsOptions) {
     confirmation.hidden = true;
     deletionTrigger?.focus();
     deletionTrigger = undefined;
+  });
+  confirmation.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || event.isComposing) return;
+    event.stopPropagation();
+    if (!busy) cancel.click();
   });
   confirm.addEventListener('click', () => {
     const target = deletion;
@@ -184,8 +198,10 @@ export function createHistoryControls(options: HistoryControlsOptions) {
       finishDeletion();
     }).then(() => {
       if (restoreFocus && (document.activeElement === document.body || confirmation.contains(document.activeElement))) {
-        if (confirmation.hidden) trigger?.focus();
-        else confirm.focus();
+        if (confirmation.hidden) {
+          if (trigger?.isConnected) trigger.focus();
+          else options.onFocusAfterDeletion?.();
+        } else confirm.focus();
       }
       if (confirmation.hidden) deletionTrigger = undefined;
     });
@@ -195,6 +211,9 @@ export function createHistoryControls(options: HistoryControlsOptions) {
     el,
     sync,
     showError,
+    requestDelete: (id: string, trigger: HTMLButtonElement) => {
+      if (!busy && store.list().some((item) => item.id === id)) askDeletion(id, trigger);
+    },
     start: async () => {
       if (localStorageGetItem(SAVE_PREFERENCE) === 'true') {
         requestedSaving = true;

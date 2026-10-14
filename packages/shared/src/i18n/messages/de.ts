@@ -335,6 +335,13 @@ export const de: Partial<I18nMessages> = {
   agentDeleteConversationConfirm: 'Diese Unterhaltung löschen? Dies kann nicht rückgängig gemacht werden.',
   agentHistoryConfirmDelete: 'Löschen',
   agentConversations: 'Unterhaltungen',
+  agentSearchConversations: 'Unterhaltungen suchen',
+  agentCurrentConversation: 'Aktuell',
+  agentHistoryToday: 'Heute',
+  agentHistoryYesterday: 'Gestern',
+  agentHistoryEarlier: 'Früher',
+  agentNoConversationsFound: 'Keine passenden Unterhaltungen',
+  agentHistoryDataControls: 'Verlauf und Daten',
   agentContextTrimmed: 'Ältere Beiträge wurden für diese Anfrage ausgelassen. Der Verlauf bleibt erhalten.',
   agentContextTooLong:
     'Die Anfrage ist zu lang. Kürzen Sie den ausgewählten Abschnitt oder Ihre eigenen Systemanweisungen, oder teilen Sie die Aufgabe auf.',
