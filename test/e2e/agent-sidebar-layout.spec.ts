@@ -21,6 +21,16 @@ for (const width of [320, 1280]) {
     expect(Math.max(...alignment) - Math.min(...alignment)).toBeLessThanOrEqual(1);
     await page.locator('.agent-panel-settings-toggle').click();
     await expect(page.locator('.agent-panel-settings')).toBeVisible();
+    const settingsToggle = page.locator('.agent-panel-settings-toggle');
+    await page.keyboard.press('Tab');
+    await settingsToggle.focus();
+    await expect(settingsToggle).toBeFocused();
+    expect(
+      await settingsToggle.evaluate((button) => {
+        const style = getComputedStyle(button);
+        return style.outlineStyle !== 'none' && Number.parseFloat(style.outlineWidth) >= 2;
+      }),
+    ).toBe(true);
     const size = await page.locator('.agent-panel-load').evaluate((button) => button.getBoundingClientRect().height);
     expect(size).toBeGreaterThanOrEqual(30);
     expect(size).toBeLessThanOrEqual(34);
