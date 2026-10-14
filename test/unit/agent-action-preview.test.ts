@@ -723,3 +723,119 @@ it('keeps verified records compact with native Undo guidance and location access
   expect(view.el.querySelector('details.agent-plan-record')?.hasAttribute('open')).toBe(false);
   view.dispose();
 });
+
+it('keeps Apply and Cancel prominent while disclosing secondary review actions', () => {
+  const view = new ActionPreview();
+  const action = {
+    target: { label: 'Word', selectedText: 'Original' },
+    plan: { tool: 'insert_text', input: { text: 'Proposal' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    apply: async () => 'verified' as const,
+    revise: () => action,
+    locate: vi.fn(),
+  };
+  view.show(action, undefined, vi.fn());
+  const primary = view.el.querySelector('.agent-plan-primary-buttons')!;
+  expect([...primary.querySelectorAll('r-button')].map((button) => button.className)).toEqual([
+    'agent-plan-apply',
+    'agent-plan-cancel',
+  ]);
+  const secondary = view.el.querySelector<HTMLDetailsElement>('.agent-plan-secondary')!;
+  expect(secondary).not.toBeNull();
+  expect(secondary.open).toBe(false);
+  expect(secondary.querySelector('summary')?.textContent).not.toBe('');
+  for (const name of ['edit', 'refine', 'copy', 'locate'])
+    expect(secondary.querySelector(`.agent-plan-${name}`)).not.toBeNull();
+  view.dispose();
+});
+
+it('returns Escape focus to the secondary disclosure without cancelling the review', () => {
+  const view = new ActionPreview();
+  document.body.append(view.el);
+  view.show({
+    target: { label: 'Word', selectedText: 'Original' },
+    plan: { tool: 'insert_text', input: { text: 'Proposal' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    apply: async () => 'verified',
+  });
+  const secondary = view.el.querySelector<HTMLDetailsElement>('.agent-plan-secondary')!;
+  expect(secondary).not.toBeNull();
+  secondary.open = true;
+  secondary.querySelector<HTMLElement>('summary')!.focus();
+  secondary.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+  expect(secondary.open).toBe(false);
+  expect(document.activeElement).toBe(secondary.querySelector('summary'));
+  expect(view.pending()).toBeDefined();
+  view.dispose();
+});
+
+it('resets secondary and original disclosures when a preview instance shows a replacement', () => {
+  const view = new ActionPreview();
+  const action = {
+    target: { label: 'Word', selectedText: 'Original' },
+    plan: { tool: 'insert_text', input: { text: 'Proposal' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    apply: async () => 'verified' as const,
+  };
+  view.show(action);
+  const secondary = view.el.querySelector<HTMLDetailsElement>('.agent-plan-secondary')!;
+  expect(secondary).not.toBeNull();
+  secondary.open = true;
+  view.el.querySelector<HTMLDetailsElement>('.agent-plan-original')!.open = true;
+  view.show({ ...action, plan: { tool: 'insert_text', input: { text: 'Replacement' } } });
+  expect(secondary.open).toBe(false);
+  expect(secondary.hidden).toBe(false);
+  expect(view.el.querySelector<HTMLDetailsElement>('.agent-plan-original')!.open).toBe(false);
+  expect(view.el.querySelector<HTMLElement>('.agent-plan-editor')!.hidden).toBe(true);
+  view.dispose();
+});
+
+it.each(['verified', 'sent', 'failed', 'expired'] as const)(
+  'removes secondary review actions from a %s receipt and cannot revive approval',
+  async (outcome) => {
+    const view = new ActionPreview();
+    const action = {
+      target: { label: 'Word', selectedText: 'Original' },
+      plan: { tool: 'insert_text', input: { text: 'Proposal' } },
+      isCurrent: () => true,
+      cancel: vi.fn(),
+      apply: vi.fn(async (): Promise<'verified' | 'sent'> => {
+        if (outcome === 'failed') throw new Error('Readback failed');
+        return outcome === 'sent' ? 'sent' : 'verified';
+      }),
+    };
+    view.show(action);
+    const secondary = view.el.querySelector<HTMLDetailsElement>('.agent-plan-secondary')!;
+    expect(secondary).not.toBeNull();
+    secondary.open = true;
+    if (outcome === 'expired') view.invalidate();
+    else {
+      view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+      await vi.waitFor(() => expect(view.el.dataset.state).toBe(outcome));
+    }
+    expect(secondary.hidden).toBe(true);
+    expect(secondary.open).toBe(false);
+    view.setRefining(false);
+    expect(view.el.querySelector<HTMLElement>('.agent-plan-primary-buttons')!.hidden).toBe(true);
+    view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+    expect(action.apply).toHaveBeenCalledTimes(outcome === 'expired' ? 0 : 1);
+    expect(view.el.querySelector('.agent-plan-undo') !== null).toBe(outcome === 'verified');
+    view.dispose();
+  },
+);
+
+it('omits an empty secondary disclosure for a destructive proposal with no secondary actions', () => {
+  const view = new ActionPreview();
+  view.show({
+    target: { label: 'Word', selectedText: '' },
+    plan: { tool: 'clear_document', input: {} },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    apply: async () => 'verified',
+  });
+  expect(view.el.querySelector<HTMLElement>('.agent-plan-secondary')!.hidden).toBe(true);
+  view.dispose();
+});
