@@ -24,8 +24,9 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 # Copy source code
 COPY . .
 
-# Build the workspace packages (their prepare scripts), then the app
-RUN pnpm -r run prepare && pnpm run build
+# Build the workspace packages, encode WASM for plain HTTP, then build the app.
+# Do this before build.sh hashes the vendor tree, so sw.js names the served bytes.
+RUN pnpm -r run prepare && node bin/prepare-docker-wasm.mjs public && pnpm run build
 
 #FROM nginxinc/nginx-unprivileged:stable-alpine
 #COPY --from=builder /app/dist /usr/share/nginx/html

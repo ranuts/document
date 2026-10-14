@@ -72,13 +72,15 @@ Content-Type = "font/ttf"
 X-Robots-Tag = "noindex"
 
 # The x2t WASM: the single largest download, vendor-versioned. The file holds
-# brotli bytes; Content-Encoding is what makes the browser decode them (see the
-# same rule in public/_headers). Without it the editor gets an opaque blob and
-# never loads.
+# gzip bytes in the Docker image (bin/prepare-docker-wasm.mjs re-encodes the
+# builder's copy before build.sh hashes it). Chrome will not decode Brotli on
+# ordinary http://<server-ip> origins (#267), so only HTTPS Pages keeps Brotli.
+# The loader URL keeps its .br suffix; Content-Encoding describes the actual
+# transport bytes. Leave Content-Type as octet-stream to avoid recompression.
 [[advanced.headers]]
 source = "/sdkjs/common/wasm/x2t/x2t.wasm.br"
 [advanced.headers.headers]
-Content-Encoding = "br"
+Content-Encoding = "gzip"
 Cache-Control = "public, max-age=31536000, immutable"
 
 # Same narrow model-Worker policy as Pages and Vite.

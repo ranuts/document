@@ -69,10 +69,10 @@ export class X2TConverter {
    * handing Emscripten the bytes via `Module.wasmBinary` (see
    * prepareWasmBinary), so x2t.js never fetches the module itself either way.
    *
-   * The file behind that URL holds brotli bytes and every host we deploy to
-   * declares `Content-Encoding: br` for it, so the browser decodes it at the
-   * network layer: 6.6 MB on the wire, under Cloudflare Pages' 25 MiB-per-file
-   * deploy limit, and nothing here decompresses anything.
+   * HTTPS Pages serves Brotli (6.6 MB, under its 25 MiB-per-file limit).
+   * Docker re-encodes the same URL as gzip to support ordinary HTTP (#267).
+   * Each host declares the matching Content-Encoding, so the browser decodes
+   * it at the network layer and nothing here decompresses anything.
    *
    * Kept in step with the same two paths in the vendor-side loader
    * (public/sdkjs/common/wasm/x2t/x2t_helper.js), which is what the editor
@@ -181,8 +181,8 @@ export class X2TConverter {
 
     // Fetched through fetchWasmResponse so this path survives the same
     // transient CDN answers the streaming one does. The response body is
-    // already the decoded module: the host declares `Content-Encoding: br`
-    // for this URL and the browser undoes it.
+    // already the decoded module: the host declares the matching
+    // Content-Encoding for this URL and the browser undoes it.
     const response = await fetchWasmResponse(this.WASM_PATH);
     const wasmBinary = await response.arrayBuffer();
 

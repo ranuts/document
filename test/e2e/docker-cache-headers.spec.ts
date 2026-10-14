@@ -48,4 +48,32 @@ test.describe('self-hosted image cache headers', () => {
     const second = await request.get('/editor.html', { headers: { 'If-Modified-Since': lastModified } });
     expect(second.status()).toBe(304);
   });
+
+  test('x2t decodes and compiles on ordinary HTTP outside localhost', async ({ page, baseURL, l0 }) => {
+    // Mapped to the container by playwright.docker.config.ts. Loopback URLs
+    // are trustworthy in Chrome and would hide the Brotli failure (#267).
+    const origin = new URL(baseURL!);
+    origin.hostname = 'document-http.test';
+    // Isolation headers are intentionally ignored on insecure HTTP; this
+    // test probes WASM transport, which does not require shared memory.
+    l0.allowConsole(/Cross-Origin-Opener-Policy header has been ignored/);
+    await page.goto(origin.href);
+    expect(await page.evaluate(() => window.isSecureContext)).toBe(false);
+    const result = await page.evaluate(async () => {
+      const response = await fetch('/sdkjs/common/wasm/x2t/x2t.wasm.br');
+      const encoding = response.headers.get('content-encoding');
+      const bytes = await response.arrayBuffer();
+      const module = await WebAssembly.compile(bytes);
+      return {
+        status: response.status,
+        encoding,
+        magic: Array.from(new Uint8Array(bytes).subarray(0, 8)),
+        exports: WebAssembly.Module.exports(module).length,
+      };
+    });
+    expect(result.status).toBe(200);
+    expect(result.encoding).toBe('gzip');
+    expect(result.magic).toEqual([0, 97, 115, 109, 1, 0, 0, 0]);
+    expect(result.exports).toBeGreaterThan(0);
+  });
 });

@@ -29,6 +29,11 @@ export default defineConfig({
   reporter: [['list'], ['html', { outputFolder: 'playwright-report-docker', open: 'never' }]],
   use: {
     baseURL: 'http://127.0.0.1:8090',
+    // Exercise an untrustworthy HTTP origin too: localhost would conceal
+    // Chrome's refusal to decode Brotli on plain HTTP self-hosting (#267).
+    launchOptions: {
+      args: ['--host-resolver-rules=MAP document-http.test 127.0.0.1', '--no-proxy-server'],
+    },
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
