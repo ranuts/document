@@ -23,6 +23,17 @@ Current code facts:
 
 No claim is made about actual model latency or answer quality without measurement.
 
+### Follow-up: immediate process feedback
+
+The user reports long waits before browser-local answers and requests visible
+process feedback. Show actual host phases immediately: request classification,
+reading content and generating an answer. Keep human review a resting state.
+Elapsed waiting time is measured locally, does not announce every tick to screen
+readers, and ends on completion, Stop, failure, view disposal or a new turn.
+Streaming text still appears as it arrives. Do not expose simulated reasoning,
+invent percentages or claim that process visibility speeds up model computation.
+Keep provider settings, inference and history contracts unchanged.
+
 ## Experience
 
 1. Open the assistant to see the current document scope and a compact set of
