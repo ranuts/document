@@ -42,11 +42,23 @@ Override the look via the `--cui-*` custom properties on `.cui-root`.
 - `append({ role, text })` — add a finished message (`user` / `agent` / `tool` / `status` / `error`).
 - `appendDelta(text)` — stream text into a live agent bubble (auto-created).
 - `endStream()` — finalise the streaming bubble.
-- `setRunning(bool)` — toggle Send⇄Stop and lock the input.
+- `setRunning(bool)` — toggle Send⇄Stop while keeping the next draft editable; never queue it.
 - `clear()` — remove all messages.
 - `getInput()` / `setInput(text)` / `focus()` — input helpers.
 - `setLabels(labels)` — update labels live (e.g. language change).
 - `actionsEl` — host-populated slot above the input (compose toolbar); collapses when empty.
+
+Hosts may mark validated document content with `documentArtifact: true` in
+`append(...)` or the metadata argument to `appendDelta(...)`. It receives a
+document-draft header; ordinary chat prose and tool receipts remain distinct.
+Localize the header through `labels.documentDraft` and `labels.incomplete`.
+Interrupted output remains copyable and is labeled incomplete, with no write
+action. Header text is never included in copied or applied content.
+
+An explicit `onApplyMessage` callback owns writing. Use
+`requireDocumentArtifact: true` to restrict this callback to host-marked content;
+streaming, interrupted and `copyOnly` results cannot offer it. Only explicit
+`endStream()` makes a completed streamed result available to that host action.
 
 Intentional cancellation can use `status`: plain muted text with the same draft recovery as an error, without an error border. Status text is never returned by `getLastAnswer()` or offered as document content.
 

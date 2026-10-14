@@ -10,26 +10,37 @@ import { Style } from 'ranui/builder';
  * with an embedded circular send button; subtle tool/error chips.
  */
 export const CHAT_UI_CSS = `
-.cui-root { --cui-accent:var(--ran-color-primary, #171717); --cui-accent-contrast:var(--ran-color-primary-text, #fff); --cui-bg:var(--ran-color-bg, #fff); --cui-user-bg:var(--ran-color-bg-muted, #f4f4f4); --cui-text:var(--ran-color-text, #171717); --cui-muted:var(--ran-color-text-secondary, #737373); --cui-border:var(--ran-color-border, #e5e5e5); position:relative; display:flex; flex-direction:column; min-height:0; height:100%; background:var(--cui-bg); color:var(--cui-text); font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased; }
-.cui-messages { flex:1 1 auto; min-height:0; overflow:auto; overflow-x:hidden; padding:24px 20px; display:flex; flex-direction:column; gap:24px; overscroll-behavior:contain; scrollbar-width:thin; }
+.cui-root { --cui-accent:var(--ran-color-primary, #171717); --cui-accent-contrast:var(--ran-color-primary-text, #fff); --cui-bg:var(--ran-color-bg, #fff); --cui-user-bg:var(--ran-color-bg-muted, #f4f4f4); --cui-text:var(--ran-color-text, #171717); --cui-muted:var(--ran-color-text-secondary, #737373); --cui-border:var(--ran-color-border, #e5e5e5); --cui-surface:var(--ran-color-bg-subtle, var(--cui-user-bg)); position:relative; display:flex; flex-direction:column; min-height:0; height:100%; background:var(--cui-bg); color:var(--cui-text); font-family:var(--ran-font-family, system-ui, sans-serif); font-size:var(--ran-text-copy-2, 14px); line-height:1.7; -webkit-font-smoothing:antialiased; }
+.cui-messages { flex:1 1 auto; min-height:0; overflow:auto; overflow-x:hidden; padding:var(--ran-space-6, 24px) var(--ran-space-4, 16px); display:flex; flex-direction:column; gap:var(--ran-space-6, 24px); overscroll-behavior:contain; scrollbar-width:thin; }
 .cui-empty { margin:auto; max-width:260px; padding:32px 8px; text-align:left; font-size:22px; font-weight:500; line-height:1.45; letter-spacing:-.035em; color:var(--cui-text); }
 .cui-empty-actions { margin-top:20px; font-size:12px; letter-spacing:0; font-weight:400; }
 .cui-empty-actions button { font:inherit; color:var(--cui-muted); border:1px solid var(--cui-border); background:transparent; padding:7px 12px; border-radius:8px; cursor:pointer; }
-.cui-msg { display:flex; flex-direction:column; gap:8px; min-width:0; }
+.cui-msg { display:flex; flex-direction:column; gap:var(--ran-space-2, 8px); min-width:0; }
 .cui-bubble { white-space:pre-wrap; overflow-wrap:anywhere; }
 .cui-msg-user { align-self:flex-end; max-width:88%; }
 .cui-msg-user .cui-bubble { background:var(--cui-user-bg); padding:10px 14px; border-radius:16px; }
 .cui-msg-agent { align-self:stretch; }
+/* Only host-marked content receives a document surface. Ordinary answers keep
+   the full reading width and receipts keep their separate disclosure. */
+.cui-msg-agent[data-document-artifact] { box-sizing:border-box; padding:var(--ran-space-4, 16px); gap:var(--ran-space-3, 12px); border:1px solid var(--cui-border); border-radius:var(--ran-radius-md, 12px); background:var(--cui-surface); }
+.cui-result-header { display:flex; align-items:center; min-width:0; gap:var(--ran-space-2, 8px); color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); font-weight:var(--ran-text-label-weight, 500); line-height:1.5; }
+.cui-result-icon { display:inline-flex; flex:0 0 var(--ran-size-1, 16px); align-items:center; justify-content:center; }
+.cui-result-icon svg { width:var(--ran-size-1, 16px); height:var(--ran-size-1, 16px); }
+.cui-result-label { overflow-wrap:anywhere; }
+.cui-msg-agent[data-document-artifact] .cui-message-actions { border-top:1px solid var(--cui-border); padding-top:var(--ran-space-2, 8px); }
+.cui-msg-agent[data-interrupted] .cui-result-icon { opacity:.65; }
 .cui-msg-agent .cui-bubble { white-space:normal; }
 .cui-bubble p { margin:0 0 12px; }
 .cui-bubble p:last-child { margin-bottom:0; }
-.cui-bubble h2,.cui-bubble h3,.cui-bubble h4,.cui-bubble h5,.cui-bubble h6 { font-size:1.08em; line-height:1.45; margin:20px 0 8px; font-weight:600; }
+.cui-bubble h2,.cui-bubble h3,.cui-bubble h4,.cui-bubble h5,.cui-bubble h6 { font-size:inherit; line-height:1.4; margin:var(--ran-space-6, 24px) 0 var(--ran-space-2, 8px); font-weight:var(--ran-text-heading-weight, 600); text-wrap:pretty; }
+.cui-bubble h2 { font-size:var(--ran-text-heading-3, 20px); letter-spacing:var(--ran-text-heading-tracking, -.03em); }
+.cui-bubble h3 { font-size:var(--ran-text-heading-4, 16px); }
 .cui-bubble :is(h2,h3,h4,h5,h6):first-child { margin-top:0; }
 .cui-bubble ul,.cui-bubble ol { padding-left:22px; margin:8px 0 14px; }
 .cui-bubble li { padding-left:2px; margin:4px 0; }
 .cui-bubble blockquote { margin:12px 0; border-left:2px solid var(--cui-border); padding-left:12px; color:var(--cui-muted); }
-.cui-bubble code { font-family:ui-monospace,monospace; font-size:.88em; background:var(--cui-user-bg); padding:2px 4px; border-radius:4px; }
-.cui-bubble pre { margin:12px 0; background:var(--cui-user-bg); padding:12px; border-radius:10px; overflow:auto; white-space:pre; }
+.cui-bubble code { font-family:var(--ran-font-mono, ui-monospace, monospace); font-size:.88em; background:var(--cui-user-bg); padding:2px 4px; border-radius:4px; }
+.cui-bubble pre { margin:var(--ran-space-3, 12px) 0; border:1px solid var(--cui-border); background:var(--cui-user-bg); padding:var(--ran-space-3, 12px); border-radius:var(--ran-radius-sm, 6px); overflow:auto; white-space:pre; line-height:1.55; }
 .cui-bubble pre code { padding:0; background:none; }
 .cui-bubble > :first-child { margin-top:0; }
 .cui-bubble > :last-child { margin-bottom:0; }
@@ -38,26 +49,28 @@ export const CHAT_UI_CSS = `
 .cui-bubble li > :is(ul,ol) { margin-bottom:0; }
 .cui-bubble pre,.cui-table { max-width:100%; box-sizing:border-box; overscroll-behavior-x:contain; }
 .cui-bubble a { color:var(--cui-text); text-underline-offset:3px; }
-.cui-table { overflow:auto; margin:12px 0; }
+.cui-table { overflow:auto; margin:var(--ran-space-3, 12px) 0; border:1px solid var(--cui-border); border-radius:var(--ran-radius-sm, 6px); }
 .cui-table table { border-collapse:collapse; font-size:inherit; min-width:100%; overflow-wrap:normal; }
-.cui-table th,.cui-table td { border-bottom:1px solid var(--cui-border); padding:8px; text-align:left; }
-.cui-message-actions { display:flex; gap:8px; }
-.cui-message-actions button { border:0; background:transparent; color:var(--cui-muted); cursor:pointer; font:inherit; font-size:11px; min-height:28px; padding:4px; border-radius:6px; }
-.cui-message-actions button:hover { color:var(--cui-text); background:var(--cui-user-bg); }
+.cui-table th,.cui-table td { border-bottom:1px solid var(--cui-border); padding:var(--ran-space-2, 8px) var(--ran-space-3, 12px); text-align:left; vertical-align:top; }
+.cui-table th { background:var(--cui-user-bg); font-weight:var(--ran-text-label-weight, 500); font-size:var(--ran-text-label-2, 13px); }
+.cui-table tr:last-child td { border-bottom:0; }
+.cui-message-actions { display:flex; align-items:center; flex-wrap:wrap; gap:var(--ran-space-2, 8px); }
+.cui-message-actions button { border:0; background:transparent; color:var(--cui-muted); cursor:pointer; font:inherit; font-size:var(--ran-text-label-3, 12px); min-height:var(--ran-size-7, 32px); padding:var(--ran-space-1, 4px) var(--ran-space-2, 8px); border-radius:var(--ran-radius-sm, 6px); transition:background-color var(--ran-motion-duration-fast, .15s), color var(--ran-motion-duration-fast, .15s); }
+.cui-message-actions button:hover:not(:disabled) { color:var(--cui-text); background:var(--cui-user-bg); }
 .cui-message-actions button:disabled { opacity:.5; cursor:default; }
-.cui-message-actions .cui-copy { flex:0 0 28px; width:28px; display:inline-flex; align-items:center; justify-content:center; }
+.cui-message-actions .cui-copy { flex:0 0 var(--ran-size-7, 32px); width:var(--ran-size-7, 32px); padding:0; display:inline-flex; align-items:center; justify-content:center; }
 .cui-message-actions .cui-copy svg { flex-shrink:0; }
 .cui-feedback { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
-.cui-root :is(button,pre,.cui-table):focus-visible { outline:var(--ran-focus-ring, 2px solid var(--ran-color-link, #0070f3)); outline-offset:3px; }
+.cui-root :is(button,summary,pre,.cui-table):focus-visible { outline:2px solid var(--ran-color-link, #0070f3); outline-offset:3px; }
 .cui-streaming .cui-message-actions { display:none; }
 .cui-streaming .cui-bubble { white-space:pre-wrap; }
-.cui-activity { color:var(--cui-muted); font-size:12px; margin:-10px 0; white-space:pre-wrap; overflow-wrap:anywhere; }
-.cui-activity summary { cursor:pointer; padding:6px 0; }
-.cui-activity ul { list-style:none; margin:4px 0 8px 5px; border-left:1px solid var(--cui-border); padding-left:16px; }
+.cui-activity { box-sizing:border-box; color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); line-height:1.6; padding:var(--ran-space-1, 4px) 0 var(--ran-space-1, 4px) var(--ran-space-3, 12px); border-left:1px solid var(--cui-border); white-space:pre-wrap; overflow-wrap:anywhere; }
+.cui-activity summary { cursor:pointer; padding:var(--ran-space-1, 4px) 0; border-radius:var(--ran-radius-sm, 6px); }
+.cui-activity ul { list-style:none; margin:var(--ran-space-1, 4px) 0 0; padding-left:var(--ran-space-4, 16px); }
 .cui-activity li { padding:4px 0; }
 .cui-msg-status { color:var(--cui-muted); font-size:12px; }
 .cui-msg-error .cui-bubble { padding:12px; border:1px solid var(--cui-border); border-radius:10px; font-size:13px; }
-.cui-status { flex:0 0 auto; display:flex; align-items:center; gap:8px; padding:0 20px 12px; color:var(--cui-muted); font-size:12px; line-height:1.5; }
+.cui-status { flex:0 0 auto; display:flex; align-items:center; gap:8px; padding:0 var(--ran-space-4, 16px) var(--ran-space-3, 12px); color:var(--cui-muted); font-size:12px; line-height:1.5; }
 .cui-status:empty { display:none; }
 /* One activity cue at a time: the waiting row gives way to the live-text
    cursor when responding. A human review is a resting state, not loading. */
@@ -80,6 +93,7 @@ export const CHAT_UI_CSS = `
 @keyframes cui-loading-turn { to { transform:rotate(360deg); } }
 @keyframes cui-answer-pulse { 0%,100% { opacity:.45; transform:scale(.85); } 50% { opacity:1; transform:scale(1.15); } }
 @media (prefers-reduced-motion:reduce) {
+  .cui-message-actions button { transition:none; }
   .cui-root[data-activity] .cui-status::before,.cui-root[data-activity] .cui-streaming .cui-bubble::after { animation:none; transform:none; opacity:1; }
 }
 `;
