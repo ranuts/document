@@ -4,7 +4,9 @@ import { buildDocx, toBase64 } from './lib/ooxml';
 // Native editors and the real composer run. Browser speech events and an AI
 // endpoint are controlled so permissions, cancellation and latency are repeatable.
 for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
-  test(`${ext}: dictation stays in composer flow and explicit Send finalizes the transcript`, async ({ page }) => {
+  test(`${ext}: dictation stays in composer flow and explicit Send finalizes the transcript`, async ({
+    page,
+  }, testInfo) => {
     test.setTimeout(120_000);
     let pdf: number[] | undefined;
     if (ext === 'pdf') {
@@ -37,19 +39,13 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       state.SpeechRecognition = class {
         onstart?: () => void;
         onend?: () => void;
+        onerror?: (event: { error: string }) => void;
         onresult?: (event: unknown) => void;
         constructor() {
           state.recognition = this;
         }
-        start() {
-          this.onstart?.();
-        }
-        stop() {
-          setTimeout(() => {
-            this.onresult?.({ results: [{ isFinal: true, 0: { transcript: 'Hello from dictation' } }] });
-            this.onend?.();
-          }, 100);
-        }
+        start() {}
+        stop() {}
         abort() {}
       };
     });
@@ -87,14 +83,33 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
     await send.click();
     await expect(send).toHaveAccessibleName('Send');
     await input.fill('');
+    const composer = page.locator('.cui-composer');
+    const idle = await composer.boundingBox();
+    const messagesBox = await page.locator('.cui-messages').boundingBox();
     await page.locator('.agent-speech-mic').click();
+    await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'starting');
+    expect(await composer.boundingBox()).toEqual(idle);
+    await page.evaluate(() => {
+      (window as unknown as { recognition: { onstart: () => void } }).recognition.onstart();
+    });
     await expect(page.locator('.agent-speech-feedback')).toContainText('Listening');
+    if (ext === 'docx') {
+      await expect(page.locator('r-popover.agent-speech-privacy')).toHaveAttribute('open', '');
+      await page.waitForTimeout(3200);
+      await expect(page.locator('r-popover.agent-speech-privacy')).not.toHaveAttribute('open');
+      await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'listening');
+    }
+    const listening = await composer.boundingBox();
+    expect(listening!.height).toBeCloseTo(idle!.height, 0);
+    expect(listening!.y).toBeCloseTo(idle!.y, 0);
+    expect((await page.locator('.cui-messages').boundingBox())!.height).toBeCloseTo(messagesBox!.height, 0);
     await page.evaluate(() => {
       const recognition = (window as unknown as { recognition: { onresult: (e: unknown) => void } }).recognition;
       recognition.onresult({ results: [{ isFinal: false, 0: { transcript: 'Hello' } }] });
     });
     await expect(input).toHaveValue('Hello');
     expect(messages).toBe(0);
+    if (ext === 'docx') await page.screenshot({ path: testInfo.outputPath('speech-listening.png') });
     const layout = await page.locator('.agent-speech-feedback').evaluate((el) => {
       const box = el.getBoundingClientRect();
       const input = document.querySelector('.cui-input')!.getBoundingClientRect();
@@ -107,17 +122,99 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
     });
     expect(layout).toEqual({ position: 'static', afterInput: true, insideComposer: true });
     await expect(send).toBeEnabled();
+    const beforeFinish = await composer.boundingBox();
+    await page.locator('.agent-speech-mic').click();
+    await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'finishing');
+    const finishing = await composer.boundingBox();
+    expect(finishing!.height).toBeCloseTo(beforeFinish!.height, 0);
+    expect(finishing!.y).toBeCloseTo(beforeFinish!.y, 0);
     await send.click();
+    await page.evaluate(() => {
+      const recognition = (window as unknown as { recognition: { onresult: (e: unknown) => void; onend: () => void } })
+        .recognition;
+      recognition.onresult({ results: [{ isFinal: true, 0: { transcript: 'Hello from dictation' } }] });
+      recognition.onend();
+    });
     await expect(page.locator('.cui-msg-user')).toHaveText('Hello from dictation');
     await expect(page.locator('.cui-msg-agent')).toContainText('Hello!');
     expect(messages).toBe(1);
     await expect(input).toHaveValue('');
     await expect(page.locator('.agent-speech-feedback')).toBeHidden();
     await expect(page.locator('.agent-speech-mic')).toHaveAttribute('aria-pressed', 'false');
-    await input.fill('Keep this draft');
+    const longDraft = Array.from({ length: 12 }, (_, i) => `Keep draft line ${i + 1}`).join('\n');
+    await input.fill(longDraft);
+    const disclosure = page.locator('.agent-speech-privacy');
+    const privacyToggle = disclosure.locator('button');
+    const beforePrivacy = await composer.boundingBox();
+    await privacyToggle.focus();
+    await privacyToggle.press('Enter');
+    await expect(disclosure).toHaveAttribute('open', '');
+    expect(await composer.boundingBox()).toEqual(beforePrivacy);
+    if (ext === 'docx') {
+      await page.waitForTimeout(3200);
+      await expect(disclosure).toHaveAttribute('open', '');
+    }
+    await privacyToggle.press('Escape');
+    await expect(disclosure).not.toHaveAttribute('open');
+    await expect(privacyToggle).toBeFocused();
+    if (ext === 'docx') {
+      await privacyToggle.press('Enter');
+      await input.focus();
+      await page.locator('.agent-speech-hint').hover();
+      await page.waitForTimeout(3200);
+      await expect(disclosure).toHaveAttribute('open', '');
+      await page.mouse.move(0, 0);
+      await page.waitForTimeout(3200);
+      await expect(disclosure).not.toHaveAttribute('open');
+      expect(await composer.boundingBox()).toEqual(beforePrivacy);
+    }
     await page.locator('.agent-speech-mic').click();
     await page.locator('.agent-speech-cancel').click();
-    await expect(input).toHaveValue('Keep this draft');
+    await expect(input).toHaveValue(longDraft);
+    await expect(page.locator('.agent-speech-mic')).toBeFocused();
+    expect(await composer.boundingBox()).toEqual(beforePrivacy);
+    if (ext === 'docx') await page.screenshot({ path: testInfo.outputPath('speech-idle-long-draft.png') });
     expect(messages).toBe(1);
+    if (ext === 'docx') {
+      await page.locator('.agent-panel-resizer').press('Home');
+      await expect(page.locator('.agent-panel-resizer')).toHaveAttribute('aria-valuenow', '320');
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      const compact = await composer.boundingBox();
+      await page.locator('.agent-speech-mic').click();
+      expect(await composer.boundingBox()).toEqual(compact);
+      const controls = await page.locator('.agent-speech').evaluate((el) => ({
+        overflow: el.scrollWidth > el.clientWidth,
+        animation: getComputedStyle(el.querySelector('.agent-speech-mic')!, '::before').animationName,
+      }));
+      expect(controls).toEqual({ overflow: false, animation: 'none' });
+      await page.evaluate(() => {
+        (window as unknown as { recognition: { onstart: () => void } }).recognition.onstart();
+      });
+      expect(await composer.boundingBox()).toEqual(compact);
+      const liveStatus = page.locator('.agent-speech-feedback [role="status"]');
+      await expect(liveStatus).toHaveText('Listening…');
+      expect(await liveStatus.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+      await expect(page.locator('.agent-speech-language')).toBeHidden();
+      await page.screenshot({ path: testInfo.outputPath('speech-compact.png') });
+      await page.evaluate(() => {
+        (window as unknown as { recognition: { onerror: (event: { error: string }) => void } }).recognition.onerror({
+          error: 'not-allowed',
+        });
+      });
+      await expect(liveStatus).toContainText('Microphone permission denied');
+      const errorWidth = await liveStatus.evaluate((el) => el.clientWidth);
+      expect(errorWidth).toBeGreaterThan(100);
+      await expect(disclosure).not.toHaveAttribute('open', { timeout: 4500 });
+      await expect(liveStatus).toContainText('Microphone permission denied');
+      await privacyToggle.click();
+      await expect(page.locator('.agent-speech-hint')).toContainText('Microphone permission denied');
+      await input.click();
+      await expect(disclosure).not.toHaveAttribute('open');
+      await page.locator('.agent-speech-mic').click();
+      await page.locator('.agent-speech-cancel').click();
+      await expect(input).toHaveValue(longDraft);
+      await expect(page.locator('.agent-speech-language')).toBeVisible();
+      expect(await composer.boundingBox()).toEqual(compact);
+    }
   });
 }
