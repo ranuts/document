@@ -97,6 +97,8 @@ export class ChatView {
   private liveText = '';
   private presentationCallback?: () => void;
   private presentationCandidate?: HTMLElement;
+  private presentationRevision = 0;
+  private livePresentationRevision?: number;
   private liveMarkdown?: StreamingMarkdown;
   private liveNode: Text | null = null;
   private pendingText = '';
@@ -593,6 +595,7 @@ export class ChatView {
     const firstForPhase = !this.respondingHasText;
     this.respondingHasText = true;
     if (!this.liveMsg) {
+      this.livePresentationRevision = this.presentationRevision;
       this.liveMsg = this.append({ role: 'agent', text: '', ...metadata }).parentElement as HTMLDivElement;
       this.liveMsg.classList.add('cui-streaming');
       if (this.options.streamingMarkdown) this.liveMsg.classList.add('cui-streaming-markdown');
@@ -621,7 +624,13 @@ export class ChatView {
     if (this.liveMsg) this.liveMsg.dataset.source = this.liveText;
     const bubble = this.liveMsg?.querySelector<HTMLElement>('.cui-bubble');
     if (bubble && !this.liveMarkdown) renderMarkdown(bubble, this.liveText);
-    if (bubble && this.liveText && this.presentationCallback) this.presentationCandidate = bubble;
+    if (
+      bubble &&
+      this.liveText &&
+      this.presentationCallback &&
+      this.livePresentationRevision === this.presentationRevision
+    )
+      this.presentationCandidate = bubble;
     this.liveMarkdown = undefined;
     this.liveMsg?.classList.remove('cui-streaming', 'cui-streaming-markdown');
     this.liveMsg = null;
@@ -1027,8 +1036,9 @@ export class ChatView {
     });
   }
 
-  /** Arm one request-owned DOM observation; replacement and cancellation discard the old owner. */
+  /** Arm one observation for a fresh stream/append; replacement never adopts an existing live stream. */
   observePresentation(callback?: () => void): void {
+    this.presentationRevision++;
     this.presentationCallback = this.disposed ? undefined : callback;
     this.presentationCandidate = undefined;
   }
@@ -1109,7 +1119,7 @@ export class ChatView {
       if (format) this.liveMarkdown.update(this.liveText);
       else this.liveMarkdown.raw(this.liveText);
     } else this.liveNode?.appendData(this.pendingText);
-    if (this.presentationCallback)
+    if (this.presentationCallback && this.livePresentationRevision === this.presentationRevision)
       this.presentationCandidate = this.liveMsg.querySelector<HTMLElement>('.cui-bubble') ?? undefined;
     this.pendingText = '';
   }

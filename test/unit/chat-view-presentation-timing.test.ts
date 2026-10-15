@@ -88,12 +88,74 @@ it('replaces ownership and limits text measurement even on a giant raw answer', 
   view.observePresentation(stale);
   view.appendDelta('Old');
   view.observePresentation(current);
+  view.endStream();
+  expect(current).not.toHaveBeenCalled();
   view.appendDelta('x'.repeat(108_000));
   flush();
   expect(stale).not.toHaveBeenCalled();
   expect(current).toHaveBeenCalledOnce();
   expect(ranges.every(([start, end]) => end - start <= 64)).toBe(true);
   expect(ranges.length).toBeLessThanOrEqual(16);
+});
+
+it.each(['queued-frame', 'completion', 'completion-then-frame', 'continued-old-stream'] as const)(
+  'does not present old stream content to a replacement observer through %s',
+  (action) => {
+    const old = vi.fn();
+    const current = vi.fn();
+    view.observePresentation(old);
+    view.appendDelta('Old request output');
+    const originalRow = view.el.querySelector('.cui-msg-agent');
+    view.observePresentation(current);
+    if (action === 'continued-old-stream') view.appendDelta(' continued');
+    if (action === 'completion' || action === 'completion-then-frame') view.endStream();
+    if (action !== 'completion') flush();
+    expect(old).not.toHaveBeenCalled();
+    expect(current).not.toHaveBeenCalled();
+    expect(view.el.querySelector('.cui-msg-agent')).toBe(originalRow);
+    expect(originalRow?.querySelector('.cui-bubble')?.textContent).toBe(
+      action === 'continued-old-stream' ? 'Old request output continued' : 'Old request output',
+    );
+  },
+);
+
+it.each([true, false])('waits for a new stream when rearming the same callback (Markdown %s)', (streamingMarkdown) => {
+  view.dispose();
+  view.el.remove();
+  view = new ChatView({ onSend: vi.fn(), streamingMarkdown });
+  document.body.append(view.el);
+  const presented = vi.fn();
+  view.observePresentation(presented);
+  view.appendDelta('Old request');
+  view.observePresentation(presented);
+  view.endStream();
+  flush();
+  expect(presented).not.toHaveBeenCalled();
+  view.appendDelta('Current request');
+  flush();
+  expect(presented).toHaveBeenCalledOnce();
+  view.endStream();
+  expect([...view.el.querySelectorAll<HTMLElement>('.cui-msg-agent')].map((row) => row.dataset.source)).toEqual([
+    'Old request',
+    'Current request',
+  ]);
+});
+
+it('does not adopt a previously flushed stream when its late tail or completion arrives', () => {
+  const old = vi.fn();
+  const current = vi.fn();
+  view.observePresentation(old);
+  view.appendDelta('Already presented');
+  flush();
+  expect(old).toHaveBeenCalledOnce();
+  view.observePresentation(current);
+  view.appendDelta(' late old tail');
+  flush();
+  view.endStream();
+  expect(current).not.toHaveBeenCalled();
+  expect(view.getLastAnswer()).toBe('Already presented late old tail');
+  view.append({ role: 'agent', text: 'New completed request' });
+  expect(current).toHaveBeenCalledOnce();
 });
 
 it('keeps provider-boundary, filtered and actual frame presentation clocks distinct end to end', async () => {

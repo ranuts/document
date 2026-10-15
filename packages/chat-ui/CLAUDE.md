@@ -186,3 +186,8 @@ The input cap bounds lexer input, not elapsed time on every device. See the
 [Streamdown memoization reference](https://streamdown.ai/docs/memoization) and
 [termination reference](https://streamdown.ai/docs/termination) for the design
 inspiration; this component deliberately preserves raw incomplete source.
+
+`observePresentation(callback?)` owns a fresh stream or completed append. Each
+call advances a distinct revision; a live stream retains its creation revision
+through flush/completion. Replacement must not adopt old buffered content or a
+late tail, including when the host rearms the same callback function.
