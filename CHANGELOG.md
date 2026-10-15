@@ -14,7 +14,8 @@ notes. Entries describe what users experience, not internal refactors.
 - Docker deployments accessed over ordinary HTTP can load the document converter
   in Chrome without a WASM content-decoding error ([#267](https://github.com/ranuts/document/issues/267)).
 - Stopping a browser-local assistant response no longer prevents the next question
-  from being answered.
+  from being answered. Stop responds immediately and keeps your next draft and
+  partial answer available.
 - Cancelling a save keeps the unsaved-changes warning and recovery status intact.
 - Exporting another format, such as PDF, preserves the original document file
   and its ordinary save target, including when the export is cancelled or fails.
@@ -38,6 +39,7 @@ notes. Entries describe what users experience, not internal refactors.
 
 - **Find earlier assistant conversations.** Search titles and messages locally,
   browse recent chats by date and see the current conversation at a glance.
+  Large histories load in pages and search without rebuilding every conversation.
   Compact row actions confirm which conversation will be deleted; history
   saving and data tools stay available in a collapsed section.
 
@@ -47,11 +49,18 @@ notes. Entries describe what users experience, not internal refactors.
   Reading progress names the actual scope, and spreadsheet reviews distinguish
   formulas from calculated values.
 
-- **Keep writing while the assistant responds.** Prepare the next request without
-  sending it automatically. Reading older messages keeps your place, and activity
-  hints distinguish reading, responding and waiting for your review.
+- **Keep going while the assistant responds.** Send follow-ups to a queue, edit or
+  remove them, or choose Send now. Older queued requests pause after Stop or an
+  error; resume when ready. Document changes still wait for your review.
+  Reading older messages keeps your place, and activity hints distinguish
+  reading, responding and waiting for your review.
   The draft adapts when you resize the sidebar, and long drafts scroll inside the
   input. Copy feedback stays compact; code and tables can be navigated by keyboard.
+
+- **Spend less time preparing simple requests.** Greetings and document-reading
+  shortcuts avoid unnecessary model steps. Ordinary chat no longer scans the
+  whole document before answering, and long source excerpts show when only part
+  of the content is included.
 
 - **Ask the assistant about the current PDF page and review notes before adding them.**
   It can read selectable page text and add page notes that you can undo. Scanned
