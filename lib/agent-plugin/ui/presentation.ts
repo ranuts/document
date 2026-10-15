@@ -132,6 +132,7 @@ export function displayError(error: unknown): string {
     text === 'agentSlideContentTooLong'
   )
     return t(text);
+  if (text === 'agentApplyBusy') return t('agentApplyBusy');
   if (text === 'agentContextTooLong') return t('agentContextTooLong');
   if (text === 'agentWritingNeedsLocalService') return t('agentWritingNeedsLocalService');
   if (text === 'agentWritingOfflineNeedsDevice') return t('agentWritingOfflineNeedsDevice');

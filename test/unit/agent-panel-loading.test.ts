@@ -3731,3 +3731,211 @@ it('retains unsupported native PDF preflight and its next request before any con
     vi.unstubAllGlobals();
   }
 });
+it.each(['stopped', 'failed'] as const)(
+  'serializes Apply on the retained original after a %s refinement before a fresh request',
+  async (outcome) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.editorKind = 'slide';
+    state.toolContext = 'slide';
+    let finishCandidate!: () => void;
+    state.toolPlan
+      .mockResolvedValueOnce({ tool: 'add_slide_text', input: { text: 'Original' }, readOnly: false })
+      .mockImplementationOnce(
+        () =>
+          new Promise((resolve, reject) => {
+            finishCandidate = () =>
+              outcome === 'failed'
+                ? reject(new Error('Candidate failed'))
+                : resolve({ tool: 'add_slide_text', input: { text: 'Late' }, readOnly: false });
+          }),
+      );
+    const calls: string[] = [];
+    state.queueStream = async (text) => {
+      calls.push(text);
+    };
+    const panel = createPreparedPanel();
+    document.body.append(panel);
+    enterQueueDraft(panel, 'Add a new text box on the current slide with this exact plain text: Original');
+    await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+    const original = panel.querySelector<HTMLElement>('.agent-plan-preview')!;
+    original.querySelector<HTMLElement>('.agent-plan-refine')!.click();
+    enterQueueDraft(panel, 'Change the suggestion text to Candidate');
+    await vi.waitFor(() => expect(finishCandidate).toBeTypeOf('function'));
+    if (outcome === 'stopped') panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+    finishCandidate();
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    expect(original.dataset.state).toBe('pending');
+    panel.querySelector<HTMLButtonElement>('.agent-refinement-context button')!.click();
+    let finishApply!: () => void;
+    state.apply.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishApply = () => resolve('verified');
+        }),
+    );
+    original.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+    await vi.waitFor(() => expect(finishApply).toBeTypeOf('function'));
+    enterQueueDraft(panel, 'Hello');
+    expect(calls).toEqual([]);
+    finishApply();
+    await vi.waitFor(() => expect(calls).toEqual(['Hello']));
+  },
+);
+it('serializes completed document-result Apply with a fresh Send until the actual write settles', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.toolContext = 'word';
+  state.semanticResponse = '{"task":"compose","language":"en"}';
+  const draft = await import('../../lib/agent-plugin/ui/document-draft');
+  const generate = vi.spyOn(draft, 'generateDocumentDraft').mockResolvedValue('Completed article');
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+  };
+  try {
+    const panel = createPreparedPanel();
+    document.body.append(panel);
+    enterQueueDraft(panel, 'Write an article about autumn');
+    await vi.waitFor(() => expect(panel.querySelector('.cui-apply')).not.toBeNull());
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    let finishApply!: () => void;
+    state.apply.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishApply = () => resolve('verified');
+        }),
+    );
+    panel.querySelector<HTMLButtonElement>('.cui-apply')!.click();
+    await vi.waitFor(() => expect(finishApply).toBeTypeOf('function'));
+    state.semanticResponse = undefined;
+    enterQueueDraft(panel, 'Hello');
+    expect(calls).toEqual([]);
+    finishApply();
+    await vi.waitFor(() => expect(calls).toEqual(['Hello']));
+  } finally {
+    generate.mockRestore();
+  }
+});
+it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent'] as const)(
+  'holds a retained native Apply through actual settlement during %s and records only verified owned execution',
+  async (mode) => {
+    state.nativeEndpoint = true;
+    state.editorReady = true;
+    state.editorKind = 'slide';
+    state.toolContext = 'slide';
+    const answers: string[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (_url: string, init: RequestInit) => {
+        const body = JSON.parse(String(init.body));
+        const messages = body.messages as Array<{ role: string; content: unknown }>;
+        const last = messages.filter((message) => message.role === 'user').at(-1)?.content;
+        for (const greeting of ['Hello', 'Hi'])
+          if (typeof last === 'string' && last.endsWith(`User request:\n${greeting}`)) answers.push(greeting);
+        return new Response(
+          JSON.stringify({
+            choices: [
+              {
+                message: body.tools?.length
+                  ? {
+                      content: null,
+                      tool_calls: [
+                        {
+                          id: 'original-native',
+                          type: 'function',
+                          function: { name: 'add_slide_text', arguments: JSON.stringify({ text: 'Original native' }) },
+                        },
+                      ],
+                    }
+                  : { content: 'Connected or answered' },
+                finish_reason: body.tools?.length ? 'tool_calls' : 'stop',
+              },
+            ],
+          }),
+        );
+      }),
+    );
+    let finishApply: (() => void) | undefined;
+    try {
+      const panel = createAgentPanel();
+      document.body.append(panel);
+      const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+      kind.value = 'openai-compatible';
+      kind.dispatchEvent(new Event('change'));
+      for (const [selector, value] of [
+        ['.agent-panel-endpoint-url', 'https://api.example.com/v1'],
+        ['.agent-panel-endpoint-model', 'tool-model'],
+        ['.agent-panel-endpoint-key', 'sk-test'],
+      ]) {
+        const field = panel.querySelector<HTMLInputElement>(selector)!;
+        field.value = value;
+        field.dispatchEvent(new Event('change'));
+      }
+      const connect = panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!;
+      connect.click();
+      await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+      enterQueueDraft(panel, 'Put a title on this slide');
+      await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+      const original = panel.querySelector<HTMLElement>('.agent-plan-preview')!;
+      if (mode === 'resume') enterQueueDraft(panel, 'Hello');
+      original.querySelector<HTMLElement>('.agent-plan-refine')!.click();
+      await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+      panel.querySelector<HTMLButtonElement>('.agent-refinement-context button')!.click();
+      let aborts = 0;
+      state.apply.mockImplementationOnce(
+        (signal?: AbortSignal) =>
+          new Promise((resolve, reject) => {
+            signal?.addEventListener('abort', () => aborts++);
+            finishApply = () =>
+              mode === 'failed' ? reject(new Error('Write failed')) : resolve(mode === 'sent' ? 'sent' : 'verified');
+          }),
+      );
+      original.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+      await vi.waitFor(() => expect(finishApply).toBeTypeOf('function'));
+      if (mode !== 'resume') enterQueueDraft(panel, 'Hello');
+      if (mode === 'resume') panel.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
+      if (mode === 'send-now') {
+        panel.querySelector<HTMLButtonElement>('.agent-queue-send-now')!.click();
+        panel.querySelector<HTMLButtonElement>('.agent-queue-send-now')!.click();
+      }
+      if (mode === 'provider') {
+        const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+        model.value = 'different-model';
+        model.dispatchEvent(new Event('change'));
+      }
+      if (mode === 'switch') {
+        panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+        enterQueueDraft(panel, 'Hi');
+      }
+      expect(answers).toEqual([]);
+      finishApply!();
+      if (mode === 'failed' || mode === 'sent') {
+        await vi.waitFor(() => expect(original.dataset.state).not.toBe('applying'));
+        expect(answers).toEqual([]);
+        panel.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
+      }
+      if (mode === 'provider') {
+        await vi.waitFor(() => expect(original.dataset.state).not.toBe('applying'));
+        expect(answers).toEqual([]);
+      } else await vi.waitFor(() => expect(answers).toEqual([mode === 'switch' ? 'Hi' : 'Hello']));
+      const history = state.conversations!.history().load();
+      const blocks = history.flatMap((message) => (typeof message.content === 'string' ? [] : message.content));
+      const receipts = blocks.filter(
+        (block) => block.type === 'tool_result' && JSON.parse(block.content).status === 'verified',
+      );
+      expect(receipts).toHaveLength(mode === 'fresh' || mode === 'resume' ? 1 : 0);
+      if (receipts[0]?.type === 'tool_result')
+        expect(blocks).toContainEqual({
+          type: 'tool_use',
+          id: receipts[0].toolUseId,
+          name: 'add_slide_text',
+          input: { text: 'Original native' },
+        });
+      if (mode === 'send-now') expect(aborts).toBe(1);
+    } finally {
+      finishApply?.();
+      vi.unstubAllGlobals();
+    }
+  },
+);

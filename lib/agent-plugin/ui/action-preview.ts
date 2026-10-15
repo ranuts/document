@@ -66,7 +66,7 @@ export class ActionPreview {
     this.labels();
     if (this.action && !this.settled && this.editor.hidden) this.renderComparison(this.action.review);
   };
-  constructor() {
+  constructor(private readonly options: { beforeApply?(): (status: 'success' | 'failed' | 'stopped') => void } = {}) {
     this.draft.className = 'agent-plan-draft';
     this.draft.maxLength = 8000;
     this.editor.hidden = true;
@@ -530,46 +530,57 @@ export class ActionPreview {
   private async apply(): Promise<void> {
     if (!this.action || this.settled || this.refining) return;
     const action = this.action;
-    this.settled = true;
-    this.stopObserving();
-    this.applyButton.setAttribute('disabled', '');
-    this.el.dataset.state = 'applying';
-    this.el.setAttribute('aria-busy', 'true');
-    this.secondary.open = false;
-    this.secondary.hidden = true;
-    this.editButton.hidden = this.refineButton.hidden = true;
-    this.copyButton.hidden = true;
-    this.status.textContent = t('agentPlanApplying');
-    this.labels();
-    // Apply owns this callback until its actual promise settles. pending() is
-    // deliberately false now; hide/invalidate must not release its queue early.
-    const signal = this.abort?.signal;
-    const onSettled = this.onSettled;
-    const onApplied = this.onApplied;
-    this.onSettled = undefined;
-    let outcome: ReviewOutcome;
+    let release: ((status: 'success' | 'failed' | 'stopped') => void) | undefined;
     try {
-      const result = await action.apply(signal);
-      if (signal?.aborted || this.action !== action) {
-        if (this.action === action) {
-          this.status.textContent = t('agentStopped');
-          this.finish('cancelled');
-        }
-        outcome = { status: 'cancelled', action };
-      } else {
-        onApplied?.(result, action);
-        this.status.textContent = t(result === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
-        this.finish(result);
-        outcome = { status: result, action };
-      }
+      release = this.options.beforeApply?.();
     } catch (error) {
-      if (this.action === action) {
-        this.status.textContent = signal?.aborted ? t('agentStopped') : displayError(error);
-        this.finish('failed');
-      }
-      outcome = signal?.aborted ? { status: 'cancelled', action } : { status: 'failed', action, error };
+      this.status.textContent = displayError(error);
+      return;
     }
-    onSettled?.(outcome);
+    let outcome: ReviewOutcome | undefined;
+    try {
+      this.settled = true;
+      this.stopObserving();
+      this.applyButton.setAttribute('disabled', '');
+      this.el.dataset.state = 'applying';
+      this.el.setAttribute('aria-busy', 'true');
+      this.secondary.open = false;
+      this.secondary.hidden = true;
+      this.editButton.hidden = this.refineButton.hidden = true;
+      this.copyButton.hidden = true;
+      this.status.textContent = t('agentPlanApplying');
+      this.labels();
+      // Apply owns this callback until its actual promise settles. pending() is
+      // deliberately false now; hide/invalidate must not release its queue early.
+      const signal = this.abort?.signal;
+      const onSettled = this.onSettled;
+      const onApplied = this.onApplied;
+      this.onSettled = undefined;
+      try {
+        const result = await action.apply(signal);
+        if (signal?.aborted || this.action !== action) {
+          if (this.action === action) {
+            this.status.textContent = t('agentStopped');
+            this.finish('cancelled');
+          }
+          outcome = { status: 'cancelled', action };
+        } else {
+          onApplied?.(result, action);
+          this.status.textContent = t(result === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
+          this.finish(result);
+          outcome = { status: result, action };
+        }
+      } catch (error) {
+        if (this.action === action) {
+          this.status.textContent = signal?.aborted ? t('agentStopped') : displayError(error);
+          this.finish('failed');
+        }
+        outcome = signal?.aborted ? { status: 'cancelled', action } : { status: 'failed', action, error };
+      }
+      onSettled?.(outcome);
+    } finally {
+      release?.(outcome?.status === 'verified' ? 'success' : outcome?.status === 'cancelled' ? 'stopped' : 'failed');
+    }
   }
 
   private settle(outcome: ReviewOutcome): void {

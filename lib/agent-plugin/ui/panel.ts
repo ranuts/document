@@ -712,8 +712,20 @@ export function createAgentPanel(
   for (const control of chat.el.querySelectorAll('.cui-input, .cui-send'))
     control.setAttribute('aria-describedby', 'agent-readiness');
   chat.el.append(readiness);
-  let preview = new ActionPreview();
   const reviewOwners = new WeakMap<ActionPreview, string>();
+  const createPreview = (): ActionPreview => {
+    const card = new ActionPreview({
+      beforeApply: () => {
+        const release = requestQueue?.acquireApplication(conversations.activeId, reviewOwners.get(card), () =>
+          card.invalidate(),
+        );
+        if (!release) throw new Error('agentApplyBusy');
+        return release;
+      },
+    });
+    return card;
+  };
+  let preview = createPreview();
   let selectedRefinementCard: ActionPreview | undefined;
   let refiningPreview: ActionPreview | undefined;
   const previews = new Set([preview]);
@@ -842,9 +854,11 @@ export function createAgentPanel(
   ): Promise<ReviewOutcome<DocumentToolAction>> => {
     const generation = controllerGeneration;
     const conversation = conversationRevision;
+    const originStorage = historyStorage;
+    const originSession = conversations.activeId;
     return new Promise((resolve, reject) => {
       chat.setActivity('reviewing');
-      const card = new ActionPreview();
+      const card = createPreview();
       preview = card;
       if (requestQueue?.activeId) reviewOwners.set(card, requestQueue.activeId);
       previews.add(card);
@@ -868,7 +882,37 @@ export function createAgentPanel(
       // Refinement ends this execution attempt while retaining the unexecuted suggestion.
       card.show(
         action,
-        undefined,
+        (outcome, appliedAction) => {
+          if (
+            !settled ||
+            outcome !== 'verified' ||
+            generation !== controllerGeneration ||
+            conversation !== conversationRevision ||
+            !(appliedAction instanceof DocumentToolAction)
+          )
+            return;
+          const id = crypto.randomUUID();
+          const feedback: LLMMessage[] = [
+            {
+              role: 'assistant',
+              content: [
+                { type: 'tool_use', id, name: appliedAction.plan.tool, input: { ...appliedAction.plan.input } },
+              ],
+            },
+            {
+              role: 'user',
+              content: [
+                {
+                  type: 'tool_result',
+                  toolUseId: id,
+                  content: JSON.stringify({ status: 'verified', result: appliedAction.result }),
+                },
+              ],
+            },
+          ];
+          if (controller && conversations.activeId === originSession) controller.recordExternalMessages(feedback);
+          else originStorage.save([...originStorage.load(), ...feedback]);
+        },
         () => {
           settle({ status: 'cancelled', action });
           selectRefinement(card);
@@ -1674,7 +1718,20 @@ export function createAgentPanel(
   const applyReply = async (text: string): Promise<'verified' | 'sent' | 'retry' | 'failed'> => {
     if (!enabled || writingReply) return 'retry';
     const revision = conversationRevision;
+    const generation = controllerGeneration;
+    const bindingRevision = providerBindingRevision;
+    const release = requestQueue?.acquireApplication(conversations.activeId);
+    if (!release) {
+      appendTurn({ role: 'status', text: t('agentApplyBusy') });
+      return 'retry';
+    }
+    const abort = new AbortController();
+    const owns = () =>
+      revision === conversationRevision &&
+      generation === controllerGeneration &&
+      bindingRevision === providerBindingRevision;
     let attempted = false;
+    let applicationStatus: 'success' | 'failed' | 'stopped' = 'failed';
     writingReply = true;
     try {
       const target = captureDocumentToolTarget();
@@ -1686,18 +1743,25 @@ export function createAgentPanel(
         readOnly: false,
       });
       attempted = true;
-      replyAbort = new AbortController();
-      const outcome = await action.apply(replyAbort.signal);
-      if (revision === conversationRevision && outcome === 'sent')
-        appendTurn({ role: 'tool', text: t('agentPlanApplied') });
+      replyAbort = abort;
+      const outcome = await action.apply(abort.signal);
+      abort.signal.throwIfAborted();
+      if (!owns()) return 'failed';
+      applicationStatus = outcome === 'verified' ? 'success' : 'failed';
+      if (outcome === 'sent') appendTurn({ role: 'tool', text: t('agentPlanApplied') });
       return outcome;
     } catch (error) {
-      if (revision === conversationRevision)
-        appendTurn({ role: 'error', text: attempted ? t('agentPlanUnverified') : displayError(error) });
+      if (abort.signal.aborted) applicationStatus = 'stopped';
+      if (owns())
+        appendTurn({
+          role: abort.signal.aborted ? 'status' : 'error',
+          text: abort.signal.aborted ? t('agentStopped') : attempted ? t('agentPlanUnverified') : displayError(error),
+        });
       return attempted ? 'failed' : 'retry';
     } finally {
       writingReply = false;
-      replyAbort = null;
+      if (replyAbort === abort) replyAbort = null;
+      release(applicationStatus);
     }
   };
 
@@ -2295,7 +2359,7 @@ export function createAgentPanel(
           const action = new DocumentToolAction(target, plan);
           if (!plan.readOnly) {
             if (request.refinement && !previousPreview?.pending()) throw new Error(t('agentPlanExpired'));
-            preview = new ActionPreview();
+            preview = createPreview();
             reviewOwners.set(preview, entry.id);
             previews.add(preview);
             preview.show(
@@ -2503,7 +2567,7 @@ export function createAgentPanel(
           appendTurn({ role: 'status', text: t(readonly ? 'agentDocumentReadOnly' : 'agentRangeCopyOnly') });
           return owned('success');
         }
-        preview = new ActionPreview();
+        preview = createPreview();
         reviewOwners.set(preview, entry.id);
         previews.add(preview);
         const action = target

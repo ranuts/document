@@ -331,6 +331,7 @@ export interface I18nMessages {
   agentInputPlaceholder: string;
   agentSend: string;
   agentStop: string;
+  agentApplyBusy: string;
   agentQueueAction: string;
   agentQueueTitle: string;
   agentQueuePaused: string;

@@ -334,6 +334,7 @@ export const en: I18nMessages = {
   agentInputPlaceholder: 'Ask AI to edit the document… (Enter to send, Shift+Enter for newline)',
   agentSend: 'Send',
   agentStop: 'Stop',
+  agentApplyBusy: 'Finish or stop the current request before applying this suggestion.',
   agentQueueAction: 'Queue request',
   agentQueueTitle: 'Pending requests · {count}',
   agentQueuePaused: 'Paused · {count} pending',
