@@ -293,3 +293,10 @@ from search and return to the draft passed. The narrow dark and medium Chinese
 light screenshots were visually inspected. The 1,000-conversation search fixture
 kept 40 initial rows, zero full-message clones, 0.16/0.15/0.11ms input handlers and
 no corpus reposts on indexed queries. Those are individual synthetic observations.
+
+The same production checkpoint passed the selected-source and pending-request
+matrices in 12 English/Chinese width/theme states each. Source heading, preview
+and input left coordinates matched exactly; disclosure opening, closing, reversal,
+keyboard and reduced motion passed. Pending controls kept the next draft focused,
+both queued entries and independent Stop visible, with zero horizontal overflow.
+The 12 preparation states also retained scrollTop=0 and a visible welcome title.
