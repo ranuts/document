@@ -52,6 +52,25 @@ panel overflow was zero. Keyboard navigation from search to a conversation and
 Escape back to the preserved draft passed. These screenshots do not measure
 model inference or establish a complete accessibility audit.
 
+## Stop checkpoint
+
+At head `30040bc`, all 5,504 unit tests in 189 files passed. Fifteen real-editor
+E2E cases passed serially: Word/Excel/PowerPoint/PDF composer and dictation,
+first microphone permission, actual phase feedback, and Word/PowerPoint
+Stop-during-routing/answer followed by two new questions without reloading.
+
+A separate Chromium 151.0.7922.34 probe mounted the shared ChatView with a
+synthetic 108,000-character partial answer and held host settlement. Stop took
+1.35 ms synchronously; the next animation frame at 11.08 ms showed stopping,
+disabled repeat cancellation, unchanged raw source and the focused next draft
+with its selection preserved. Markdown had not been parsed before that frame.
+Three cancellation attempts invoked the host once. Reduced motion was enabled.
+This measures component interaction, not physical GPU cancellation/drain time.
+
+Source and quality review approved per-run ownership and capability-derived
+document outcomes. Cancelled, unverified, expired and unavailable native tool
+receipts cannot masquerade as successful queue advancement.
+
 ## Long conversation behavior
 
 The existing runtime trims older complete turns to fit a request budget; it does
