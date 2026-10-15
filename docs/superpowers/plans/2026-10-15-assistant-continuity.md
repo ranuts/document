@@ -79,7 +79,9 @@ locale labels/types, unit suites and real-editor queue E2E.
       Preserve drafts and allow explicit recovery; no persistent schema change.
 - [ ] Advance only on explicit success; cover delayed drain, provider switching,
       old finalizers and shared ChatView without queue hooks. New drafts while
-      paused remain queued; Resume uses FIFO, Send now promotes/resumes. Editing
+      paused older requests remain queued; Resume uses FIFO, Send now promotes/resumes.
+      A fresh explicit Send with no older pending requests starts normally after
+      cancellation settles, preserving the Stop-then-ask-again interaction. Editing
       cannot overwrite an occupied composer. Return to a conversation requires
       Resume; deletion/history restoration invalidates its volatile queue. Scope
       recovery requires explicit restore/rebind, including freeform requests.

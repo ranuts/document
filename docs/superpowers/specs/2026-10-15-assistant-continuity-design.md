@@ -104,8 +104,11 @@ receipts for cancelled, sent, expired, failed or unavailable reads must pause
 dependent execution. Existing callers that ignore the additive flag keep their
 current behavior; provider and persistence contracts remain unchanged.
 
-When paused, sending a new draft queues it without resuming older work. Resume
-continues FIFO; Send now promotes the selected entry and explicitly resumes it.
+When older pending requests are paused, sending a new draft queues it without
+resuming that older work. Resume continues FIFO; Send now promotes the selected
+entry and explicitly resumes it. If no older pending requests remain, a fresh
+explicit Send starts a new turn after any active cancellation settles; stopping
+an otherwise empty queue must not add a redundant Resume step to asking again.
 Editing restores only into an empty composer; otherwise it remains pending with
 feedback. Switching away pauses that session and returning requires Resume.
 Deleting or restoring a session discards its volatile queue. Invalid document
