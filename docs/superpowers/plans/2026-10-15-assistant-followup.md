@@ -27,11 +27,11 @@ Files: panel.ts, request-intent.ts/request-context.ts or a focused request-scope
 speech-input.ts; document-task.ts only for opt-in native preflight deferral; controller.ts only for necessary hooks; relevant panel/speech/context/native registry unit tests;
 test/e2e/{agent-request-queue,agent-dictation,agent-stop-resume}.spec.ts.
 
-- [ ] RED: Hello and classified ordinary chat continue after document edits; queued pure chat survives irrelevant edits; selected references/PDF/host reads/writes still refuse stale scope. Provider/session/Stop guards remain effective.
-- [ ] Implement explicit scope policy using immutable enqueue-time ComposerContext (including cell values). Preserve native compatibility without an extra JSON call: only eligible source-free native candidates may opt into pre-tool freshness deferral; actual registry operations stay strict, and first target change permanently promotes output checks. Strip selected source from conversation-only references and validate original targets for document operations after routing, never rebind stale queued writes. Run focused tests/typecheck; functional commit.
-- [ ] RED: dictate next draft during a held reply; finalize on explicit Send and queue once, preserving current reply. Conversation switch/disable still closes speech.
-- [ ] Relax only inference-related speech gating, retain lifecycle/permission/finish guards. Focused tests/typecheck; separate functional commit.
-- [ ] Specification gate then independent quality gate.
+- [x] RED: Hello and classified ordinary chat continue after document edits; queued pure chat survives irrelevant edits; selected references/PDF/host reads/writes still refuse stale scope. Provider/session/Stop guards remain effective.
+- [x] Implement explicit scope policy using immutable enqueue-time ComposerContext (including cell values). Preserve native compatibility without an extra JSON call: only eligible source-free native candidates may opt into pre-tool freshness deferral; actual registry operations stay strict, and first target change permanently promotes output checks. Strip selected source from conversation-only references and validate original targets for document operations after routing, never rebind stale queued writes. Run focused tests/typecheck; functional commit.
+- [x] RED: dictate next draft during a held reply; finalize on explicit Send and queue once, preserving current reply. Conversation switch/disable still closes speech.
+- [x] Relax only inference-related speech gating, retain lifecycle/permission/finish guards. Focused tests/typecheck; separate functional commit.
+- [x] Specification gate then independent quality gate.
 
 ## Chunk 3: Bounded search and exact token budgeting
 
