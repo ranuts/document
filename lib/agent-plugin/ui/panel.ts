@@ -87,7 +87,7 @@ import { mountPanelViewport } from './panel-viewport';
 import { ActionPreview } from './action-preview';
 import { ProposalContext } from './proposal-context';
 import { captureComposerContext } from './composer-context';
-import { captureRequestContext } from './request-context';
+import { captureRequestContext, serializeRequestContext } from './request-context';
 import { classifyRequest, resolveRequestIntent, safeChatIntent } from './request-intent';
 import { generateDocumentDraft } from './document-draft';
 import { listCachedGGUF, rememberModelSource } from '@ranuts/agent-core/llm/model-cache';
@@ -1407,7 +1407,7 @@ export function createAgentPanel(
   };
   writingSelect.addEventListener('change', taskRouteChanged);
   languageSelect.addEventListener('change', taskRouteChanged);
-  const nativeRequest = (target: ReturnType<typeof captureDocumentToolScope>): TurnRequest => {
+  const nativeRequest = (target: ReturnType<typeof captureDocumentToolScope>, instruction: string): TurnRequest => {
     let current = target;
     const provider = endpointProvider!;
     const generation = controllerGeneration;
@@ -1419,7 +1419,7 @@ export function createAgentPanel(
     return {
       tools: {},
       assertCurrent,
-      getRequestContext: () => JSON.stringify(captureRequestContext('metadata')),
+      getRequestContext: () => serializeRequestContext(captureRequestContext('metadata'), instruction).serialized,
       prepareRun: async (request: string, signal: AbortSignal) =>
         prepareDocumentTask(provider, request, {
           target,
@@ -1452,7 +1452,7 @@ export function createAgentPanel(
       storage: historyStorage,
       getRequestContext: (): string | undefined => {
         const reference = captureRequestContext('metadata');
-        return reference.editor ? JSON.stringify(reference) : undefined;
+        return reference.editor ? serializeRequestContext(reference, '').serialized : undefined;
       },
       onContextTrimmed: (): void => {
         if (generation === controllerGeneration && conversation === conversationRevision)
@@ -1950,7 +1950,7 @@ export function createAgentPanel(
       ) {
         chat.setActivity('responding');
         if (!requestTarget) throw new Error(t('agentPlanExpired'));
-        await ctl.send(trimmed, { echoUser: false, request: nativeRequest(requestTarget) });
+        await ctl.send(trimmed, { echoUser: false, request: nativeRequest(requestTarget, trimmed) });
         return;
       }
       if (
@@ -2360,7 +2360,9 @@ export function createAgentPanel(
             assertCurrent: () => {
               if (requestTarget && !requestTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
             },
-            getRequestContext: () => JSON.stringify(captureRequestContext(pdf && !safe ? 'pdf-page' : 'metadata')),
+            getRequestContext: () =>
+              serializeRequestContext(captureRequestContext(pdf && !safe ? 'pdf-page' : 'metadata'), trimmed)
+                .serialized,
           },
         });
       }

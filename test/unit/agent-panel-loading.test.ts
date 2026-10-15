@@ -2944,3 +2944,19 @@ it('keeps semantic routing for an exact greeting while an unexecuted suggestion 
     activity.mockRestore();
   }
 });
+
+it.each(['English selection '.repeat(600), '中文选区。'.repeat(2000), '"\\\n'.repeat(3000)])(
+  'answers ordinary chat with a large selection using a bounded context envelope',
+  async (source) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.source = source;
+    state.semanticResponse = '{"task":"chat","language":"en"}';
+    const panel = createPreparedPanel();
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = 'Tell me a brief story';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+    expect(panel.querySelector('.cui-msg-error')).toBeNull();
+  },
+);

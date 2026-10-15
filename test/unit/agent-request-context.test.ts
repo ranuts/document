@@ -108,3 +108,40 @@ it('grounds a selected read in the exact selection without reading the Word body
   });
   expect(body).not.toHaveBeenCalled();
 });
+
+it.each(['English selection '.repeat(600), '中文选区。'.repeat(2000), '"\\\n'.repeat(3000)])(
+  'serializes a long metadata selection without changing captured windows or rereading SDK content',
+  async (source) => {
+    const { serializeRequestContext } = await import('../../lib/agent-plugin/ui/request-context');
+    const selected = vi.fn(() => source);
+    state.api.pluginMethod_GetSelectedText = selected;
+    const captured = captureRequestContext('metadata');
+    expect(captured.selection.text).toHaveLength(8000);
+    const original = JSON.stringify(captured);
+    const calls = selected.mock.calls.length;
+    const bounded = serializeRequestContext(captured, 'Tell me a short story');
+    const context = JSON.parse(bounded.serialized);
+    expect(context.editor).toEqual(captured.editor);
+    expect(context.selection.truncated).toBe(true);
+    expect(context.selection.text.length).toBeGreaterThan(100);
+    expect(context.selection.text.length).toBeLessThan(captured.selection.text.length);
+    expect(JSON.stringify(captured)).toBe(original);
+    expect(selected).toHaveBeenCalledTimes(calls);
+  },
+);
+it('keeps a single source copy and exact PDF metadata when bounding a page envelope', async () => {
+  const { serializeRequestContext } = await import('../../lib/agent-plugin/ui/request-context');
+  const captured = {
+    editor: { kind: 'pdf' as const, page: 2, pages: 7, selectionCharacters: 4 },
+    selection: { text: 'same', truncated: false },
+    content: { scope: 'pdf-page' as const, page: 2, pages: 7, text: '中'.repeat(8000), truncated: false },
+  };
+  const bounded = serializeRequestContext(captured, 'Summarize the current page');
+  expect(bounded.context).toMatchObject({
+    editor: captured.editor,
+    content: { scope: 'pdf-page', page: 2, pages: 7, truncated: true },
+  });
+  expect(bounded.context).not.toHaveProperty('selection');
+  expect(captured.content.text).toHaveLength(8000);
+  expect(captured.content.truncated).toBe(false);
+});
