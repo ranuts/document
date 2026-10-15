@@ -998,6 +998,8 @@ export function createAgentPanel(
   let historyStorage = conversations.history();
   // create() changes the store's active ID before the old composer is replaced.
   let displayedConversationId = conversations.activeId;
+  const initialConversationId = displayedConversationId;
+  let restoringInitialHistory = false;
   const drafts = new Map<string, string>();
   const rememberDraft = () => {
     const text = chat.getInput();
@@ -2744,6 +2746,12 @@ export function createAgentPanel(
     },
     onRestore: () => {
       if (conversations.searchSnapshot().some((item) => item.id === displayedConversationId)) rememberDraft();
+      else if (restoringInitialHistory && displayedConversationId === initialConversationId) {
+        // Retain text typed into the initial placeholder while startup storage was loading.
+        const text = chat.getInput();
+        drafts.delete(initialConversationId);
+        if (text.trim()) drafts.set(conversations.activeId, text);
+      }
       switchConversation(conversations.activeId, false, false);
     },
   });
@@ -3009,7 +3017,10 @@ export function createAgentPanel(
     refresh: syncContext,
   });
   setOpen(!options.background);
-  void historyControls.start();
+  restoringInitialHistory = true;
+  void historyControls.start().finally(() => {
+    restoringInitialHistory = false;
+  });
   showView('chat');
   // Cache discovery may choose a default view only until chat interaction starts.
   // Capture clicks because speech controls stop propagation before requesting permission.
