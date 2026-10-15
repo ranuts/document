@@ -129,16 +129,27 @@ const installSeamProbe = () => {
     });
 
     if (typeof converter.convertFromBin === 'function') {
-      let fromBinImpl = converter.convertFromBin.bind(converter);
-      const wrappedFromBin = function (obj: any) {
-        state.fromBin.push({ targetExt: obj && obj.targetExt, fileExt: obj && obj.fileExt });
-        return fromBinImpl(obj);
+      let depth = 0;
+      const probeFromBin = (impl: (obj: any) => unknown) => {
+        // Each decorator must retain the implementation it captured. A stable
+        // wrapper forwarding to a mutable target would recurse when save-stream
+        // tracking captures that wrapper and then assigns its own replacement.
+        return function (obj: any) {
+          if (depth === 0) state.fromBin.push({ targetExt: obj && obj.targetExt, fileExt: obj && obj.fileExt });
+          depth++;
+          try {
+            return impl(obj);
+          } finally {
+            depth--;
+          }
+        };
       };
+      let wrappedFromBin = probeFromBin(converter.convertFromBin.bind(converter));
       Object.defineProperty(converter, 'convertFromBin', {
         configurable: true,
         get: () => wrappedFromBin,
         set: (fn: (...args: unknown[]) => unknown) => {
-          fromBinImpl = fn.bind(converter);
+          wrappedFromBin = probeFromBin(fn.bind(converter));
         },
       });
     }
@@ -177,6 +188,31 @@ const readOfflineMarkers = () => {
 
 test.describe('the offline build answers the server protocol in-process', () => {
   test.describe.configure({ timeout: 240_000 });
+
+  test('the seam probe supports decorators that call the captured conversion method', async ({ page }) => {
+    await page.addInitScript(installSeamProbe);
+    await page.goto('about:blank');
+
+    const result = await page.evaluate(async () => {
+      const w = window as unknown as Record<string, any>;
+      const converter = {
+        convertToBin: async () => ({ binary: new Uint8Array([1]) }),
+        convertFromBin: async (request: { targetExt: string }) => ({ targetExt: request.targetExt }),
+      };
+      w.AscCommon.x2t = converter;
+      // Save-stream tracking decorates the worker proxy this way: retain the
+      // current method, then replace it with one that calls the retained one.
+      const convert = converter.convertFromBin;
+      converter.convertFromBin = function (request) {
+        return convert.call(this, request).then((output) => ({ ...output, tracked: true }));
+      };
+      const output = await converter.convertFromBin({ targetExt: 'docx' });
+      return { output, fromBin: w.__seamProbe.fromBin };
+    });
+
+    expect(result.output).toEqual({ targetExt: 'docx', tracked: true });
+    expect(result.fromBin).toEqual([{ targetExt: 'docx' }]);
+  });
 
   test('conversion crosses one seam, and that seam survives a foreign realm', async ({ page }) => {
     await page.addInitScript(installSeamProbe);
