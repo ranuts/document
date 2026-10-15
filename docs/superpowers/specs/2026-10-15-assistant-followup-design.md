@@ -172,6 +172,32 @@ with and without scrollend support, nested scrollend isolation, reduced motion,
 clear/dispose and the prior paged/empty-message geometry. Avoid copying the
 reference project's broader folding/navigation architecture.
 
+## Inactive-history deletion continuity
+
+The reference-driven reply/history probe exposed an additional current defect:
+while Hello is held in the current chat, deleting a different saved chat calls
+panel's global controller invalidation and rebuilds the active view. Releasing
+the answer then leaves only the unanswered Hello; the Stop control disappears.
+The controls' successful single-chat deletion also invokes restoreView twice.
+This was reproduced in Chromium against the `99f7b03` production build with two
+synthetic saved conversations and a controlled loopback endpoint.
+
+A deletion must invalidate only the deleted chat's volatile draft/queue owner.
+If the displayed chat still exists and remains the store's current owner, deleting
+another chat refreshes the history list without disposing its controller,
+incrementing its request revision, rebuilding its message window or changing its
+scroll/focus/draft. Current-chat deletion, clear-all, import, manual restore and
+saving-preference restoration retain their existing explicit invalidation.
+
+Carry the deletion identity through the internal onRestore callback (optional
+argument; no storage/public bridge change), and use current owner validity when
+settlement arrives so late deletion completion cannot replace a chat selected
+in the meantime. Make each deletion's view-settlement callback idempotent while
+preserving existing failure disclosure/retry behavior. Test held reply survival,
+loaded-page/DOM and draft preservation, one settlement callback, deletion failure
+and active/all/import/restore invalidation. Extend the existing editor history
+contract without removing full-content/copy or focus assertions.
+
 ## CPU context budget
 
 Replace repeated one-turn removal/counting with bounded coarse bracketing and
