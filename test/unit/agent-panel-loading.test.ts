@@ -3817,7 +3817,7 @@ it('serializes completed document-result Apply with a fresh Send until the actua
     generate.mockRestore();
   }
 });
-it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent'] as const)(
+it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent', 'stop-fresh'] as const)(
   'holds a retained native Apply through actual settlement during %s and records only verified owned execution',
   async (mode) => {
     state.nativeEndpoint = true;
@@ -3893,6 +3893,7 @@ it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent'] 
       );
       original.querySelector<HTMLElement>('.agent-plan-apply')!.click();
       await vi.waitFor(() => expect(finishApply).toBeTypeOf('function'));
+      if (mode === 'stop-fresh') original.querySelector<HTMLElement>('.agent-plan-cancel')!.click();
       if (mode !== 'resume') enterQueueDraft(panel, 'Hello');
       if (mode === 'resume') panel.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
       if (mode === 'send-now') {

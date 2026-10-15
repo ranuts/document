@@ -273,3 +273,38 @@ it('does not allow an unrelated card to start Apply while another request owns e
   expect(release).toBeTypeOf('function');
   release?.('success');
 });
+it.each([false, true])(
+  'sends fresh work after a cancelled physical Apply only without older pending work: older=%s',
+  async (older) => {
+    const { queue, runs } = setup();
+    const release = queue.acquireApplication('a')!;
+    if (older) queue.enqueue('a', 'older', 'scope');
+    queue.pause('a');
+    queue.enqueue('a', 'fresh', 'scope');
+    expect(runs).toHaveLength(0);
+    release('stopped');
+    await tick();
+    expect(runs.map((run) => run.text)).toEqual(older ? [] : ['fresh']);
+    expect(queue.state('a').paused).toBe(older);
+    if (older) {
+      queue.resume('a');
+      expect(runs.map((run) => run.text)).toEqual(['older']);
+    }
+  },
+);
+
+it('ignores an old physical Apply Stop handle after a newer session owns Apply', () => {
+  const { queue, cancel } = setup();
+  const old = queue.acquireApplication('a')!;
+  old('success');
+  queue.select('b');
+  const current = queue.acquireApplication('b')!;
+  old.stop();
+  expect(cancel).not.toHaveBeenCalled();
+  expect(queue.state('b').paused).toBe(false);
+  expect(queue.busy).toBe(true);
+  current.stop();
+  expect(cancel).toHaveBeenCalledOnce();
+  expect(queue.state('b').paused).toBe(true);
+  current('stopped');
+});

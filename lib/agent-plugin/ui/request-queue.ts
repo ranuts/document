@@ -54,12 +54,12 @@ export class RequestQueue<Binding> {
     session: string,
     owner?: string,
     cancel?: () => void,
-  ): ((status: 'success' | 'failed' | 'stopped') => void) | undefined {
+  ): (((status: 'success' | 'failed' | 'stopped') => void) & { stop(): void }) | undefined {
     if (this.application || (this.active && this.active.entry.id !== owner)) return;
     const application = { session, cancelled: false, resumeAfter: false, cancel };
     this.application = application;
     let released = false;
-    return (status) => {
+    const release = (status: 'success' | 'failed' | 'stopped') => {
       if (released || this.application !== application) return;
       released = true;
       this.application = undefined;
@@ -67,6 +67,11 @@ export class RequestQueue<Binding> {
       this.options.changed();
       queueMicrotask(() => this.drain());
     };
+    return Object.assign(release, {
+      stop: () => {
+        if (this.application === application) this.pause(session);
+      },
+    });
   }
   pendingConversations(): string[] {
     return [...this.sessions].filter(([, state]) => state.entries.length).map(([id]) => id);
@@ -96,6 +101,7 @@ export class RequestQueue<Binding> {
     if (state.paused && !state.entries.some((entry) => !entry.recoverOnly)) {
       state.paused = false;
       if (this.active?.session === session && this.active.cancelled) this.active.resumeAfter = true;
+      if (this.application?.session === session && this.application.cancelled) this.application.resumeAfter = true;
     }
     if (replacement && replacement.current()) {
       state.entries.unshift(entry);

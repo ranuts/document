@@ -714,13 +714,19 @@ export function createAgentPanel(
   chat.el.append(readiness);
   const reviewOwners = new WeakMap<ActionPreview, string>();
   const createPreview = (): ActionPreview => {
+    let stopApply: (() => void) | undefined;
     const card = new ActionPreview({
+      onApplyStop: () => stopApply?.(),
       beforeApply: () => {
         const release = requestQueue?.acquireApplication(conversations.activeId, reviewOwners.get(card), () =>
           card.invalidate(),
         );
         if (!release) throw new Error('agentApplyBusy');
-        return release;
+        stopApply = release.stop;
+        return (status) => {
+          stopApply = undefined;
+          release(status);
+        };
       },
     });
     return card;
