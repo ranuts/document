@@ -47,7 +47,7 @@ container.appendChild(chat.el); // mount the root element
 | `appendMany(messages)`                                                         | Add finished messages in order with one final layout update, for restoring history.   |
 | `appendDelta(text)`                                                            | Stream into a live agent bubble (auto-created on first delta).                        |
 | `endStream()`                                                                  | Finalise the streaming bubble (drops the caret).                                      |
-| `setRunning(bool)`                                                             | Toggle Send⇄Stop; keep the next draft editable, without queuing it.                   |
+| `setRunning(bool)`                                                             | Update run controls; keep the next draft editable, with optional host queuing.        |
 | `setActivity('routing' / 'reading' / 'planning' / 'responding' / 'reviewing')` | Announce the host's actual phase through a polite status; review is a resting state.  |
 | `clear()`                                                                      | Remove all messages, restore empty state.                                             |
 | `getInput()` / `setInput(text)` / `focus()`                                    | Input helpers (e.g. prepend a quote).                                                 |
@@ -113,9 +113,29 @@ Hosts may provide `canSend(text)` to keep drafts editable while a dependency is 
 its first call during a run it immediately shows `labels.stopping` (default
 “Stopping…”), freezes the partial source as incomplete/copy-only, disables
 repeat Stop, and calls `onStop` synchronously. It preserves the editable next
-draft and focus; input is never sent or queued while the host is settling.
+draft and focus. Legacy hosts preserve the draft until settlement; queue-enabled
+hosts may accept another pending request while cancellation settles.
 `appendDelta()` and `endStream()` ignore late output during this state. The host
 must keep the run active until its cancellation settles, then call
 `setRunning(false)`. Markdown formatting of the captured interrupted row runs
 after the acknowledgement has a chance to paint, with disposal/row ownership
 guards. Stop does not claim that the backend has already finished.
+
+## Optional host queue
+
+Provide `onQueue(text)` to accept Enter or Send during a running turn. It receives
+original nonempty text after the same `canSend`, `beforeSend`, IME and asynchronous
+revision guards as `onSend`. The composer clears only an accepted submission and
+keeps keyboard focus. `labels.queue` names this control while running.
+
+With this hook, Send remains independent from the compact Stop control. Without
+it, the existing Send-as-Stop behavior is preserved. Both variants use the shared
+`requestStop()` acknowledgement and interrupted-source ownership guards. Stop
+continues to use `.cui-send-stop` for existing host selectors; `.cui-send` remains
+the Send/Queue control in an opted-in host.
+
+`chat.pendingEl` is a host-populated slot above the draft, separate from message
+history and `actionsEl`. The component knows nothing about editors, providers,
+request ordering, cancellation settlement or persistence. Hosts must keep one
+execution owner until the actual submit settles, retain unexecuted text on
+preflight failure, and advance their queue only on explicit successful outcomes.

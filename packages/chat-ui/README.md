@@ -1,8 +1,7 @@
 # @ranuts/chat-ui
 
 Framework-free chat / IM UI component (built with the ranui builder): a scrolling message list
-with streaming support and an auto-growing input box whose button doubles as
-Send / Stop. Bring your own backend — it only renders and emits events.
+with streaming support and an auto-growing input box with Send / Stop controls. Bring your own backend — it only renders and emits events.
 
 ## Usage
 
@@ -42,7 +41,7 @@ Override the look via the `--cui-*` custom properties on `.cui-root`.
 - `append({ role, text })` — add a finished message (`user` / `agent` / `tool` / `status` / `error`).
 - `appendDelta(text)` — stream text into a live agent bubble (auto-created).
 - `endStream()` — finalise the streaming bubble.
-- `setRunning(bool)` — toggle Send⇄Stop while keeping the next draft editable; never queue it.
+- `setRunning(bool)` — update run controls while keeping the next draft editable; queue acceptance is opt-in.
 - `setActivity(phase)` — display the host's actual `routing`, `reading`, `planning`,
   `responding` or `reviewing` phase. Classification must be reported only when it runs.
 - `clear()` — remove messages and waiting feedback; it does not stop the host's run.
@@ -78,9 +77,29 @@ The document product uses a default-off assistant switch. Opening the panel neve
 its first call during a run it immediately shows `labels.stopping` (default
 “Stopping…”), freezes the partial source as incomplete/copy-only, disables
 repeat Stop, and calls `onStop` synchronously. It preserves the editable next
-draft and focus; input is never sent or queued while the host is settling.
+draft and focus. Legacy hosts preserve the draft until settlement; queue-enabled
+hosts may accept another pending request while cancellation settles.
 `appendDelta()` and `endStream()` ignore late output during this state. The host
 must keep the run active until its cancellation settles, then call
 `setRunning(false)`. Markdown formatting of the captured interrupted row runs
 after the acknowledgement has a chance to paint, with disposal/row ownership
 guards. Stop does not claim that the backend has already finished.
+
+## Optional host queue
+
+Provide `onQueue(text)` to accept Enter or Send during a running turn. It receives
+original nonempty text after the same `canSend`, `beforeSend`, IME and asynchronous
+revision guards as `onSend`. The composer clears only an accepted submission and
+keeps keyboard focus. `labels.queue` names this control while running.
+
+With this hook, Send remains independent from the compact Stop control. Without
+it, the existing Send-as-Stop behavior is preserved. Both variants use the shared
+`requestStop()` acknowledgement and interrupted-source ownership guards. Stop
+continues to use `.cui-send-stop` for existing host selectors; `.cui-send` remains
+the Send/Queue control in an opted-in host.
+
+`chat.pendingEl` is a host-populated slot above the draft, separate from message
+history and `actionsEl`. The component knows nothing about editors, providers,
+request ordering, cancellation settlement or persistence. Hosts must keep one
+execution owner until the actual submit settles, retain unexecuted text on
+preflight failure, and advance their queue only on explicit successful outcomes.
