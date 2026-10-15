@@ -64,10 +64,10 @@ streaming-markdown.ts helper if needed; panel.ts host opt-in; shared README/CLAU
 test/unit/{chat-view-performance,chat-view-stop,chat-view-results}.test.ts and a
 focused Markdown streaming suite; relevant stream/browser acceptance.
 
-- [ ] RED: completed Markdown block DOM stays identical while a later block grows; open code fences render progressively; incomplete links stay inert and raw source is unchanged; final output equals ordinary full rendering for tables/lists/setext/reference links/CRLF/escapes.
-- [ ] Implement per-stream stable-block reuse and safe unstable-tail presentation with the existing lexer/DOM renderer, frame coalescing and bounded formatting cadence. Preserve legacy defaults via host opt-in; no new dependency or general ad hoc Markdown repair parser.
-- [ ] Cap every automatic main-thread lex/render input, including final/reference/interrupted paths; oversized tails stay exact raw text and stable prefix nodes remain. Oversized whole-reference fallback stays raw at completion, with no later uncapped parse. This bounds input rather than promising preemption in 4ms. Verify Stop does no synchronous Markdown parsing, exact partial source/copy-only state/draft/focus are retained and clear/switch/dispose prevent old callbacks. Test arbitrary chunk boundaries, parser failure raw fallback, scroll/selection and unchanged block identity, plus reduced motion.
-- [ ] Focused tests/typecheck/lint; separate streaming rendering functional commit. Specification gate then independent quality gate before timings/integrated acceptance.
+- [x] RED: completed Markdown block DOM stays identical while a later block grows; open code fences render progressively; incomplete links stay inert and raw source is unchanged; final output equals ordinary full rendering for tables/lists/setext/reference links/CRLF/escapes.
+- [x] Implement per-stream stable-block reuse and safe unstable-tail presentation with the existing lexer/DOM renderer, frame coalescing and bounded formatting cadence. Preserve legacy defaults via host opt-in; no new dependency or general ad hoc Markdown repair parser.
+- [x] Cap every automatic main-thread lex/render input, including final/reference/interrupted paths; oversized tails stay exact raw text and stable prefix nodes remain. Oversized whole-reference fallback stays raw at completion, with no later uncapped parse. This bounds input rather than promising preemption in 4ms. Verify Stop does no synchronous Markdown parsing, exact partial source/copy-only state/draft/focus are retained and clear/switch/dispose prevent old callbacks. Test arbitrary chunk boundaries, parser failure raw fallback, scroll/selection and unchanged block identity, plus reduced motion.
+- [x] Focused tests/typecheck/lint; separate streaming rendering functional commit. Specification gate then independent quality gate before timings/integrated acceptance.
 
 ## Chunk 4c: Native smooth-scroll ownership
 
