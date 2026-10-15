@@ -100,5 +100,13 @@ removed its trusted routing. Unlike the earlier empty-document baseline, this
 fixture contains text, so serialized sizes are observations of each request,
 not a controlled percentage improvement claim. Ordinary ambiguous chat keeps
 semantic classification intentionally. Source review identified the separate
-large-selection byte-budget boundary; its follow-up and final integration
-acceptance remain pending.
+large-selection byte-budget boundary. Its shared serializer follow-up passed
+specification and quality review and 37 independently run boundary tests;
+instruction text and public source windows remain unchanged.
+
+At `7908c4e`, the production build and all 18 serialized real-editor workspace,
+write-tool and process-feedback regressions passed, including Word, spreadsheet
+and slide writes, review, refinement and cancellation. The full unit checkpoint
+passed 5,557 tests and exposed four failures in the older write-reply fixture,
+which mocked strong capture but omitted the newly required lightweight scope.
+Fixture repair and final queue integration checks remain pending.

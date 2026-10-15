@@ -92,26 +92,26 @@ Files: `request-intent.ts`, `request-context.ts`, `task-entry.ts`, `controller.t
 `document-tool-action.ts`, `panel.ts`, relevant unit suites and real-editor
 workspace/process E2E.
 
-- [ ] Record baseline model calls, context bytes and SDK reads for exact greetings,
+- [x] Record baseline model calls, context bytes and SDK reads for exact greetings,
       generic chat, trusted read tasks, edited tasks and document writes.
-- [ ] Add conservative exact chat shortcuts; all ambiguous requests keep the
+- [x] Add conservative exact chat shortcuts; all ambiguous requests keep the
       semantic router. Preserve language and pending-proposal refinement.
-- [ ] Capture selection/metadata for generic chat and native tool requests;
+- [x] Capture selection/metadata for generic chat and native tool requests;
       preserve actual PDF/page/document grounding on explicit read paths.
-- [ ] Remove implicit eager body reads from target capture as well: introduce a
+- [x] Remove implicit eager body reads from target capture as well: introduce a
       lightweight bound scope, capturing full mutation verification only before
       actual writes and before asynchronous work. Require zero whole-body reads
       for exact greetings and ordinary generic chat; preserve write readback.
-- [ ] Add trusted one-inference read-only tasks with tools forced empty and bound
+- [x] Add trusted one-inference read-only tasks with tools forced empty and bound
       target validity at preflight/deltas/completion. Keep writes reviewed.
-- [ ] Define explicit host read provenance by existing task ID and scope (never
+- [x] Define explicit host read provenance by existing task ID and scope (never
       task='tools' alone). Revoke it on edits/restoration. Test selected text,
       Word body, sheet range, slide scope and exact PDF page, including unavailable
       and truncated sources; require one inference, empty tools and truthful
       unavailable-source feedback.
-- [ ] Verify per-turn context/guards cannot leak to the next request; Stop,
+- [x] Verify per-turn context/guards cannot leak to the next request; Stop,
       readiness, provider switching, history and privacy semantics remain intact.
-- [ ] Run two-stage review and commit as a distinct performance change.
+- [x] Run two-stage review and commit as a distinct performance change.
 
 ## Chunk 5: Integration, evidence and delivery
 
