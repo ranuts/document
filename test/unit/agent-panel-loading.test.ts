@@ -3502,3 +3502,36 @@ it('pauses the next queued request after a real unsupported PDF preflight refusa
   expect(state.apply).not.toHaveBeenCalled();
   expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hello');
 });
+it('pauses queued work when an explicit direct operation has no verified capability receipt', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.editorKind = 'slide';
+  state.toolContext = 'slide';
+  const { agentTools } = await import('../../lib/agent-plugin/tools');
+  let finish!: () => void;
+  const execute = vi.spyOn(agentTools.slide_action, 'execute').mockImplementation(async () => {
+    await new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    return { verified: false, count: 2, page: 2 } as never;
+  });
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+  };
+  try {
+    const panel = createPreparedPanel();
+    document.body.append(panel);
+    enterQueueDraft(panel, 'Add a slide');
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+    enterQueueDraft(panel, 'Hello');
+    finish();
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    expect(calls).toEqual([]);
+    expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hello');
+    expect(panel.textContent).not.toContain(t('agentPlanVerified'));
+    expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false);
+  } finally {
+    execute.mockRestore();
+  }
+});
