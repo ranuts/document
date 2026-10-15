@@ -339,6 +339,7 @@ export const ja: Partial<I18nMessages> = {
   agentInputPlaceholder: 'AI にドキュメントの編集を依頼…（Enter で送信、Shift+Enter で改行）',
   agentSend: '送信',
   agentStop: '停止',
+  agentApplyBusy: '現在のリクエストを完了または停止してから、この提案を適用してください。',
   agentQueueAction: '送信待ちに追加',
   agentQueueTitle: '送信待ち · {count}',
   agentQueuePaused: '一時停止 · {count} 件',

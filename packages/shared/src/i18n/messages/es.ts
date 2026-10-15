@@ -343,6 +343,7 @@ export const es: Partial<I18nMessages> = {
   agentInputPlaceholder: 'Pide a la IA que edite el documento… (Enter para enviar, Mayús+Enter para salto de línea)',
   agentSend: 'Enviar',
   agentStop: 'Detener',
+  agentApplyBusy: 'Finaliza o detén la solicitud actual antes de aplicar esta sugerencia.',
   agentQueueAction: 'Poner en cola',
   agentQueueTitle: 'Solicitudes pendientes · {count}',
   agentQueuePaused: 'En pausa · {count} pendientes',

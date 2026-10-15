@@ -320,6 +320,7 @@ export const zhCN: I18nMessages = {
   agentInputPlaceholder: '让 AI 帮你编辑文档…（Enter 发送，Shift+Enter 换行）',
   agentSend: '发送',
   agentStop: '停止',
+  agentApplyBusy: '请先完成或停止当前请求，再应用此建议。',
   agentQueueAction: '加入待发',
   agentQueueTitle: '待发请求 · {count}',
   agentQueuePaused: '已暂停 · {count} 条待发',

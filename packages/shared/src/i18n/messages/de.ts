@@ -353,6 +353,7 @@ export const de: Partial<I18nMessages> = {
   agentInputPlaceholder: 'Die KI um eine Änderung am Dokument bitten … (Enter sendet, Umschalt+Enter für neue Zeile)',
   agentSend: 'Senden',
   agentStop: 'Anhalten',
+  agentApplyBusy: 'Beenden oder stoppen Sie die aktuelle Anfrage, bevor Sie diesen Vorschlag anwenden.',
   agentQueueAction: 'Einreihen',
   agentQueueTitle: 'Ausstehende Anfragen · {count}',
   agentQueuePaused: 'Pausiert · {count} ausstehend',

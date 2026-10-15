@@ -31,6 +31,7 @@ export class RequestQueue<Binding> {
   private readonly sessions = new Map<string, Session<Binding>>();
   private selected?: string;
   private active?: Active<Binding>;
+  private application?: { session: string; cancelled: boolean; resumeAfter: boolean; cancel?(): void };
   constructor(
     private readonly options: {
       execute(entry: QueuedRequest<Binding>, accept: () => boolean): Promise<TurnResult>;
@@ -43,10 +44,29 @@ export class RequestQueue<Binding> {
     return this.active?.entry.id;
   }
   get busy(): boolean {
-    return !!this.active;
+    return !!this.active || !!this.application;
   }
   state(id: string): RequestQueueState<Binding> {
     return this.session(id);
+  }
+  /** Every physical document Apply, including retained cards, blocks subsequent submits. */
+  acquireApplication(
+    session: string,
+    owner?: string,
+    cancel?: () => void,
+  ): ((status: 'success' | 'failed' | 'stopped') => void) | undefined {
+    if (this.application || (this.active && this.active.entry.id !== owner)) return;
+    const application = { session, cancelled: false, resumeAfter: false, cancel };
+    this.application = application;
+    let released = false;
+    return (status) => {
+      if (released || this.application !== application) return;
+      released = true;
+      this.application = undefined;
+      if (status !== 'success' && !application.resumeAfter) this.session(session).paused = true;
+      this.options.changed();
+      queueMicrotask(() => this.drain());
+    };
   }
   pendingConversations(): string[] {
     return [...this.sessions].filter(([, state]) => state.entries.length).map(([id]) => id);
@@ -92,10 +112,12 @@ export class RequestQueue<Binding> {
   }
   pause(id: string): void {
     this.session(id).paused = true;
+    if (this.application?.session === id) this.application.resumeAfter = false;
     if (this.active?.session === id) {
       this.active.resumeAfter = false;
       this.cancel();
     }
+    if (this.application?.session === id) this.cancelApplication();
     this.options.changed();
   }
   pauseAll(): void {
@@ -103,6 +125,7 @@ export class RequestQueue<Binding> {
   }
   resume(id: string): void {
     this.session(id).paused = false;
+    if (this.application?.session === id) this.application.resumeAfter = true;
     if (this.active?.session === id && this.active.cancelled) this.active.resumeAfter = true;
     this.options.changed();
     this.drain();
@@ -113,10 +136,11 @@ export class RequestQueue<Binding> {
     if (index < 0 || session.entries[index].recoverOnly || this.active?.entry.id === entryId) return;
     session.entries.unshift(...session.entries.splice(index, 1));
     session.paused = false;
+    if (this.application) this.application.resumeAfter = true;
     if (this.active) {
       this.active.resumeAfter = true;
       this.cancel();
-    }
+    } else this.cancelApplication();
     this.options.changed();
     this.drain();
   }
@@ -146,6 +170,7 @@ export class RequestQueue<Binding> {
       this.active.invalidated = true;
       this.cancel();
     }
+    if (this.application?.session === id) this.cancelApplication();
     this.options.changed();
   }
   invalidateAll(): void {
@@ -169,11 +194,21 @@ export class RequestQueue<Binding> {
       );
       this.options.revoke(active.entry);
     }
+    if (this.application && !this.application.cancelled) {
+      this.application.cancelled = true;
+      this.application.cancel?.();
+    }
     this.options.cancel();
     // A review callback owns held settlement, including an in-flight Apply.
   }
+  private cancelApplication(): void {
+    if (!this.application || this.application.cancelled) return;
+    this.application.cancelled = true;
+    this.application.cancel?.();
+    this.options.cancel();
+  }
   private drain(): void {
-    if (this.active || !this.selected) return;
+    if (this.active || this.application || !this.selected) return;
     const session = this.session(this.selected);
     const next = session.entries.find((entry) => !entry.recoverOnly);
     if (session.paused || !next) return;

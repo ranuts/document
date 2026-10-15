@@ -228,3 +228,48 @@ it('parks a cancelled validation attempt and starts only the fresh explicit Send
   expect(runs).toHaveLength(2);
   expect(queue.state('a').entries[0].recoverOnly).toBe(true);
 });
+it('serializes physical Applies independently of old review owners and ignores a duplicate old release', async () => {
+  const { queue, runs } = setup();
+  const release = queue.acquireApplication('a', 'old-review')!;
+  queue.enqueue('a', 'next', 'scope');
+  expect(runs).toHaveLength(0);
+  expect(queue.busy).toBe(true);
+  queue.resume('a');
+  expect(runs).toHaveLength(0);
+  release('success');
+  await tick();
+  expect(runs).toHaveLength(1);
+  runs[0].accept();
+  runs[0].finish('success');
+  await tick();
+  const newer = queue.acquireApplication('a', 'new-review')!;
+  release('success');
+  expect(queue.busy).toBe(true);
+  expect(queue.acquireApplication('a')).toBeUndefined();
+  newer('failed');
+  await tick();
+  expect(queue.busy).toBe(false);
+  expect(queue.state('a').paused).toBe(true);
+});
+it('cancels a physical Apply once on Send now but waits for real settlement before draining', async () => {
+  const { queue, runs, cancel } = setup();
+  const cancelApplication = vi.fn();
+  const release = queue.acquireApplication('a', undefined, cancelApplication)!;
+  const entry = queue.enqueue('a', 'next', 'scope');
+  queue.sendNow('a', entry.id);
+  queue.sendNow('a', entry.id);
+  expect(cancel).toHaveBeenCalledOnce();
+  expect(cancelApplication).toHaveBeenCalledOnce();
+  expect(runs).toHaveLength(0);
+  release('stopped');
+  await tick();
+  expect(runs.map((run) => run.text)).toEqual(['next']);
+});
+it('does not allow an unrelated card to start Apply while another request owns execution', () => {
+  const { queue } = setup();
+  const entry = queue.enqueue('a', 'active request', 'scope');
+  expect(queue.acquireApplication('a', 'old-card')).toBeUndefined();
+  const release = queue.acquireApplication('a', entry.id);
+  expect(release).toBeTypeOf('function');
+  release?.('success');
+});

@@ -331,6 +331,7 @@ export const ko: Partial<I18nMessages> = {
   agentInputPlaceholder: 'AI에게 문서 편집을 요청하세요… (Enter로 전송, Shift+Enter로 줄바꿈)',
   agentSend: '보내기',
   agentStop: '중지',
+  agentApplyBusy: '현재 요청을 완료하거나 중지한 후 이 제안을 적용하세요.',
   agentQueueAction: '대기열에 추가',
   agentQueueTitle: '대기 중 · {count}',
   agentQueuePaused: '일시 중지 · {count}개',

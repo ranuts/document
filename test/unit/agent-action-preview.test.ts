@@ -899,3 +899,53 @@ it('rests an invalidated applying card after a late verified resolution without 
   expect(view.el.querySelector('[role=status]')?.textContent).toBe('Stopped.');
   view.dispose();
 });
+it('keeps the proposal pending when the host cannot acquire physical Apply ownership', async () => {
+  const apply = vi.fn().mockResolvedValue('verified');
+  const view = new ActionPreview({
+    beforeApply: () => {
+      throw new Error('agentApplyBusy');
+    },
+  });
+  view.show({
+    target: { label: 'Document', selectedText: '' },
+    plan: { tool: 'insert_text', input: { text: 'Draft' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    apply,
+  });
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await Promise.resolve();
+  expect(apply).not.toHaveBeenCalled();
+  expect(view.pending()).toBeTruthy();
+  expect(view.el.querySelector('[role=status]')?.textContent).toBe(
+    'Finish or stop the current request before applying this suggestion.',
+  );
+  view.dispose();
+});
+it.each(['complete', 'invalidate', 'hide'] as const)(
+  'releases host Apply ownership only after physical settlement: %s',
+  async (mode) => {
+    const release = vi.fn();
+    const view = new ActionPreview({ beforeApply: () => release });
+    let finish!: () => void;
+    view.show({
+      target: { label: 'Document', selectedText: '' },
+      plan: { tool: 'insert_text', input: { text: 'Draft' } },
+      isCurrent: () => true,
+      cancel: vi.fn(),
+      apply: () =>
+        new Promise((resolve) => {
+          finish = () => resolve('verified');
+        }),
+    });
+    view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+    if (mode !== 'complete') view[mode]();
+    expect(release).not.toHaveBeenCalled();
+    finish();
+    await vi.waitFor(() =>
+      expect(release).toHaveBeenCalledExactlyOnceWith(mode === 'complete' ? 'success' : 'stopped'),
+    );
+    view.dispose();
+    expect(release).toHaveBeenCalledOnce();
+  },
+);
