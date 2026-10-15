@@ -256,3 +256,135 @@ it.each(['English source '.repeat(800), '中文段落内容。'.repeat(1500), '"
     expect(context.content.truncated).toBe(true);
   },
 );
+
+it.each(['English selection '.repeat(600), '中文选区。'.repeat(2000), '"\\\n'.repeat(3000)])(
+  'runs generic and native turns with a large metadata selection within the existing runtime budget',
+  async (source) => {
+    const { captureRequestContext, serializeRequestContext } =
+      await import('../../lib/agent-plugin/ui/request-context');
+    const { prepareDocumentTask } = await import('../../lib/agent-plugin/document-task');
+    const state = editor('word', source);
+    const instruction = 'Tell me a brief story and retain this exact instruction.';
+    for (const native of [false, true]) {
+      const target = captureDocumentToolScope();
+      const reference = captureRequestContext('metadata');
+      const bounded = serializeRequestContext(reference, instruction);
+      const context = JSON.parse(bounded.serialized);
+      expect(context.selection.truncated).toBe(true);
+      const count = state.selection.mock.calls.length;
+      const chatStream = vi.fn(async (messages, _tools, delta) => {
+        expect(JSON.stringify(messages)).toContain(instruction);
+        for (let i = 0; i < 100; i++) delta('a');
+        return {
+          text: 'a'.repeat(100),
+          toolCalls: [],
+          stopReason: 'stop',
+          assistant: { role: 'assistant' as const, content: 'a'.repeat(100) },
+        };
+      });
+      const provider = {
+        name: 'test',
+        isReady: () => true,
+        chat: vi.fn(),
+        chatStream,
+        ...(native ? { toolCallingMode: 'native' as const } : {}),
+      } as LLMProvider;
+      const prepare = vi.fn(async (request, signal) =>
+        prepareDocumentTask(provider, request, { target, readonly: false, signal, review: vi.fn(), receipt: () => {} }),
+      );
+      const controller = new AgentChatController(provider, () => {}, { onAgentDelta: () => {} });
+      const outcome = await controller.send(instruction, {
+        request: {
+          tools: {},
+          ...(native ? { prepareRun: prepare } : {}),
+          getRequestContext: () => bounded.serialized,
+          assertCurrent: () => {
+            if (!target.isCurrent(false)) throw Error('expired');
+          },
+        },
+      });
+      expect(outcome.status).toBe('success');
+      expect(chatStream).toHaveBeenCalledOnce();
+      expect(prepare).toHaveBeenCalledTimes(native ? 1 : 0);
+      expect(state.selection).toHaveBeenCalledTimes(count);
+      expect(state.body).not.toHaveBeenCalled();
+    }
+  },
+);
+it.each(['Page text '.repeat(1000), '当前页面内容。'.repeat(1500), '"\\\n'.repeat(3000)])(
+  'runs ordinary explicit PDF page grounding through the runtime without rereading page content',
+  async (source) => {
+    const { captureRequestContext, serializeRequestContext } =
+      await import('../../lib/agent-plugin/ui/request-context');
+    const state = editor('pdf', 'selected excerpt');
+    state.pdfRead.mockImplementation((_page, out) => {
+      out.Text = source;
+    });
+    const instruction = 'Explain the current PDF page.';
+    const target = captureDocumentToolScope();
+    const bounded = serializeRequestContext(captureRequestContext('pdf-page'), instruction);
+    const count = state.selection.mock.calls.length;
+    const chatStream = vi.fn(async (_messages, _tools, delta) => {
+      for (let i = 0; i < 100; i++) delta('a');
+      return {
+        text: 'a'.repeat(100),
+        toolCalls: [],
+        stopReason: 'stop',
+        assistant: { role: 'assistant' as const, content: 'a'.repeat(100) },
+      };
+    });
+    const controller = new AgentChatController(
+      { name: 'test', isReady: () => true, chat: vi.fn(), chatStream } as LLMProvider,
+      () => {},
+      { onAgentDelta: () => {} },
+    );
+    expect(
+      (
+        await controller.send(instruction, {
+          request: {
+            tools: {},
+            getRequestContext: () => bounded.serialized,
+            assertCurrent: () => {
+              if (!target.isCurrent(false)) throw Error('expired');
+            },
+          },
+        })
+      ).status,
+    ).toBe('success');
+    expect(chatStream).toHaveBeenCalledOnce();
+    expect(JSON.parse(bounded.serialized).content).toMatchObject({
+      scope: 'pdf-page',
+      page: 2,
+      pages: 2,
+      truncated: true,
+    });
+    expect(state.pdfRead).toHaveBeenCalledOnce();
+    expect(state.selection).toHaveBeenCalledTimes(count);
+  },
+);
+
+it('reserves space for the complete user instruction by reducing only reference text', async () => {
+  const { captureRequestContext, serializeRequestContext } = await import('../../lib/agent-plugin/ui/request-context');
+  editor('word', '中'.repeat(8000));
+  const instruction = '完整保留这条用户指令。'.repeat(100);
+  const bounded = serializeRequestContext(captureRequestContext('metadata'), instruction);
+  const chat = vi.fn(async (messages) => {
+    expect(messages.at(-1)?.content.endsWith(instruction)).toBe(true);
+    return {
+      text: 'answer',
+      toolCalls: [],
+      stopReason: 'stop',
+      assistant: { role: 'assistant' as const, content: 'answer' },
+    };
+  });
+  const controller = new AgentChatController({ name: 'test', isReady: () => true, chat } as LLMProvider, () => {});
+  expect(
+    (
+      await controller.send(instruction, {
+        request: { tools: {}, getRequestContext: () => bounded.serialized, assertCurrent: () => {} },
+      })
+    ).status,
+  ).toBe('success');
+  expect(chat).toHaveBeenCalledOnce();
+  expect(bounded.context.selection?.truncated).toBe(true);
+});

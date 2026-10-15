@@ -22,6 +22,8 @@ export interface RequestContext {
 }
 const MAX_CHARACTERS = 8000;
 const MAX_CELLS = 2000;
+const MAX_REFERENCE_REQUEST_BYTES = 4096;
+const REQUEST_ENVELOPE_HEADROOM = 512;
 function column(index: number): string {
   let result = '';
   for (let n = index + 1; n > 0; n = Math.floor((n - 1) / 26))
@@ -146,4 +148,42 @@ export function captureRequestContext(source: RequestSourceScope = 'document'): 
     /* An unavailable read must not be represented as an empty document. */
   }
   return result;
+}
+
+export interface SerializedRequestContext {
+  context: Pick<RequestContext, 'editor' | 'content'> & { selection?: RequestContext['selection'] };
+  serialized: string;
+}
+
+/** Bound captured reference data for one inference without changing SDK source windows.
+ * Count serialized UTF-8 (including escaping), reserving room for the complete user
+ * instruction and runtime envelope within the existing 6 KiB fallback budget.
+ */
+export function serializeRequestContext(reference: RequestContext, instruction: string): SerializedRequestContext {
+  const context: SerializedRequestContext['context'] = {
+    editor: reference.editor && { ...reference.editor },
+    ...(reference.content ? { content: { ...reference.content } } : { selection: { ...reference.selection } }),
+  };
+  const serialize = () => JSON.stringify(context);
+  const encoder = new TextEncoder();
+  const bytes = () =>
+    encoder.encode(JSON.stringify(serialize())).byteLength +
+    encoder.encode(JSON.stringify(instruction)).byteLength +
+    REQUEST_ENVELOPE_HEADROOM;
+  // Content already owns the requested source; do not also send the selection copy.
+  const source = context.content ?? context.selection;
+  if (source?.text && bytes() > MAX_REFERENCE_REQUEST_BYTES) {
+    const characters = [...source.text];
+    source.truncated = true;
+    let low = 0,
+      high = characters.length;
+    while (low < high) {
+      const middle = Math.ceil((low + high) / 2);
+      source.text = characters.slice(0, middle).join('');
+      if (bytes() <= MAX_REFERENCE_REQUEST_BYTES) low = middle;
+      else high = middle - 1;
+    }
+    source.text = characters.slice(0, low).join('');
+  }
+  return { context, serialized: serialize() };
 }
