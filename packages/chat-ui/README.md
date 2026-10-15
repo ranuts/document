@@ -167,7 +167,11 @@ ancestors and the text probe at 16 nodes of 64 characters each. Unsupported or
 unobserved visibility leaves the observation absent.
 
 Calling `observePresentation()` cancels the owner; replacement, Clear, Stop and
-disposal invalidate pending callbacks. Hosts must cancel on request supersession
+disposal invalidate pending callbacks. Each call creates a distinct observation
+revision, even when reusing the same callback. A live stream keeps the revision
+captured on its first delta: replacing the observer waits for a fresh stream or
+completed append, never adopting an old stream's buffered content, late tail or
+completion. Hosts must cancel on request supersession
 and allow synchronous `append`/`endStream` finalization before clearing a legitimate
 owner. This optional hook adds no diagnostics, content or backend coupling to the
 shared component.
