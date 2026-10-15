@@ -212,9 +212,10 @@ than nearly one thousand; realistic tokenizer timing remains separately measured
 ## Request timing
 
 Measure, do not infer: routing duration, context preparation/budget duration,
-first nonempty model delta, first filtered output and first presented DOM text. Provider timings use a
+first nonempty text at the current provider boundary, first filtered output and first presented DOM text. Provider timings use a
 monotonic clock; first model text can differ from visible output after reasoning
 or schema filtering. Missing stages stay absent, never fabricated as zero.
+An optional content-free `onFirstProviderText?: () => void` runtime hook may observe the first nonempty chatStream delta once per logical run, after abort checks and before deferred text buffering. The host must still verify request ownership. This measures the current LLMProvider boundary: schema/answer-only adapters may have filtered backend content already, so keep backend provider usage timings distinct and never label this as raw model token arrival. Nonstream paths do not fabricate that observation.
 Sample first presented text from an optional request-owned ChatView hook at the actual nonempty DOM flush, not from appendDelta (which only buffers). Report it only while the connected panel and document are visible; this is DOM presentation timing, not proof of compositor paint. Clearing/stopping/switching must invalidate pending presentation callbacks.
 Record only bounded, local numeric timing/status data through existing usage
 metadata and a small request-timing owner; no content, credentials, persistence,
