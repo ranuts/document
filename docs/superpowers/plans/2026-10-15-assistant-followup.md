@@ -14,21 +14,21 @@ Files: lib/agent-plugin/ui/{sessions,panel,request-queue,request-queue-view}.ts;
 test/unit/{agent-sessions,agent-panel-loading,agent-request-queue,agent-request-queue-view}.test.ts;
 test/e2e/agent-history-rendering.spec.ts; seven i18n tables/types and assistant.css if needed.
 
-- [ ] Add delayed-repository RED: send an unaccepted held-classification first request; restore history; assert its original session remains reachable and the request completes/recoverable without target rebind. Keep accepted-Hello and early unsent-draft controls.
-- [ ] Run focused test to confirm expected failure. Implement minimal volatile owner preservation and skip destructive same-owner startup rebuild. Test manual restore/delete/opt-out and provider/conversation changes.
-- [ ] Commit fix(assistant): preserve pending request owners during history hydration.
-- [ ] Add RED for preparing-entry actions and false occupied feedback. Expose active preparation identity; disable unavailable controls and show real localized state while keeping Stop available. Clear stale feedback after successful recovery/session changes.
-- [ ] Run focused tests, changed-file lint/format and typecheck. Commit fix(assistant): reflect pending request preparation in queue actions.
-- [ ] Specification gate then independent quality gate; fix findings before next chunk.
+- [x] Add delayed-repository RED: send an unaccepted held-classification first request; restore history; assert its original session remains reachable and the request completes/recoverable without target rebind. Keep accepted-Hello and early unsent-draft controls.
+- [x] Run focused test to confirm expected failure. Implement minimal volatile owner preservation and skip destructive same-owner startup rebuild. Test manual restore/delete/opt-out and provider/conversation changes.
+- [x] Commit fix(assistant): preserve pending request owners during history hydration.
+- [x] Add RED for preparing-entry actions and false occupied feedback. Expose active preparation identity; disable unavailable controls and show real localized state while keeping Stop available. Clear stale feedback after successful recovery/session changes.
+- [x] Run focused tests, changed-file lint/format and typecheck. Commit fix(assistant): reflect pending request preparation in queue actions.
+- [x] Specification gate then independent quality gate; fix findings before next chunk.
 
 ## Chunk 2: Chat and voice continuity
 
 Files: panel.ts, request-intent.ts/request-context.ts or a focused request-scope helper if needed;
-speech-input.ts; controller.ts only for necessary hooks; relevant panel/speech/context unit tests;
+speech-input.ts; document-task.ts only for opt-in native preflight deferral; controller.ts only for necessary hooks; relevant panel/speech/context/native registry unit tests;
 test/e2e/{agent-request-queue,agent-dictation,agent-stop-resume}.spec.ts.
 
 - [ ] RED: Hello and classified ordinary chat continue after document edits; queued pure chat survives irrelevant edits; selected references/PDF/host reads/writes still refuse stale scope. Provider/session/Stop guards remain effective.
-- [ ] Implement explicit scope policy. Strip selected source from conversation-only references and validate original targets for document operations after routing, never rebind stale queued writes. Run focused tests/typecheck; functional commit.
+- [ ] Implement explicit scope policy using immutable enqueue-time ComposerContext (including cell values). Preserve native compatibility without an extra JSON call: only eligible source-free native candidates may opt into pre-tool freshness deferral; actual registry operations stay strict, and first target change permanently promotes output checks. Strip selected source from conversation-only references and validate original targets for document operations after routing, never rebind stale queued writes. Run focused tests/typecheck; functional commit.
 - [ ] RED: dictate next draft during a held reply; finalize on explicit Send and queue once, preserving current reply. Conversation switch/disable still closes speech.
 - [ ] Relax only inference-related speech gating, retain lifecycle/permission/finish guards. Focused tests/typecheck; separate functional commit.
 - [ ] Specification gate then independent quality gate.
@@ -51,7 +51,7 @@ lib/agent-plugin/ui/panel.ts; shared README/CLAUDE; seven i18n tables/types;
 test/unit/{chat-view-performance,chat-view-results,agent-panel-loading}.test.ts;
 test/e2e/agent-history-rendering.spec.ts.
 
-- [ ] RED: restoring 1000 messages mounts only the latest bounded window and renders no omitted Markdown; full older history remains accessible in order.
+- [ ] RED: restoring 1000 messages mounts only the latest bounded window and renders no omitted Markdown; full older history remains accessible in order; source-level last-answer/document getters still work outside the DOM window; a giant restored message uses a bounded preview with explicit full-source expansion.
 - [ ] Add an opt-in bounded restoration entry point with a localized older-message control; keep appendMany default behavior. Prepend batches without replacing existing message nodes, stealing focus, disturbing a live stream or resetting the draft/viewport anchor.
 - [ ] Test cross-boundary tool groups, nearest-prior-user recovery ownership, lastUserText after prepend, a single oversized turn with <=40 initial rows, copy/interrupted artifact semantics, clear/switch/dispose, reduced motion and keyboard; update old 400-row E2E to explicitly load older rows while retaining all content/action assertions.
 - [ ] Focused tests/typecheck/lint; commit perf(chat-ui): restore long conversations in bounded windows.
