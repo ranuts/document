@@ -55,7 +55,9 @@ unchanged cursor/history. Provider, conversation, enablement and cancellation
 ownership remain mandatory. Classification alone cannot authorize writes: every
 write/read action still validates its original target after routing and before
 execution. PDF page answers, selected-source answers, host reads and proposals
-remain editor-bound. Queued work must not silently recapture a different target.
+remain editor-bound. Capture immutable ComposerContext when enqueuing, including spreadsheet values: execution must not attach a newly selected source. Queued work must not silently recapture a different target.
+
+Native transports do not need an added JSON classification request. Only an original unselected, untruncated, non-PDF candidate without host-read/proposal/refinement may defer editor freshness during pre-tool inference. Its request context is explicitly undefined (no fallback metadata); preflight deferral is opt-in/default strict and cannot enable PDF deferral. Every actual read/write still validates the original target in the registry. The first onTargetChanged callback, including a write promotion before review, permanently binds subsequent output to the editor. A missing target exposes no tools; stale-tool refusal ends in failure, never fallback chat or silent rebind. Owner guards remain active throughout.
 
 Allow microphone dictation of the next draft while inference is running. It uses
 the existing recognition lifecycle and explicit Send, which finalizes dictation
@@ -78,7 +80,7 @@ viewport anchor, next draft, copy actions and any live stream while prepending.
 Prepending must preserve lastUserText and each Restore request source. If a window starts inside an assistant/tool segment, derive its preceding user request without rendering the entire turn. Loading old rows must not change the recovery source of a later error.
 Switch/clear/dispose cancels the old window owner. Full history remains in the
 session/controller and available for model budgeting/export; only presentation
-is windowed. Existing appendMany behavior remains unchanged for other consumers.
+is windowed. getLastAnswer/getLastDocumentBody must still find an eligible answer outside the rendered window. Bound previews of a giant restored message (for example 8000 characters) with explicit expansion; keep the full source for copy/apply. Ordinary append and live streaming retain their existing behavior. Existing appendMany behavior remains unchanged for other consumers.
 Use the existing component/theme system; no new dependency or decorative motion.
 
 ## CPU context budget
