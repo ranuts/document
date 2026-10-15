@@ -152,3 +152,36 @@ visible node's position rather than inferring it from total scroll height.
 `loadEarlier`/`expandMessage` labels have shared English defaults. Clear, a new
 restore and disposal invalidate old history controls. Empty welcome layout never
 follows the bottom; real message arrivals retain ordinary following behavior.
+
+## Optional streaming Markdown
+
+`streamingMarkdown: true` opts into per-stream block reuse; false/default preserves
+legacy hosts. `streaming-markdown.ts` owns only presentation state. It reparses a
+conservative tail (two blocks plus a verified blank-line boundary), checks raw
+source offsets including CRLF, and renders the existing safe Marked token tree.
+Reference definitions at any nesting level need whole-document resolution;
+conservative reference candidates disable prefix reuse. No global parser cache,
+React, remend, extra dependency or general incomplete-syntax repair is used.
+Copy each bounded working tail before lexing so retained token substrings do not
+pin earlier full growing response snapshots. Keep formatted streaming whitespace
+normal via the opt-in modifier; raw spans and legacy streams retain pre-wrap.
+
+All automatic Markdown inputs in this mode are capped at 8000 characters,
+including finished messages, tails, reference fallbacks and interrupted streams.
+An oversized tail stays raw after stable formatted blocks; oversized reference
+fallbacks stay wholly raw even at completion. Never schedule an uncapped parse in
+a later frame/task. Frozen bare URLs may remain inert for oversized mixed/raw results; do not traverse
+all frozen blocks at completion to activate them. Bounded completion retains full
+ordinary semantics. Full raw source remains the copy/apply payload. Explicit
+restored-message expansion remains user-owned and history defaults do not change.
+
+`flushStream(false)` is Stop's raw-only path: do not lex or render tokens before
+`onStop`. Formatting after acknowledgement retains the captured row/helper and
+checks row/source/disposal ownership. Clearing and disposal cancel old callbacks.
+Links parsed from unfinished/bare/reference URLs stay inert during streaming; completed
+explicit permitted links can navigate. HTML/image tokens stay literal text.
+Keep unchanged DOM nodes and text selections; add no token animation or debounce.
+The input cap bounds lexer input, not elapsed time on every device. See the
+[Streamdown memoization reference](https://streamdown.ai/docs/memoization) and
+[termination reference](https://streamdown.ai/docs/termination) for the design
+inspiration; this component deliberately preserves raw incomplete source.

@@ -123,3 +123,28 @@ source and metadata. Ordinary append and streaming remain unchanged. Localize
 `labels.loadEarlier` and `labels.expandMessage`; English defaults are provided.
 Clear, replacement and disposal invalidate old controls. This changes only
 presentation; hosts continue to own full history, storage and model context.
+
+## Optional streaming Markdown
+
+Set `streamingMarkdown: true` to format live replies once per frame. The default
+keeps legacy plain streaming and completed-message rendering. This opt-in reuses
+unchanged block DOM and retains two evolving blocks before freezing verified
+source boundaries, following [Streamdown's block memoization](https://streamdown.ai/docs/memoization).
+Open code fences render progressively; unfinished inline syntax stays literal.
+Provisional bare/reference URLs stay inert, while complete explicit links retain the
+existing web/mail allowlist. HTML and images remain text, never remote elements.
+No source-repair syntax is added; copy and apply always receive original text.
+
+Every automatic Markdown input in this mode is capped at 8000 characters,
+including completion and interrupted formatting. Oversized open tails append
+exact raw text after any stable formatted prefix. Reference definitions can change
+earlier links; they use whole-response parsing only within the cap, otherwise
+the whole response stays raw, including at completion. Large replies therefore
+have an intentional mixed/raw presentation, with complete source available to
+copy/apply. Bare URLs in a frozen prefix may remain inert in oversized replies;
+bounded completion retains ordinary full Markdown link semantics. No later uncapped parse is scheduled. The cap bounds input size,
+not synchronous parse duration. Stop flushes raw pending text without parsing,
+and detached stream callbacks cannot format a newer conversation.
+
+History APIs retain their defaults; an explicit user expansion may still render
+a complete restored message. This option adds no token animation or inference.

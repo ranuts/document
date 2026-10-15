@@ -2,6 +2,7 @@ import { ButtonBuilder, Div, Span, View } from 'ranui/builder';
 import { throttle } from 'ranuts/utils';
 import { ensureChatUiStyles } from './styles';
 import { renderMarkdown } from './markdown';
+import { StreamingMarkdown, STREAMING_MARKDOWN_LIMIT } from './streaming-markdown';
 import type { ChatMessage, ChatViewLabels, ChatViewOptions, RestoreHistoryOptions } from './types';
 
 const ICON_SEND =
@@ -90,6 +91,7 @@ export class ChatView {
   /** The agent bubble currently receiving streamed deltas, if any. */
   private liveMsg: HTMLDivElement | null = null;
   private liveText = '';
+  private liveMarkdown?: StreamingMarkdown;
   private liveNode: Text | null = null;
   private pendingText = '';
   private actionRunning = false;
@@ -294,11 +296,14 @@ export class ChatView {
 
     const bubble = Div().class('cui-bubble').text(visibleText).build();
     if (message.role === 'agent') {
-      if (restored) {
+      if (restored || this.options.streamingMarkdown) {
         try {
-          renderMarkdown(bubble, visibleText);
+          if (this.options.streamingMarkdown && visibleText.length > STREAMING_MARKDOWN_LIMIT)
+            bubble.classList.add('cui-stream-raw');
+          else renderMarkdown(bubble, visibleText);
         } catch {
           bubble.textContent = visibleText;
+          if (this.options.streamingMarkdown) bubble.classList.add('cui-stream-raw');
         }
       } else renderMarkdown(bubble, visibleText);
     }
@@ -547,8 +552,14 @@ export class ChatView {
     if (!this.liveMsg) {
       this.liveMsg = this.append({ role: 'agent', text: '', ...metadata }).parentElement as HTMLDivElement;
       this.liveMsg.classList.add('cui-streaming');
+      if (this.options.streamingMarkdown) this.liveMsg.classList.add('cui-streaming-markdown');
       this.liveNode = document.createTextNode('');
-      this.liveMsg.querySelector('.cui-bubble')?.replaceChildren(this.liveNode);
+      const bubble = this.liveMsg.querySelector<HTMLElement>('.cui-bubble')!;
+      bubble.replaceChildren(this.liveNode);
+      if (this.options.streamingMarkdown) {
+        bubble.classList.remove('cui-stream-raw');
+        this.liveMarkdown = new StreamingMarkdown(bubble);
+      }
     }
     if (firstForPhase) this.updateActivity();
     this.liveText += delta;
@@ -560,11 +571,15 @@ export class ChatView {
   endStream(): void {
     if (this.stopping || this.disposed) return;
     const stick = this.following;
-    this.flushStream();
+    if (this.liveMarkdown) {
+      this.liveMarkdown.update(this.liveText, true);
+      this.pendingText = '';
+    } else this.flushStream();
     if (this.liveMsg) this.liveMsg.dataset.source = this.liveText;
     const bubble = this.liveMsg?.querySelector<HTMLElement>('.cui-bubble');
-    if (bubble) renderMarkdown(bubble, this.liveText);
-    this.liveMsg?.classList.remove('cui-streaming');
+    if (bubble && !this.liveMarkdown) renderMarkdown(bubble, this.liveText);
+    this.liveMarkdown = undefined;
+    this.liveMsg?.classList.remove('cui-streaming', 'cui-streaming-markdown');
     this.liveMsg = null;
     this.liveNode = null;
     this.liveText = '';
@@ -577,18 +592,21 @@ export class ChatView {
     const row = this.liveMsg;
     if (!row) return;
     const text = this.liveText;
-    this.flushStream();
+    const markdown = this.liveMarkdown;
+    this.flushStream(false);
+    this.liveMarkdown = undefined;
     row.dataset.source = text;
     row.dataset.interrupted = 'true';
     row.querySelector('.cui-apply')?.remove();
     this.updateResultPresentation(row);
-    row.classList.remove('cui-streaming');
+    row.classList.remove('cui-streaming', 'cui-streaming-markdown');
     this.liveMsg = null;
     this.liveNode = null;
     this.liveText = '';
     if (!deferMarkdown) {
       const bubble = row.querySelector<HTMLElement>('.cui-bubble');
-      if (bubble) renderMarkdown(bubble, text);
+      if (markdown) markdown.update(text, true);
+      else if (bubble) renderMarkdown(bubble, text);
       this.updateActivity();
       if (bubble && this.following) this.finishAppendLayout(true);
       return;
@@ -604,7 +622,8 @@ export class ChatView {
         this.interruptedRenders.delete(work);
         if (this.disposed || !this.messagesEl.contains(row) || row.dataset.source !== text) return;
         const bubble = row.querySelector<HTMLElement>('.cui-bubble');
-        if (bubble) renderMarkdown(bubble, text);
+        if (markdown) markdown.update(text, true);
+        else if (bubble) renderMarkdown(bubble, text);
         this.scheduleLayout();
       }, 0);
     });
@@ -746,6 +765,7 @@ export class ChatView {
     this.layoutFrame = undefined;
     this.pendingText = '';
     this.liveNode = null;
+    this.liveMarkdown = undefined;
     this.clearCopyFeedback();
     this.resizeObserver?.disconnect();
     this.messagesEl.replaceChildren(this.emptyEl);
@@ -928,6 +948,7 @@ export class ChatView {
     this.layoutFrame = undefined;
     this.pendingText = '';
     this.liveNode = null;
+    this.liveMarkdown = undefined;
     this.resizeObserver?.disconnect();
     this.clearCopyFeedback();
   }
@@ -956,9 +977,12 @@ export class ChatView {
     });
   }
 
-  private flushStream(): void {
+  private flushStream(format = true): void {
     if (!this.liveMsg || !this.pendingText) return;
-    this.liveNode?.appendData(this.pendingText);
+    if (this.liveMarkdown) {
+      if (format) this.liveMarkdown.update(this.liveText);
+      else this.liveMarkdown.raw(this.liveText);
+    } else this.liveNode?.appendData(this.pendingText);
     this.pendingText = '';
   }
 
