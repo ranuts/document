@@ -324,14 +324,15 @@ vi.mock('../../lib/agent-plugin/document-task', async (original) => {
       provider: import('@ranuts/agent-core/llm/types').LLMProvider,
       request: string,
       options: Parameters<typeof import('../../lib/agent-plugin/document-task').runDocumentTask>[2],
-    ) =>
-      options.target.context.kind === 'pdf'
-        ? actual.runDocumentTask(provider, request, options)
-        : runAgent(
-            createSchemaTaskProvider(provider, () => options.target.context),
-            request,
-            { ...options, tools: createDocumentAgentTools(options) },
-          ),
+    ) => {
+      if (options.target.context.kind === 'pdf') return actual.runDocumentTask(provider, request, options);
+      options.beforeRun?.();
+      return runAgent(
+        createSchemaTaskProvider(provider, () => options.target.context),
+        request,
+        { ...options, tools: createDocumentAgentTools(options) },
+      );
+    },
   };
 });
 vi.mock('../../lib/agent-plugin/document-read-answer', () => ({ generateReadAnswer: state.readAnswer }));
@@ -2384,14 +2385,17 @@ it('preserves a failed routing request and lets the next Excel question start fr
   input.value = 'Explain the available editing features';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.cui-msg-error')).not.toBeNull());
-  expect(panel.querySelector('.cui-msg-user')?.textContent).toBe('Explain the available editing features');
+  expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(0);
+  expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Explain the available editing features');
+  expect(state.conversations!.history().load()).toEqual([]);
+  panel.querySelector<HTMLButtonElement>('.agent-queue-remove')!.click();
   expect(panel.querySelector('.cui-msg-error')?.textContent).not.toContain(t('agentWordOnly'));
   expect(state.apply).not.toHaveBeenCalled();
   state.semanticResponse = '{"task":"chat","language":"en"}';
   input.value = '你好';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
-  expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(2);
+  expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
   expect(panel.querySelectorAll('.cui-msg-error')).toHaveLength(1);
   expect(state.apply).not.toHaveBeenCalled();
 });
@@ -2633,7 +2637,7 @@ it('preserves external focus and the next draft when a grounded response complet
   expect(document.activeElement).toBe(external);
 });
 
-it('shows an accepted request before task routing completes and never duplicates it', async () => {
+it('keeps validation pending before routing completes and accepts the answer request exactly once', async () => {
   state.ready = true;
   state.semanticResponse = '{"task":"chat","language":"en"}';
   let finish!: () => void;
@@ -2645,7 +2649,8 @@ it('shows an accepted request before task routing completes and never duplicates
   input.value = 'Tell me a brief story';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   try {
-    expect(panel.querySelector('.cui-msg-user .cui-bubble')?.textContent).toBe('Tell me a brief story');
+    expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(0);
+    expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Tell me a brief story');
     expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentRoutingRequest'));
     expect(input.value).toBe('');
   } finally {
@@ -2814,7 +2819,9 @@ it('preserves a naturally routed rewrite request and offers settings when local 
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
   expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingNeedsLocalService'));
-  expect(input.value).toBe('Improve this selection');
+  expect(input.value).toBe('');
+  expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Improve this selection');
+  expect(state.conversations!.history().load()).toEqual([]);
   expect(state.writing).not.toHaveBeenCalled();
   const setup = panel.querySelector<HTMLButtonElement>('.agent-prepare-action')!;
   expect(setup.hidden).toBe(false);
@@ -3500,7 +3507,12 @@ it('pauses the next queued request after a real unsupported PDF preflight refusa
   expect(panel.textContent).toContain(t('agentPdfBodyUnsupported'));
   expect(calls).toEqual([]);
   expect(state.apply).not.toHaveBeenCalled();
-  expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hello');
+  expect([...panel.querySelectorAll('.agent-queue-text')].map((row) => row.textContent)).toEqual([
+    'Please change the PDF body budget to 200.',
+    'Hello',
+  ]);
+  expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(0);
+  expect(state.conversations!.history().load()).toEqual([]);
 });
 it('pauses queued work when an explicit direct operation has no verified capability receipt', async () => {
   state.ready = true;
@@ -3533,5 +3545,189 @@ it('pauses queued work when an explicit direct operation has no verified capabil
     expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false);
   } finally {
     execute.mockRestore();
+  }
+});
+it.each(['missing-selection', 'protocol', 'stale', 'stop'] as const)(
+  'retains an unresolved request through held routing %s without echoing or persisting an executed turn',
+  async (mode) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.toolContext = 'word';
+    state.semanticResponse =
+      mode === 'missing-selection'
+        ? '{"task":"rewrite","language":"en"}'
+        : mode === 'protocol'
+          ? '{"unexpected":true}'
+          : '{"task":"chat","language":"en"}';
+    let finish!: () => void;
+    state.semanticGate = new Promise((resolve) => {
+      finish = resolve;
+    });
+    const calls: string[] = [];
+    state.queueStream = async (text) => {
+      calls.push(text);
+    };
+    const panel = createPreparedPanel();
+    document.body.append(panel);
+    const text = 'Please improve the wording of my request.';
+    enterQueueDraft(panel, text);
+    await vi.waitFor(() => expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentRoutingRequest')));
+    expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(1);
+    expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(0);
+    if (mode === 'stale') state.targetCurrent = false;
+    if (mode === 'stop') panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+    finish();
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    expect(calls).toEqual([]);
+    expect(state.writing).not.toHaveBeenCalled();
+    expect(panel.querySelector('.agent-queue-text')?.textContent).toBe(text);
+    expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(mode === 'stop');
+    expect(state.conversations!.history().load()).toEqual([]);
+  },
+);
+it.each(['unavailable', 'empty'] as const)(
+  'retains a trusted %s source request without calling the answer model',
+  async (kind) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.toolContext = 'word';
+    const context = await import('../../lib/agent-plugin/ui/request-context');
+    const read = vi.spyOn(context, 'captureRequestContext').mockReturnValue({
+      editor: { kind: 'word' },
+      selection: { text: '', truncated: false },
+      content: { scope: 'document-body', ...(kind === 'unavailable' ? { unavailable: true as const } : { text: '' }) },
+    });
+    const calls: string[] = [];
+    state.queueStream = async (text) => {
+      calls.push(text);
+    };
+    try {
+      const panel = createPreparedPanel();
+      document.body.append(panel);
+      panel.querySelector<HTMLButtonElement>('[data-task="read"]')!.click();
+      const text = panel.querySelector<HTMLTextAreaElement>('.cui-input')!.value;
+      enterQueueDraft(panel, text);
+      await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+      expect(calls).toEqual([]);
+      expect(state.routing).not.toHaveBeenCalled();
+      expect(panel.querySelector('.agent-queue-text')?.textContent).toBe(text);
+      expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(0);
+      expect(state.conversations!.history().load()).toEqual([]);
+    } finally {
+      read.mockRestore();
+    }
+  },
+);
+it.each([false, true])(
+  'allows fresh Send after routing Stop only when older executable work is absent: older=%s',
+  async (older) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.toolContext = 'word';
+    state.semanticResponse = '{"task":"chat","language":"en"}';
+    let finish!: () => void;
+    state.semanticGate = new Promise((resolve) => {
+      finish = resolve;
+    });
+    const calls: string[] = [];
+    state.queueStream = async (text) => {
+      calls.push(text);
+    };
+    const panel = createPreparedPanel();
+    document.body.append(panel);
+    enterQueueDraft(panel, 'Tell me a brief story');
+    await vi.waitFor(() => expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentRoutingRequest')));
+    if (older) enterQueueDraft(panel, 'Hi');
+    panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+    finish();
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    state.semanticResponse = undefined;
+    enterQueueDraft(panel, 'Hello');
+    if (older) {
+      expect(calls).toEqual([]);
+      panel.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
+      await vi.waitFor(() => expect(calls).toEqual(['Hi', 'Hello']));
+    } else await vi.waitFor(() => expect(calls).toEqual(['Hello']));
+    expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Tell me a brief story');
+    expect(panel.querySelector('.agent-queue-recovery')?.textContent).toBe(t('agentStopped'));
+    expect(panel.querySelector<HTMLButtonElement>('.agent-queue-send-now')!.hidden).toBe(true);
+  },
+);
+it('keeps a queue-only conversation reachable after switching away during validation without persisting its pending request', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.toolContext = 'word';
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  let finish!: () => void;
+  state.semanticGate = new Promise((resolve) => {
+    finish = resolve;
+  });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  const original = activeSession();
+  enterQueueDraft(panel, 'Tell me a brief story');
+  await vi.waitFor(() => expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentRoutingRequest')));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  finish();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  openSession(panel, original);
+  expect(state.conversations!.history().load()).toEqual([]);
+  expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Tell me a brief story');
+  expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(0);
+});
+it('retains unsupported native PDF preflight and its next request before any controller turn or tool execution', async () => {
+  state.nativeEndpoint = true;
+  state.editorReady = true;
+  state.toolContext = 'pdf';
+  let finish!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    finish = resolve;
+  });
+  const requests: Array<Record<string, unknown>> = [];
+  const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
+    const body = JSON.parse(String(init.body));
+    requests.push(body);
+    await gate;
+    return new Response(
+      JSON.stringify({ choices: [{ message: { content: '{"effect":"edit_body"}' }, finish_reason: 'stop' }] }),
+    );
+  });
+  vi.stubGlobal('fetch', fetchMock);
+  try {
+    const panel = createAgentPanel();
+    document.body.append(panel);
+    const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+    kind.value = 'openai-compatible';
+    kind.dispatchEvent(new Event('change'));
+    for (const [selector, value] of [
+      ['.agent-panel-endpoint-url', 'https://api.example.com/v1'],
+      ['.agent-panel-endpoint-model', 'tool-model'],
+      ['.agent-panel-endpoint-key', 'sk-test'],
+    ]) {
+      const field = panel.querySelector<HTMLInputElement>(selector)!;
+      field.value = value;
+      field.dispatchEvent(new Event('change'));
+    }
+    const connect = panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!;
+    connect.click();
+    await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+    enterQueueDraft(panel, 'Change the budget in this PDF to 200.');
+    await vi.waitFor(() => expect(requests).toHaveLength(1));
+    enterQueueDraft(panel, 'Hello');
+    expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(0);
+    finish();
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    expect(requests).toHaveLength(1);
+    expect(requests[0].tools ?? []).toEqual([]);
+    expect(state.apply).not.toHaveBeenCalled();
+    expect(state.conversations!.history().load()).toEqual([]);
+    expect([...panel.querySelectorAll('.agent-queue-text')].map((row) => row.textContent)).toEqual([
+      'Change the budget in this PDF to 200.',
+      'Hello',
+    ]);
+    expect(panel.textContent).toContain(t('agentPdfBodyUnsupported'));
+  } finally {
+    finish?.();
+    vi.unstubAllGlobals();
   }
 });

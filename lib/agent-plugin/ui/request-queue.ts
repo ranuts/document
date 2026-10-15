@@ -4,6 +4,8 @@ export interface QueuedRequest<Binding> {
   readonly id: string;
   readonly text: string;
   readonly binding: Binding;
+  /** Cancelled validation is recoverable text, never executable FIFO work. */
+  readonly recoverOnly?: true;
 }
 export interface RequestQueueState<Binding> {
   readonly entries: readonly QueuedRequest<Binding>[];
@@ -46,6 +48,9 @@ export class RequestQueue<Binding> {
   state(id: string): RequestQueueState<Binding> {
     return this.session(id);
   }
+  pendingConversations(): string[] {
+    return [...this.sessions].filter(([, state]) => state.entries.length).map(([id]) => id);
+  }
   private session(id: string): Session<Binding> {
     let session = this.sessions.get(id);
     if (!session) {
@@ -68,7 +73,7 @@ export class RequestQueue<Binding> {
     const entry = Object.freeze({ id: crypto.randomUUID(), text, binding });
     const state = this.session(session);
     // A fresh explicit Send need not resume anything when no older work remains.
-    if (state.paused && !state.entries.length) {
+    if (state.paused && !state.entries.some((entry) => !entry.recoverOnly)) {
       state.paused = false;
       if (this.active?.session === session && this.active.cancelled) this.active.resumeAfter = true;
     }
@@ -105,7 +110,7 @@ export class RequestQueue<Binding> {
   sendNow(id: string, entryId: string): void {
     const session = this.session(id);
     const index = session.entries.findIndex((entry) => entry.id === entryId);
-    if (index < 0 || this.active?.entry.id === entryId) return;
+    if (index < 0 || session.entries[index].recoverOnly || this.active?.entry.id === entryId) return;
     session.entries.unshift(...session.entries.splice(index, 1));
     session.paused = false;
     if (this.active) {
@@ -157,16 +162,24 @@ export class RequestQueue<Binding> {
     const active = this.active;
     if (!active || active.cancelled) return;
     active.cancelled = true;
+    if (!active.accepted && !active.invalidated) {
+      const session = this.session(active.session);
+      session.entries = session.entries.map((entry) =>
+        entry.id === active.entry.id ? Object.freeze({ ...entry, recoverOnly: true as const }) : entry,
+      );
+      this.options.revoke(active.entry);
+    }
     this.options.cancel();
     // A review callback owns held settlement, including an in-flight Apply.
   }
   private drain(): void {
     if (this.active || !this.selected) return;
     const session = this.session(this.selected);
-    if (session.paused || !session.entries.length) return;
+    const next = session.entries.find((entry) => !entry.recoverOnly);
+    if (session.paused || !next) return;
     const active: Active<Binding> = {
       session: this.selected,
-      entry: session.entries[0],
+      entry: next,
       accepted: false,
       cancelled: false,
       resumeAfter: false,

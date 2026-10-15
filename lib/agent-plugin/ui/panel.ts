@@ -1731,7 +1731,10 @@ export function createAgentPanel(
       else invalidatePlans();
     },
     revoke: (entry) => revokeHostRead(entry.binding.intent?.hostRead),
-    changed: () => pendingQueue.update(requestQueue!.state(conversations.activeId)),
+    changed: () => {
+      pendingQueue.update(requestQueue!.state(conversations.activeId));
+      conversationList?.sync();
+    },
   });
   requestQueue.select(conversations.activeId);
   function enqueueRequest(text: string): void {
@@ -2022,9 +2025,7 @@ export function createAgentPanel(
       return owned('failed');
     }
 
-    if (!requestTarget.isCurrent(false) || !accept()) return owned('stopped');
-    // Echo only after readiness checks, before routing or model work.
-    appendTurn({ role: 'user', text });
+    // Validation owns Stop and the visible pending entry, without executing a user turn.
     chat.setRunning(true);
     const generation = controllerGeneration;
     const conversation = conversationRevision;
@@ -2032,7 +2033,21 @@ export function createAgentPanel(
     const operationStorage = historyStorage;
     const operationSession = conversations.activeId;
     let turnStatus: TurnResult['status'] = 'failed';
-    let routingStarted = false;
+    let accepted = false;
+    const beginExecution = (): void => {
+      if (accepted) return;
+      if (
+        generation !== controllerGeneration ||
+        conversation !== conversationRevision ||
+        binding.providerRevision !== providerBindingRevision ||
+        binding.readonly !== getReadonlyMode() ||
+        !requestTarget.isCurrent(false)
+      )
+        throw new Error(t('agentPlanExpired'));
+      if (!accept()) throw new DOMException('Request stopped before execution', 'AbortError');
+      accepted = true;
+      appendTurn({ role: 'user', text });
+    };
     let verifiedTaskChanges = 0;
     let partialTaskAnswer = '';
     const taskDisplay = new AssistantDisplayStream((delta) => {
@@ -2050,7 +2065,13 @@ export function createAgentPanel(
         if (!isCurrentHostRead(stagedIntent.hostRead)) throw new Error(t('agentPlanExpired'));
         chat.setActivity('reading');
         const read = prepareHostRead(stagedIntent.hostRead, trimmed);
-        if (!read.request.reply) appendTurn({ role: 'tool', text: read.receipt });
+        if (read.request.reply) {
+          appendTurn({ role: 'tool', text: read.request.reply });
+          return owned('failed');
+        }
+        read.request.assertCurrent();
+        beginExecution();
+        appendTurn({ role: 'tool', text: read.receipt });
         chat.setActivity('responding');
         const result = await ctl.send(trimmed, { echoUser: false, request: read.request });
         return owned(result.status);
@@ -2071,7 +2092,22 @@ export function createAgentPanel(
       ) {
         chat.setActivity('responding');
         if (!requestTarget) throw new Error(t('agentPlanExpired'));
-        const result = await ctl.send(trimmed, { echoUser: false, request: nativeRequest(requestTarget, trimmed) });
+        const native = nativeRequest(requestTarget, trimmed);
+        const abort = new AbortController();
+        planning = abort;
+        const prepared = await native.prepareRun!(trimmed, abort.signal);
+        abort.signal.throwIfAborted();
+        native.assertCurrent();
+        if (prepared.reply) {
+          appendTurn({ role: 'tool', text: prepared.reply });
+          return owned('failed');
+        }
+        beginExecution();
+        if (planning === abort) planning = null;
+        const result = await ctl.send(trimmed, {
+          echoUser: false,
+          request: { ...native, ...prepared, prepareRun: undefined },
+        });
         return owned(result.status);
       }
       if (
@@ -2083,7 +2119,6 @@ export function createAgentPanel(
       ) {
         const abort = new AbortController();
         planning = abort;
-        routingStarted = true;
         const safe = !pendingProposal ? safeChatIntent(trimmed) : undefined;
         if (stagedIntent) request = { ...stagedIntent };
         else if (safe) request = safe;
@@ -2123,6 +2158,7 @@ export function createAgentPanel(
       if (request.task === 'compose') {
         if (snapshot.context?.kind !== 'word') throw new Error(t('agentWordOnly'));
         if (!routingProvider?.isReady()) throw new Error(t('agentLoadModel'));
+        beginExecution();
         operationHistory.push({ role: 'user', content: trimmed });
         const abort = new AbortController();
         planning = abort;
@@ -2145,7 +2181,6 @@ export function createAgentPanel(
         return owned('success');
       }
       if (writingSelect.value === 'tools') {
-        operationHistory.push({ role: 'user', content: text });
         if (!request.refinement) invalidatePlans();
         let target = requestTarget;
         if (!target || !target.isCurrent(false)) throw new Error(t('agentPlanExpired'));
@@ -2172,13 +2207,18 @@ export function createAgentPanel(
               }
             },
           };
-          const historyStart = operationHistory.length - 1;
+          const historyStart = operationHistory.length;
           const record = (messages: LLMMessage[]) => {
             operationHistory.splice(historyStart, operationHistory.length - historyStart, ...messages, ...taskReceipts);
           };
           const result = await runDocumentTask(routingProvider!, text, {
             ...taskOptions,
             signal: abort.signal,
+            beforeRun: () => {
+              abort.signal.throwIfAborted();
+              beginExecution();
+              operationHistory.push({ role: 'user', content: text });
+            },
             assertCurrent: () => {
               if (!currentTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
             },
@@ -2196,7 +2236,11 @@ export function createAgentPanel(
               } else if (event.type === 'tool_result' && event.isError) taskError = event.content;
             },
           });
-          record(result.messages);
+          if (accepted) record(result.messages);
+          if (result.preflightFailed) {
+            appendTurn({ role: 'tool', text: result.text });
+            return owned('failed');
+          }
           abort.signal.throwIfAborted();
           if (generation !== controllerGeneration || conversation !== conversationRevision)
             throw new Error(t('agentPlanExpired'));
@@ -2223,6 +2267,8 @@ export function createAgentPanel(
         }
         // A bounded plan may propose writes: bind the strong baseline before planning yields.
         target = target.prepareWrite?.() ?? target;
+        beginExecution();
+        operationHistory.push({ role: 'user', content: text });
         const plans = await generateDocumentToolSequence(
           useEndpointForChat() ? endpointProvider! : webllmProvider!,
           text,
@@ -2392,7 +2438,6 @@ export function createAgentPanel(
           }
         }
       } else if (proposalMode) {
-        operationHistory.push({ role: 'user', content: trimmed });
         invalidatePlans();
         const readonly = getReadonlyMode();
         if (!requestTarget?.isCurrent(false)) throw new Error(t('agentPlanExpired'));
@@ -2428,6 +2473,8 @@ export function createAgentPanel(
         // The gate above normally covers an unready browser-local model; this stays
         // as a guard for readiness that flipped between the gate and here.
         if (!writingProvider || !writingProvider.isReady()) throw new Error('agentWritingNeedsLocalService');
+        beginExecution();
+        operationHistory.push({ role: 'user', content: trimmed });
         chat.setActivity('responding');
         const body = await generateWriting(
           writingProvider,
@@ -2493,6 +2540,11 @@ export function createAgentPanel(
         chat.setActivity('responding');
         const pdf = snapshot.context?.kind === 'pdf';
         const safe = !pendingProposal && safeChatIntent(trimmed);
+        const reference = serializeRequestContext(
+          captureRequestContext(pdf && !safe ? 'pdf-page' : 'metadata'),
+          trimmed,
+        ).serialized;
+        beginExecution();
         const result = await ctl.send(trimmed, {
           echoUser: false,
           request: {
@@ -2500,9 +2552,7 @@ export function createAgentPanel(
             assertCurrent: () => {
               if (requestTarget && !requestTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
             },
-            getRequestContext: () =>
-              serializeRequestContext(captureRequestContext(pdf && !safe ? 'pdf-page' : 'metadata'), trimmed)
-                .serialized,
+            getRequestContext: () => reference,
           },
         });
         turnStatus = result.status;
@@ -2512,6 +2562,7 @@ export function createAgentPanel(
       if (
         caughtError instanceof Error &&
         ['agentWritingNeedsLocalService', 'agentWritingOfflineNeedsDevice'].includes(caughtError.message) &&
+        accepted &&
         !chat.getInput().trim()
       )
         chat.setInput(text);
@@ -2522,11 +2573,6 @@ export function createAgentPanel(
       const stopped = error instanceof Error && error.name === 'AbortError';
       const role =
         stopped || (error instanceof Error && error.message === 'agentProposalUnchanged') ? 'status' : 'error';
-      // Routing happens before any branch records the request. Preserve failed
-      // requests too, without duplicating a chat/controller-owned user turn.
-      if (routingStarted && !operationHistory.length) {
-        operationHistory.push({ role: 'user', content: trimmed });
-      }
       if (partialTaskAnswer)
         operationHistory.push({ role: 'assistant', content: partialTaskAnswer, interrupted: true });
       if (operationHistory.length)
@@ -2786,6 +2832,7 @@ export function createAgentPanel(
   historyView.hidden = true;
   conversationList = createConversationList({
     store: conversations,
+    pendingConversations: () => requestQueue?.pendingConversations() ?? [],
     onSelect: (id) => {
       speech?.close();
       switchConversation(id);

@@ -79,7 +79,11 @@ export type DocumentTaskResult = AgentRunResult & { preflightFailed?: true };
 export async function runDocumentTask(
   provider: LLMProvider,
   request: string,
-  options: DocumentAgentToolOptions & Pick<AgentRunOptions, 'signal' | 'onEvent' | 'onToolExchange' | 'assertCurrent'>,
+  options: DocumentAgentToolOptions &
+    Pick<AgentRunOptions, 'signal' | 'onEvent' | 'onToolExchange' | 'assertCurrent'> & {
+      /** Host accepts execution only after capability preflight succeeds. May throw to retain the pending request. */
+      beforeRun?(): void;
+    },
 ): Promise<DocumentTaskResult> {
   let current = options.target;
   const prepared = await prepareDocumentTask(provider, request, {
@@ -103,6 +107,9 @@ export async function runDocumentTask(
       aborted: false,
     };
   }
+  options.signal?.throwIfAborted();
+  options.assertCurrent?.();
+  options.beforeRun?.();
   return runAgent(
     provider.toolCallingMode === 'native' ? provider : createSchemaTaskProvider(provider, () => current.context),
     request,

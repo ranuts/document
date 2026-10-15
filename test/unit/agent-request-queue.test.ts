@@ -143,7 +143,7 @@ it('invalidation drops volatile entries and late finally cannot clear newer acti
   await tick();
   expect(runs.at(-1)?.text).toBe('new');
 });
-it('rejects late acceptance after a preflight Stop and never retries an unaccepted success automatically', async () => {
+it('rejects late acceptance after a preflight Stop and keeps it outside executable FIFO', async () => {
   const { queue, runs } = setup();
   queue.enqueue('a', 'preflight', 'scope');
   queue.pause('a');
@@ -154,10 +154,10 @@ it('rejects late acceptance after a preflight Stop and never retries an unaccept
   expect(queue.state('a').entries.map((e) => e.text)).toEqual(['preflight']);
   expect(queue.state('a').paused).toBe(true);
   queue.resume('a');
-  runs[1].finish('success');
-  await tick();
-  expect(runs).toHaveLength(2);
-  expect(queue.state('a').paused).toBe(true);
+  expect(runs).toHaveLength(1);
+  expect(queue.state('a').entries[0].recoverOnly).toBe(true);
+  queue.sendNow('a', queue.state('a').entries[0].id);
+  expect(runs).toHaveLength(1);
 });
 it('allows a fresh explicit Send after Stop when no older work exists, after active settlement', async () => {
   const { queue, runs } = setup();
@@ -200,4 +200,31 @@ it('retains an explicit Resume requested while a cancelled original submit is st
   runs[0].finish('superseded');
   await tick();
   expect(runs.map((run) => run.text)).toEqual(['old', 'pending']);
+});
+
+it('pauses an unaccepted success rather than retrying it automatically', async () => {
+  const { queue, runs } = setup();
+  queue.enqueue('a', 'preflight', 'scope');
+  runs[0].finish('success');
+  await tick();
+  expect(runs).toHaveLength(1);
+  expect(queue.state('a').paused).toBe(true);
+  queue.resume('a');
+  expect(runs).toHaveLength(2);
+});
+it('parks a cancelled validation attempt and starts only the fresh explicit Send after settlement', async () => {
+  const { queue, runs, revoke } = setup();
+  const old = queue.enqueue('a', 'old validation', 'trusted');
+  queue.pause('a');
+  queue.enqueue('a', 'fresh', 'scope');
+  expect(runs).toHaveLength(1);
+  expect(revoke).toHaveBeenCalledWith(old);
+  runs[0].finish('stopped');
+  await tick();
+  expect(runs.map((run) => run.text)).toEqual(['old validation', 'fresh']);
+  runs[1].accept();
+  runs[1].finish('success');
+  await tick();
+  expect(runs).toHaveLength(2);
+  expect(queue.state('a').entries[0].recoverOnly).toBe(true);
 });

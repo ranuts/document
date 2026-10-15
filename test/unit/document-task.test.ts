@@ -183,6 +183,7 @@ it('coordinates a real registry read and returns its result to schema inference'
 it('rejects a PDF body edit before offering an annotation as a substitute', async () => {
   const generateJSON = vi.fn().mockResolvedValue(response({ effect: 'edit_body' }));
   const review = vi.fn();
+  const beforeRun = vi.fn();
   const result = await runDocumentTask(
     { name: 'local', isReady: () => true, generateJSON, chat: vi.fn() },
     'Change the budget in page 1 to 200.',
@@ -190,10 +191,12 @@ it('rejects a PDF body edit before offering an annotation as a substitute', asyn
       target: { context: { kind: 'pdf', page: 1 }, label: 'PDF', selectedText: '', isCurrent: () => true },
       readonly: false,
       review,
+      beforeRun,
       receipt: vi.fn(),
     },
   );
   expect(result.preflightFailed).toBe(true);
+  expect(beforeRun).not.toHaveBeenCalled();
   expect(result.text).toContain('body text');
   expect(result.toolCallCount).toBe(0);
   expect(review).not.toHaveBeenCalled();
@@ -269,4 +272,22 @@ it('streams only a schema answer through the tool loop before the completion clo
       .join(''),
   ).toBe('Budget 120');
   expect(events.some((event) => event.type === 'tool_call')).toBe(false);
+});
+
+it('lets the host reject execution after capability preflight before any answer or tool model call', async () => {
+  const chat = vi.fn();
+  const beforeRun = vi.fn(() => {
+    throw new DOMException('Stopped', 'AbortError');
+  });
+  await expect(
+    runDocumentTask({ name: 'native', toolCallingMode: 'native', isReady: () => true, chat }, 'Read the document', {
+      target: { context: { kind: 'word' }, label: 'Word', selectedText: '', isCurrent: () => true },
+      readonly: false,
+      review: vi.fn(),
+      receipt: vi.fn(),
+      beforeRun,
+    }),
+  ).rejects.toMatchObject({ name: 'AbortError' });
+  expect(beforeRun).toHaveBeenCalledOnce();
+  expect(chat).not.toHaveBeenCalled();
 });
