@@ -1,4 +1,10 @@
-import { createSearchMatcher, type SearchEntry, type SearchRequest, type SearchResult } from './history-search-model';
+import {
+  compileSearchQuery,
+  createSearchMatcher,
+  type SearchEntry,
+  type SearchRequest,
+  type SearchResult,
+} from './history-search-model';
 const corpus = new Map<string, SearchEntry[]>();
 let revision = 0;
 self.addEventListener('message', (event: MessageEvent<SearchRequest>) => {
@@ -12,8 +18,9 @@ self.addEventListener('message', (event: MessageEvent<SearchRequest>) => {
     revision = data.revision;
   } else if (data.type === 'query' && data.revision === revision) {
     const matches = [];
+    const compiled = compileSearchQuery(data.query);
     for (const [id, segments] of corpus) {
-      const match = createSearchMatcher(id, data.query);
+      const match = createSearchMatcher(id, compiled);
       for (const segment of segments) {
         const result = match(segment);
         if (result) {

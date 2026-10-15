@@ -1,7 +1,10 @@
 import { scheduleHistoryTask } from './history-idle';
 import type { ConversationSearchRecord } from './sessions';
 import {
+  canonicalSearchQuery,
+  createSearchCompiler,
   createSearchMatcher,
+  normalizeSearchWhitespace,
   type SearchEntry,
   type SearchMatch,
   type SearchRequest,
@@ -35,11 +38,14 @@ export function createHistorySearch(receive: (result: SearchResult) => void) {
     const currentRequest = request;
     const currentRevision = revision;
     const currentGeneration = generation;
+    const currentQuery = query;
     const entries = corpus.entries();
     const matches: SearchMatch[] = [];
     let current = entries.next();
     let segment = 0;
-    let match = current.done ? undefined : createSearchMatcher(current.value[0], query);
+    let compiler: ReturnType<typeof createSearchCompiler> | undefined;
+    let prepared = false;
+    let match: ReturnType<typeof createSearchMatcher> | undefined;
     const step = () => {
       if (
         disposed ||
@@ -52,9 +58,15 @@ export function createHistorySearch(receive: (result: SearchResult) => void) {
       const deadline = performance.now() + 4;
       let batches = 0;
       do {
+        if (!prepared && !current.done) {
+          compiler ??= createSearchCompiler(currentQuery);
+          prepared = compiler.advance();
+          if (prepared) match = createSearchMatcher(current.value[0], compiler.compiled);
+          else continue;
+        }
         let budget = 16_384;
         let count = 0;
-        while (!current.done && budget > 0 && count < 32) {
+        while (!current.done && budget > 0 && count < 32 && performance.now() < deadline) {
           const part = current.value[1][segment++];
           const result = part && match?.(part);
           budget -= Math.max(1, part?.text.length ?? 0);
@@ -63,12 +75,13 @@ export function createHistorySearch(receive: (result: SearchResult) => void) {
           if (result || segment >= current.value[1].length) {
             current = entries.next();
             segment = 0;
-            match = current.done ? undefined : createSearchMatcher(current.value[0], query);
+            match = current.done ? undefined : createSearchMatcher(current.value[0], compiler!.compiled);
           }
         }
       } while (!current.done && ++batches < 32 && performance.now() < deadline);
       if (!current.done) fallback = setTimeout(step, 0);
-      else receive({ type: 'result', revision, request, query, matches });
+      else
+        receive({ type: 'result', revision: currentRevision, request: currentRequest, query: currentQuery, matches });
     };
     fallback = setTimeout(step, 0);
   };
@@ -178,7 +191,7 @@ export function createHistorySearch(receive: (result: SearchResult) => void) {
             offset++;
             iterator = undefined;
           } else {
-            let text = part.value.replace(/\s+/g, ' ');
+            let text = normalizeSearchWhitespace(part.value);
             if (previousSpace && text.startsWith(' ')) text = text.slice(1);
             if (text) previousSpace = text.endsWith(' ');
             const value = { id: entry.id, index: segments.length, text, normalized: text.toLocaleLowerCase() };
@@ -222,7 +235,7 @@ export function createHistorySearch(receive: (result: SearchResult) => void) {
     update,
     query(value: string) {
       if (disposed || suspended) return;
-      query = value.trim().toLocaleLowerCase();
+      query = canonicalSearchQuery(value);
       request++;
       if (query && extraction && extractStep) {
         extraction();

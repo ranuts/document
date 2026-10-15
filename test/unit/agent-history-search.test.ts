@@ -1,10 +1,118 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import { createConversationStore } from '../../lib/agent-plugin/ui/sessions';
 import { createHistorySearch } from '../../lib/agent-plugin/ui/history-search';
+import * as searchModel from '../../lib/agent-plugin/ui/history-search-model';
 
 afterEach(() => {
+  vi.restoreAllMocks();
   vi.useRealTimers();
   vi.unstubAllGlobals();
+});
+
+it('canonicalizes repeated whitespace and case across corpus segments and query identity', async () => {
+  vi.useFakeTimers();
+  const receive = vi.fn();
+  const search = createHistorySearch(receive);
+  search.update([
+    {
+      id: 'one',
+      title: '',
+      createdAt: 1,
+      updatedAt: 1,
+      empty: false,
+      *text() {
+        yield 'ALPHA \t';
+        yield '\n  BETA';
+      },
+    },
+  ]);
+  search.query('  alpha  \n\t BETA  ');
+  await vi.runAllTimersAsync();
+  expect(receive).toHaveBeenLastCalledWith(
+    expect.objectContaining({
+      query: 'alpha beta',
+      matches: [expect.objectContaining({ id: 'one' })],
+    }),
+  );
+  search.dispose();
+});
+
+it('prepares one large query cooperatively and discards it when newer input arrives', async () => {
+  vi.useFakeTimers();
+  const NativeArray = Uint32Array;
+  const sizes: number[] = [];
+  vi.stubGlobal(
+    'Uint32Array',
+    class extends NativeArray {
+      constructor(size: number) {
+        super(size);
+        sizes.push(size);
+      }
+    },
+  );
+  const receive = vi.fn();
+  const search = createHistorySearch(receive);
+  search.update(
+    Array.from({ length: 32 }, (_, index) => ({
+      id: String(index),
+      title: 'tiny',
+      createdAt: 1,
+      updatedAt: 1,
+      empty: false,
+      *text() {
+        yield 'tiny';
+      },
+    })),
+  );
+  await vi.runAllTimersAsync();
+  search.query('a'.repeat(500000));
+  expect(sizes).toEqual([]);
+  await vi.advanceTimersByTimeAsync(0);
+  expect(receive).not.toHaveBeenCalled();
+  expect(sizes).toEqual([500000]);
+  search.query('tiny');
+  await vi.runAllTimersAsync();
+  expect(receive).toHaveBeenCalledOnce();
+  expect(receive.mock.calls[0][0].query).toBe('tiny');
+  expect(receive.mock.calls[0][0].matches).toHaveLength(32);
+  expect(sizes).toEqual([500000, 4]);
+  search.dispose();
+});
+
+it('checks the fallback deadline between tiny records rather than after a whole inner batch', async () => {
+  vi.useFakeTimers();
+  let elapsed = 0;
+  vi.spyOn(performance, 'now').mockImplementation(() => elapsed);
+  const original = searchModel.createSearchMatcher;
+  vi.spyOn(searchModel, 'createSearchMatcher').mockImplementation((...args) => {
+    const match = original(...args);
+    return (entry) => {
+      elapsed += 2;
+      return match(entry);
+    };
+  });
+  const receive = vi.fn();
+  const search = createHistorySearch(receive);
+  search.update(
+    Array.from({ length: 32 }, (_, index) => ({
+      id: String(index),
+      title: 'tiny',
+      createdAt: 1,
+      updatedAt: 1,
+      empty: false,
+      *text() {
+        yield 'tiny';
+      },
+    })),
+  );
+  await vi.runAllTimersAsync();
+  search.query('tiny');
+  await vi.advanceTimersByTimeAsync(0);
+  expect(elapsed).toBeLessThanOrEqual(4);
+  expect(receive).not.toHaveBeenCalled();
+  await vi.runAllTimersAsync();
+  expect(receive.mock.calls[0][0].matches).toHaveLength(32);
+  search.dispose();
 });
 
 it('extracts each immutable record once and searches without cloning message arrays', async () => {
