@@ -448,6 +448,8 @@ export const ja: Partial<I18nMessages> = {
   agentEntrySmaller: '文章を変更するには、より小さい範囲を選択してください。',
   agentEntryReadOnly: '読み取り専用 · 内容の確認と要約ができます',
   agentDocumentDraft: '文書の下書き',
+  agentLoadEarlierMessages: '以前のメッセージを読み込む',
+  agentShowFullMessage: 'メッセージ全体を表示',
   agentIncompleteResponse: '未完了の回答',
   agentReviewActions: 'その他の操作',
   agentEntryAnalyze: '選択データを確認',

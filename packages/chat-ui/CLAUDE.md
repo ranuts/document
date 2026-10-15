@@ -41,18 +41,19 @@ container.appendChild(chat.el); // mount the root element
 
 ## Methods
 
-| Method                                                                         | Purpose                                                                               |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `append({ role, text })`                                                       | Add a finished message. `role`: `'user' \| 'agent' \| 'tool' \| 'status' \| 'error'`. |
-| `appendMany(messages)`                                                         | Add finished messages in order with one final layout update, for restoring history.   |
-| `appendDelta(text)`                                                            | Stream into a live agent bubble (auto-created on first delta).                        |
-| `endStream()`                                                                  | Finalise the streaming bubble (drops the caret).                                      |
-| `setRunning(bool)`                                                             | Update run controls; keep the next draft editable, with optional host queuing.        |
-| `setActivity('routing' / 'reading' / 'planning' / 'responding' / 'reviewing')` | Announce the host's actual phase through a polite status; review is a resting state.  |
-| `clear()`                                                                      | Remove all messages, restore empty state.                                             |
-| `getInput()` / `setInput(text)` / `focus()`                                    | Input helpers (e.g. prepend a quote).                                                 |
-| `setLabels(labels)`                                                            | Re-apply labels live (e.g. language change).                                          |
-| `dispose()`                                                                    | Release resize observers and copy-feedback timers when unmounting.                    |
+| Method                                                                         | Purpose                                                                                              |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `append({ role, text })`                                                       | Add a finished message. `role`: `'user' \| 'agent' \| 'tool' \| 'status' \| 'error'`.                |
+| `restoreHistory(messages, { pageSize?: number })`                              | Opt into a recent window (default/max 40) and load earlier messages without replacing existing rows. |
+| `appendMany(messages)`                                                         | Add finished messages in order with one final layout update, for restoring history.                  |
+| `appendDelta(text)`                                                            | Stream into a live agent bubble (auto-created on first delta).                                       |
+| `endStream()`                                                                  | Finalise the streaming bubble (drops the caret).                                                     |
+| `setRunning(bool)`                                                             | Update run controls; keep the next draft editable, with optional host queuing.                       |
+| `setActivity('routing' / 'reading' / 'planning' / 'responding' / 'reviewing')` | Announce the host's actual phase through a polite status; review is a resting state.                 |
+| `clear()`                                                                      | Remove all messages, restore empty state.                                                            |
+| `getInput()` / `setInput(text)` / `focus()`                                    | Input helpers (e.g. prepend a quote).                                                                |
+| `setLabels(labels)`                                                            | Re-apply labels live (e.g. language change).                                                         |
+| `dispose()`                                                                    | Release resize observers and copy-feedback timers when unmounting.                                   |
 
 `chat.actionsEl` is a host-populated slot directly above the input (an IM-style
 compose toolbar) — append your own controls; it collapses when empty.
@@ -139,3 +140,15 @@ outside its focus boundary and separate from message history and `actionsEl`. Th
 request ordering, cancellation settlement or persistence. Hosts must keep one
 execution owner until the actual submit settles, retain unexecuted text on
 preflight failure, and advance their queue only on explicit successful outcomes.
+
+Bounded restoration is opt-in. Convert host history to complete display messages
+before calling `restoreHistory`; do not slice before conversion because adjacent
+status/interruption metadata and request recovery can cross a window boundary.
+Full restored source remains available to source getters and copy/apply. Only
+restored previews are capped at 8000 characters, with explicit expansion.
+Prepending is render-only: it must not interrupt a live bubble, mutate the latest
+recovery request or recreate existing review/actions. It preserves the actual old
+visible node's position rather than inferring it from total scroll height.
+`loadEarlier`/`expandMessage` labels have shared English defaults. Clear, a new
+restore and disposal invalidate old history controls. Empty welcome layout never
+follows the bottom; real message arrivals retain ordinary following behavior.

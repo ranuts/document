@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { ChatView } from '../../packages/chat-ui/src/chat-view';
+import { historyToTurns } from '../../lib/agent-plugin/ui/storage';
+import type { LLMMessage } from '@ranuts/agent-core/llm/types';
 
 let view: ChatView;
 const apply = vi.fn().mockResolvedValue('retry');
@@ -86,4 +88,27 @@ it('restores truthful result identities in history without reconstructing write 
   expect(view.el.querySelectorAll('.cui-copy')).toHaveLength(3);
   expect(view.el.querySelector('.cui-apply')).toBeNull();
   expect(view.getLastDocumentBody()).toBe(source);
+});
+
+it('converts the complete host history before windowing so boundary status retains interruption metadata', () => {
+  const source: Array<LLMMessage & { hostGuidance?: 'status' | 'tool' }> = [
+    { role: 'user', content: 'Original document request' },
+    { role: 'assistant', content: 'Incomplete document', documentArtifact: true },
+    { role: 'assistant', content: 'Stopped', hostGuidance: 'status' },
+    ...Array.from({ length: 39 }, (_, index) => ({
+      role: 'assistant' as const,
+      content: `Read ${index}`,
+      hostGuidance: 'tool' as const,
+    })),
+  ];
+  view.restoreHistory(historyToTurns(source));
+  expect(view.el.querySelector('.cui-msg-agent')).toBeNull();
+  expect(view.getLastAnswer()).toBe('');
+  expect(view.getLastDocumentBody()).toBe('');
+  view.el.querySelector<HTMLButtonElement>('.cui-load-earlier')!.click();
+  const row = view.el.querySelector<HTMLElement>('.cui-msg-agent')!;
+  expect(row.dataset.interrupted).toBe('true');
+  expect(row.querySelector('.cui-result-label')?.textContent).toBe('Incomplete response');
+  expect(row.querySelector('.cui-copy')).not.toBeNull();
+  expect(row.querySelector('.cui-apply')).toBeNull();
 });

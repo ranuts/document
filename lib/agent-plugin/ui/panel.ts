@@ -599,6 +599,8 @@ export function createAgentPanel(
     restore: t('agentRestoreRequest'),
     documentDraft: t('agentDocumentDraft'),
     incomplete: t('agentIncompleteResponse'),
+    loadEarlier: t('agentLoadEarlierMessages'),
+    expandMessage: t('agentShowFullMessage'),
     waiting: t('agentWaiting'),
     routing: t('agentRoutingRequest'),
     elapsed: (seconds) => t('agentWaitElapsed', { seconds: new Intl.NumberFormat(getLanguage()).format(seconds) }),
@@ -1027,7 +1029,7 @@ export function createAgentPanel(
   };
 
   // Restore a previous conversation into the view on load.
-  chat.appendMany(historyToTurns(historyStorage.load()));
+  chat.restoreHistory(historyToTurns(historyStorage.load()));
 
   // ── Controller wiring ───────────────────────────────────────────────────
   const currentProvider = (): 'webllm' | 'wllama' =>
@@ -2765,7 +2767,7 @@ export function createAgentPanel(
     chat.clear();
     chat.setRunning(false);
     chat.setInput(drafts.get(id) ?? '');
-    chat.appendMany(historyToTurns(historyStorage.load()));
+    chat.restoreHistory(historyToTurns(historyStorage.load()));
     renderSessions();
     if (focus) chat.focus();
   };

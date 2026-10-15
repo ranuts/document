@@ -451,6 +451,8 @@ export const pt: Partial<I18nMessages> = {
   agentEntrySmaller: 'Selecione um trecho ou intervalo menor para alterar o texto.',
   agentEntryReadOnly: 'Somente leitura · Você pode explorar e resumir o conteúdo',
   agentDocumentDraft: 'Rascunho do documento',
+  agentLoadEarlierMessages: 'Carregar mensagens anteriores',
+  agentShowFullMessage: 'Mostrar mensagem completa',
   agentIncompleteResponse: 'Resposta incompleta',
   agentReviewActions: 'Mais ações',
   agentEntryAnalyze: 'Explorar dados selecionados',

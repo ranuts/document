@@ -2,6 +2,7 @@ import { expect, test } from './lib/l0';
 
 test('restores a long saved conversation and switches sessions with completed answer actions', async ({ page }) => {
   test.setTimeout(90_000);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   const ids = await page.evaluate(async () => {
     localStorage.setItem('document-assistant-enabled', 'true');
@@ -53,9 +54,12 @@ test('restores a long saved conversation and switches sessions with completed an
   await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
   await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
   const rows = page.locator('.cui-messages .cui-msg');
-  await expect(rows).toHaveCount(400);
-  await expect(rows.first().locator('.cui-bubble')).toHaveText('Question 0');
-  await expect(rows.last().locator('.cui-bubble strong')).toHaveText('Answer 199');
+  const loadAllEarlier = async () => {
+    const earlier = page.getByRole('button', { name: 'Load earlier messages', exact: true });
+    while (await earlier.isVisible()) await earlier.click();
+  };
+  await expect(rows).toHaveCount(40);
+  await expect(rows.first().locator('.cui-bubble')).toHaveText('Question 180');
   await expect(rows.last().locator('.cui-copy')).toBeEnabled();
   await expect
     .poll(() =>
@@ -64,6 +68,17 @@ test('restores a long saved conversation and switches sessions with completed an
         .evaluate((element) => element.scrollHeight - element.clientHeight - element.scrollTop),
     )
     .toBeLessThanOrEqual(2);
+  const earlier = page.getByRole('button', { name: 'Load earlier messages', exact: true });
+  await earlier.focus();
+  await page.keyboard.press('Enter');
+  await expect(rows).toHaveCount(80);
+  await expect(earlier).toBeFocused();
+  await loadAllEarlier();
+  await expect(page.locator('.cui-messages')).toBeFocused();
+  await expect(rows).toHaveCount(400);
+  await expect(rows.first().locator('.cui-bubble')).toHaveText('Question 0');
+  await expect(rows.last().locator('.cui-bubble strong')).toHaveText('Answer 199');
+  await expect(rows.last().locator('.cui-copy')).toBeEnabled();
   await page.locator('.agent-history-toggle').click();
   const search = page.getByRole('searchbox', { name: 'Search conversations' });
   await search.fill('Short answer');
@@ -77,6 +92,8 @@ test('restores a long saved conversation and switches sessions with completed an
   await expect(rows.last().locator('.cui-bubble')).toHaveText('Short answer');
   await page.locator('.agent-history-toggle').click();
   await page.locator(`.agent-conversation-open[data-id="${ids.long}"]`).click();
+  await expect(rows).toHaveCount(40);
+  await loadAllEarlier();
   await expect(rows).toHaveCount(400);
   await expect(rows.last()).toHaveAttribute('data-source', '**Answer 199**');
   await page.locator('.cui-input').fill('Next request');
@@ -111,6 +128,8 @@ test('restores a long saved conversation and switches sessions with completed an
   await expect(search).toBeFocused();
   await expect(page.locator('.agent-conversation-open')).toHaveAttribute('data-id', ids.long);
   await page.keyboard.press('Escape');
+  await expect(rows).toHaveCount(40);
+  await loadAllEarlier();
   await expect(rows).toHaveCount(400);
   await expect(page.locator('.cui-input')).toHaveValue('Next request');
 });

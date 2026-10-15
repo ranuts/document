@@ -426,6 +426,8 @@ export const zhCN: I18nMessages = {
   agentEntrySmaller: '如需修改文字，请选择更小的段落或范围。',
   agentEntryReadOnly: '只读 · 可以了解和总结内容',
   agentDocumentDraft: '文档草稿',
+  agentLoadEarlierMessages: '加载更早的消息',
+  agentShowFullMessage: '显示完整消息',
   agentIncompleteResponse: '回答未完成',
   agentReviewActions: '更多操作',
   agentEntryAnalyze: '分析选中数据',

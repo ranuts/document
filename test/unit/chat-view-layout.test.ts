@@ -177,3 +177,33 @@ it('disposes observers and discards clipboard completions after unmount', async 
   resized(messages, 320);
   expect(messages.scrollTo).not.toHaveBeenCalled();
 });
+
+it('keeps an empty welcome at the top when the preparation footer shrinks its viewport', () => {
+  const { view, messages } = mount();
+  Object.defineProperties(messages, {
+    scrollHeight: { configurable: true, value: 420 },
+    clientHeight: { configurable: true, value: 320 },
+  });
+  resized(messages, 320);
+  expect(messages.scrollTo).not.toHaveBeenCalled();
+  expect(messages.scrollTop).toBe(0);
+  view.append({ role: 'user', text: 'Actual first message' });
+  expect(messages.scrollTo).toHaveBeenCalledWith({ top: 420, behavior: 'auto' });
+});
+
+it('resets welcome scroll after clearing history and follows the actual first message after an empty scroll event', () => {
+  const { view, messages } = mount();
+  view.append({ role: 'user', text: 'History' });
+  messages.scrollTop = 70;
+  view.clear();
+  expect(messages.scrollTop).toBe(0);
+  Object.defineProperties(messages, {
+    scrollHeight: { configurable: true, value: 420 },
+    clientHeight: { configurable: true, value: 320 },
+  });
+  resized(messages, 320);
+  messages.dispatchEvent(new Event('scroll'));
+  vi.mocked(messages.scrollTo).mockClear();
+  view.append({ role: 'user', text: 'Actual first message' });
+  expect(messages.scrollTo).toHaveBeenCalledWith({ top: 420, behavior: 'auto' });
+});

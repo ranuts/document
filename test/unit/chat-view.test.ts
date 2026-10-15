@@ -411,6 +411,7 @@ it.each([true, false])('jump-to-latest respects reduced motion: %s', (reduced) =
   );
   try {
     const { view } = mount();
+    view.append({ role: 'agent', text: 'Existing history' });
     const messages = view.el.querySelector<HTMLElement>('.cui-messages')!;
     Object.defineProperties(messages, { scrollHeight: { value: 1000 }, clientHeight: { value: 200 } });
     messages.scrollTop = 0;
@@ -536,6 +537,7 @@ it('keeps a next draft editable during a response without sending or queuing it'
 
 it('does not interrupt historical reading when a review is appended', () => {
   const { view } = mount();
+  view.append({ role: 'agent', text: 'Existing history' });
   const messages = view.el.querySelector<HTMLElement>('.cui-messages')!;
   Object.defineProperties(messages, { scrollHeight: { value: 1000 }, clientHeight: { value: 200 } });
   messages.scrollTop = 100;

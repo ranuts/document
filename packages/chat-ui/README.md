@@ -103,3 +103,23 @@ outside its focus boundary and separate from message history and `actionsEl`. Th
 request ordering, cancellation settlement or persistence. Hosts must keep one
 execution owner until the actual submit settles, retain unexecuted text on
 preflight failure, and advance their queue only on explicit successful outcomes.
+
+## Bounded history restoration
+
+`chat.restoreHistory(messages, { pageSize: 40 })` opts into recent-window
+presentation. It replaces the displayed conversation, initially renders at most
+40 source messages and offers a keyboard-accessible control to prepend earlier
+batches. `pageSize` may be smaller and is capped at 40. `appendMany` retains its
+existing eager behavior for other hosts.
+
+Prepending keeps existing rows, live streams, review cards, the next draft and
+reader position. Recovery uses each message's original preceding request, while
+later errors still refer to the latest request. Last-answer/document getters use
+the complete restored source even when its answer is outside the visible window.
+
+Restored messages longer than 8000 characters show a bounded preview and an
+explicit full-message expansion. Copy/apply always receive the complete original
+source and metadata. Ordinary append and streaming remain unchanged. Localize
+`labels.loadEarlier` and `labels.expandMessage`; English defaults are provided.
+Clear, replacement and disposal invalidate old controls. This changes only
+presentation; hosts continue to own full history, storage and model context.

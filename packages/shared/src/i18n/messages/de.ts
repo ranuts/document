@@ -469,6 +469,8 @@ export const de: Partial<I18nMessages> = {
   agentEntrySmaller: 'Wähle für Textänderungen eine kleinere Passage oder einen kleineren Bereich.',
   agentEntryReadOnly: 'Schreibgeschützt · Inhalte erkunden und zusammenfassen',
   agentDocumentDraft: 'Dokumententwurf',
+  agentLoadEarlierMessages: 'Frühere Nachrichten laden',
+  agentShowFullMessage: 'Vollständige Nachricht anzeigen',
   agentIncompleteResponse: 'Unvollständige Antwort',
   agentReviewActions: 'Weitere Aktionen',
   agentEntryAnalyze: 'Ausgewählte Daten erkunden',

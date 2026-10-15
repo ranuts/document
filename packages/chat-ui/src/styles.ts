@@ -12,6 +12,10 @@ import { Style } from 'ranui/builder';
 export const CHAT_UI_CSS = `
 .cui-root { --cui-accent:var(--ran-color-primary, #171717); --cui-accent-contrast:var(--ran-color-primary-text, #fff); --cui-bg:var(--ran-color-bg, #fff); --cui-user-bg:var(--ran-color-bg-muted, #f4f4f4); --cui-text:var(--ran-color-text, #171717); --cui-muted:var(--ran-color-text-secondary, #737373); --cui-border:var(--ran-color-border, #e5e5e5); --cui-surface:var(--ran-color-bg-subtle, var(--cui-user-bg)); position:relative; display:flex; flex-direction:column; min-height:0; height:100%; background:var(--cui-bg); color:var(--cui-text); font-family:var(--ran-font-family, system-ui, sans-serif); font-size:var(--ran-text-copy-2, 14px); line-height:1.7; -webkit-font-smoothing:antialiased; }
 .cui-messages { flex:1 1 auto; min-height:0; overflow:auto; overflow-x:hidden; padding:var(--ran-space-6, 24px) var(--ran-space-4, 16px); display:flex; flex-direction:column; gap:var(--ran-space-6, 24px); overscroll-behavior:contain; scrollbar-width:thin; }
+.cui-load-earlier, .cui-history-expand { align-self:flex-start; max-width:100%; padding:var(--ran-space-2, 8px) var(--ran-space-3, 12px); border:1px solid var(--cui-border); border-radius:var(--ran-radius-sm, 6px); background:transparent; color:var(--cui-muted); font:inherit; font-size:var(--ran-text-label-3, 12px); cursor:pointer; }
+.cui-load-earlier:focus-visible, .cui-history-expand:focus-visible { outline:2px solid var(--ran-color-link, currentColor); outline-offset:2px; }
+.cui-history-expand { display:block; margin-top:var(--ran-space-2, 8px); }
+.cui-load-earlier[hidden] { display:none; }
 .cui-empty { margin:auto; max-width:260px; padding:32px 8px; text-align:left; font-size:22px; font-weight:500; line-height:1.45; letter-spacing:-.035em; color:var(--cui-text); }
 .cui-empty-actions { margin-top:20px; font-size:12px; letter-spacing:0; font-weight:400; }
 .cui-empty-actions button { font:inherit; color:var(--cui-muted); border:1px solid var(--cui-border); background:transparent; padding:7px 12px; border-radius:8px; cursor:pointer; }

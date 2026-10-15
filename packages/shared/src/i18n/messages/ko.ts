@@ -439,6 +439,8 @@ export const ko: Partial<I18nMessages> = {
   agentEntrySmaller: '글을 수정하려면 더 작은 영역을 선택하세요.',
   agentEntryReadOnly: '읽기 전용 · 내용을 살펴보고 요약할 수 있습니다',
   agentDocumentDraft: '문서 초안',
+  agentLoadEarlierMessages: '이전 메시지 불러오기',
+  agentShowFullMessage: '전체 메시지 보기',
   agentIncompleteResponse: '미완성 답변',
   agentReviewActions: '추가 작업',
   agentEntryAnalyze: '선택 데이터 분석',
