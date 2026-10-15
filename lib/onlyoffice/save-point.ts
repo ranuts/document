@@ -5,9 +5,8 @@
  * modified while `History.Index` differs from `History.SavedIndex`, and
  * `onDocumentStateChange` fires only when that answer flips. With serverless
  * saves (guard 5) nothing ever moves `SavedIndex`, so after the first edit the
- * answer stays "modified" for good and later edits fire nothing. That is fine
- * for the standalone page, but an embedding host that saves on its own cadence
- * needs to hear about the edits after its last save.
+ * answer stays "modified" for good and later edits fire nothing. Both standalone
+ * disk saves and embedding hosts need to hear about edits after their last save.
  *
  * So after an embed save, do what the SDK itself does after a server save:
  * `History.Reset_SavedIndex(true)` followed by `CheckChangedDocument()` (the
@@ -34,6 +33,7 @@ export type SavePoint = {
   frame: SdkFrameWindow;
   index: number;
   head: unknown;
+  items: unknown[] | null;
 };
 
 function findSdkFrame(): SdkFrameWindow | null {
@@ -55,7 +55,9 @@ export function captureSavePoint(): SavePoint | null {
   if (!frame || !history || typeof history.Index !== 'number' || !Array.isArray(history.Points)) {
     return null;
   }
-  return { frame, index: history.Index, head: history.Points[history.Index] };
+  const head = history.Points[history.Index];
+  const items = (head as { Items?: unknown[] } | undefined)?.Items;
+  return { frame, index: history.Index, head, items: Array.isArray(items) ? [...items] : null };
 }
 
 /**
@@ -74,6 +76,14 @@ export function commitSavePoint(point: SavePoint | null): boolean {
     if (history.Index !== point.index || history.Points?.[point.index] !== point.head) {
       return false;
     }
+    const items = (point.head as { Items?: unknown[] } | undefined)?.Items;
+    if (
+      point.items &&
+      (!Array.isArray(items) ||
+        items.length !== point.items.length ||
+        items.some((item, i) => item !== point.items![i]))
+    )
+      return false;
 
     history.Reset_SavedIndex(true);
     api.CheckChangedDocument();

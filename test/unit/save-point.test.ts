@@ -66,4 +66,14 @@ describe('save point', () => {
     expect(commitSavePoint(point)).toBe(false);
     expect(history.Reset_SavedIndex).not.toHaveBeenCalled();
   });
+
+  it('keeps edits appended to the same undo point during export dirty', () => {
+    const { history } = mountEditorFrame();
+    const head = { Items: [{}] };
+    history.Points[1] = head;
+    const point = captureSavePoint();
+    head.Items.push({});
+    expect(commitSavePoint(point)).toBe(false);
+    expect(history.Reset_SavedIndex).not.toHaveBeenCalled();
+  });
 });

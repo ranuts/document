@@ -49,7 +49,6 @@ export function prepareEditorIframe(): boolean {
       const sharedWorkerShadowed = shadowSharedWorker(win);
       const fetchFontsGuarded = installFetchFontsGuard(win);
       const imagePipelineInstalled = installServerlessImagePipeline(win);
-      const saveSemanticsInstalled = installServerlessSaveSemantics(win);
       const longActionGuarded = installLongActionLeakGuard(win);
 
       installSeriesSettingsGuard(win);
@@ -61,6 +60,8 @@ export function prepareEditorIframe(): boolean {
       installHintFallbackGuard(win);
       installBadImageUrlGuard(win);
       const x2tWorkerProxied = installX2tWorkerProxy(win);
+      // Save tracking wraps the final converter, including the worker proxy.
+      const saveSemanticsInstalled = installServerlessSaveSemantics(win);
       installAboutSourceNotice(doc);
       const wasmBinaryHandled = releaseWasmBinary(win);
 

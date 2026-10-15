@@ -8,6 +8,7 @@ import { getReadonlyMode } from './readonly';
 import { isEmbedMode } from '../embed-mode';
 import { markDocumentSaved } from '../unsaved-guard';
 import type { SaveOutcome } from '../save-target';
+import { captureSavePoint, commitSavePoint } from './save-point';
 
 /**
  * Notified when bytes actually reach the user's disk.
@@ -115,9 +116,69 @@ interface FileStreamMessage {
 // lib/converter's singleton.
 let sheetJsConverter: X2TConverter | null = null;
 
-function routeSavedFile(file: File): void {
-  if (embeddedSaveRequest) {
-    const request = embeddedSaveRequest;
+function standaloneExportState(win: Window, sequence = 0) {
+  const source = getDocmentObj();
+  const editor = window.editor;
+  const point = captureSavePoint();
+  return {
+    source,
+    sequence,
+    point,
+    request: embeddedSaveRequest,
+    isCurrent: () =>
+      getDocmentObj() === source &&
+      window.editor === editor &&
+      document.querySelector<HTMLIFrameElement>('iframe[name="frameEditor"]')?.contentWindow === win,
+  };
+}
+const readyExports = new WeakMap<Window, Array<ReturnType<typeof standaloneExportState>>>();
+const diskWrites = new WeakMap<object, Promise<void>>();
+const exportSequences = new WeakMap<object, number>();
+const writtenSequences = new WeakMap<object, number>();
+
+/** Bind serialized bytes to their conversion, then queue them in actual stream order. */
+export function installSaveStreamTracking(win: Window): boolean {
+  type Result = { binary: object };
+  type Converter = {
+    convertFromBin(request: unknown): Promise<Result>;
+    downloadFile(binary: object, fileName: string): void;
+    __ooSaveStreamTracked?: boolean;
+  };
+  const converter = (win as Window & { AscCommon?: { x2t?: Converter } }).AscCommon?.x2t;
+  if (!converter?.convertFromBin || !converter.downloadFile) return false;
+  if (converter.__ooSaveStreamTracked) return true;
+  const outputs = new WeakMap<object, ReturnType<typeof standaloneExportState>>();
+  const convert = converter.convertFromBin;
+  const download = converter.downloadFile;
+  converter.convertFromBin = function (input) {
+    // The SDK has just synchronously serialized its history into input.binary.
+    // isLongAction ends before this promise settles, so it cannot identify saves.
+    const source = getDocmentObj();
+    const sequence = (exportSequences.get(source) ?? 0) + 1;
+    exportSequences.set(source, sequence);
+    const state = standaloneExportState(win, sequence);
+    return convert.call(this, input).then((result) => {
+      if (result?.binary && typeof result.binary === 'object') outputs.set(result.binary, state);
+      return result;
+    });
+  };
+  converter.downloadFile = function (binary, fileName) {
+    const state = outputs.get(binary) ?? { ...standaloneExportState(win), point: null };
+    outputs.delete(binary);
+    const ready = readyExports.get(win) ?? [];
+    ready.push(state);
+    readyExports.set(win, ready);
+    download.call(this, binary, fileName);
+  };
+  converter.__ooSaveStreamTracked = true;
+  return true;
+}
+
+function routeSavedFile(file: File, state: ReturnType<typeof standaloneExportState>): void {
+  if (!state.isCurrent()) return;
+  if (state.request) {
+    const request = state.request;
+    if (request !== embeddedSaveRequest || request.settled) return;
     cleanupEmbeddedSaveRequest(request);
     resolveEmbeddedSaveRequest(request, file);
     return;
@@ -128,18 +189,31 @@ function routeSavedFile(file: File): void {
     return;
   }
 
+  // Only ordinary saves reuse the linked document destination. Other formats
+  // use independent export pickers and must not suppress each other's output.
+  const regularSave = getFileExtension(file.name) === getFileExtension(state.source.fileName);
+
   const reachedDisk = (): void => {
     // Reaching the user's disk is the only thing that clears the unsaved-changes
     // warning: an autosave snapshot lives in this browser, a saved file does not.
-    markDocumentSaved();
-    savedToDiskListener?.();
+    if (regularSave)
+      writtenSequences.set(state.source, Math.max(writtenSequences.get(state.source) ?? 0, state.sequence));
+    if (state.isCurrent() && commitSavePoint(state.point)) {
+      markDocumentSaved();
+      savedToDiskListener?.();
+    }
   };
 
   // Write back to the document's own file where that is possible, and download
   // a copy where it is not. Both end in the same place from the app's point of
   // view: the bytes are on the user's disk.
-  void (async () => {
+  const write = async (): Promise<void> => {
     try {
+      // A queued save may outlive the document that requested it.
+      if (!state.isCurrent()) return;
+      // Conversions can finish out of order as well as writes. Once a newer
+      // export reached disk, an older late result must never replace it.
+      if (regularSave && (writtenSequences.get(state.source) ?? 0) > state.sequence) return;
       const outcome = await diskWriter?.(file);
       if (outcome === 'cancelled') return;
       if (outcome === 'written') {
@@ -150,7 +224,14 @@ function routeSavedFile(file: File): void {
     } catch (error) {
       notifyOperationFailed(error);
     }
-  })();
+  };
+  // File System Access can keep several writable streams open. Preserve save
+  // order so a slow older close cannot overwrite a newer committed file.
+  const pending = (diskWrites.get(state.source) ?? Promise.resolve()).then(write);
+  diskWrites.set(state.source, pending);
+  void pending.finally(() => {
+    if (diskWrites.get(state.source) === pending) diskWrites.delete(state.source);
+  });
 }
 
 function handleFileStreamMessage(event: MessageEvent): void {
@@ -166,6 +247,10 @@ function handleFileStreamMessage(event: MessageEvent): void {
   }
 
   const buffer = data.buffer;
+  const win = editorFrame.contentWindow!;
+  const ready = readyExports.get(win);
+  const state = ready?.shift() ?? { ...standaloneExportState(win), point: null };
+  if (!ready?.length) readyExports.delete(win);
   const { fileName: docName } = getDocmentObj() || {};
   const ext = (data.fileType || data.fileName?.split('.').pop() || 'bin').toLowerCase();
   const baseName = (docName || data.fileName || 'document').replace(/\.[^/.]+$/, '');
@@ -177,7 +262,7 @@ function handleFileStreamMessage(event: MessageEvent): void {
   // an explicit embed-API "save as CSV" the same way (the editor's own CSV
   // export stalls on a delimiter dialog, see triggerPersonalDownloadAs).
   // Explicit non-CSV requests (e.g. the embed default XLSX) keep the stream.
-  const requestedExt = embeddedSaveRequest?.targetExt;
+  const requestedExt = state.request?.targetExt;
   const wantsCsvBack =
     ext === 'xlsx' &&
     (requestedExt === 'CSV' || (requestedExt === undefined && !!docName?.toLowerCase().endsWith('.csv')));
@@ -186,17 +271,17 @@ function handleFileStreamMessage(event: MessageEvent): void {
       try {
         sheetJsConverter ??= new X2TConverter();
         const csvBytes = await sheetJsConverter.xlsxToCsvBytes(new Uint8Array(buffer));
-        routeSavedFile(new File([csvBytes], `${baseName}.csv`, { type: 'text/csv' }));
+        routeSavedFile(new File([csvBytes], `${baseName}.csv`, { type: 'text/csv' }), state);
       } catch (error) {
         console.error('Failed to convert saved XLSX back to CSV, keeping XLSX:', error);
-        routeSavedFile(new File([buffer], `${baseName}.xlsx`, { type: getSavedFileMimeType('a.xlsx') }));
+        routeSavedFile(new File([buffer], `${baseName}.xlsx`, { type: getSavedFileMimeType('a.xlsx') }), state);
       }
     })();
     return;
   }
 
   const savedName = `${baseName}.${ext}`;
-  routeSavedFile(new File([buffer], savedName, { type: getSavedFileMimeType(savedName) }));
+  routeSavedFile(new File([buffer], savedName, { type: getSavedFileMimeType(savedName) }), state);
 }
 
 if (typeof window !== 'undefined') {

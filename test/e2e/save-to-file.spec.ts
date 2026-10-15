@@ -4,6 +4,7 @@ import type { Page } from '@playwright/test';
 import { readHistoryKeys } from './lib/history-db';
 import { buildDocx, ooxmlText, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
+import { typeIntoDocument, waitForEditorReady as waitForSdkReady } from './actions/editor';
 
 /**
  * Saving writes back into the document's own file instead of downloading a new
@@ -64,6 +65,10 @@ const stubPicker = `
       const nativeAbort = stream.abort.bind(stream);
       stream.close = async () => {
         try {
+          if (window.__holdNextWrite) {
+            window.__holdNextWrite = false;
+            await new Promise(resolve => { window.__releaseWrite = resolve; });
+          }
           await nativeClose();
         } catch (error) {
           settle(false);
@@ -180,6 +185,85 @@ test.describe('saving into the document own file (real editor)', () => {
       true,
     );
   });
+
+  test('another edit after saving rearms the unsaved-changes warning', async ({ page }) => {
+    await page.goto('/editor?new=docx');
+    await waitForEditorReady(page);
+    const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.type('first saved text', { delay: 30 });
+    await page.keyboard.press('Control+s');
+    await waitForWrites(page, 1);
+    const dirty = () => page.evaluate(() => !window.dispatchEvent(new Event('beforeunload', { cancelable: true })));
+    await expect.poll(dirty).toBe(false);
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.press('End');
+    await page.keyboard.type(' later unsaved text', { delay: 30 });
+    await expect.poll(dirty).toBe(true);
+    expect(await savedText(page)).not.toContain('later unsaved text');
+  });
+
+  test('an older file finishing its write does not clear edits made while writing', async ({ page }) => {
+    await page.goto('/editor?new=docx');
+    await waitForEditorReady(page);
+    const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.type('exported text', { delay: 30 });
+    await page.evaluate(() => {
+      (window as any).__holdNextWrite = true;
+    });
+    await page.keyboard.press('Control+s');
+    await page.waitForFunction(() => typeof (window as any).__releaseWrite === 'function');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.press('End');
+    await page.keyboard.type(' edited while writing', { delay: 30 });
+    await page.evaluate(() => (window as any).__releaseWrite());
+    await waitForWrites(page, 1);
+    expect(await page.evaluate(() => !window.dispatchEvent(new Event('beforeunload', { cancelable: true })))).toBe(
+      true,
+    );
+    expect(await savedText(page)).not.toContain('edited while writing');
+  });
+
+  test('consecutive saves commit in order while the first write is pending', async ({ page }) => {
+    await page.goto('/editor?new=docx');
+    await waitForEditorReady(page);
+    const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.type('first version', { delay: 30 });
+    await page.evaluate(() => {
+      (window as any).__holdNextWrite = true;
+    });
+    await page.keyboard.press('Control+s');
+    await page.waitForFunction(() => typeof (window as any).__releaseWrite === 'function');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.press('End');
+    await page.keyboard.type(' second version', { delay: 30 });
+    const returned = page.waitForEvent('console', {
+      predicate: (message) => message.text().includes('[OO] file stream received:'),
+    });
+    await page.keyboard.press('Control+s');
+    await returned;
+    expect(await page.evaluate(() => (window as any).__writesInFlight)).toBe(1);
+    await page.evaluate(() => (window as any).__releaseWrite());
+    await waitForWrites(page, 2);
+    expect(await savedText(page)).toMatch(/first version second version/i);
+  });
+
+  for (const extension of ['xlsx', 'pptx']) {
+    test(`${extension}: another edit after saving rearms the unsaved-changes warning`, async ({ page }) => {
+      await page.goto(`/editor?new=${extension}`);
+      const { kind } = await waitForSdkReady(page);
+      await typeIntoDocument(page, kind, 'first');
+      const dirty = () => page.evaluate(() => !window.dispatchEvent(new Event('beforeunload', { cancelable: true })));
+      await expect.poll(dirty).toBe(true);
+      await page.keyboard.press('Control+s');
+      await waitForWrites(page, 1);
+      await expect.poll(dirty).toBe(false);
+      await typeIntoDocument(page, kind, 'second');
+      await expect.poll(dirty).toBe(true);
+    });
+  }
 
   test('exporting PDF preserves the DOCX file and its next save target', async ({ page }) => {
     await page.goto('/editor?new=docx');
