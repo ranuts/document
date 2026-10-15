@@ -322,6 +322,7 @@ export const en: I18nMessages = {
   agentHistoryYesterday: 'Yesterday',
   agentHistoryEarlier: 'Earlier',
   agentHistoryEmpty: 'No conversations yet',
+  agentHistorySearching: 'Searching…',
   agentHistoryLoadMore: 'Load more',
   agentNoConversationsFound: 'No matching conversations',
   agentHistoryDataControls: 'History & data',

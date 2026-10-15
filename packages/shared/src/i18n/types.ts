@@ -320,6 +320,7 @@ export interface I18nMessages {
   agentHistoryYesterday: string;
   agentHistoryEarlier: string;
   agentHistoryEmpty: string;
+  agentHistorySearching: string;
   agentHistoryLoadMore: string;
   agentNoConversationsFound: string;
   agentHistoryDataControls: string;

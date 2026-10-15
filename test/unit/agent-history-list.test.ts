@@ -116,3 +116,25 @@ it('shows a distinct empty state for an untouched draft', () => {
   expect(list.el.querySelector('.agent-history-empty')?.textContent).toBe('No conversations yet');
   list.dispose();
 });
+
+it('announces pending search while preserving the search focus and existing row nodes', async () => {
+  const store = createConversationStore();
+  store.history().save([{ role: 'user', content: 'Find this conversation' }]);
+  const list = createConversationList({ store, onSelect: vi.fn(), onDelete: vi.fn() });
+  document.body.append(list.el);
+  const first = rows(list.el)[0];
+  const input = list.el.querySelector<HTMLInputElement>('input')!;
+  input.focus();
+  input.value = 'Find';
+  input.dispatchEvent(new Event('input'));
+  const status = list.el.querySelector<HTMLElement>('.agent-history-search-status');
+  expect(status?.getAttribute('role')).toBe('status');
+  expect(status?.textContent).toBe('Searching…');
+  expect(rows(list.el)[0]).toBe(first);
+  expect(document.activeElement).toBe(input);
+  await vi.waitFor(() => expect(list.el.querySelector('ul')?.getAttribute('aria-busy')).toBe('false'));
+  expect(list.el.querySelector('.agent-history-search-status')).toBe(status);
+  expect(status?.textContent).toBe('');
+  expect(document.activeElement).toBe(input);
+  list.dispose();
+});

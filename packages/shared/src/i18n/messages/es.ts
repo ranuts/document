@@ -331,6 +331,7 @@ export const es: Partial<I18nMessages> = {
   agentHistoryYesterday: 'Ayer',
   agentHistoryEarlier: 'Anteriores',
   agentHistoryEmpty: 'Aún no hay conversaciones',
+  agentHistorySearching: 'Buscando…',
   agentHistoryLoadMore: 'Cargar más',
   agentNoConversationsFound: 'No se encontraron conversaciones',
   agentHistoryDataControls: 'Historial y datos',

@@ -49,20 +49,24 @@ export function createHistorySearch(receive: (result: SearchResult) => void) {
         revision !== currentRevision
       )
         return;
-      let budget = 16_384;
-      let count = 0;
-      while (!current.done && budget > 0 && count < 32) {
-        const part = current.value[1][segment++];
-        const result = part && match?.(part);
-        budget -= Math.max(1, part?.text.length ?? 0);
-        count++;
-        if (result) matches.push(result);
-        if (result || segment >= current.value[1].length) {
-          current = entries.next();
-          segment = 0;
-          match = current.done ? undefined : createSearchMatcher(current.value[0], query);
+      const deadline = performance.now() + 4;
+      let batches = 0;
+      do {
+        let budget = 16_384;
+        let count = 0;
+        while (!current.done && budget > 0 && count < 32) {
+          const part = current.value[1][segment++];
+          const result = part && match?.(part);
+          budget -= Math.max(1, part?.text.length ?? 0);
+          count++;
+          if (result) matches.push(result);
+          if (result || segment >= current.value[1].length) {
+            current = entries.next();
+            segment = 0;
+            match = current.done ? undefined : createSearchMatcher(current.value[0], query);
+          }
         }
-      }
+      } while (!current.done && ++batches < 32 && performance.now() < deadline);
       if (!current.done) fallback = setTimeout(step, 0);
       else receive({ type: 'result', revision, request, query, matches });
     };
@@ -152,38 +156,43 @@ export function createHistorySearch(receive: (result: SearchResult) => void) {
     }
     const step = () => {
       if (disposed || suspended || generation !== currentGeneration) return;
-      const entries: SearchEntry[] = [];
-      let budget = 8192;
-      let count = 0;
-      while (offset < pending.length && budget > 0 && count < 32) {
-        const entry = pending[offset];
-        if (!iterator) {
-          iterator = textFor(entry);
-          segments = [];
-          previousSpace = false;
-          corpus.set(entry.id, segments);
+      // Keep transfers small while amortizing the browser's nested-timer clamp.
+      const deadline = performance.now() + 4;
+      let batches = 0;
+      do {
+        const entries: SearchEntry[] = [];
+        let budget = 8192;
+        let count = 0;
+        while (offset < pending.length && budget > 0 && count < 32) {
+          const entry = pending[offset];
+          if (!iterator) {
+            iterator = textFor(entry);
+            segments = [];
+            previousSpace = false;
+            corpus.set(entry.id, segments);
+          }
+          const part = iterator.next();
+          count++;
+          if (part.done) {
+            versions.set(entry.id, entry);
+            offset++;
+            iterator = undefined;
+          } else {
+            let text = part.value.replace(/\s+/g, ' ');
+            if (previousSpace && text.startsWith(' ')) text = text.slice(1);
+            if (text) previousSpace = text.endsWith(' ');
+            const value = { id: entry.id, index: segments.length, text, normalized: text.toLocaleLowerCase() };
+            segments.push(value);
+            entries.push(value);
+            budget -= Math.max(1, text.length);
+          }
         }
-        const part = iterator.next();
-        count++;
-        if (part.done) {
-          versions.set(entry.id, entry);
-          offset++;
-          iterator = undefined;
-        } else {
-          let text = part.value.replace(/\s+/g, ' ');
-          if (previousSpace && text.startsWith(' ')) text = text.slice(1);
-          if (text) previousSpace = text.endsWith(' ');
-          const value = { id: entry.id, index: segments.length, text, normalized: text.toLocaleLowerCase() };
-          segments.push(value);
-          entries.push(value);
-          budget -= Math.max(1, text.length);
+        if (entries.length || first) {
+          post({ type: 'update', revision, entries, removed: Array.from(tombstones) });
+          tombstones.clear();
         }
-      }
-      if (entries.length || first) {
-        post({ type: 'update', revision, entries, removed: Array.from(tombstones) });
-        tombstones.clear();
-      }
-      first = false;
+        first = false;
+      } while (offset < pending.length && ++batches < 32 && performance.now() < deadline);
       if (offset < pending.length) extraction = scheduleHistoryTask(step, !query);
       else {
         extraction = undefined;
