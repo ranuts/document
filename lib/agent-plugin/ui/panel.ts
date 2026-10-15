@@ -620,6 +620,7 @@ export function createAgentPanel(
     return intent?.kind === 'clarify' && (writingSelect.value === 'tools' || provider?.isReady()) ? null : intent;
   };
   const chat = new ChatView({
+    streamingMarkdown: true,
     canSend: (text) => {
       if (!enabled || runtimeCleanup || runtimeCleanupFailed || cacheBusy) return false;
       // Ordinary typing with a ready model does not need to query the editor.

@@ -62,6 +62,8 @@ export interface RestoreHistoryOptions {
 }
 
 export interface ChatViewOptions {
+  /** Opt into bounded incremental Markdown; legacy plain streaming remains the default. */
+  streamingMarkdown?: boolean;
   /** Host readiness check; false preserves editable drafts and prevents submission. */
   canSend?: (text: string) => boolean;
   /** Optional explicit setup action while unavailable. It never consumes or queues the draft. */
