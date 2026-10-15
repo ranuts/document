@@ -67,7 +67,7 @@ deletion, assistant disable/close and disposal terminate recognition as before.
 ## Search
 
 Normalize whitespace and case consistently on both sides, across segment
-boundaries. Compile KMP query data once per query, reuse it across records in
+boundaries. The history-list query identity and search engine must use the same canonical query, so normalized results are not rejected as stale. Compile KMP query data once per query, reuse it across records in
 Worker and fallback, and check fallback deadlines within the record loop.
 Preserve segmented transfers and cancellation identities; do not add an arbitrary
 short search-length limit or silently trim user search text.
@@ -81,7 +81,7 @@ Prepending must preserve lastUserText and each Restore request source. If a wind
 Switch/clear/dispose cancels the old window owner. Full history remains in the
 session/controller and available for model budgeting/export; only presentation
 is windowed. getLastAnswer/getLastDocumentBody must still find an eligible answer outside the rendered window. Bound previews of a giant restored message (for example 8000 characters) with explicit expansion; keep the full source for copy/apply. Ordinary append and live streaming retain their existing behavior. Existing appendMany behavior remains unchanged for other consumers.
-Use the existing component/theme system; no new dependency or decorative motion.
+Use the existing component/theme system; no new dependency or decorative motion. When the preparation footer shrinks an empty chat, do not auto-scroll its welcome content to the bottom: keep the heading visible while preserving normal following once messages arrive. A Chromium probe at 720px height showed titleTop=30 above messageTop=56 with scrollTop=70; this is a measured layout defect.
 
 ## CPU context budget
 
