@@ -14,8 +14,8 @@ characters per message. It contains synthetic text only.
 | Initial conversation rows                 | 1,000                       | 40                    |
 | Message-array clones per full-text search | 1,000                       | 0                     |
 | Synchronous input handler, three queries  | 15.2 / 43.8 / 18.6 ms       | 0.19 / 0.12 / 0.10 ms |
-| Exact `Hello` model requests              | 2 (classification + answer) | Pending acceptance    |
-| Ordinary generic chat model requests      | 2                           | Pending acceptance    |
+| Exact `Hello` model requests              | 2 (classification + answer) | 1 (answer)            |
+| Ordinary generic chat model requests      | 2                           | 2                     |
 
 The request baseline uses a synthetic loopback endpoint and an empty Word
 document. Both exact greeting and ordinary chat include document-body context in
@@ -79,3 +79,26 @@ budget. A ready CPU provider with exact token counting budgets its complete
 templated request and reserves output tokens. Stored history remains intact.
 Semantic summaries are not part of this change: generating one on the Send path
 would add a model call and requires a separate grounding/invalidation design.
+
+## Request performance checkpoint
+
+At head `44fe2aa`, a production build and a separate Chromium 151.0.7922.34
+loopback probe passed. Each scenario used a fresh conversation and the same
+synthetic one-paragraph Word document. These are request counts and source-read
+observations; the responses do not measure browser-local GPU latency.
+
+| Scenario                       | Classification | Answer | Whole-body walks | Answer request characters |
+| ------------------------------ | -------------- | ------ | ---------------- | ------------------------- |
+| Exact `Hello`                  | 0              | 1      | 0                | 272                       |
+| Ordinary programming joke      | 1              | 1      | 0                | 300                       |
+| Host-staged Explore document   | 0              | 1      | 1                | 430                       |
+| Staged read edited into a joke | 1              | 1      | 0                | 300                       |
+
+The trusted read included the actual synthetic source and document-body scope;
+all four answer requests contained zero tools. Editing the staged request
+removed its trusted routing. Unlike the earlier empty-document baseline, this
+fixture contains text, so serialized sizes are observations of each request,
+not a controlled percentage improvement claim. Ordinary ambiguous chat keeps
+semantic classification intentionally. Source review identified the separate
+large-selection byte-budget boundary; its follow-up and final integration
+acceptance remain pending.
