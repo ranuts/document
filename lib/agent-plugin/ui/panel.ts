@@ -1926,6 +1926,8 @@ export function createAgentPanel(
             result = await agentTools[name].execute(input, directAbort.signal);
           }
           directAbort.signal.throwIfAborted();
+          if (intent.kind !== 'write_reply' && (result as { verified?: unknown } | undefined)?.verified !== true)
+            throw new Error(t('agentPlanUnverified'));
           if (revision !== conversationRevision || directGeneration !== controllerGeneration)
             return owned('superseded');
           directStatus =
