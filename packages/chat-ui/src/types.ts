@@ -18,7 +18,9 @@ export interface ChatViewLabels {
   conversation?: string;
   /** Send-button label (idle state). */
   send?: string;
-  /** Send-button label while a turn is running (acts as Stop). */
+  /** Send-button label while a queue-enabled host is answering. */
+  queue?: string;
+  /** Stop-control label (the Send button in legacy hosts). */
   stop?: string;
   /** Acknowledgement while a requested cancellation is still settling. */
   stopping?: string;
@@ -61,7 +63,9 @@ export interface ChatViewOptions {
   beforeSend?: () => boolean | Promise<boolean>;
   /** Called when the user submits the input (Enter or Send). Receives the original non-empty text. */
   onSend: (text: string) => void;
-  /** Called when the user clicks Send while a turn is running (i.e. Stop). */
+  /** Opt into accepting drafts during a run; the host owns ordering and execution. */
+  onQueue?: (text: string) => void;
+  /** Called synchronously by the first Stop activation during a run. */
   onStop?: () => void;
   /** Host-owned document operation; the model never executes this action. */
   canApplyMessage?: () => boolean;

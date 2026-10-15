@@ -41,6 +41,8 @@ export class ChatView {
    * collapses when empty.
    */
   readonly actionsEl: HTMLDivElement;
+  /** Host-owned pending requests, separate from executed conversation messages. */
+  readonly pendingEl = Div().class('cui-pending').build();
   readonly contextEl = Div().class('cui-context').build();
   readonly emptyActionsEl: HTMLDivElement;
 
@@ -49,6 +51,7 @@ export class ChatView {
   private readonly emptyTitle: HTMLDivElement;
   private readonly input: HTMLTextAreaElement;
   private readonly sendBtn: HTMLButtonElement;
+  private readonly stopBtn: HTMLButtonElement;
   private readonly scrollBtn: HTMLButtonElement;
   private labels: ChatViewLabels;
   private running = false;
@@ -140,6 +143,9 @@ export class ChatView {
       .on('compositionend', () => {
         this.composing = false;
       })
+      .on('beforeinput', () => {
+        this.submissionRevision++;
+      })
       .on('input', () => {
         this.autoGrow();
         this.updateSendState();
@@ -157,18 +163,26 @@ export class ChatView {
       .class('cui-send')
       .attr('type', 'button')
       .on('click', () => {
-        if (this.running) this.requestStop();
+        if (this.running && !this.options.onQueue) this.requestStop();
         else this.submit();
       })
       .build();
     this.sendBtn.innerHTML = ICON_SEND;
+    this.stopBtn = ButtonBuilder()
+      .class('cui-stop')
+      .attr('type', 'button')
+      .on('click', () => this.requestStop())
+      .build();
+    this.stopBtn.innerHTML = ICON_STOP;
+    this.stopBtn.hidden = true;
 
     const composer = Div()
       .class('cui-composer')
       .children(
+        this.pendingEl,
         this.contextEl,
         this.input,
-        Div().class('cui-composer-bar').children(this.actionsEl, this.sendBtn).build(),
+        Div().class('cui-composer-bar').children(this.actionsEl, this.stopBtn, this.sendBtn).build(),
       )
       .build();
 
@@ -453,7 +467,7 @@ export class ChatView {
   /** Freeze visible output and acknowledge cancellation until the host settles. */
   requestStop(): void {
     if (!this.running || this.stopping || this.disposed) return;
-    const restoreFocus = document.activeElement === this.sendBtn;
+    const restoreFocus = document.activeElement === this.sendBtn || document.activeElement === this.stopBtn;
     this.stopping = true;
     this.messagesEl.setAttribute('aria-busy', 'true');
     this.updateActivity();
@@ -498,9 +512,10 @@ export class ChatView {
     this.finishAppendLayout(stick);
   }
 
-  /** Toggle Send/Stop while keeping the next draft editable and never queued. */
+  /** Update run presentation; optional queue hosts retain an independent Send control. */
   setRunning(running: boolean): void {
-    const restore = !running && this.running && document.activeElement === this.sendBtn;
+    const restore =
+      !running && this.running && (document.activeElement === this.sendBtn || document.activeElement === this.stopBtn);
     if (running && !this.running) {
       this.respondingHasText = false;
       this.presentationCleared = false;
@@ -646,7 +661,14 @@ export class ChatView {
 
   private async submit(): Promise<void> {
     const text = this.input.value;
-    if (!text.trim() || this.running || this.preparingSend || this.disposed) return;
+    if (
+      !text.trim() ||
+      (this.running && !this.options.onQueue) ||
+      this.composing ||
+      this.preparingSend ||
+      this.disposed
+    )
+      return;
     if (this.options.canSend?.(text) === false) {
       const preparation = this.options.getSendPreparation?.();
       if (preparation && !preparation.disabled) preparation.run();
@@ -673,10 +695,19 @@ export class ChatView {
       }
     }
     const readyText = this.input.value;
-    if (this.disposed || revision !== this.submissionRevision || this.running || !readyText.trim()) return;
+    if (
+      this.disposed ||
+      revision !== this.submissionRevision ||
+      (this.running && !this.options.onQueue) ||
+      this.composing ||
+      !readyText.trim()
+    )
+      return;
     if (this.options.canSend?.(readyText) === false) return;
     this.setInput('');
-    this.options.onSend(readyText);
+    if (this.options.onQueue && document.activeElement === this.sendBtn) this.input.focus({ preventScroll: true });
+    if (this.running && this.options.onQueue) this.options.onQueue(readyText);
+    else this.options.onSend(readyText);
   }
 
   /** Reflect run state + empty input on the send button (icon, disabled, title). */
@@ -687,22 +718,27 @@ export class ChatView {
       this.actionHasDraft = hasDraft;
       this.updateRestoreState();
     }
-    const unavailable = !this.running && hasDraft && this.options.canSend?.(this.input.value) === false;
+    const legacyStop = this.running && !this.options.onQueue;
+    const unavailable = !legacyStop && hasDraft && this.options.canSend?.(this.input.value) === false;
     const preparation = unavailable ? this.options.getSendPreparation?.() : undefined;
     if (preparation) this.sendBtn.textContent = preparation.label;
-    else this.sendBtn.innerHTML = this.running ? ICON_STOP : ICON_SEND;
+    else this.sendBtn.innerHTML = legacyStop ? ICON_STOP : ICON_SEND;
     this.sendBtn.classList.toggle('cui-send-prepare', !!preparation);
-    this.sendBtn.classList.toggle('cui-send-stop', this.running);
-    this.sendBtn.title = this.running
+    this.sendBtn.classList.toggle('cui-send-stop', !!legacyStop);
+    this.sendBtn.title = legacyStop
       ? this.stopping
         ? (this.labels.stopping ?? 'Stopping…')
         : (this.labels.stop ?? 'Stop')
-      : (preparation?.label ?? this.labels.send ?? 'Send');
+      : (preparation?.label ?? (this.running ? (this.labels.queue ?? 'Queue request') : (this.labels.send ?? 'Send')));
     this.sendBtn.setAttribute('aria-label', this.sendBtn.title);
-    // Disable unavailable submissions while idle and repeated cancellation while settling.
-    this.sendBtn.disabled =
-      this.stopping ||
-      (!this.running && (this.preparingSend || !hasDraft || (unavailable && (!preparation || !!preparation.disabled))));
+    this.sendBtn.disabled = legacyStop
+      ? this.stopping
+      : this.preparingSend || !hasDraft || (unavailable && (!preparation || !!preparation.disabled));
+    this.stopBtn.classList.toggle('cui-send-stop', !!this.options.onQueue && this.running);
+    this.stopBtn.hidden = !this.options.onQueue || !this.running;
+    this.stopBtn.disabled = this.stopping;
+    this.stopBtn.title = this.stopping ? (this.labels.stopping ?? 'Stopping…') : (this.labels.stop ?? 'Stop');
+    this.stopBtn.setAttribute('aria-label', this.stopBtn.title);
   }
 
   private updateRestoreState(parent: HTMLElement = this.messagesEl): void {
