@@ -153,6 +153,7 @@ export const es: Partial<I18nMessages> = {
   agentReadDocument: 'Leer documento',
   agentUpdateDocument: 'Actualizar documento',
   agentToolNotChosen: 'No se seleccionó una operación ejecutable. Aclara la solicitud o prueba otro modelo.',
+  agentReadUnavailable: 'El contenido de origen no está disponible. Vuelve a intentarlo cuando el editor esté listo.',
   agentNoReadableText: 'No se encontró texto legible.',
   agentReadCell: 'Leer celda',
   agentUpdateCell: 'Actualizar celda',

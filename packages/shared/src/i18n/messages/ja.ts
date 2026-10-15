@@ -151,6 +151,7 @@ export const ja: Partial<I18nMessages> = {
   agentReadDocument: '文書を読む',
   agentUpdateDocument: '文書を更新',
   agentToolNotChosen: '実行できる操作が選択されませんでした。依頼を具体的にするか、別のモデルでお試しください。',
+  agentReadUnavailable: '元の内容を読み取れません。エディターの準備ができてから再試行してください。',
   agentNoReadableText: '読み取れるテキストが見つかりませんでした。',
   agentReadCell: 'セルを読む',
   agentUpdateCell: 'セルを更新',

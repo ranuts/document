@@ -149,6 +149,7 @@ export const en: I18nMessages = {
   agentReadDocument: 'Read document content',
   agentUpdateDocument: 'Update document',
   agentToolNotChosen: 'No executable operation was selected. Clarify the request or try another model.',
+  agentReadUnavailable: 'The source content is unavailable. Try reading it again after the editor is ready.',
   agentNoReadableText: 'No readable text was found.',
   agentReadCell: 'Read cell',
   agentUpdateCell: 'Update cell',

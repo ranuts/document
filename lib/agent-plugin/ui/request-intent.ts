@@ -8,6 +8,26 @@ export interface RequestIntent {
   refinement?: true;
 }
 
+/** Whole-utterance allowlist only. Compounds, negation and refinements still use the router. */
+export function safeChatIntent(input: string): RequestIntent | undefined {
+  const utterance = input
+    .trim()
+    .toLocaleLowerCase()
+    .replace(/[!?。！？]+$/, '')
+    .trim();
+  const phrases: Array<[WritingLanguage, readonly string[]]> = [
+    ['en', ['hello', 'hi', 'hey', 'hello there', 'what can you do', 'how can you help me']],
+    ['zh-CN', ['你好', '您好', '你能做什么', '你可以做什么']],
+    ['ja', ['こんにちは', '何ができますか']],
+    ['ko', ['안녕하세요', '무엇을 할 수 있나요']],
+    ['de', ['hallo', 'was kannst du tun']],
+    ['es', ['hola', 'qué puedes hacer', '¿qué puedes hacer']],
+    ['pt', ['olá', 'o que você pode fazer']],
+  ];
+  const language = phrases.find(([, values]) => values.includes(utterance))?.[0];
+  return language ? { task: 'chat', language } : undefined;
+}
+
 /** Schema-constrained routing, independent of the user's phrasing or editor language. */
 export async function resolveRequestIntent(
   provider: LLMProvider,
@@ -21,6 +41,8 @@ export async function resolveRequestIntent(
 ): Promise<RequestIntent> {
   signal.throwIfAborted();
   if (input.length > 8000) throw new Error('Document operation request is too large');
+  const safe = !options.pendingProposal ? safeChatIntent(input) : undefined;
+  if (safe) return safe;
   const hasSelection = options.hasSelection ?? (context?.selectionCharacters ?? 0) > 0;
   const tasks = [
     'chat',

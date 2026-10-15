@@ -523,3 +523,38 @@ it('refreshes the frozen target after verified navigation in a read-only editor'
   expect(action.continuationTarget?.isCurrent(false)).toBe(true);
   expect(action.continuationTarget?.isCurrent(true)).toBe(false);
 });
+
+it('binds lightweight Word scope without reading body and refuses SDK writes until guarded promotion', async () => {
+  const { captureDocumentToolScope } = await import('../../lib/agent-plugin/document-tool-action');
+  const state = mount();
+  const body = vi.fn(() => 'body');
+  Object.assign(state.logic, {
+    Slides: undefined,
+    GetText: body,
+    GetDocPosType: () => 0,
+    GetSelectionState: () => [0],
+  });
+  Object.assign(state.api, { pluginMethod_GetSelectedText: () => '', asc_IsTrackRevisions: () => false });
+  const target = captureDocumentToolScope();
+  expect(body).not.toHaveBeenCalled();
+  expect(target.isCurrent(false)).toBe(true);
+  expect(target.isCurrent(true)).toBe(false);
+  const execute = vi.spyOn(agentTools.insert_text, 'execute');
+  await expect(new DocumentToolAction(target, plan('insert_text', { text: 'new' }, 'word')).apply()).rejects.toThrow();
+  expect(execute).not.toHaveBeenCalled();
+  const promoted = target.prepareWrite!();
+  expect(body).toHaveBeenCalledOnce();
+  expect(promoted.isCurrent(true)).toBe(true);
+  state.history.Index++;
+  expect(() => target.prepareWrite!()).toThrow();
+  expect(body).toHaveBeenCalledOnce();
+});
+
+it('bounds lightweight selection text while retaining full public target capture semantics', async () => {
+  const { captureDocumentToolScope } = await import('../../lib/agent-plugin/document-tool-action');
+  const state = mount();
+  Object.assign(state.logic, { Slides: undefined, GetSelectionState: () => [0] });
+  Object.assign(state.api, { pluginMethod_GetSelectedText: () => 'x'.repeat(9000), asc_IsTrackRevisions: () => false });
+  expect(captureDocumentToolScope().selectedText).toHaveLength(8000);
+  expect(captureDocumentToolTarget().selectedText).toHaveLength(9000);
+});

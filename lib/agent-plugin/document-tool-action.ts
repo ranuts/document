@@ -19,6 +19,8 @@ export interface DocumentToolTarget {
   readonly label: string;
   readonly selectedText: string;
   readonly reviewText?: string;
+  /** Synchronously promote the original lightweight scope before any write planning awaits. */
+  prepareWrite?(): DocumentToolTarget;
   getReview?(plan: DocumentToolPlan): ChangeReview | undefined;
   locate?(plan: DocumentToolPlan): void;
   isCurrent(write?: boolean): boolean;
@@ -84,6 +86,15 @@ function interaction(doc: Document): { revision: number } {
 
 /** Bind document identity, version and selection before invoking a model. */
 export function captureDocumentToolTarget(): DocumentToolTarget {
+  return captureTarget(true);
+}
+
+/** Identity, history and selection only; no whole-body or review-character reads. */
+export function captureDocumentToolScope(): DocumentToolTarget {
+  return captureTarget(false);
+}
+
+function captureTarget(full: boolean): DocumentToolTarget {
   const api = requireEditorApi() as ScopeApi;
   if (!api.isDocumentLoadComplete || !api.isLoadFullApi) throw new Error('Editor is still loading');
   const context = captureDocumentContext();
@@ -137,11 +148,14 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
       : context.kind === 'slide'
         ? (readSlideTextSelection({ getDocContent: () => selectedContent })?.selectedText ?? '')
         : '';
-  const beforeText = context.kind === 'word' && logic?.GetDocPosType?.() === 0 ? readWordBodyText(logic) : undefined;
+  const beforeText =
+    full && context.kind === 'word' && logic?.GetDocPosType?.() === 0 ? readWordBodyText(logic) : undefined;
   const currentReviewMode = () =>
     context.kind === 'word' && typeof api.asc_IsTrackRevisions === 'function' && api.asc_IsTrackRevisions();
   const reviewMode = currentReviewMode();
-  const beforeReview = reviewMode ? captureReviewCharacters(logic) : undefined;
+  const readonly = getReadonlyMode();
+  const viewMode = api.isViewMode;
+  const beforeReview = full && reviewMode ? captureReviewCharacters(logic) : undefined;
   const sameDocument = () =>
     frame.isConnected &&
     getEditorApi() === api &&
@@ -166,6 +180,7 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
         currentReviewMode() !== reviewMode
       )
         return false;
+      if (!full && (write || getReadonlyMode() !== readonly || api.isViewMode !== viewMode)) return false;
       if (write && (getReadonlyMode() || api.isViewMode || !tracked || capturedPosition === undefined)) return false;
       if (!history) return !write;
       return (
@@ -243,7 +258,15 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
           : context.kind === 'pdf'
             ? `PDF · ${context.page ?? ''}`
             : 'DOCX',
-    selectedText,
+    selectedText: full ? selectedText : selectedText.slice(0, 8000),
+    ...(!full
+      ? {
+          prepareWrite: () => {
+            if (!isCurrent(false)) throw new Error('agentPlanExpired');
+            return captureDocumentToolTarget();
+          },
+        }
+      : {}),
     ...(context.kind === 'cell' && typeof api.wb?.scrollToCell === 'function'
       ? {
           locate: (plan: DocumentToolPlan) => {
@@ -312,7 +335,7 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
         (!plan.readOnly && (getReadonlyMode() || api.isViewMode))
       )
         throw new Error('agentPlanExpired');
-      return captureDocumentToolTarget();
+      return full ? captureDocumentToolTarget() : captureDocumentToolScope();
     },
   });
 }

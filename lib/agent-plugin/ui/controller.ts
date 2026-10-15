@@ -50,6 +50,15 @@ export interface AgentChatControllerOptions {
   assertCurrent?: () => void;
 }
 
+export interface TurnRequest {
+  prepareRun?: AgentChatControllerOptions['prepareRun'];
+  reply?: string;
+  maxIterations?: number;
+  tools: Record<string, AgentTool>;
+  getRequestContext(): string | undefined;
+  assertCurrent(): void;
+}
+
 export interface TurnResult {
   turnId: string;
   status: 'success' | 'stopped' | 'failed' | 'limited' | 'review-pending' | 'superseded';
@@ -87,7 +96,9 @@ export class AgentChatController {
   }
 
   /** Send a user instruction and run the agent loop, emitting turns as it goes. */
-  async send(userText: string, presentation: { echoUser?: boolean } = {}): Promise<TurnResult> {
+  async send(userText: string, presentation: { echoUser?: boolean; request?: TurnRequest } = {}): Promise<TurnResult> {
+    const request = presentation.request;
+    const assertCurrent = request?.assertCurrent ?? this.options.assertCurrent;
     const turnId = crypto.randomUUID();
     const text = userText.trim();
     if (!text || this.activeRun) return { turnId, status: this.activeRun ? 'superseded' : 'failed' };
@@ -142,13 +153,15 @@ export class AgentChatController {
       assertLive();
       if (presentation.echoUser !== false) emitTurn({ role: 'user', text });
       assertLive();
-      const prepared = this.options.prepareRun ? await this.options.prepareRun(text, run.abort.signal) : undefined;
+      assertCurrent?.();
+      const prepare = request ? request.prepareRun : this.options.prepareRun;
+      const prepared = prepare ? await prepare(text, run.abort.signal) : request;
       if (!current()) return outcome('superseded');
       if (run.abort.signal.aborted) {
         saveStoppedTurn();
         return outcome('stopped');
       }
-      this.options.assertCurrent?.();
+      assertCurrent?.();
       assertLive();
       if (prepared?.reply) {
         const receipt = { role: 'assistant' as const, content: prepared.reply, hostGuidance: 'tool' as const };
@@ -157,13 +170,15 @@ export class AgentChatController {
         emitTurn({ role: 'tool', text: prepared.reply });
         return outcome('failed');
       }
-      const tools = prepared?.tools ?? this.options.getTools?.() ?? this.options.tools;
+      const tools = prepared?.tools ?? request?.tools ?? this.options.getTools?.() ?? this.options.tools;
       assertLive();
-      const requestContext = this.options.getRequestContext?.();
+      assertCurrent?.();
+      const requestContext = (request?.getRequestContext ?? this.options.getRequestContext)?.();
+      assertCurrent?.();
       assertLive();
       const result = await runAgent(this.provider, text, {
         tools,
-        maxIterations: this.options.maxIterations,
+        maxIterations: request?.maxIterations ?? this.options.maxIterations,
         history: priorHistory,
         onContextTrimmed: () => {
           if (live()) this.options.onContextTrimmed?.();
@@ -177,7 +192,7 @@ export class AgentChatController {
         requestContext,
         assertCurrent: () => {
           assertLive();
-          this.options.assertCurrent?.();
+          assertCurrent?.();
         },
         signal: run.abort.signal,
         onEvent: (event) => {
@@ -185,6 +200,7 @@ export class AgentChatController {
           if (event.type === 'usage') {
             this.options.onUsage?.(event.usage);
           } else if (event.type === 'assistant_delta') {
+            assertCurrent?.();
             displayStream.push(event.text);
           } else if (event.type === 'tool_call') {
             resetSegment();
@@ -196,6 +212,7 @@ export class AgentChatController {
             if (event.isError) toolFailed = true;
             if (event.isError && !event.limitReason) emitTurn({ role: 'error', text: displayError(event.content) });
           } else if (event.type === 'assistant') {
+            assertCurrent?.();
             // A streamed turn was already rendered via deltas — just close the
             // live bubble. Without a delta handler wired, fall back to emitting
             // the whole turn so the text is never lost.
@@ -215,6 +232,7 @@ export class AgentChatController {
         },
       });
       if (!current()) return outcome('superseded');
+      assertCurrent?.();
       this.history = [...result.messages, ...run.externalMessages];
       run.externalMessages = [];
       saveHistory();

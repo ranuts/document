@@ -142,6 +142,7 @@ export const zhCN: I18nMessages = {
   agentReadDocument: '读取文档内容',
   agentUpdateDocument: '修改文档',
   agentToolNotChosen: '没有选出可执行的操作。请明确说明需求，或换个模型重试。',
+  agentReadUnavailable: '暂时无法读取源内容，请在编辑器就绪后重试。',
   agentNoReadableText: '没有找到可读取的文本。',
   agentReadCell: '读取单元格',
   agentUpdateCell: '修改单元格',

@@ -4,6 +4,38 @@ import { WRITING_LANGUAGES, type WritingLanguage } from '@ranuts/agent-core/llm/
 import type { ComposerContext } from './composer-context';
 import type { DocumentToolTarget } from '../document-tool-action';
 import type { RequestIntent } from './request-intent';
+import type { RequestSourceScope } from './request-context';
+export interface HostReadTask {
+  readonly taskId: string;
+  readonly scope: Exclude<RequestSourceScope, 'metadata'>;
+}
+export interface StagedRequestIntent extends RequestIntent {
+  readonly hostRead?: HostReadTask;
+}
+const hostReads = new WeakMap<
+  HostReadTask,
+  { target: DocumentToolTarget; current(): boolean; snapshotCurrent(): boolean; revoked: boolean }
+>();
+/** Trust survives consumption by reference, never serialization or reconstruction. */
+export function isCurrentHostRead(task: HostReadTask | undefined): task is HostReadTask {
+  const record = task && hostReads.get(task);
+  return !!record && !record.revoked && record.current();
+}
+export function revokeHostRead(task: HostReadTask | undefined): void {
+  const record = task && hostReads.get(task);
+  if (record) record.revoked = true;
+}
+export function hostReadTarget(task: HostReadTask): DocumentToolTarget {
+  if (!isCurrentHostRead(task) || !hostReads.get(task)!.snapshotCurrent()) throw new Error('agentPlanExpired');
+  return hostReads.get(task)!.target;
+}
+function readScope(id: string, snapshot: ComposerContext): HostReadTask['scope'] | undefined {
+  if (!['read', 'explain', 'analyze', 'slides', 'outline', 'page', 'points', 'summarize'].includes(id)) return;
+  if (snapshot.context?.kind === 'pdf') return 'pdf-page';
+  if (['summarize', 'analyze'].includes(id) || (id === 'explain' && !!snapshot.text.trim())) return 'selection';
+  return 'document';
+}
+
 interface Task {
   id: string;
   label: Parameters<typeof t>[0];
@@ -34,7 +66,7 @@ export function createTaskEntry(options: {
   readonly(): boolean;
   capture(): ComposerContext;
   captureTarget(): DocumentToolTarget;
-  onStage(intent: RequestIntent): void;
+  onStage(intent: StagedRequestIntent): void;
 }) {
   const el = View('section').class('agent-task-entry').build();
   const scope = Span().class('agent-task-scope').build();
@@ -43,7 +75,7 @@ export function createTaskEntry(options: {
   el.append(scope, tasks, help);
   let staged: {
     text: string;
-    intent: RequestIntent;
+    intent: StagedRequestIntent;
     session: string;
     snapshot: string;
     target: DocumentToolTarget;
@@ -58,7 +90,10 @@ export function createTaskEntry(options: {
     staged.target.isCurrent(false) &&
     staged.snapshot === fingerprint(snapshot ?? options.capture());
   const inputChanged = (text: string) => {
-    if (staged && staged.text !== text) staged = null;
+    if (staged && staged.text !== text) {
+      revokeHostRead(staged.intent.hostRead);
+      staged = null;
+    }
   };
   const check = (text: string) => {
     inputChanged(text);
@@ -67,9 +102,10 @@ export function createTaskEntry(options: {
     help.textContent = t('agentEntryChanged');
     return false;
   };
-  const consume = (text: string): RequestIntent | null => {
+  const consume = (text: string): StagedRequestIntent | null => {
     inputChanged(text);
     const intent = staged && fresh() ? staged.intent : null;
+    if (!intent) revokeHostRead(staged?.intent.hostRead);
     staged = null;
     return intent;
   };
@@ -143,7 +179,24 @@ export function createTaskEntry(options: {
               const language = (
                 WRITING_LANGUAGES.includes(locale as WritingLanguage) ? locale : 'en'
               ) as WritingLanguage;
-              const intent = { task: item.task, language };
+              const session = options.session();
+              const readonly = options.readonly();
+              const snapshotKey = fingerprint(snapshot);
+              const source = readScope(item.id, snapshot);
+              const hostRead = source ? Object.freeze({ taskId: item.id, scope: source }) : undefined;
+              if (hostRead)
+                hostReads.set(hostRead, {
+                  target,
+                  revoked: false,
+                  current: () =>
+                    options.session() === session && options.readonly() === readonly && target.isCurrent(false),
+                  snapshotCurrent: () => fingerprint(options.capture()) === snapshotKey,
+                });
+              const intent: StagedRequestIntent = Object.freeze({
+                task: item.task,
+                language,
+                ...(hostRead ? { hostRead } : {}),
+              });
               const text = t(item.prompt);
               options.setInput(text);
               staged = {

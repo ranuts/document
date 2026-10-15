@@ -319,8 +319,8 @@ vi.mock('../../lib/agent-plugin/document-task', async (original) => {
   };
 });
 vi.mock('../../lib/agent-plugin/document-read-answer', () => ({ generateReadAnswer: state.readAnswer }));
-vi.mock('../../lib/agent-plugin/document-tool-action', () => ({
-  captureDocumentToolTarget: () => ({
+vi.mock('../../lib/agent-plugin/document-tool-action', () => {
+  const capture = () => ({
     context:
       state.toolContext === 'cell'
         ? { kind: 'cell' }
@@ -330,22 +330,26 @@ vi.mock('../../lib/agent-plugin/document-tool-action', () => ({
     label: 'PPT · 1',
     selectedText: '',
     isCurrent: () => state.targetCurrent,
-  }),
-  DocumentToolAction: class {
-    cancel() {}
-    isCurrent() {
-      return state.targetCurrent;
-    }
-    apply = state.apply;
-    get result() {
-      return state.readText === undefined ? { verified: true, page: 2, count: 2 } : { text: state.readText };
-    }
-    constructor(
-      readonly target: unknown,
-      readonly plan: unknown,
-    ) {}
-  },
-}));
+  });
+  return {
+    captureDocumentToolTarget: capture,
+    captureDocumentToolScope: capture,
+    DocumentToolAction: class {
+      cancel() {}
+      isCurrent() {
+        return state.targetCurrent;
+      }
+      apply = state.apply;
+      get result() {
+        return state.readText === undefined ? { verified: true, page: 2, count: 2 } : { text: state.readText };
+      }
+      constructor(
+        readonly target: unknown,
+        readonly plan: unknown,
+      ) {}
+    },
+  };
+});
 afterEach(() => {
   localStorage.removeItem('agent-panel-provider');
   localStorage.removeItem('agent-local-preset');
@@ -2357,10 +2361,10 @@ it('preserves a failed routing request and lets the next Excel question start fr
   const panel = createPreparedPanel();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
-  input.value = 'What can you do?';
+  input.value = 'Explain the available editing features';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.cui-msg-error')).not.toBeNull());
-  expect(panel.querySelector('.cui-msg-user')?.textContent).toBe('What can you do?');
+  expect(panel.querySelector('.cui-msg-user')?.textContent).toBe('Explain the available editing features');
   expect(panel.querySelector('.cui-msg-error')?.textContent).not.toContain(t('agentWordOnly'));
   expect(state.apply).not.toHaveBeenCalled();
   state.semanticResponse = '{"task":"chat","language":"en"}';
@@ -2618,10 +2622,10 @@ it('shows an accepted request before task routing completes and never duplicates
   });
   const panel = createPreparedPanel();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  input.value = 'Hello there';
+  input.value = 'Tell me a brief story';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   try {
-    expect(panel.querySelector('.cui-msg-user .cui-bubble')?.textContent).toBe('Hello there');
+    expect(panel.querySelector('.cui-msg-user .cui-bubble')?.textContent).toBe('Tell me a brief story');
     expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentRoutingRequest'));
     expect(input.value).toBe('');
   } finally {
@@ -2847,7 +2851,7 @@ it('keeps dictation unsent when no editor target can be bound at the Send gestur
     },
   );
   const targetModule = await import('../../lib/agent-plugin/document-tool-action');
-  const capture = vi.spyOn(targetModule, 'captureDocumentToolTarget');
+  const capture = vi.spyOn(targetModule, 'captureDocumentToolScope');
   try {
     state.ready = true;
     state.editorReady = true;
@@ -2866,5 +2870,77 @@ it('keeps dictation unsent when no editor target can be bound at the Send gestur
   } finally {
     capture.mockRestore();
     vi.unstubAllGlobals();
+  }
+});
+
+it('answers an exact greeting without displaying a classification phase or copying document-body context', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  const activity = vi.spyOn(ChatView.prototype, 'setActivity');
+  const send = vi.spyOn(AgentChatController.prototype, 'send');
+  const panel = createPreparedPanel();
+  try {
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = 'Hello';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+    expect(activity).not.toHaveBeenCalledWith('routing');
+    expect(send).toHaveBeenCalledOnce();
+    const request = send.mock.calls[0][1]!.request!;
+    expect(JSON.parse(request.getRequestContext()!)).not.toHaveProperty('content');
+    expect(JSON.parse(request.getRequestContext()!)).not.toHaveProperty('availableOperations');
+  } finally {
+    activity.mockRestore();
+    send.mockRestore();
+  }
+});
+
+it('stages a selected summary as a trusted read and answers only on explicit Send without writing consent', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.toolContext = 'word';
+  state.source = 'Selected source';
+  state.semanticResponse = '{"task":"tools","language":"en"}';
+  const panel = createPreparedPanel();
+  const send = vi.spyOn(AgentChatController.prototype, 'send');
+  try {
+    panel.querySelector<HTMLButtonElement>('[data-task="summarize"]')!.click();
+    expect(send).not.toHaveBeenCalled();
+    expect(state.writing).not.toHaveBeenCalled();
+    panel.querySelector<HTMLButtonElement>('.cui-send')!.click();
+    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+    expect(send).toHaveBeenCalledOnce();
+    expect(send.mock.calls[0][1]?.request?.tools).toEqual({});
+    expect(state.writing).not.toHaveBeenCalled();
+    expect(state.routing).not.toHaveBeenCalled();
+    expect(state.toolPlan).not.toHaveBeenCalled();
+    expect(state.apply).not.toHaveBeenCalled();
+  } finally {
+    send.mockRestore();
+  }
+});
+it('keeps semantic routing for an exact greeting while an unexecuted suggestion is pending', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.editorKind = 'slide';
+  state.routing.mockResolvedValue({ task: 'tools', language: 'en' });
+  state.toolPlan.mockResolvedValue({ tool: 'add_slide_text', input: { text: 'Draft' }, readOnly: false });
+  const panel = createPreparedPanel();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Add a new text box on the current slide with this exact plain text: Draft';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  const activity = vi.spyOn(ChatView.prototype, 'setActivity');
+  try {
+    input.value = 'Hello';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+    expect(activity).toHaveBeenCalledWith('routing');
+    expect(state.apply).not.toHaveBeenCalled();
+  } finally {
+    activity.mockRestore();
   }
 });

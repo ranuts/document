@@ -1106,3 +1106,23 @@ it('does not start host preflight after the user-turn callback invalidates its r
   expect(prepareRun).not.toHaveBeenCalled();
   expect(controller.isRunning()).toBe(false);
 });
+
+it('isolates read-only per-turn tools and context and bypasses native preflight', async () => {
+  const prepareRun = vi.fn(async () => ({ tools: {} }));
+  const chat = vi.fn(async (_messages: LLMMessage[], _tools: unknown[]) => textResponse('answer'));
+  const controller = new AgentChatController({ name: 'test', isReady: () => true, chat }, () => {}, {
+    prepareRun,
+    getRequestContext: () => 'ordinary context',
+  });
+  const assertCurrent = vi.fn();
+  await controller.send('read', { request: { tools: {}, getRequestContext: () => 'trusted source', assertCurrent } });
+  expect(prepareRun).not.toHaveBeenCalled();
+  expect(chat).toHaveBeenCalledOnce();
+  expect(chat.mock.calls[0][1]).toEqual([]);
+  expect(JSON.stringify(chat.mock.calls[0][0])).toContain('trusted source');
+  expect(assertCurrent).toHaveBeenCalled();
+  await controller.send('ordinary');
+  expect(prepareRun).toHaveBeenCalledOnce();
+  expect(JSON.stringify(chat.mock.calls[1][0])).toContain('ordinary context');
+  expect(JSON.stringify(chat.mock.calls[1][0])).not.toContain('trusted source');
+});

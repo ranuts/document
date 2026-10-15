@@ -8,7 +8,8 @@ import type { DocumentContext } from '../document-context';
 interface ReadContent {
   page?: number;
   pages?: number;
-  scope: 'pdf-page' | 'document-body' | 'active-sheet-used-range' | 'presentation-text';
+  slidesRead?: number;
+  scope: 'selection' | 'pdf-page' | 'document-body' | 'active-sheet-used-range' | 'presentation-text';
   text?: string;
   range?: string;
   truncated?: boolean;
@@ -28,12 +29,23 @@ function column(index: number): string {
   return result;
 }
 /** Fresh reference data for this request. Never selects all or changes the cursor. */
-export function captureRequestContext(): RequestContext {
+export type RequestSourceScope = 'metadata' | 'selection' | 'document' | 'pdf-page';
+export function captureRequestContext(source: RequestSourceScope = 'document'): RequestContext {
   const selected = captureComposerContext();
   const result: RequestContext = {
     editor: selected.context,
     selection: { text: selected.text, truncated: selected.truncated },
   };
+  if (source === 'metadata') return result;
+  if (source === 'selection') {
+    result.content = {
+      scope: 'selection',
+      text: selected.text,
+      truncated: selected.truncated,
+      ...(selected.context?.range ? { range: selected.context.range } : {}),
+    };
+    return result;
+  }
   const api = getEditorApi();
   if (!selected.context || !api) return result;
   const scope: ReadContent['scope'] =
@@ -62,6 +74,7 @@ export function captureRequestContext(): RequestContext {
     let text: string | undefined;
     let truncated = false;
     let range: string | undefined;
+    let slidesRead: number | undefined;
     const logic = (api.WordControl as { m_oLogicDocument?: unknown } | undefined)?.m_oLogicDocument;
     if (selected.context.kind === 'word') text = readWordBodyText(logic);
     else if (selected.context.kind === 'slide') {
@@ -70,7 +83,9 @@ export function captureRequestContext(): RequestContext {
       )?.Slides;
       if (slides) {
         text = '';
+        slidesRead = 0;
         for (const [index, slide] of slides.entries()) {
+          slidesRead++;
           const body = slide.cSld.spTree.map(readPresentationShapeText).filter(Boolean).join('\n');
           if (body) text += `${text ? '\n\n' : ''}Slide ${index + 1}:\n${body}`;
           if (text.length > MAX_CHARACTERS) {
@@ -125,6 +140,7 @@ export function captureRequestContext(): RequestContext {
         text: text.slice(0, MAX_CHARACTERS),
         truncated: truncated || text.length > MAX_CHARACTERS,
         ...(range ? { range } : {}),
+        ...(slidesRead !== undefined ? { slidesRead } : {}),
       };
   } catch {
     /* An unavailable read must not be represented as an empty document. */
