@@ -35,6 +35,19 @@ test('Word selection updates the composer through SDK events without idle reads'
     api.asc_EditSelectAll();
   });
   await expect(page.locator('.agent-quoted-text')).toHaveText('Event-driven selection');
+  const disclosure = page.locator('.agent-selection-toggle');
+  await expect(disclosure).toHaveAttribute('aria-expanded', 'false');
+  await disclosure.focus();
+  await disclosure.press('Enter');
+  await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('.agent-quoted-text')).toBeVisible();
+  await disclosure.press('Space');
+  await expect(disclosure).toHaveAttribute('aria-expanded', 'false');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await disclosure.press('Enter');
+  await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('.agent-selection-reveal')).toHaveCSS('transition-duration', '0s');
+
   // Let notification bursts settle, then observe longer than the former interval.
   await page.waitForTimeout(100);
   const reads = () =>
@@ -53,14 +66,14 @@ test('spreadsheet cell navigation updates context without reopening the panel', 
     const win = window.__ooFrames.editor() as unknown as { Asc: { editor: { asc_findCell(address: string): void } } };
     win.Asc.editor.asc_findCell('B2');
   });
-  await expect(page.locator('.agent-quote-context summary')).toContainText('B2');
+  await expect(page.locator('.agent-selection-toggle')).toContainText('B2');
   await page.evaluate(() => {
     const win = window.__ooFrames.editor() as unknown as {
       Asc: { editor: { asc_renameWorksheet(name: string): void } };
     };
     win.Asc.editor.asc_renameWorksheet('Updated sheet');
   });
-  await expect(page.locator('.agent-quote-context summary')).toContainText('Updated sheet');
+  await expect(page.locator('.agent-selection-toggle')).toContainText('Updated sheet');
   // Keep the same selection: a completed history action must update its contents.
   await page.evaluate(() => {
     const win = window.__ooFrames.editor() as unknown as {

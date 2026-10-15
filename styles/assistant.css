@@ -1043,10 +1043,6 @@ r-dropdown[role='listbox'] {
 .agent-panel-settings h2:focus {
   outline: none;
 }
-.agent-quote-context details {
-  flex: 1;
-  min-width: 0;
-}
 .agent-quote-remove {
   border: 0;
   background: transparent;
@@ -1225,32 +1221,81 @@ r-dropdown[role='listbox'] {
   outline-offset: 2px;
 }
 .agent-quote-context {
-  color: var(--ran-color-text-secondary);
-  font-size: 11px;
-  gap: 8px;
-  align-items: flex-start;
-  display: flex;
+  min-width: 0;
   margin-bottom: var(--ran-space-3);
-  border: 0;
-  padding: 0;
-}
-.agent-quote-context summary {
-  min-height: 24px;
-  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+}
+.agent-quote-context[hidden] {
+  display: none;
+}
+.agent-selection-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ran-space-2);
+  width: 100%;
+  min-height: 28px;
+  padding: var(--ran-space-1) 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
   cursor: pointer;
 }
+.agent-selection-toggle:hover {
+  color: var(--ran-color-text);
+}
+.agent-selection-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.agent-selection-chevron {
+  flex: 0 0 auto;
+  transition: transform var(--ran-motion-duration-base) cubic-bezier(0.22, 1, 0.36, 1);
+}
+.agent-quote-context[data-open='true'] .agent-selection-chevron {
+  transform: rotate(180deg);
+}
+/* Adapted card resize: intrinsic grid tracks reverse from the current height. */
+.agent-selection-reveal {
+  --resize-dur: var(--ran-motion-duration-base);
+  --resize-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--resize-dur) var(--resize-ease),
+    visibility 0s linear var(--resize-dur);
+  will-change: grid-template-rows;
+}
+.agent-quote-context[data-open='true'] .agent-selection-reveal {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition-delay: 0s;
+}
+.agent-selection-clip {
+  min-height: 0;
+  overflow: hidden;
+}
 .agent-quoted-text {
-  font: inherit;
-  margin: 8px 0;
+  min-width: 0;
+  max-height: 160px;
+  margin: 0;
+  padding: var(--ran-space-2) 0;
+  overflow: auto;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
-  max-height: 160px;
-  overflow: auto;
-  font-size: var(--ran-text-label-3);
-  background: var(--ran-color-bg-muted);
-  border-radius: var(--ran-radius-sm);
-  padding: var(--ran-space-3);
+  font: inherit;
+}
+@media (prefers-reduced-motion: reduce) {
+  .agent-selection-reveal,
+  .agent-selection-chevron {
+    transition: none !important;
+  }
 }
 
 .agent-panel-model-row {

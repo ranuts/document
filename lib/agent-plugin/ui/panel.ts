@@ -90,6 +90,7 @@ import { mountPanelViewport } from './panel-viewport';
 import { ActionPreview } from './action-preview';
 import { ProposalContext } from './proposal-context';
 import { captureComposerContext } from './composer-context';
+import { createComposerSelection } from './composer-selection';
 import { captureRequestContext, serializeRequestContext } from './request-context';
 import { classifyRequest, resolveRequestIntent, safeChatIntent } from './request-intent';
 import { generateDocumentDraft } from './document-draft';
@@ -801,15 +802,9 @@ export function createAgentPanel(
     if (event.isTrusted || chat.getInput()) taskEntry.inputChanged(chat.getInput());
   });
   let quotedSelection = '';
-  const quoteContext = document.createElement('div');
-  quoteContext.className = 'agent-quote-context';
+  const selectionContext = createComposerSelection();
+  const { el: quoteContext, label: quoteSummary, text: quoteText } = selectionContext;
   quoteContext.hidden = true;
-  const quoteDetails = document.createElement('details');
-  const quoteSummary = document.createElement('summary');
-  const quoteText = document.createElement('pre');
-  quoteText.className = 'agent-quoted-text';
-  quoteDetails.append(quoteSummary, quoteText);
-  quoteContext.append(quoteDetails);
   chat.contextEl.append(quoteContext);
   const stagedGuidance = document.createElement('p');
   stagedGuidance.className = 'agent-staged-guidance';
@@ -934,6 +929,7 @@ export function createAgentPanel(
     syncPanelContext({
       quoteContext,
       quoteSummary,
+      quoteTrigger: selectionContext.trigger,
       quoteText,
       welcomeHint,
       settings,

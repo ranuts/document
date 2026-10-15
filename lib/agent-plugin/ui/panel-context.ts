@@ -156,6 +156,7 @@ export function mountPanelContext(options: {
 export function syncPanelContext(options: {
   quoteContext: HTMLElement;
   quoteSummary: HTMLElement;
+  quoteTrigger?: HTMLElement;
   quoteText: HTMLElement;
   welcomeHint: HTMLElement;
   settings: HTMLElement;
@@ -175,7 +176,7 @@ export function syncPanelContext(options: {
           ? t('agentSelectionContext').replace('{count}', String(snapshot.text.length))
           : t('agentCurrentDocument');
   if (options.quoteSummary.textContent !== label) options.quoteSummary.textContent = label;
-  options.quoteSummary.setAttribute('aria-label', `${t('agentReadSelection')} · ${label}`);
+  (options.quoteTrigger ?? options.quoteSummary).setAttribute('aria-label', `${t('agentReadSelection')} · ${label}`);
   if (options.quoteText.textContent !== snapshot.text) options.quoteText.textContent = snapshot.text;
   const release = options.settings.querySelector<HTMLElement>('.agent-release-memory');
   if (release) release.hidden = !options.ready();
