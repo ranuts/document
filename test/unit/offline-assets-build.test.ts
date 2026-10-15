@@ -64,6 +64,36 @@ it('keeps offline editor dependencies while deferring the assistant and its runt
   }
 });
 
+it('keeps assistant UI assets mandatory while deferring attached executable runtime assets', async () => {
+  const { dir, manifest } = await fixture();
+  try {
+    // Vite can attach Worker outputs directly to the importing UI chunk.
+    Object.assign(manifest['lib/agent-plugin/agent-plugin.ts'], {
+      css: ['assets/assistant.css'],
+      assets: ['assets/webllm.worker-build.js', 'assets/runtime.wasm', 'assets/ui.woff2'],
+    });
+    for (const name of ['assistant.css', 'webllm.worker-build.js', 'ui.woff2'])
+      await writeFile(join(dir, 'assets', name), '');
+    await writeFile(join(dir, '.vite', 'manifest.json'), JSON.stringify(manifest));
+
+    expect(await stampOfflineAssets(dir)).toEqual([
+      '/assets/agent.js',
+      '/assets/assistant.css',
+      '/assets/base.css',
+      '/assets/editor.js',
+      '/assets/recovery.js',
+      '/assets/shared.js',
+      '/assets/ui.woff2',
+      '/ran-fonts/Geist.woff2',
+    ]);
+    const source = await readFile(join(dir, 'sw.js'), 'utf8');
+    const optional = JSON.parse(source.match(/const ASSISTANT_ASSETS_TO_CACHE = (\[.*?\]);/)![1]);
+    expect(optional).toEqual(['/assets/engine.js', '/assets/runtime.wasm', '/assets/webllm.worker-build.js']);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
 it('rejects graph dependencies that could cache an external URL or private file', async () => {
   const { dir, manifest } = await fixture();
   try {
