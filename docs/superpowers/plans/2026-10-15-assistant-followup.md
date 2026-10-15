@@ -69,6 +69,16 @@ focused Markdown streaming suite; relevant stream/browser acceptance.
 - [ ] Cap every automatic main-thread lex/render input, including final/reference/interrupted paths; oversized tails stay exact raw text and stable prefix nodes remain. Oversized whole-reference fallback stays raw at completion, with no later uncapped parse. This bounds input rather than promising preemption in 4ms. Verify Stop does no synchronous Markdown parsing, exact partial source/copy-only state/draft/focus are retained and clear/switch/dispose prevent old callbacks. Test arbitrary chunk boundaries, parser failure raw fallback, scroll/selection and unchanged block identity, plus reduced motion.
 - [ ] Focused tests/typecheck/lint; separate streaming rendering functional commit. Specification gate then independent quality gate before timings/integrated acceptance.
 
+## Chunk 4c: Native smooth-scroll ownership
+
+Files: packages/chat-ui/src/chat-view.ts and optional small scroll-follow.ts;
+related scroll/layout/queue unit tests and focused browser acceptance/docs.
+
+- [ ] RED: native smooth-jump progress does not represent reader detachment; streamed growth must retarget the outstanding jump and reach the new floor. Preserve the observed Chromium 14732 vs 17136 baseline.
+- [ ] Separate native target from reader intent. Retarget growth, settle only own scrollend with current-floor arrival or measured arrival, support reader gesture cancellation of actual native motion and reduced motion. Ignore stale end/progress after cancellation and retarget old-floor scrollend; no endless polling. Do not add guessed completion timeouts or broader fold/navigation architecture.
+- [ ] Test interruption followed by resize, nested scrollend isolation, no-scrollend fallback, clear/dispose, unchanged page anchors and empty welcome behavior. Root Chromium smooth-scroll and gesture probes must pass.
+- [ ] Focused tests/typecheck/lint; separate functional scroll fix commit. Specification gate then independent quality gate.
+
 ## Chunk 5: Actual request timing
 
 Files: packages/agent-core/src/llm/{types,webllm,wllama}.ts;

@@ -207,3 +207,25 @@ output tokens in the fixture's 4,096 capacity. These are synthetic callback/work
 counts, not real tokenizer or GPU timings. Wllama integration separately checks
 that generation receives the counted fitting suffix instead of the last rejected
 refinement probe. Specification and independent quality reviews approved it.
+
+At `99f7b03`, the production build and 309 independently run focused tests passed.
+All three serialized real-editor history cases passed, preserving the original
+400-message content/actions after explicit pagination, the 1,000-conversation
+search checks and delayed-startup ownership. A same-source Chromium component
+probe mounted 40 rows / 784 DOM nodes from 1,000 messages and later reached every
+original row. The warmed 1,000-message sample took 4.86ms to restore with a 6.12ms
+pending-timer delay; the cold first 50-message sample took 21.21ms/23.26ms. The
+baseline 1,000-message eager render used 19,023 nodes and a 135ms timer delay.
+These single-machine samples are observations rather than latency guarantees.
+Ordinary page anchoring drifted at most 0.33 pixels. An expanded cross-window
+70-tool group drifted 0.39 pixels while preserving its group/open summary, all
+ordered receipts, live reply, draft and focused input. The source-level answer
+and document-body getters also succeeded when those messages were outside the
+rendered window.
+
+Twelve English/Chinese preparing states at 320/432/520 pixels in light/dark now
+keep scrollTop=0 and titleTop=100 below messageTop=56, with zero horizontal
+overflow. The delayed-startup request/draft assertions also pass in both locales.
+English 320px dark and Chinese 432px light screenshots were inspected. The
+separate [reference review](2026-10-15-assistant-harness-review.md) records a newly
+reproduced native smooth-scroll target failure; that follow-up is still pending.
