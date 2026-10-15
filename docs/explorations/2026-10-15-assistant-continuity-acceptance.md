@@ -196,3 +196,14 @@ microphone or establish real local-model inference latency.
 Specification and independent quality review approved both follow-up chunks.
 Search, exact budgeting, bounded message restoration and local request timing
 are subsequent checkpoints; these results do not claim to validate them.
+
+At `7c45f66`, 79 independently run search/budget/provider unit tests passed.
+Chromium Worker and fallback searches each matched copied double spaces,
+newline/tab whitespace and a word sequence split across corpus segments. The
+same synthetic 1,000-turn exact-budget counter now made 21 callbacks and visited
+20,956 message entries, compared with 998 callbacks and 1,000,994 entries before.
+It retained six messages with 3,072 measured prompt tokens plus 1,024 reserved
+output tokens in the fixture's 4,096 capacity. These are synthetic callback/work
+counts, not real tokenizer or GPU timings. Wllama integration separately checks
+that generation receives the counted fitting suffix instead of the last rejected
+refinement probe. Specification and independent quality reviews approved it.
