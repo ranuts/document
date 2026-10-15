@@ -116,6 +116,10 @@ resuming that older work. Resume continues FIFO; Send now promotes the selected
 entry and explicitly resumes it. If no older pending requests remain, a fresh
 explicit Send starts a new turn after any active cancellation settles; stopping
 an otherwise empty queue must not add a redundant Resume step to asking again.
+Failed preflight retains a pending request for recovery. Explicit Stop or Send
+now cancels the active attempt instead: preserve its original text for Restore,
+but do not leave that cancelled attempt as executable older work or replay it
+after another answer. Other already queued requests remain paused.
 Editing restores only into an empty composer; otherwise it remains pending with
 feedback. Switching away pauses that session and returning requires Resume.
 Deleting or restoring a session discards its volatile queue. Invalid document
