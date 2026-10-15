@@ -4666,3 +4666,133 @@ it('refuses a document artifact after its original editor scope changes during c
     generate.mockRestore();
   }
 });
+it.each(['answer', 'apply'] as const)(
+  'dictates the next draft during a held %s and queues it once only after explicit Send finishes recognition',
+  async (mode) => {
+    class Recognition {
+      static current: Recognition;
+      constructor() {
+        Recognition.current = this;
+      }
+      onstart?: () => void;
+      onend?: () => void;
+      onresult?: (event: unknown) => void;
+      start = vi.fn();
+      stop = vi.fn();
+      abort = vi.fn();
+    }
+    vi.stubGlobal('SpeechRecognition', Recognition);
+    state.ready = true;
+    state.editorReady = true;
+    state.toolContext = 'word';
+    let finish!: () => void;
+    const calls: string[] = [];
+    state.queueStream = async (text) => {
+      calls.push(text);
+      if (mode === 'answer' && calls.length === 1)
+        await new Promise<void>((resolve) => {
+          finish = resolve;
+        });
+    };
+    const draft = await import('../../lib/agent-plugin/ui/document-draft');
+    const generate = vi.spyOn(draft, 'generateDocumentDraft').mockResolvedValue('Completed article');
+    try {
+      const panel = createPreparedPanel();
+      document.body.append(panel);
+      if (mode === 'answer') enterQueueDraft(panel, 'Hello');
+      else {
+        state.semanticResponse = '{"task":"compose","language":"en"}';
+        enterQueueDraft(panel, 'Write an article about autumn');
+        await vi.waitFor(() => expect(panel.querySelector('.cui-apply')).not.toBeNull());
+        await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+        state.apply.mockImplementationOnce(
+          () =>
+            new Promise((resolve) => {
+              finish = () => resolve('verified');
+            }),
+        );
+        panel.querySelector<HTMLButtonElement>('.cui-apply')!.click();
+        state.semanticResponse = undefined;
+      }
+      await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+      panel.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+      expect(Recognition.current).toBeDefined();
+      Recognition.current.onstart?.();
+      Recognition.current.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'Hi' } }] });
+      expect(panel.querySelector<HTMLTextAreaElement>('.cui-input')!.value).toBe('Hi');
+      expect(calls).toEqual(mode === 'answer' ? ['Hello'] : []);
+      panel.querySelector<HTMLButtonElement>('.cui-send')!.click();
+      panel.querySelector<HTMLButtonElement>('.cui-send')!.click();
+      expect(Recognition.current.stop).toHaveBeenCalledOnce();
+      expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0);
+      Recognition.current.onresult?.({ results: [{ isFinal: true, 0: { transcript: 'Hi' } }] });
+      Recognition.current.onend?.();
+      await vi.waitFor(() => expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hi'));
+      expect(panel.querySelector<HTMLTextAreaElement>('.cui-input')!.value).toBe('');
+      expect(calls).toEqual(mode === 'answer' ? ['Hello'] : []);
+      finish();
+      await vi.waitFor(() => expect(calls).toEqual(mode === 'answer' ? ['Hello', 'Hi'] : ['Hi']));
+    } finally {
+      finish?.();
+      generate.mockRestore();
+      vi.unstubAllGlobals();
+    }
+  },
+);
+it.each(['switch', 'close', 'disable', 'delete', 'pagehide'] as const)(
+  'closes next-draft dictation during a held answer on %s and ignores obsolete recognition callbacks',
+  async (mode) => {
+    class Recognition {
+      static current: Recognition;
+      constructor() {
+        Recognition.current = this;
+      }
+      onstart?: () => void;
+      onend?: () => void;
+      onresult?: (event: unknown) => void;
+      start = vi.fn();
+      stop = vi.fn();
+      abort = vi.fn();
+    }
+    vi.stubGlobal('SpeechRecognition', Recognition);
+    state.ready = true;
+    state.editorReady = true;
+    let finish!: () => void;
+    const calls: string[] = [];
+    state.queueStream = async (text) => {
+      calls.push(text);
+      await new Promise<void>((resolve) => {
+        finish = resolve;
+      });
+    };
+    try {
+      const panel = createPreparedPanel();
+      document.body.append(panel);
+      enterQueueDraft(panel, 'Hello');
+      await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+      panel.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+      expect(Recognition.current).toBeDefined();
+      Recognition.current.onstart?.();
+      const late = Recognition.current.onresult!;
+      late({ results: [{ isFinal: false, 0: { transcript: 'Next draft' } }] });
+      if (mode === 'switch') panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+      else if (mode === 'close') setAgentPanelOpen(false);
+      else if (mode === 'disable') await (await import('../../lib/agent-plugin/ui/panel')).setAgentPanelEnabled(false);
+      else if (mode === 'delete') {
+        panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+        panel.querySelector<HTMLButtonElement>('.agent-history-delete-current')!.click();
+        panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+      } else window.dispatchEvent(new Event('pagehide'));
+      expect(Recognition.current.abort).toHaveBeenCalledOnce();
+      const draft = panel.querySelector<HTMLTextAreaElement>('.cui-input')!.value;
+      late({ results: [{ isFinal: true, 0: { transcript: 'Obsolete next request' } }] });
+      Recognition.current.onend?.();
+      expect(panel.querySelector<HTMLTextAreaElement>('.cui-input')!.value).toBe(draft);
+      expect(calls).toEqual(['Hello']);
+      expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0);
+    } finally {
+      finish?.();
+      vi.unstubAllGlobals();
+    }
+  },
+);

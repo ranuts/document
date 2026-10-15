@@ -113,6 +113,8 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       };
     });
     let messages = 0;
+    let holdNextAnswer = false;
+    let releaseAnswer: (() => void) | undefined;
     await page.route('http://localhost:11434/api/**', async (route) => {
       if (route.request().method() === 'OPTIONS') {
         await route.fulfill({
@@ -127,7 +129,15 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       }
       const request = route.request().postDataJSON();
       const content = request.format?.properties?.task ? JSON.stringify({ task: 'chat', language: 'en' }) : 'Hello!';
-      if (!request.format?.properties?.task) messages++;
+      if (!request.format?.properties?.task) {
+        messages++;
+        if (holdNextAnswer) {
+          holdNextAnswer = false;
+          await new Promise<void>((resolve) => {
+            releaseAnswer = resolve;
+          });
+        }
+      }
       await route.fulfill({ json: { done: true, message: { role: 'assistant', content } } });
     });
     if (pdf) {
@@ -278,6 +288,43 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       await expect(input).toHaveValue(longDraft);
       await expect(page.locator('.agent-speech-language')).toBeVisible();
       expect(await composer.boundingBox()).toEqual(compact);
+      holdNextAnswer = true;
+      await input.fill('Hello');
+      await send.click();
+      await expect.poll(() => messages).toBe(2);
+      await expect.poll(() => typeof releaseAnswer).toBe('function');
+      try {
+        await page.locator('.agent-speech-mic').click();
+        await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'starting');
+        await page.evaluate(() => {
+          const recognition = (
+            window as unknown as { recognition: { onstart(): void; onresult(event: unknown): void } }
+          ).recognition;
+          recognition.onstart();
+          recognition.onresult({ results: [{ isFinal: false, 0: { transcript: 'Hi' } }] });
+        });
+        await expect(input).toHaveValue('Hi');
+        expect(messages).toBe(2);
+        await send.click();
+        await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'finishing');
+        await page.evaluate(() => {
+          const recognition = (window as unknown as { recognition: { onresult(event: unknown): void; onend(): void } })
+            .recognition;
+          recognition.onresult({ results: [{ isFinal: true, 0: { transcript: 'Hi' } }] });
+          recognition.onend();
+        });
+        await expect(page.locator('.agent-queue-text')).toHaveText('Hi');
+        await expect(input).toHaveValue('');
+        await expect(input).toBeFocused();
+        expect(messages).toBe(2);
+        releaseAnswer!();
+        await expect.poll(() => messages).toBe(3);
+        await expect(page.locator('.cui-msg-user')).toHaveText(['Hello from dictation', 'Hello', 'Hi']);
+        await expect(page.locator('.cui-msg-agent')).toHaveCount(3);
+        await expect(page.locator('.agent-queue-entry')).toHaveCount(0);
+      } finally {
+        releaseAnswer?.();
+      }
     }
   });
 }
