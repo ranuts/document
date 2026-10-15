@@ -74,10 +74,10 @@ focused Markdown streaming suite; relevant stream/browser acceptance.
 Files: packages/chat-ui/src/chat-view.ts and optional small scroll-follow.ts;
 related scroll/layout/queue unit tests and focused browser acceptance/docs.
 
-- [ ] RED: native smooth-jump progress does not represent reader detachment; streamed growth must retarget the outstanding jump and reach the new floor. Preserve the observed Chromium 14732 vs 17136 baseline.
-- [ ] Separate native target from reader intent. Retarget growth, settle only own scrollend with current-floor arrival or measured arrival, support reader gesture cancellation of actual native motion and reduced motion. Ignore stale end/progress after cancellation and retarget old-floor scrollend; no endless polling. Do not add guessed completion timeouts or broader fold/navigation architecture.
-- [ ] Test interruption followed by resize, nested scrollend isolation, no-scrollend fallback, clear/dispose, unchanged page anchors and empty welcome behavior. Root Chromium smooth-scroll and gesture probes must pass.
-- [ ] Focused tests/typecheck/lint; separate functional scroll fix commit. Specification gate then independent quality gate.
+- [x] RED: native smooth-jump progress does not represent reader detachment; streamed growth must retarget the outstanding jump and reach the new floor. Preserve the observed Chromium 14732 vs 17136 baseline.
+- [x] Separate native target from reader intent. Retarget growth, settle only own scrollend with current-floor arrival or measured arrival, support reader gesture cancellation of actual native motion and reduced motion. Ignore stale end/progress after cancellation and retarget old-floor scrollend; no endless polling. Do not add guessed completion timeouts or broader fold/navigation architecture.
+- [x] Test interruption followed by resize, nested scrollend isolation, no-scrollend fallback, clear/dispose, unchanged page anchors and empty welcome behavior. Root Chromium smooth-scroll and gesture probes must pass.
+- [x] Focused tests/typecheck/lint; separate functional scroll fix commit. Specification gate then independent quality gate.
 
 ## Chunk 4d: Inactive-history deletion continuity
 

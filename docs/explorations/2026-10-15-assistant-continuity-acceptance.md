@@ -249,3 +249,23 @@ handler. It measures local presentation work, not model inference or GPU drain.
 All automatic opt-in formatting inputs are capped at 8,000 characters; unusually
 large reference-dependent responses deliberately remain raw at completion. The
 focused unit cases exercise the cap at completion, interruption and fallback.
+
+The production build at `7b2bd7c` also passed all three real-editor history cases
+and the complete delayed-hydration/chat-editing/next-draft-dictation browser probe.
+These controlled transport/recognition fixtures do not certify physical audio or
+local-model latency.
+
+## Native scroll checkpoint
+
+Specification and independent quality review approved `0ebd67d` and `eae6ac5`.
+The latter closes the own-scrollbar interruption gap found during quality review;
+compatibility mouse events cannot release the pointer gesture's cancellation.
+A Chromium native-animation probe reached the current 15,684-pixel floor after
+streamed growth, instead of stranding new content below an obsolete target.
+A real upward wheel interrupted at 57 pixels; later output and resize left that
+position unchanged. A real native-scrollbar drag interrupted at 5,983 pixels;
+subsequent output/resize left that position unchanged while the floor grew to
+16,442 pixels. A reduced-motion jump reached that current floor immediately.
+These coordinates belong to a synthetic shared-ChatView fixture, not a product
+performance promise. The baseline and fixed scripts use different streaming
+presentation modes, so their absolute floor values are not a speed comparison.
