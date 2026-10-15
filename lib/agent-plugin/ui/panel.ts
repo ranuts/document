@@ -27,7 +27,9 @@ import { getEditorApi } from '../editor-bridge';
 import { mountReviewSettings } from './review-settings';
 import { createModelCacheSettings } from './model-cache-settings';
 import { mountPanelContext, syncPanelContext } from './panel-context';
-import { createTaskEntry, isCurrentHostRead } from './task-entry';
+import { createRequestQueueView } from './request-queue-view';
+import { RequestQueue, type QueuedRequest } from './request-queue';
+import { createTaskEntry, isCurrentHostRead, revokeHostRead, type StagedRequestIntent } from './task-entry';
 import { prepareHostRead } from './host-read-request';
 import { agentTools } from '../tools';
 import { parseDirectDocumentIntent } from '../direct-intent';
@@ -67,7 +69,7 @@ import { generateDocumentToolSequence, isModelFreeToolRequest } from '../documen
 import { captureDocumentToolTarget, captureDocumentToolScope, DocumentToolAction } from '../document-tool-action';
 import { isLiteralDocumentToolRequest } from '../document-tool-plan';
 import { ChatView, type ChatViewLabels } from '@ranuts/chat-ui';
-import { AgentChatController, type ChatTurn, type TurnRequest } from './controller';
+import { AgentChatController, type ChatTurn, type TurnRequest, type TurnResult } from './controller';
 import {
   assistantPresentation,
   AssistantDisplayStream,
@@ -75,6 +77,7 @@ import {
   isVerifiedDocumentChange,
   documentTaskStopText,
   documentTaskFailureText,
+  documentToolTurnStatus,
 } from './presentation';
 import { historyToTurns } from './storage';
 import { createConversationStore } from './sessions';
@@ -226,6 +229,23 @@ export function createAgentPanel(
   let enabled = true;
   let hasConfiguration = false;
   let viewRevision = 0;
+  let requestQueue: RequestQueue<PanelRequestBinding> | undefined;
+  let providerBindingRevision = 0;
+  const invalidateRequestBindings = () => {
+    providerBindingRevision++;
+    requestQueue?.pauseAll();
+  };
+  window.addEventListener('pagehide', () => requestQueue?.pauseAll());
+  interface PanelRequestBinding {
+    conversation: string;
+    providerRevision: number;
+    readonly: boolean;
+    target: ReturnType<typeof captureDocumentToolScope> | null;
+    intent: StagedRequestIntent | null;
+    refinement: ReturnType<ProposalContext['capture']>;
+    card?: ActionPreview;
+    proposal?: NonNullable<ReturnType<ActionPreview['pending']>>['plan'];
+  }
   const mountSidebar = () =>
     createSidebarEntry(
       () => setOpen(!open),
@@ -565,6 +585,7 @@ export function createAgentPanel(
   const chatLabels = (): ChatViewLabels => ({
     conversation: t('agentTitle'),
     send: t('agentSend'),
+    queue: t('agentQueueAction'),
     stop: t('agentStop'),
     stopping: t('agentStopping'),
     placeholder: t(proposalMode && writingSelect.value !== 'tools' ? 'agentWritingHint' : 'agentComposeHint'),
@@ -653,15 +674,12 @@ export function createAgentPanel(
         return ready;
       });
     },
-    onSend: (text) => void submit(text),
+    onSend: (text) => enqueueRequest(text),
+    onQueue: (text) => enqueueRequest(text),
     requireDocumentArtifact: true,
     canApplyMessage: () => captureDocumentContext()?.kind === 'word' && !getReadonlyMode(),
     onApplyMessage: (text) => applyReply(text),
-    onStop: () => {
-      controller?.stop();
-      if (refiningPreview) planning?.abort();
-      else invalidatePlans();
-    },
+    onStop: () => requestQueue?.pause(conversations.activeId),
     labels: chatLabels(),
   });
   const readiness = document.createElement('div');
@@ -694,6 +712,8 @@ export function createAgentPanel(
     control.setAttribute('aria-describedby', 'agent-readiness');
   chat.el.append(readiness);
   let preview = new ActionPreview();
+  const reviewOwners = new WeakMap<ActionPreview, string>();
+  let selectedRefinementCard: ActionPreview | undefined;
   let refiningPreview: ActionPreview | undefined;
   const previews = new Set([preview]);
   const clearPreviews = (): void => {
@@ -805,6 +825,7 @@ export function createAgentPanel(
   chat.contextEl.append(refinementRow);
   const clearRefinement = (): void => {
     refinement.clear();
+    selectedRefinementCard = undefined;
     refinementRow.hidden = true;
   };
   refinementCancel.addEventListener('click', () => {
@@ -813,6 +834,7 @@ export function createAgentPanel(
   });
   const selectRefinement = (card: ActionPreview): void => {
     if (!card.pending()) return;
+    selectedRefinementCard = card;
     refinement.select(() => card.pending()?.plan);
     refinementLabel.textContent = t('agentRefiningProposal');
     refinementCancel.textContent = t('agentPlanCancel');
@@ -829,6 +851,7 @@ export function createAgentPanel(
       chat.setActivity('reviewing');
       const card = new ActionPreview();
       preview = card;
+      if (requestQueue?.activeId) reviewOwners.set(card, requestQueue.activeId);
       previews.add(card);
       const abortReview = () => card.invalidate();
       let settled = false;
@@ -1067,6 +1090,7 @@ export function createAgentPanel(
     syncRuntimeStatus();
   };
   const disconnectEndpoint = (): void => {
+    invalidateRequestBindings();
     endpointAttempt++;
     if (controllerKind.startsWith('endpoint:')) {
       controller?.dispose();
@@ -1105,6 +1129,7 @@ export function createAgentPanel(
         return;
       }
     }
+    invalidateRequestBindings();
     const attempt = ++endpointAttempt;
     endpointStatus.textContent = t('agentEndpointConnecting');
     let failure = '';
@@ -1154,6 +1179,7 @@ export function createAgentPanel(
   // These two do not define where the text goes, so they keep the connection.
   for (const input of [localWritingConsent, writePreference])
     input.addEventListener('change', () => {
+      invalidateRequestBindings();
       rememberEndpoint();
       syncEndpointForm();
     });
@@ -1269,6 +1295,7 @@ export function createAgentPanel(
   };
   const generationOptions = normalizeGenerationOptions();
   const resetController = (): void => {
+    invalidateRequestBindings();
     syncSidebar();
     modelLoading = false;
 
@@ -1678,41 +1705,116 @@ export function createAgentPanel(
     }
   };
 
-  // ChatView owns the Send/Stop button, Enter-to-send, and the input lock; this
-  // just runs a turn. `submit` is passed to ChatView's onSend above.
-  const submit = async (text: string): Promise<void> => {
-    const trimmed = text.trim();
-    if (!enabled || !trimmed) return;
-    // Context may change while speech finalization or send preparation yields.
+  const pendingQueue = createRequestQueueView({
+    focus: () => chat.focus(),
+    edit: (id) => {
+      if (
+        !requestQueue?.restore(conversations.activeId, id, !chat.getInput().trim(), (text) => {
+          chat.setInput(text);
+          chat.focus();
+        })
+      )
+        pendingQueue.occupied();
+    },
+    remove: (id) => {
+      requestQueue?.remove(conversations.activeId, id);
+    },
+    sendNow: (id) => requestQueue?.sendNow(conversations.activeId, id),
+    resume: () => requestQueue?.resume(conversations.activeId),
+  });
+  chat.pendingEl.append(pendingQueue.el);
+  requestQueue = new RequestQueue<PanelRequestBinding>({
+    execute: (entry, accept) => submit(entry, accept),
+    cancel: () => {
+      controller?.stop();
+      if (refiningPreview) planning?.abort();
+      else invalidatePlans();
+    },
+    revoke: (entry) => revokeHostRead(entry.binding.intent?.hostRead),
+    changed: () => pendingQueue.update(requestQueue!.state(conversations.activeId)),
+  });
+  requestQueue.select(conversations.activeId);
+  function enqueueRequest(text: string): void {
+    // Capture identity and trusted provenance synchronously, before execution can yield.
     if (!taskEntry.check(text)) {
-      chat.setInput(text);
+      if (!chat.getInput().trim()) chat.setInput(text);
       stagedGuidance.hidden = false;
       stagedGuidance.textContent = t('agentEntryChanged');
-      chat.focus();
       return;
     }
-    const stagedIntent = taskEntry.consume(text);
-    // Bind the request before any model await: selection changes must never retarget a write.
-    const requestTarget = (() => {
-      try {
-        return captureDocumentToolScope();
-      } catch {
-        return null;
-      }
-    })();
+    const intent = taskEntry.consume(text);
+    let target: ReturnType<typeof captureDocumentToolScope> | null = null;
+    try {
+      target = captureDocumentToolScope();
+    } catch {
+      /* Preserve the unexecuted entry for recovery. */
+    }
+    const selected = refinement.capture();
+    const card = selected.kind === 'selected' ? selectedRefinementCard : undefined;
+    const proposal = selected.kind === 'selected' ? selected.plan : preview.pending()?.plan;
+    const originalPlan = proposal
+      ? Object.freeze({ ...proposal, input: Object.freeze({ ...proposal.input }) })
+      : undefined;
+    const owner = card && reviewOwners.get(card);
+    requestQueue!.enqueue(
+      conversations.activeId,
+      text,
+      {
+        conversation: conversations.activeId,
+        providerRevision: providerBindingRevision,
+        readonly: getReadonlyMode(),
+        target,
+        intent,
+        refinement: selected.kind === 'selected' ? { kind: 'selected', plan: originalPlan! } : selected,
+        card,
+        proposal: originalPlan,
+      },
+      owner && card ? { owner, current: () => !!card.pending() } : undefined,
+    );
+  }
 
-    const refinementContext = refinement.capture();
+  // Every branch returns an owned outcome. Promise resolution never implies success.
+  const submit = async (entry: QueuedRequest<PanelRequestBinding>, accept: () => boolean): Promise<TurnResult> => {
+    const text = entry.text;
+    const trimmed = text.trim();
+    const binding = entry.binding;
+    const executionRevision = conversationRevision;
+    const owned = (status: TurnResult['status']): TurnResult => ({
+      turnId: entry.id,
+      status:
+        binding.conversation !== conversations.activeId ||
+        binding.providerRevision !== providerBindingRevision ||
+        executionRevision !== conversationRevision
+          ? 'superseded'
+          : status,
+    });
+    if (!enabled || !trimmed) return owned('failed');
+    const stagedIntent = binding.intent;
+    const requestTarget = binding.target;
+    if (
+      binding.conversation !== conversations.activeId ||
+      binding.providerRevision !== providerBindingRevision ||
+      binding.readonly !== getReadonlyMode() ||
+      !requestTarget?.isCurrent(false) ||
+      (stagedIntent?.hostRead && !isCurrentHostRead(stagedIntent.hostRead))
+    ) {
+      stagedGuidance.hidden = false;
+      stagedGuidance.textContent = t('agentQueueScopeChanged');
+      return owned('failed');
+    }
+    const refinementContext =
+      binding.refinement.kind === 'selected' && !binding.card?.pending()
+        ? { kind: 'expired' as const }
+        : binding.refinement;
     if (refinementContext.kind === 'expired') {
       clearRefinement();
       appendTurn({ role: 'status', text: t('agentPlanExpired') });
-      chat.setInput(trimmed);
-      chat.focus();
-      return;
+      return owned('failed');
     }
     // Snapshot before mode changes invalidate the previous action. This is reference
     // data only: a fresh target is still captured before the next model request.
-    const previousPreview = preview.pending() ? preview : undefined;
-    const pendingProposal = refinementContext.kind === 'selected' ? refinementContext.plan : preview.pending()?.plan;
+    const previousPreview = binding.card ?? (preview.pending() ? preview : undefined);
+    const pendingProposal = binding.proposal;
     let request = {
       ...(stagedIntent ?? (!pendingProposal ? safeChatIntent(trimmed) : undefined) ?? classifyRequest(trimmed)),
     };
@@ -1737,7 +1839,6 @@ export function createAgentPanel(
       ['rewrite', 'summarize', 'translate'].includes(request.task) &&
       (!snapshot.text.trim() || snapshot.truncated)
     ) {
-      appendTurn({ role: 'user', text: trimmed });
       appendTurn({
         role: 'status',
         text: t(
@@ -1750,9 +1851,7 @@ export function createAgentPanel(
                 : 'agentSelectText',
         ),
       });
-      chat.setInput(trimmed);
-      chat.focus();
-      return;
+      return owned('failed');
     }
     const intent = stagedIntent || refinementContext.kind === 'selected' ? null : directIntent(trimmed);
     if (intent) {
@@ -1765,18 +1864,21 @@ export function createAgentPanel(
       const directGeneration = controllerGeneration;
       const originStorage = historyStorage;
       const originSession = conversations.activeId;
-      appendTurn({ role: 'user', text: trimmed });
-
+      let directStatus: TurnResult['status'] = 'failed';
+      if (intent.kind === 'clarify') {
+        appendTurn({
+          role: 'status',
+          text: chinese
+            ? '请明确操作范围。选中文字后说明操作，或指定单元格范围、幻灯片页码。'
+            : 'Specify the scope: select text, name a cell range, or specify a slide.',
+        });
+        return owned('failed');
+      }
+      let directAccepted = false;
       chat.setRunning(true);
       let directAbort: AbortController | undefined;
       try {
-        if (intent.kind === 'clarify') {
-          const guidance = chinese
-            ? '请明确操作范围。文字可选中后加粗或对齐；Excel 可说“将 A1:C10 按 B 列升序排序，首行为表头”“计算 B2:B10 的总和”或“将 B2:B10 的总和写入 B11”；PPT 可说“新增一页幻灯片”“复制当前幻灯片”或“切换到第 3 页幻灯片”。'
-            : 'Specify the scope: select text to bold or align; Excel: “sort A1:C10 by B ascending with header”, “sum B2:B10” or “sum B2:B10 into B11”; presentations: “add a slide”, “duplicate current slide” or “go to slide 3”.';
-          appendTurn({ role: 'tool', text: guidance });
-          messages.push({ role: 'assistant', content: guidance, hostGuidance: 'tool' });
-        } else {
+        {
           invalidatePlans();
           directAbort = new AbortController();
           planning = directAbort;
@@ -1787,14 +1889,25 @@ export function createAgentPanel(
             (intent.kind === 'slide' && intent.action === 'navigate');
           const directTarget = readOnly ? requestTarget : (requestTarget.prepareWrite?.() ?? requestTarget);
           if (!directTarget.isCurrent(!readOnly)) throw new Error(t('agentPlanExpired'));
+          if (intent.kind === 'write_reply') {
+            if (!answer.trim()) throw new Error('agentNoCompletedAnswer');
+            if (directTarget.context.kind !== 'word') throw new Error(t('agentWordOnly'));
+            if (intent.requireSelection && !directTarget.selectedText.trim()) throw new Error(t('agentNoSelection'));
+          }
+          if (
+            intent.kind === 'align' &&
+            /当前段落|current paragraph/i.test(trimmed) &&
+            getEditorApi()?.pluginMethod_GetSelectedText().trim()
+          )
+            throw new Error('agentParagraphSelectionConflict');
+          if (!accept()) return owned('stopped');
+          directAccepted = true;
+          appendTurn({ role: 'user', text: trimmed });
           let name: string;
           let input: Record<string, unknown>;
           let result: unknown;
           if (intent.kind === 'write_reply') {
-            if (!answer.trim()) throw new Error('agentNoCompletedAnswer');
             const target = directTarget;
-            if (target.context.kind !== 'word') throw new Error(t('agentWordOnly'));
-            if (intent.requireSelection && !target.selectedText.trim()) throw new Error(t('agentNoSelection'));
             name = 'insert_text';
             input = { text: answer, format: 'markdown' };
             result = {
@@ -1810,14 +1923,17 @@ export function createAgentPanel(
           } else {
             name = intent.kind === 'bold' ? 'set_bold' : 'set_paragraph_alignment';
             input = intent.kind === 'bold' ? { enabled: intent.enabled } : { alignment: intent.alignment };
-            if (
-              intent.kind === 'align' &&
-              /当前段落|current paragraph/i.test(trimmed) &&
-              getEditorApi()?.pluginMethod_GetSelectedText().trim()
-            )
-              throw new Error('agentParagraphSelectionConflict');
             result = await agentTools[name].execute(input, directAbort.signal);
           }
+          directAbort.signal.throwIfAborted();
+          if (revision !== conversationRevision || directGeneration !== controllerGeneration)
+            return owned('superseded');
+          directStatus =
+            intent.kind === 'write_reply'
+              ? (result as { outcome?: string }).outcome === 'verified'
+                ? 'success'
+                : 'failed'
+              : 'success';
           const id = `direct-${crypto.randomUUID()}`;
           messages.push(
             { role: 'assistant', content: [{ type: 'tool_use', id, name, input }] },
@@ -1846,6 +1962,7 @@ export function createAgentPanel(
         }
       } catch (error) {
         const stopped = error instanceof Error && error.name === 'AbortError';
+        directStatus = stopped ? 'stopped' : 'failed';
         const role = stopped ? 'status' : 'error';
         const guidance = stopped ? t('agentStopped') : displayError(error);
         if (revision === conversationRevision) appendTurn({ role, text: guidance });
@@ -1853,8 +1970,10 @@ export function createAgentPanel(
       } finally {
         if (planning === directAbort) planning = null;
         const owner = conversations.activeId === originSession ? controller : null;
-        if (owner) owner.recordExternalMessages(messages);
-        else originStorage.save([...originStorage.load(), ...messages]);
+        if (directAccepted) {
+          if (owner) owner.recordExternalMessages(messages);
+          else originStorage.save([...originStorage.load(), ...messages]);
+        }
         if (revision === conversationRevision) {
           if (directGeneration === controllerGeneration) {
             syncContext();
@@ -1862,7 +1981,7 @@ export function createAgentPanel(
           }
         }
       }
-      return;
+      return owned(directStatus);
     }
     if (stagedIntent?.hostRead) {
       writingSelect.value = 'chat';
@@ -1889,20 +2008,19 @@ export function createAgentPanel(
       (currentProvider() === 'wllama' || currentProvider() === 'webllm') &&
       !webllmProvider?.isReady()
     ) {
-      chat.setInput(text);
       syncRuntimeStatus();
       note.textContent = t(runtimeCleanupFailed ? 'agentModelCleanupFailed' : 'agentModelFirstDownload');
-      return;
+      return owned('failed');
     }
     if (!ctl) {
-      chat.setInput(text);
       chat.append({
         role: 'error',
         text: currentProvider() === 'webllm' ? t('agentNoWebGPU') : t('agentNeedKey'),
       });
-      return;
+      return owned('failed');
     }
 
+    if (!requestTarget.isCurrent(false) || !accept()) return owned('stopped');
     // Echo only after readiness checks, before routing or model work.
     appendTurn({ role: 'user', text });
     chat.setRunning(true);
@@ -1911,6 +2029,7 @@ export function createAgentPanel(
     const operationHistory: Array<LLMMessage & { hostGuidance?: 'tool' | 'status' | 'error'; copyOnly?: true }> = [];
     const operationStorage = historyStorage;
     const operationSession = conversations.activeId;
+    let turnStatus: TurnResult['status'] = 'failed';
     let routingStarted = false;
     let verifiedTaskChanges = 0;
     let partialTaskAnswer = '';
@@ -1931,8 +2050,8 @@ export function createAgentPanel(
         const read = prepareHostRead(stagedIntent.hostRead, trimmed);
         if (!read.request.reply) appendTurn({ role: 'tool', text: read.receipt });
         chat.setActivity('responding');
-        await ctl.send(trimmed, { echoUser: false, request: read.request });
-        return;
+        const result = await ctl.send(trimmed, { echoUser: false, request: read.request });
+        return owned(result.status);
       }
 
       if (refinementContext.kind === 'selected') {
@@ -1950,8 +2069,8 @@ export function createAgentPanel(
       ) {
         chat.setActivity('responding');
         if (!requestTarget) throw new Error(t('agentPlanExpired'));
-        await ctl.send(trimmed, { echoUser: false, request: nativeRequest(requestTarget, trimmed) });
-        return;
+        const result = await ctl.send(trimmed, { echoUser: false, request: nativeRequest(requestTarget, trimmed) });
+        return owned(result.status);
       }
       if (
         refinementContext.kind !== 'selected' &&
@@ -2021,7 +2140,7 @@ export function createAgentPanel(
         if (partialTaskAnswer) chat.endStream();
         else appendTurn({ role: 'agent', text: body, documentArtifact: true });
         partialTaskAnswer = '';
-        return;
+        return owned('success');
       }
       if (writingSelect.value === 'tools') {
         operationHistory.push({ role: 'user', content: text });
@@ -2035,6 +2154,7 @@ export function createAgentPanel(
           let currentTarget = target;
           const taskReceipts: typeof operationHistory = [];
           let taskError: string | undefined;
+          let taskStatus: ReturnType<typeof documentToolTurnStatus>;
           const taskOptions: DocumentAgentToolOptions = {
             target,
             readonly: getReadonlyMode(),
@@ -2063,6 +2183,8 @@ export function createAgentPanel(
             onToolExchange: record,
             onEvent: (event) => {
               if (generation !== controllerGeneration || conversation !== conversationRevision) return;
+              const status = documentToolTurnStatus(event);
+              if (status && (status !== 'success' || !taskStatus)) taskStatus = status;
               if (event.type === 'assistant_delta') {
                 if (!abort.signal.aborted && currentTarget.isCurrent(false)) taskDisplay.push(event.text);
               } else if (event.type === 'tool_call') chat.setActivity('reading');
@@ -2076,11 +2198,12 @@ export function createAgentPanel(
           abort.signal.throwIfAborted();
           if (generation !== controllerGeneration || conversation !== conversationRevision)
             throw new Error(t('agentPlanExpired'));
+          if (result.aborted) return owned('stopped');
           if (result.stoppedOnLimit) {
             const text = documentTaskStopText(result.limitReason, verifiedTaskChanges);
             operationHistory.push({ role: 'assistant', content: text, hostGuidance: 'tool' });
             appendTurn({ role: 'tool', text });
-            return;
+            return owned('limited');
           }
           if (taskError) appendTurn({ role: 'error', text: displayError(taskError) });
           if (!currentTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
@@ -2090,7 +2213,11 @@ export function createAgentPanel(
             else appendTurn({ role: 'agent', text: assistantPresentation(result.text) });
             partialTaskAnswer = '';
           }
-          return;
+          return owned(
+            result.preflightFailed || taskError
+              ? 'failed'
+              : (taskStatus ?? (result.text.trim() ? 'success' : 'failed')),
+          );
         }
         // A bounded plan may propose writes: bind the strong baseline before planning yields.
         target = target.prepareWrite?.() ?? target;
@@ -2125,6 +2252,7 @@ export function createAgentPanel(
           if (!plan.readOnly) {
             if (request.refinement && !previousPreview?.pending()) throw new Error(t('agentPlanExpired'));
             preview = new ActionPreview();
+            reviewOwners.set(preview, entry.id);
             previews.add(preview);
             preview.show(
               action,
@@ -2155,16 +2283,19 @@ export function createAgentPanel(
                 }
               },
               () => selectRefinement(preview),
+              (outcome) => requestQueue?.settleReview(entry.id, outcome.status),
             );
             if (request.refinement) {
               previousPreview?.supersede();
               clearRefinement();
             }
             chat.appendContent(preview.el);
+            turnStatus = 'review-pending';
             break;
           }
           chat.setActivity('reading');
           const outcome = await action.apply(abort.signal);
+          turnStatus = 'success';
           const exchangeId = crypto.randomUUID();
           operationHistory.push(
             {
@@ -2212,6 +2343,10 @@ export function createAgentPanel(
               appendTurn({ role: 'tool', text: resultText });
           }
         }
+        abort.signal.throwIfAborted();
+        if (generation !== controllerGeneration || conversation !== conversationRevision || !target.isCurrent(false))
+          throw new Error(t('agentPlanExpired'));
+        if (unavailableRead) turnStatus = 'failed';
         if (answerFromReads && !unavailableRead) {
           chat.setActivity('responding');
           let partialAnswer = '';
@@ -2314,16 +2449,17 @@ export function createAgentPanel(
         operationHistory.push({ role: 'assistant', content: body, copyOnly: true });
         if (request.task === 'summarize' || snapshot.context?.kind === 'pdf') {
           appendTurn({ role: 'agent', text: body, copyOnly: true });
-          return;
+          return owned('success');
         }
         const singleCell =
           snapshot.context?.kind === 'cell' && snapshot.context.range && !snapshot.context.range.includes(':');
         if (!target && (!officeTarget || (snapshot.context?.kind === 'cell' && !singleCell))) {
           appendTurn({ role: 'agent', text: body, copyOnly: true });
           appendTurn({ role: 'status', text: t(readonly ? 'agentDocumentReadOnly' : 'agentRangeCopyOnly') });
-          return;
+          return owned('success');
         }
         preview = new ActionPreview();
+        reviewOwners.set(preview, entry.id);
         previews.add(preview);
         const action = target
           ? new ReviewedAction(target, plan)
@@ -2345,15 +2481,17 @@ export function createAgentPanel(
             else operationStorage.save([...operationStorage.load(), ...messages]);
           },
           () => selectRefinement(preview),
+          (outcome) => requestQueue?.settleReview(entry.id, outcome.status),
         );
         chat.appendContent(preview.el);
+        turnStatus = 'review-pending';
         operationHistory.push({ role: 'assistant', content: t('agentPlanReady'), hostGuidance: 'tool' });
       } else {
         invalidatePlans();
         chat.setActivity('responding');
         const pdf = snapshot.context?.kind === 'pdf';
         const safe = !pendingProposal && safeChatIntent(trimmed);
-        await ctl.send(trimmed, {
+        const result = await ctl.send(trimmed, {
           echoUser: false,
           request: {
             tools: {},
@@ -2365,7 +2503,9 @@ export function createAgentPanel(
                 .serialized,
           },
         });
+        turnStatus = result.status;
       }
+      return owned(turnStatus);
     } catch (caughtError) {
       if (
         caughtError instanceof Error &&
@@ -2398,6 +2538,7 @@ export function createAgentPanel(
           role,
           text: stopped ? t('agentStopped') : documentTaskFailureText(error, verifiedTaskChanges),
         });
+      return owned(stopped ? 'stopped' : 'failed');
     } finally {
       previousPreview?.setRefining(false);
       if (refiningPreview === previousPreview) refiningPreview = undefined;
@@ -2418,11 +2559,13 @@ export function createAgentPanel(
     }
   };
   const switchConversation = (id: string, focus = true): void => {
+    requestQueue?.pause(conversations.activeId);
     conversationRevision++;
     invalidatePlans();
     controller?.dispose();
     controller = null;
     conversations.select(id);
+    requestQueue?.select(id);
     clearPreviews();
     clearQuote();
     historyStorage = conversations.history();
@@ -2440,7 +2583,9 @@ export function createAgentPanel(
   historyControls = createHistoryControls({
     store: conversations,
     onFocusAfterDeletion: () => conversationList?.focus(),
-    onBeforeRestore: () => {
+    onBeforeRestore: (deleted) => {
+      if (deleted && deleted !== 'all') requestQueue?.invalidate(deleted);
+      else requestQueue?.invalidateAll();
       conversationRevision++;
       invalidatePlans();
       controller?.dispose();
@@ -2505,6 +2650,7 @@ export function createAgentPanel(
     writingSelect.setAttribute('aria-label', t('agentTaskLabel'));
     languageSelect.setAttribute('aria-label', t('agentTaskLanguage'));
     chat.setLabels(chatLabels()); // Send/Stop/placeholder/empty + role chips
+    pendingQueue.update(requestQueue!.state(conversations.activeId));
     syncProviderUi(); // refresh key placeholder / model hint in the new language
     contextLifecycle?.update();
   });
@@ -2580,6 +2726,7 @@ export function createAgentPanel(
   );
   sourcePicker.setAttribute('aria-label', t('agentSourceLabel'));
   const syncSource = () => {
+    if (selectedSource !== sourcePicker.value) invalidateRequestBindings();
     selectedSource = sourcePicker.value;
     localCard.hidden = sourcePicker.value !== 'local';
     serviceCard.hidden = sourcePicker.value !== 'service';

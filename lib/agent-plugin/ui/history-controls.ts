@@ -6,7 +6,7 @@ const SAVE_PREFERENCE = 'agent_conversation_saving_v2';
 export interface HistoryControlsOptions {
   store: ReturnType<typeof createConversationStore>;
   onRestore(): void;
-  onBeforeRestore?(): void;
+  onBeforeRestore?(deleted?: string): void;
   onFocusAfterDeletion?(): void;
 }
 
@@ -183,7 +183,7 @@ export function createHistoryControls(options: HistoryControlsOptions) {
       restoreView();
     };
     void run(async () => {
-      options.onBeforeRestore?.();
+      options.onBeforeRestore?.(target);
       if (target === 'all') {
         await store.clearAll();
         localStorageSetItem(SAVE_PREFERENCE, 'false');

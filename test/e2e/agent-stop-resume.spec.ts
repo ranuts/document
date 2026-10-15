@@ -73,9 +73,11 @@ for (const ext of ['docx', 'pptx'] as const) {
         await expect(send).toHaveAccessibleName('Send');
         await send.click();
         await expect.poll(() => held).toBe(true);
-        await expect(send).toHaveAccessibleName('Stop');
+        const stop = page.locator('.cui-send-stop');
+        await expect(stop).toHaveAccessibleName('Stop');
+        await expect(send).toHaveAccessibleName('Queue request');
         await input.fill('Continue');
-        await send.click();
+        await stop.click();
         await expect(send).toHaveAccessibleName('Send');
         await expect(input).toHaveValue('Continue');
         await expect(page.getByRole('log')).toContainText('Stopped.');

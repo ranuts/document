@@ -1858,3 +1858,71 @@ r-dropdown[role='listbox'] {
 .agent-history-search-status + .agent-conversation-list {
   margin-top: var(--ran-space-1);
 }
+
+/* Pending requests stay outside history and leave space for the composer. */
+.agent-request-queue {
+  min-width: 0;
+  margin-bottom: var(--ran-space-2);
+  font-size: var(--ran-text-label-3);
+  color: var(--ran-color-text);
+}
+.agent-request-queue[hidden],
+.agent-queue-resume[hidden] {
+  display: none;
+}
+.agent-queue-heading,
+.agent-queue-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ran-space-2);
+}
+.agent-queue-heading {
+  justify-content: space-between;
+}
+.agent-queue-title {
+  color: var(--ran-color-text-secondary);
+}
+.agent-queue-list {
+  max-height: min(28vh, 200px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: var(--ran-space-1) 0;
+  padding: 0;
+  list-style: none;
+}
+.agent-queue-entry {
+  min-width: 0;
+  padding: var(--ran-space-2) 0;
+  border-bottom: 1px solid var(--ran-color-border);
+}
+.agent-queue-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.agent-request-queue button {
+  max-width: 100%;
+  padding: var(--ran-space-1) var(--ran-space-2);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg);
+  color: inherit;
+  font: inherit;
+  overflow-wrap: anywhere;
+}
+.agent-request-queue button:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+}
+.agent-queue-actions {
+  margin-top: var(--ran-space-1);
+}
+.agent-queue-feedback {
+  display: block;
+  color: var(--ran-color-text-secondary);
+  overflow-wrap: anywhere;
+}
