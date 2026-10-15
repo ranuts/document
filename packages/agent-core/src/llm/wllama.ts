@@ -267,13 +267,13 @@ export class WllamaProvider implements LocalLLMProvider {
             const base = request;
             const budget = await budgetMessagesByTokens(
               messages,
-              async (candidate) => {
-                request = { ...base, messages: toOpenAIMessages(candidate, systemPrompt) };
-                return engine.countChatTokens!(request);
-              },
+              async (candidate) =>
+                engine.countChatTokens!({ ...base, messages: toOpenAIMessages(candidate, systemPrompt) }),
               request.max_tokens + 1,
               abortSignal,
             );
+            // Refinement may finish on a rejected probe; execute only the selected counted candidate.
+            request = { ...base, messages: toOpenAIMessages(budget.messages, systemPrompt) };
             contextTrimmed = budget.trimmed;
           }
           abortSignal.throwIfAborted();

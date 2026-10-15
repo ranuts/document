@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import { budgetMessages } from '../../packages/agent-core/src/context-budget';
 import type { LLMMessage } from '@ranuts/agent-core/llm/types';
 it('retains a short legacy assistant-only prefix when it fits', () => {
@@ -111,9 +111,11 @@ it('accepts the exact reserved boundary and keeps short history intact', async (
     { role: 'assistant', content: 'legacy' },
     { role: 'user', content: 'current' },
   ];
-  const result = await budgetMessagesByTokens(messages, async () => ({ promptTokens: 80, contextTokens: 100 }), 20);
+  const count = vi.fn(async () => ({ promptTokens: 80, contextTokens: 100 }));
+  const result = await budgetMessagesByTokens(messages, count, 20);
   expect(result).toEqual({ messages, trimmed: false, promptTokens: 80, contextTokens: 100 });
   expect(result.messages).not.toBe(messages);
+  expect(count).toHaveBeenCalledTimes(1);
 });
 
 it.each([0, -1, 1.5, NaN])('rejects invalid context capacity %s', async (contextTokens) => {
@@ -121,4 +123,65 @@ it.each([0, -1, 1.5, NaN])('rejects invalid context capacity %s', async (context
   await expect(budgetMessagesByTokens([], async () => ({ promptTokens: 0, contextTokens }), 0)).rejects.toThrow(
     'Invalid token count',
   );
+});
+
+it('bounds exact counting for a thousand complete turns while retaining a counted recent suffix', async () => {
+  const { budgetMessagesByTokens } = await import('../../packages/agent-core/src/context-budget');
+  const messages: LLMMessage[] = Array.from({ length: 1000 }, (_, index) => [
+    { role: 'user' as const, content: `Question ${index}` },
+    { role: 'assistant' as const, content: `Answer ${index}` },
+  ]).flat();
+  const count = vi.fn(async (candidate: LLMMessage[]) => ({
+    promptTokens: candidate.length * 512,
+    contextTokens: 4096,
+  }));
+  const result = await budgetMessagesByTokens(messages, count, 1024);
+  expect(count.mock.calls.length).toBeLessThanOrEqual(32);
+  expect(result.messages).toEqual(messages.slice(-6));
+  expect(count.mock.calls.some(([candidate]) => candidate === result.messages)).toBe(true);
+  expect(result.promptTokens + 1024).toBe(4096);
+  expect(new Set(count.mock.calls.map(([candidate]) => candidate[0])).size).toBe(count.mock.calls.length);
+  expect(messages).toHaveLength(2000);
+});
+
+it('keeps the best measured fit even when a later nonmonotonic probe is oversized', async () => {
+  const { budgetMessagesByTokens } = await import('../../packages/agent-core/src/context-budget');
+  const messages: LLMMessage[] = Array.from({ length: 8 }, (_, index) => ({ role: 'user', content: String(index) }));
+  const count = vi.fn(async (candidate: LLMMessage[]) => ({
+    promptTokens: Number(candidate[0].content) === 4 ? 60 : 90,
+    contextTokens: 100,
+  }));
+  const result = await budgetMessagesByTokens(messages, count, 20);
+  expect(result.messages).toEqual(messages.slice(4));
+  expect(result.promptTokens).toBe(60);
+  expect(count.mock.calls.some(([candidate]) => candidate === result.messages)).toBe(true);
+});
+
+it('checks the complete latest tool exchange exactly before rejecting overflow', async () => {
+  const { budgetMessagesByTokens } = await import('../../packages/agent-core/src/context-budget');
+  const current: LLMMessage[] = [
+    { role: 'user', content: 'Newest question' },
+    { role: 'assistant', content: [{ type: 'tool_use', id: 'latest', name: 'get_range', input: {} }] },
+    { role: 'user', content: [{ type: 'tool_result', toolUseId: 'latest', content: 'Actual cells' }] },
+  ];
+  const messages: LLMMessage[] = [
+    ...Array.from({ length: 1000 }, (_, index) => ({ role: 'user' as const, content: String(index) })),
+    ...current,
+  ];
+  const count = vi.fn(async () => ({ promptTokens: 81, contextTokens: 100 }));
+  await expect(budgetMessagesByTokens(messages, count, 20)).rejects.toThrow('agentContextTooLong');
+  expect(count).toHaveBeenLastCalledWith(current);
+  expect(count.mock.calls.length).toBeLessThanOrEqual(32);
+});
+
+it('does not return a fitting candidate when cancellation arrives between awaited probe continuations', async () => {
+  const { budgetMessagesByTokens } = await import('../../packages/agent-core/src/context-budget');
+  const controller = new AbortController();
+  const count = async () => {
+    queueMicrotask(() => queueMicrotask(() => controller.abort()));
+    return { promptTokens: 1, contextTokens: 100 };
+  };
+  await expect(
+    budgetMessagesByTokens([{ role: 'user', content: 'Current' }], count, 20, controller.signal),
+  ).rejects.toMatchObject({ name: 'AbortError' });
 });

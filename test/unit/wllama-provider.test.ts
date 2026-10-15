@@ -474,6 +474,45 @@ it('counts final schema requests and reserves output before generation', async (
   await provider.dispose();
 });
 
+it('generates the selected counted suffix rather than the last rejected refinement probe', async () => {
+  const countChatTokens = vi.fn(async (body: Record<string, unknown>) => ({
+    promptTokens: (body.messages as unknown[]).length > 9 ? 90 : 60,
+    contextTokens: 100,
+  }));
+  const createChatCompletion = vi.fn(async (_body: Record<string, unknown>) => ({
+    choices: [{ message: { content: 'Answer' }, finish_reason: 'stop' }],
+  }));
+  const provider = new WllamaProvider({
+    systemPrompt: 'System',
+    generation: { maxTokens: 32 },
+    engineFactory: async () => ({
+      isModelLoaded: () => true,
+      countChatTokens,
+      createChatCompletion,
+      exit: async () => {},
+    }),
+  });
+  await provider.preload();
+  const messages = Array.from({ length: 8 }, (_, index) => [
+    { role: 'user' as const, content: `Question ${index}` },
+    { role: 'assistant' as const, content: `Answer ${index}` },
+  ]).flat();
+  const result = await provider.chat(messages, []);
+  const lastProbe = countChatTokens.mock.calls.at(-1)![0];
+  expect((lastProbe.messages as unknown[]).length).toBe(11);
+  const completed = createChatCompletion.mock.calls[0][0];
+  expect((completed.messages as unknown[]).length).toBe(9);
+  expect(
+    countChatTokens.mock.calls.some(
+      ([candidate]) => JSON.stringify(candidate.messages) === JSON.stringify(completed.messages),
+    ),
+  ).toBe(true);
+  expect(completed.messages).not.toEqual(lastProbe.messages);
+  expect(result.contextTrimmed).toBe(true);
+  expect(messages).toHaveLength(16);
+  await provider.dispose();
+});
+
 it('does not generate when the final current request exceeds the reserved capacity', async () => {
   const createChatCompletion = vi.fn();
   const provider = new WllamaProvider({
