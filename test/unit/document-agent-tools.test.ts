@@ -169,3 +169,19 @@ it('avoids duplicating unchanged write content in the tool result while retainin
   });
   expect(await edited.insert_text.execute({ text: 'Original' })).toHaveProperty('input', { text: 'User revision' });
 });
+it('binds a write target before exposing its review even without a promotion adapter', async () => {
+  const next = vi.fn();
+  const review = vi.fn(async (action) => {
+    expect(next).toHaveBeenCalledExactlyOnceWith(action.target);
+    return { status: 'cancelled' as const, action };
+  });
+  const tools = createDocumentAgentTools({
+    target: target(),
+    readonly: false,
+    review,
+    receipt: vi.fn(),
+    onTargetChanged: next,
+  });
+  await tools.insert_text.execute({ text: 'Draft' });
+  expect(review).toHaveBeenCalledOnce();
+});

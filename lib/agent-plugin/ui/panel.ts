@@ -89,7 +89,8 @@ import { mountPanelResize } from './panel-resize';
 import { mountPanelViewport } from './panel-viewport';
 import { ActionPreview } from './action-preview';
 import { ProposalContext } from './proposal-context';
-import { captureComposerContext } from './composer-context';
+import { captureComposerContext, type ComposerContext } from './composer-context';
+import { RequestScopePolicy, snapshotComposerContext } from './request-scope';
 import { createComposerSelection } from './composer-selection';
 import { captureRequestContext, serializeRequestContext } from './request-context';
 import { classifyRequest, resolveRequestIntent, safeChatIntent } from './request-intent';
@@ -242,6 +243,7 @@ export function createAgentPanel(
     providerRevision: number;
     readonly: boolean;
     target: ReturnType<typeof captureDocumentToolScope> | null;
+    snapshot: ComposerContext | null;
     intent: StagedRequestIntent | null;
     refinement: ReturnType<ProposalContext['capture']>;
     card?: ActionPreview;
@@ -1493,26 +1495,45 @@ export function createAgentPanel(
   };
   writingSelect.addEventListener('change', taskRouteChanged);
   languageSelect.addEventListener('change', taskRouteChanged);
-  const nativeRequest = (target: ReturnType<typeof captureDocumentToolScope>, instruction: string): TurnRequest => {
+  const nativeRequest = (
+    target: ReturnType<typeof captureDocumentToolScope>,
+    instruction: string,
+    snapshot: ComposerContext,
+    scope: RequestScopePolicy,
+    readonly: boolean,
+  ): TurnRequest => {
     let current = target;
     const provider = endpointProvider!;
     const generation = controllerGeneration;
     const conversation = conversationRevision;
     const assertCurrent = () => {
-      if (generation !== controllerGeneration || conversation !== conversationRevision || !current.isCurrent(false))
+      if (
+        !enabled ||
+        generation !== controllerGeneration ||
+        conversation !== conversationRevision ||
+        (scope.editorBound && (readonly !== getReadonlyMode() || !current.isCurrent(false)))
+      )
         throw new Error(t('agentPlanExpired'));
     };
     return {
       tools: {},
       assertCurrent,
-      getRequestContext: () => serializeRequestContext(captureRequestContext('metadata'), instruction).serialized,
+      getRequestContext: () =>
+        scope.deferNative
+          ? undefined
+          : serializeRequestContext(
+              { editor: snapshot.context, selection: { text: snapshot.text, truncated: snapshot.truncated } },
+              instruction,
+            ).serialized,
       prepareRun: async (request: string, signal: AbortSignal) =>
         prepareDocumentTask(provider, request, {
           target,
-          readonly: getReadonlyMode(),
+          deferEditorFreshness: scope.deferNative,
+          readonly,
           signal,
           assertCurrent,
           onTargetChanged: (next) => {
+            scope.bindEditor();
             current = next;
           },
           review: waitForToolReview,
@@ -1830,10 +1851,13 @@ export function createAgentPanel(
     }
     const intent = taskEntry.consume(text);
     let target: ReturnType<typeof captureDocumentToolScope> | null = null;
+    let snapshot: ComposerContext | null = null;
     try {
       target = captureDocumentToolScope();
+      snapshot = snapshotComposerContext(captureComposerContext());
     } catch {
-      /* Preserve the unexecuted entry for recovery. */
+      target = null;
+      /* Unknown source is never treated as an empty conversation-only source. */
     }
     const selected = refinement.capture();
     const card = selected.kind === 'selected' ? selectedRefinementCard : undefined;
@@ -1850,6 +1874,7 @@ export function createAgentPanel(
         providerRevision: providerBindingRevision,
         readonly: getReadonlyMode(),
         target,
+        snapshot,
         intent,
         refinement: selected.kind === 'selected' ? { kind: 'selected', plan: originalPlan! } : selected,
         card,
@@ -1877,11 +1902,20 @@ export function createAgentPanel(
     if (!enabled || !trimmed) return owned('failed');
     const stagedIntent = binding.intent;
     const requestTarget = binding.target;
+    const snapshot = binding.snapshot;
+    if (!snapshot) {
+      stagedGuidance.hidden = false;
+      stagedGuidance.textContent = t('agentQueueScopeChanged');
+      return owned('failed');
+    }
+    const scope = new RequestScopePolicy(snapshot, {
+      greeting: !!safeChatIntent(trimmed),
+      referenced: !!stagedIntent || !!binding.proposal || binding.refinement.kind !== 'none',
+    });
     if (
       binding.conversation !== conversations.activeId ||
       binding.providerRevision !== providerBindingRevision ||
-      binding.readonly !== getReadonlyMode() ||
-      !requestTarget?.isCurrent(false) ||
+      (scope.editorBound && (binding.readonly !== getReadonlyMode() || !requestTarget?.isCurrent(false))) ||
       (stagedIntent?.hostRead && !isCurrentHostRead(stagedIntent.hostRead))
     ) {
       stagedGuidance.hidden = false;
@@ -1910,7 +1944,6 @@ export function createAgentPanel(
     proposalMode = writingSelect.value !== 'chat';
     languageSelect.hidden = true;
     chat.setLabels(chatLabels());
-    const snapshot = captureComposerContext();
     const literalToolRequest = isLiteralDocumentToolRequest(trimmed, snapshot.context);
     if (literalToolRequest || isModelFreeToolRequest(trimmed, snapshot.context)) {
       request.task = 'tools';
@@ -1941,6 +1974,8 @@ export function createAgentPanel(
     }
     const intent = stagedIntent || refinementContext.kind === 'selected' ? null : directIntent(trimmed);
     if (intent) {
+      scope.bindEditor();
+      if (binding.readonly !== getReadonlyMode()) return owned('failed');
       const answer = chat.getLastDocumentBody();
       const chinese = getLanguage().startsWith('zh');
       const messages: (LLMMessage & { hostGuidance?: 'tool' | 'status' | 'error' })[] = [
@@ -2123,8 +2158,8 @@ export function createAgentPanel(
         generation !== controllerGeneration ||
         conversation !== conversationRevision ||
         binding.providerRevision !== providerBindingRevision ||
-        binding.readonly !== getReadonlyMode() ||
-        !requestTarget.isCurrent(false)
+        !enabled ||
+        (scope.editorBound && (binding.readonly !== getReadonlyMode() || !requestTarget?.isCurrent(false)))
       )
         throw new Error(t('agentPlanExpired'));
       if (!accept()) throw new DOMException('Request stopped before execution', 'AbortError');
@@ -2175,7 +2210,7 @@ export function createAgentPanel(
       ) {
         chat.setActivity('responding');
         if (!requestTarget) throw new Error(t('agentPlanExpired'));
-        const native = nativeRequest(requestTarget, trimmed);
+        const native = nativeRequest(requestTarget, trimmed, snapshot, scope, binding.readonly);
         const abort = new AbortController();
         planning = abort;
         const prepared = await native.prepareRun!(trimmed, abort.signal);
@@ -2215,8 +2250,8 @@ export function createAgentPanel(
         abort.signal.throwIfAborted();
         if (generation !== controllerGeneration || conversation !== conversationRevision)
           throw new Error(t('agentPlanExpired'));
-        if (request.task !== 'chat' && (!requestTarget || !requestTarget.isCurrent(false)))
-          throw new Error(t('agentPlanExpired'));
+        if (request.task !== 'chat') scope.bindEditor();
+        if (scope.editorBound && !requestTarget?.isCurrent(false)) throw new Error(t('agentPlanExpired'));
         writingSelect.value = request.task === 'compose' ? 'chat' : request.task;
         languageSelect.value = request.language;
         proposalMode = !['chat', 'compose'].includes(request.task);
@@ -2237,6 +2272,7 @@ export function createAgentPanel(
             ),
           );
       }
+      if (request.task !== 'chat') scope.bindEditor();
       if (previousPreview && !request.refinement) invalidatePlans();
       if (request.task === 'compose') {
         if (snapshot.context?.kind !== 'word') throw new Error(t('agentWordOnly'));
@@ -2247,7 +2283,14 @@ export function createAgentPanel(
         planning = abort;
         chat.setActivity('responding');
         const body = await generateDocumentDraft(routingProvider, trimmed, abort.signal, (delta) => {
-          if (!abort.signal.aborted && generation === controllerGeneration && conversation === conversationRevision) {
+          if (
+            !abort.signal.aborted &&
+            enabled &&
+            generation === controllerGeneration &&
+            conversation === conversationRevision &&
+            binding.readonly === getReadonlyMode() &&
+            requestTarget?.isCurrent(false)
+          ) {
             // The schema decoder already separates body text from the envelope.
             // Preserve document syntax instead of interpreting it as chat JSON.
             partialTaskAnswer += delta;
@@ -2255,7 +2298,13 @@ export function createAgentPanel(
           }
         });
         abort.signal.throwIfAborted();
-        if (generation !== controllerGeneration || conversation !== conversationRevision)
+        if (
+          !enabled ||
+          generation !== controllerGeneration ||
+          conversation !== conversationRevision ||
+          binding.readonly !== getReadonlyMode() ||
+          !requestTarget?.isCurrent(false)
+        )
           throw new Error(t('agentPlanExpired'));
         operationHistory.push({ role: 'assistant', content: body, documentArtifact: true });
         if (partialTaskAnswer) chat.endStream();
@@ -2623,17 +2672,28 @@ export function createAgentPanel(
         chat.setActivity('responding');
         const pdf = snapshot.context?.kind === 'pdf';
         const safe = !pendingProposal && safeChatIntent(trimmed);
-        const reference = serializeRequestContext(
-          captureRequestContext(pdf && !safe ? 'pdf-page' : 'metadata'),
-          trimmed,
-        ).serialized;
+        const reference = scope.editorBound
+          ? serializeRequestContext(
+              pdf && !safe
+                ? captureRequestContext('pdf-page')
+                : { editor: snapshot.context, selection: { text: snapshot.text, truncated: snapshot.truncated } },
+              trimmed,
+            ).serialized
+          : undefined;
         beginExecution();
         const result = await ctl.send(trimmed, {
           echoUser: false,
           request: {
             tools: {},
             assertCurrent: () => {
-              if (requestTarget && !requestTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
+              if (
+                !enabled ||
+                generation !== controllerGeneration ||
+                conversation !== conversationRevision ||
+                binding.providerRevision !== providerBindingRevision ||
+                (scope.editorBound && (binding.readonly !== getReadonlyMode() || !requestTarget?.isCurrent(false)))
+              )
+                throw new Error(t('agentPlanExpired'));
             },
             getRequestContext: () => reference,
           },

@@ -80,7 +80,18 @@ for (const ext of ['docx', 'pptx'] as const) {
         .poll(() => page.locator('.cui-composer').evaluate((el) => el.scrollWidth - el.clientWidth))
         .toBeLessThan(2);
       await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`queue-${ext}-320-dark.png`) });
+      if (ext === 'docx') {
+        await page.evaluate(() => {
+          const win = window.__ooFrames.readyEditor() as unknown as {
+            Asc: { editor: { pluginMethod_InputText(text: string): void; asc_EditSelectAll(): void } };
+          };
+          win.Asc.editor.pluginMethod_InputText('A sensitive later document selection');
+          win.Asc.editor.asc_EditSelectAll();
+        });
+        await expect(page.locator('.agent-quoted-text')).toHaveText('A sensitive later document selection');
+      }
       releases.get('Hello')!();
+      await expect(page.getByRole('log')).toContainText('Answer to Hello');
       await expect.poll(() => calls).toEqual(['Hello', 'Hi']);
       await expect(page.locator('.cui-msg-user')).toHaveCount(2);
       await page.locator('.cui-send-stop').click();

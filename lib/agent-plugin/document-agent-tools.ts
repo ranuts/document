@@ -33,8 +33,8 @@ export function createDocumentAgentTools(options: DocumentAgentToolOptions): Rec
             if (!target.isCurrent(false)) throw new Error('agentPlanExpired');
             const plan = parseDocumentToolPlan(JSON.stringify({ tool: tool.name, input }), target.context);
             if (options.readonly && !plan.readOnly) throw new Error('agentReadonly');
-            if (!plan.readOnly && target.prepareWrite) {
-              target = target.prepareWrite();
+            if (!plan.readOnly) {
+              target = target.prepareWrite?.() ?? target;
               options.onTargetChanged?.(target);
             }
             const action = new DocumentToolAction(target, plan);
