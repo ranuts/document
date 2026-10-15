@@ -19,6 +19,7 @@ import {
 import { t } from '@ranuts/shared/i18n';
 import { runAgent } from '@ranuts/agent-core/runtime';
 import type { HistoryStorage } from './storage';
+import type { RequestTiming } from './request-timing';
 import type { AgentTool } from '@ranuts/agent-core/types';
 import type { LLMMessage, LLMProvider, LLMResponse } from '@ranuts/agent-core/llm/types';
 
@@ -67,6 +68,7 @@ export interface TurnResult {
 interface ActiveRun {
   abort: AbortController;
   externalMessages: LLMMessage[];
+  timing?: RequestTiming;
 }
 
 export class AgentChatController {
@@ -96,14 +98,17 @@ export class AgentChatController {
   }
 
   /** Send a user instruction and run the agent loop, emitting turns as it goes. */
-  async send(userText: string, presentation: { echoUser?: boolean; request?: TurnRequest } = {}): Promise<TurnResult> {
+  async send(
+    userText: string,
+    presentation: { echoUser?: boolean; request?: TurnRequest; timing?: RequestTiming } = {},
+  ): Promise<TurnResult> {
     const request = presentation.request;
     const assertCurrent = request?.assertCurrent ?? this.options.assertCurrent;
     const turnId = crypto.randomUUID();
     const text = userText.trim();
     if (!text || this.activeRun) return { turnId, status: this.activeRun ? 'superseded' : 'failed' };
 
-    const run: ActiveRun = { abort: new AbortController(), externalMessages: [] };
+    const run: ActiveRun = { abort: new AbortController(), externalMessages: [], timing: presentation.timing };
     this.activeRun = run;
     const current = () => this.activeRun === run;
     const live = () => current() && !run.abort.signal.aborted;
@@ -136,6 +141,7 @@ export class AgentChatController {
     };
     const emitDelta = (delta: string) => {
       if (!live()) return;
+      if (delta) run.timing?.filteredText();
       visibleAnswer = true;
       if (this.options.onAgentDelta) {
         interruptedText += delta;
@@ -178,6 +184,9 @@ export class AgentChatController {
       assertLive();
       const result = await runAgent(this.provider, text, {
         tools,
+        onFirstProviderText: () => {
+          if (live()) run.timing?.providerText();
+        },
         maxIterations: request?.maxIterations ?? this.options.maxIterations,
         history: priorHistory,
         onContextTrimmed: () => {
@@ -198,6 +207,7 @@ export class AgentChatController {
         onEvent: (event) => {
           if (!live()) return;
           if (event.type === 'usage') {
+            run.timing?.usage(event.usage);
             this.options.onUsage?.(event.usage);
           } else if (event.type === 'assistant_delta') {
             assertCurrent?.();
@@ -223,6 +233,7 @@ export class AgentChatController {
             } else if (event.text) {
               const text = assistantPresentation(event.text);
               if (text) {
+                run.timing?.filteredText();
                 visibleAnswer = true;
                 emitTurn({ role: 'agent', text });
               }
@@ -278,11 +289,15 @@ export class AgentChatController {
 
   /** Abort cooperatively once; the run stays active until its host promise settles. */
   stop(): void {
-    if (this.activeRun && !this.activeRun.abort.signal.aborted) this.activeRun.abort.abort();
+    if (this.activeRun && !this.activeRun.abort.signal.aborted) {
+      this.activeRun.timing?.cancel('stopped');
+      this.activeRun.abort.abort();
+    }
   }
 
   /** Detach pending output and persistence when switching providers. Keeps stored history. */
   dispose(): void {
+    this.activeRun?.timing?.cancel('superseded');
     this.stop();
     this.activeRun = null;
   }

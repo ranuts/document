@@ -2930,6 +2930,39 @@ it('answers an exact greeting without displaying a classification phase or copyi
   }
 });
 
+it.each(['Hello', 'Tell me a brief story'])('records only observed request timing stages for %s', async (question) => {
+  state.ready = true;
+  state.editorReady = true;
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  state.usage = { contextPreparationDurationMs: 2, timeToFirstTextMs: 3, responseDurationMs: 5 };
+  const measure = vi.fn();
+  const now = performance.now.bind(performance);
+  vi.stubGlobal('performance', { now, measure, clearMeasures: vi.fn() });
+  try {
+    const panel = createPreparedPanel();
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = question;
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await vi.waitFor(() => expect(measure).toHaveBeenCalledOnce());
+    const [name, options] = measure.mock.calls[0];
+    expect(name).toMatch(/^document\.assistant\.request\.[0-7]$/);
+    expect(options.detail).toMatchObject({
+      status: 'success',
+      firstProviderTextMs: expect.any(Number),
+      firstFilteredTextMs: expect.any(Number),
+      providerContextPreparationDurationMs: 2,
+      providerTimeToFirstTextMs: 3,
+      providerResponseDurationMs: 5,
+    });
+    expect(Object.hasOwn(options.detail, 'routingDurationMs')).toBe(question !== 'Hello');
+    // Detached jsdom panel cannot claim actual presentation from buffered text.
+    expect(options.detail).not.toHaveProperty('firstPresentedTextMs');
+    expect(Object.values(options.detail).every((value) => value === 'success' || typeof value === 'number')).toBe(true);
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
+
 it('stages a selected summary as a trusted read and answers only on explicit Send without writing consent', async () => {
   state.ready = true;
   state.editorReady = true;

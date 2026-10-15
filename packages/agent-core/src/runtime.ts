@@ -45,6 +45,8 @@ export interface AgentRunOptions {
   /** UTF-8 budget for request messages; full history is returned unchanged. */
   maxContextBytes?: number;
   onContextTrimmed?: () => void;
+  /** Once per run at the current provider streaming boundary, before host deferral/filtering. */
+  onFirstProviderText?: () => void;
   /** Host-supplied scope metadata, sent as quoted reference data without storing it. */
   requestContext?: string;
   /** Checkpoint a complete tool call/result exchange before the next inference. */
@@ -103,6 +105,7 @@ export async function runAgent(
     throw new Error('Agent limits must be positive integers');
   const seenCalls = new Map<string, number>();
   let contextNoticeSent = false;
+  let firstProviderText = false;
 
   for (let iteration = 0; iteration < maxIterations; iteration++) {
     options.assertCurrent?.();
@@ -140,6 +143,10 @@ export async function runAgent(
           toolDefs,
           (delta) => {
             if (!delta || options.signal?.aborted) return;
+            if (!firstProviderText) {
+              firstProviderText = true;
+              options.onFirstProviderText?.();
+            }
             streamed = true;
             if (toolDefs.length && provider.streamingTextMode !== 'answer-only') deferredDeltas.push(delta);
             else options.onEvent?.({ type: 'assistant_delta', text: delta });

@@ -75,3 +75,13 @@ browser-local writing consent; it does not silently select a cloud destination.
 
 Fully unit-testable: pass a scripted `LLMProvider` (returns canned `chat()` results)
 and mock `AgentTool`s; assert on the event stream and `result`.
+
+## Timing observations
+
+`onFirstProviderText` is an optional content-free once-per-run callback at the
+current `chatStream` boundary, after nonempty/abort checks and before runtime
+deferral. Adapters may already filter text; never label it raw model-token time.
+Keep local provider context construction/exact budgeting, first-text and total
+execution usage separate from host elapsed arrival/presentation clocks and
+backend first-token/prefill fields. Provider execution excludes queue/model load;
+unsupported stages remain absent. See README for provider-specific semantics.

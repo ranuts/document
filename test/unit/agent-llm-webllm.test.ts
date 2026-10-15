@@ -163,7 +163,7 @@ describe('WebLLMProvider', () => {
     const result = await provider.chatStream([{ role: 'user', content: 'go' }], [], (d) => deltas.push(d));
     expect(create.mock.calls[0][0].stream).toBe(true);
     expect(create.mock.calls[0][0].stream_options).toEqual({ include_usage: true });
-    expect(result.usage).toEqual({ completionTokens: 5, promptTokens: 10 });
+    expect(result.usage).toMatchObject({ completionTokens: 5, promptTokens: 10 });
     expect(deltas).toEqual(['on', 'line']);
     expect(result.text).toBe('online');
   });
@@ -581,4 +581,64 @@ it('keeps explicit streamed tool IDs across later argument-only fragments', asyn
       )
     ).toolCalls,
   ).toEqual([{ id: 'provided-id', name: 'first_tool', input: {} }]);
+});
+
+it('times the actual GPU internal stream even for a completed-response caller', async () => {
+  let now = 200;
+  const clock = vi.spyOn(performance, 'now').mockImplementation(() => now);
+  const create = vi.fn(async () =>
+    (async function* () {
+      now += 4;
+      yield { choices: [{ delta: { content: '' } }] };
+      now += 6;
+      yield { choices: [{ delta: { content: 'Answer' }, finish_reason: 'stop' }] };
+      now += 9;
+    })(),
+  );
+  const provider = new WebLLMProvider({ engine: { chat: { completions: { create } } } });
+  try {
+    const response = await provider.chat([{ role: 'user', content: 'Hello' }], []);
+    expect(response.usage).toMatchObject({
+      contextPreparationDurationMs: 0,
+      timeToFirstTextMs: 10,
+      responseDurationMs: 19,
+    });
+    expect(response.usage).not.toHaveProperty('timeToFirstTokenMs');
+  } finally {
+    clock.mockRestore();
+    await provider.dispose();
+  }
+});
+
+it('excludes time waiting behind an earlier GPU request from its execution clock', async () => {
+  let now = 0;
+  const clock = vi.spyOn(performance, 'now').mockImplementation(() => now);
+  let release!: () => void;
+  let calls = 0;
+  const create = vi.fn(async () => {
+    const call = ++calls;
+    return (async function* () {
+      if (call === 1)
+        await new Promise<void>((resolve) => {
+          release = resolve;
+        });
+      else now += 7;
+      yield { choices: [{ delta: { content: 'Answer' }, finish_reason: 'stop' }] };
+      now += 3;
+    })();
+  });
+  const provider = new WebLLMProvider({ engine: { chat: { completions: { create } } } });
+  try {
+    const first = provider.chat([{ role: 'user', content: 'First' }], []);
+    await vi.waitFor(() => expect(release).toBeTypeOf('function'));
+    now = 10;
+    const second = provider.chat([{ role: 'user', content: 'Second' }], []);
+    now = 1000;
+    release();
+    await first;
+    expect((await second).usage).toMatchObject({ timeToFirstTextMs: 7, responseDurationMs: 10 });
+  } finally {
+    clock.mockRestore();
+    await provider.dispose();
+  }
 });

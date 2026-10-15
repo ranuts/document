@@ -154,3 +154,20 @@ and detached stream callbacks cannot format a newer conversation.
 
 History APIs retain their defaults; an explicit user expansion may still render
 a complete restored message. This option adds no token animation or inference.
+
+## Optional presentation observation
+
+`chat.observePresentation(callback)` arms a once-only, request-owned observation
+for the next assistant text actually appended/flushed into visible DOM after
+follow layout. `appendDelta` only buffers and does not trigger it. The root and
+text must be connected, document/panel visible and a small text range intersecting
+the transcript viewport. This observes DOM presentation, not compositor paint.
+Native visibility checks include ancestor opacity; fallback work is capped at 16
+ancestors and the text probe at 16 nodes of 64 characters each. Unsupported or
+unobserved visibility leaves the observation absent.
+
+Calling `observePresentation()` cancels the owner; replacement, Clear, Stop and
+disposal invalidate pending callbacks. Hosts must cancel on request supersession
+and allow synchronous `append`/`endStream` finalization before clearing a legitimate
+owner. This optional hook adds no diagnostics, content or backend coupling to the
+shared component.

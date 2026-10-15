@@ -224,6 +224,18 @@ request and cannot leak through stopped/superseded callbacks. Ordinary chat is t
 initial complete measurement path; other paths report only stages they actually
 observe. Preserve existing actual-phase waiting feedback.
 
+Implemented diagnostic names are `document.assistant.request.0` through `.7`,
+reused after clearing the prior measure in each slot. Details contain only status
+and observed durations. `durationMs`, `firstProviderTextMs`, `firstFilteredTextMs`
+and `firstPresentedTextMs` share the host execution start (after queue/model
+readiness validation); `routingDurationMs` exists only if routing ran.
+`providerContextPreparationDurationMs` and `providerResponseDurationMs` sum observed
+provider executions, while `providerTimeToFirstTextMs` retains the first supported
+execution's first-text observation. These provider-relative fields cannot be used
+to reconstruct a host arrival timestamp. Performance API absence/failure is best
+effort and never prevents execution. No measurements imply physical GPU/microphone
+latency or a benchmark speedup.
+
 ## Alternatives
 
 Blocking Send until all history restores is simpler but delays ready local work;

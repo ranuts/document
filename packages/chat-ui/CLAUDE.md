@@ -48,6 +48,7 @@ container.appendChild(chat.el); // mount the root element
 | `appendMany(messages)`                                                         | Add finished messages in order with one final layout update, for restoring history.                  |
 | `appendDelta(text)`                                                            | Stream into a live agent bubble (auto-created on first delta).                                       |
 | `endStream()`                                                                  | Finalise the streaming bubble (drops the caret).                                                     |
+| `observePresentation(callback?)`                                               | Arm one request-owned visible DOM text observation; omit the callback to cancel.                     |
 | `setRunning(bool)`                                                             | Update run controls; keep the next draft editable, with optional host queuing.                       |
 | `setActivity('routing' / 'reading' / 'planning' / 'responding' / 'reviewing')` | Announce the host's actual phase through a polite status; review is a resting state.                 |
 | `clear()`                                                                      | Remove all messages, restore empty state.                                                            |
