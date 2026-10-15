@@ -142,6 +142,15 @@ export class ChatView {
     });
     this.messagesEl.addEventListener('wheel', () => this.readerScrollIntent(), { passive: true });
     this.messagesEl.addEventListener('touchmove', () => this.readerScrollIntent(), { passive: true });
+    const ownPointerIntent = (event: Event) => {
+      if (event.target === this.messagesEl) this.readerScrollIntent();
+    };
+    this.messagesEl.addEventListener('pointerdown', ownPointerIntent);
+    this.messagesEl.addEventListener('mousedown', (event) => {
+      // Pointer-enabled browsers also emit mousedown for the same gesture.
+      // Processing it twice would release the interruption established above.
+      if (typeof window.PointerEvent === 'undefined') ownPointerIntent(event);
+    });
     this.messagesEl.addEventListener('keydown', (event) => {
       if (
         event.defaultPrevented ||
