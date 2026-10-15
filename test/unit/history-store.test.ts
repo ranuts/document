@@ -208,6 +208,22 @@ describe('history store', () => {
     expect(Array.from((await getLatestSnapshot(first!.id))!.bytes)).toEqual(Array(70).fill(2));
   });
 
+  it('reads only the latest blob and prunes without cloning retained versions', async () => {
+    const first = await putSnapshot({ title: 'Versions.docx', origin: 'local', bytes: bytes(10, 1) });
+    for (const value of [2, 3])
+      await putSnapshot({ id: first!.id, title: 'Versions.docx', origin: 'local', bytes: bytes(10, value) });
+    const all = IDBIndex.prototype.getAll;
+    vi.spyOn(IDBIndex.prototype, 'getAll').mockImplementation(function (this: IDBIndex, ...args) {
+      if (this.objectStore.name === 'blobs') throw new Error('Unbounded blob read');
+      return all.apply(this, args as Parameters<typeof all>);
+    });
+    expect(Array.from((await getLatestSnapshot(first!.id))!.bytes)).toEqual(Array(10).fill(3));
+    const next = await putSnapshot({ id: first!.id, title: 'Versions.docx', origin: 'local', bytes: bytes(10, 4) });
+    expect(next?.totalBytes).toBe(30);
+    expect(next?.revCount).toBe(3);
+    expect(Array.from((await getLatestSnapshot(first!.id))!.bytes)).toEqual(Array(10).fill(4));
+  });
+
   it('deletes documents that went seven days without being touched', async () => {
     const stale = await putSnapshot({ title: 'Stale.docx', origin: 'local', bytes: bytes(16) });
     const fresh = await putSnapshot({ title: 'Fresh.docx', origin: 'local', bytes: bytes(16) });
