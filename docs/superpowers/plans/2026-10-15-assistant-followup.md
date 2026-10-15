@@ -51,11 +51,11 @@ lib/agent-plugin/ui/panel.ts; shared README/CLAUDE; seven i18n tables/types;
 test/unit/{chat-view-performance,chat-view-results,chat-view-layout,agent-panel-loading}.test.ts;
 test/e2e/agent-history-rendering.spec.ts.
 
-- [ ] RED: restoring 1000 messages mounts only the latest bounded window and renders no omitted Markdown; full older history remains accessible in order; source-level last-answer/document getters still work outside the DOM window; a giant restored message uses a bounded preview with explicit full-source expansion.
-- [ ] Add an opt-in bounded restoration entry point with a localized older-message control; keep appendMany default behavior. Prepend batches without replacing existing message nodes, stealing focus, disturbing a live stream or resetting the draft/viewport anchor.
-- [ ] Keep an empty welcome at its initial viewport position when the preparation footer grows (no bottom following before any actual message). Test cross-boundary tool groups, nearest-prior-user recovery ownership, lastUserText after prepend, a single oversized turn with <=40 initial rows, copy/interrupted artifact semantics, clear/switch/dispose, reduced motion and keyboard; update old 400-row E2E to explicitly load older rows while retaining all content/action assertions.
-- [ ] Focused tests/typecheck/lint; commit perf(chat-ui): restore long conversations in bounded windows.
-- [ ] Specification gate then independent quality gate.
+- [x] RED: restoring 1000 messages mounts only the latest bounded window and renders no omitted Markdown; full older history remains accessible in order; source-level last-answer/document getters still work outside the DOM window; a giant restored message uses a bounded preview with explicit full-source expansion.
+- [x] Add an opt-in bounded restoration entry point with a localized older-message control; keep appendMany default behavior. Prepend batches without replacing existing message nodes, stealing focus, disturbing a live stream or resetting the draft/viewport anchor.
+- [x] Keep an empty welcome at its initial viewport position when the preparation footer grows (no bottom following before any actual message). Test cross-boundary tool groups, nearest-prior-user recovery ownership, lastUserText after prepend, a single oversized turn with <=40 initial rows, copy/interrupted artifact semantics, clear/switch/dispose, reduced motion and keyboard; update old 400-row E2E to explicitly load older rows while retaining all content/action assertions.
+- [x] Focused tests/typecheck/lint; commit perf(chat-ui): restore long conversations in bounded windows.
+- [x] Specification gate then independent quality gate.
 
 ## Chunk 4b: Streamdown-informed streaming Markdown
 
@@ -84,7 +84,7 @@ packages/chat-ui/src/{chat-view,types}.ts for a request-owned first-presentation
 
 - [ ] Re-run original Chromium failure probes: slow history + first submitted request, preparing actions, Hello + editor write, Worker/fallback whitespace. Extend dictation with a held answer/queued draft.
 - [ ] Measure bounded history initial nodes/task delay and prepend viewport anchor against the same baseline fixture. Verify all older text remains accessible and full model history/export survives.
-- [ ] Full units --maxWorkers=2; pnpm run lint:ts; pnpm run format:check; pnpm run build. Preserve 1511 immutable archives.
+- [ ] Full units with coverage --maxWorkers=2 (matching CI thresholds); pnpm run lint:ts; pnpm run format:check; pnpm run build. Preserve 1511 immutable archives.
 - [ ] Serialized --workers=1 editor regressions including history/composer/context/dictation/process/queue/Stop/writes/PDF; English/Chinese widths and themes. One browser/build owner, no agent full suites.
 - [ ] Final overall source review. Update focused docs/changelog and PR description around final implementation, preserving functional commits and pending verdict.
 - [ ] SSH push to existing fix/speech-first-permission; inspect exact-head CI via Code Review tool only. Fix any failures with fresh evidence until all checks pass; update final verdict and preview. Do not merge.
