@@ -117,7 +117,7 @@ workspace/process E2E.
 
 ## Chunk 5: Integration, evidence and delivery
 
-- [ ] Align the selected-text disclosure and add a thin chevron, reversible
+- [x] Align the selected-text disclosure and add a thin chevron, reversible
       open/close motion, reduced-motion support and keyboard regression coverage.
 - [ ] Make the assistant title return to the latest meaningful conversation,
       falling back to an existing draft or new conversation, without resuming

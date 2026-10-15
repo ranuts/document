@@ -38,6 +38,39 @@ That result does not validate subsequent continuity changes.
 Final functional, visual and exact-head CI results will be recorded after the
 implementation and reviews finish.
 
+## Integrated queue checkpoint
+
+At `2e5f59e`, all 5,622 unit tests in 193 files passed. Repository lint,
+workspace/application type checks, formatting and the production build passed;
+both quality entry points verified all 1,511 immutable evaluation artifacts.
+The serialized real-editor run passed 41 cases and skipped three unavailable
+legacy corpus formats. Two queue cases exposed browser focus loss when Send
+disabled itself; `a73e075` captures focus ownership before clearing the draft.
+The next browser run passed that focus assertion and exposed a fixture using
+NDJSON against the loopback provider's non-streaming JSON contract. Both Word
+and PowerPoint FIFO/Stop/Resume/Send now cases passed after the fixture transport
+repair at `b10c9e4`. The Apply settlement follow-up remains in progress.
+
+At `a73e075`, selected-text disclosure checks passed in 12 English/Chinese,
+320/432/520-pixel, light/dark states. Heading, preview and input left coordinates
+matched exactly; panel horizontal overflow was zero. Chromium observed
+intermediate heights while both opening and closing, then returned to the same
+expanded height after reversing the animation. Enter/Space and reduced motion
+passed. Three real-editor context-event tests passed, including no idle SDK reads.
+The shared disclosure/queue/Stop focused suites passed all 12 tests.
+
+A separate reduced-motion Chromium component probe exercised the independent
+queue Stop button with a 108,000-character partial answer. The synchronous
+handler took 1.07 ms; stopping feedback appeared on the next frame at 9.37 ms.
+No Markdown parsing occurred before that frame. Raw source, next draft and caret
+were preserved; three cancellation attempts invoked the host once. This is a
+component measurement with held host settlement, not physical GPU drain timing.
+
+The pending-list layout also passed 12 English/Chinese, light/dark width states
+at `a73e075`. Two pending entries and the independent Stop button stayed visible,
+input focus stayed in the next draft, and horizontal overflow was zero. Stop
+preserved the unsent draft and exposed Resume without auto-running older work.
+
 ## History checks
 
 Source review approved bounded segmented extraction/transfers and resumable
