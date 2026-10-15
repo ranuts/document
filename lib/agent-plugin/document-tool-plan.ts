@@ -27,6 +27,10 @@ const capabilities: Record<DocumentContext['kind'], readonly string[]> = {
   cell: ['get_ranges', 'get_range', 'get_cell', 'set_cell', 'fill_series', 'sum_range', 'sort_range'],
   slide: ['get_presentation_text', 'create_slide', 'slide_action', 'add_slide_text', 'replace_selection'],
 };
+/** Recognize host document tools from the same capability owner used for execution. */
+export function isDocumentToolName(name: string): boolean {
+  return Object.values(capabilities).some((names) => names.includes(name));
+}
 export function documentTools(context: DocumentContext): AgentTool[] {
   return (capabilities[context.kind] ?? [])
     .filter(

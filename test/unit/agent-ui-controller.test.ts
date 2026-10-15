@@ -1049,42 +1049,53 @@ it('does not complete a stream when Stop is requested by its final flushed delta
   ).toHaveLength(1);
 });
 
-it.each(['cancelled', 'expired', 'failed', 'sent', 'verified'] as const)(
-  'maps the actual native document review %s outcome without reporting false success',
-  async (status) => {
-    const provider = scripted([toolResponse('write', 'insert_text', { text: 'body' }), textResponse('')]);
+it.each(
+  (
+    [
+      { name: 'insert_text', kind: 'word', input: { text: 'body' } },
+      { name: 'add_pdf_comment', kind: 'pdf', input: { page: 1, text: 'note' } },
+      { name: 'create_slide', kind: 'slide', input: { title: 'Title', body: 'Body' } },
+    ] as const
+  ).flatMap((fixture) =>
+    (['cancelled', 'expired', 'failed', 'sent', 'verified'] as const).map((status) => ({ ...fixture, status })),
+  ),
+)('maps actual $name review $status without reporting false success', async ({ name, kind, input, status }) => {
+  const provider = scripted([toolResponse('write', name, input), textResponse('')]);
+  const tools = createDocumentAgentTools({
+    target: { context: { kind }, label: kind, selectedText: '', isCurrent: () => true },
+    readonly: false,
+    review: async (action) =>
+      status === 'failed' ? { status, action, error: new Error('failed') } : { status, action },
+    receipt: vi.fn(),
+  });
+  const { controller } = collect(provider, { tools });
+  expect(await controller.send('write')).toMatchObject({
+    status: status === 'verified' ? 'success' : status === 'cancelled' ? 'stopped' : 'failed',
+  });
+});
+
+it.each(
+  (
+    [
+      { kind: 'word', name: 'get_document_text' },
+      { kind: 'pdf', name: 'get_pdf_text' },
+    ] as const
+  ).flatMap((fixture) => [{ text: '' }, { unavailable: true }].map((result) => ({ ...fixture, result }))),
+)('fails an explicitly concluded unavailable or empty $name read $result', async ({ kind, name, result }) => {
+  const execute = vi.spyOn(agentTools[name], 'execute').mockResolvedValue(result);
+  try {
     const tools = createDocumentAgentTools({
-      target: { context: { kind: 'word' }, label: 'Word', selectedText: '', isCurrent: () => true },
+      target: { context: { kind }, label: kind, selectedText: '', isCurrent: () => true },
       readonly: false,
-      review: async (action) =>
-        status === 'failed' ? { status, action, error: new Error('failed') } : { status, action },
+      review: vi.fn(),
       receipt: vi.fn(),
     });
-    const { controller } = collect(provider, { tools });
-    expect(await controller.send('write')).toMatchObject({
-      status: status === 'verified' ? 'success' : status === 'cancelled' ? 'stopped' : 'failed',
-    });
-  },
-);
-
-it.each([{ text: '' }, { unavailable: true }])(
-  'fails an explicitly concluded unavailable or empty document read %j',
-  async (result) => {
-    const execute = vi.spyOn(agentTools.get_document_text, 'execute').mockResolvedValue(result);
-    try {
-      const tools = createDocumentAgentTools({
-        target: { context: { kind: 'word' }, label: 'Word', selectedText: '', isCurrent: () => true },
-        readonly: false,
-        review: vi.fn(),
-        receipt: vi.fn(),
-      });
-      const controller = collect(scripted([toolResponse('read', 'get_document_text', {})]), { tools }).controller;
-      expect(await controller.send('read')).toMatchObject({ status: 'failed' });
-    } finally {
-      execute.mockRestore();
-    }
-  },
-);
+    const controller = collect(scripted([toolResponse('read', name, {})]), { tools }).controller;
+    expect(await controller.send('read')).toMatchObject({ status: 'failed' });
+  } finally {
+    execute.mockRestore();
+  }
+});
 
 it('does not start host preflight after the user-turn callback invalidates its run', async () => {
   const prepareRun = vi.fn(async () => ({ tools: {} }));

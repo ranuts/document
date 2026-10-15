@@ -1,3 +1,4 @@
+import { isDocumentToolName } from '../document-tool-plan';
 import { t, getLanguage, i18n, SHELL_LOCALES } from '@ranuts/shared/i18n';
 import type { AgentEvent, AgentRunResult } from '@ranuts/agent-core/runtime';
 
@@ -46,7 +47,7 @@ const tools = new Set([
 
 /** Interpret only the host document-tool protocol; generic tools retain their own receipts. */
 export function documentToolTurnStatus(event: AgentEvent): 'success' | 'stopped' | 'failed' | undefined {
-  if (event.type !== 'tool_result' || !tools.has(event.name)) return;
+  if (event.type !== 'tool_result' || !isDocumentToolName(event.name)) return;
   try {
     const outcome = JSON.parse(event.content);
     if (outcome?.status === 'cancelled') return 'stopped';
