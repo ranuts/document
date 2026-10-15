@@ -1145,6 +1145,18 @@ E2E 回归套件覆盖**（`pnpm run test:e2e` 的 embed-regression.spec：打�
 
 `lib/agent-entry.ts` owns the discoverable entry and browser-local default-off preference. URL `agent` flags do not enable it. Opening restores only UI/preferences; loading a model or connecting a service requires an explicit user action. Generated writing must be reviewed before applying. Developer transport and provider details belong in developer references, not product onboarding.
 
+The panel delegates endpoint lifetimes to `ui/endpoint-lifecycle.ts`, native task
+scope/review/context bindings to `ui/controller-bindings.ts`, and settings layout
+to `ui/settings-view.ts`. Keep these owners separate when adding providers or
+changing cancellation. Optional document reference text must fit the runtime
+request budget after preserving the user's request and current tool exchange.
+
+Standalone exports bind their SDK save points to the actual conversion result,
+not the SDK busy flag, which ends before conversion completes. Install save-stream
+tracking after the x2t worker proxy. Disk writes for a document are serialized;
+late older ordinary-save results must not overwrite a newer saved version, while
+other-format exports retain their independent output.
+
 ## Runtime and storage maintenance (2026-10-13)
 
 - `bin/offline-assets.mjs` derives mandatory app dependencies from Vite's emitted manifest. Inference chunks/WASM are optional; the small assistant UI static graph stays in core for live-page compatibility. `PREPARE_ASSISTANT` follows explicit or persisted opt-in, and a prepared marker refreshes runtime assets before later worker activation. Model weights and external endpoints remain outside app caches. Preserve the vendor precache for first offline export.
