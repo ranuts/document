@@ -4,8 +4,8 @@ import { join } from 'node:path';
 const ASSISTANT_ENTRY = 'lib/agent-plugin/agent-plugin.ts';
 const GENERATED_ASSET = /^assets\/[A-Za-z0-9_.-]+\.(?:js|css|wasm|woff2)$/;
 
-/** Follow both static and lazy app edges, stopping at the optional assistant. */
-function collectAssets(manifest, roots, excluded = new Set(), followDynamic = true) {
+/** Follow app edges, optionally deferring lazy imports and attached runtime assets. */
+function collectAssets(manifest, roots, excluded = new Set(), includeRuntime = true) {
   const visited = new Set();
   const assets = new Set();
   const visit = (key) => {
@@ -13,11 +13,14 @@ function collectAssets(manifest, roots, excluded = new Set(), followDynamic = tr
     visited.add(key);
     const chunk = manifest[key];
     if (!chunk) throw new Error(`Missing offline manifest dependency: ${key}`);
-    for (const asset of [chunk.file, ...(chunk.css ?? []), ...(chunk.assets ?? [])]) {
+    // Worker outputs can appear in a static UI chunk's assets without being a
+    // static import. Keep its styles and fonts, but defer executable payloads.
+    const attachedAssets = (chunk.assets ?? []).filter((asset) => includeRuntime || !/\.(?:js|wasm)$/.test(asset));
+    for (const asset of [chunk.file, ...(chunk.css ?? []), ...attachedAssets]) {
       if (!GENERATED_ASSET.test(asset)) throw new Error(`Unsupported offline asset: ${asset}`);
       assets.add(`/${asset}`);
     }
-    for (const imported of [...(chunk.imports ?? []), ...(followDynamic ? (chunk.dynamicImports ?? []) : [])])
+    for (const imported of [...(chunk.imports ?? []), ...(includeRuntime ? (chunk.dynamicImports ?? []) : [])])
       visit(imported);
   };
   for (const root of roots) visit(root);
