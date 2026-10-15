@@ -38,11 +38,11 @@ test/e2e/{agent-request-queue,agent-dictation,agent-stop-resume}.spec.ts.
 Files: history-search{,-model,.worker}.ts and history-list.ts; test/unit/{agent-history-search,agent-history-list}.test.ts;
 packages/agent-core/src/context-budget.ts and llm/wllama.ts; test/unit/agent-context-budget.test.ts and the existing Wllama provider test owner.
 
-- [ ] RED: copied repeated whitespace and cross-segment whitespace match in Worker/fallback; prefix is shared once per query; long-query fallback yields and cancellation wins.
-- [ ] Implement shared canonical query normalization in both list identity and engine, reusable KMP compilation and inner deadline checks. Preserve existing bounded extraction/progress/idle behavior. Focused tests/lint; search functional commit.
-- [ ] RED: 1000 complete turns retain a fitting recent suffix with a bounded (e.g. <=32) exact-count callback budget; newest-too-large, exact reserved equality, nonmonotonic counts, tool pairs, abort and malformed counts still behave correctly.
-- [ ] Implement coarse bracketing/refinement, reuse counted fitting results, and return only an exactly verified candidate. Rebuild the Wllama completion request from returned budget.messages and integration-test that a rejected last probe cannot be sent. Focused runtime/provider tests/typecheck; CPU performance functional commit.
-- [ ] Specification gate then independent quality gate.
+- [x] RED: copied repeated whitespace and cross-segment whitespace match in Worker/fallback; prefix is shared once per query; long-query fallback yields and cancellation wins.
+- [x] Implement shared canonical query normalization in both list identity and engine, reusable KMP compilation and inner deadline checks. Preserve existing bounded extraction/progress/idle behavior. Focused tests/lint; search functional commit.
+- [x] RED: 1000 complete turns retain a fitting recent suffix with a bounded (e.g. <=32) exact-count callback budget; newest-too-large, exact reserved equality, nonmonotonic counts, tool pairs, abort and malformed counts still behave correctly.
+- [x] Implement coarse bracketing/refinement, reuse counted fitting results, and return only an exactly verified candidate. Rebuild the Wllama completion request from returned budget.messages and integration-test that a rejected last probe cannot be sent. Focused runtime/provider tests/typecheck; CPU performance functional commit.
+- [x] Specification gate then independent quality gate.
 
 ## Chunk 4: Bounded restored-message presentation
 
