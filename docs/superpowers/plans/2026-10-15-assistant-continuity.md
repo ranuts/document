@@ -18,29 +18,33 @@ locale tables/types, `test/unit/agent-history-list.test.ts`, session tests and
 `test/e2e/agent-history-rendering.spec.ts`. Root integrates lifecycle hooks in
 `panel.ts`; implementation must provide the exact hook/API requirements.
 
-- [ ] Write/observe failing tests for full-text result snippets, distinct empty
+- [x] Write/observe failing tests for full-text result snippets, distinct empty
       states, bounded initial rows, incremental loading, unchanged render/focus,
       zero repeated message-history clones, stale results and Worker failure.
-- [ ] Implement searchable data access under the existing session-store owner;
+- [x] Implement searchable data access under the existing session-store owner;
       invalidate only changed records. Preserve defensive public history reads.
-- [ ] Implement Worker search and bounded cancellable idle preparation/fallback.
+- [x] Implement Worker search and bounded cancellable idle preparation/fallback.
       Ensure first explicit search has a priority path, latest result wins,
       removed records cannot return, and disposal terminates work.
-- [ ] Cover constructed-but-silent Worker timeout, error/messageerror and
+- [x] Cover constructed-but-silent Worker timeout, error/messageerror and
       construction failure. Use 1,000 x eight x 512-character fixture, 40-row
       pages, no per-query corpus repost or repeated message cloning; cover hidden
       view, reactivation and pagehide cleanup.
-- [ ] Refine history hierarchy using existing tokens and components. Keep all
+- [x] Refine history hierarchy using existing tokens and components. Keep all
       data tools and confirmation reachable; no new persistence contract.
-- [ ] Run focused units, then specification and code-quality review. Root runs
+- [x] Run focused units, then specification and code-quality review. Root runs
       serialized browser/screenshot acceptance and records operation counts.
-- [ ] Commit as `feat(assistant): refine history browsing and background search`.
+- [x] Commit as `feat(assistant): refine history browsing and background search`.
 
 ## Chunk 2: Immediate Stop presentation and lifecycle
 
 Files: `packages/chat-ui/src/{chat-view,types,styles}.ts`, public README/CLAUDE,
 `lib/agent-plugin/ui/controller.ts`, host integration in `panel.ts`, locale
 labels/types, controller/chat UI tests and `test/e2e/agent-stop-resume.spec.ts`.
+An optional agent-core runtime completion-cause flag and shared presentation
+mapping distinguish successful terminal receipts from empty answers or native
+cancelled/unverified/unavailable outcomes. Adjacent panel-loading fixtures must
+use authoritative session identity and activate history before selecting rows.
 
 - [ ] Write/observe failing tests for delayed host cancellation, single Stop,
       obsolete deltas/finish, long partial content and preserved draft/focus.
