@@ -83,6 +83,56 @@ session/controller and available for model budgeting/export; only presentation
 is windowed. getLastAnswer/getLastDocumentBody must still find an eligible answer outside the rendered window. Bound previews of a giant restored message (for example 8000 characters) with explicit expansion; keep the full source for copy/apply. Ordinary append and live streaming retain their existing behavior. Existing appendMany behavior remains unchanged for other consumers.
 Use the existing component/theme system; no new dependency or decorative motion. When the preparation footer shrinks an empty chat, do not auto-scroll its welcome content to the bottom: keep the heading visible while preserving normal following once messages arrive. A Chromium probe at 720px height showed titleTop=30 above messageTop=56 with scrollTop=70; this is a measured layout defect.
 
+## Streaming Markdown reference update
+
+The user additionally requested Streamdown as a rendering reference and paged
+long history. Official [memoization documentation](https://streamdown.ai/docs/memoization)
+and [unterminated parsing documentation](https://streamdown.ai/docs/termination),
+plus its [block parser](https://github.com/vercel/streamdown/blob/main/packages/streamdown/lib/parse-blocks.tsx),
+show stable block reuse, conservative tail reparsing and safe provisional syntax.
+The current host instead appends plain text during streaming and formats the
+whole response only on completion. This is a separate presentation improvement,
+not a claim of faster model inference.
+
+Add an opt-in streaming Markdown mode to shared ChatView and enable it in the
+assistant host. Reuse the existing Marked lexer and safe DOM renderer, without
+React, another Markdown stack, remote image loading or a new dependency. Keep
+completed blocks and their DOM identities while reparsing only an unstable tail
+at a bounded cadence; coalesce model deltas to frames and do not delay the first
+text behind a debounce. Do not assume one blank line alone makes a paragraph,
+list or setext heading immutable. Reference definitions can change earlier inline
+meaning: preserve whole-document semantics on that fallback and final completion.
+Use per-stream ownership rather than global mutable caches.
+
+The evolving tail may render an open fenced code block with existing lexer
+semantics. Incomplete inline syntax stays readable and incomplete/unsafe URLs
+remain inert until a valid permitted link exists; do not invent source text or
+add a homegrown general Markdown repair parser. Final Markdown must agree with
+the existing full renderer for bounded input, including tables, nested lists,
+reference links, CRLF and escaped syntax. Full original source remains the
+copy/apply payload.
+
+Every automatic main-thread lex/render must receive a capped input (for example
+8000 characters), including tail updates, reference-definition fallback, normal
+completion and interrupted formatting. A timer/rAF/idle deadline cannot preempt
+one synchronous Lexer.lex call and must not be described as doing so. For a
+pathological oversized open block keep incoming exact raw text readable in that
+tail and preserve already stable formatted blocks. If reference semantics require
+a whole-document fallback beyond the cap, retain the whole exact response as raw
+text rather than silently render incorrect links. Completion keeps that bounded
+mixed/raw representation; do not schedule a later uncapped whole-response parse.
+Raw copy/apply remains complete. This explicit large-input fallback avoids adding
+a Worker tokenizer and a second asynchronous DOM renderer in this change. The
+cap bounds input size, not a promised number of milliseconds on every device.
+
+Stop must still acknowledge without any synchronous Markdown parse, freeze exact
+partial source as copy-only and reject late deltas. Clear/switch/dispose cancel
+scheduled old formatting. Keep the viewport, text selection and existing
+completed nodes stable wherever content has not changed; respect reduced motion
+without adding token animations. Compare output across arbitrary chunk boundaries
+for ordinary inputs; parser/render failures fall back to accurate safe raw text
+without losing the source or enabling an incomplete link.
+
 ## CPU context budget
 
 Replace repeated one-turn removal/counting with bounded coarse bracketing and
