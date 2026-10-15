@@ -325,7 +325,8 @@ export const ko: Partial<I18nMessages> = {
   agentHistoryLoadMore: '더 보기',
   agentNoConversationsFound: '일치하는 대화가 없습니다',
   agentHistoryDataControls: '기록 및 데이터',
-  agentContextTrimmed: '이번 요청에서 이전 대화를 제외했습니다. 전체 기록은 유지됩니다.',
+  agentContextTrimmed:
+    '이번 요청의 문맥을 줄여 문서의 일부 또는 최근 대화만 포함될 수 있습니다. 전체 대화 기록은 유지됩니다.',
   agentContextTooLong: '요청이 너무 깁니다. 선택한 내용이나 사용자 지정 시스템 지침을 줄이거나 작업을 나누세요.',
   agentClear: '대화 지우기',
   agentInputPlaceholder: 'AI에게 문서 편집을 요청하세요… (Enter로 전송, Shift+Enter로 줄바꿈)',

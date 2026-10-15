@@ -346,7 +346,8 @@ export const de: Partial<I18nMessages> = {
   agentHistoryLoadMore: 'Mehr laden',
   agentNoConversationsFound: 'Keine passenden Unterhaltungen',
   agentHistoryDataControls: 'Verlauf und Daten',
-  agentContextTrimmed: 'Ältere Beiträge wurden für diese Anfrage ausgelassen. Der Verlauf bleibt erhalten.',
+  agentContextTrimmed:
+    'Der Kontext dieser Anfrage wurde gekürzt und enthält möglicherweise nur einen Teil des Dokuments oder neuere Beiträge. Der vollständige Gesprächsverlauf bleibt erhalten.',
   agentContextTooLong:
     'Die Anfrage ist zu lang. Kürzen Sie den ausgewählten Abschnitt oder Ihre eigenen Systemanweisungen, oder teilen Sie die Aufgabe auf.',
   agentClear: 'Verlauf löschen',

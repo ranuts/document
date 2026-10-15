@@ -336,7 +336,8 @@ export const es: Partial<I18nMessages> = {
   agentHistoryLoadMore: 'Cargar más',
   agentNoConversationsFound: 'No se encontraron conversaciones',
   agentHistoryDataControls: 'Historial y datos',
-  agentContextTrimmed: 'Se omitieron turnos anteriores en esta solicitud. El historial completo se conserva.',
+  agentContextTrimmed:
+    'Se ha reducido el contexto de esta solicitud y puede incluir solo parte del documento o los turnos recientes. Se conserva el historial completo de la conversación.',
   agentContextTooLong:
     'La solicitud es demasiado larga. Acorta el fragmento seleccionado o tus instrucciones de sistema personalizadas, o divide la tarea.',
   agentClear: 'Borrar la conversación',
