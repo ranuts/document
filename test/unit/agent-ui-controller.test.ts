@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { t } from '@ranuts/shared/i18n';
+import { createDocumentAgentTools } from '../../lib/agent-plugin/document-agent-tools';
+import { agentTools } from '../../lib/agent-plugin/tools';
 import { historyToTurns } from '../../lib/agent-plugin/ui/storage';
 import { ChatView } from '../../packages/chat-ui/src/chat-view';
 import { AgentChatController, type ChatTurn } from '../../lib/agent-plugin/ui/controller';
@@ -904,4 +906,192 @@ it('does not display or archive unclassified follow-up after a tool response', a
   expect(deltas).toEqual([]);
   expect(saved.at(-1)).toEqual({ role: 'assistant', content: t('agentStopped'), hostGuidance: 'status' });
   expect(saved).not.toContainEqual(expect.objectContaining({ content: 'Visible follow-up' }));
+});
+
+it('returns explicit turn outcomes including failed empty answers and tool errors', async () => {
+  const ok = collect(scripted([textResponse('answer')])).controller;
+  expect(await ok.send('go')).toMatchObject({ turnId: expect.any(String), status: 'success' });
+  expect(await collect(scripted([textResponse('')])).controller.send('go')).toMatchObject({ status: 'failed' });
+  const failed = collect(scripted([toolResponse('1', 'broken', {}), textResponse('')]), {
+    tools: {
+      broken: makeTool('broken', async () => {
+        throw new Error('tool failed');
+      }),
+    },
+  }).controller;
+  expect(await failed.send('go')).toMatchObject({ status: 'failed' });
+  const limited = collect(scripted([toolResponse('1', 'read', {})]), {
+    maxIterations: 1,
+    tools: { read: makeTool('read', async () => 'ok') },
+  }).controller;
+  expect(await limited.send('go')).toMatchObject({ status: 'limited' });
+});
+
+it('holds running through Stop settlement and suppresses late completion and repeated cancellation', async () => {
+  let finish!: (response: LLMResponse) => void;
+  let signal!: AbortSignal;
+  const abort = vi.fn(),
+    end = vi.fn(),
+    delta = vi.fn();
+  const provider: LLMProvider = {
+    name: 'held',
+    isReady: () => true,
+    chat: async () => textResponse('unused'),
+    chatStream: (_messages, _tools, onDelta, currentSignal) => {
+      signal = currentSignal!;
+      signal.addEventListener('abort', abort);
+      onDelta('partial');
+      return new Promise((resolve) => {
+        finish = resolve;
+      });
+    },
+  };
+  const { controller, turns } = collect(provider, { onAgentDelta: delta, onAgentStreamEnd: end });
+  const pending = controller.send('go');
+  controller.stop();
+  controller.stop();
+  expect(controller.isRunning()).toBe(true);
+  expect(signal.aborted).toBe(true);
+  expect(abort).toHaveBeenCalledOnce();
+  expect(await controller.send('overlap')).toMatchObject({ status: 'superseded' });
+  finish(textResponse('late'));
+  expect(await pending).toMatchObject({ status: 'stopped' });
+  expect(end).not.toHaveBeenCalled();
+  expect(turns.at(-1)).toEqual({ role: 'status', text: t('agentStopped') });
+  expect(controller.isRunning()).toBe(false);
+});
+
+it('invalidates every stale run callback and finalizer while a new run owns the controller', async () => {
+  let finishOld!: (response: LLMResponse) => void, finishNew!: (response: LLMResponse) => void;
+  let calls = 0;
+  const provider: LLMProvider = {
+    name: 'held',
+    isReady: () => true,
+    chat: () =>
+      new Promise((resolve) => {
+        if (++calls === 1) finishOld = resolve;
+        else finishNew = resolve;
+      }),
+  };
+  const saved = vi.fn(),
+    context = vi.fn(),
+    usage = vi.fn();
+  const { controller, turns } = collect(provider, {
+    storage: { load: () => [], save: saved, clear: () => {} },
+    onContextTrimmed: context,
+    onUsage: usage,
+  });
+  const old = controller.send('old');
+  controller.reset();
+  const current = controller.send('new');
+  saved.mockClear();
+  finishOld({ ...textResponse('stale'), contextTrimmed: true, usage: { completionTokens: 9 } });
+  expect(await old).toMatchObject({ status: 'superseded' });
+  expect(controller.isRunning()).toBe(true);
+  expect(saved).not.toHaveBeenCalled();
+  expect(context).not.toHaveBeenCalled();
+  expect(usage).not.toHaveBeenCalled();
+  finishNew(textResponse('current'));
+  const result = await current;
+  expect(result).toMatchObject({ status: 'success' });
+  expect(controller.isRunning()).toBe(false);
+  expect(turns.at(-1)).toEqual({ role: 'agent', text: 'current' });
+  expect(saved.mock.calls.at(-1)![0]).toEqual([{ role: 'user', content: 'new' }, textResponse('current').assistant]);
+});
+
+it('fails an empty answer after ordinary read tools while accepting explicit concluding receipts', async () => {
+  const responses = [toolResponse('1', 'read', {}), textResponse('')];
+  const ordinary = collect(scripted(responses), {
+    tools: { read: { ...makeTool('read', async () => 'data'), readOnlyHint: true } },
+  }).controller;
+  expect(await ordinary.send('go')).toMatchObject({ status: 'failed' });
+  for (const [concludesTurn, expected] of [
+    [true, 'success'],
+    [vi.fn(() => true), 'success'],
+    [vi.fn(() => false), 'failed'],
+  ] as const) {
+    const controller = collect(scripted(responses), {
+      tools: { read: { ...makeTool('read', async () => 'data'), concludesTurn } },
+    }).controller;
+    expect(await controller.send('go')).toMatchObject({ status: expected });
+    if (typeof concludesTurn === 'function') expect(concludesTurn).toHaveBeenCalledOnce();
+  }
+});
+
+it('does not complete a stream when Stop is requested by its final flushed delta', async () => {
+  const end = vi.fn();
+  let saved: LLMMessage[] = [];
+  const provider: LLMProvider = {
+    name: 'held-prefix',
+    isReady: () => true,
+    chat: async () => textResponse('unused'),
+    chatStream: async (_messages, _tools, delta) => {
+      delta('[unfinished prose');
+      return textResponse('[unfinished prose');
+    },
+  };
+  const controller = new AgentChatController(provider, () => {}, {
+    onAgentDelta: () => controller.stop(),
+    onAgentStreamEnd: end,
+    storage: {
+      load: () => [],
+      save: (messages) => {
+        saved = structuredClone(messages);
+      },
+      clear: () => {},
+    },
+  });
+  expect(await controller.send('go')).toMatchObject({ status: 'stopped' });
+  expect(end).not.toHaveBeenCalled();
+  expect(saved).toContainEqual({ role: 'assistant', content: '[unfinished prose', interrupted: true });
+  expect(
+    saved.filter((message) => message.role === 'assistant' && message.content === '[unfinished prose'),
+  ).toHaveLength(1);
+});
+
+it.each(['cancelled', 'expired', 'failed', 'sent', 'verified'] as const)(
+  'maps the actual native document review %s outcome without reporting false success',
+  async (status) => {
+    const provider = scripted([toolResponse('write', 'insert_text', { text: 'body' }), textResponse('')]);
+    const tools = createDocumentAgentTools({
+      target: { context: { kind: 'word' }, label: 'Word', selectedText: '', isCurrent: () => true },
+      readonly: false,
+      review: async (action) =>
+        status === 'failed' ? { status, action, error: new Error('failed') } : { status, action },
+      receipt: vi.fn(),
+    });
+    const { controller } = collect(provider, { tools });
+    expect(await controller.send('write')).toMatchObject({
+      status: status === 'verified' ? 'success' : status === 'cancelled' ? 'stopped' : 'failed',
+    });
+  },
+);
+
+it.each([{ text: '' }, { unavailable: true }])(
+  'fails an explicitly concluded unavailable or empty document read %j',
+  async (result) => {
+    const execute = vi.spyOn(agentTools.get_document_text, 'execute').mockResolvedValue(result);
+    try {
+      const tools = createDocumentAgentTools({
+        target: { context: { kind: 'word' }, label: 'Word', selectedText: '', isCurrent: () => true },
+        readonly: false,
+        review: vi.fn(),
+        receipt: vi.fn(),
+      });
+      const controller = collect(scripted([toolResponse('read', 'get_document_text', {})]), { tools }).controller;
+      expect(await controller.send('read')).toMatchObject({ status: 'failed' });
+    } finally {
+      execute.mockRestore();
+    }
+  },
+);
+
+it('does not start host preflight after the user-turn callback invalidates its run', async () => {
+  const prepareRun = vi.fn(async () => ({ tools: {} }));
+  const controller = new AgentChatController(scripted([textResponse('unused')]), () => controller.reset(), {
+    prepareRun,
+  });
+  expect(await controller.send('old')).toMatchObject({ status: 'superseded' });
+  expect(prepareRun).not.toHaveBeenCalled();
+  expect(controller.isRunning()).toBe(false);
 });

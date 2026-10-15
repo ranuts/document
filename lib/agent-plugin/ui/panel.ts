@@ -565,6 +565,7 @@ export function createAgentPanel(
     conversation: t('agentTitle'),
     send: t('agentSend'),
     stop: t('agentStop'),
+    stopping: t('agentStopping'),
     placeholder: t(proposalMode && writingSelect.value !== 'tools' ? 'agentWritingHint' : 'agentComposeHint'),
     empty: t('agentWelcome'),
     copy: t('agentCopy'),

@@ -352,6 +352,7 @@ export const de: Partial<I18nMessages> = {
   agentInputPlaceholder: 'Die KI um eine Änderung am Dokument bitten … (Enter sendet, Umschalt+Enter für neue Zeile)',
   agentSend: 'Senden',
   agentStop: 'Anhalten',
+  agentStopping: 'Wird angehalten…',
   agentNeedKey: 'Bitte zuerst einen API-Schlüssel eingeben.',
   agentNoCompletedAnswer: 'Erstelle eine vollständige Antwort, bevor du sie ins Dokument einfügst.',
   agentParagraphSelectionConflict:

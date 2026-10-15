@@ -520,7 +520,15 @@ it.each([
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     await vi.waitFor(() => expect(release).toBeTypeOf('function'));
-    panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+    input.value = 'Next request';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.focus();
+    const stop = panel.querySelector<HTMLButtonElement>('.cui-send-stop')!;
+    stop.click();
+    expect(stop.disabled).toBe(true);
+    expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentStopping'));
+    expect(input.value).toBe('Next request');
+    expect(document.activeElement).toBe(input);
     release();
     await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
     expect(wrote).toBe(false);

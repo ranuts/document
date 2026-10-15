@@ -108,3 +108,14 @@ onSend: async (text) => {
 Intentional cancellation can use `status`: plain muted text with the same draft recovery as an error, without an error border. Status text is never returned by `getLastAnswer()` or offered as document content.
 
 Hosts may provide `canSend(text)` to keep drafts editable while a dependency is unavailable. Call `refreshSendAvailability()` when readiness changes. This blocks both Send and Enter without clearing or queuing the draft; Stop remains available during a running turn.
+
+`requestStop()` is the shared Stop entry point for buttons and host actions. On
+its first call during a run it immediately shows `labels.stopping` (default
+“Stopping…”), freezes the partial source as incomplete/copy-only, disables
+repeat Stop, and calls `onStop` synchronously. It preserves the editable next
+draft and focus; input is never sent or queued while the host is settling.
+`appendDelta()` and `endStream()` ignore late output during this state. The host
+must keep the run active until its cancellation settles, then call
+`setRunning(false)`. Markdown formatting of the captured interrupted row runs
+after the acknowledgement has a chance to paint, with disposal/row ownership
+guards. Stop does not claim that the backend has already finished.

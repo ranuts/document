@@ -330,6 +330,7 @@ export const ko: Partial<I18nMessages> = {
   agentInputPlaceholder: 'AI에게 문서 편집을 요청하세요… (Enter로 전송, Shift+Enter로 줄바꿈)',
   agentSend: '보내기',
   agentStop: '중지',
+  agentStopping: '중지 중…',
   agentNeedKey: '먼저 API 키를 입력하세요.',
   agentNoCompletedAnswer: '문서에 쓰기 전에 답변을 끝까지 생성하세요.',
   agentParagraphSelectionConflict: '현재 단락을 정렬하려면 선택을 해제하거나 선택 영역 정렬을 요청하세요.',

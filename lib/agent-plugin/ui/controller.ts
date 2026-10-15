@@ -12,6 +12,7 @@ import {
   toolLabel,
   displayError,
   isVerifiedDocumentChange,
+  documentToolTurnStatus,
   documentTaskStopText,
   documentTaskFailureText,
 } from './presentation';
@@ -49,12 +50,19 @@ export interface AgentChatControllerOptions {
   assertCurrent?: () => void;
 }
 
+export interface TurnResult {
+  turnId: string;
+  status: 'success' | 'stopped' | 'failed' | 'limited' | 'review-pending' | 'superseded';
+}
+
+interface ActiveRun {
+  abort: AbortController;
+  externalMessages: LLMMessage[];
+}
+
 export class AgentChatController {
   private history: LLMMessage[] = [];
-  private externalMessages: LLMMessage[] = [];
-  private running = false;
-  private revision = 0;
-  private abortController: AbortController | null = null;
+  private activeRun: ActiveRun | null = null;
 
   constructor(
     private readonly provider: LLMProvider,
@@ -68,40 +76,55 @@ export class AgentChatController {
 
   /** Whether a run is currently in progress (submission is unavailable). */
   isRunning(): boolean {
-    return this.running;
+    return this.activeRun !== null;
   }
 
   /** Record verified host operations without invoking a language model. */
   recordExternalMessages(messages: LLMMessage[]): void {
-    if (this.running) this.externalMessages.push(...messages);
+    this.activeRun?.externalMessages.push(...messages);
     this.history.push(...messages);
     this.options.storage?.save(this.history);
   }
 
   /** Send a user instruction and run the agent loop, emitting turns as it goes. */
-  async send(userText: string, presentation: { echoUser?: boolean } = {}): Promise<void> {
+  async send(userText: string, presentation: { echoUser?: boolean } = {}): Promise<TurnResult> {
+    const turnId = crypto.randomUUID();
     const text = userText.trim();
-    if (!text || this.running) return;
+    if (!text || this.activeRun) return { turnId, status: this.activeRun ? 'superseded' : 'failed' };
 
-    this.running = true;
-    const revision = this.revision;
-    this.abortController = new AbortController();
+    const run: ActiveRun = { abort: new AbortController(), externalMessages: [] };
+    this.activeRun = run;
+    const current = () => this.activeRun === run;
+    const live = () => current() && !run.abort.signal.aborted;
+    const outcome = (status: TurnResult['status']): TurnResult => ({
+      turnId,
+      status: current() ? status : 'superseded',
+    });
+    const assertLive = () => {
+      if (!live()) throw new DOMException('Turn no longer active', 'AbortError');
+    };
+    const saveHistory = () => {
+      if (current()) this.options.storage?.save(this.history);
+    };
+    const emitTurn = (turn: ChatTurn) => {
+      if (current()) this.onTurn(turn);
+    };
     const priorHistory = [...this.history];
-    this.history.push({ role: 'user', content: text });
-    this.options.storage?.save(this.history);
-    if (presentation.echoUser !== false) this.onTurn({ role: 'user', text });
     let visibleAnswer = false;
-    let calledTool = false;
+    let documentOutcome: 'success' | 'stopped' | 'failed' | undefined;
+    let toolFailed = false;
     let verifiedChanges = 0;
     let interruptedText = '';
     const saveStoppedTurn = () => {
+      if (!current()) return;
       if (interruptedText) this.history.push({ role: 'assistant', content: interruptedText, interrupted: true });
       const status = { role: 'assistant' as const, content: t('agentStopped'), hostGuidance: 'status' as const };
       this.history.push(status);
-      this.options.storage?.save(this.history);
-      this.onTurn({ role: 'status', text: status.content });
+      saveHistory();
+      emitTurn({ role: 'status', text: status.content });
     };
     const emitDelta = (delta: string) => {
+      if (!live()) return;
       visibleAnswer = true;
       if (this.options.onAgentDelta) {
         interruptedText += delta;
@@ -114,119 +137,142 @@ export class AgentChatController {
       displayStream = new AssistantDisplayStream(emitDelta);
     };
     try {
-      const prepared = this.options.prepareRun
-        ? await this.options.prepareRun(text, this.abortController.signal)
-        : undefined;
-      if (revision !== this.revision) return;
-      if (this.abortController.signal.aborted) {
+      this.history.push({ role: 'user', content: text });
+      saveHistory();
+      assertLive();
+      if (presentation.echoUser !== false) emitTurn({ role: 'user', text });
+      assertLive();
+      const prepared = this.options.prepareRun ? await this.options.prepareRun(text, run.abort.signal) : undefined;
+      if (!current()) return outcome('superseded');
+      if (run.abort.signal.aborted) {
         saveStoppedTurn();
-        return;
+        return outcome('stopped');
       }
       this.options.assertCurrent?.();
+      assertLive();
       if (prepared?.reply) {
         const receipt = { role: 'assistant' as const, content: prepared.reply, hostGuidance: 'tool' as const };
         this.history.push(receipt);
-        this.options.storage?.save(this.history);
-        this.onTurn({ role: 'tool', text: prepared.reply });
-        return;
+        saveHistory();
+        emitTurn({ role: 'tool', text: prepared.reply });
+        return outcome('failed');
       }
+      const tools = prepared?.tools ?? this.options.getTools?.() ?? this.options.tools;
+      assertLive();
+      const requestContext = this.options.getRequestContext?.();
+      assertLive();
       const result = await runAgent(this.provider, text, {
-        tools: prepared?.tools ?? this.options.getTools?.() ?? this.options.tools,
+        tools,
         maxIterations: this.options.maxIterations,
         history: priorHistory,
-        onContextTrimmed: this.options.onContextTrimmed,
-        onToolExchange: (messages) => {
-          if (revision !== this.revision) return;
-          resetSegment();
-          this.history = [...messages, ...this.externalMessages];
-          this.options.storage?.save(this.history);
+        onContextTrimmed: () => {
+          if (live()) this.options.onContextTrimmed?.();
         },
-        requestContext: this.options.getRequestContext?.(),
-        assertCurrent: this.options.assertCurrent,
-        signal: this.abortController.signal,
+        onToolExchange: (messages) => {
+          if (!current()) return;
+          resetSegment();
+          this.history = [...messages, ...run.externalMessages];
+          saveHistory();
+        },
+        requestContext,
+        assertCurrent: () => {
+          assertLive();
+          this.options.assertCurrent?.();
+        },
+        signal: run.abort.signal,
         onEvent: (event) => {
-          if (revision !== this.revision) return;
+          if (!live()) return;
           if (event.type === 'usage') {
             this.options.onUsage?.(event.usage);
           } else if (event.type === 'assistant_delta') {
-            if (!this.abortController?.signal.aborted) displayStream.push(event.text);
+            displayStream.push(event.text);
           } else if (event.type === 'tool_call') {
             resetSegment();
-            calledTool = true;
-            this.onTurn({ role: 'tool', text: toolLabel(event.name) });
+            emitTurn({ role: 'tool', text: toolLabel(event.name) });
           } else if (event.type === 'tool_result') {
+            const status = documentToolTurnStatus(event);
+            if (status) documentOutcome = status;
             if (isVerifiedDocumentChange(event)) verifiedChanges++;
-            if (event.isError && !event.limitReason) this.onTurn({ role: 'error', text: displayError(event.content) });
+            if (event.isError) toolFailed = true;
+            if (event.isError && !event.limitReason) emitTurn({ role: 'error', text: displayError(event.content) });
           } else if (event.type === 'assistant') {
             // A streamed turn was already rendered via deltas — just close the
             // live bubble. Without a delta handler wired, fall back to emitting
             // the whole turn so the text is never lost.
             if (event.streamed && this.options.onAgentDelta) {
               displayStream.finish();
+              if (!live()) return;
               this.options.onAgentStreamEnd?.();
             } else if (event.text) {
               const text = assistantPresentation(event.text);
               if (text) {
                 visibleAnswer = true;
-                this.onTurn({ role: 'agent', text });
+                emitTurn({ role: 'agent', text });
               }
             }
             resetSegment();
           }
         },
       });
-      if (revision !== this.revision) return;
-      this.history = [...result.messages, ...this.externalMessages];
-      this.externalMessages = [];
-      this.options.storage?.save(this.history);
-      if (result.aborted) {
+      if (!current()) return outcome('superseded');
+      this.history = [...result.messages, ...run.externalMessages];
+      run.externalMessages = [];
+      saveHistory();
+      if (result.aborted || run.abort.signal.aborted) {
         saveStoppedTurn();
+        return outcome('stopped');
       } else if (result.stoppedOnLimit) {
         const text = documentTaskStopText(result.limitReason, verifiedChanges);
         const receipt = { role: 'assistant' as const, content: text, hostGuidance: 'tool' as const };
         this.history.push(receipt);
-        this.options.storage?.save(this.history);
-        this.onTurn({ role: 'tool', text });
-      } else if (!visibleAnswer && !calledTool) {
-        this.onTurn({ role: 'error', text: t('agentRequestFailed') });
+        saveHistory();
+        emitTurn({ role: 'tool', text });
+        return outcome('limited');
+      } else if (documentOutcome === 'stopped' || documentOutcome === 'failed') {
+        return outcome(documentOutcome);
+      } else if (!visibleAnswer && !result.completedByTool && documentOutcome !== 'success') {
+        emitTurn({ role: 'error', text: t('agentRequestFailed') });
+        return outcome('failed');
       }
+      return outcome(toolFailed ? 'failed' : 'success');
     } catch (error) {
-      if (revision === this.revision) {
-        if (this.abortController?.signal.aborted) saveStoppedTurn();
-        else {
+      if (current()) {
+        if (run.abort.signal.aborted) {
+          saveStoppedTurn();
+          return outcome('stopped');
+        } else {
           const guidance = documentTaskFailureText(error, verifiedChanges);
           if (interruptedText || verifiedChanges > 0) {
             const failure = { role: 'assistant' as const, content: guidance, hostGuidance: 'error' as const };
             if (interruptedText) this.history.push({ role: 'assistant', content: interruptedText, interrupted: true });
             this.history.push(failure);
-            this.options.storage?.save(this.history);
+            saveHistory();
           }
-          this.onTurn({ role: 'error', text: guidance });
+          emitTurn({ role: 'error', text: guidance });
+          return outcome('failed');
         }
       }
+      return outcome('superseded');
     } finally {
-      this.externalMessages = [];
-      this.running = false;
-      this.abortController = null;
+      if (current()) this.activeRun = null;
     }
   }
 
-  /** Request the current run to stop after the in-flight model call returns. */
+  /** Abort cooperatively once; the run stays active until its host promise settles. */
   stop(): void {
-    this.abortController?.abort();
+    if (this.activeRun && !this.activeRun.abort.signal.aborted) this.activeRun.abort.abort();
   }
 
   /** Detach pending output and persistence when switching providers. Keeps stored history. */
   dispose(): void {
-    this.revision++;
     this.stop();
+    this.activeRun = null;
   }
 
   /** Clear the conversation history (and its persisted copy). */
   reset(): void {
     this.dispose();
     this.history = [];
-    this.externalMessages = [];
     this.options.storage?.clear();
   }
 }

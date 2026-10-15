@@ -330,6 +330,7 @@ export interface I18nMessages {
   agentInputPlaceholder: string;
   agentSend: string;
   agentStop: string;
+  agentStopping: string;
   agentNeedKey: string;
   agentNoCompletedAnswer: string;
   agentParagraphSelectionConflict: string;
