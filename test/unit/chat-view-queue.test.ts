@@ -29,7 +29,8 @@ it('opts into separate Queue and Stop controls and exposes an editor-independent
   view.el.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
   expect(stop).toHaveBeenCalledOnce();
   expect(view.getInput()).toBe('draft');
-  expect(view.pendingEl.parentElement).not.toBeNull();
+  expect(view.pendingEl.parentElement).toBe(view.el.querySelector('.cui-footer'));
+  expect(view.el.querySelector('.cui-composer')!.contains(view.pendingEl)).toBe(false);
 });
 it('keeps legacy Send-as-Stop without a queue hook', () => {
   const stop = vi.fn();

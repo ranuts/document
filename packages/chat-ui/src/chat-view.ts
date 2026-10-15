@@ -179,7 +179,6 @@ export class ChatView {
     const composer = Div()
       .class('cui-composer')
       .children(
-        this.pendingEl,
         this.contextEl,
         this.input,
         Div().class('cui-composer-bar').children(this.actionsEl, this.stopBtn, this.sendBtn).build(),
@@ -188,7 +187,7 @@ export class ChatView {
 
     // Footer hosts the jump-to-latest button (floats just above it), the action
     // slot, and the composer.
-    const footer = Div().class('cui-footer').children(this.scrollBtn, composer).build();
+    const footer = Div().class('cui-footer').children(this.scrollBtn, this.pendingEl, composer).build();
 
     this.el = Div().class('cui-root').children(this.messagesEl, this.progressEl, footer, this.feedbackEl).build();
     if (typeof ResizeObserver !== 'undefined') {
