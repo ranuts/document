@@ -160,6 +160,7 @@ export const de: Partial<I18nMessages> = {
   agentUpdateDocument: 'Dokument ändern',
   agentToolNotChosen:
     'Keine ausführbare Aktion ausgewählt. Präzisieren Sie die Anfrage oder versuchen Sie ein anderes Modell.',
+  agentReadUnavailable: 'Der Quellinhalt ist nicht verfügbar. Versuchen Sie es erneut, wenn der Editor bereit ist.',
   agentNoReadableText: 'Kein lesbarer Text gefunden.',
   agentReadCell: 'Zelle lesen',
   agentUpdateCell: 'Zelle ändern',

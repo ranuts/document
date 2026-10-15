@@ -399,10 +399,41 @@ it('falls back to the editor frame when the native rail is unavailable', async (
   expect(document.activeElement).toBe(frame);
 });
 
+function mountDirectScope(kind: 'word' | 'cell' | 'slide'): void {
+  const logic =
+    kind === 'slide'
+      ? { Slides: [], GetSelectedSlides: () => [0] }
+      : { GetSelectionState: () => [0], GetDocPosType: () => 0, GetText: () => 'Selected text' };
+  const model = {
+    selectionRange: { ranges: [{ r1: 0, r2: 0, c1: 0, c2: 0 }], activeCell: { row: 0, col: 0 } },
+    getRange3: () => ({ getValue: () => '1' }),
+  };
+  editorState.api = {
+    isDocumentLoadComplete: true,
+    isLoadFullApi: true,
+    pluginMethod_GetSelectedText: () => (kind === 'word' ? 'Selected text' : ''),
+    asc_IsTrackRevisions: () => false,
+    WordControl: { m_oLogicDocument: logic },
+    ...(kind === 'cell'
+      ? {
+          asc_getActiveRangeStr: () => 'A1',
+          asc_getActiveWorksheetIndex: () => 0,
+          wb: { getWorksheet: () => ({ model }) },
+        }
+      : {}),
+    ...(kind === 'slide' ? { getCurrentPage: () => 0 } : {}),
+  };
+  const frame = document.createElement('iframe');
+  frame.name = 'frameEditor';
+  document.body.append(frame);
+  Object.assign(frame.contentWindow!, { editor: editorState.api, AscCommon: { History: { Index: 0, Points: [] } } });
+}
+
 it('executes an explicit slide command directly in tools mode without a ready model', async () => {
   const { agentTools } = await import('../../lib/agent-plugin/tools');
   const execute = vi.spyOn(agentTools.slide_action, 'execute').mockResolvedValue({ verified: true, count: 2, page: 2 });
   try {
+    mountDirectScope('slide');
     const panel = createAgentPanel();
     document.body.append(panel);
     const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
@@ -510,6 +541,7 @@ it.each([
     return { verified: true } as never;
   });
   try {
+    mountDirectScope(name === 'sum_range' ? 'cell' : name === 'slide_action' ? 'slide' : 'word');
     const panel = createAgentPanel();
     document.body.append(panel);
     const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;

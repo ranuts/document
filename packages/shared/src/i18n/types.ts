@@ -148,6 +148,7 @@ export interface I18nMessages {
   agentReadDocument: string;
   agentUpdateDocument: string;
   agentReadCell: string;
+  agentReadUnavailable: string;
   agentNoReadableText: string;
   agentToolNotChosen: string;
   agentUpdateCell: string;

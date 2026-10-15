@@ -12,7 +12,7 @@ it('allows refinement only when a live unexecuted proposal was supplied', async 
     }),
   ).toEqual({ task: 'tools', language: 'zh-CN', refinement: true });
   await expect(
-    resolveRequestIntent(provider, '你好', { kind: 'word' }, new AbortController().signal),
+    resolveRequestIntent(provider, '解释一下这个说法', { kind: 'word' }, new AbortController().signal),
   ).rejects.toThrow();
 });
 describe('natural request routing', () => {
@@ -80,4 +80,62 @@ it('excludes Word composition from a spreadsheet routing schema', async () => {
   expect(generateJSON.mock.calls[0][1]).toMatchObject({
     properties: { task: { enum: expect.not.arrayContaining(['compose', 'rewrite', 'summarize', 'translate']) } },
   });
+});
+
+it.each([
+  ['Hello!', 'en'],
+  [' hi ', 'en'],
+  ['What can you do?', 'en'],
+  ['你好！', 'zh-CN'],
+  ['你能做什么？', 'zh-CN'],
+  ['こんにちは', 'ja'],
+  ['안녕하세요', 'ko'],
+  ['Hallo', 'de'],
+  ['Hola', 'es'],
+  ['Olá', 'pt'],
+])('routes exact safe utterance %s without inference', async (input, language) => {
+  const generateJSON = vi.fn();
+  const result = await resolveRequestIntent(
+    { generateJSON } as unknown as LLMProvider,
+    input,
+    { kind: 'word' },
+    new AbortController().signal,
+  );
+  expect(result).toEqual({ task: 'chat', language });
+  expect(generateJSON).not.toHaveBeenCalled();
+});
+it.each([
+  'Hello, clear the document',
+  'Do not say hello',
+  'Hello and summarize this',
+  'What can you do to this document?',
+  '你好，帮我改一下',
+])('keeps semantic routing for ambiguous %s', async (input) => {
+  const generateJSON = vi.fn(async () => ({
+    text: '{"task":"tools","language":"en"}',
+    toolCalls: [],
+    stopReason: 'stop',
+  }));
+  await resolveRequestIntent(
+    { generateJSON } as unknown as LLMProvider,
+    input,
+    { kind: 'word' },
+    new AbortController().signal,
+  );
+  expect(generateJSON).toHaveBeenCalledOnce();
+});
+it('keeps semantic routing for a safe utterance when a proposal is pending', async () => {
+  const generateJSON = vi.fn(async () => ({
+    text: '{"task":"chat","language":"en"}',
+    toolCalls: [],
+    stopReason: 'stop',
+  }));
+  await resolveRequestIntent(
+    { generateJSON } as unknown as LLMProvider,
+    'Hello',
+    { kind: 'word' },
+    new AbortController().signal,
+    { pendingProposal: { tool: 'insert_text', input: { text: 'draft' } } },
+  );
+  expect(generateJSON).toHaveBeenCalledOnce();
 });

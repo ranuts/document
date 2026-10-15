@@ -150,6 +150,7 @@ export const ko: Partial<I18nMessages> = {
   agentReadDocument: '문서 읽기',
   agentUpdateDocument: '문서 수정',
   agentToolNotChosen: '실행할 작업이 선택되지 않았습니다. 요청을 구체적으로 설명하거나 다른 모델로 다시 시도하세요.',
+  agentReadUnavailable: '원본 내용을 읽을 수 없습니다. 편집기가 준비되면 다시 시도하세요.',
   agentNoReadableText: '읽을 수 있는 텍스트가 없습니다.',
   agentReadCell: '셀 읽기',
   agentUpdateCell: '셀 수정',

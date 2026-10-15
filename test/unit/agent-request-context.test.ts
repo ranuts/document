@@ -88,3 +88,23 @@ it('reports a PDF page without extracted text as unavailable, not empty', () => 
   });
   expect(captureRequestContext()).toMatchObject({ content: { scope: 'pdf-page', page: 1, unavailable: true } });
 });
+
+it('captures only bounded selection metadata for ordinary chat and native requests', () => {
+  const body = vi.fn(() => 'private document');
+  state.api.WordControl = { m_oLogicDocument: { GetText: body } };
+  state.api.pluginMethod_GetSelectedText = () => 'selected';
+  expect(captureRequestContext('metadata')).toEqual({
+    editor: { kind: 'word', selectionCharacters: 8 },
+    selection: { text: 'selected', truncated: false },
+  });
+  expect(body).not.toHaveBeenCalled();
+});
+it('grounds a selected read in the exact selection without reading the Word body', () => {
+  const body = vi.fn(() => 'private document');
+  state.api.WordControl = { m_oLogicDocument: { GetText: body } };
+  state.api.pluginMethod_GetSelectedText = () => 'selected';
+  expect(captureRequestContext('selection')).toMatchObject({
+    content: { scope: 'selection', text: 'selected', truncated: false },
+  });
+  expect(body).not.toHaveBeenCalled();
+});

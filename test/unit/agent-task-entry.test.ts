@@ -56,14 +56,14 @@ it('preserves an existing user draft', () => {
 });
 it('edited requests lose host intent even when changed back', () => {
   const task = entry();
-  task.el.querySelector<HTMLButtonElement>('[data-task="polish"]')!.click();
+  task.el.querySelector<HTMLButtonElement>('[data-task="summarize"]')!.click();
   const original = draft;
   task.inputChanged(`${draft} differently`);
   expect(task.consume(original)).toBeNull();
 });
 it.each(['session', 'target', 'text', 'readonly'])('refuses stale %s and preserves staged text', (cause) => {
   const task = entry();
-  task.el.querySelector<HTMLButtonElement>('[data-task="polish"]')!.click();
+  task.el.querySelector<HTMLButtonElement>('[data-task="summarize"]')!.click();
   const original = draft;
   if (cause === 'session') session = 'two';
   if (cause === 'target') current = false;
@@ -123,4 +123,36 @@ it('normalizes the Chinese shell locale for a trusted writing intent', () => {
   task.el.querySelector<HTMLButtonElement>('[data-task="polish"]')!.click();
   expect(draft).toContain('润色');
   expect(task.consume(draft)?.language).toBe('zh-CN');
+});
+
+it('issues immutable host provenance for exact read task and selection scope only once', () => {
+  const task = entry();
+  task.el.querySelector<HTMLButtonElement>('[data-task="summarize"]')!.click();
+  const intent = task.consume(draft);
+  expect(intent?.hostRead).toEqual({ taskId: 'summarize', scope: 'selection' });
+  expect(Object.isFrozen(intent?.hostRead)).toBe(true);
+  expect(task.consume(draft)).toBeNull();
+});
+
+it('keeps a consumed token independent of later draft typing and supports explicit revocation', async () => {
+  const { isCurrentHostRead, revokeHostRead } = await import('../../lib/agent-plugin/ui/task-entry');
+  const task = entry();
+  task.el.querySelector<HTMLButtonElement>('[data-task="summarize"]')!.click();
+  const token = task.consume(draft)!.hostRead!;
+  expect(isCurrentHostRead(token)).toBe(true);
+  task.inputChanged('new draft');
+  expect(isCurrentHostRead(token)).toBe(true);
+  expect(isCurrentHostRead({ ...token })).toBe(false);
+  revokeHostRead(token);
+  expect(isCurrentHostRead(token)).toBe(false);
+});
+
+it('checks a consumed read token during streaming without rereading selected content', async () => {
+  const { isCurrentHostRead } = await import('../../lib/agent-plugin/ui/task-entry');
+  const task = entry();
+  task.el.querySelector<HTMLButtonElement>('[data-task="summarize"]')!.click();
+  const token = task.consume(draft)!.hostRead!;
+  capture.mockClear();
+  for (let i = 0; i < 100; i++) expect(isCurrentHostRead(token)).toBe(true);
+  expect(capture).not.toHaveBeenCalled();
 });

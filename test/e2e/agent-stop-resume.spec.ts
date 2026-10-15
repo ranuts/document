@@ -67,7 +67,7 @@ for (const ext of ['docx', 'pptx'] as const) {
         await page.locator('.agent-enable-switch').click();
         const input = page.locator('.cui-input');
         const send = page.locator('.cui-send');
-        await input.fill('Hello');
+        await input.fill('Tell me a brief story');
         await expect(send).toHaveAccessibleName('Reconnect');
         await send.click();
         await expect(send).toHaveAccessibleName('Send');
