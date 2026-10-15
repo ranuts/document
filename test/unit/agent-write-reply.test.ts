@@ -35,6 +35,13 @@ vi.mock('../../lib/agent-plugin/tools', async (original) => {
 vi.mock('../../lib/agent-plugin/document-tool-action', async (original) => ({
   ...(await original<typeof import('../../lib/agent-plugin/document-tool-action')>()),
   captureDocumentToolTarget: state.capture,
+  captureDocumentToolScope: () => ({
+    context: { kind: 'word' },
+    label: 'DOCX',
+    selectedText: '',
+    isCurrent: (write = true) => !write && state.valid,
+    prepareWrite: () => state.capture(),
+  }),
 }));
 vi.mock('../../lib/agent-plugin/editor-bridge', () => ({
   getEditorApi: () => ({ isDocumentLoadComplete: true, isLoadFullApi: true, pluginMethod_GetSelectedText: () => '' }),
@@ -176,6 +183,12 @@ it('keeps the operation retryable when the editor is not ready and nothing was e
 });
 
 it('explains a missing completed answer without trying to write', async () => {
+  state.capture.mockReturnValue({
+    context: { kind: 'word' },
+    label: 'DOCX',
+    selectedText: '',
+    isCurrent: () => state.valid,
+  });
   const panel = createAgentPanel();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'write the previous answer into the document';
