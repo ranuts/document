@@ -2963,6 +2963,132 @@ it.each(['Hello', 'Tell me a brief story'])('records only observed request timin
   }
 });
 
+it.each(['switch', 'restore', 'import', 'delete', 'delete-all', 'provider', 'disable', 'pagehide'] as const)(
+  'records supersession before %s cancels the current queued execution',
+  async (action) => {
+    state.ready = true;
+    state.editorReady = true;
+    let finish!: () => void;
+    state.queueStream = async () => {
+      await new Promise<void>((resolve) => {
+        finish = resolve;
+      });
+    };
+    const measure = vi.fn();
+    const now = performance.now.bind(performance);
+    vi.stubGlobal('performance', { now, measure, clearMeasures: vi.fn() });
+    try {
+      const panel = createPreparedPanel();
+      enterQueueDraft(panel, 'Hello');
+      await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+      if (action === 'switch') panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+      else if (action === 'restore') {
+        vi.spyOn(state.conversations!, 'restoreSaved').mockResolvedValue();
+        panel.querySelector<HTMLButtonElement>('.agent-history-restore')!.click();
+      } else if (action === 'import') {
+        vi.spyOn(state.conversations!, 'importLegacy').mockResolvedValue();
+        panel.querySelector<HTMLButtonElement>('.agent-history-import')!.click();
+      } else if (action === 'delete' || action === 'delete-all') {
+        panel
+          .querySelector<HTMLButtonElement>(
+            action === 'delete' ? '.agent-history-delete-current' : '.agent-history-delete-all',
+          )!
+          .click();
+        panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+      } else if (action === 'provider') {
+        const provider = panel.querySelector<HTMLSelectElement>('.agent-panel-provider')!;
+        provider.value = 'wllama';
+        provider.dispatchEvent(new Event('change'));
+      } else if (action === 'disable')
+        await (await import('../../lib/agent-plugin/ui/panel')).setAgentPanelEnabled(false);
+      else window.dispatchEvent(new Event('pagehide'));
+      await vi.waitFor(() => expect(measure).toHaveBeenCalledOnce());
+      expect(measure.mock.calls[0][1].detail.status).toBe('superseded');
+      finish();
+      await Promise.resolve();
+      expect(measure).toHaveBeenCalledOnce();
+    } finally {
+      finish?.();
+      vi.unstubAllGlobals();
+    }
+  },
+);
+
+it.each(['stop', 'send-now', 'stop-switch'] as const)(
+  'preserves the first stopped timing outcome for %s',
+  async (action) => {
+    state.ready = true;
+    state.editorReady = true;
+    let finish!: () => void;
+    let calls = 0;
+    state.queueStream = async () => {
+      if (++calls === 1)
+        await new Promise<void>((resolve) => {
+          finish = resolve;
+        });
+    };
+    const measure = vi.fn();
+    const now = performance.now.bind(performance);
+    vi.stubGlobal('performance', { now, measure, clearMeasures: vi.fn() });
+    try {
+      const panel = createPreparedPanel();
+      enterQueueDraft(panel, 'Hello');
+      await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+      if (action === 'send-now') {
+        enterQueueDraft(panel, 'Hi');
+        panel.querySelector<HTMLButtonElement>('.agent-queue-send-now')!.click();
+      } else panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+      if (action === 'stop-switch') panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+      expect(measure).toHaveBeenCalledOnce();
+      expect(measure.mock.calls[0][1].detail.status).toBe('stopped');
+      finish();
+      if (action === 'send-now') {
+        await vi.waitFor(() => expect(measure).toHaveBeenCalledTimes(2));
+        expect(measure.mock.calls[1][1].detail.status).toBe('success');
+      } else await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+      expect(measure.mock.calls[0][1].detail.status).toBe('stopped');
+    } finally {
+      finish?.();
+      vi.unstubAllGlobals();
+    }
+  },
+);
+
+it('keeps the current timing owner when a different conversation is deleted', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  let finish!: () => void;
+  state.queueStream = async () => {
+    await new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+  };
+  const measure = vi.fn();
+  const now = performance.now.bind(performance);
+  vi.stubGlobal('performance', { now, measure, clearMeasures: vi.fn() });
+  try {
+    const panel = createPreparedPanel();
+    const store = state.conversations!;
+    const current = store.activeId;
+    const other = store.create().id;
+    store.history().save([{ role: 'user', content: 'Other conversation' }]);
+    store.select(current);
+    enterQueueDraft(panel, 'Hello');
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+    panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+    panel.querySelector<HTMLButtonElement>(`.agent-conversation-delete[data-id="${other}"]`)!.click();
+    panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+    await vi.waitFor(() => expect(store.list().some((item) => item.id === other)).toBe(false));
+    expect(measure).not.toHaveBeenCalled();
+    finish();
+    await vi.waitFor(() => expect(measure).toHaveBeenCalledOnce());
+    expect(measure.mock.calls[0][1].detail.status).toBe('success');
+  } finally {
+    finish?.();
+    vi.unstubAllGlobals();
+  }
+});
+
 it('stages a selected summary as a trusted read and answers only on explicit Send without writing consent', async () => {
   state.ready = true;
   state.editorReady = true;

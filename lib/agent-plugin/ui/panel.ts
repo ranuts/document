@@ -233,12 +233,17 @@ export function createAgentPanel(
   let hasConfiguration = false;
   let viewRevision = 0;
   let requestQueue: RequestQueue<PanelRequestBinding> | undefined;
+  let activeTiming: RequestTiming | undefined;
   let providerBindingRevision = 0;
   const invalidateRequestBindings = () => {
+    activeTiming?.cancel('superseded');
     providerBindingRevision++;
     requestQueue?.pauseAll();
   };
-  window.addEventListener('pagehide', () => requestQueue?.pauseAll());
+  window.addEventListener('pagehide', () => {
+    activeTiming?.cancel('superseded');
+    requestQueue?.pauseAll();
+  });
   interface PanelRequestBinding {
     conversation: string;
     providerRevision: number;
@@ -620,7 +625,6 @@ export function createAgentPanel(
     const provider = useEndpointForChat() ? endpointProvider : webllmProvider;
     return intent?.kind === 'clarify' && (writingSelect.value === 'tools' || provider?.isReady()) ? null : intent;
   };
-  let activeTiming: RequestTiming | undefined;
   const chat = new ChatView({
     streamingMarkdown: true,
     canSend: (text) => {
@@ -2787,6 +2791,7 @@ export function createAgentPanel(
   };
   const switchConversation = (id: string, focus = true, saveDraft = true): void => {
     if (saveDraft) rememberDraft();
+    activeTiming?.cancel('superseded');
     requestQueue?.pause(displayedConversationId);
     conversationRevision++;
     invalidatePlans();
@@ -2839,6 +2844,7 @@ export function createAgentPanel(
       if (deleted && deleted !== 'all') drafts.delete(deleted);
       else drafts.clear();
       if (deleted === 'all' || deleted === displayedConversationId) chat.setInput('');
+      if (!deleted || deleted === 'all' || deleted === displayedConversationId) activeTiming?.cancel('superseded');
       if (deleted && deleted !== 'all') requestQueue?.invalidate(deleted);
       else requestQueue?.invalidateAll();
       if (deleted && deleted !== 'all' && deleted !== displayedConversationId) return;
