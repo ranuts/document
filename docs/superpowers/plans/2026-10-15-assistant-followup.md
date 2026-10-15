@@ -84,10 +84,10 @@ related scroll/layout/queue unit tests and focused browser acceptance/docs.
 Files: lib/agent-plugin/ui/{panel,history-controls}.ts; focused controls/panel
 unit tests and existing editor history regression.
 
-- [ ] RED: deleting an inactive chat while a current reply is held must preserve the current controller/reply, loaded pages, DOM, draft and reading position; successful delete view settlement happens once.
-- [ ] Carry optional deletion identity through the internal restore callback, limit invalidation to the deleted owner, and skip active-view rebuild only when the current displayed/store owner still exists. Handle navigation during async deletion from current owner validity.
-- [ ] Keep active/all/import/manual restore invalidation and failure/retry/focus behavior; add cancellation and exactly-once tests. Existing history E2E retains all content/copy checks and now verifies inactive deletion does not discard loaded pages.
-- [ ] Focused tests/typecheck/lint; separate functional assistant history fix commit. Specification gate then independent quality gate. Can share one implementation dispatch with Chunk4c but keep commits separate.
+- [x] RED: deleting an inactive chat while a current reply is held must preserve the current controller/reply, loaded pages, DOM, draft and reading position; successful delete view settlement happens once.
+- [x] Carry optional deletion identity through the internal restore callback, limit invalidation to the deleted owner, and skip active-view rebuild only when the current displayed/store owner still exists. Handle navigation during async deletion from current owner validity.
+- [x] Keep active/all/import/manual restore invalidation and failure/retry/focus behavior; add cancellation and exactly-once tests. Existing history E2E retains all content/copy checks and now verifies inactive deletion does not discard loaded pages.
+- [x] Focused tests/typecheck/lint; separate functional assistant history fix commit. Specification gate then independent quality gate. Can share one implementation dispatch with Chunk4c but keep commits separate.
 
 ## Chunk 5: Actual request timing
 
