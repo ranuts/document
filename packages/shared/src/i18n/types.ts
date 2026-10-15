@@ -90,6 +90,8 @@ export interface I18nMessages {
   unsupportedFileType: string;
   invalidFileObject: string;
   documentOperationFailed: string;
+  openUrlTimeout: string;
+  openUrlTooLarge: string;
   openUrlFailed: string;
   openUrlUnreachable: string;
   editorErrorToast: string;
@@ -372,6 +374,7 @@ export interface I18nMessages {
 
   // Local history: autosave and the history page
   autosaveStopped: string;
+  autosaveExportStopped: string;
   historyChip: string;
   historyTitle: string;
   historyIntro: string;

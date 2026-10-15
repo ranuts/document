@@ -95,43 +95,15 @@ let editorOperationQueue: Promise<void> = Promise.resolve();
 /**
  * Queue editor operations to prevent concurrent editor creation/destruction
  */
-async function queueEditorOperation<T>(operation: () => Promise<T>): Promise<T> {
-  // Wait for previous operations to complete
-  // Add a timeout to prevent infinite waiting
-  try {
-    await Promise.race([
-      editorOperationQueue,
-      new Promise((_, reject) => setTimeout(() => reject(new Error('Editor operation queue timeout')), 30000)),
-    ]);
-  } catch (error) {
-    // If timeout, log warning but continue (previous operation may have failed)
-    if (error instanceof Error && error.message === 'Editor operation queue timeout') {
-      console.warn('Editor operation queue timeout, proceeding anyway');
-    } else {
-      // Re-throw other errors
-      throw error;
-    }
-  }
-
-  // Create a new promise for this operation
-  let resolveOperation: () => void;
-  let rejectOperation: (error: any) => void;
-  const operationPromise = new Promise<void>((resolve, reject) => {
-    resolveOperation = resolve;
-    rejectOperation = reject;
-  });
-
-  // Update the queue
-  editorOperationQueue = operationPromise;
-
-  try {
-    const result = await operation();
-    resolveOperation!();
-    return result;
-  } catch (error) {
-    rejectOperation!(error);
-    throw error;
-  }
+function queueEditorOperation<T>(operation: () => Promise<T>): Promise<T> {
+  // Reserve the queue position before yielding. A failed caller still receives
+  // its rejection, while the non-rejecting tail lets later opens recover.
+  const result = editorOperationQueue.then(operation);
+  editorOperationQueue = result.then(
+    () => undefined,
+    () => undefined,
+  );
+  return result;
 }
 
 // Blob URL handed to the current v9 editor via document.url; revoked when the
@@ -377,17 +349,18 @@ export function createEditorInstance(config: {
   fileType: string;
   binData?: ArrayBuffer;
   readonly?: boolean;
+  isCurrent?: () => boolean;
   /** Set only by retryCurrentOpen: keeps the attempt's one retry budget. */
   isRetry?: boolean;
 }): Promise<void> {
-  registerOpenAttempt(config);
-  // A new document is taking over the frame: whatever was unsaved belonged to
-  // the one being replaced.
-  resetUnsavedChanges();
-  // Asked once per session, well before any failure needs to report it: the
-  // answer is only read from the out-of-memory branch of the error toast.
-  resolveBuildBitness();
   return queueEditorOperation(async () => {
+    const assertCurrent = () => {
+      if (config.isCurrent && !config.isCurrent()) throw new DOMException('Document open superseded', 'AbortError');
+    };
+    assertCurrent();
+    registerOpenAttempt(config);
+    resetUnsavedChanges();
+    resolveBuildBitness();
     const { fileName, fileType, binData, readonly = false } = config;
     setReadonlyState(readonly);
 
@@ -436,6 +409,7 @@ export function createEditorInstance(config: {
     const editorLang = getOnlyOfficeLang();
     console.log('Creating new editor instance for:', fileName, 'type:', fileType);
 
+    assertCurrent();
     createPersonalEditorInstance({ fileName, fileType, binData, editorLang });
   });
 }

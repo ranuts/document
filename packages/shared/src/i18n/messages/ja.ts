@@ -120,6 +120,8 @@ export const ja: Partial<I18nMessages> = {
   unsupportedFileType: 'サポートされていないファイル形式: ',
   invalidFileObject: '無効なファイルです',
   documentOperationFailed: 'ドキュメントの操作に失敗しました: ',
+  openUrlTimeout: 'ダウンロードがタイムアウトしました。再試行するか、ローカルのコピーを開いてください。',
+  openUrlTooLarge: 'リモートファイルが {mb} MiB を超えています。ダウンロードしてデバイスから開いてください。',
   openUrlFailed: 'そのリンクを開けませんでした: ',
   openUrlUnreachable:
     'ファイルを取得できませんでした。そのサイトが他のページからの読み取りを許可していないか、ネットワークに問題がある可能性があります。ファイルをダウンロードして、端末から開いてください。',
@@ -382,6 +384,8 @@ export const ja: Partial<I18nMessages> = {
     '{count} 件の確認済み変更を適用しました。後続の処理は実行上限に達したため停止しました。すべての要望が完了したわけではありません。結果を確認してから、残りの要望を伝えてください。',
   agentToolCallPrefix: 'ツール呼び出し：',
   agentToolErrorPrefix: 'ツールエラー：',
+  autosaveExportStopped:
+    '文書をエクスポートできず、自動回復が停止しました。今すぐコピーを保存し、開き直して再試行してください。',
   autosaveStopped:
     '自動保存を停止しました。このブラウザーの保存容量が不足しています。このドキュメントを書き出してから、保存済みドキュメントをいくつか削除してください。',
   historyTitle: '保存済みドキュメント',

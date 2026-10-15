@@ -120,6 +120,8 @@ export const pt: Partial<I18nMessages> = {
   unsupportedFileType: 'Tipo de arquivo não suportado: ',
   invalidFileObject: 'Arquivo inválido',
   documentOperationFailed: 'Falha na operação do documento: ',
+  openUrlTimeout: 'O tempo de download esgotou. Tente novamente ou abra uma cópia local.',
+  openUrlTooLarge: 'O arquivo remoto excede {mb} MiB. Baixe e abra no seu dispositivo.',
   openUrlFailed: 'Não foi possível abrir esse link: ',
   openUrlUnreachable:
     'Não foi possível obter o arquivo. O site pode não permitir que outras páginas leiam seus arquivos, ou a rede está indisponível. Baixe o arquivo e abra-o a partir do seu dispositivo.',
@@ -384,6 +386,8 @@ export const pt: Partial<I18nMessages> = {
     'Foram aplicadas {count} alterações confirmadas. As etapas seguintes atingiram o limite de execução e foram interrompidas. Isso não significa que todos os pedidos foram concluídos. Confira o resultado antes de pedir o trabalho restante.',
   agentToolCallPrefix: 'Chamada de ferramenta: ',
   agentToolErrorPrefix: 'Erro da ferramenta: ',
+  autosaveExportStopped:
+    'A recuperação automática parou porque não foi possível exportar o documento. Salve uma cópia e abra novamente para tentar de novo.',
   autosaveStopped:
     'O salvamento automático parou: este navegador ficou sem espaço. Exporte este documento e apague alguns dos que estão salvos.',
   historyTitle: 'Documentos salvos',

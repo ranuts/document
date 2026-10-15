@@ -256,6 +256,60 @@ describe('onlyoffice-editor', () => {
       return DocEditor.mock.calls[0][1] as any;
     }
 
+    it('serializes simultaneous editor replacements', async () => {
+      vi.useFakeTimers();
+      const destroyEditor = vi.fn();
+      const DocEditor = vi.fn(function () {
+        return { destroyEditor };
+      });
+      (window as any).DocsAPI = { DocEditor };
+      const first = createEditorInstance({ fileName: 'first.docx', fileType: 'docx' });
+      const second = createEditorInstance({ fileName: 'second.docx', fileType: 'docx' });
+      await vi.advanceTimersByTimeAsync(200);
+      expect(DocEditor).toHaveBeenCalledTimes(1);
+      await vi.advanceTimersByTimeAsync(1000);
+      await Promise.all([first, second]);
+      expect(DocEditor).toHaveBeenCalledTimes(2);
+      expect(destroyEditor).toHaveBeenCalledTimes(1);
+    });
+
+    it('allows the next editor to open after construction fails', async () => {
+      vi.useFakeTimers();
+      const DocEditor = vi
+        .fn()
+        .mockImplementationOnce(function () {
+          throw new Error('mount failed');
+        })
+        .mockImplementation(function () {
+          return { destroyEditor: vi.fn() };
+        });
+      (window as any).DocsAPI = { DocEditor };
+      const first = createEditorInstance({ fileName: 'bad.docx', fileType: 'docx' });
+      const failed = expect(first).rejects.toThrow('mount failed');
+      await vi.advanceTimersByTimeAsync(200);
+      await failed;
+      const second = createEditorInstance({ fileName: 'good.docx', fileType: 'docx' });
+      const next = expect(second).resolves.toBeUndefined();
+      await vi.advanceTimersByTimeAsync(1000);
+      await failed;
+      await next;
+      expect(DocEditor).toHaveBeenCalledTimes(2);
+    });
+
+    it('does not mount an obsolete editor after asynchronous cleanup', async () => {
+      vi.useFakeTimers();
+      const DocEditor = vi.fn();
+      (window as any).DocsAPI = { DocEditor };
+      let current = true;
+      const opening = createEditorInstance({ fileName: 'stale.docx', fileType: 'docx', isCurrent: () => current });
+      const failed = expect(opening).rejects.toMatchObject({ name: 'AbortError' });
+      await vi.advanceTimersByTimeAsync(50);
+      current = false;
+      await vi.advanceTimersByTimeAsync(200);
+      await failed;
+      expect(DocEditor).not.toHaveBeenCalled();
+    });
+
     it.each(['docx', 'xlsx', 'pptx'])(
       'provides same-window home navigation for standalone %s editors',
       async (fileType) => {

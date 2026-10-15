@@ -121,6 +121,8 @@ export const es: Partial<I18nMessages> = {
   unsupportedFileType: 'Tipo de archivo no admitido: ',
   invalidFileObject: 'Archivo no válido',
   documentOperationFailed: 'Error al procesar el documento: ',
+  openUrlTimeout: 'La descarga agotó el tiempo de espera. Inténtalo de nuevo o abre una copia local.',
+  openUrlTooLarge: 'El archivo remoto supera los {mb} MiB. Descárgalo y ábrelo desde tu dispositivo.',
   openUrlFailed: 'No se pudo abrir ese enlace: ',
   openUrlUnreachable:
     'No se pudo obtener el archivo. Puede que el sitio no permita que otras páginas lean sus archivos, o que no haya red. Descárgalo y ábrelo desde tu dispositivo.',
@@ -388,6 +390,8 @@ export const es: Partial<I18nMessages> = {
     'Se aplicaron {count} cambios confirmados. Los siguientes pasos alcanzaron el límite de ejecución y se detuvieron. No significa que se haya completado toda la solicitud. Revisa el resultado antes de pedir lo que falta.',
   agentToolCallPrefix: 'Llamada a herramienta: ',
   agentToolErrorPrefix: 'Error de herramienta: ',
+  autosaveExportStopped:
+    'La recuperación automática se detuvo porque no se pudo exportar el documento. Guarda una copia y vuelve a abrirla para reintentar.',
   autosaveStopped:
     'Se ha detenido el guardado automático: este navegador se ha quedado sin espacio. Exporta este documento y borra algunos de los que tienes guardados.',
   historyTitle: 'Documentos guardados',

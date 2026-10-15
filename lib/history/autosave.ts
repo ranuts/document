@@ -254,6 +254,7 @@ export async function takeSnapshot(): Promise<HistoryDoc | null> {
       active.failures += 1;
       if (active.failures >= MAX_CONSECUTIVE_FAILURES) {
         console.warn('[history] autosave stopped after repeated export failures:', message);
+        notify('warning', t('autosaveExportStopped'));
         stopAutosaveSession();
       }
     }

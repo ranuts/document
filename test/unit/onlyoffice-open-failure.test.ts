@@ -132,6 +132,18 @@ describe('a rebuild in flight suppresses the toast diagnostic', () => {
     frame.reject(message);
   };
 
+  it('does not run a deferred retry after a newer document takes ownership', () => {
+    const runner = vi.fn(async () => {});
+    setOpenRunner(runner);
+    let current = true;
+    registerOpenAttempt({ fileName: 'old.docx', fileType: 'docx', isCurrent: () => current });
+    failOnce(fakeFrame());
+    current = false;
+    vi.runAllTimers();
+    expect(runner).not.toHaveBeenCalled();
+    expect(isOpenRetryInFlight()).toBe(false);
+  });
+
   it('is false until a retry is actually scheduled', () => {
     registerOpenAttempt({ fileName: 'a.xlsx', fileType: 'xlsx' });
     expect(isOpenRetryInFlight()).toBe(false);

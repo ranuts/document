@@ -18,6 +18,7 @@ type OpenRunner = (config: {
   binData?: ArrayBuffer;
   readonly?: boolean;
   isRetry?: boolean;
+  isCurrent?: () => boolean;
 }) => Promise<void>;
 let runOpen: OpenRunner | null = null;
 
@@ -34,6 +35,7 @@ type OpenAttempt = {
   binData?: ArrayBuffer;
   readonly: boolean;
   retried: boolean;
+  isCurrent?: () => boolean;
 };
 let currentOpenAttempt: OpenAttempt | null = null;
 // Whether a rebuilt editor is on its way for the attempt that just failed.
@@ -83,7 +85,7 @@ export function openAttemptHoldsBytes(): boolean {
  */
 function retryCurrentOpen(reason: string): boolean {
   const attempt = currentOpenAttempt;
-  if (!attempt || attempt.retried) return false;
+  if (!attempt || attempt.retried || attempt.isCurrent?.() === false) return false;
   if (classifyOpenFailure(reason) !== 'environment') return false;
   attempt.retried = true;
   openRetryInFlight = true;
@@ -92,14 +94,19 @@ function retryCurrentOpen(reason: string): boolean {
   // Deferred: this runs from the failing frame's rejection handler, and the
   // rebuild tears that frame down.
   setTimeout(() => {
-    if (!runOpen) return;
+    if (!runOpen || currentOpenAttempt !== attempt || attempt.isCurrent?.() === false) {
+      if (currentOpenAttempt === attempt) openRetryInFlight = false;
+      return;
+    }
     void runOpen({
       fileName: attempt.fileName,
       fileType: attempt.fileType,
       binData: attempt.binData,
       readonly: attempt.readonly,
       isRetry: true,
+      isCurrent: attempt.isCurrent,
     }).catch((error) => {
+      if (currentOpenAttempt !== attempt || attempt.isCurrent?.() === false) return;
       console.error('[OO] open retry failed to start:', error);
       openRetryInFlight = false;
       markDocumentOpenFailed(String(error));
@@ -252,6 +259,7 @@ export function registerOpenAttempt(config: {
   binData?: ArrayBuffer;
   readonly?: boolean;
   isRetry?: boolean;
+  isCurrent?: () => boolean;
 }): void {
   openGeneration += 1;
   if (config.isRetry) return;
@@ -266,5 +274,6 @@ export function registerOpenAttempt(config: {
     binData: config.binData,
     readonly: config.readonly ?? false,
     retried: false,
+    isCurrent: config.isCurrent,
   };
 }

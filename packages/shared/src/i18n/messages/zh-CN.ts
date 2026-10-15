@@ -112,6 +112,8 @@ export const zhCN: I18nMessages = {
   unsupportedFileType: '不支持的文件类型：',
   invalidFileObject: '无效的文件对象',
   documentOperationFailed: '文档操作失败：',
+  openUrlTimeout: '下载超时。请重试，或打开本地副本。',
+  openUrlTooLarge: '远程文件超过 {mb} MiB。请下载后从设备打开。',
   openUrlFailed: '无法打开该链接：',
   openUrlUnreachable:
     '取不到这个文件。可能是该网站不允许其它网页读取它的文件，也可能是网络不通。把文件下载下来再从本机打开即可。',
@@ -362,6 +364,7 @@ export const zhCN: I18nMessages = {
   agentToolCallPrefix: '调用工具：',
   agentToolErrorPrefix: '工具出错：',
 
+  autosaveExportStopped: '文档导出失败，自动恢复已停止。请立即保存副本，再重新打开以重试。',
   autosaveStopped: '自动保存已停止：浏览器没有可用的存储空间了。请导出保存这篇文档，并到本机文档列表里删掉一些旧文件。',
   historyChip: '本机存储 · 从不上传',
   historyTitle: '本机保存的文档',
