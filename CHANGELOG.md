@@ -12,6 +12,10 @@ notes. Entries describe what users experience, not internal refactors.
 - The first assistant request stays in its original chat while saved conversations
   finish loading. Requests being prepared or stopped show their state and keep
   unavailable queue actions disabled until recovery is ready.
+- Ordinary chat continues while you edit the document. Deleting another saved
+  chat preserves the current reply, loaded messages, draft and reading position.
+- Returning to the latest reply follows new content during smooth scrolling;
+  scrolling or dragging the scrollbar keeps you in control of your reading position.
 - Starting assistant dictation or editing a draft during first-use setup no longer
   gets interrupted by the background model-cache check opening settings.
 - Docker deployments accessed over ordinary HTTP can load the document converter
@@ -43,6 +47,8 @@ notes. Entries describe what users experience, not internal refactors.
 - **Find earlier assistant conversations.** Search titles and messages locally,
   browse recent chats by date and see the current conversation at a glance.
   Large histories load in pages and search without rebuilding every conversation.
+  Long conversations open with recent messages; load earlier messages without
+  losing your place or the full original text.
   Compact row actions confirm which conversation will be deleted; history
   saving and data tools stay available in a collapsed section.
   Click the assistant title to return to your latest conversation; unsent drafts
@@ -54,8 +60,13 @@ notes. Entries describe what users experience, not internal refactors.
   Reading progress names the actual scope, and spreadsheet reviews distinguish
   formulas from calculated values.
 
+- **Read formatted replies as they arrive.** Headings, lists, code and tables
+  appear progressively, with stable completed paragraphs and safe partial links.
+  Very large unfinished sections remain readable as original text.
+
 - **Keep going while the assistant responds.** Send follow-ups to a queue, edit or
-  remove them, or choose Send now. Older queued requests pause after Stop or an
+  remove them, or choose Send now. Dictate the next draft during a reply and send
+  it when ready. Older queued requests pause after Stop or an
   error; resume when ready. Document changes still wait for your review.
   Reading older messages keeps your place, and activity hints distinguish
   reading, responding and waiting for your review.
