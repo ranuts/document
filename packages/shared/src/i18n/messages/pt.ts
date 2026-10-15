@@ -348,6 +348,8 @@ export const pt: Partial<I18nMessages> = {
   agentQueueRemove: 'Remover',
   agentQueueSendNow: 'Enviar agora',
   agentQueueComposerOccupied: 'Já existe um rascunho. Envie ou limpe antes de editar uma solicitação pendente.',
+  agentQueueEditUnavailable:
+    'Não é possível editar esta solicitação agora. Confira a lista de pendências e tente novamente.',
   agentQueueScopeChanged: 'O documento ou modelo original mudou. Edite a solicitação para enviar com o contexto atual.',
   agentStopping: 'Parando…',
   agentNeedKey: 'Introduza primeiro uma chave de API.',

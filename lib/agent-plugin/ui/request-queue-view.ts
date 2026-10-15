@@ -18,6 +18,7 @@ export function createRequestQueueView(options: {
   el.append(Div().class('agent-queue-heading').children(title, resume).build(), list, feedback);
   el.hidden = true;
   function update<Binding>(state: RequestQueueState<Binding>): void {
+    feedback.textContent = '';
     const focused =
       document.activeElement instanceof HTMLElement && el.contains(document.activeElement)
         ? document.activeElement
@@ -34,6 +35,7 @@ export function createRequestQueueView(options: {
     resume.hidden = !state.paused || !executable;
     list.replaceChildren();
     for (const entry of state.entries) {
+      const preparing = state.preparing?.id === entry.id ? state.preparing : undefined;
       const row = View('li').class('agent-queue-entry').build();
       const text = Span().class('agent-queue-text').text(entry.text).build();
       text.title = entry.text;
@@ -49,6 +51,7 @@ export function createRequestQueueView(options: {
           .text(t(label))
           .on('click', () => run(entry.id))
           .build();
+        button.disabled = !!preparing;
         if (entry.recoverOnly && name === 'send-now') button.hidden = true;
         if (entry.recoverOnly && name === 'edit') button.textContent = t('agentRestoreRequest');
         button.dataset.entry = entry.id;
@@ -57,16 +60,29 @@ export function createRequestQueueView(options: {
         controls.append(button);
       }
       row.append(text);
-      if (entry.recoverOnly) row.append(Span().class('agent-queue-recovery').text(t('agentStopped')).build());
+      if (preparing)
+        row.append(
+          Span()
+            .class('agent-queue-state')
+            .attr('role', 'status')
+            .text(t(preparing.stopping ? 'agentStopping' : 'agentPreparingTask'))
+            .build(),
+        );
+      else if (entry.recoverOnly) row.append(Span().class('agent-queue-recovery').text(t('agentStopped')).build());
       row.append(controls);
       list.append(row);
     }
     if (focused && !state.entries.length) options.focus();
-    else if (focused && owner && action) {
-      const replacement = [...list.querySelectorAll<HTMLButtonElement>('button')].find(
+    else if (focused && (focused !== resume || resume.hidden)) {
+      const available = [...list.querySelectorAll<HTMLButtonElement>('button')].filter(
+        (button) => !button.disabled && !button.hidden,
+      );
+      const replacement = available.find(
         (button) => button.dataset.entry === owner && button.dataset.action === action,
       );
-      (replacement ?? list.querySelector<HTMLButtonElement>('button') ?? resume).focus();
+      const target = replacement ?? available[0] ?? (!resume.hidden ? resume : undefined);
+      if (target) target.focus();
+      else options.focus();
     }
   }
   return {
@@ -74,6 +90,9 @@ export function createRequestQueueView(options: {
     update,
     occupied: () => {
       feedback.textContent = t('agentQueueComposerOccupied');
+    },
+    unavailable: () => {
+      feedback.textContent = t('agentQueueEditUnavailable');
     },
   };
 }

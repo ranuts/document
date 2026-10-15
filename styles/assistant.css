@@ -1966,6 +1966,10 @@ r-dropdown[role='listbox'] {
   font: inherit;
   overflow-wrap: anywhere;
 }
+.agent-request-queue button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
 .agent-request-queue button:focus-visible {
   outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;

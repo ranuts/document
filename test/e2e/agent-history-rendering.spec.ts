@@ -263,9 +263,11 @@ test('keeps the first validating request in its original chat while startup hist
     const open = indexedDB.open.bind(indexedDB);
     const success = Object.getOwnPropertyDescriptor(IDBRequest.prototype, 'onsuccess')!;
     const host = window as unknown as { releaseAssistantHistory?: () => void };
+    let delayed = false;
     indexedDB.open = (...args: Parameters<IDBFactory['open']>) => {
       const request = open(...args);
-      if (args[0] === 'document-ai-conversations')
+      if (args[0] === 'document-ai-conversations' && !delayed) {
+        delayed = true;
         Object.defineProperty(request, 'onsuccess', {
           set(callback: ((this: IDBRequest, event: Event) => void) | null) {
             success.set!.call(
@@ -278,6 +280,7 @@ test('keeps the first validating request in its original chat while startup hist
           },
           get: () => success.get!.call(request),
         });
+      }
       return request;
     };
   });
@@ -305,9 +308,7 @@ test('keeps the first validating request in its original chat while startup hist
       return;
     }
     await route.fulfill({
-      contentType: 'application/x-ndjson',
-      body:
-        JSON.stringify({ done: true, message: { role: 'assistant', content: 'The first request completed.' } }) + '\n',
+      json: { done: true, message: { role: 'assistant', content: 'The first request completed.' } },
     });
   });
   try {
@@ -321,6 +322,10 @@ test('keeps the first validating request in its original chat while startup hist
     await page.locator('.cui-send').click();
     await expect.poll(() => typeof releaseRouting).toBe('function');
     await expect(page.locator('.agent-queue-text')).toHaveText('Tell me a brief story');
+    await expect(page.locator('.agent-queue-state')).toHaveText('Preparing your request…');
+    for (const action of ['edit', 'remove', 'send-now'])
+      await expect(page.locator(`.agent-queue-${action}`)).toBeDisabled();
+    await expect(page.locator('.cui-stop')).toBeEnabled();
     await page.waitForFunction(
       () =>
         typeof (window as unknown as { releaseAssistantHistory?: () => void }).releaseAssistantHistory === 'function',

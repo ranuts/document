@@ -324,3 +324,20 @@ it('retains pending, accepted and physical application owners without retaining 
   release('success');
   expect(queue.retainedConversations()).toEqual([]);
 });
+
+it('exposes preparation ownership until cancellation physically settles, without marking accepted work as pending', async () => {
+  const { queue, runs } = setup();
+  const entry = queue.enqueue('a', 'First request', 'original scope');
+  expect(queue.state('a').preparing).toEqual({ id: entry.id, stopping: false });
+  expect(queue.state('b').preparing).toBeUndefined();
+  queue.pause('a');
+  expect(queue.state('a').preparing).toEqual({ id: entry.id, stopping: true });
+  expect(queue.restore('a', entry.id, true, vi.fn())).toBe(false);
+  runs[0].finish('stopped');
+  await tick();
+  expect(queue.state('a').preparing).toBeUndefined();
+  expect(queue.restore('a', entry.id, true, vi.fn())).toBe(true);
+  queue.enqueue('a', 'Accepted request', 'scope');
+  runs[1].accept();
+  expect(queue.state('a').preparing).toBeUndefined();
+});

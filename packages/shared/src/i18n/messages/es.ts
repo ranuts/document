@@ -352,6 +352,8 @@ export const es: Partial<I18nMessages> = {
   agentQueueRemove: 'Quitar',
   agentQueueSendNow: 'Enviar ahora',
   agentQueueComposerOccupied: 'Ya hay un borrador. Envíalo o bórralo antes de editar una solicitud pendiente.',
+  agentQueueEditUnavailable:
+    'Esta solicitud no se puede editar ahora. Revisa la lista de pendientes e inténtalo de nuevo.',
   agentQueueScopeChanged:
     'El documento o modelo original cambió. Edita la solicitud para enviarla con el contexto actual.',
   agentStopping: 'Deteniendo…',

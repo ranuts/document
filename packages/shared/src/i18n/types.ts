@@ -340,6 +340,7 @@ export interface I18nMessages {
   agentQueueRemove: string;
   agentQueueSendNow: string;
   agentQueueComposerOccupied: string;
+  agentQueueEditUnavailable: string;
   agentQueueScopeChanged: string;
   agentStopping: string;
   agentNeedKey: string;

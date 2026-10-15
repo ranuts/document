@@ -5,6 +5,7 @@ import { getEndpointKey } from '@ranuts/agent-core/llm/keys';
 import { AgentChatController } from '../../lib/agent-plugin/ui/controller';
 import { createHistoryStorage } from '../../lib/agent-plugin/ui/storage';
 import { ChatView } from '@ranuts/chat-ui';
+import { RequestQueue } from '../../lib/agent-plugin/ui/request-queue';
 HTMLElement.prototype.scrollTo = vi.fn();
 // Runtime tests explicitly prepare, as a user must now do from settings.
 function createPreparedPanel() {
@@ -3324,6 +3325,7 @@ it.each(['running', 'stopped', 'scope-changed'] as const)(
     expect(activeSession()).toBe(original);
     expect(panel.querySelector('.agent-queue-text')?.textContent).toBe(text);
     expect(state.conversations!.history().load()).toEqual([]);
+    expect(stored.repository.save.mock.calls.every(([data]) => !JSON.stringify(data).includes(text))).toBe(true);
     if (mode !== 'stopped') finishRouting();
     if (mode === 'running') {
       await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
@@ -4308,3 +4310,57 @@ it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent', 
     }
   },
 );
+
+it('shows truthful unavailable actions while a queued request prepares and stops, then restores its exact text', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.toolContext = 'word';
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  let finishRouting!: () => void;
+  state.semanticGate = new Promise<void>((resolve) => {
+    finishRouting = resolve;
+  });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  const text = 'Tell me a brief story';
+  enterQueueDraft(panel, text);
+  await vi.waitFor(() => expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentRoutingRequest')));
+  expect(panel.querySelector('.agent-queue-state')?.textContent).toBe(t('agentPreparingTask'));
+  for (const button of panel.querySelectorAll<HTMLButtonElement>('.agent-queue-actions button'))
+    expect(button.disabled).toBe(true);
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  expect(input.value).toBe('');
+  panel.querySelector<HTMLButtonElement>('.agent-queue-edit')!.click();
+  expect(panel.textContent).not.toContain(t('agentQueueComposerOccupied'));
+  panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+  expect(panel.querySelector('.agent-queue-state')?.textContent).toBe(t('agentStopping'));
+  expect(panel.querySelector<HTMLButtonElement>('.agent-queue-edit')!.disabled).toBe(true);
+  finishRouting();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  const edit = panel.querySelector<HTMLButtonElement>('.agent-queue-edit')!;
+  expect(edit.disabled).toBe(false);
+  edit.click();
+  expect(input.value).toBe(text);
+});
+
+it('distinguishes unavailable recovery from an occupied composer when an edit is refused', async () => {
+  state.ready = true;
+  let finish!: () => void;
+  state.queueStream = () =>
+    new Promise((resolve) => {
+      finish = resolve;
+    });
+  const panel = createPreparedPanel();
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+  enterQueueDraft(panel, 'Hi');
+  const restore = vi.spyOn(RequestQueue.prototype, 'restore').mockReturnValue(false);
+  try {
+    panel.querySelector<HTMLButtonElement>('.agent-queue-edit')!.click();
+    expect(panel.querySelector('.agent-queue-feedback')?.textContent).toBe(t('agentQueueEditUnavailable'));
+    expect(panel.textContent).not.toContain(t('agentQueueComposerOccupied'));
+  } finally {
+    restore.mockRestore();
+    finish();
+  }
+});
