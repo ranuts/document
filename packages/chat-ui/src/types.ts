@@ -45,6 +45,8 @@ export interface ChatViewLabels {
   planning?: string;
   reviewing?: string;
   scrollLatest?: string;
+  loadEarlier?: string;
+  expandMessage?: string;
   applyMessage?: string;
   applyTip?: string;
   applying?: string;
@@ -52,6 +54,11 @@ export interface ChatViewLabels {
   checkDocument?: string;
   /** Map a role to its display chip (e.g. localisation). Return '' to hide the chip. */
   role?: (role: ChatRole) => string;
+}
+
+export interface RestoreHistoryOptions {
+  /** Maximum source messages per visible page, capped at 40; defaults to 40. */
+  pageSize?: number;
 }
 
 export interface ChatViewOptions {

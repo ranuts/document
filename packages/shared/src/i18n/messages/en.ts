@@ -444,6 +444,8 @@ export const en: I18nMessages = {
   agentEntrySmaller: 'Select a smaller passage or range for text changes.',
   agentEntryReadOnly: 'Read-only · You can explore and summarize content.',
   agentDocumentDraft: 'Document draft',
+  agentLoadEarlierMessages: 'Load earlier messages',
+  agentShowFullMessage: 'Show full message',
   agentIncompleteResponse: 'Incomplete response',
   agentReviewActions: 'More actions',
   agentEntryAnalyze: 'Explore selected data',

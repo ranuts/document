@@ -2,7 +2,7 @@ import { ButtonBuilder, Div, Span, View } from 'ranui/builder';
 import { throttle } from 'ranuts/utils';
 import { ensureChatUiStyles } from './styles';
 import { renderMarkdown } from './markdown';
-import type { ChatMessage, ChatViewLabels, ChatViewOptions } from './types';
+import type { ChatMessage, ChatViewLabels, ChatViewOptions, RestoreHistoryOptions } from './types';
 
 const ICON_SEND =
   '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>';
@@ -66,6 +66,11 @@ export class ChatView {
   private elapsedTimer?: ReturnType<typeof setInterval>;
   private composing = false;
   private lastUserText = '';
+  private restoredHistory: readonly ChatMessage[] = [];
+  private historyStart = 0;
+  private historyPageSize = 40;
+  private historyRevision = 0;
+  private earlierButton?: HTMLButtonElement;
   private readonly statusEl = Div().class('cui-status').attr('role', 'status').attr('aria-atomic', 'true').build();
   // The visual clock is outside live regions so its ticks do not interrupt reading.
   private readonly elapsedEl = Span().class('cui-elapsed').attr('aria-hidden', 'true').build();
@@ -109,6 +114,7 @@ export class ChatView {
       .attr('aria-busy', 'false')
       .attr('tabindex', '-1')
       .on('scroll', () => {
+        if (this.emptyEl.parentElement === this.messagesEl) return;
         // Reflow can emit scroll before ResizeObserver. Changed geometry does
         // not establish that the reader intentionally scrolled away.
         const unchanged =
@@ -218,14 +224,14 @@ export class ChatView {
     const rows = this.messagesEl.querySelectorAll<HTMLElement>(
       '.cui-msg-agent:not(.cui-streaming):not([data-interrupted])',
     );
-    return rows.length ? (rows[rows.length - 1].dataset.source ?? '') : '';
+    return rows.length ? (rows[rows.length - 1].dataset.source ?? '') : this.restoredAnswer(false);
   }
 
   getLastDocumentBody(): string {
     const rows = this.messagesEl.querySelectorAll<HTMLElement>(
       '.cui-msg-agent[data-document-artifact]:not(.cui-streaming):not([data-interrupted])',
     );
-    return rows.length ? (rows[rows.length - 1].dataset.source ?? '') : '';
+    return rows.length ? (rows[rows.length - 1].dataset.source ?? '') : this.restoredAnswer(true);
   }
 
   /** Append a finished message and scroll to it. Returns the bubble element. */
@@ -234,16 +240,35 @@ export class ChatView {
       this.interruptStream();
     }
     if (message.role === 'user') this.lastUserText = message.text;
-    const stick = this.following;
+    const bubble = this.renderMessage(message, this.messagesEl, this.lastUserText);
+    this.finishAppendLayout(this.following);
+    return bubble;
+  }
+
+  /** Construct history rows without changing the active stream or recovery request. */
+  private renderMessage(
+    message: ChatMessage,
+    destination: HTMLElement,
+    request: string,
+    restored = false,
+  ): HTMLElement {
     this.emptyEl.remove();
+    const preview = restored && message.text.length > 8000;
+    const visibleText = preview ? message.text.slice(0, 8000) : message.text;
     if (message.role === 'tool') {
-      const last = this.messagesEl.lastElementChild;
+      const last = destination.lastElementChild;
       let group = last?.matches('.cui-activity') ? last : document.createElement('div');
-      const item = Span().text(message.text).build();
+      const item = Span().text(visibleText).build();
       if (group !== last) {
         group.className = 'cui-activity';
-        group.append(item);
-        this.messagesEl.append(group);
+        if (restored) {
+          group = document.createElement('details');
+          group.className = 'cui-activity';
+          const summary = document.createElement('summary');
+          summary.append(item);
+          group.append(summary, document.createElement('ul'));
+        } else group.append(item);
+        destination.append(group);
       } else {
         let previous: Element;
         if (group.tagName !== 'DETAILS') {
@@ -262,13 +287,21 @@ export class ChatView {
         group.querySelector('ul')!.append(li);
         group.querySelector('summary')!.replaceChildren(item);
       }
-      this.finishAppendLayout(stick);
       this.resizeObserver?.observe(group);
+      if (preview) this.addHistoryExpansion(item, item, message, false);
       return item;
     }
 
-    const bubble = Div().class('cui-bubble').text(message.text).build();
-    if (message.role === 'agent') renderMarkdown(bubble, message.text);
+    const bubble = Div().class('cui-bubble').text(visibleText).build();
+    if (message.role === 'agent') {
+      if (restored) {
+        try {
+          renderMarkdown(bubble, visibleText);
+        } catch {
+          bubble.textContent = visibleText;
+        }
+      } else renderMarkdown(bubble, visibleText);
+    }
     const row = Div().class(`cui-msg cui-msg-${message.role}`).attr('data-role', message.role).children(bubble).build();
 
     const actions = Div().class('cui-message-actions').build();
@@ -338,8 +371,8 @@ export class ChatView {
         actions.prepend(apply);
       }
     }
-    if ((message.role === 'error' || message.role === 'status') && this.lastUserText) {
-      const draft = this.lastUserText;
+    if ((message.role === 'error' || message.role === 'status') && request) {
+      const draft = request;
       const restore = ButtonBuilder().class('cui-restore').attr('type', 'button').build();
       restore.textContent = this.labels.restore ?? 'Restore request';
       restore.addEventListener('click', () => {
@@ -349,17 +382,131 @@ export class ChatView {
       });
       actions.append(restore);
     }
+    if (preview) this.addHistoryExpansion(row, bubble, message, message.role === 'agent');
     if (actions.childElementCount) row.append(actions);
     row.dataset.source = message.text;
     if (message.documentArtifact) row.dataset.documentArtifact = 'true';
     if (message.interrupted) row.dataset.interrupted = 'true';
     if (message.role === 'agent') this.updateResultPresentation(row);
 
-    this.messagesEl.appendChild(row);
+    destination.appendChild(row);
     this.resizeObserver?.observe(row);
     this.updateRestoreState(row);
-    this.finishAppendLayout(stick);
     return bubble;
+  }
+
+  /** Replace presentation with a bounded recent window; full source stays available. */
+  restoreHistory(messages: readonly ChatMessage[], options: RestoreHistoryOptions = {}): void {
+    if (this.disposed) return;
+    this.clear();
+    this.restoredHistory = messages.map((message) => ({ ...message }));
+    const requestedSize = options.pageSize ?? 40;
+    this.historyPageSize = Number.isFinite(requestedSize) ? Math.max(1, Math.min(40, Math.floor(requestedSize))) : 40;
+    this.historyStart = messages.length;
+    const owner = this.historyRevision;
+    if (!messages.length) return;
+    this.earlierButton = ButtonBuilder()
+      .class('cui-load-earlier')
+      .attr('type', 'button')
+      .on('click', () => {
+        if (!this.disposed && owner === this.historyRevision) this.loadEarlierHistory();
+      })
+      .build();
+    this.earlierButton.textContent = this.labels.loadEarlier ?? 'Load earlier messages';
+    this.messagesEl.prepend(this.earlierButton);
+    this.prependHistoryWindow();
+    this.lastUserText = this.priorHistoryRequest(messages.length);
+    this.finishAppendLayout(true);
+  }
+
+  private restoredAnswer(documentOnly: boolean): string {
+    for (let index = this.restoredHistory.length - 1; index >= 0; index--) {
+      const message = this.restoredHistory[index];
+      if (message.role === 'agent' && !message.interrupted && (!documentOnly || message.documentArtifact))
+        return message.text;
+    }
+    return '';
+  }
+
+  private priorHistoryRequest(before: number): string {
+    for (let index = before - 1; index >= 0; index--)
+      if (this.restoredHistory[index].role === 'user') return this.restoredHistory[index].text;
+    return '';
+  }
+
+  private addHistoryExpansion(row: HTMLElement, bubble: HTMLElement, message: ChatMessage, markdown: boolean): void {
+    const owner = this.historyRevision;
+    const expand = ButtonBuilder()
+      .class('cui-history-expand')
+      .attr('type', 'button')
+      .text(this.labels.expandMessage ?? 'Show full message')
+      .build();
+    expand.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (this.disposed || owner !== this.historyRevision || !this.messagesEl.contains(row)) return;
+      const ownedFocus = document.activeElement === expand;
+      if (markdown) {
+        try {
+          renderMarkdown(bubble, message.text);
+        } catch {
+          bubble.textContent = message.text;
+        }
+      } else bubble.textContent = message.text;
+      expand.remove();
+      if (ownedFocus) this.messagesEl.focus({ preventScroll: true });
+    });
+    row.append(expand);
+  }
+
+  private prependHistoryWindow(): void {
+    const end = this.historyStart;
+    const start = Math.max(0, end - this.historyPageSize);
+    const fragment = document.createElement('div');
+    let request = this.priorHistoryRequest(start);
+    for (let index = start; index < end; index++) {
+      const message = this.restoredHistory[index];
+      if (message.role === 'user') request = message.text;
+      this.renderMessage(message, fragment, request, true);
+    }
+    const previous = fragment.lastElementChild;
+    const next = this.earlierButton?.nextElementSibling;
+    if (previous?.matches('details.cui-activity') && next?.matches('details.cui-activity')) {
+      const priorItems = previous.querySelector('ul')!;
+      const summaryItem = document.createElement('li');
+      summaryItem.append(...Array.from(previous.querySelector('summary')!.childNodes));
+      priorItems.append(summaryItem);
+      next.querySelector('ul')!.prepend(...Array.from(priorItems.children));
+      this.resizeObserver?.unobserve(previous);
+      previous.remove();
+    }
+    this.earlierButton?.after(...Array.from(fragment.children));
+    this.historyStart = start;
+    if (this.earlierButton) this.earlierButton.hidden = !start;
+  }
+
+  private loadEarlierHistory(): void {
+    if (!this.historyStart || this.disposed) return;
+    const bounds = this.messagesEl.getBoundingClientRect();
+    const candidates = [
+      ...this.messagesEl.querySelectorAll<HTMLElement>('.cui-bubble, .cui-activity summary, .cui-activity li'),
+      ...Array.from(this.messagesEl.children).filter((node) => node !== this.earlierButton),
+    ];
+    const anchor =
+      candidates.find((node) => {
+        const rect = node.getBoundingClientRect();
+        return rect.bottom > bounds.top && rect.top < bounds.bottom;
+      }) ??
+      candidates[0] ??
+      this.earlierButton?.nextElementSibling;
+    const top = anchor?.getBoundingClientRect().top ?? 0;
+    const focused = document.activeElement;
+    this.following = false;
+    this.prependHistoryWindow();
+    if (anchor) this.messagesEl.scrollTop += anchor.getBoundingClientRect().top - top;
+    this.recordScrollGeometry();
+    this.updateScrollBtn();
+    if (focused === this.earlierButton && this.earlierButton?.hidden) this.messagesEl.focus({ preventScroll: true });
   }
 
   /** Append finished messages in order, measuring and scrolling only after the batch. */
@@ -586,6 +733,10 @@ export class ChatView {
   /** Remove all messages and restore the empty state. */
   clear(): void {
     this.submissionRevision++;
+    this.historyRevision++;
+    this.restoredHistory = [];
+    this.historyStart = 0;
+    this.earlierButton = undefined;
     this.cancelInterruptedRenders();
     // Clear the rendered feedback without claiming that the host's run stopped.
     this.presentationCleared = true;
@@ -598,6 +749,7 @@ export class ChatView {
     this.clearCopyFeedback();
     this.resizeObserver?.disconnect();
     this.messagesEl.replaceChildren(this.emptyEl);
+    this.messagesEl.scrollTop = 0;
     this.emptyTitle.textContent = this.labels.empty ?? '';
     this.liveMsg = null;
     this.liveText = '';
@@ -636,6 +788,9 @@ export class ChatView {
     this.input.setAttribute('aria-label', labels.placeholder ?? 'Message');
     this.scrollBtn.setAttribute('aria-label', labels.scrollLatest ?? 'Scroll to latest');
     this.updateActivity();
+    if (this.earlierButton) this.earlierButton.textContent = labels.loadEarlier ?? 'Load earlier messages';
+    for (const button of this.messagesEl.querySelectorAll<HTMLButtonElement>('.cui-history-expand'))
+      button.textContent = labels.expandMessage ?? 'Show full message';
     for (const button of this.messagesEl.querySelectorAll<HTMLButtonElement>('.cui-copy'))
       this.updateCopyButton(button);
     for (const button of this.messagesEl.querySelectorAll<HTMLElement>('.cui-apply')) {
@@ -762,6 +917,9 @@ export class ChatView {
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
+    this.historyRevision++;
+    this.restoredHistory = [];
+    this.earlierButton = undefined;
     this.cancelInterruptedRenders();
     this.running = false;
     this.updateActivity();
@@ -790,7 +948,7 @@ export class ChatView {
         this.inputNeedsResize = false;
         this.autoGrow();
       }
-      if (this.following) this.scrollToEnd();
+      if (this.following && this.emptyEl.parentElement !== this.messagesEl) this.scrollToEnd();
       else {
         this.recordScrollGeometry();
         this.updateScrollBtn();
@@ -834,6 +992,10 @@ export class ChatView {
 
   private scrollToEnd(smooth = false): void {
     this.following = true;
+    if (this.emptyEl.parentElement === this.messagesEl) {
+      this.updateScrollBtn();
+      return;
+    }
     const reduceMotion = smooth && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     this.messagesEl.scrollTo({
       top: this.messagesEl.scrollHeight,

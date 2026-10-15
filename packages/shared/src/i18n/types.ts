@@ -441,6 +441,8 @@ export interface I18nMessages {
   agentEntrySmaller: string;
   agentEntryReadOnly: string;
   agentDocumentDraft: string;
+  agentLoadEarlierMessages: string;
+  agentShowFullMessage: string;
   agentIncompleteResponse: string;
   agentReviewActions: string;
   agentEntryAnalyze: string;
