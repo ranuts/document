@@ -799,7 +799,7 @@ export function createAgentPanel(
     invalidatePlans();
     syncRuntimeStatus();
   });
-  speech = mountSpeechInput(chat, () => enabled && !planning && !controller?.isRunning() && !replyAbort);
+  speech = mountSpeechInput(chat, () => enabled);
   const welcomeHint = document.createElement('p');
   welcomeHint.className = 'agent-welcome-hint';
   welcomeHint.textContent = t('agentWelcomeHint');
