@@ -133,6 +133,45 @@ without adding token animations. Compare output across arbitrary chunk boundarie
 for ordinary inputs; parser/render failures fall back to accurate safe raw text
 without losing the source or enabling an incomplete link.
 
+## DeepSeek Harness scroll ownership follow-up
+
+The user requested another source comparison covering scrolling, rendering,
+lists and reply interaction. Its [scroll-follow controller](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/client/ui-chat/src/client/chat/use-scroll-follow.ts)
+keeps native animation targets separate from reader intent. Its [conversation contract](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/conversation.md)
+also preserves keyed nodes during older-page prepends and batches high-frequency
+view publication without dropping logical updates. These principles support the
+bounded history and streaming work already specified; no Cordis/React/server or
+persistence architecture migration is required.
+
+A Chromium probe of this branch confirmed a separate smooth-jump defect: after
+return-to-bottom starts, its first native scroll event sets following=false.
+Appending 100 new lines then leaves the final offset at the former floor 14732
+while the current floor is 17136. New content is stranded 2404 pixels below the
+reader even though the user explicitly requested bottom following.
+
+Track an outstanding native follow target independently from the current offset.
+Animation delivery alone must not detach the reader. Content/viewport growth
+retargets an active smooth jump with native smooth scrolling, rather than
+snapping immediately or stopping at the old floor. Settle ownership on this
+scrollport's own scrollend plus verified arrival at the current target/floor, or
+a measured bottom arrival without scrollend. An old animation may emit scrollend
+after growth retargeted it: if still above the current floor, retain intent and
+retarget instead of clearing ownership. Do not use guessed animation timeouts or
+an endless polling loop. Reduced motion remains immediate. Explicit reader
+scrolling gestures interrupt an outstanding native target and the actual native
+animation (freeze its current offset), keeping the reader in control. Old progress
+or scrollend events must not reattach canceled ownership, and subsequent layout/
+resize work must not revive it. Nested
+scrollend events must not settle the outer transcript. Preserve existing normal
+follow thresholds, empty-welcome behavior and paged reading anchors.
+
+Keep this change local to ChatView or a small framework-free scroll-follow helper.
+Clear/dispose reset outstanding motion ownership and scheduled callbacks. Test
+smooth jump plus streaming growth, reader interruption before a resize, completion
+with and without scrollend support, nested scrollend isolation, reduced motion,
+clear/dispose and the prior paged/empty-message geometry. Avoid copying the
+reference project's broader folding/navigation architecture.
+
 ## CPU context budget
 
 Replace repeated one-turn removal/counting with bounded coarse bracketing and
