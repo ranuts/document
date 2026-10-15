@@ -64,17 +64,15 @@ describe('agent editor-bridge', () => {
       expect(getEditorApi()).toBeNull();
     });
 
-    it('skips iframes whose contentWindow access throws (cross-origin) and keeps scanning', () => {
-      const crossOrigin = document.createElement('iframe');
-      document.body.appendChild(crossOrigin);
-      Object.defineProperty(crossOrigin, 'contentWindow', {
+    it('skips frames whose editor property access throws (cross-origin) and keeps scanning', () => {
+      const inaccessibleWindow = Object.defineProperty({}, 'editor', {
         get() {
           throw new Error('cross-origin');
         },
-        configurable: true,
       });
+      mountIframe(inaccessibleWindow);
       const api = { pluginMethod_PasteHtml: () => {} };
-      mountIframe({ editor: api }, { name: 'frameEditor' });
+      mountIframe({ editor: api });
       expect(getEditorApi()).toBe(api);
     });
   });
