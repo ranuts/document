@@ -1,5 +1,5 @@
+import { runDocumentTask } from '../document-task';
 import { readReceipt } from './read-receipt';
-import { runDocumentTask, prepareDocumentTask } from '../document-task';
 import type { ReviewOutcome } from '../review-outcome';
 import { generateReadAnswer } from '../document-read-answer';
 import type { DocumentAgentToolOptions } from '../document-agent-tools';
@@ -34,7 +34,7 @@ import { prepareHostRead } from './host-read-request';
 import { agentTools } from '../tools';
 import { parseDirectDocumentIntent } from '../direct-intent';
 import { captureDocumentContext, resolveContextCommand } from '../document-context';
-import type { LLMMessage, LLMProvider } from '@ranuts/agent-core/llm/types';
+import type { LLMMessage } from '@ranuts/agent-core/llm/types';
 import type { ProviderId } from '@ranuts/agent-core/llm/factory';
 import { DEFAULT_CPU_MODEL_URL, LocalInferenceProvider } from '@ranuts/agent-core/llm/local';
 import { DEFAULT_WEBLLM_MODEL, isModelCached, WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
@@ -95,6 +95,9 @@ import { RequestScopePolicy, snapshotComposerContext } from './request-scope';
 import { createComposerSelection } from './composer-selection';
 import { captureRequestContext, serializeRequestContext } from './request-context';
 import { classifyRequest, resolveRequestIntent, safeChatIntent } from './request-intent';
+import { createDocumentControllerBindings, createNativeDocumentRequest } from './controller-bindings';
+import { EndpointConnection } from './endpoint-lifecycle';
+import { createPanelSettingsView } from './settings-view';
 import { generateDocumentDraft } from './document-draft';
 import { listCachedGGUF, rememberModelSource } from '@ranuts/agent-core/llm/model-cache';
 
@@ -622,7 +625,7 @@ export function createAgentPanel(
   });
   const directIntent = (text: string) => {
     const intent = parseDirectDocumentIntent(resolveContextCommand(text, captureDocumentContext()));
-    const provider = useEndpointForChat() ? endpointProvider : webllmProvider;
+    const provider = useEndpointForChat() ? endpointConnection.current : webllmProvider;
     return intent?.kind === 'clarify' && (writingSelect.value === 'tools' || provider?.isReady()) ? null : intent;
   };
   const chat = new ChatView({
@@ -632,7 +635,8 @@ export function createAgentPanel(
       // Ordinary typing with a ready model does not need to query the editor.
       if (
         !!webllmProvider?.isReady() ||
-        (!!endpointProvider?.isReady() && (endpointSettings.kind === 'loopback' || navigator.onLine !== false))
+        (!!endpointConnection.current?.isReady() &&
+          (endpointSettings.kind === 'loopback' || navigator.onLine !== false))
       )
         return true;
       const context = captureDocumentContext();
@@ -645,13 +649,13 @@ export function createAgentPanel(
       if (!enabled || runtimeCleanupFailed) return;
       const endpoint = configuredEndpoint(endpointSettings);
       if (
-        (selectedSource === 'service' || endpointProvider?.isReady()) &&
+        (selectedSource === 'service' || endpointConnection.current?.isReady()) &&
         endpoint &&
         isCloudEndpointKind(endpoint.kind) &&
         navigator.onLine === false
       )
         return;
-      if (runtimeCleanup || cacheBusy || modelLoading || pendingEndpoint)
+      if (runtimeCleanup || cacheBusy || modelLoading || endpointConnection.pending)
         return { label: readinessText.textContent || t('agentPreparing'), run: prepareSelectedSource, disabled: true };
       return { label: prepareAction.textContent || t('agentSettings'), run: prepareSelectedSource };
     },
@@ -702,7 +706,7 @@ export function createAgentPanel(
   const readinessText = Span().id('agent-readiness').attr('role', 'status').build();
   const prepareAction = ButtonBuilder().class('agent-prepare-action').attr('type', 'button').build();
   function prepareSelectedSource(): void {
-    if (pendingEndpoint || modelLoading || runtimeCleanup || cacheBusy || !enabled) return;
+    if (endpointConnection.pending || modelLoading || runtimeCleanup || cacheBusy || !enabled) return;
     if (proposalMode && writingSelect.value !== 'tools' && resolveRoute().kind === 'blocked') {
       showView('settings');
       const disclosure = localWritingConsent.closest('details');
@@ -1051,9 +1055,7 @@ export function createAgentPanel(
   let webllmProvider: LocalLLMProvider | null = null;
   // Independent of the browser-local lifecycle: switching or unloading a browser
   // model must not disconnect a writing endpoint the user deliberately connected.
-  let endpointProvider: LLMProvider | null = null;
-  let pendingEndpoint: LLMProvider | null = null;
-  let endpointAttempt = 0;
+  const endpointConnection = new EndpointConnection(() => syncRuntimeStatus());
   const endpointKindValue = (): WritingEndpointKind => endpointKind.value as WritingEndpointKind;
   const endpointKeySlot = (kind: WritingEndpointKind): string =>
     kind === 'openai-compatible' ? endpointBaseUrl.value.trim() : kind;
@@ -1083,7 +1085,7 @@ export function createAgentPanel(
     }
   };
   const useEndpointForChat = (): boolean => {
-    if (!endpointProvider?.isReady() || (endpointSettings.kind !== 'loopback' && navigator.onLine === false))
+    if (!endpointConnection.current?.isReady() || (endpointSettings.kind !== 'loopback' && navigator.onLine === false))
       return false;
     return (
       endpointSettings.kind === 'loopback' ||
@@ -1092,7 +1094,7 @@ export function createAgentPanel(
     );
   };
   const resolveRoute = (): WritingRoute => {
-    const endpoint = endpointProvider?.isReady() ? configuredEndpoint(endpointSettings) : null;
+    const endpoint = endpointConnection.current?.isReady() ? configuredEndpoint(endpointSettings) : null;
     return resolveWritingRoute({
       loopback: endpoint?.kind === 'loopback' ? endpoint : null,
       remote: endpoint && endpoint.kind !== 'loopback' ? endpoint : null,
@@ -1114,7 +1116,7 @@ export function createAgentPanel(
           ? 'agentWriteDestinationRemote'
           : 'agentWriteDestinationDevice';
       const unavailable =
-        endpointProvider?.isReady() && endpointSettings.kind !== 'loopback' && navigator.onLine === false;
+        endpointConnection.current?.isReady() && endpointSettings.kind !== 'loopback' && navigator.onLine === false;
       writeDestination.hidden = !ready && !unavailable;
       writeDestination.textContent = `${t('agentWriteDestinationTitle')}: ${t(ready ? where : unavailable ? 'agentWriteDestinationOfflineUnavailable' : 'agentWriteNeedsDestination')}`;
       return;
@@ -1130,7 +1132,7 @@ export function createAgentPanel(
     if (!route || route.kind === 'blocked') {
       // "not configured" would be false when a cloud endpoint is configured but
       // cannot be used right now; say what is actually configured.
-      const configured = endpointProvider?.isReady() ? configuredEndpoint(endpointSettings) : null;
+      const configured = endpointConnection.current?.isReady() ? configuredEndpoint(endpointSettings) : null;
       writeDestination.hidden = !configured;
       if (configured && configured.kind !== 'loopback')
         writeDestination.textContent = `${title}: ${t('agentWriteDestinationOfflineUnavailable')} · ${configured.model}`;
@@ -1153,32 +1155,26 @@ export function createAgentPanel(
     const cloud = isCloudEndpointKind(kind);
     endpointBaseUrl.hidden = kind === 'anthropic' || kind === 'gemini';
     endpointKey.hidden = !cloud;
-    endpointStatus.textContent = endpointProvider?.isReady()
+    endpointStatus.textContent = endpointConnection.current?.isReady()
       ? t(cloud ? 'agentEndpointConfigured' : 'agentEndpointConnected')
       : status;
-    endpointConnect.textContent = endpointProvider ? t('agentEndpointDisconnect') : t('agentEndpointConnect');
+    endpointConnect.textContent = endpointConnection.current ? t('agentEndpointDisconnect') : t('agentEndpointConnect');
     syncRuntimeStatus();
   };
   const disconnectEndpoint = (): void => {
     invalidateRequestBindings();
-    endpointAttempt++;
     if (controllerKind.startsWith('endpoint:')) {
       controller?.dispose();
       controller = null;
       chat.setRunning(false);
     }
     invalidatePlans();
-    const pending = pendingEndpoint;
-    pendingEndpoint = null;
-    if (pending && 'dispose' in pending && typeof pending.dispose === 'function') void pending.dispose();
-    const previous = endpointProvider;
-    endpointProvider = null;
-    if (previous && 'dispose' in previous && typeof previous.dispose === 'function') void previous.dispose();
+    endpointConnection.disconnect();
     syncEndpointForm();
   };
   const connectEndpoint = async (): Promise<void> => {
     if (!enabled) return;
-    if (endpointProvider || pendingEndpoint) {
+    if (endpointConnection.current || endpointConnection.pending) {
       disconnectEndpoint();
       return;
     }
@@ -1200,7 +1196,7 @@ export function createAgentPanel(
       }
     }
     invalidateRequestBindings();
-    const attempt = ++endpointAttempt;
+    const attempt = endpointConnection.revision + 1;
     endpointStatus.textContent = t('agentEndpointConnecting');
     let failure = '';
     try {
@@ -1208,23 +1204,17 @@ export function createAgentPanel(
       const endpoint = configuredEndpoint(endpointSettings);
       if (!endpoint) throw new Error('Incomplete writing endpoint');
       const stored = isCloudEndpointKind(kind) ? getEndpointKey(endpointKeySlot(kind)) : undefined;
-      const provider = createEndpointProvider(endpoint, endpointKey.value.trim() || stored);
-      pendingEndpoint = provider;
-      syncRuntimeStatus();
-      // Only the loopback service has a real connection check; a cloud endpoint
-      // reports "configured" because readiness is not reachability.
-      if ('preload' in provider && typeof provider.preload === 'function') await provider.preload();
-      if (attempt !== endpointAttempt) return;
-      if (!provider.isReady()) throw new Error('Writing endpoint is not ready');
-      endpointProvider = provider;
+      const connected = await endpointConnection.connect(() =>
+        createEndpointProvider(endpoint, endpointKey.value.trim() || stored),
+      );
+      if (!connected) return;
       hasConfiguration = true;
     } catch {
-      if (attempt !== endpointAttempt) return;
+      if (endpointConnection.revision > attempt + 1) return;
       disconnectEndpoint();
       failure = t('agentEndpointFailed');
       note.textContent = failure;
     }
-    pendingEndpoint = null;
     syncEndpointForm(failure);
     syncRuntimeStatus();
   };
@@ -1285,7 +1275,7 @@ export function createAgentPanel(
     else if (runtimeCleanupFailed) reason = t('agentModelCleanupFailed');
     else if (runtimeCleanup) reason = t('agentModelReleasing');
     else if (cacheBusy) reason = t('agentCacheBusy');
-    else if (pendingEndpoint) reason = t('agentEndpointConnecting');
+    else if (endpointConnection.pending) reason = t('agentEndpointConnecting');
     else if (modelLoading) reason = t('agentPreparing');
     else if (!ready && selectedSource === 'service' && endpointStatus.textContent) reason = endpointStatus.textContent;
     let writingBlocked = false;
@@ -1307,7 +1297,7 @@ export function createAgentPanel(
     readinessText.textContent = reason;
     // The runtime row already announces loading and offers cancellation.
     readiness.hidden = !reason || modelLoading;
-    const waiting = modelLoading || !!pendingEndpoint || !!runtimeCleanup || cacheBusy;
+    const waiting = modelLoading || !!endpointConnection.pending || !!runtimeCleanup || cacheBusy;
     const endpoint = configuredEndpoint(endpointSettings);
     const canReconnect = !!(
       endpoint &&
@@ -1511,86 +1501,44 @@ export function createAgentPanel(
     scope: RequestScopePolicy,
     readonly: boolean,
   ): TurnRequest => {
-    let current = target;
-    const provider = endpointProvider!;
     const generation = controllerGeneration;
     const conversation = conversationRevision;
-    const assertCurrent = () => {
-      if (
-        !enabled ||
-        generation !== controllerGeneration ||
-        conversation !== conversationRevision ||
-        (scope.editorBound && (readonly !== getReadonlyMode() || !current.isCurrent(false)))
-      )
-        throw new Error(t('agentPlanExpired'));
-    };
-    return {
-      tools: {},
-      assertCurrent,
-      getRequestContext: () =>
-        scope.deferNative
-          ? undefined
-          : serializeRequestContext(
-              { editor: snapshot.context, selection: { text: snapshot.text, truncated: snapshot.truncated } },
-              instruction,
-            ).serialized,
-      prepareRun: async (request: string, signal: AbortSignal) =>
-        prepareDocumentTask(provider, request, {
-          target,
-          deferEditorFreshness: scope.deferNative,
-          readonly,
-          signal,
-          assertCurrent,
-          onTargetChanged: (next) => {
-            scope.bindEditor();
-            current = next;
-          },
-          review: waitForToolReview,
-          receipt: (name, result) => {
-            if (generation !== controllerGeneration || conversation !== conversationRevision) return;
-            const text = readReceipt(name, result, current.context);
-            if (text) appendTurn({ role: 'tool', text });
-          },
-        }),
-    };
+    return createNativeDocumentRequest({
+      target,
+      instruction,
+      snapshot,
+      scope,
+      readonly,
+      provider: endpointConnection.current!,
+      isCurrent: () => enabled && generation === controllerGeneration && conversation === conversationRevision,
+      review: waitForToolReview,
+      appendTurn,
+    });
   };
   const buildController = (localOnly = false): AgentChatController | null => {
     if (runtimeCleanup) return null;
     const id = currentProvider();
     const generation = controllerGeneration;
     const conversation = conversationRevision;
+    const isCurrent = () => generation === controllerGeneration && conversation === conversationRevision;
     const emit = (turn: ChatTurn): void => {
-      if (generation === controllerGeneration && conversation === conversationRevision) appendTurn(turn);
+      if (isCurrent()) appendTurn(turn);
     };
-    const options = {
-      ...controllerOptions,
-      tools: {},
-      storage: historyStorage,
-      getRequestContext: (): string | undefined => {
-        const reference = captureRequestContext('metadata');
-        return reference.editor ? serializeRequestContext(reference, '').serialized : undefined;
-      },
-      onContextTrimmed: (): void => {
-        if (generation === controllerGeneration && conversation === conversationRevision)
-          appendTurn({ role: 'tool', text: t('agentContextTrimmed') });
-      },
-      onAgentDelta: (delta: string): void => {
-        if (generation === controllerGeneration && conversation === conversationRevision) chat.appendDelta(delta);
-      },
-      onAgentStreamEnd: (): void => {
-        if (generation === controllerGeneration && conversation === conversationRevision) chat.endStream();
-      },
-    };
+    const options = createDocumentControllerBindings({
+      base: { ...controllerOptions, storage: historyStorage },
+      isCurrent,
+      appendTurn,
+    });
     if (
       !localOnly &&
-      (!proposalMode || endpointProvider?.toolCallingMode === 'native') &&
+      (!proposalMode || endpointConnection.current?.toolCallingMode === 'native') &&
       useEndpointForChat() &&
-      endpointProvider
+      endpointConnection.current
     ) {
-      const kind = `endpoint:${endpointAttempt}`;
+      const kind = `endpoint:${endpointConnection.revision}`;
       if (!controller || controllerKind !== kind) {
         controller?.dispose();
-        controller = new AgentChatController(endpointProvider, emit, { ...options, tools: {} });
+        controller = new AgentChatController(endpointConnection.current, emit, { ...options, tools: {} });
         controllerKind = kind;
       }
       return controller;
@@ -1963,7 +1911,7 @@ export function createAgentPanel(
       chat.setLabels(chatLabels());
     }
     quotedSelection = snapshot.text;
-    const intentProvider = useEndpointForChat() ? endpointProvider : webllmProvider;
+    const intentProvider = useEndpointForChat() ? endpointConnection.current : webllmProvider;
     if (
       (!intentProvider || (!intentProvider.generateJSON && typeof intentProvider.chat !== 'function')) &&
       ['rewrite', 'summarize', 'translate'].includes(request.task) &&
@@ -2130,7 +2078,9 @@ export function createAgentPanel(
       if (writingSelect.value === 'tools')
         return !useEndpointForChat() && !isModelFreeToolRequest(text, captureDocumentContext());
       if (!proposalMode)
-        return !endpointProvider?.isReady() || (endpointSettings.kind !== 'loopback' && navigator.onLine === false);
+        return (
+          !endpointConnection.current?.isReady() || (endpointSettings.kind !== 'loopback' && navigator.onLine === false)
+        );
       try {
         return resolveRoute().kind === 'local';
       } catch {
@@ -2205,7 +2155,7 @@ export function createAgentPanel(
       previousPreview.setRefining(true);
     }
     try {
-      const routingProvider = useEndpointForChat() ? endpointProvider : webllmProvider;
+      const routingProvider = useEndpointForChat() ? endpointConnection.current : webllmProvider;
       if (stagedIntent?.hostRead) {
         if (!isCurrentHostRead(stagedIntent.hostRead)) throw new Error(t('agentPlanExpired'));
         chat.setActivity('reading');
@@ -2436,7 +2386,7 @@ export function createAgentPanel(
         beginExecution();
         operationHistory.push({ role: 'user', content: text });
         const plans = await generateDocumentToolSequence(
-          useEndpointForChat() ? endpointProvider! : webllmProvider!,
+          useEndpointForChat() ? endpointConnection.current! : webllmProvider!,
           text,
           target.context,
           abort.signal,
@@ -2635,7 +2585,7 @@ export function createAgentPanel(
               ? 'agentWritingOfflineNeedsDevice'
               : 'agentWritingNeedsLocalService',
           );
-        const writingProvider = route.kind === 'endpoint' ? endpointProvider : webllmProvider;
+        const writingProvider = route.kind === 'endpoint' ? endpointConnection.current : webllmProvider;
         // The gate above normally covers an unready browser-local model; this stays
         // as a guard for readiness that flipped between the gate and here.
         if (!writingProvider || !writingProvider.isReady()) throw new Error('agentWritingNeedsLocalService');
@@ -2949,71 +2899,29 @@ export function createAgentPanel(
   historyBtn.className = 'agent-history-toggle';
   historyBtn.innerHTML =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11a9 9 0 1 1 3 8M3 5v6h6M12 7v6l4 2"/></svg>';
-  const settingsHeading = View('h2').build();
-  settingsHeading.tabIndex = -1;
-  const localCard = View('section').build();
-  localCard.className = 'agent-use-card agent-device-section';
-  const modelChoice = Div().build();
-  modelChoice.className = 'agent-model-choice';
-  modelChoice.append(modelSelect, modelMemory);
-  const modelActions = Div().class('agent-model-actions').children(loadBtn).build();
-  modelRow.replaceChildren(modelChoice, modelActions);
-  localCard.append(modelRow, ggufRow);
-  const serviceCard = View('section').build();
-  serviceCard.className = 'agent-use-card agent-service-section';
-  const serviceHint = View('p').build();
-  const fieldLabels: Array<{ title: HTMLElement; key: keyof I18nMessages }> = [];
-  const field = (control: HTMLElement, key: keyof I18nMessages) => {
-    const wrapper = Label().build();
-    wrapper.className = 'agent-settings-field';
-    const title = Span().build();
-    fieldLabels.push({ title, key });
-    wrapper.append(title, control);
-    return wrapper;
-  };
-  endpointRow.replaceChildren(
-    field(endpointKind, 'agentEndpointKind'),
-    field(endpointBaseUrl, 'agentEndpointUrl'),
-    field(endpointModel, 'agentEndpointModel'),
-    field(endpointKey, 'agentEndpointKey'),
+  const settingsView = createPanelSettingsView({
+    modelSelect,
+    modelMemory,
+    loadBtn,
+    modelRow,
+    ggufRow,
+    endpointRow,
+    endpointKind,
+    endpointBaseUrl,
+    endpointModel,
+    endpointKey,
     endpointConnect,
     endpointStatus,
-  );
-  serviceCard.append(endpointRow, serviceHint);
-  const advanced = View<HTMLDetailsElement>('details').build();
-  advanced.className = 'agent-preferences agent-disclosure';
-  const advancedSummary = View('summary').build();
-  const advancedTitle = Span().build();
-  advancedSummary.append(advancedTitle);
-  advanced.append(
-    advancedSummary,
-    field(providerSelect, 'agentProviderLabel'),
+    providerSelect,
     consentLabel,
-    field(writePreference, 'agentWritePreference'),
+    writePreference,
     reviewLabel,
-  );
-  const customSources = View('section')
-    .class('agent-custom-sources')
-    .children(
-      View('h3').text(t('agentCustomModel')).build(),
-      field(localModelId, 'agentModelId'),
-      field(localModelUrl, 'agentModelUrl'),
-      field(localModelLib, 'agentModelRuntimeUrl'),
-    )
-    .build();
-  advanced.append(customSources);
-  const settingsHero = Div().build();
-  settingsHero.className = 'agent-settings-hero';
-  settingsHero.append(settingsHeading);
-  const sourcePicker = ranSelect(
-    'agent-source-picker',
-    [
-      { value: 'local', label: t('agentSourceLocal') },
-      { value: 'service', label: t('agentSourceService') },
-    ],
+    localModelId,
+    localModelUrl,
+    localModelLib,
     selectedSource,
-  );
-  sourcePicker.setAttribute('aria-label', t('agentSourceLabel'));
+  });
+  const { settingsHeading, modelActions, localCard, serviceCard, advanced, settingsHero, sourcePicker } = settingsView;
   const syncSource = () => {
     if (selectedSource !== sourcePicker.value) invalidateRequestBindings();
     selectedSource = sourcePicker.value;
@@ -3118,15 +3026,9 @@ export function createAgentPanel(
     }
   });
   const syncProductLabels = () => {
-    fieldLabels.forEach(({ title, key }) => {
-      title.textContent = t(key);
-    });
+    settingsView.syncLabels();
     refinementLabel.textContent = t('agentRefiningProposal');
     refinementCancel.textContent = t('agentPlanCancel');
-    settingsHeading.textContent = t('agentSettings');
-    serviceHint.textContent = t('agentUseServiceHint');
-    advancedTitle.textContent = t('agentPreferences');
-    customSources.querySelector('h3')!.textContent = t('agentCustomModel');
     disableLabel.textContent = t('agentEnable');
     disableHint.textContent = t('agentOffNote');
     disable.setAttribute('aria-label', t('agentEnable'));
