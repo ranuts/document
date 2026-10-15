@@ -229,3 +229,23 @@ overflow. The delayed-startup request/draft assertions also pass in both locales
 English 320px dark and Chinese 432px light screenshots were inspected. The
 separate [reference review](2026-10-15-assistant-harness-review.md) records a newly
 reproduced native smooth-scroll target failure; that follow-up is still pending.
+
+## Streaming Markdown checkpoint
+
+Specification and independent quality review approved `27836c7` and the small
+caret correction `7b2bd7c`. The root checkout passed 91 focused ChatView tests.
+A Chromium 151.0.7922.34 development-build probe verified progressive open-fence
+rendering, stable completed nodes and text selection, inert incomplete URLs and
+safe activation after closure. Identical formatted content had zero bubble-height
+change on completion. The initial browser run exposed a 23.796875-pixel extra
+caret line; the correction excludes only formatted streams, preserving the legacy
+plain-stream caret and the existing actual responding status.
+
+A synthetic 108,000-character open tail stayed readable as exact raw text without
+passing it to the lexer. Stop invoked no synchronous lexer calls and preserved
+the complete interrupted source, copy-only result, next draft, focus and selection;
+late deltas were ignored. This component probe observed a 0.315ms synchronous Stop
+handler. It measures local presentation work, not model inference or GPU drain.
+All automatic opt-in formatting inputs are capped at 8,000 characters; unusually
+large reference-dependent responses deliberately remain raw at completion. The
+focused unit cases exercise the cap at completion, interruption and fallback.
