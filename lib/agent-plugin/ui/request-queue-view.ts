@@ -25,10 +25,13 @@ export function createRequestQueueView(options: {
     const owner = focused?.dataset.entry;
     const action = focused?.dataset.action;
     el.hidden = !state.entries.length;
-    el.setAttribute('aria-label', t('agentQueueTitle', { count: state.entries.length }));
-    title.textContent = t(state.paused ? 'agentQueuePaused' : 'agentQueueTitle', { count: state.entries.length });
+    const executable = state.entries.filter((entry) => !entry.recoverOnly).length;
+    title.textContent = executable
+      ? t(state.paused ? 'agentQueuePaused' : 'agentQueueTitle', { count: executable })
+      : t('agentRestoreRequest');
+    el.setAttribute('aria-label', title.textContent);
     resume.textContent = t('agentQueueResume');
-    resume.hidden = !state.paused;
+    resume.hidden = !state.paused || !executable;
     list.replaceChildren();
     for (const entry of state.entries) {
       const row = View('li').class('agent-queue-entry').build();
@@ -46,12 +49,16 @@ export function createRequestQueueView(options: {
           .text(t(label))
           .on('click', () => run(entry.id))
           .build();
+        if (entry.recoverOnly && name === 'send-now') button.hidden = true;
+        if (entry.recoverOnly && name === 'edit') button.textContent = t('agentRestoreRequest');
         button.dataset.entry = entry.id;
         button.dataset.action = name;
-        button.setAttribute('aria-label', `${t(label)}: ${entry.text}`);
+        button.setAttribute('aria-label', `${button.textContent}: ${entry.text}`);
         controls.append(button);
       }
-      row.append(text, controls);
+      row.append(text);
+      if (entry.recoverOnly) row.append(Span().class('agent-queue-recovery').text(t('agentStopped')).build());
+      row.append(controls);
       list.append(row);
     }
     if (focused && !state.entries.length) options.focus();

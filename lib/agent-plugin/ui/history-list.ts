@@ -8,10 +8,12 @@ interface ConversationListOptions {
   store: ReturnType<typeof createConversationStore>;
   onSelect(id: string): void;
   onDelete(id: string, trigger: HTMLButtonElement): void;
+  /** Volatile pending requests make otherwise empty sessions reachable, without persistence. */
+  pendingConversations?(): readonly string[];
 }
 
 /** Keyed, bounded presentation of the session owner's local history. */
-export function createConversationList({ store, onSelect, onDelete }: ConversationListOptions) {
+export function createConversationList({ store, onSelect, onDelete, pendingConversations }: ConversationListOptions) {
   const heading = View('h2').class('agent-history-heading').build();
   const search = InputBuilder().class('agent-history-search').attr('type', 'search').build();
   const searchIcon = Span().attr('aria-hidden', 'true').build();
@@ -28,6 +30,7 @@ export function createConversationList({ store, onSelect, onDelete }: Conversati
   let suspended = false;
   let limit = 40;
   let query = '';
+  let pendingKey = '';
   let matches: SearchMatch[] | undefined;
   let sessions: Conversation[] = [];
   let source: ReturnType<typeof store.searchSnapshot> | undefined;
@@ -167,14 +170,20 @@ export function createConversationList({ store, onSelect, onDelete }: Conversati
   function sync() {
     if (!active || disposed || suspended) return;
     const next = store.searchSnapshot();
-    if (next !== source) {
+    const pending = new Set(pendingConversations?.() ?? []);
+    const nextPendingKey = [...pending].sort().join(':');
+    const sourceChanged = next !== source;
+    if (sourceChanged || nextPendingKey !== pendingKey) {
+      pendingKey = nextPendingKey;
       source = next;
       sessions = next
-        .filter((entry) => !entry.empty)
+        .filter((entry) => !entry.empty || pending.has(entry.id))
         .map(({ id, title, createdAt, updatedAt }) => ({ id, title, createdAt, updatedAt }))
         .sort((a, b) => b.updatedAt - a.updatedAt);
-      engine.update(next);
-      matches = undefined;
+      if (sourceChanged) {
+        engine.update(next);
+        matches = undefined;
+      }
     }
     render();
   }

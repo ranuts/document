@@ -138,3 +138,28 @@ it('announces pending search while preserving the search focus and existing row 
   expect(document.activeElement).toBe(input);
   list.dispose();
 });
+it('includes only queue-backed empty sessions and refreshes their visibility without mutating stored metadata', () => {
+  const store = createConversationStore();
+  const first = store.activeId;
+  store.create();
+  const second = store.activeId;
+  let pending: string[] = [first];
+  const list = createConversationList({
+    store,
+    onSelect: vi.fn(),
+    onDelete: vi.fn(),
+    pendingConversations: () => pending,
+  });
+  document.body.append(list.el);
+  const snapshot = store.searchSnapshot();
+  expect(rows(list.el).map((row) => row.dataset.id)).toEqual([first]);
+  expect(store.history(first).load()).toEqual([]);
+  pending = [second];
+  list.sync();
+  expect(rows(list.el).map((row) => row.dataset.id)).toEqual([second]);
+  expect(store.searchSnapshot()).toBe(snapshot);
+  pending = [];
+  list.sync();
+  expect(rows(list.el)).toHaveLength(0);
+  list.dispose();
+});
