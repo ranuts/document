@@ -269,3 +269,27 @@ subsequent output/resize left that position unchanged while the floor grew to
 These coordinates belong to a synthetic shared-ChatView fixture, not a product
 performance promise. The baseline and fixed scripts use different streaming
 presentation modes, so their absolute floor values are not a speed comparison.
+
+## Inactive deletion checkpoint
+
+At `8fe8fbe`, specification and independent quality review approved deletion
+identity and current-owner settlement. The root checkout passed 250 focused
+history/panel/scroll tests and the production build. All four real-editor history
+cases passed, including preservation of all 400 explicitly loaded messages and
+a held answer surviving deletion of a different chat.
+
+A separate production-browser probe restored 80 of 100 saved messages, submitted
+one held request and retained a newer draft. Deleting another chat kept the same
+first DOM node, all 81 displayed rows, zero scroll shift and the exact draft;
+releasing the response completed the original answer. The baseline at `99f7b03`
+had instead canceled that answer and rebuilt its view. Controlled unit cases also
+cover navigation while deletion awaits storage and physical Apply settlement
+for deletion of the current chat or all chats; the browser probe itself does not
+simulate physical document-bridge drain timing.
+
+The history list was rechecked in 12 English/Chinese, 320/432/520-pixel light/dark
+states with reduced motion. Horizontal overflow remained zero; keyboard entry
+from search and return to the draft passed. The narrow dark and medium Chinese
+light screenshots were visually inspected. The 1,000-conversation search fixture
+kept 40 initial rows, zero full-message clones, 0.16/0.15/0.11ms input handlers and
+no corpus reposts on indexed queries. Those are individual synthetic observations.
