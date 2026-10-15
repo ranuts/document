@@ -2,6 +2,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Lexer } from 'marked';
 import { ChatView } from '../../packages/chat-ui/src/chat-view';
 import { renderMarkdown } from '../../packages/chat-ui/src/markdown';
+import { CHAT_UI_CSS } from '../../packages/chat-ui/src/styles';
 let frames: FrameRequestCallback[];
 let view: ChatView;
 beforeEach(() => {
@@ -30,6 +31,26 @@ function flush() {
 function bubble() {
   return view.el.querySelector<HTMLElement>('.cui-msg-agent .cui-bubble')!;
 }
+it('omits the extra inline caret for formatted block streams while retaining the legacy caret', () => {
+  mount();
+  view.appendDelta(
+    '**Stable heading**\n\nOne soft\nline\n\nThird block grows\n\n```ts\nconst value = 1\n```\n\n[Visit](https://example.com)',
+  );
+  flush();
+  const style = document.createElement('style');
+  style.textContent = CHAT_UI_CSS;
+  document.head.append(style);
+  const caretSelectors = Array.from(style.sheet!.cssRules)
+    .filter((rule): rule is CSSStyleRule => rule instanceof CSSStyleRule && Boolean(rule.style.content))
+    .flatMap((rule) => rule.selectorText.split(','))
+    .filter((selector) => selector.includes('.cui-bubble::after'))
+    .map((selector) => selector.replace('::after', ''));
+  expect(caretSelectors.length).toBeGreaterThan(0);
+  expect(caretSelectors.some((selector) => bubble().matches(selector))).toBe(false);
+  view.el.querySelector('.cui-streaming-markdown')!.classList.remove('cui-streaming-markdown');
+  expect(caretSelectors.some((selector) => bubble().matches(selector))).toBe(true);
+  style.remove();
+});
 it('formats the first frame and preserves completed block nodes and selection while a later block grows', () => {
   mount();
   view.appendDelta('**First block**\n\nSecond block\n\nThird block');
