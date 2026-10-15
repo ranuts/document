@@ -124,6 +124,12 @@ source and metadata. Ordinary append and streaming remain unchanged. Localize
 Clear, replacement and disposal invalidate old controls. This changes only
 presentation; hosts continue to own full history, storage and model context.
 
+Jumping to the latest message keeps native smooth-scroll ownership until the
+current bottom is measured, including when streaming or resizing moves it.
+Wheel, touch scrolling and transcript navigation keys interrupt the animation;
+later layout cannot revive that canceled jump. Reduced motion uses an immediate
+jump, and clearing or disposing the view cancels outstanding motion.
+
 ## Optional streaming Markdown
 
 Set `streamingMarkdown: true` to format live replies once per frame. The default
