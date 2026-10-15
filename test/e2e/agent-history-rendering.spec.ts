@@ -114,3 +114,109 @@ test('restores a long saved conversation and switches sessions with completed an
   await expect(rows).toHaveCount(400);
   await expect(page.locator('.cui-input')).toHaveValue('Next request');
 });
+
+test('pages and searches one thousand saved conversations without cloning or reposting the corpus', async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.addInitScript(() => {
+    const metrics = { messageArrayClones: 0, corpusPosts: 0 };
+    Object.defineProperty(window, '__historySearchMetrics', { value: metrics });
+    const clone = window.structuredClone;
+    window.structuredClone = (value, options) => {
+      if (Array.isArray(value) && value.some((message) => message && typeof message === 'object' && 'role' in message))
+        metrics.messageArrayClones++;
+      return clone(value, options);
+    };
+    const post = Worker.prototype.postMessage;
+    Worker.prototype.postMessage = function (message, options) {
+      if (message?.type === 'update') metrics.corpusPosts++;
+      return Reflect.apply(post, this, options === undefined ? [message] : [message, options]);
+    };
+  });
+  await page.goto('/');
+  const ids = await page.evaluate(async () => {
+    localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+    localStorage.setItem('agent_conversation_saving_v2', 'true');
+    const ids = Array.from({ length: 1000 }, () => crypto.randomUUID());
+    const now = Date.now();
+    const request = indexedDB.open('document-ai-conversations', 2);
+    request.onupgradeneeded = () => {
+      request.result.createObjectStore('conversations');
+      request.result.createObjectStore('sessions');
+    };
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const tx = db.transaction(['conversations', 'sessions'], 'readwrite');
+    tx.objectStore('conversations').put({ version: 2, revision: 1, activeId: ids[0], sessionIds: ids }, 'state');
+    ids.forEach((id, index) =>
+      tx.objectStore('sessions').put(
+        {
+          id,
+          title: `Saved conversation ${index}`,
+          createdAt: now - index * 1000,
+          updatedAt: now - index * 1000,
+          messages: Array.from({ length: 8 }, (_, message) => ({
+            role: message % 2 ? 'assistant' : 'user',
+            content:
+              `${message === 7 ? `needle stored in message ${index}` : `Conversation ${index} message ${message}`}`.padEnd(
+                512,
+                'x',
+              ),
+          })),
+        },
+        id,
+      ),
+    );
+    await new Promise<void>((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onabort = () => reject(tx.error);
+    });
+    db.close();
+    return { active: ids[0], late: ids[997] };
+  });
+  await page.goto('/editor?new=docx&locale=en');
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+  await page.locator('.cui-input').fill('Keep this draft');
+  await page.locator('.agent-history-toggle').click();
+  const rows = page.locator('.agent-conversation-open');
+  await expect(rows).toHaveCount(40);
+  await expect(page.locator(`.agent-conversation-open[data-id="${ids.active}"]`)).toHaveAttribute(
+    'aria-current',
+    'true',
+  );
+  await page.getByRole('button', { name: 'Load more', exact: true }).click();
+  await expect(rows).toHaveCount(80);
+  const search = page.getByRole('searchbox', { name: 'Search conversations' });
+  await search.fill('needle stored in message 997');
+  await expect(rows).toHaveCount(1);
+  await expect(rows).toHaveAttribute('data-id', ids.late);
+  await expect(rows.locator('.agent-conversation-snippet')).toContainText('needle stored in message 997');
+  const before = await page.evaluate(() => ({
+    ...(window as unknown as { __historySearchMetrics: { messageArrayClones: number; corpusPosts: number } })
+      .__historySearchMetrics,
+  }));
+  await search.fill('needle stored in message 998');
+  await expect(rows).toHaveCount(1);
+  await expect(rows.locator('.agent-conversation-snippet')).toContainText('needle stored in message 998');
+  await search.fill('needle stored in message 997');
+  await expect(rows).toHaveAttribute('data-id', ids.late);
+  const after = await page.evaluate(() => ({
+    ...(window as unknown as { __historySearchMetrics: { messageArrayClones: number; corpusPosts: number } })
+      .__historySearchMetrics,
+  }));
+  expect(after.messageArrayClones - before.messageArrayClones).toBe(0);
+  expect(after.corpusPosts - before.corpusPosts).toBe(0);
+  await search.fill('');
+  await expect(rows).toHaveCount(40);
+  await expect(page.locator(`.agent-conversation-open[data-id="${ids.active}"]`)).toHaveAttribute(
+    'aria-current',
+    'true',
+  );
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.cui-input')).toHaveValue('Keep this draft');
+});

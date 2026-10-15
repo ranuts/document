@@ -319,6 +319,8 @@ export const ko: Partial<I18nMessages> = {
   agentHistoryToday: '오늘',
   agentHistoryYesterday: '어제',
   agentHistoryEarlier: '이전',
+  agentHistoryEmpty: '아직 대화가 없습니다',
+  agentHistoryLoadMore: '더 보기',
   agentNoConversationsFound: '일치하는 대화가 없습니다',
   agentHistoryDataControls: '기록 및 데이터',
   agentContextTrimmed: '이번 요청에서 이전 대화를 제외했습니다. 전체 기록은 유지됩니다.',

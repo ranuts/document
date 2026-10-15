@@ -321,6 +321,8 @@ export const en: I18nMessages = {
   agentHistoryToday: 'Today',
   agentHistoryYesterday: 'Yesterday',
   agentHistoryEarlier: 'Earlier',
+  agentHistoryEmpty: 'No conversations yet',
+  agentHistoryLoadMore: 'Load more',
   agentNoConversationsFound: 'No matching conversations',
   agentHistoryDataControls: 'History & data',
   agentContextTrimmed: 'Earlier turns were omitted from this request. Full history remains available.',

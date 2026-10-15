@@ -326,6 +326,8 @@ export const ja: Partial<I18nMessages> = {
   agentHistoryToday: '今日',
   agentHistoryYesterday: '昨日',
   agentHistoryEarlier: 'それ以前',
+  agentHistoryEmpty: '会話はまだありません',
+  agentHistoryLoadMore: 'さらに表示',
   agentNoConversationsFound: '一致する会話がありません',
   agentHistoryDataControls: '履歴とデータ',
   agentContextTrimmed: 'このリクエストでは古い会話を省略しました。履歴は保存されています。',

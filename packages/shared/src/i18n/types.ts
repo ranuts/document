@@ -319,6 +319,8 @@ export interface I18nMessages {
   agentHistoryToday: string;
   agentHistoryYesterday: string;
   agentHistoryEarlier: string;
+  agentHistoryEmpty: string;
+  agentHistoryLoadMore: string;
   agentNoConversationsFound: string;
   agentHistoryDataControls: string;
   agentContextTrimmed: string;

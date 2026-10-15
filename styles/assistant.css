@@ -1811,3 +1811,39 @@ r-dropdown[role='listbox'] {
     transition: none;
   }
 }
+
+.agent-conversation-snippet {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-2);
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.agent-conversation-snippet[hidden],
+.agent-conversation-current[hidden],
+.agent-history-more[hidden] {
+  display: none;
+}
+.agent-history-more {
+  display: block;
+  margin: var(--ran-space-4) auto 0;
+  padding: var(--ran-space-2) var(--ran-space-4);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  background: transparent;
+  color: var(--ran-color-text);
+  font: inherit;
+  font-size: var(--ran-text-label-2);
+  cursor: pointer;
+}
+.agent-history-more:hover {
+  background: var(--ran-color-bg-hover);
+}
+.agent-history-more:focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: 2px;
+}
