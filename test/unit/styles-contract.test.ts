@@ -79,12 +79,14 @@ describe('the packaged chat UI does not rely on the host for its own geometry', 
   const packaged = readFileSync(resolve(ROOT, 'packages/chat-ui/src/styles.ts'), 'utf8');
 
   const rule = (selector: string): string => {
-    const at = packaged.indexOf(`\n${selector} {`);
-    expect(at, `chat-ui styles must still declare \`${selector}\``).toBeGreaterThan(-1);
-    return packaged.slice(at, packaged.indexOf('}', at));
+    const declarations = [...packaged.matchAll(/(?:^|\n)([^{}]+)\{([^{}]*)\}/g)]
+      .filter((match) => match[1].split(',').some((part) => part.trim() === selector))
+      .map((match) => match[2]);
+    expect(declarations.length, `chat-ui styles must still declare \`${selector}\``).toBeGreaterThan(0);
+    return declarations.join('\n');
   };
 
-  for (const selector of ['.cui-send', '.cui-scroll-bottom']) {
+  for (const selector of ['.cui-send', '.cui-stop', '.cui-scroll-bottom']) {
     it(`${selector} owns its box`, () => {
       expect(rule(selector)).toMatch(/box-sizing:\s*border-box/);
       expect(rule(selector)).toMatch(/padding:\s*0/);
