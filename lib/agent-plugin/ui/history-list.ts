@@ -24,6 +24,7 @@ export function createConversationList({ store, onSelect, onDelete }: Conversati
   const el = Div().class('agent-conversations').children(heading, searchRow, list, empty, more).build();
   let active = true;
   let disposed = false;
+  let suspended = false;
   let limit = 40;
   let query = '';
   let matches: SearchMatch[] | undefined;
@@ -50,7 +51,7 @@ export function createConversationList({ store, onSelect, onDelete }: Conversati
     render();
   });
   function render() {
-    if (!active || disposed) return;
+    if (!active || disposed || suspended) return;
     if (heading.textContent !== t('agentConversations')) heading.textContent = t('agentConversations');
     search.placeholder = t('agentSearchConversations');
     search.setAttribute('aria-label', t('agentSearchConversations'));
@@ -160,7 +161,7 @@ export function createConversationList({ store, onSelect, onDelete }: Conversati
     list.setAttribute('aria-busy', String(Boolean(query && !matches)));
   }
   function sync() {
-    if (!active || disposed) return;
+    if (!active || disposed || suspended) return;
     const next = store.searchSnapshot();
     if (next !== source) {
       source = next;
@@ -199,6 +200,19 @@ export function createConversationList({ store, onSelect, onDelete }: Conversati
         sync();
         engine.query(query);
       }
+    },
+    suspend() {
+      if (disposed || suspended) return;
+      suspended = true;
+      engine.suspend();
+    },
+    resume() {
+      if (disposed || !suspended) return;
+      suspended = false;
+      engine.resume(store.searchSnapshot());
+      source = undefined;
+      sync();
+      engine.query(query);
     },
     dispose() {
       disposed = true;
