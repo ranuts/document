@@ -106,7 +106,7 @@ test('a held request shows actual classification and generation, then clears wai
     await send.click();
     await expect.poll(() => answers).toBe(2);
     await input.fill('One more question');
-    await send.click();
+    await page.locator('.cui-send-stop').click();
     await expect(page.locator('.cui-progress')).toBeHidden();
     await expect(elapsed).toHaveText('');
     await expect(input).toHaveValue('One more question');
@@ -197,7 +197,7 @@ test('Chinese waiting feedback remains localized and stable in a narrow real edi
     await page
       .locator('.agent-runtime-panel')
       .screenshot({ path: testInfo.outputPath('process-routing-zh-narrow.png') });
-    await send.click();
+    await page.locator('.cui-send-stop').click();
     await expect(page.locator('.cui-progress')).toBeHidden();
     await expect(page.locator('.cui-elapsed')).toHaveText('');
     await expect(input).toHaveValue('下一条问题草稿');

@@ -72,12 +72,15 @@ export async function prepareDocumentTask(
   return { tools };
 }
 
+/** A preflight refusal is guidance, never a successful executed task. */
+export type DocumentTaskResult = AgentRunResult & { preflightFailed?: true };
+
 /** Own one editor-scoped task; presentation remains in the panel's callbacks. */
 export async function runDocumentTask(
   provider: LLMProvider,
   request: string,
   options: DocumentAgentToolOptions & Pick<AgentRunOptions, 'signal' | 'onEvent' | 'onToolExchange' | 'assertCurrent'>,
-): Promise<AgentRunResult> {
+): Promise<DocumentTaskResult> {
   let current = options.target;
   const prepared = await prepareDocumentTask(provider, request, {
     ...options,
@@ -95,6 +98,7 @@ export async function runDocumentTask(
         { role: 'assistant', content: text },
       ],
       toolCallCount: 0,
+      preflightFailed: true,
       stoppedOnLimit: false,
       aborted: false,
     };

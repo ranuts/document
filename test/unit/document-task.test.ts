@@ -193,6 +193,7 @@ it('rejects a PDF body edit before offering an annotation as a substitute', asyn
       receipt: vi.fn(),
     },
   );
+  expect(result.preflightFailed).toBe(true);
   expect(result.text).toContain('body text');
   expect(result.toolCallCount).toBe(0);
   expect(review).not.toHaveBeenCalled();

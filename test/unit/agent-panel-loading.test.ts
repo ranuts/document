@@ -14,6 +14,8 @@ function createPreparedPanel() {
 }
 
 const state = vi.hoisted(() => ({
+  queueStream: undefined as
+    undefined | ((text: string, delta: (text: string) => void, signal?: AbortSignal) => Promise<void>),
   conversations: undefined as
     undefined | ReturnType<typeof import('../../lib/agent-plugin/ui/sessions').createConversationStore>,
   preload: vi.fn(),
@@ -34,10 +36,11 @@ const state = vi.hoisted(() => ({
   toolPlan: vi.fn(),
   routing: vi.fn(),
   semanticResponse: undefined as string | undefined,
+  pdfEffect: undefined as string | undefined,
   semanticGate: undefined as Promise<void> | undefined,
   structuredStream: undefined as import('@ranuts/agent-core/llm/types').LLMProvider['generateJSONStream'],
   targetCurrent: true,
-  toolContext: 'slide' as 'slide' | 'cell' | 'word',
+  toolContext: 'slide' as 'slide' | 'cell' | 'word' | 'pdf',
   apply: vi.fn().mockResolvedValue('verified'),
   writing: vi.fn(),
   source: '',
@@ -183,17 +186,28 @@ vi.mock('@ranuts/agent-core/llm/local', async (original) => ({
       return state.ready;
     }
     get generateJSON() {
-      return state.semanticResponse === undefined
+      return state.semanticResponse === undefined && state.pdfEffect === undefined
         ? undefined
         : async () => {
             await state.semanticGate;
-            return { text: state.semanticResponse!, toolCalls: [], stopReason: 'stop' };
+            return {
+              text: state.pdfEffect ? JSON.stringify({ effect: state.pdfEffect }) : state.semanticResponse!,
+              toolCalls: [],
+              stopReason: 'stop',
+            };
           };
     }
     get generateJSONStream() {
       return state.structuredStream;
     }
-    async chatStream(_messages: unknown, _tools: unknown, delta: (text: string) => void, signal?: AbortSignal) {
+    async chatStream(
+      _messages: import('@ranuts/agent-core/llm/types').LLMMessage[],
+      _tools: unknown,
+      delta: (text: string) => void,
+      signal?: AbortSignal,
+    ) {
+      if (state.queueStream)
+        await state.queueStream(String(_messages.at(-1)?.content).split('User request:\n').at(-1)!, delta, signal);
       if (state.stalled)
         await new Promise((_resolve, reject) =>
           signal?.addEventListener(
@@ -311,22 +325,26 @@ vi.mock('../../lib/agent-plugin/document-task', async (original) => {
       request: string,
       options: Parameters<typeof import('../../lib/agent-plugin/document-task').runDocumentTask>[2],
     ) =>
-      runAgent(
-        createSchemaTaskProvider(provider, () => options.target.context),
-        request,
-        { ...options, tools: createDocumentAgentTools(options) },
-      ),
+      options.target.context.kind === 'pdf'
+        ? actual.runDocumentTask(provider, request, options)
+        : runAgent(
+            createSchemaTaskProvider(provider, () => options.target.context),
+            request,
+            { ...options, tools: createDocumentAgentTools(options) },
+          ),
   };
 });
 vi.mock('../../lib/agent-plugin/document-read-answer', () => ({ generateReadAnswer: state.readAnswer }));
 vi.mock('../../lib/agent-plugin/document-tool-action', () => {
   const capture = () => ({
     context:
-      state.toolContext === 'cell'
-        ? { kind: 'cell' }
-        : state.toolContext === 'word'
-          ? { kind: 'word' }
-          : { kind: 'slide', page: 1 },
+      state.toolContext === 'pdf'
+        ? { kind: 'pdf', page: 1 }
+        : state.toolContext === 'cell'
+          ? { kind: 'cell' }
+          : state.toolContext === 'word'
+            ? { kind: 'word' }
+            : { kind: 'slide', page: 1 },
     label: 'PPT · 1',
     selectedText: '',
     isCurrent: () => state.targetCurrent,
@@ -373,6 +391,7 @@ afterEach(() => {
   state.unavailable = undefined;
   state.activeBackend = undefined;
   state.stalled = false;
+  state.queueStream = undefined;
   state.generate.mockReset();
   state.toolPlan.mockReset();
   state.readAnswer.mockReset().mockResolvedValue('120');
@@ -381,6 +400,7 @@ afterEach(() => {
   state.apply.mockClear();
   state.routing.mockReset();
   state.semanticResponse = undefined;
+  state.pdfEffect = undefined;
   state.semanticGate = undefined;
   state.structuredStream = undefined;
   state.targetCurrent = true;
@@ -2937,6 +2957,9 @@ it('keeps semantic routing for an exact greeting while an unexecuted suggestion 
   try {
     input.value = 'Hello';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(activity).not.toHaveBeenCalledWith('routing');
+    expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(1);
+    panel.querySelector<HTMLButtonElement>('.agent-queue-send-now')!.click();
     await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
     expect(activity).toHaveBeenCalledWith('routing');
     expect(state.apply).not.toHaveBeenCalled();
@@ -2960,3 +2983,522 @@ it.each(['English selection '.repeat(600), '中文选区。'.repeat(2000), '"\\\
     expect(panel.querySelector('.cui-msg-error')).toBeNull();
   },
 );
+
+function enterQueueDraft(panel: HTMLElement, text: string): void {
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = text;
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+}
+it('executes queued drafts in FIFO order and echoes them only after the active host turn settles', async () => {
+  state.ready = true;
+  const calls: string[] = [];
+  const releases: Array<() => void> = [];
+  state.queueStream = (text) =>
+    new Promise((resolve) => {
+      calls.push(text);
+      releases.push(resolve);
+    });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(calls).toHaveLength(1));
+  enterQueueDraft(panel, 'Hi');
+  enterQueueDraft(panel, 'Hey');
+  expect(calls).toEqual(['Hello']);
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(2);
+  expect([...panel.querySelectorAll('.cui-msg-user')].map((row) => row.textContent)).toEqual(['Hello']);
+  releases[0]();
+  await vi.waitFor(() => expect(calls).toEqual(['Hello', 'Hi']));
+  releases[1]();
+  await vi.waitFor(() => expect(calls).toEqual(['Hello', 'Hi', 'Hey']));
+  releases[2]();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0);
+});
+it('pauses queued requests after Stop, accepts new drafts while paused, and resumes only explicitly', async () => {
+  state.ready = true;
+  const calls: string[] = [];
+  state.queueStream = (text, _delta, signal) =>
+    new Promise((_resolve, reject) => {
+      calls.push(text);
+      signal?.addEventListener('abort', () => reject(signal.reason), { once: true });
+    });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(calls).toHaveLength(1));
+  enterQueueDraft(panel, 'Hi');
+  panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  enterQueueDraft(panel, 'Hey');
+  expect(calls).toHaveLength(1);
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(2);
+  panel.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
+  await vi.waitFor(() => expect(calls).toEqual(['Hello', 'Hi']));
+});
+it('retains stale original scopes for explicit editing and never overwrites an occupied composer', async () => {
+  state.ready = true;
+  let release!: () => void;
+  state.queueStream = () =>
+    new Promise((resolve) => {
+      release = resolve;
+    });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(release).toBeTypeOf('function'));
+  enterQueueDraft(panel, 'Hi');
+  state.targetCurrent = false;
+  release();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'My occupied draft';
+  input.dispatchEvent(new Event('input'));
+  panel.querySelector<HTMLButtonElement>('.agent-queue-edit')!.click();
+  expect(input.value).toBe('My occupied draft');
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(1);
+  expect(panel.textContent).toContain(t('agentQueueComposerOccupied'));
+  input.value = '';
+  input.dispatchEvent(new Event('input'));
+  panel.querySelector<HTMLButtonElement>('.agent-queue-edit')!.click();
+  expect(input.value).toBe('Hi');
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0);
+});
+it('lets a fresh Send after Stop start normally when no older pending request remains', async () => {
+  state.ready = true;
+  const calls: string[] = [];
+  state.queueStream = (text, _delta, signal) =>
+    new Promise((_resolve, reject) => {
+      calls.push(text);
+      signal?.addEventListener('abort', () => reject(signal.reason), { once: true });
+    });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(calls).toHaveLength(1));
+  panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  enterQueueDraft(panel, 'Hi');
+  await vi.waitFor(() => expect(calls).toEqual(['Hello', 'Hi']));
+});
+it('promotes Send now once and waits for the previous host submit to settle', async () => {
+  state.ready = true;
+  const calls: string[] = [];
+  let finish!: () => void;
+  let aborts = 0;
+  state.queueStream = (text, _delta, signal) =>
+    new Promise((resolve) => {
+      calls.push(text);
+      finish = resolve;
+      signal?.addEventListener('abort', () => aborts++, { once: true });
+    });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(calls).toHaveLength(1));
+  enterQueueDraft(panel, 'Hi');
+  enterQueueDraft(panel, 'Hey');
+  panel.querySelectorAll<HTMLButtonElement>('.agent-queue-send-now')[1].click();
+  panel.querySelectorAll<HTMLButtonElement>('.agent-queue-send-now')[0].click();
+  expect(aborts).toBe(1);
+  expect(calls).toEqual(['Hello']);
+  finish();
+  await vi.waitFor(() => expect(calls).toEqual(['Hello', 'Hey']));
+  expect([...panel.querySelectorAll('.agent-queue-text')].map((row) => row.textContent)).toEqual(['Hi']);
+});
+it('holds pending work through review Apply in flight and advances only on its verified settlement', async () => {
+  state.ready = true;
+  state.toolContext = 'slide';
+  state.editorReady = true;
+  state.editorKind = 'slide';
+  state.toolPlan.mockResolvedValue({ tool: 'add_slide_text', input: { text: 'Draft' }, readOnly: false });
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+  };
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Add a new text box on the current slide with this exact plain text: Draft');
+  await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+  enterQueueDraft(panel, 'Hello');
+  expect(calls).toEqual([]);
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(1);
+  let finish!: (outcome: 'verified') => void;
+  state.apply.mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+  );
+  panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  expect(panel.querySelector('.agent-plan-preview')?.getAttribute('data-state')).toBe('applying');
+  enterQueueDraft(panel, 'Hi');
+  expect(calls).toEqual([]);
+  finish('verified');
+  await vi.waitFor(() => expect(calls).toEqual(['Hello', 'Hi']));
+});
+it.each(['cancelled', 'failed', 'sent'] as const)('pauses older pending work after review %s', async (status) => {
+  state.ready = true;
+  state.toolContext = 'slide';
+  state.editorKind = 'slide';
+  state.editorReady = true;
+  state.toolPlan.mockResolvedValue({ tool: 'add_slide_text', input: { text: 'Draft' }, readOnly: false });
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+  };
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Add a new text box on the current slide with this exact plain text: Draft');
+  await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+  enterQueueDraft(panel, 'Hello');
+  if (status === 'cancelled') panel.querySelector<HTMLElement>('.agent-plan-cancel')!.click();
+  else {
+    state.apply.mockImplementationOnce(async () => {
+      if (status === 'failed') throw new Error('write failed');
+      return 'sent';
+    });
+    panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  }
+  await vi.waitFor(() => expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false));
+  expect(calls).toEqual([]);
+  enterQueueDraft(panel, 'Hi');
+  expect(calls).toEqual([]);
+});
+it('prioritizes explicit Refine without executing its old suggestion or unrelated pending work', async () => {
+  state.ready = true;
+  state.toolContext = 'slide';
+  state.editorKind = 'slide';
+  state.editorReady = true;
+  state.toolPlan
+    .mockResolvedValueOnce({ tool: 'add_slide_text', input: { text: 'First' }, readOnly: false })
+    .mockResolvedValueOnce({ tool: 'add_slide_text', input: { text: 'Replacement' }, readOnly: false });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Add a new text box on the current slide with this exact plain text: First');
+  await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+  enterQueueDraft(panel, 'Hello');
+  panel.querySelector<HTMLElement>('.agent-plan-refine')!.click();
+  enterQueueDraft(panel, 'Change the suggestion text to Replacement');
+  await vi.waitFor(() => expect(panel.querySelectorAll('.agent-plan-preview')).toHaveLength(2));
+  expect(panel.querySelector('.agent-plan-preview:last-child')?.getAttribute('data-state')).toBe('pending');
+  expect(state.apply).not.toHaveBeenCalled();
+  expect([...panel.querySelectorAll('.agent-queue-text')].map((row) => row.textContent)).toEqual(['Hello']);
+});
+it('pauses the previous conversation on switch and requires Resume on return', async () => {
+  state.ready = true;
+  const calls: string[] = [];
+  state.queueStream = (text, _delta, signal) =>
+    new Promise((_resolve, reject) => {
+      calls.push(text);
+      signal?.addEventListener('abort', () => reject(signal.reason), { once: true });
+    });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  const original = activeSession();
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(calls).toHaveLength(1));
+  enterQueueDraft(panel, 'Hi');
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0);
+  openSession(panel, original);
+  expect(calls).toHaveLength(1);
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(1);
+  panel.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
+  await vi.waitFor(() => expect(calls).toEqual(['Hello', 'Hi']));
+});
+it('preserves a pending original provider binding after switching the selected model', async () => {
+  state.ready = true;
+  let finish!: () => void;
+  const calls: string[] = [];
+  state.queueStream = (text) =>
+    new Promise((resolve) => {
+      calls.push(text);
+      finish = resolve;
+    });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(calls).toHaveLength(1));
+  enterQueueDraft(panel, 'Hi');
+  const select = panel.querySelector<HTMLElement>('.agent-panel-model')!;
+  select.setAttribute('value', 'another-model');
+  select.dispatchEvent(new Event('change'));
+  finish();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  panel.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
+  await vi.waitFor(() => expect(panel.textContent).toContain(t('agentQueueScopeChanged')));
+  expect(calls).toHaveLength(1);
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(1);
+});
+it('replaces an actual native-tool review through Refine without overlapping its old submit or applying either proposal', async () => {
+  state.nativeEndpoint = true;
+  state.editorReady = true;
+  state.editorKind = 'slide';
+  state.toolContext = 'slide';
+  state.toolPlan.mockResolvedValue({ tool: 'add_slide_text', input: { text: 'Replacement' }, readOnly: false });
+  const nativeBodies: Array<Record<string, unknown>> = [];
+  const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
+    const body = JSON.parse(String(init.body));
+    if (body.tools?.length) nativeBodies.push(body);
+    return new Response(
+      JSON.stringify({
+        choices: [
+          {
+            message: body.tools?.length
+              ? {
+                  content: null,
+                  tool_calls: [
+                    {
+                      id: 'native-review',
+                      type: 'function',
+                      function: { name: 'add_slide_text', arguments: JSON.stringify({ text: 'Original native' }) },
+                    },
+                  ],
+                }
+              : { content: 'connected' },
+            finish_reason: body.tools?.length ? 'tool_calls' : 'stop',
+          },
+        ],
+      }),
+    );
+  });
+  vi.stubGlobal('fetch', fetchMock);
+  try {
+    const panel = createAgentPanel();
+    document.body.append(panel);
+    const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+    kind.value = 'openai-compatible';
+    kind.dispatchEvent(new Event('change'));
+    for (const [selector, value] of [
+      ['.agent-panel-endpoint-url', 'https://api.example.com/v1'],
+      ['.agent-panel-endpoint-model', 'tool-model'],
+      ['.agent-panel-endpoint-key', 'sk-test'],
+    ]) {
+      const field = panel.querySelector<HTMLInputElement>(selector)!;
+      field.value = value;
+      field.dispatchEvent(new Event('change'));
+    }
+    const connect = panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!;
+    connect.click();
+    await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+    enterQueueDraft(panel, 'Put a title on this slide');
+    await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+    enterQueueDraft(panel, 'Hello');
+    panel.querySelector<HTMLElement>('.agent-plan-refine')!.click();
+    enterQueueDraft(panel, 'Change the suggestion title to Replacement');
+    await vi.waitFor(() => expect(panel.querySelectorAll('.agent-plan-preview')).toHaveLength(2));
+    expect(state.apply).not.toHaveBeenCalled();
+    expect(nativeBodies).toHaveLength(1);
+    expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(1);
+    expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hello');
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
+it('waits for a cancelled review Apply to actually settle before Send now starts a model turn', async () => {
+  state.ready = true;
+  state.toolContext = 'slide';
+  state.editorKind = 'slide';
+  state.editorReady = true;
+  state.toolPlan.mockResolvedValue({ tool: 'add_slide_text', input: { text: 'Draft' }, readOnly: false });
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+  };
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Add a new text box on the current slide with this exact plain text: Draft');
+  await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+  let finish!: (status: 'verified') => void;
+  state.apply.mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+  );
+  panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  enterQueueDraft(panel, 'Hello');
+  panel.querySelector<HTMLButtonElement>('.agent-queue-send-now')!.click();
+  expect(calls).toEqual([]);
+  expect(panel.querySelector('.agent-plan-preview')?.getAttribute('data-state')).toBe('applying');
+  finish('verified');
+  await vi.waitFor(() => expect(calls).toEqual(['Hello']));
+  expect(panel.querySelector('.agent-plan-preview')?.getAttribute('data-state')).toBe('cancelled');
+  expect(panel.querySelector('.agent-plan-preview')?.textContent).not.toContain(t('agentPlanVerified'));
+});
+it('keeps a queued request pending through a readiness failure and preserves a different composer draft', async () => {
+  state.ready = true;
+  const calls: string[] = [];
+  let finish!: () => void;
+  state.queueStream = (text) =>
+    new Promise((resolve) => {
+      calls.push(text);
+      finish = resolve;
+    });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(calls).toHaveLength(1));
+  enterQueueDraft(panel, 'Hi');
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'A different draft';
+  input.dispatchEvent(new Event('input'));
+  state.ready = false;
+  finish();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false));
+  expect(calls).toEqual(['Hello']);
+  expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
+  expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hi');
+  expect(input.value).toBe('A different draft');
+  state.ready = true;
+  panel.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
+  await vi.waitFor(() => expect(calls).toEqual(['Hello', 'Hi']));
+  expect(input.value).toBe('A different draft');
+});
+it('pauses older queued requests after a model failure instead of treating promise resolution as success', async () => {
+  state.ready = true;
+  let fail!: () => void;
+  const calls: string[] = [];
+  state.queueStream = (text) =>
+    new Promise((_resolve, reject) => {
+      calls.push(text);
+      fail = () => reject(new Error('Model failed'));
+    });
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(calls).toHaveLength(1));
+  enterQueueDraft(panel, 'Hi');
+  fail();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false));
+  enterQueueDraft(panel, 'Hey');
+  expect(calls).toEqual(['Hello']);
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(2);
+});
+it.each(['restore', 'import', 'delete-current'] as const)(
+  'invalidates volatile pending work on history %s',
+  async (action) => {
+    state.ready = true;
+    const calls: string[] = [];
+    state.queueStream = (text, _delta, signal) =>
+      new Promise((_resolve, reject) => {
+        calls.push(text);
+        signal?.addEventListener('abort', () => reject(signal.reason), { once: true });
+      });
+    const panel = createPreparedPanel();
+    document.body.append(panel);
+    enterQueueDraft(panel, 'Hello');
+    await vi.waitFor(() => expect(calls).toHaveLength(1));
+    enterQueueDraft(panel, 'Hi');
+    panel.querySelector<HTMLButtonElement>(`.agent-history-${action}`)!.click();
+    if (action === 'delete-current') panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+    await vi.waitFor(() => expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(calls).toEqual(['Hello']);
+  },
+);
+it('pauses before pagehide review disposal and never auto-sends on BFCache restoration', async () => {
+  state.ready = true;
+  state.toolContext = 'slide';
+  state.editorKind = 'slide';
+  state.editorReady = true;
+  state.toolPlan.mockResolvedValue({ tool: 'add_slide_text', input: { text: 'Draft' }, readOnly: false });
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+  };
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Add a new text box on the current slide with this exact plain text: Draft');
+  await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+  enterQueueDraft(panel, 'Hello');
+  const hide = new Event('pagehide');
+  Object.defineProperty(hide, 'persisted', { value: true });
+  window.dispatchEvent(hide);
+  const show = new Event('pageshow');
+  Object.defineProperty(show, 'persisted', { value: true });
+  window.dispatchEvent(show);
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(calls).toEqual([]);
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(1);
+  expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false);
+});
+it.each(['execute', 'edit'] as const)(
+  'keeps queued trusted reads by reference and revokes their provenance on %s',
+  async (action) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.toolContext = 'word';
+    state.source = 'Selected original source';
+    let finish!: () => void;
+    state.queueStream = () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      });
+    const hostRead = await import('../../lib/agent-plugin/ui/host-read-request');
+    const prepare = vi.spyOn(hostRead, 'prepareHostRead');
+    const panel = createPreparedPanel();
+    document.body.append(panel);
+    const summary = panel.querySelector<HTMLButtonElement>('[data-task="summarize"]')!;
+    try {
+      enterQueueDraft(panel, 'Hello');
+      await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+      summary.click();
+      const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+      const text = input.value;
+      expect(text).not.toBe('');
+      enterQueueDraft(panel, text);
+      expect(prepare).not.toHaveBeenCalled();
+      if (action === 'edit') {
+        panel.querySelector<HTMLButtonElement>('.agent-queue-edit')!.click();
+        expect(input.value).toBe(text);
+        expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0);
+      }
+      finish();
+      if (action === 'execute') {
+        await vi.waitFor(() => expect(prepare).toHaveBeenCalledOnce());
+        const { isCurrentHostRead } = await import('../../lib/agent-plugin/ui/task-entry');
+        expect(isCurrentHostRead(prepare.mock.calls[0][0])).toBe(true);
+        expect(prepare.mock.results[0].value.request.tools).toEqual({});
+        expect(state.routing).not.toHaveBeenCalled();
+      } else {
+        await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+        enterQueueDraft(panel, text);
+        await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+        expect(prepare).not.toHaveBeenCalled();
+      }
+    } finally {
+      prepare.mockRestore();
+    }
+  },
+);
+
+it('pauses the next queued request after a real unsupported PDF preflight refusal without starting an answer call', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.toolContext = 'pdf';
+  state.pdfEffect = 'edit_body';
+  state.routing.mockResolvedValue({ task: 'tools', language: 'en' });
+  let finish!: () => void;
+  state.semanticGate = new Promise((resolve) => {
+    finish = resolve;
+  });
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+  };
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Please change the PDF body budget to 200.');
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).not.toBeNull());
+  enterQueueDraft(panel, 'Hello');
+  finish();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false));
+  expect(panel.textContent).toContain(t('agentPdfBodyUnsupported'));
+  expect(calls).toEqual([]);
+  expect(state.apply).not.toHaveBeenCalled();
+  expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hello');
+});
