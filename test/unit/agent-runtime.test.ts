@@ -557,3 +557,48 @@ it('does not publish an inference result after the host scope changes', async ()
   ).rejects.toThrow('expired scope');
   expect(event).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'assistant' }));
 });
+
+it('observes the first nonempty provider-boundary text once before deferred UI deltas', async () => {
+  const order: string[] = [];
+  const provider: LLMProvider = {
+    name: 'test',
+    isReady: () => true,
+    chat: async () => textResponse('Unused'),
+    chatStream: async (_messages, _tools, delta) => {
+      delta('');
+      delta('First');
+      delta(' second');
+      return textResponse('First second');
+    },
+  };
+  await runAgent(provider, 'Question', {
+    tools: {
+      read: { name: 'read', description: 'read', inputSchema: {}, readOnlyHint: true, execute: async () => ({}) },
+    },
+    onFirstProviderText: () => order.push('provider'),
+    onEvent: (event) => {
+      if (event.type === 'assistant_delta') order.push('visible');
+    },
+  });
+  expect(order).toEqual(['provider', 'visible']);
+});
+
+it('does not observe provider text that arrives after abort', async () => {
+  const abort = new AbortController();
+  const observed = vi.fn();
+  await runAgent(
+    {
+      name: 'test',
+      isReady: () => true,
+      chat: async () => textResponse('Unused'),
+      chatStream: async (_messages, _tools, delta) => {
+        abort.abort();
+        delta('Late');
+        return textResponse('Late');
+      },
+    },
+    'Question',
+    { signal: abort.signal, onFirstProviderText: observed },
+  );
+  expect(observed).not.toHaveBeenCalled();
+});

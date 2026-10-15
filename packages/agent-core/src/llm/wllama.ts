@@ -243,8 +243,10 @@ export class WllamaProvider implements LocalLLMProvider {
           : undefined;
         const engine = this.engine!;
         let contextTrimmed = false;
+        let contextPreparationDurationMs: number | undefined;
         const completion = await this.interruptible(engine, abortSignal, async () => {
           abortSignal.throwIfAborted();
+          const contextStarted = performance.now();
           const systemPrompt = this.generation.systemPrompt ?? this.options.systemPrompt ?? CHAT_ONLY_SYSTEM_PROMPT;
           let request = {
             messages: toOpenAIMessages(messages, systemPrompt),
@@ -276,6 +278,7 @@ export class WllamaProvider implements LocalLLMProvider {
             request = { ...base, messages: toOpenAIMessages(budget.messages, systemPrompt) };
             contextTrimmed = budget.trimmed;
           }
+          contextPreparationDurationMs = performance.now() - contextStarted;
           abortSignal.throwIfAborted();
           const result = await engine.createChatCompletion(request);
           return onDelta
@@ -289,6 +292,7 @@ export class WllamaProvider implements LocalLLMProvider {
         response.usage = {
           ...response.usage,
           responseDurationMs: elapsed,
+          ...(contextPreparationDurationMs !== undefined ? { contextPreparationDurationMs } : {}),
           ...(firstTextMs !== undefined ? { timeToFirstTextMs: firstTextMs } : {}),
           ...(response.usage?.completionTokens !== undefined && elapsed > 0
             ? { endToEndTokensPerSecond: (response.usage.completionTokens * 1000) / elapsed }

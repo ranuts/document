@@ -305,36 +305,42 @@ export class WebLLMProvider implements LocalLLMProvider {
     signal?.addEventListener('abort', onAbort, { once: true });
     this.lifetime.signal.addEventListener('abort', onAbort, { once: true });
     try {
+      const started = performance.now();
+      let firstTextMs: number | undefined;
       const failureSignals = [this.lifetime.signal, ...(engine.failureSignal ? [engine.failureSignal] : [])];
-      const response = await waitForSignals(
-        engine.chat.completions.create({
-          ...this.requestBody(messages, tools),
-          ...(schema
-            ? {
-                messages: toOpenAIMessages(
-                  messages,
-                  'Return only JSON matching the supplied schema. Follow the bounded task instructions. /no_think',
-                ),
-                // Qwen3 recommends sampling even in non-thinking mode. JSON
-                // grammar constrains syntax; forcing greedy decoding does not
-                // establish task accuracy and overrides the chosen settings.
-                temperature: this.model.startsWith('Qwen3-') ? this.generation.temperature : 0,
-                response_format: { type: 'json_object', schema: JSON.stringify(schema) },
-              }
-            : {}),
-          // SDK 0.2.85 keeps its interrupt flag after Stop. Its non-streaming
-          // entry skips generation before resetting that flag; the streaming
-          // entry resets it on every run. Collect internal streams even for
-          // chat/JSON callers that only need the completed response.
-          stream: true,
-          stream_options: { include_usage: true },
-        }),
-        failureSignals,
-      );
+      const request = {
+        ...this.requestBody(messages, tools),
+        ...(schema
+          ? {
+              messages: toOpenAIMessages(
+                messages,
+                'Return only JSON matching the supplied schema. Follow the bounded task instructions. /no_think',
+              ),
+              // Qwen3 recommends sampling even in non-thinking mode. JSON
+              // grammar constrains syntax; forcing greedy decoding does not
+              // establish task accuracy and overrides the chosen settings.
+              temperature: this.model.startsWith('Qwen3-') ? this.generation.temperature : 0,
+              response_format: { type: 'json_object', schema: JSON.stringify(schema) },
+            }
+          : {}),
+        // SDK 0.2.85 keeps its interrupt flag after Stop. Its non-streaming
+        // entry skips generation before resetting that flag; the streaming
+        // entry resets it on every run. Collect internal streams even for
+        // chat/JSON callers that only need the completed response.
+        stream: true,
+        stream_options: { include_usage: true },
+      };
+      // Host construction only: Worker tokenization/prefill remains backend-owned.
+      const contextPreparationDurationMs = performance.now() - started;
+      const response = await waitForSignals(engine.chat.completions.create(request), failureSignals);
       const completion = await waitForSignals(
         accumulateOpenAIStream(
           webLLMStream(response as AsyncIterable<OpenAIStreamChunk>),
-          onDelta ?? (() => {}),
+          (text) => {
+            if (!text || signal?.aborted || this.lifetime.signal.aborted) return;
+            if (firstTextMs === undefined) firstTextMs = performance.now() - started;
+            onDelta?.(text);
+          },
           signal,
           {
             drainOnAbort: true,
@@ -344,7 +350,14 @@ export class WebLLMProvider implements LocalLLMProvider {
       );
       signal?.throwIfAborted();
       this.lifetime.signal.throwIfAborted();
-      return parseOpenAIResponse(completion);
+      const parsed = parseOpenAIResponse(completion);
+      parsed.usage = {
+        ...parsed.usage,
+        contextPreparationDurationMs,
+        responseDurationMs: performance.now() - started,
+        ...(firstTextMs !== undefined ? { timeToFirstTextMs: firstTextMs } : {}),
+      };
+      return parsed;
     } catch (error: unknown) {
       // The Worker SDK serializes native errors with toString(), rejecting a
       // string instead of preserving the Error subclass. Match only its known

@@ -95,6 +95,8 @@ export class ChatView {
   /** The agent bubble currently receiving streamed deltas, if any. */
   private liveMsg: HTMLDivElement | null = null;
   private liveText = '';
+  private presentationCallback?: () => void;
+  private presentationCandidate?: HTMLElement;
   private liveMarkdown?: StreamingMarkdown;
   private liveNode: Text | null = null;
   private pendingText = '';
@@ -279,6 +281,7 @@ export class ChatView {
     }
     if (message.role === 'user') this.lastUserText = message.text;
     const bubble = this.renderMessage(message, this.messagesEl, this.lastUserText);
+    if (message.role === 'agent' && message.text && this.presentationCallback) this.presentationCandidate = bubble;
     this.finishAppendLayout(this.following);
     return bubble;
   }
@@ -574,8 +577,11 @@ export class ChatView {
 
   private finishAppendLayout(stick: boolean): void {
     if (this.appendBatchDepth) this.appendBatchChanged = true;
-    else if (stick) this.scrollToEnd();
-    else this.updateScrollBtn();
+    else {
+      if (stick) this.scrollToEnd();
+      else this.updateScrollBtn();
+      this.notifyPresentation();
+    }
   }
 
   /**
@@ -615,13 +621,14 @@ export class ChatView {
     if (this.liveMsg) this.liveMsg.dataset.source = this.liveText;
     const bubble = this.liveMsg?.querySelector<HTMLElement>('.cui-bubble');
     if (bubble && !this.liveMarkdown) renderMarkdown(bubble, this.liveText);
+    if (bubble && this.liveText && this.presentationCallback) this.presentationCandidate = bubble;
     this.liveMarkdown = undefined;
     this.liveMsg?.classList.remove('cui-streaming', 'cui-streaming-markdown');
     this.liveMsg = null;
     this.liveNode = null;
     this.liveText = '';
     this.updateActivity();
-    if (bubble && stick) this.finishAppendLayout(stick);
+    if (bubble) this.finishAppendLayout(stick);
   }
 
   /** Only explicit stream completion can make a preview available for writing. */
@@ -668,6 +675,7 @@ export class ChatView {
 
   /** Freeze visible output and acknowledge cancellation until the host settles. */
   requestStop(): void {
+    this.observePresentation();
     if (!this.running || this.stopping || this.disposed) return;
     const restoreFocus = document.activeElement === this.sendBtn || document.activeElement === this.stopBtn;
     this.stopping = true;
@@ -788,6 +796,7 @@ export class ChatView {
 
   /** Remove all messages and restore the empty state. */
   clear(): void {
+    this.observePresentation();
     this.resetNativeScroll();
     this.submissionRevision++;
     this.historyRevision++;
@@ -974,6 +983,7 @@ export class ChatView {
   /** Release layout observers and transient feedback when the host unmounts. */
   dispose(): void {
     if (this.disposed) return;
+    this.observePresentation();
     this.resetNativeScroll();
     this.disposed = true;
     this.historyRevision++;
@@ -1013,7 +1023,84 @@ export class ChatView {
         this.recordScrollGeometry();
         this.updateScrollBtn();
       }
+      this.notifyPresentation();
     });
+  }
+
+  /** Arm one request-owned DOM observation; replacement and cancellation discard the old owner. */
+  observePresentation(callback?: () => void): void {
+    this.presentationCallback = this.disposed ? undefined : callback;
+    this.presentationCandidate = undefined;
+  }
+
+  private notifyPresentation(): void {
+    const callback = this.presentationCallback;
+    const candidate = this.presentationCandidate;
+    if (
+      !callback ||
+      !candidate ||
+      this.disposed ||
+      this.appendBatchDepth ||
+      !this.el.isConnected ||
+      !candidate.isConnected ||
+      document.visibilityState !== 'visible'
+    )
+      return;
+    try {
+      if (typeof candidate.checkVisibility === 'function') {
+        if (
+          !candidate.checkVisibility({ opacityProperty: true, visibilityProperty: true, contentVisibilityAuto: true })
+        )
+          return;
+      } else {
+        // Older engines: cap ancestor work and leave deeper/unobservable trees unmeasured.
+        let ancestor: HTMLElement | null = candidate;
+        for (let visited = 0; ancestor && visited < 16; visited++, ancestor = ancestor.parentElement) {
+          const style = getComputedStyle(ancestor);
+          if (
+            style.visibility === 'hidden' ||
+            style.visibility === 'collapse' ||
+            style.display === 'none' ||
+            style.opacity === '0'
+          )
+            return;
+        }
+        if (ancestor) return;
+      }
+      const viewport = this.messagesEl.getBoundingClientRect();
+      const left = Math.max(0, viewport.left);
+      const top = Math.max(0, viewport.top);
+      const right = Math.min(window.innerWidth, viewport.right);
+      const bottom = Math.min(window.innerHeight, viewport.bottom);
+      if (left >= right || top >= bottom) return;
+      // Conservative bounded probe: never create a Range spanning a growing reply.
+      const text = document.createTreeWalker(candidate, NodeFilter.SHOW_TEXT);
+      for (let visited = 0, node = text.nextNode(); node && visited < 16; visited++, node = text.nextNode()) {
+        const sample = (node as Text).data.slice(0, 64);
+        const start = sample.search(/\S/);
+        if (start < 0) continue;
+        const range = document.createRange();
+        range.setStart(node, start);
+        range.setEnd(node, sample.length);
+        for (const rect of range.getClientRects()) {
+          if (
+            rect.width <= 0 ||
+            rect.height <= 0 ||
+            rect.right <= left ||
+            rect.left >= right ||
+            rect.bottom <= top ||
+            rect.top >= bottom
+          )
+            continue;
+          this.presentationCallback = undefined;
+          this.presentationCandidate = undefined;
+          callback();
+          return;
+        }
+      }
+    } catch {
+      /* Unsupported geometry/diagnostics never affect chat behavior. */
+    }
   }
 
   private flushStream(format = true): void {
@@ -1022,6 +1109,8 @@ export class ChatView {
       if (format) this.liveMarkdown.update(this.liveText);
       else this.liveMarkdown.raw(this.liveText);
     } else this.liveNode?.appendData(this.pendingText);
+    if (this.presentationCallback)
+      this.presentationCandidate = this.liveMsg.querySelector<HTMLElement>('.cui-bubble') ?? undefined;
     this.pendingText = '';
   }
 

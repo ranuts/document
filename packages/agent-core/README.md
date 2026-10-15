@@ -38,3 +38,19 @@ The runtime is fully unit-testable with a scripted provider and mock tools — i
 only knows the `LLMProvider` interface and the `AgentTool` registry.
 
 The document product uses a default-off assistant switch. Opening the panel never downloads a model or connects a service. Runtime configuration is reached through the usage settings; generated selection edits require explicit review and confirmation. Browser-agent tools are documented separately in the developer reference.
+
+## Optional timing observations
+
+`runAgent` accepts `onFirstProviderText?: () => void`, called once for the first
+nonempty `chatStream` delta after abort checks and before runtime buffering. This
+is the current `LLMProvider` boundary; schema/answer-only adapters may already
+filter backend text. It is not a raw model-token timestamp, and blocking `chat`
+calls do not fabricate it.
+
+Local provider usage may include `contextPreparationDurationMs` (host request
+construction and exact budgeting), `timeToFirstTextMs` and `responseDurationMs`.
+Their monotonic execution basis excludes provider queue wait and model loading.
+WebLLM includes its internal stream even for nonstream callers; its context field
+does not measure Worker tokenization or GPU prefill. Wllama's exact-budget token
+counting is included, while nonstream first-text time remains absent. Backend
+first-token/prefill statistics retain their separate fields.

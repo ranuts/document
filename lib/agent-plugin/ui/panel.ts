@@ -70,6 +70,7 @@ import { captureDocumentToolTarget, captureDocumentToolScope, DocumentToolAction
 import { isLiteralDocumentToolRequest } from '../document-tool-plan';
 import { ChatView, type ChatViewLabels } from '@ranuts/chat-ui';
 import { AgentChatController, type ChatTurn, type TurnRequest, type TurnResult } from './controller';
+import { createRequestTiming, type RequestTiming } from './request-timing';
 import {
   assistantPresentation,
   AssistantDisplayStream,
@@ -619,6 +620,7 @@ export function createAgentPanel(
     const provider = useEndpointForChat() ? endpointProvider : webllmProvider;
     return intent?.kind === 'clarify' && (writingSelect.value === 'tools' || provider?.isReady()) ? null : intent;
   };
+  let activeTiming: RequestTiming | undefined;
   const chat = new ChatView({
     streamingMarkdown: true,
     canSend: (text) => {
@@ -1833,6 +1835,8 @@ export function createAgentPanel(
   requestQueue = new RequestQueue<PanelRequestBinding>({
     execute: (entry, accept) => submit(entry, accept),
     cancel: () => {
+      activeTiming?.cancel('stopped');
+      chat.observePresentation();
       controller?.stop();
       if (refiningPreview) planning?.abort();
       else invalidatePlans();
@@ -2154,6 +2158,20 @@ export function createAgentPanel(
     const operationStorage = historyStorage;
     const operationSession = conversations.activeId;
     let turnStatus: TurnResult['status'] = 'failed';
+    activeTiming?.cancel('superseded');
+    const timing = createRequestTiming({
+      isCurrent: () =>
+        enabled &&
+        generation === controllerGeneration &&
+        conversation === conversationRevision &&
+        binding.providerRevision === providerBindingRevision,
+    });
+    activeTiming = timing;
+    const measured = (status: TurnResult['status']): TurnResult => {
+      const result = owned(status);
+      turnStatus = result.status;
+      return result;
+    };
     let accepted = false;
     const beginExecution = (): void => {
       if (accepted) return;
@@ -2167,11 +2185,13 @@ export function createAgentPanel(
         throw new Error(t('agentPlanExpired'));
       if (!accept()) throw new DOMException('Request stopped before execution', 'AbortError');
       accepted = true;
+      chat.observePresentation(() => timing.presented());
       appendTurn({ role: 'user', text });
     };
     let verifiedTaskChanges = 0;
     let partialTaskAnswer = '';
     const taskDisplay = new AssistantDisplayStream((delta) => {
+      timing.filteredText();
       partialTaskAnswer += delta;
       chat.setActivity('responding');
       chat.appendDelta(delta);
@@ -2188,14 +2208,14 @@ export function createAgentPanel(
         const read = prepareHostRead(stagedIntent.hostRead, trimmed);
         if (read.request.reply) {
           appendTurn({ role: 'tool', text: read.request.reply });
-          return owned('failed');
+          return measured('failed');
         }
         read.request.assertCurrent();
         beginExecution();
         appendTurn({ role: 'tool', text: read.receipt });
         chat.setActivity('responding');
-        const result = await ctl.send(trimmed, { echoUser: false, request: read.request });
-        return owned(result.status);
+        const result = await ctl.send(trimmed, { echoUser: false, timing, request: read.request });
+        return measured(result.status);
       }
 
       if (refinementContext.kind === 'selected') {
@@ -2221,15 +2241,16 @@ export function createAgentPanel(
         native.assertCurrent();
         if (prepared.reply) {
           appendTurn({ role: 'tool', text: prepared.reply });
-          return owned('failed');
+          return measured('failed');
         }
         beginExecution();
         if (planning === abort) planning = null;
         const result = await ctl.send(trimmed, {
           echoUser: false,
+          timing,
           request: { ...native, ...prepared, prepareRun: undefined },
         });
-        return owned(result.status);
+        return measured(result.status);
       }
       if (
         refinementContext.kind !== 'selected' &&
@@ -2245,10 +2266,15 @@ export function createAgentPanel(
         else if (safe) request = safe;
         else {
           chat.setActivity('routing');
-          request = await resolveRequestIntent(routingProvider, trimmed, snapshot.context, abort.signal, {
-            hasSelection: !!snapshot.text.trim() && !snapshot.truncated,
-            pendingProposal,
-          });
+          const finishRouting = timing.routing();
+          try {
+            request = await resolveRequestIntent(routingProvider, trimmed, snapshot.context, abort.signal, {
+              hasSelection: !!snapshot.text.trim() && !snapshot.truncated,
+              pendingProposal,
+            });
+          } finally {
+            finishRouting();
+          }
         }
         abort.signal.throwIfAborted();
         if (generation !== controllerGeneration || conversation !== conversationRevision)
@@ -2296,6 +2322,7 @@ export function createAgentPanel(
           ) {
             // The schema decoder already separates body text from the envelope.
             // Preserve document syntax instead of interpreting it as chat JSON.
+            timing.filteredText();
             partialTaskAnswer += delta;
             chat.appendDelta(delta, { documentArtifact: true });
           }
@@ -2313,7 +2340,7 @@ export function createAgentPanel(
         if (partialTaskAnswer) chat.endStream();
         else appendTurn({ role: 'agent', text: body, documentArtifact: true });
         partialTaskAnswer = '';
-        return owned('success');
+        return measured('success');
       }
       if (writingSelect.value === 'tools') {
         if (!request.refinement) invalidatePlans();
@@ -2374,17 +2401,17 @@ export function createAgentPanel(
           if (accepted) record(result.messages);
           if (result.preflightFailed) {
             appendTurn({ role: 'tool', text: result.text });
-            return owned('failed');
+            return measured('failed');
           }
           abort.signal.throwIfAborted();
           if (generation !== controllerGeneration || conversation !== conversationRevision)
             throw new Error(t('agentPlanExpired'));
-          if (result.aborted) return owned('stopped');
+          if (result.aborted) return measured('stopped');
           if (result.stoppedOnLimit) {
             const text = documentTaskStopText(result.limitReason, verifiedTaskChanges);
             operationHistory.push({ role: 'assistant', content: text, hostGuidance: 'tool' });
             appendTurn({ role: 'tool', text });
-            return owned('limited');
+            return measured('limited');
           }
           if (taskError) appendTurn({ role: 'error', text: displayError(taskError) });
           if (!currentTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
@@ -2394,7 +2421,7 @@ export function createAgentPanel(
             else appendTurn({ role: 'agent', text: assistantPresentation(result.text) });
             partialTaskAnswer = '';
           }
-          return owned(
+          return measured(
             result.preflightFailed || taskError
               ? 'failed'
               : (taskStatus ?? (result.text.trim() ? 'success' : 'failed')),
@@ -2633,14 +2660,14 @@ export function createAgentPanel(
         operationHistory.push({ role: 'assistant', content: body, copyOnly: true });
         if (request.task === 'summarize' || snapshot.context?.kind === 'pdf') {
           appendTurn({ role: 'agent', text: body, copyOnly: true });
-          return owned('success');
+          return measured('success');
         }
         const singleCell =
           snapshot.context?.kind === 'cell' && snapshot.context.range && !snapshot.context.range.includes(':');
         if (!target && (!officeTarget || (snapshot.context?.kind === 'cell' && !singleCell))) {
           appendTurn({ role: 'agent', text: body, copyOnly: true });
           appendTurn({ role: 'status', text: t(readonly ? 'agentDocumentReadOnly' : 'agentRangeCopyOnly') });
-          return owned('success');
+          return measured('success');
         }
         preview = createPreview();
         reviewOwners.set(preview, entry.id);
@@ -2686,6 +2713,7 @@ export function createAgentPanel(
         beginExecution();
         const result = await ctl.send(trimmed, {
           echoUser: false,
+          timing,
           request: {
             tools: {},
             assertCurrent: () => {
@@ -2703,7 +2731,7 @@ export function createAgentPanel(
         });
         turnStatus = result.status;
       }
-      return owned(turnStatus);
+      return measured(turnStatus);
     } catch (caughtError) {
       if (
         caughtError instanceof Error &&
@@ -2732,8 +2760,13 @@ export function createAgentPanel(
           role,
           text: stopped ? t('agentStopped') : documentTaskFailureText(error, verifiedTaskChanges),
         });
-      return owned(stopped ? 'stopped' : 'failed');
+      return measured(stopped ? 'stopped' : 'failed');
     } finally {
+      timing.finish(turnStatus);
+      if (activeTiming === timing) {
+        activeTiming = undefined;
+        chat.observePresentation();
+      }
       previousPreview?.setRefining(false);
       if (refiningPreview === previousPreview) refiningPreview = undefined;
       if (operationHistory.length) {

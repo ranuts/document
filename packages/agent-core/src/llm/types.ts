@@ -49,8 +49,10 @@ export interface LLMToolCall {
 export interface LLMResponse {
   /** Provider removed complete old turns to fit the measured context. */
   contextTrimmed?: boolean;
-  /** Actual backend statistics, absent when unsupported; never estimated from chunks. */
+  /** Observed provider/backend statistics; unsupported fields stay absent, never estimated from chunks. */
   usage?: {
+    /** Provider host request construction and exact budgeting, when observed; excludes SDK prefill. */
+    contextPreparationDurationMs?: number;
     /** Backend-measured prompt processing and decoding durations, when available. */
     promptProcessingDurationMs?: number;
     decodingDurationMs?: number;
@@ -58,7 +60,7 @@ export interface LLMResponse {
     promptTokens?: number;
     decodeTokensPerSecond?: number;
     timeToFirstTokenMs?: number;
-    /** Provider wall clock from execution start, excluding queue/model load. */
+    /** Provider monotonic clock from execution start, excluding queue/model load. */
     responseDurationMs?: number;
     /** First nonempty text delta; distinct from the backend's first token time. */
     timeToFirstTextMs?: number;

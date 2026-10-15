@@ -572,3 +572,37 @@ it('advertises exact budgeting only while a count-capable engine is ready', asyn
   await provider.dispose();
   expect(provider.hasExactContextBudget()).toBe(false);
 });
+
+it('times real CPU context budgeting and first text from execution without including preload or queue wait', async () => {
+  let now = 1000;
+  const engine = {
+    isModelLoaded: () => true,
+    countChatTokens: async () => {
+      now += 7;
+      return { promptTokens: 10, contextTokens: 10000 };
+    },
+    createChatCompletion: async () =>
+      (async function* () {
+        now += 11;
+        yield { choices: [{ delta: { content: '' } }] };
+        now += 13;
+        yield { choices: [{ delta: { content: 'Answer' }, finish_reason: 'stop' }] };
+        now += 17;
+      })(),
+    exit: async () => {},
+  };
+  const provider = new WllamaProvider({ modelUrl: 'test', engineFactory: async () => engine });
+  await provider.preload();
+  const clock = vi.spyOn(performance, 'now').mockImplementation(() => now);
+  try {
+    const response = await provider.chatStream([{ role: 'user', content: 'Hello' }], [], () => {});
+    expect(response.usage).toMatchObject({
+      contextPreparationDurationMs: 7,
+      timeToFirstTextMs: 31,
+      responseDurationMs: 48,
+    });
+  } finally {
+    clock.mockRestore();
+    await provider.dispose();
+  }
+});
