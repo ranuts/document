@@ -68,12 +68,15 @@ it('keeps cancellation feedback in the originating conversation after switching 
   input.dispatchEvent(new Event('input', { bubbles: true }));
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+  // Imported answers are nonempty; History renders their rows only when opened.
+  panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
   const original = panel.querySelector<HTMLButtonElement>('.agent-conversation-open[aria-current="true"]')!.dataset.id!;
   (panel.querySelector('.agent-panel-clear') as HTMLElement).click();
   finish();
   await vi.waitFor(() => expect(state.text).toBe('秋日的天空明净。'));
   await new Promise((resolve) => setTimeout(resolve, 0));
   expect(panel.querySelectorAll('.cui-msg')).toHaveLength(0);
+  panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
   panel.querySelector<HTMLButtonElement>(`.agent-conversation-open[data-id="${original}"]`)!.click();
   const exported = await exportHistory(panel);
   const messages = exported.sessions.find((item: { id: string }) => item.id === original).messages;
