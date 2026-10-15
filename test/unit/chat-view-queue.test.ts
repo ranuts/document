@@ -72,3 +72,30 @@ it('prepares queued dictation once and guards async revisions, readiness and IME
   await Promise.resolve();
   expect(queue).toHaveBeenCalledExactlyOnceWith('new draft');
 });
+it('returns focus to the draft when clearing disables and blurs the clicked Queue button', () => {
+  const queue = vi.fn();
+  view = new ChatView({ onSend: vi.fn(), onQueue: queue });
+  document.body.append(view.el);
+  view.setRunning(true);
+  view.setInput('Queued draft');
+  const send = view.el.querySelector<HTMLButtonElement>('.cui-send')!;
+  let disabled = send.disabled;
+  Object.defineProperty(send, 'disabled', {
+    configurable: true,
+    get: () => disabled,
+    set: (value) => {
+      disabled = value;
+      if (value) send.blur();
+    },
+  });
+  send.focus();
+  send.click();
+  expect(queue).toHaveBeenCalledExactlyOnceWith('Queued draft');
+  expect(document.activeElement).toBe(view.el.querySelector('.cui-input'));
+  const external = document.createElement('button');
+  document.body.append(external);
+  view.setInput('Other draft');
+  external.focus();
+  view.el.querySelector('textarea')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  expect(document.activeElement).toBe(external);
+});

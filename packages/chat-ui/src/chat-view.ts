@@ -703,8 +703,9 @@ export class ChatView {
     )
       return;
     if (this.options.canSend?.(readyText) === false) return;
+    const restoreFocus = this.options.onQueue && document.activeElement === this.sendBtn;
     this.setInput('');
-    if (this.options.onQueue && document.activeElement === this.sendBtn) this.input.focus({ preventScroll: true });
+    if (restoreFocus) this.input.focus({ preventScroll: true });
     if (this.running && this.options.onQueue) this.options.onQueue(readyText);
     else this.options.onSend(readyText);
   }
