@@ -43,7 +43,10 @@ function mockQuota(quota: number): void {
 }
 
 describe('history store', () => {
-  beforeEach(wipe);
+  beforeEach(async () => {
+    await wipe();
+    mockQuota(2_000_000);
+  });
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -182,6 +185,27 @@ describe('history store', () => {
     expect(doc).not.toBeNull();
     // The retry paid for itself by dropping the coldest document.
     expect((await listDocs()).items.map((row) => row.title)).toEqual(['New.docx']);
+  });
+
+  it('rejects an impossible snapshot without evicting existing recovery', async () => {
+    mockQuota(200);
+    const keep = await putSnapshot({ title: 'Keep.docx', origin: 'local', bytes: bytes(40, 7) });
+    const large = await putSnapshot({ title: 'Too large.docx', origin: 'local', bytes: bytes(120) });
+    expect(large).toBeNull();
+    expect(Array.from((await getLatestSnapshot(keep!.id))!.bytes)).toEqual(Array(40).fill(7));
+    expect(await historyUsage()).toBe(40);
+  });
+
+  it('trims its own revisions to the budget before evicting unrelated history', async () => {
+    mockQuota(240);
+    const keep = await putSnapshot({ title: 'Keep.docx', origin: 'local', bytes: bytes(10, 7) });
+    const first = await putSnapshot({ title: 'Large.docx', origin: 'local', bytes: bytes(60, 1) });
+    const next = await putSnapshot({ id: first!.id, title: 'Large.docx', origin: 'local', bytes: bytes(70, 2) });
+    expect(next?.revCount).toBe(1);
+    expect(next?.totalBytes).toBe(70);
+    expect(await historyUsage()).toBe(80);
+    expect(Array.from((await getLatestSnapshot(keep!.id))!.bytes)).toEqual(Array(10).fill(7));
+    expect(Array.from((await getLatestSnapshot(first!.id))!.bytes)).toEqual(Array(70).fill(2));
   });
 
   it('deletes documents that went seven days without being touched', async () => {

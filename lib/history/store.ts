@@ -132,29 +132,40 @@ async function deleteDocumentData(tx: IDBTransaction, docId: string): Promise<vo
   tx.addEventListener('complete', () => clearSessionSaveTargets(docId), { once: true });
 }
 
-/** Keep the newest MAX_REVS_PER_DOC revisions. Returns bytes freed. */
-async function trimRevisions(tx: IDBTransaction, docId: string): Promise<number> {
+/** Keep the newest revisions that fit this document's count and byte budget. */
+async function trimRevisions(
+  tx: IDBTransaction,
+  docId: string,
+  budget: number,
+): Promise<{ freed: number; count: number }> {
   const store = tx.objectStore(BLOBS_STORE);
   // Array-valued keys sort after numeric revisions. These bounds include
   // exactly this document's [docId, rev, byteLength] keys, even with rev gaps.
   const range = IDBKeyRange.bound([docId], [docId, []]);
-  return new Promise<number>((resolve, reject) => {
+  return new Promise<{ freed: number; count: number }>((resolve, reject) => {
     const request = store.index(BLOBS_BY_REVISION).openKeyCursor(range, 'prev');
     let kept = 0;
     let freed = 0;
+    let count = 0;
+    let keptBytes = 0;
+    let retaining = true;
     request.onerror = () => reject(request.error ?? new Error('Revision cursor failed'));
     request.onsuccess = () => {
       const cursor = request.result;
       if (!cursor) {
-        resolve(freed);
+        resolve({ freed, count });
         return;
       }
       try {
-        if (kept < MAX_REVS_PER_DOC) {
+        const byteLength = (cursor.key as [string, number, number])[2];
+        if (retaining && kept < MAX_REVS_PER_DOC && keptBytes + byteLength <= budget) {
           kept += 1;
+          keptBytes += byteLength;
         } else {
+          retaining = false;
           store.delete(cursor.primaryKey);
-          freed += (cursor.key as [string, number, number])[2];
+          freed += byteLength;
+          count += 1;
         }
         cursor.continue();
       } catch (error) {
@@ -277,9 +288,9 @@ async function writeSnapshot(
     // the budget does not have to take from documents that are still current.
     await sweepExpired(tx, now);
 
-    const freed = await trimRevisions(tx, doc.id);
-    doc.totalBytes -= freed;
-    doc.revCount = Math.min(doc.revCount, MAX_REVS_PER_DOC);
+    const trimmed = await trimRevisions(tx, doc.id, budget);
+    doc.totalBytes -= trimmed.freed;
+    doc.revCount -= trimmed.count;
     docs.put(doc);
 
     await enforceBudget(tx, budget, doc.id);
@@ -303,6 +314,9 @@ export async function putSnapshot(input: SnapshotInput, signal?: AbortSignal): P
   if (signal?.aborted) return null;
   const payload = await toBytes(input.bytes);
   if (signal?.aborted) return null;
+  // No eviction can make an individually oversized snapshot fit. Preserve the
+  // existing library (including the current document's previous recovery).
+  if (payload.byteLength > budget) return null;
   try {
     return await writeSnapshot(payload, input, budget, signal);
   } catch (error) {
