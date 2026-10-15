@@ -338,6 +338,7 @@ export const pt: Partial<I18nMessages> = {
   agentInputPlaceholder: 'Peça à IA para editar o documento… (Enter envia, Shift+Enter muda de linha)',
   agentSend: 'Enviar',
   agentStop: 'Parar',
+  agentStopping: 'Parando…',
   agentNeedKey: 'Introduza primeiro uma chave de API.',
   agentNoCompletedAnswer: 'Gera uma resposta completa antes de a inserir no documento.',
   agentParagraphSelectionConflict: 'Remove a seleção para alinhar o parágrafo atual, ou pede para alinhar a seleção.',

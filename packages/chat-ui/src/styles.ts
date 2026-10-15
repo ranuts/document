@@ -74,7 +74,7 @@ export const CHAT_UI_CSS = `
 .cui-status { flex:1; min-width:0; display:flex; align-items:center; gap:var(--ran-space-2, 8px); color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); line-height:1.5; }
 .cui-elapsed { flex:0 0 auto; color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); line-height:1.5; font-variant-numeric:tabular-nums; white-space:nowrap; }
 .cui-progress[hidden],.cui-elapsed[hidden] { display:none; }
-.cui-root[data-activity="reviewing"] .cui-progress { border-color:transparent; background:transparent; padding-inline:0; }
+.cui-root:is([data-activity="reviewing"],[data-activity="stopping"]) .cui-progress { border-color:transparent; background:transparent; padding-inline:0; }
 .cui-status:empty { display:none; }
 /* One activity cue at a time: the waiting row gives way to the live-text
    cursor when responding. A human review is a resting state, not loading. */

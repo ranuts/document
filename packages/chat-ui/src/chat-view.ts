@@ -52,6 +52,8 @@ export class ChatView {
   private readonly scrollBtn: HTMLButtonElement;
   private labels: ChatViewLabels;
   private running = false;
+  private stopping = false;
+  private readonly interruptedRenders = new Set<{ frame?: number; timer?: ReturnType<typeof setTimeout> }>();
   private preparingSend = false;
   private submissionRevision = 0;
   private activity: 'responding' | 'routing' | 'reading' | 'planning' | 'reviewing' = 'responding';
@@ -155,7 +157,7 @@ export class ChatView {
       .class('cui-send')
       .attr('type', 'button')
       .on('click', () => {
-        if (this.running) this.options.onStop?.();
+        if (this.running) this.requestStop();
         else this.submit();
       })
       .build();
@@ -379,7 +381,7 @@ export class ChatView {
    * Call {@link endStream} when the turn completes.
    */
   appendDelta(delta: string, metadata: Pick<ChatMessage, 'documentArtifact'> = {}): void {
-    if (!delta || this.disposed) return;
+    if (!delta || this.disposed || this.stopping) return;
     const firstForPhase = !this.respondingHasText;
     this.respondingHasText = true;
     if (!this.liveMsg) {
@@ -396,6 +398,7 @@ export class ChatView {
 
   /** Finalise the current streaming bubble (removes the caret). */
   endStream(): void {
+    if (this.stopping || this.disposed) return;
     const stick = this.following;
     this.flushStream();
     if (this.liveMsg) this.liveMsg.dataset.source = this.liveText;
@@ -410,12 +413,62 @@ export class ChatView {
   }
 
   /** Only explicit stream completion can make a preview available for writing. */
-  private interruptStream(): void {
-    if (!this.liveMsg) return;
-    this.liveMsg.dataset.interrupted = 'true';
-    this.liveMsg.querySelector('.cui-apply')?.remove();
-    this.updateResultPresentation(this.liveMsg);
-    this.endStream();
+  private interruptStream(deferMarkdown = false): void {
+    const row = this.liveMsg;
+    if (!row) return;
+    const text = this.liveText;
+    this.flushStream();
+    row.dataset.source = text;
+    row.dataset.interrupted = 'true';
+    row.querySelector('.cui-apply')?.remove();
+    this.updateResultPresentation(row);
+    row.classList.remove('cui-streaming');
+    this.liveMsg = null;
+    this.liveNode = null;
+    this.liveText = '';
+    if (!deferMarkdown) {
+      const bubble = row.querySelector<HTMLElement>('.cui-bubble');
+      if (bubble) renderMarkdown(bubble, text);
+      this.updateActivity();
+      if (bubble && this.following) this.finishAppendLayout(true);
+      return;
+    }
+    // A frame followed by a task lets the acknowledgement paint before parsing
+    // a potentially large partial answer. Capture row/source, never the next stream.
+    const work: { frame?: number; timer?: ReturnType<typeof setTimeout> } = {};
+    this.interruptedRenders.add(work);
+    work.frame = requestAnimationFrame(() => {
+      work.frame = undefined;
+      if (!this.interruptedRenders.has(work)) return;
+      work.timer = setTimeout(() => {
+        this.interruptedRenders.delete(work);
+        if (this.disposed || !this.messagesEl.contains(row) || row.dataset.source !== text) return;
+        const bubble = row.querySelector<HTMLElement>('.cui-bubble');
+        if (bubble) renderMarkdown(bubble, text);
+        this.scheduleLayout();
+      }, 0);
+    });
+  }
+
+  /** Freeze visible output and acknowledge cancellation until the host settles. */
+  requestStop(): void {
+    if (!this.running || this.stopping || this.disposed) return;
+    const restoreFocus = document.activeElement === this.sendBtn;
+    this.stopping = true;
+    this.messagesEl.setAttribute('aria-busy', 'true');
+    this.updateActivity();
+    this.updateSendState();
+    if (restoreFocus) this.input.focus({ preventScroll: true });
+    this.interruptStream(true);
+    this.options.onStop?.();
+  }
+
+  private cancelInterruptedRenders(): void {
+    for (const work of this.interruptedRenders) {
+      if (work.frame !== undefined) cancelAnimationFrame(work.frame);
+      if (work.timer !== undefined) clearTimeout(work.timer);
+    }
+    this.interruptedRenders.clear();
   }
 
   /** Result identity follows host metadata, never model prose or tool receipts. */
@@ -453,10 +506,11 @@ export class ChatView {
       this.presentationCleared = false;
     }
     this.running = running;
+    if (!running) this.stopping = false;
     if (!running) this.activity = 'responding';
     this.updateActivity();
     if (!running) this.interruptStream();
-    this.messagesEl.setAttribute('aria-busy', String(running && this.activity !== 'reviewing'));
+    this.messagesEl.setAttribute('aria-busy', String(running && (this.stopping || this.activity !== 'reviewing')));
     this.updateSendState();
     if (restore) this.input.focus({ preventScroll: true });
   }
@@ -465,31 +519,33 @@ export class ChatView {
   setActivity(activity: 'responding' | 'routing' | 'reading' | 'planning' | 'reviewing'): void {
     if (activity !== this.activity) this.respondingHasText = false;
     this.activity = activity;
-    this.messagesEl.setAttribute('aria-busy', String(this.running && activity !== 'reviewing'));
+    this.messagesEl.setAttribute('aria-busy', String(this.running && (this.stopping || activity !== 'reviewing')));
     this.updateActivity();
   }
 
   private updateActivity(): void {
     // Host phases describe actual work; the clock measures waiting, not inference progress.
-    this.el.dataset.activity = this.running ? this.activity : 'idle';
+    this.el.dataset.activity = this.running ? (this.stopping ? 'stopping' : this.activity) : 'idle';
     const text =
       !this.running ||
       this.disposed ||
       this.presentationCleared ||
-      (this.respondingHasText && this.activity === 'responding')
+      (this.respondingHasText && this.activity === 'responding' && !this.stopping)
         ? ''
-        : this.activity === 'reviewing'
-          ? (this.labels.reviewing ?? 'Review the proposed change to continue.')
-          : this.activity === 'reading'
-            ? (this.labels.reading ?? 'Reading content…')
-            : this.activity === 'routing'
-              ? (this.labels.routing ?? 'Understanding your request…')
-              : this.activity === 'planning'
-                ? (this.labels.planning ?? 'Preparing task…')
-                : (this.labels.waiting ?? 'Generating a response…');
+        : this.stopping
+          ? (this.labels.stopping ?? 'Stopping…')
+          : this.activity === 'reviewing'
+            ? (this.labels.reviewing ?? 'Review the proposed change to continue.')
+            : this.activity === 'reading'
+              ? (this.labels.reading ?? 'Reading content…')
+              : this.activity === 'routing'
+                ? (this.labels.routing ?? 'Understanding your request…')
+                : this.activity === 'planning'
+                  ? (this.labels.planning ?? 'Preparing task…')
+                  : (this.labels.waiting ?? 'Generating a response…');
     if (this.statusEl.textContent !== text) this.statusEl.textContent = text;
     this.progressEl.hidden = !text;
-    this.updateWaitClock(!!text && this.activity !== 'reviewing');
+    this.updateWaitClock(!!text && !this.stopping && this.activity !== 'reviewing');
   }
 
   private updateWaitClock(waiting: boolean): void {
@@ -516,6 +572,7 @@ export class ChatView {
   /** Remove all messages and restore the empty state. */
   clear(): void {
     this.submissionRevision++;
+    this.cancelInterruptedRenders();
     // Clear the rendered feedback without claiming that the host's run stopped.
     this.presentationCleared = true;
     this.respondingHasText = false;
@@ -637,12 +694,15 @@ export class ChatView {
     this.sendBtn.classList.toggle('cui-send-prepare', !!preparation);
     this.sendBtn.classList.toggle('cui-send-stop', this.running);
     this.sendBtn.title = this.running
-      ? (this.labels.stop ?? 'Stop')
+      ? this.stopping
+        ? (this.labels.stopping ?? 'Stopping…')
+        : (this.labels.stop ?? 'Stop')
       : (preparation?.label ?? this.labels.send ?? 'Send');
     this.sendBtn.setAttribute('aria-label', this.sendBtn.title);
-    // Disable unavailable submissions while idle; a running turn always keeps Stop available.
+    // Disable unavailable submissions while idle and repeated cancellation while settling.
     this.sendBtn.disabled =
-      !this.running && (this.preparingSend || !hasDraft || (unavailable && (!preparation || !!preparation.disabled)));
+      this.stopping ||
+      (!this.running && (this.preparingSend || !hasDraft || (unavailable && (!preparation || !!preparation.disabled))));
   }
 
   private updateRestoreState(parent: HTMLElement = this.messagesEl): void {
@@ -661,6 +721,7 @@ export class ChatView {
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
+    this.cancelInterruptedRenders();
     this.running = false;
     this.updateActivity();
     this.messagesEl.setAttribute('aria-busy', 'false');

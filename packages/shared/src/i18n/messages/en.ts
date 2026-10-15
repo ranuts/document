@@ -333,6 +333,7 @@ export const en: I18nMessages = {
   agentInputPlaceholder: 'Ask AI to edit the document… (Enter to send, Shift+Enter for newline)',
   agentSend: 'Send',
   agentStop: 'Stop',
+  agentStopping: 'Stopping…',
   agentNeedKey: 'Please enter an API Key first.',
   agentNoCompletedAnswer: 'Generate a complete answer before writing it to the document.',
   agentParagraphSelectionConflict: 'Clear the selection to align the current paragraph, or ask to align the selection.',

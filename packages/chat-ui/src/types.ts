@@ -20,6 +20,8 @@ export interface ChatViewLabels {
   send?: string;
   /** Send-button label while a turn is running (acts as Stop). */
   stop?: string;
+  /** Acknowledgement while a requested cancellation is still settling. */
+  stopping?: string;
   /** Input placeholder. */
   placeholder?: string;
   /** Empty-state hint shown when there are no messages. */

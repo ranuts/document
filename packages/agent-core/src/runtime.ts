@@ -64,6 +64,8 @@ export interface AgentRunResult {
   messages: LLMMessage[];
   /** How many tool calls were executed across the run. */
   toolCallCount: number;
+  /** A host tool explicitly ended the turn; this alone does not imply success. */
+  completedByTool?: true;
   /** True if the run stopped because it hit `maxIterations`. */
   stoppedOnLimit: boolean;
   /** Identifies a guard stop without interpreting internal error prose in the UI. */
@@ -152,12 +154,13 @@ export async function runAgent(
       options.onContextTrimmed?.();
     }
     if (response.usage) options.onEvent?.({ type: 'usage', usage: response.usage });
-    messages.push(response.assistant);
     if (!response.toolCalls.length) {
       if (deferredDeltas.length) options.onEvent?.({ type: 'assistant_delta', text: deferredDeltas.join('') });
       if (response.text) options.onEvent?.({ type: 'assistant', text: response.text, streamed });
     }
 
+    if (options.signal?.aborted) return { text: '', messages, toolCallCount, stoppedOnLimit: false, aborted: true };
+    messages.push(response.assistant);
     if (response.toolCalls.length === 0) {
       return { text: response.text, messages, toolCallCount, stoppedOnLimit: false, aborted: false };
     }
@@ -226,7 +229,7 @@ export async function runAgent(
         toolCallCount,
         stoppedOnLimit: limited,
         aborted: false,
-        ...(limitReason ? { limitReason } : {}),
+        ...(limitReason ? { limitReason } : { completedByTool: true as const }),
       };
     if (options.signal?.aborted) return { text: '', messages, toolCallCount, stoppedOnLimit: false, aborted: true };
   }

@@ -44,6 +44,25 @@ const tools = new Set([
   'add_slide_text',
 ]);
 
+/** Interpret only the host document-tool protocol; generic tools retain their own receipts. */
+export function documentToolTurnStatus(event: AgentEvent): 'success' | 'stopped' | 'failed' | undefined {
+  if (event.type !== 'tool_result' || !tools.has(event.name)) return;
+  try {
+    const outcome = JSON.parse(event.content);
+    if (outcome?.status === 'cancelled') return 'stopped';
+    if (['sent', 'expired', 'failed'].includes(outcome?.status)) return 'failed';
+    if (outcome?.status === 'verified') return 'success';
+    if (
+      outcome?.status === 'completed' &&
+      (outcome.result?.unavailable === true ||
+        (typeof outcome.result?.text === 'string' && !outcome.result.text.trim()))
+    )
+      return 'failed';
+  } catch {
+    // Other tools may return plain text or unrelated JSON.
+  }
+}
+
 function withoutReasoning(text: string): string {
   return text.replace(/^\s*<think>[\s\S]*?<\/think>\s*/, '');
 }
