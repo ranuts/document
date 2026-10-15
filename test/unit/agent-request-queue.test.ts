@@ -308,3 +308,19 @@ it('ignores an old physical Apply Stop handle after a newer session owns Apply',
   expect(queue.state('b').paused).toBe(true);
   current('stopped');
 });
+
+it('retains pending, accepted and physical application owners without retaining settled empty sessions', async () => {
+  const { queue, runs } = setup();
+  queue.enqueue('a', 'First request', 'original scope');
+  expect(queue.retainedConversations()).toEqual(['a']);
+  runs[0].accept();
+  expect(queue.pendingConversations()).toEqual([]);
+  expect(queue.retainedConversations()).toEqual(['a']);
+  runs[0].finish('success');
+  await tick();
+  expect(queue.retainedConversations()).toEqual([]);
+  const release = queue.acquireApplication('a')!;
+  expect(queue.retainedConversations()).toEqual(['a']);
+  release('success');
+  expect(queue.retainedConversations()).toEqual([]);
+});

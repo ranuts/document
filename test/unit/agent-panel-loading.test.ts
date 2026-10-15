@@ -3293,6 +3293,78 @@ it('keeps a different displayed draft owner created while automatic history hydr
   expect(input.value).toBe('New owner draft');
 });
 
+it.each(['running', 'stopped', 'scope-changed'] as const)(
+  'retains the original pending owner through initial history hydration: %s',
+  async (mode) => {
+    const stored = delayedConversationRepository();
+    localStorage.setItem('agent_conversation_saving_v2', 'true');
+    state.ready = true;
+    state.editorReady = true;
+    state.toolContext = 'word';
+    state.semanticResponse = '{"task":"chat","language":"en"}';
+    let finishRouting!: () => void;
+    state.semanticGate = new Promise<void>((resolve) => {
+      finishRouting = resolve;
+    });
+    const panel = createPreparedPanel();
+    document.body.append(panel);
+    const original = activeSession();
+    const text = 'Tell me a brief story';
+    enterQueueDraft(panel, text);
+    await vi.waitFor(() => expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentRoutingRequest')));
+    expect(state.conversations!.history().load()).toEqual([]);
+    if (mode === 'stopped') {
+      panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+      finishRouting();
+      await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    } else if (mode === 'scope-changed') state.targetCurrent = false;
+    stored.finish();
+    await vi.waitFor(() => expect(state.conversations!.saving).toBe(true));
+    expect(state.conversations!.list().some((item) => item.id === original)).toBe(true);
+    expect(activeSession()).toBe(original);
+    expect(panel.querySelector('.agent-queue-text')?.textContent).toBe(text);
+    expect(state.conversations!.history().load()).toEqual([]);
+    if (mode !== 'stopped') finishRouting();
+    if (mode === 'running') {
+      await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+      expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
+    } else {
+      await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+      panel.querySelector<HTMLButtonElement>('.agent-queue-edit')!.click();
+      expect(panel.querySelector<HTMLTextAreaElement>('.cui-input')!.value).toBe(text);
+      expect(state.conversations!.history().load()).toEqual([]);
+    }
+    expect(stored.repository.save.mock.calls.every(([data]) => !JSON.stringify(data).includes('recoverOnly'))).toBe(
+      true,
+    );
+  },
+);
+
+it('keeps an accepted first answer active while initial history hydration finishes', async () => {
+  const stored = delayedConversationRepository();
+  localStorage.setItem('agent_conversation_saving_v2', 'true');
+  state.ready = true;
+  let finishAnswer!: () => void;
+  let aborted = false;
+  state.queueStream = (_text, _delta, signal) =>
+    new Promise((resolve) => {
+      finishAnswer = resolve;
+      signal?.addEventListener('abort', () => {
+        aborted = true;
+      });
+    });
+  const panel = createPreparedPanel();
+  const original = activeSession();
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(finishAnswer).toBeTypeOf('function'));
+  stored.finish();
+  await vi.waitFor(() => expect(state.conversations!.saving).toBe(true));
+  expect(activeSession()).toBe(original);
+  expect(aborted).toBe(false);
+  finishAnswer();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+});
+
 it('executes queued drafts in FIFO order and echoes them only after the active host turn settles', async () => {
   state.ready = true;
   const calls: string[] = [];

@@ -220,3 +220,120 @@ test('pages and searches one thousand saved conversations without cloning or rep
   await page.keyboard.press('Escape');
   await expect(page.locator('.cui-input')).toHaveValue('Keep this draft');
 });
+
+test('keeps the first validating request in its original chat while startup history restores', async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.goto('/');
+  await page.evaluate(async () => {
+    localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem('agent_conversation_saving_v2', 'true');
+    localStorage.setItem(
+      'agent-writing-endpoint',
+      JSON.stringify({ version: 1, kind: 'loopback', baseUrl: 'http://localhost:11434', model: 'startup-test' }),
+    );
+    const request = indexedDB.open('document-ai-conversations', 2);
+    request.onupgradeneeded = () => {
+      request.result.createObjectStore('conversations');
+      request.result.createObjectStore('sessions');
+    };
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const id = crypto.randomUUID();
+    const tx = db.transaction(['conversations', 'sessions'], 'readwrite');
+    tx.objectStore('conversations').put({ version: 2, revision: 1, activeId: id, sessionIds: [id] }, 'state');
+    tx.objectStore('sessions').put(
+      {
+        id,
+        title: 'Saved earlier chat',
+        createdAt: 1,
+        updatedAt: 1,
+        messages: [{ role: 'user', content: 'Saved earlier chat' }],
+      },
+      id,
+    );
+    await new Promise<void>((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onabort = () => reject(tx.error);
+    });
+    db.close();
+  });
+  await page.addInitScript(() => {
+    const open = indexedDB.open.bind(indexedDB);
+    const success = Object.getOwnPropertyDescriptor(IDBRequest.prototype, 'onsuccess')!;
+    const host = window as unknown as { releaseAssistantHistory?: () => void };
+    indexedDB.open = (...args: Parameters<IDBFactory['open']>) => {
+      const request = open(...args);
+      if (args[0] === 'document-ai-conversations')
+        Object.defineProperty(request, 'onsuccess', {
+          set(callback: ((this: IDBRequest, event: Event) => void) | null) {
+            success.set!.call(
+              request,
+              callback &&
+                function (event: Event) {
+                  host.releaseAssistantHistory = () => callback.call(request, event);
+                },
+            );
+          },
+          get: () => success.get!.call(request),
+        });
+      return request;
+    };
+  });
+  let releaseRouting: (() => void) | undefined;
+  await page.route('http://localhost:11434/api/**', async (route) => {
+    if (route.request().method() === 'OPTIONS') {
+      await route.fulfill({
+        status: 204,
+        headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type' },
+      });
+      return;
+    }
+    if (route.request().url().endsWith('/tags')) {
+      await route.fulfill({ json: { models: [{ name: 'startup-test' }] } });
+      return;
+    }
+    const body = route.request().postDataJSON();
+    if (body.format?.properties?.task) {
+      await new Promise<void>((resolve) => {
+        releaseRouting = resolve;
+      });
+      await route.fulfill({
+        json: { done: true, message: { role: 'assistant', content: '{"task":"chat","language":"en"}' } },
+      });
+      return;
+    }
+    await route.fulfill({
+      contentType: 'application/x-ndjson',
+      body:
+        JSON.stringify({ done: true, message: { role: 'assistant', content: 'The first request completed.' } }) + '\n',
+    });
+  });
+  try {
+    await page.goto('/editor?new=docx&locale=en');
+    await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+    await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+    const input = page.locator('.cui-input');
+    await input.fill('Tell me a brief story');
+    await page.locator('.cui-send').click();
+    await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
+    await page.locator('.cui-send').click();
+    await expect.poll(() => typeof releaseRouting).toBe('function');
+    await expect(page.locator('.agent-queue-text')).toHaveText('Tell me a brief story');
+    await page.waitForFunction(
+      () =>
+        typeof (window as unknown as { releaseAssistantHistory?: () => void }).releaseAssistantHistory === 'function',
+    );
+    await page.evaluate(() => (window as unknown as { releaseAssistantHistory(): void }).releaseAssistantHistory());
+    await expect(page.locator('.agent-history-status')).toContainText('saving is enabled');
+    await expect(page.locator('.agent-queue-text')).toHaveText('Tell me a brief story');
+    await expect(page.locator('.cui-msg-user')).toHaveCount(0);
+    releaseRouting!();
+    await expect(page.locator('.cui-msg-user')).toHaveText('Tell me a brief story');
+    await expect(page.locator('.cui-msg-agent')).toContainText('The first request completed.');
+    await expect(page.locator('.cui-msg-user')).toHaveCount(1);
+  } finally {
+    releaseRouting?.();
+  }
+});

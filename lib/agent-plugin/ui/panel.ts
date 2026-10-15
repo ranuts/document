@@ -993,7 +993,10 @@ export function createAgentPanel(
       renderSessions();
       historyControls?.sync();
     },
-    { onError: (error) => historyControls?.showError(error) },
+    {
+      onError: (error) => historyControls?.showError(error),
+      retainedConversations: () => (restoringInitialHistory ? (requestQueue?.retainedConversations() ?? []) : []),
+    },
   );
   let historyStorage = conversations.history();
   // create() changes the store's active ID before the old composer is replaced.
@@ -2745,6 +2748,14 @@ export function createAgentPanel(
       chat.setRunning(false);
     },
     onRestore: () => {
+      if (
+        restoringInitialHistory &&
+        conversations.activeId === displayedConversationId &&
+        requestQueue?.retainedConversations().includes(displayedConversationId)
+      ) {
+        renderSessions();
+        return;
+      }
       if (conversations.searchSnapshot().some((item) => item.id === displayedConversationId)) rememberDraft();
       else if (restoringInitialHistory && displayedConversationId === initialConversationId) {
         // Retain text typed into the initial placeholder while startup storage was loading.
