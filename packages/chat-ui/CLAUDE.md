@@ -134,8 +134,8 @@ it, the existing Send-as-Stop behavior is preserved. Both variants use the share
 continues to use `.cui-send-stop` for existing host selectors; `.cui-send` remains
 the Send/Queue control in an opted-in host.
 
-`chat.pendingEl` is a host-populated slot above the draft, separate from message
-history and `actionsEl`. The component knows nothing about editors, providers,
+`chat.pendingEl` is a host-populated footer slot immediately above the composer,
+outside its focus boundary and separate from message history and `actionsEl`. The component knows nothing about editors, providers,
 request ordering, cancellation settlement or persistence. Hosts must keep one
 execution owner until the actual submit settles, retain unexecuted text on
 preflight failure, and advance their queue only on explicit successful outcomes.
