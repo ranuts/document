@@ -550,8 +550,13 @@ export class ActionPreview {
     let outcome: ReviewOutcome;
     try {
       const result = await action.apply(signal);
-      if (signal?.aborted || this.action !== action) outcome = { status: 'cancelled', action };
-      else {
+      if (signal?.aborted || this.action !== action) {
+        if (this.action === action) {
+          this.status.textContent = t('agentStopped');
+          this.finish('cancelled');
+        }
+        outcome = { status: 'cancelled', action };
+      } else {
         onApplied?.(result, action);
         this.status.textContent = t(result === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
         this.finish(result);
