@@ -637,3 +637,25 @@ it('suspends history while closed, hidden or in BFCache and disposes on terminal
     visibility.mockRestore();
   }
 });
+
+it('preserves an expanded selected-text disclosure and its scroller while context notifications update the source', () => {
+  let selection = 'Original selected text';
+  editorState.api = {
+    isDocumentLoadComplete: true,
+    isLoadFullApi: true,
+    pluginMethod_GetSelectedText: () => selection,
+  };
+  const panel = createAgentPanel();
+  const trigger = panel.querySelector<HTMLButtonElement>('.agent-selection-toggle')!;
+  trigger.click();
+  const text = panel.querySelector<HTMLElement>('.agent-quoted-text')!;
+  text.scrollTop = 32;
+  selection = 'Updated selected text with\nline breaks';
+  window.dispatchEvent(new Event('document:content-ready'));
+  expect(panel.querySelector('.agent-quoted-text')).toBe(text);
+  expect(text.textContent).toBe(selection);
+  expect(text.scrollTop).toBe(32);
+  expect(trigger.getAttribute('aria-expanded')).toBe('true');
+  expect(trigger.querySelector('svg')).not.toBeNull();
+  expect(trigger.getAttribute('aria-label')).toContain(String(selection.length));
+});
