@@ -10,6 +10,10 @@
 
 **Spec:** `docs/superpowers/specs/2026-10-15-assistant-continuity-design.md`.
 
+Execution order is history, Stop, request performance, then queue integration.
+The queue consumes Chunk 4's lightweight scope and trusted-read provenance;
+landing these first avoids capturing whole documents when accepting follow-ups.
+
 ## Chunk 1: History interaction and search performance
 
 Files: `lib/agent-plugin/ui/history-list.ts`, `sessions.ts`, new history search
@@ -46,18 +50,18 @@ mapping distinguish successful terminal receipts from empty answers or native
 cancelled/unverified/unavailable outcomes. Adjacent panel-loading fixtures must
 use authoritative session identity and activate history before selecting rows.
 
-- [ ] Write/observe failing tests for delayed host cancellation, single Stop,
+- [x] Write/observe failing tests for delayed host cancellation, single Stop,
       obsolete deltas/finish, long partial content and preserved draft/focus.
-- [ ] Add truthful immediate stopping state; freeze the current stream before
+- [x] Add truthful immediate stopping state; freeze the current stream before
       expensive cancellation work. Defer expensive interrupted Markdown work
       past the interaction paint without re-enabling Apply or losing source.
-- [ ] Preserve controller/provider turn ownership and underlying serialized
+- [x] Preserve controller/provider turn ownership and underlying serialized
       engine drain. Old finalizers cannot reset a newer turn or save stale text.
-- [ ] Return explicit turn IDs and success/stopped/failed/limited/review-pending/
-      superseded outcomes across controller and host submit paths. Distinguish
+- [x] Return explicit turn IDs and success/stopped/failed/limited/review-pending/
+      superseded controller outcomes (host submit mapping is in Chunk 3). Distinguish
       acknowledged cancellation from underlying provider drain. Test Stop's next
       paint with 100KB partial content and no event-handler Markdown parsing.
-- [ ] Verify keyboard, reduced motion, error/Stop recovery and native write guards.
+- [x] Verify keyboard, reduced motion, error/Stop recovery and native write guards.
       Run two-stage review and commit as `fix(assistant): make stopping responsive`.
 
 ## Chunk 3: Continuous input and host-owned request queue
