@@ -9,6 +9,13 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Saving keeps edits made during conversion or writing protected. Further edits
+  after a save reactivate the unsaved-changes warning and recovery snapshots.
+- Long document context no longer blocks a short assistant question. Partial
+  context is identified while the original question and conversation stay intact.
+- A recovery snapshot too large for the storage budget leaves existing recovery
+  records intact. Reading the newest version avoids loading every older file.
+
 - Returning to the latest assistant conversation during dictation keeps each
   chat's draft intact and ignores late speech results after navigation.
 - The first assistant request stays in its original chat while saved conversations
