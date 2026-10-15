@@ -890,6 +890,7 @@ export function createAgentPanel(
   document.addEventListener('visibilitychange', syncHistoryActivity);
   window.addEventListener('pagehide', (event) => {
     historySuspended = true;
+    conversationList?.suspend();
     syncHistoryActivity();
     if (!event.persisted) {
       historyDisposed = true;
@@ -900,6 +901,7 @@ export function createAgentPanel(
   window.addEventListener('pageshow', (event) => {
     if (!event.persisted || historyDisposed) return;
     historySuspended = false;
+    conversationList?.resume();
     syncHistoryActivity();
   });
   const syncContext = () => {

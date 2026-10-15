@@ -209,3 +209,171 @@ it('retains worker tombstones when another update supersedes pending extraction'
   );
   search.dispose();
 });
+
+it('bounds every transfer and processing slice for a multi-megabyte conversation', async () => {
+  vi.useFakeTimers();
+  const post = vi.fn();
+  vi.stubGlobal(
+    'Worker',
+    class {
+      postMessage = post;
+      terminate() {}
+      addEventListener() {}
+    },
+  );
+  const store = createConversationStore();
+  store.history().save([{ role: 'user', content: `${'x'.repeat(3 * 1024 * 1024)} tail needle` }]);
+  const normalize = vi.spyOn(String.prototype, 'toLocaleLowerCase');
+  const join = vi.spyOn(Array.prototype, 'join');
+  const search = createHistorySearch(vi.fn());
+  search.update(store.searchSnapshot());
+  search.query('tail needle');
+  try {
+    await vi.advanceTimersByTimeAsync(0);
+    expect(post.mock.calls.some(([message]) => message.type === 'query')).toBe(false);
+    await vi.runAllTimersAsync();
+    const updates = post.mock.calls.map(([message]) => message).filter((message) => message.type === 'update');
+    expect(updates.length).toBeGreaterThan(100);
+    expect(Math.max(...updates.map((message) => JSON.stringify(message).length))).toBeLessThan(40_000);
+    expect(normalize.mock.instances.every((value) => String(value).length <= 4096)).toBe(true);
+    expect(join.mock.instances.every((value) => Array.isArray(value) && value.length < 100)).toBe(true);
+    expect(updates.flatMap((message) => message.entries).some((entry) => entry.text.includes('tail needle'))).toBe(
+      true,
+    );
+  } finally {
+    search.dispose();
+    normalize.mockRestore();
+    join.mockRestore();
+  }
+});
+
+it('suspends actual worker and scheduled work, then restarts from current authoritative records', async () => {
+  vi.useFakeTimers();
+  const workers: {
+    post: ReturnType<typeof vi.fn>;
+    terminate: ReturnType<typeof vi.fn>;
+    listeners: Map<string, (event: MessageEvent) => void>;
+  }[] = [];
+  vi.stubGlobal(
+    'Worker',
+    class {
+      postMessage = vi.fn();
+      terminate = vi.fn();
+      listeners = new Map<string, (event: MessageEvent) => void>();
+      constructor() {
+        workers.push({ post: this.postMessage, terminate: this.terminate, listeners: this.listeners });
+      }
+      addEventListener(type: string, callback: (event: MessageEvent) => void) {
+        this.listeners.set(type, callback);
+      }
+    },
+  );
+  const store = createConversationStore();
+  store.history().save([{ role: 'user', content: 'old needle' }]);
+  const receive = vi.fn();
+  const search = createHistorySearch(receive);
+  search.update(store.searchSnapshot());
+  search.query('needle');
+  search.suspend();
+  expect(workers[0].terminate).toHaveBeenCalledOnce();
+  expect(vi.getTimerCount()).toBe(0);
+  store.history().save([{ role: 'user', content: 'new needle' }]);
+  search.resume(store.searchSnapshot());
+  search.query('needle');
+  await vi.advanceTimersByTimeAsync(0);
+  expect(workers).toHaveLength(2);
+  expect(
+    workers[1].post.mock.calls.some(
+      ([message]) =>
+        message.type === 'update' &&
+        message.entries.some((entry: { text: string }) => entry.text.includes('new needle')),
+    ),
+  ).toBe(true);
+  const latest = workers[1].post.mock.calls.at(-1)![0];
+  workers[0].listeners.get('message')!({
+    data: { ...latest, type: 'result', matches: [{ id: store.activeId, snippet: 'late old needle' }] },
+  } as MessageEvent);
+  expect(receive).not.toHaveBeenCalled();
+  workers[1].listeners.get('message')!({
+    data: { ...latest, type: 'result', matches: [{ id: store.activeId, snippet: 'new needle' }] },
+  } as MessageEvent);
+  expect(receive).toHaveBeenCalledWith(
+    expect.objectContaining({ matches: [expect.objectContaining({ snippet: 'new needle' })] }),
+  );
+  search.dispose();
+});
+
+it('yields the first message block without mapping or filtering the remaining block array', () => {
+  const store = createConversationStore();
+  store.history().save([
+    {
+      role: 'user',
+      content: Array.from({ length: 10_000 }, (_, index) => ({ type: 'text' as const, text: `Block ${index}` })),
+    },
+  ]);
+  const record = store.searchSnapshot()[0];
+  const filter = vi.spyOn(Array.prototype, 'filter');
+  const map = vi.spyOn(Array.prototype, 'map');
+  try {
+    const first = record.text()[Symbol.iterator]().next();
+    const filterCalls = filter.mock.calls.length;
+    const mapCalls = map.mock.calls.length;
+    expect(first.value).toBe('Block 0');
+    expect(filterCalls).toBe(0);
+    expect(mapCalls).toBe(0);
+  } finally {
+    filter.mockRestore();
+    map.mockRestore();
+  }
+});
+
+it('finds a query spanning more than two segments without assembling the record', async () => {
+  vi.useFakeTimers();
+  const store = createConversationStore();
+  const phrase = `start${'a'.repeat(12_000)}end`;
+  store.history().save([{ role: 'user', content: `${'z'.repeat(4090)}${phrase} tail needle` }]);
+  const receive = vi.fn();
+  const search = createHistorySearch(receive);
+  search.update(store.searchSnapshot());
+  search.query(phrase);
+  await vi.runAllTimersAsync();
+  expect(receive).toHaveBeenCalledWith(
+    expect.objectContaining({ matches: [expect.objectContaining({ id: store.activeId })] }),
+  );
+  search.dispose();
+});
+
+it.each(['idle', 'watchdog', 'fallback'])('cancels pending %s work when suspended', async (phase) => {
+  vi.useFakeTimers();
+  const cancelIdle = vi.fn();
+  if (phase === 'idle') {
+    vi.stubGlobal('requestIdleCallback', () => 1);
+    vi.stubGlobal('cancelIdleCallback', cancelIdle);
+  }
+  if (phase === 'watchdog')
+    vi.stubGlobal(
+      'Worker',
+      class {
+        postMessage() {}
+        terminate() {}
+        addEventListener() {}
+      },
+    );
+  else vi.stubGlobal('Worker', undefined);
+  const store = createConversationStore();
+  store.history().save([{ role: 'user', content: 'needle' }]);
+  const receive = vi.fn();
+  const search = createHistorySearch(receive);
+  search.update(store.searchSnapshot());
+  if (phase !== 'idle') {
+    search.query('needle');
+    await vi.advanceTimersByTimeAsync(0);
+  }
+  expect(vi.getTimerCount()).toBeGreaterThan(0);
+  search.suspend();
+  expect(vi.getTimerCount()).toBe(0);
+  if (phase === 'idle') expect(cancelIdle).toHaveBeenCalled();
+  await vi.runAllTimersAsync();
+  expect(receive).not.toHaveBeenCalled();
+  search.dispose();
+});

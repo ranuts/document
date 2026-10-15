@@ -557,6 +557,8 @@ it('suspends history while closed, hidden or in BFCache and disposes on terminal
   const factory = vi.spyOn(historyList, 'createConversationList').mockImplementation((options) => {
     list = original(options);
     vi.spyOn(list, 'setActive');
+    vi.spyOn(list, 'suspend');
+    vi.spyOn(list, 'resume');
     vi.spyOn(list, 'dispose');
     return list;
   });
@@ -582,7 +584,9 @@ it('suspends history while closed, hidden or in BFCache and disposes on terminal
     window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
     expect(list.setActive).toHaveBeenLastCalledWith(false);
     expect(list.dispose).not.toHaveBeenCalled();
+    expect(list.suspend).toHaveBeenCalledOnce();
     window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+    expect(list.resume).toHaveBeenCalledOnce();
     expect(list.setActive).toHaveBeenLastCalledWith(true);
     await setAgentPanelEnabled(false);
     expect(list.setActive).toHaveBeenLastCalledWith(false);

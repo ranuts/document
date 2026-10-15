@@ -69,14 +69,18 @@ export function createConversationStore(onChange?: () => void, options: Conversa
           empty: !title && !record.messages.length,
           *text() {
             for (const message of record.messages) {
-              const parts =
-                typeof message.content === 'string'
-                  ? [message.content]
-                  : message.content.filter((part) => part.type === 'text').map((part) => part.text);
-              for (const text of parts) {
-                for (let offset = 0; offset < text.length; offset += 4096) yield text.slice(offset, offset + 4096);
+              if (typeof message.content === 'string') {
+                for (let offset = 0; offset < message.content.length; offset += 4096)
+                  yield message.content.slice(offset, offset + 4096);
                 yield ' ';
-              }
+              } else
+                for (const part of message.content) {
+                  if (part.type === 'text')
+                    for (let offset = 0; offset < part.text.length; offset += 4096)
+                      yield part.text.slice(offset, offset + 4096);
+                  // Yield even for image-only blocks so huge arrays remain interruptible.
+                  yield ' ';
+                }
             }
           },
         };
