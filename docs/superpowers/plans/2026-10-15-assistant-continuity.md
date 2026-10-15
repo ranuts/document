@@ -70,14 +70,14 @@ Files: new `lib/agent-plugin/ui/request-queue.ts` and queue presentation module;
 optional hooks/slots in chat-ui source/public docs; `panel.ts`, queue styles,
 locale labels/types, unit suites and real-editor queue E2E.
 
-- [ ] Write/observe failing tests for FIFO, immediate acceptance while busy,
+- [x] Write/observe failing tests for FIFO, immediate acceptance while busy,
       edit/remove/send now, duplicate prevention and Stop/failure pause.
-- [ ] Implement a pure queue state owner per conversation and minimal pending
+- [x] Implement a pure queue state owner per conversation and minimal pending
       list. Separate Send/Queue from Stop; defaults preserve other ChatView users.
-- [ ] Bind each queued request to its original scope and trusted intent. Hold
+- [x] Bind each queued request to its original scope and trusted intent. Hold
       through human review; pause stale/deleted/switched scope without auto-send.
       Preserve drafts and allow explicit recovery; no persistent schema change.
-- [ ] Advance only on explicit success; cover delayed drain, provider switching,
+- [x] Advance only on explicit success; cover delayed drain, provider switching,
       old finalizers and shared ChatView without queue hooks. New drafts while
       paused older requests remain queued; Resume uses FIFO, Send now promotes/resumes.
       A fresh explicit Send with no older pending requests starts normally after
@@ -85,7 +85,7 @@ locale labels/types, unit suites and real-editor queue E2E.
       cannot overwrite an occupied composer. Return to a conversation requires
       Resume; deletion/history restoration invalidates its volatile queue. Scope
       recovery requires explicit restore/rebind, including freeform requests.
-- [ ] Verify no parallel model calls and no later request starts before active
+- [x] Verify no parallel model calls and no later request starts before active
       settlement. Run two-stage review, then commit queue behavior separately.
 
 ## Chunk 4: Fewer model calls and relevant request context
@@ -117,6 +117,11 @@ workspace/process E2E.
 
 ## Chunk 5: Integration, evidence and delivery
 
+- [ ] Align the selected-text disclosure and add a thin chevron, reversible
+      open/close motion, reduced-motion support and keyboard regression coverage.
+- [ ] Make the assistant title return to the latest meaningful conversation,
+      falling back to an existing draft or new conversation, without resuming
+      paused requests or restoring disabled disk history.
 - [ ] Integrate functional commits onto `fix/speech-first-permission`, retaining
       91ad1dd and updating PR #271 rather than creating another PR.
 - [ ] Run full unit suite, lint/typecheck, format and production build. Serialize
