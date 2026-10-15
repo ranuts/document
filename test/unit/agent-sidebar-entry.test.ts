@@ -100,7 +100,8 @@ it('does not steal parent composer focus when moving an inactive remembered rail
   const composer = document.createElement('textarea');
   document.body.append(composer);
   composer.focus();
-  // jsdom reports only the iframe's remembered activeElement; model browser focus ownership.
+  // Model a remembered iframe focus target independently of jsdom's version.
+  // The parent composer owns actual focus; moving the rail must not reclaim it.
   vi.spyOn(doc, 'hasFocus').mockReturnValue(false);
   vi.spyOn(doc, 'activeElement', 'get').mockReturnValue(button);
   expect(doc.activeElement).toBe(button);
