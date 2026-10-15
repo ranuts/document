@@ -327,7 +327,8 @@ export const en: I18nMessages = {
   agentHistoryLoadMore: 'Load more',
   agentNoConversationsFound: 'No matching conversations',
   agentHistoryDataControls: 'History & data',
-  agentContextTrimmed: 'Earlier turns were omitted from this request. Full history remains available.',
+  agentContextTrimmed:
+    'This request uses shortened context and may include only part of the document or recent turns. Full conversation history remains available.',
   agentContextTooLong:
     'This request is too long. Shorten the selected passage or your custom system prompt, or split the task.',
   agentClear: 'Clear chat',

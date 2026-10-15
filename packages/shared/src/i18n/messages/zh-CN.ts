@@ -314,7 +314,7 @@ export const zhCN: I18nMessages = {
   agentHistoryLoadMore: '加载更多',
   agentNoConversationsFound: '没有找到匹配的对话',
   agentHistoryDataControls: '历史与数据',
-  agentContextTrimmed: '本次请求已省略较早的对话，完整记录仍保留。',
+  agentContextTrimmed: '本次请求已缩减上下文，可能只包含部分文档内容或较新的对话。完整对话记录仍保留。',
   agentContextTooLong: '当前请求过长，请缩短所选内容或自定义系统指令，也可以拆分任务。',
   agentClear: '清空对话',
   agentInputPlaceholder: '让 AI 帮你编辑文档…（Enter 发送，Shift+Enter 换行）',

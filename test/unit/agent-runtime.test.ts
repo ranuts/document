@@ -117,6 +117,38 @@ it('supplies fresh scope only in model requests without contaminating saved or d
   expect(result.messages[0]).toEqual({ role: 'user', content: 'question' });
 });
 
+it.each(['文'.repeat(2500), '😀'.repeat(2500), '"\\\n'.repeat(2500)])(
+  'fits long optional reference text while preserving the question and scope',
+  async (body) => {
+    const chat = vi.fn().mockResolvedValue(textResponse('answer'));
+    const trimmed = vi.fn();
+    const result = await runAgent({ name: 'cloud', isReady: () => true, chat }, '你好', {
+      requestContext: JSON.stringify({ editor: { kind: 'word' }, content: { text: body, truncated: false } }),
+      onContextTrimmed: trimmed,
+    });
+    const sent = chat.mock.calls[0][0] as LLMMessage[];
+    expect(
+      new TextEncoder().encode(JSON.stringify({ role: sent[0].role, content: sent[0].content })).length + 16,
+    ).toBeLessThanOrEqual(6144);
+    expect(sent[0].content).toContain('你好');
+    expect(sent[0].content).toContain('"kind":"word"');
+    expect(sent[0].content).toContain('"truncated":true');
+    expect(trimmed).toHaveBeenCalledOnce();
+    expect(result.messages[0]).toEqual({ role: 'user', content: '你好' });
+    expect(result.text).toBe('answer');
+  },
+);
+
+it('still rejects a user prompt that alone exceeds its budget', async () => {
+  const chat = vi.fn();
+  await expect(
+    runAgent({ name: 'cloud', isReady: () => true, chat }, '文'.repeat(2500), {
+      requestContext: 'optional',
+    }),
+  ).rejects.toThrow('agentContextTooLong');
+  expect(chat).not.toHaveBeenCalled();
+});
+
 const toolResponse = (id: string, name: string, input: Record<string, unknown>): LLMResponse => ({
   text: '',
   toolCalls: [{ id, name, input }],

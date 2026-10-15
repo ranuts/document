@@ -332,7 +332,8 @@ export const ja: Partial<I18nMessages> = {
   agentHistoryLoadMore: 'さらに表示',
   agentNoConversationsFound: '一致する会話がありません',
   agentHistoryDataControls: '履歴とデータ',
-  agentContextTrimmed: 'このリクエストでは古い会話を省略しました。履歴は保存されています。',
+  agentContextTrimmed:
+    'このリクエストでは文脈を短縮したため、文書の一部または最近の会話のみが含まれる場合があります。会話履歴全体は保持されます。',
   agentContextTooLong:
     'リクエストが長すぎます。選択した内容やカスタムシステム指示を短くするか、タスクを分割してください。',
   agentClear: 'チャットを消去',
