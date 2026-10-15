@@ -22,6 +22,8 @@ export interface ConversationSearchRecord extends Conversation {
 export interface ConversationStoreOptions {
   repository?: ConversationRepository;
   onError?: (error: unknown) => void;
+  /** Volatile request owners that an automatic restore must keep in memory. */
+  retainedConversations?(): readonly string[];
 }
 function blankConversation(): ConversationRecord {
   const now = Date.now();
@@ -154,10 +156,11 @@ export function createConversationStore(onChange?: () => void, options: Conversa
       knownRevision = 0;
       return;
     }
+    const retained = new Set(options.retainedConversations?.() ?? []);
     const current = sessions.filter(
       (item) =>
-        (item.messages.length || item.title || touched.has(item.id)) &&
-        (!savedIds.has(item.id) || touched.has(item.id)),
+        (item.messages.length || item.title || touched.has(item.id) || retained.has(item.id)) &&
+        (!savedIds.has(item.id) || touched.has(item.id) || retained.has(item.id)),
     );
     if (
       knownRevision !== undefined &&

@@ -386,3 +386,22 @@ it('erasing while a save is in flight cancels its queued successor and retains t
   expect(await repository.load()).toEqual({ version: 1, revision: 3, activeId: '', sessions: [] });
   expect(store.history().load()).toEqual([]);
 });
+
+it('retains only explicitly owned volatile sessions while merging saved history', async () => {
+  const saved = createConversationStore();
+  const savedId = saved.activeId;
+  saved.history().save([{ role: 'user', content: 'Saved chat' }]);
+  await saved.setSaving(true);
+  let retained: string[] = [];
+  const store = createConversationStore(undefined, { retainedConversations: () => retained });
+  const initial = store.activeId;
+  retained = [initial];
+  await store.restoreSaved();
+  expect(store.activeId).toBe(initial);
+  expect(store.history(initial).load()).toEqual([]);
+  expect(store.list().some((item) => item.id === savedId)).toBe(true);
+  retained = [];
+  await store.restoreSaved();
+  expect(store.activeId).toBe(savedId);
+  expect(store.list().some((item) => item.id === initial)).toBe(false);
+});

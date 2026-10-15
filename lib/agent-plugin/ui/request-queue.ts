@@ -76,6 +76,13 @@ export class RequestQueue<Binding> {
   pendingConversations(): string[] {
     return [...this.sessions].filter(([, state]) => state.entries.length).map(([id]) => id);
   }
+  /** Keep every volatile request owner reachable until execution and recovery finish. */
+  retainedConversations(): string[] {
+    const ids = new Set(this.pendingConversations());
+    if (this.active) ids.add(this.active.session);
+    if (this.application) ids.add(this.application.session);
+    return [...ids];
+  }
   private session(id: string): Session<Binding> {
     let session = this.sessions.get(id);
     if (!session) {
