@@ -35,8 +35,27 @@ test('native PDF preflight rejects body edits, preserves ordinary chat and permi
   let phase: 'edit' | 'greet' | 'read' | 'annotate' = 'edit';
   let taskCalls = 0;
   let classifications = 0;
+  let greetings = 0;
   await page.route('https://assistant.example.invalid/v1/chat/completions', async (route) => {
     const request = route.request().postDataJSON();
+    if (phase === 'greet') {
+      // Plain greetings deliberately bypass both PDF effect classification and tools.
+      expect(request.tools ?? []).toHaveLength(0);
+      expect(request.response_format).toBeUndefined();
+      expect(JSON.stringify(request.messages)).toContain('Hello');
+      greetings++;
+      await route.fulfill({
+        json: {
+          choices: [
+            {
+              message: { content: 'Hello! How can I help?' },
+              finish_reason: 'stop',
+            },
+          ],
+        },
+      });
+      return;
+    }
     if (!request.tools?.length) {
       classifications++;
       await route.fulfill({
@@ -57,11 +76,11 @@ test('native PDF preflight rejects body edits, preserves ordinary chat and permi
     }
     taskCalls++;
     const names = request.tools.map((tool: any) => tool.function.name);
-    if (phase === 'greet' || phase === 'read') expect(names).not.toContain('add_pdf_comment');
+    if (phase === 'read') expect(names).not.toContain('add_pdf_comment');
     if (phase === 'annotate') expect(names).toContain('add_pdf_comment');
     const name = phase === 'read' ? 'get_pdf_text' : 'add_pdf_comment';
     const input = phase === 'read' ? {} : { page: 1, text: 'Please check the budget.' };
-    const call = phase !== 'greet' && taskCalls === 1;
+    const call = taskCalls === 1;
     if (phase === 'read' && !call) expect(JSON.stringify(request.messages)).toContain('Budget is 120');
     await route.fulfill({
       json: {
@@ -79,12 +98,7 @@ test('native PDF preflight rejects body edits, preserves ordinary chat and permi
                   ],
                 }
               : {
-                  content:
-                    phase === 'greet'
-                      ? 'Hello! How can I help?'
-                      : phase === 'read'
-                        ? '120'
-                        : 'Added the reviewed note.',
+                  content: phase === 'read' ? '120' : 'Added the reviewed note.',
                 },
             finish_reason: call ? 'tool_calls' : 'stop',
           },
@@ -124,6 +138,9 @@ test('native PDF preflight rejects body edits, preserves ordinary chat and permi
   await input.fill('Hello');
   await input.press('Enter');
   await expect(page.locator('.cui-msg-agent .cui-bubble').last()).toHaveText('Hello! How can I help?');
+  expect(greetings).toBe(1);
+  expect(classifications).toBe(1);
+  expect(taskCalls).toBe(0);
   await expect(page.locator('.cui-send-stop')).toHaveCount(0);
   expect(await annotations()).toEqual([]);
   phase = 'read';
