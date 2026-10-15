@@ -1,3 +1,6 @@
+import { clearActiveSource } from './active-document-source';
+import { beginDocumentOpen, cancelDocumentOpen, commitDocumentOpen } from './document-open';
+import { stopAutosaveSession } from './history/autosave';
 import { MessageCodec, Platform, createObjectURL } from 'ranuts/utils';
 import type { MessageHandler } from 'ranuts/utils';
 import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
@@ -22,6 +25,7 @@ export interface RenderOfficeData {
 }
 
 let fileChunks: RenderOfficeData[] = [];
+let chunkOpening: ReturnType<typeof beginDocumentOpen> | null = null;
 
 export const events: Record<string, MessageHandler<any, unknown>> = {
   RENDER_OFFICE: async (data: RenderOfficeData) => {
@@ -29,28 +33,45 @@ export const events: Record<string, MessageHandler<any, unknown>> = {
     if (hideControlPanelFn) {
       hideControlPanelFn();
     }
+    if (data.chunkIndex === 0 || !chunkOpening) {
+      fileChunks = [];
+      chunkOpening = beginDocumentOpen();
+    }
+    const opening = chunkOpening;
     fileChunks.push(data);
     if (fileChunks.length >= data.totalChunks) {
+      const chunks = fileChunks;
+      fileChunks = [];
+      chunkOpening = null;
       const { removeLoading } = showLoading();
       try {
-        const file = await MessageCodec.decodeFileChunked(fileChunks);
+        const file = await MessageCodec.decodeFileChunked(chunks);
+        opening.assertCurrent();
+        const url = await createObjectURL(file);
+        opening.assertCurrent();
         setDocmentObj({
           fileName: file.name,
           file: file,
-          url: await createObjectURL(file),
+          url,
         });
         const { fileName, file: fileBlob } = getDocmentObj();
-        await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
+        await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob, isCurrent: opening.isCurrent });
+        if (commitDocumentOpen(opening.id)) {
+          stopAutosaveSession();
+          await clearActiveSource();
+        }
       } catch (error) {
-        console.error('Error rendering office document:', error);
+        if (opening.isCurrent()) console.error('Error rendering office document:', error);
       } finally {
-        fileChunks = [];
         // Always remove loading, even if there's an error
         removeLoading();
       }
     }
   },
   CLOSE_EDITOR: () => {
+    cancelDocumentOpen();
+    stopAutosaveSession();
+    chunkOpening = null;
     fileChunks = [];
     if (window.editor && typeof window.editor.destroyEditor === 'function') {
       window.editor.destroyEditor();

@@ -32,6 +32,7 @@ export async function handleDocumentOperation(options: {
   fileName: string;
   file?: File;
   readonly?: boolean;
+  isCurrent?: () => boolean;
 }): Promise<void> {
   try {
     // The DocsAPI loader is no longer a render-blocking <script> in
@@ -39,6 +40,7 @@ export async function handleDocumentOperation(options: {
     // a document); every open path funnels through here, so load it on
     // demand. Idempotent once window.DocsAPI exists.
     await loadEditorApi();
+    if (options.isCurrent && !options.isCurrent()) throw new DOMException('Document open superseded', 'AbortError');
     const { isNew, fileName, file, readonly = false } = options;
     const fileType = fileName.split('.').pop() || getExtensions(file?.type || '')[0] || '';
     const _docType = getDocumentType(fileType);
@@ -89,14 +91,18 @@ export async function handleDocumentOperation(options: {
       }
     }
 
+    if (options.isCurrent && !options.isCurrent()) throw new DOMException('Document open superseded', 'AbortError');
+
     // Create editor instance (returns a Promise, uses queue internally)
     await createEditorInstance({
       fileName,
       fileType: openFileType,
       binData,
       readonly,
+      isCurrent: options.isCurrent,
     });
   } catch (error: any) {
+    if (error?.name === 'AbortError') throw error;
     console.error(`${t('documentOperationFailed')}`, error);
     alert(`${t('documentOperationFailed')}${error.message}`);
     throw error;

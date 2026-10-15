@@ -118,6 +118,8 @@ export const en: I18nMessages = {
   unsupportedFileType: 'Unsupported file type: ',
   invalidFileObject: 'Invalid file object',
   documentOperationFailed: 'Document operation failed: ',
+  openUrlTimeout: 'The download timed out. Try again or open a local copy.',
+  openUrlTooLarge: 'The remote file exceeds {mb} MiB. Download it and open it from your device.',
   openUrlFailed: 'Could not open that link: ',
   openUrlUnreachable:
     'That file could not be fetched. The site may not allow other pages to read its files, or the network is down. Download it and open the file from your device instead.',
@@ -378,6 +380,8 @@ export const en: I18nMessages = {
   agentToolCallPrefix: 'Tool call: ',
   agentToolErrorPrefix: 'Tool error: ',
 
+  autosaveExportStopped:
+    'Automatic recovery stopped because the document could not be exported. Save a copy now, then reopen it to retry.',
   autosaveStopped:
     'Autosave stopped: this browser is out of storage room. Export this document, then delete a few old ones from your saved documents.',
   historyChip: 'On this device · never uploaded',

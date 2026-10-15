@@ -1,3 +1,4 @@
+import { t } from '@ranuts/shared/i18n';
 import 'fake-indexeddb/auto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -252,6 +253,8 @@ describe('autosave session', () => {
   });
 
   it('gives up after repeated export failures instead of retrying forever', async () => {
+    const warning = vi.fn();
+    Object.assign(window, { message: { warning } });
     requestSaveDocument.mockRejectedValue(new Error('export failed'));
     await beginAutosaveSession({ docId: 'broken', title: 'Broken.docx', origin: 'local' });
 
@@ -261,6 +264,11 @@ describe('autosave session', () => {
     await takeSnapshot();
 
     expect(isAutosaveSessionActive()).toBe(false);
+    expect(warning).toHaveBeenCalledWith(t('autosaveExportStopped'));
+    expect(warning).toHaveBeenCalledTimes(1);
+    await takeSnapshot();
+    expect(warning).toHaveBeenCalledTimes(1);
+    delete (window as any).message;
   });
 
   it('waits its turn while a user-initiated save owns the channel', async () => {

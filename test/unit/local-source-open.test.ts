@@ -119,6 +119,45 @@ describe('local open retains its reload source', () => {
     expect(id).toBeTruthy();
     expect(await readActiveSource(id!)).not.toBeNull();
   });
+  it('retires pending original bytes after an embedded replacement mounts', async () => {
+    const file = original();
+    let finish!: (buffer: ArrayBuffer) => void;
+    const read = vi.spyOn(file, 'arrayBuffer').mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          finish = resolve;
+        }),
+    );
+    const first = openLocalFile(file);
+    await vi.waitFor(() => expect(read).toHaveBeenCalled());
+    history.replaceState(null, '', '/editor?embed=1');
+    const listeners = vi.spyOn(window, 'addEventListener');
+    const posted = vi.spyOn(window.parent, 'postMessage');
+    const { initEmbedApi } = await import('../../lib/embed-api');
+    initEmbedApi();
+    try {
+      window.dispatchEvent(
+        new MessageEvent('message', {
+          source: window.parent,
+          origin: 'https://host.example',
+          data: { id: 'retire-source', type: 'document:open-file', payload: { file: new File(['host'], 'host.docx') } },
+        }),
+      );
+      await vi.waitFor(() =>
+        expect(posted).toHaveBeenCalledWith(
+          expect.objectContaining({ id: 'retire-source', type: 'document:opened' }),
+          'https://host.example',
+        ),
+      );
+      finish(new TextEncoder().encode('original bytes').buffer);
+      await first;
+      expect(sessionStorage.getItem('document-active-source')).toBeNull();
+    } finally {
+      for (const [type, listener, options] of listeners.mock.calls) window.removeEventListener(type, listener, options);
+      document.body.classList.remove('embed-mode');
+      history.replaceState(null, '', '/editor');
+    }
+  });
   it('does not let an older delayed source overwrite the newer session identity', async () => {
     const file = original();
     let finish!: (buffer: ArrayBuffer) => void;

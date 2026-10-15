@@ -119,6 +119,8 @@ export const ko: Partial<I18nMessages> = {
   unsupportedFileType: '지원하지 않는 파일 형식: ',
   invalidFileObject: '잘못된 파일입니다',
   documentOperationFailed: '문서 작업에 실패했습니다: ',
+  openUrlTimeout: '다운로드 시간이 초과되었습니다. 다시 시도하거나 로컬 사본을 여세요.',
+  openUrlTooLarge: '원격 파일이 {mb} MiB를 초과합니다. 다운로드한 후 기기에서 여세요.',
   openUrlFailed: '해당 링크를 열 수 없습니다: ',
   openUrlUnreachable:
     '파일을 가져오지 못했습니다. 해당 사이트가 다른 페이지의 읽기를 허용하지 않거나 네트워크에 문제가 있을 수 있습니다. 파일을 내려받아 기기에서 직접 열어 주세요.',
@@ -374,6 +376,8 @@ export const ko: Partial<I18nMessages> = {
     '확인한 변경 {count}개를 적용했습니다. 후속 단계가 실행 한도에 도달하여 중지했습니다. 모든 요청이 완료되었다는 뜻은 아닙니다. 결과를 확인한 뒤 남은 작업을 요청하세요.',
   agentToolCallPrefix: '도구 호출: ',
   agentToolErrorPrefix: '도구 오류: ',
+  autosaveExportStopped:
+    '문서를 내보내지 못해 자동 복구가 중지되었습니다. 지금 사본을 저장한 후 다시 열어 재시도하세요.',
   autosaveStopped:
     '자동 저장이 중지되었습니다. 이 브라우저의 저장 공간이 부족합니다. 이 문서를 내보낸 뒤 저장된 문서 몇 개를 삭제하세요.',
   historyTitle: '저장된 문서',

@@ -245,3 +245,18 @@ describe('WebMCP adapter', () => {
     await expect(tool.execute({})).rejects.toThrow('Current document text is unavailable');
   });
 });
+
+describe('URL open failure contract', () => {
+  it('returns an error result from the registered tool when URL opening rejects', async () => {
+    disposeWebMcp();
+    const surface = fakeSurface();
+    (document as any).modelContext = surface;
+    documentApi.openDocumentFromUrl.mockRejectedValueOnce(new Error('download failed'));
+    initWebMcp();
+    const result = await surface.tools.get('open_document_url').execute({ url: 'https://example.com/bad.docx' });
+    expect(result.isError).toBe(true);
+    expect(result.content[0].text).toContain('download failed');
+    disposeWebMcp();
+    delete (document as any).modelContext;
+  });
+});

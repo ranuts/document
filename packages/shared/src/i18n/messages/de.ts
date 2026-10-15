@@ -125,6 +125,8 @@ export const de: Partial<I18nMessages> = {
   unsupportedFileType: 'Nicht unterstützter Dateityp: ',
   invalidFileObject: 'Ungültige Datei',
   documentOperationFailed: 'Dokumentvorgang fehlgeschlagen: ',
+  openUrlTimeout: 'Zeitüberschreitung beim Download. Erneut versuchen oder eine lokale Kopie öffnen.',
+  openUrlTooLarge: 'Die entfernte Datei ist größer als {mb} MiB. Herunterladen und vom Gerät öffnen.',
   openUrlFailed: 'Dieser Link konnte nicht geöffnet werden: ',
   openUrlUnreachable:
     'Die Datei konnte nicht abgerufen werden. Die Website erlaubt anderen Seiten möglicherweise nicht, ihre Dateien zu lesen, oder das Netzwerk ist nicht erreichbar. Laden Sie die Datei herunter und öffnen Sie sie von Ihrem Gerät.',
@@ -400,6 +402,8 @@ export const de: Partial<I18nMessages> = {
     '{count} bestätigte Änderungen wurden angewendet. Weitere Schritte wurden am Ausführungslimit gestoppt. Nicht alle Anforderungen sind damit abgeschlossen. Prüfen Sie das Ergebnis, bevor Sie weitere Schritte anfordern.',
   agentToolCallPrefix: 'Werkzeugaufruf: ',
   agentToolErrorPrefix: 'Werkzeugfehler: ',
+  autosaveExportStopped:
+    'Die automatische Wiederherstellung wurde wegen eines Exportfehlers angehalten. Jetzt eine Kopie speichern und erneut öffnen.',
   autosaveStopped:
     'Automatisches Speichern angehalten: In diesem Browser ist kein Speicherplatz mehr frei. Exportieren Sie dieses Dokument und löschen Sie dann einige ältere aus Ihren gespeicherten Dokumenten.',
   historyTitle: 'Gespeicherte Dokumente',

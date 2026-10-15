@@ -173,14 +173,18 @@ void (async () => {
   }
 
   if (documentUrl) {
+    let decodedUrl = documentUrl;
     try {
-      const decodedUrl = decodeURIComponent(documentUrl);
-      await openDocumentFromUrl(decodedUrl, undefined, { readonly: isReadonly, docId: savedParam || undefined });
+      decodedUrl = decodeURIComponent(documentUrl);
     } catch (error) {
-      // If decoding fails, try using original URL
       console.warn('Failed to decode URL, using original:', error);
-      await openDocumentFromUrl(documentUrl, undefined, { readonly: isReadonly, docId: savedParam || undefined });
     }
+    // The open path already reports failures to the reader. Only decoding
+    // errors use the original URL; a failed download must not be retried here.
+    await openDocumentFromUrl(decodedUrl, undefined, {
+      readonly: isReadonly,
+      docId: savedParam || undefined,
+    }).catch(() => {});
     return;
   }
 

@@ -85,6 +85,16 @@ window.addEventListener('message', (event) => {
 > auth), fetch the file in the parent page and pass the bytes with
 > `document:open-buffer` instead.
 
+Remote URL downloads are limited to **100 MiB of decoded response data** and
+**60 seconds**, including the response body. Download larger files separately
+and open them with `document:open-file` or `document:open-buffer`. These limits
+apply to URL downloads, not local file opens.
+
+A failed, timed-out or superseded URL open returns `document:error` for its
+request ID. Opening another document cancels the older download; late responses
+and pending conversions cannot replace the newer editor. Encoded `filename*`
+response headers take precedence over `filename`.
+
 ```js
 sendEditorCommand('document:open-url', {
   url: 'https://example.com/files/demo.xlsx',

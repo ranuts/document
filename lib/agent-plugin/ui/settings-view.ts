@@ -121,6 +121,12 @@ export function createPanelSettingsView(controls: SettingsControls) {
     serviceHint.textContent = t('agentUseServiceHint');
     advancedTitle.textContent = t('agentPreferences');
     customSources.querySelector('h3')!.textContent = t('agentCustomModel');
+    sourcePicker.setAttribute('aria-label', t('agentSourceLabel'));
+    const selected = sourcePicker.value ?? sourcePicker.getAttribute('value') ?? selectedSource;
+    for (const option of sourcePicker.querySelectorAll('r-option')) {
+      option.textContent = t(option.getAttribute('value') === 'local' ? 'agentSourceLocal' : 'agentSourceService');
+    }
+    sourcePicker.setAttribute('value', selected);
   };
   syncLabels();
   return {
