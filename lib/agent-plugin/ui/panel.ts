@@ -1787,13 +1787,17 @@ export function createAgentPanel(
   const pendingQueue = createRequestQueueView({
     focus: () => chat.focus(),
     edit: (id) => {
+      if (chat.getInput().trim()) {
+        pendingQueue.occupied();
+        return;
+      }
       if (
-        !requestQueue?.restore(conversations.activeId, id, !chat.getInput().trim(), (text) => {
+        !requestQueue?.restore(conversations.activeId, id, true, (text) => {
           chat.setInput(text);
           chat.focus();
         })
       )
-        pendingQueue.occupied();
+        pendingQueue.unavailable();
     },
     remove: (id) => {
       requestQueue?.remove(conversations.activeId, id);

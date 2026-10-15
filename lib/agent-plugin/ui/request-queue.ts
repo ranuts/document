@@ -10,6 +10,8 @@ export interface QueuedRequest<Binding> {
 export interface RequestQueueState<Binding> {
   readonly entries: readonly QueuedRequest<Binding>[];
   readonly paused: boolean;
+  /** An unaccepted active attempt remains unavailable until its submit physically settles. */
+  readonly preparing?: { readonly id: string; readonly stopping: boolean };
 }
 interface Session<Binding> {
   entries: QueuedRequest<Binding>[];
@@ -47,7 +49,15 @@ export class RequestQueue<Binding> {
     return !!this.active || !!this.application;
   }
   state(id: string): RequestQueueState<Binding> {
-    return this.session(id);
+    const session = this.session(id);
+    const active = this.active;
+    return {
+      entries: session.entries,
+      paused: session.paused,
+      ...(active?.session === id && !active.accepted
+        ? { preparing: { id: active.entry.id, stopping: active.cancelled } }
+        : {}),
+    };
   }
   /** Every physical document Apply, including retained cards, blocks subsequent submits. */
   acquireApplication(
@@ -235,6 +245,7 @@ export class RequestQueue<Binding> {
       holding: false,
     };
     this.active = active;
+    this.options.changed();
     const accept = () => {
       if (this.active !== active || active.cancelled || active.invalidated) return false;
       if (active.accepted) return true;

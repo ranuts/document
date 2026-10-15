@@ -9,6 +9,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- The first assistant request stays in its original chat while saved conversations
+  finish loading. Requests being prepared or stopped show their state and keep
+  unavailable queue actions disabled until recovery is ready.
 - Starting assistant dictation or editing a draft during first-use setup no longer
   gets interrupted by the background model-cache check opening settings.
 - Docker deployments accessed over ordinary HTTP can load the document converter

@@ -362,6 +362,8 @@ export const de: Partial<I18nMessages> = {
   agentQueueRemove: 'Entfernen',
   agentQueueSendNow: 'Jetzt senden',
   agentQueueComposerOccupied: 'Ein Entwurf ist vorhanden. Senden oder leeren Sie ihn vor dem Bearbeiten.',
+  agentQueueEditUnavailable:
+    'Diese Anfrage kann derzeit nicht bearbeitet werden. Prüfe die Warteliste und versuche es erneut.',
   agentQueueScopeChanged:
     'Das ursprüngliche Dokument oder Modell wurde geändert. Bearbeiten Sie die Anfrage, um sie im aktuellen Kontext zu senden.',
   agentStopping: 'Wird angehalten…',

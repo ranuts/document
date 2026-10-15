@@ -340,6 +340,7 @@ export const ko: Partial<I18nMessages> = {
   agentQueueRemove: '삭제',
   agentQueueSendNow: '지금 보내기',
   agentQueueComposerOccupied: '입력창에 초안이 있습니다. 먼저 보내거나 지운 후 편집하세요.',
+  agentQueueEditUnavailable: '지금은 이 요청을 편집할 수 없습니다. 대기 목록을 확인한 후 다시 시도하세요.',
   agentQueueScopeChanged: '원본 문서 또는 모델이 변경되었습니다. 편집 후 현재 맥락으로 다시 보내세요.',
   agentStopping: '중지 중…',
   agentNeedKey: '먼저 API 키를 입력하세요.',
