@@ -2923,8 +2923,7 @@ it('answers an exact greeting without displaying a classification phase or copyi
     expect(activity).not.toHaveBeenCalledWith('routing');
     expect(send).toHaveBeenCalledOnce();
     const request = send.mock.calls[0][1]!.request!;
-    expect(JSON.parse(request.getRequestContext()!)).not.toHaveProperty('content');
-    expect(JSON.parse(request.getRequestContext()!)).not.toHaveProperty('availableOperations');
+    expect(request.getRequestContext()).toBeUndefined();
   } finally {
     activity.mockRestore();
     send.mockRestore();
@@ -3303,6 +3302,7 @@ it.each(['running', 'stopped', 'scope-changed'] as const)(
     state.editorReady = true;
     state.toolContext = 'word';
     state.semanticResponse = '{"task":"chat","language":"en"}';
+    if (mode === 'scope-changed') state.source = 'Original selected source';
     let finishRouting!: () => void;
     state.semanticGate = new Promise<void>((resolve) => {
       finishRouting = resolve;
@@ -3425,7 +3425,10 @@ it('retains stale original scopes for explicit editing and never overwrites an o
   document.body.append(panel);
   enterQueueDraft(panel, 'Hello');
   await vi.waitFor(() => expect(release).toBeTypeOf('function'));
-  enterQueueDraft(panel, 'Hi');
+  state.editorReady = true;
+  state.source = 'Original selected source';
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  enterQueueDraft(panel, 'Explain the selected source');
   state.targetCurrent = false;
   release();
   await vi.waitFor(() => expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false));
@@ -3439,7 +3442,7 @@ it('retains stale original scopes for explicit editing and never overwrites an o
   input.value = '';
   input.dispatchEvent(new Event('input'));
   panel.querySelector<HTMLButtonElement>('.agent-queue-edit')!.click();
-  expect(input.value).toBe('Hi');
+  expect(input.value).toBe('Explain the selected source');
   expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0);
 });
 it('lets a fresh Send after Stop start normally when no older pending request remains', async () => {
@@ -3923,6 +3926,7 @@ it.each(['missing-selection', 'protocol', 'stale', 'stop'] as const)(
     state.ready = true;
     state.editorReady = true;
     state.toolContext = 'word';
+    if (mode === 'stale') state.source = 'Original selected source';
     state.semanticResponse =
       mode === 'missing-selection'
         ? '{"task":"rewrite","language":"en"}'
@@ -4202,7 +4206,8 @@ it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent', 
         const messages = body.messages as Array<{ role: string; content: unknown }>;
         const last = messages.filter((message) => message.role === 'user').at(-1)?.content;
         for (const greeting of ['Hello', 'Hi'])
-          if (typeof last === 'string' && last.endsWith(`User request:\n${greeting}`)) answers.push(greeting);
+          if (typeof last === 'string' && (last === greeting || last.endsWith(`User request:\n${greeting}`)))
+            answers.push(greeting);
         return new Response(
           JSON.stringify({
             choices: [
@@ -4362,5 +4367,302 @@ it('distinguishes unavailable recovery from an occupied composer when an edit is
   } finally {
     restore.mockRestore();
     finish();
+  }
+});
+it.each(['Hello', 'Tell me a joke'])(
+  'continues conversation-only %s while the editor changes during its answer',
+  async (text) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.semanticResponse = '{"task":"chat","language":"en"}';
+    let finish!: () => void;
+    state.queueStream = async () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      });
+    const send = vi.spyOn(AgentChatController.prototype, 'send');
+    const panel = createPreparedPanel();
+    document.body.append(panel);
+    try {
+      enterQueueDraft(panel, text);
+      await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+      state.targetCurrent = false;
+      finish();
+      await expect(send.mock.results.at(-1)!.value).resolves.toMatchObject({ status: 'success' });
+      expect(panel.querySelector('.cui-msg-agent')?.textContent).toContain('answer');
+      expect(send.mock.calls.at(-1)![1]?.request?.getRequestContext()).toBeUndefined();
+      expect(send.mock.calls.at(-1)![1]?.request?.tools).toEqual({});
+    } finally {
+      send.mockRestore();
+    }
+  },
+);
+it('allows classification to finish as ordinary chat after an editor change', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  let finish!: () => void;
+  state.semanticGate = new Promise((resolve) => {
+    finish = resolve;
+  });
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+  };
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Tell me a joke');
+  await vi.waitFor(() => expect(panel.querySelector('.cui-root')?.getAttribute('data-activity')).toBe('routing'));
+  state.targetCurrent = false;
+  finish();
+  await vi.waitFor(() => expect(calls).toEqual(['Tell me a joke']));
+});
+it('keeps queued ordinary chat independent of a later sensitive spreadsheet selection', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.editorKind = 'cell';
+  state.toolContext = 'cell';
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  let finish!: () => void;
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+    if (calls.length === 1)
+      await new Promise<void>((resolve) => {
+        finish = resolve;
+      });
+  };
+  const send = vi.spyOn(AgentChatController.prototype, 'send');
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  try {
+    enterQueueDraft(panel, 'Hello');
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+    enterQueueDraft(panel, 'Tell me a joke');
+    state.source = 'Sensitive later cell value';
+    state.targetCurrent = false;
+    finish();
+    await vi.waitFor(() => expect(calls).toEqual(['Hello', 'Tell me a joke']));
+    expect(send.mock.calls.at(-1)![1]?.request?.getRequestContext()).toBeUndefined();
+    expect(JSON.stringify(state.conversations!.history().load())).not.toContain('Sensitive later cell value');
+  } finally {
+    send.mockRestore();
+  }
+});
+it.each(['plain', 'stale-tool', 'read-then-edit'] as const)(
+  'preserves native original-scope boundaries during concurrent editing: %s',
+  async (mode) => {
+    state.nativeEndpoint = true;
+    state.editorReady = true;
+    state.editorKind = 'slide';
+    state.toolContext = 'slide';
+    state.readText = 'Original slide source';
+    let finish!: () => void;
+    let nativeCalls = 0;
+    const bodies: unknown[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (_url: string, init: RequestInit) => {
+        const body = JSON.parse(String(init.body));
+        bodies.push(body);
+        nativeCalls++;
+        const tools = body.tools?.length;
+        if ((mode !== 'read-then-edit' && tools) || (mode === 'read-then-edit' && nativeCalls === 2))
+          await new Promise<void>((resolve) => {
+            finish = resolve;
+          });
+        const tool = tools && (mode === 'stale-tool' || (mode === 'read-then-edit' && nativeCalls === 1));
+        return new Response(
+          JSON.stringify({
+            choices: [
+              {
+                message: tool
+                  ? {
+                      content: null,
+                      tool_calls: [
+                        {
+                          id: 'original-read',
+                          type: 'function',
+                          function: { name: 'get_presentation_text', arguments: '{}' },
+                        },
+                      ],
+                    }
+                  : { content: 'A general conversation answer' },
+                finish_reason: tool ? 'tool_calls' : 'stop',
+              },
+            ],
+          }),
+        );
+      }),
+    );
+    const send = vi.spyOn(AgentChatController.prototype, 'send');
+    try {
+      const panel = createAgentPanel();
+      document.body.append(panel);
+      const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+      kind.value = 'openai-compatible';
+      kind.dispatchEvent(new Event('change'));
+      for (const [selector, value] of [
+        ['.agent-panel-endpoint-url', 'https://api.example.com/v1'],
+        ['.agent-panel-endpoint-model', 'tool-model'],
+        ['.agent-panel-endpoint-key', 'sk-test'],
+      ]) {
+        const field = panel.querySelector<HTMLInputElement>(selector)!;
+        field.value = value;
+        field.dispatchEvent(new Event('change'));
+      }
+      const connect = panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!;
+      connect.click();
+      await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+      enterQueueDraft(panel, 'Tell me a joke');
+      await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+      state.targetCurrent = false;
+      state.source = 'Sensitive later selection';
+      finish();
+      await expect(send.mock.results.at(-1)!.value).resolves.toMatchObject({
+        status: mode === 'plain' ? 'success' : 'failed',
+      });
+      if (mode === 'plain')
+        expect(panel.querySelector('.cui-msg-agent')?.textContent).toContain('A general conversation answer');
+      else expect(panel.textContent).not.toContain('A general conversation answer');
+      expect(state.apply).toHaveBeenCalledTimes(mode === 'read-then-edit' ? 1 : 0);
+      expect(JSON.stringify(bodies)).not.toContain('Sensitive later selection');
+      expect(nativeCalls).toBe(mode === 'read-then-edit' ? 2 : 1);
+      expect(send.mock.calls.at(-1)![1]?.request?.getRequestContext()).toBeUndefined();
+    } finally {
+      finish?.();
+      send.mockRestore();
+      vi.unstubAllGlobals();
+    }
+  },
+);
+
+it('serializes only the original selected cell values after routing without recapturing later values', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.editorKind = 'cell';
+  state.toolContext = 'cell';
+  state.source = 'Original cell value';
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  let finish!: () => void;
+  state.semanticGate = new Promise((resolve) => {
+    finish = resolve;
+  });
+  const send = vi.spyOn(AgentChatController.prototype, 'send');
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  try {
+    enterQueueDraft(panel, 'Explain this value');
+    await vi.waitFor(() => expect(panel.querySelector('.cui-root')?.getAttribute('data-activity')).toBe('routing'));
+    state.source = 'Later private value';
+    finish();
+    await vi.waitFor(() => expect(send).toHaveBeenCalledOnce());
+    const context = send.mock.calls[0][1]?.request?.getRequestContext();
+    expect(context).toContain('Original cell value');
+    expect(context).not.toContain('Later private value');
+  } finally {
+    send.mockRestore();
+  }
+});
+it('omits a selected source for an exact greeting while retaining selection-bound ordinary answers', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.source = 'Private selected source';
+  const send = vi.spyOn(AgentChatController.prototype, 'send');
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  try {
+    enterQueueDraft(panel, 'Hello');
+    await vi.waitFor(() => expect(send).toHaveBeenCalledOnce());
+    await expect(send.mock.results[0].value).resolves.toMatchObject({ status: 'success' });
+    expect(send.mock.calls[0][1]?.request?.getRequestContext()).toBeUndefined();
+    state.semanticResponse = '{"task":"chat","language":"en"}';
+    let finish!: () => void;
+    state.queueStream = async () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      });
+    enterQueueDraft(panel, 'Explain this source');
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+    state.targetCurrent = false;
+    finish();
+    await expect(send.mock.results.at(-1)!.value).resolves.toMatchObject({ status: 'failed' });
+  } finally {
+    send.mockRestore();
+  }
+});
+
+it('allows a queued ordinary chat through a readonly toggle without weakening queued document work', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  let finish!: () => void;
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+    if (calls.length === 1)
+      await new Promise<void>((resolve) => {
+        finish = resolve;
+      });
+  };
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+  enterQueueDraft(panel, 'Tell me a joke');
+  state.readonly = true;
+  finish();
+  await vi.waitFor(() => expect(calls).toEqual(['Hello', 'Tell me a joke']));
+});
+it('retains exact pending text when enqueue-time composer capture throws instead of assuming an empty source', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  const context = await import('../../lib/agent-plugin/ui/composer-context');
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+  };
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  // Only enqueue capture is failed; idle context presentation was already mounted.
+  const failure = vi.spyOn(context, 'captureComposerContext').mockImplementationOnce(() => {
+    throw new Error('SDK is transitioning');
+  });
+  try {
+    enterQueueDraft(panel, 'Hello');
+    await vi.waitFor(() => expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hello'));
+    expect(calls).toEqual([]);
+    expect(state.conversations!.history().load()).toEqual([]);
+    panel.querySelector<HTMLButtonElement>('.agent-queue-edit')!.click();
+    expect(panel.querySelector<HTMLTextAreaElement>('.cui-input')!.value).toBe('Hello');
+  } finally {
+    failure.mockRestore();
+  }
+});
+it('refuses a document artifact after its original editor scope changes during composition', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.toolContext = 'word';
+  state.semanticResponse = '{"task":"compose","language":"en"}';
+  const draft = await import('../../lib/agent-plugin/ui/document-draft');
+  let finish!: () => void;
+  const generate = vi.spyOn(draft, 'generateDocumentDraft').mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        finish = () => resolve('Late document artifact');
+      }),
+  );
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  try {
+    enterQueueDraft(panel, 'Write an article about autumn');
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+    state.targetCurrent = false;
+    finish();
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    expect(panel.textContent).not.toContain('Late document artifact');
+    expect(panel.querySelector('.cui-msg-error')).not.toBeNull();
+  } finally {
+    generate.mockRestore();
   }
 });

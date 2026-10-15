@@ -2,7 +2,7 @@ import { agentTools } from '../../lib/agent-plugin/tools';
 import { expect, it, vi } from 'vitest';
 import { runAgent } from '@ranuts/agent-core/runtime';
 import type { LLMProvider, LLMResponse } from '@ranuts/agent-core/llm/types';
-import { createSchemaTaskProvider, runDocumentTask } from '../../lib/agent-plugin/document-task';
+import { createSchemaTaskProvider, prepareDocumentTask, runDocumentTask } from '../../lib/agent-plugin/document-task';
 
 const response = (value: unknown): LLMResponse => ({
   text: JSON.stringify(value),
@@ -291,3 +291,39 @@ it('lets the host reject execution after capability preflight before any answer 
   expect(beforeRun).toHaveBeenCalledOnce();
   expect(chat).not.toHaveBeenCalled();
 });
+
+it.each([
+  ['native', 'word', true, true],
+  ['native', 'word', false, false],
+  ['schema', 'word', true, false],
+  ['native', 'pdf', true, false],
+] as const)(
+  'defers only explicitly eligible native non-PDF preflight: %s/%s/%s',
+  async (mode, kind, deferEditorFreshness, allowed) => {
+    const execute = vi.spyOn(agentTools.get_document_text, 'execute');
+    const provider: LLMProvider = {
+      name: 'fixture',
+      toolCallingMode: mode,
+      isReady: () => true,
+      chat: vi.fn().mockResolvedValue(response({ effect: 'read' })),
+    };
+    const prepare = prepareDocumentTask(provider, 'A general question', {
+      target: { context: { kind }, label: 'Original', selectedText: '', isCurrent: () => false },
+      readonly: false,
+      review: vi.fn(),
+      receipt: vi.fn(),
+      deferEditorFreshness,
+    });
+    try {
+      if (!allowed) await expect(prepare).rejects.toThrow('agentPlanExpired');
+      else {
+        const prepared = await prepare;
+        expect(prepared.tools.get_document_text).toBeDefined();
+        await expect(prepared.tools.get_document_text.execute({})).rejects.toThrow('agentPlanExpired');
+      }
+      expect(execute).not.toHaveBeenCalled();
+    } finally {
+      execute.mockRestore();
+    }
+  },
+);

@@ -58,12 +58,18 @@ async function pdfEffect(provider: LLMProvider, request: string, signal?: AbortS
 export async function prepareDocumentTask(
   provider: LLMProvider,
   request: string,
-  options: DocumentAgentToolOptions & Pick<AgentRunOptions, 'signal' | 'assertCurrent'>,
+  options: DocumentAgentToolOptions &
+    Pick<AgentRunOptions, 'signal' | 'assertCurrent'> & {
+      /** Only an ungrounded non-PDF native candidate may defer to each tool's strict original-target guard. */
+      deferEditorFreshness?: boolean;
+    },
 ): Promise<{ tools: Record<string, AgentTool>; reply?: string }> {
   options.assertCurrent?.();
   const effect = options.target.context.kind === 'pdf' ? await pdfEffect(provider, request, options.signal) : undefined;
   options.assertCurrent?.();
-  if (!options.target.isCurrent(false)) throw new Error('agentPlanExpired');
+  const defer =
+    options.deferEditorFreshness && provider.toolCallingMode === 'native' && options.target.context.kind !== 'pdf';
+  if (!defer && !options.target.isCurrent(false)) throw new Error('agentPlanExpired');
   if (effect === 'edit_body' || effect === 'uncertain') {
     return { tools: {}, reply: t(effect === 'edit_body' ? 'agentPdfBodyUnsupported' : 'agentToolNotChosen') };
   }
