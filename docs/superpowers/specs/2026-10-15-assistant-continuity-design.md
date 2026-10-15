@@ -83,6 +83,13 @@ Send now can promote an entry and request cancellation, then waits for the activ
 run to settle before submitting it. Waiting for change review cannot silently
 advance another document operation.
 
+Explicitly choosing a proposal's Refine action and sending the refinement may
+replace that proposal's owned review hold. Capture its plan as reference data and
+bind a fresh original-scope guard before cancellation; do not reuse executable
+permission from a cancelled action. Wait for the old submit/inference to settle,
+and never bypass an Apply already in flight. The replacement still requires
+review, and old card callbacks cannot advance its queue owner.
+
 Queue state is owned by the host, keyed to conversation and current document
 scope; ChatView exposes optional generic hooks only. Switching conversations
 must not execute an old conversation's queue. Bind queued document requests to
