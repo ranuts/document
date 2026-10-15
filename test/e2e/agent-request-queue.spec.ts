@@ -49,14 +49,9 @@ for (const ext of ['docx', 'pptx'] as const) {
       const text = String(body.messages.at(-1).content).split('User request:\n').at(-1)!;
       calls.push(text);
       await new Promise<void>((resolve) => releases.set(text, resolve));
-      // Keep the provider's streaming transport, including a terminal receipt.
+      expect(body.stream).toBe(false);
       await route.fulfill({
-        contentType: 'application/x-ndjson',
-        body:
-          [
-            JSON.stringify({ done: false, message: { role: 'assistant', content: `Answer to ${text}` } }),
-            JSON.stringify({ done: true, message: { role: 'assistant', content: '' } }),
-          ].join('\n') + '\n',
+        json: { done: true, message: { role: 'assistant', content: `Answer to ${text}` } },
       });
     });
     try {
