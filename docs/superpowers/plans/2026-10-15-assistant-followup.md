@@ -102,9 +102,14 @@ packages/chat-ui/src/{chat-view,types}.ts for a request-owned first-presentation
 
 ## Chunk 6: Integrated acceptance and delivery
 
-- [ ] Re-run original Chromium failure probes: slow history + first submitted request, preparing actions, Hello + editor write, Worker/fallback whitespace. Extend dictation with a held answer/queued draft.
-- [ ] Measure bounded history initial nodes/task delay and prepend viewport anchor against the same baseline fixture. Verify all older text remains accessible and full model history/export survives.
-- [ ] Full units with coverage --maxWorkers=2 (matching CI thresholds); pnpm run lint:ts; pnpm run format:check; pnpm run build. Preserve 1511 immutable archives.
-- [ ] Serialized --workers=1 editor regressions including history/composer/context/dictation/process/queue/Stop/writes/PDF; English/Chinese widths and themes. One browser/build owner, no agent full suites.
-- [ ] Final overall source review. Update focused docs/changelog and PR description around final implementation, preserving functional commits and pending verdict.
-- [ ] SSH push to existing fix/speech-first-permission; inspect exact-head CI via Code Review tool only. Fix any failures with fresh evidence until all checks pass; update final verdict and preview. Do not merge.
+- [x] Re-run original Chromium failure probes: slow history + first submitted request, preparing actions, Hello + editor write, Worker/fallback whitespace. Extend dictation with a held answer/queued draft.
+- [x] Measure bounded history initial nodes/task delay and prepend viewport anchor against the same baseline fixture. Verify all older text remains accessible and full model history/export survives.
+- [x] Full units with coverage --maxWorkers=2 (matching CI thresholds); pnpm run lint:ts; pnpm run format:check; pnpm run build. Preserve 1511 immutable archives. Passed at source 8ca217d; final documentation is checked again before pushing.
+- [x] Serialized --workers=1 editor regressions including history/composer/context/dictation/process/queue/Stop/writes/PDF; English/Chinese widths and themes. One browser/build owner, no agent full suites. Final source: 74 passed, three unavailable legacy corpus cases skipped.
+- [x] Final overall source review at 8ca217d. Update focused docs/changelog and PR description around final implementation, preserving functional commits and pending verdict.
+
+Remote delivery gate: SSH push to existing fix/speech-first-permission; inspect
+exact-head CI via Code Review only. Fix failures until all checks pass, then
+update the verdict and immutable preview in PR #271. That live PR records the
+final remote status, avoiding a documentation-only push after completed CI.
+Do not merge.
