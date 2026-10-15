@@ -98,7 +98,7 @@ packages/chat-ui/src/{chat-view,types}.ts for a request-owned first-presentation
 - [x] RED controlled-clock tests: first provider-boundary text differs from filtered arrival and actual DOM presentation; hidden/disconnected UI has no presented-time field; routing/context times are measured, missing stages absent; canceled and superseded callbacks cannot publish another turn's timings.
 - [x] Add optional usage fields for actual local context preparation and first-text time; keep provider queue/model-load exclusions explicit. Add small per-request local timing ownership at host/controller boundaries plus an optional content-free once-per-run runtime provider-text ingress callback before deferred deltas and an actual flushStream presentation callback, with bounded Performance API diagnostics containing only numbers/status.
 - [x] Verify Hello, routed ordinary chat and selected/PDF/host-read guard behavior. Do not infer backend first-token timing from a visible chunk or expose prompts/keys in measures. Focused tests/typecheck/lint; timing functional commit.
-- [ ] Specification gate then independent quality gate.
+- [x] Specification gate then independent quality gate.
 
 ## Chunk 6: Integrated acceptance and delivery
 
