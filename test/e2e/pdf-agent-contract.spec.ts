@@ -134,6 +134,11 @@ test('native PDF preflight rejects body edits, preserves ordinary chat and permi
   expect(classifications).toBe(1);
   await expect(page.locator('.agent-plan-preview')).toHaveCount(0);
   expect(await annotations()).toEqual([]);
+  await expect(page.locator('.agent-queue-text')).toHaveText('Change the budget in this PDF to 200.');
+  await expect(page.locator('.cui-msg-user')).toHaveCount(0);
+  // The unsupported request remains recoverable until explicitly discarded.
+  await page.locator('.agent-queue-remove').click();
+  await expect(page.locator('.agent-queue-entry')).toHaveCount(0);
   phase = 'greet';
   await input.fill('Hello');
   await input.press('Enter');
