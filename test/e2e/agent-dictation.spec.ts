@@ -1,6 +1,69 @@
 import { expect, test } from './lib/l0';
 import { buildDocx, toBase64 } from './lib/ooxml';
 
+test.describe('first microphone permission', () => {
+  // Keep the delayed SDK request observable rather than served by a worker cache.
+  test.use({ serviceWorkers: 'block' });
+  test('initial model discovery does not interrupt the first microphone permission request', async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.addInitScript(() => {
+      localStorage.setItem('document-assistant-enabled', 'true');
+      const state = window as unknown as {
+        SpeechRecognition: unknown;
+        recognition: { onstart?: () => void; onend?: () => void; onresult?: (event: unknown) => void };
+        speechAborts: number;
+      };
+      state.speechAborts = 0;
+      state.SpeechRecognition = class {
+        onstart?: () => void;
+        onend?: () => void;
+        onresult?: (event: unknown) => void;
+        constructor() {
+          state.recognition = this;
+        }
+        start() {}
+        stop() {}
+        abort() {
+          state.speechAborts++;
+        }
+      };
+    });
+    let release!: () => void;
+    const discovery = new Promise<void>((resolve) => (release = resolve));
+    await page.route('**/assets/lib-*.js', async (route) => {
+      await discovery;
+      await route.continue();
+    });
+    try {
+      await page.goto('/editor?new=docx&locale=en');
+      await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+      await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+      await page.locator('.agent-speech-mic').click();
+      await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'starting');
+      release();
+      await expect(page.locator('.agent-model-cache > summary')).toContainText('(0)');
+      await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
+      await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'starting');
+      expect(await page.evaluate(() => (window as unknown as { speechAborts: number }).speechAborts)).toBe(0);
+      await page.evaluate(() => {
+        const recognition = (
+          window as unknown as { recognition: { onstart: () => void; onresult: (event: unknown) => void } }
+        ).recognition;
+        recognition.onstart();
+        recognition.onresult({ results: [{ isFinal: false, 0: { transcript: 'My first dictated request' } }] });
+      });
+      await expect(page.locator('.cui-input')).toHaveValue('My first dictated request');
+      await page.locator('.agent-speech-mic').click();
+      await page.evaluate(() => (window as unknown as { recognition: { onend: () => void } }).recognition.onend());
+      await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'idle');
+      await page.locator('.agent-panel-settings-toggle').click();
+      await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'settings');
+    } finally {
+      release();
+    }
+  });
+});
+
 // Native editors and the real composer run. Browser speech events and an AI
 // endpoint are controlled so permissions, cancellation and latency are repeatable.
 for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {

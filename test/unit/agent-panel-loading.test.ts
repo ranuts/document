@@ -461,6 +461,47 @@ it('does not override an explicit view change while checking cached configuratio
   await new Promise((resolve) => setTimeout(resolve, 0));
   expect(panel.dataset.view).toBe('chat');
 });
+it.each(['starting', 'listening'])(
+  'does not cancel %s dictation when the initial cache check finishes',
+  async (phase) => {
+    class Recognition {
+      static current: Recognition;
+      constructor() {
+        Recognition.current = this;
+      }
+      onstart?: () => void;
+      onresult?: (event: unknown) => void;
+      start = vi.fn();
+      stop = vi.fn();
+      abort = vi.fn();
+    }
+    vi.stubGlobal('SpeechRecognition', Recognition);
+    try {
+      const panel = createAgentPanel({ externalEntry: true });
+      panel.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+      if (phase === 'listening') Recognition.current.onstart?.();
+      expect(panel.querySelector<HTMLElement>('.agent-speech')!.dataset.state).toBe(phase);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(panel.dataset.view).toBe('chat');
+      expect(Recognition.current.abort).not.toHaveBeenCalled();
+      Recognition.current.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'A dictated request' } }] });
+      expect(panel.querySelector<HTMLTextAreaElement>('.cui-input')!.value).toBe('A dictated request');
+      expect(state.preload).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  },
+);
+it('does not hide an edited draft when the initial cache check finishes', async () => {
+  const panel = createAgentPanel({ externalEntry: true });
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Keep this draft visible';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(panel.dataset.view).toBe('chat');
+  expect(input.value).toBe('Keep this draft visible');
+  expect(state.preload).not.toHaveBeenCalled();
+});
 it('reopens a configured assistant in chat after closing its settings', () => {
   localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
   const panel = createAgentPanel({ externalEntry: true });
