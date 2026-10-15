@@ -152,7 +152,21 @@ for (const fixture of fixtures) {
     await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
     await page.locator('.agent-panel-settings-toggle').click();
     const input = page.locator('.cui-input');
-    await input.fill('What content is in the current file?');
+    // Imported content enters the request only through an explicit trusted read.
+    // The second request below still exercises semantic tools and continuation.
+    const readEntry = page
+      .locator(
+        fixture.kind === 'slide'
+          ? '[data-task="slides"]'
+          : fixture.kind === 'cell'
+            ? '[data-task="analyze"], [data-task="read"], [data-task="explain"]'
+            : '[data-task="read"], [data-task="explain"]',
+      )
+      .first();
+    await expect(readEntry).toBeVisible();
+    await readEntry.click();
+    expect(grounded).toBe(false);
+    await expect(input).not.toHaveValue('');
     await input.press('Enter');
     await expect(page.locator('.cui-messages')).toContainText(`The file contains ${marker}.`);
     expect(grounded).toBe(true);
