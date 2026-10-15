@@ -18,6 +18,8 @@ const state = vi.hoisted(() => ({
     undefined | ((text: string, delta: (text: string) => void, signal?: AbortSignal) => Promise<void>),
   conversations: undefined as
     undefined | ReturnType<typeof import('../../lib/agent-plugin/ui/sessions').createConversationStore>,
+  conversationRepository: undefined as
+    undefined | import('../../lib/agent-plugin/ui/conversation-db').ConversationRepository,
   preload: vi.fn(),
   dispose: vi.fn().mockResolvedValue(undefined),
   progress: [] as Array<(value: { text: string; progress?: number }) => void>,
@@ -58,7 +60,10 @@ vi.mock('../../lib/agent-plugin/ui/sessions', async (original) => {
   return {
     ...actual,
     createConversationStore: (...args: Parameters<typeof actual.createConversationStore>) => {
-      const store = actual.createConversationStore(...args);
+      const store = actual.createConversationStore(args[0], {
+        ...args[1],
+        ...(state.conversationRepository ? { repository: state.conversationRepository } : {}),
+      });
       state.conversations = store;
       return store;
     },
@@ -374,6 +379,7 @@ afterEach(() => {
   localStorage.removeItem('agent-local-preset');
   localStorage.removeItem('agent-panel-gguf-url');
   localStorage.removeItem('agent-writing-endpoint');
+  localStorage.removeItem('agent_conversation_saving_v2');
   Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
   window.dispatchEvent(new Event('pagehide'));
   document.body.replaceChildren();
@@ -382,6 +388,7 @@ afterEach(() => {
   state.progress.length = 0;
   state.ready = false;
   state.conversations = undefined;
+  state.conversationRepository = undefined;
   state.nativeEndpoint = false;
   state.cached = false;
   state.cachedModel = 'Qwen3-4B-q4f16_1-MLC';
@@ -3208,6 +3215,84 @@ it('reloads replaced history after restore while retaining only the surviving cu
   await vi.waitFor(() => expect(input.value).toBe(''));
   await vi.waitFor(() => expect(panel.querySelector('.cui-msg-user')).toBeNull());
 });
+
+function delayedConversationRepository() {
+  const id = '11111111-1111-4111-8111-111111111111';
+  const saved: import('../../lib/agent-plugin/ui/conversation-db').StoredConversations = {
+    version: 1,
+    revision: 1,
+    activeId: id,
+    sessions: [
+      { id, title: 'Saved chat', createdAt: 1, updatedAt: 1, messages: [{ role: 'user', content: 'Saved chat' }] },
+    ],
+  };
+  let finish!: (value: typeof saved) => void;
+  const repository = {
+    load: vi.fn(
+      () =>
+        new Promise<typeof saved>((resolve) => {
+          finish = resolve;
+        }),
+    ),
+    save: vi.fn(
+      async (_data: import('../../lib/agent-plugin/ui/conversation-db').ConversationData, revision: number) =>
+        revision + 1,
+    ),
+    clear: vi.fn(async () => 2),
+  };
+  state.conversationRepository = repository;
+  return { id, repository, finish: () => finish(saved) };
+}
+
+it.each(['automatic', 'manual'] as const)(
+  'preserves early placeholder typing only during %s history restoration',
+  async (reason) => {
+    const stored = delayedConversationRepository();
+    if (reason === 'automatic') localStorage.setItem('agent_conversation_saving_v2', 'true');
+    const panel = createAgentPanel();
+    const initial = activeSession();
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = 'Keep this draft';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    if (reason === 'manual') {
+      await Promise.resolve();
+      expect(stored.repository.load).not.toHaveBeenCalled();
+      panel.querySelector<HTMLButtonElement>('.agent-history-restore')!.click();
+    }
+    await vi.waitFor(() => expect(stored.repository.load).toHaveBeenCalledOnce());
+    stored.finish();
+    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-user')?.textContent).toBe('Saved chat'));
+    expect(activeSession()).toBe(stored.id);
+    expect(state.conversations!.list().some((item) => item.id === initial)).toBe(false);
+    panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+    panel
+      .querySelector<HTMLElement>('.agent-history-view')!
+      .dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(input.value).toBe(reason === 'automatic' ? 'Keep this draft' : '');
+  },
+);
+
+it('keeps a different displayed draft owner created while automatic history hydration is pending', async () => {
+  const stored = delayedConversationRepository();
+  localStorage.setItem('agent_conversation_saving_v2', 'true');
+  const panel = createAgentPanel();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Initial placeholder draft';
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  const current = activeSession();
+  input.value = 'New owner draft';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  await vi.waitFor(() => expect(stored.repository.load).toHaveBeenCalledOnce());
+  stored.finish();
+  await vi.waitFor(() => expect(state.conversations!.saving).toBe(true));
+  expect(activeSession()).toBe(current);
+  expect(input.value).toBe('New owner draft');
+  openSession(panel, stored.id);
+  expect(input.value).toBe('');
+  openSession(panel, current);
+  expect(input.value).toBe('New owner draft');
+});
+
 it('executes queued drafts in FIFO order and echoes them only after the active host turn settles', async () => {
   state.ready = true;
   const calls: string[] = [];
