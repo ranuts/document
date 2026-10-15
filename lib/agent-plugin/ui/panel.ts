@@ -308,7 +308,7 @@ export function createAgentPanel(
   };
 
   // ── Header ──────────────────────────────────────────────────────────────
-  const title = Span().class('agent-panel-title').text(t('agentTitle')).build();
+  const title = ButtonBuilder().class('agent-panel-title').attr('type', 'button').text(t('agentTitle')).build();
   // Gear toggles the settings block (provider / key / model), hidden by default
   // so the main panel stays a clean chat surface.
   const settingsBtn = ButtonBuilder()
@@ -996,6 +996,14 @@ export function createAgentPanel(
     { onError: (error) => historyControls?.showError(error) },
   );
   let historyStorage = conversations.history();
+  // create() changes the store's active ID before the old composer is replaced.
+  let displayedConversationId = conversations.activeId;
+  const drafts = new Map<string, string>();
+  const rememberDraft = () => {
+    const text = chat.getInput();
+    if (text.trim()) drafts.set(displayedConversationId, text);
+    else drafts.delete(displayedConversationId);
+  };
   function renderSessions(): void {
     conversationList?.sync();
   }
@@ -2672,24 +2680,49 @@ export function createAgentPanel(
       }
     }
   };
-  const switchConversation = (id: string, focus = true): void => {
-    requestQueue?.pause(conversations.activeId);
+  const switchConversation = (id: string, focus = true, saveDraft = true): void => {
+    if (saveDraft) rememberDraft();
+    requestQueue?.pause(displayedConversationId);
     conversationRevision++;
     invalidatePlans();
     controller?.dispose();
     controller = null;
     conversations.select(id);
+    displayedConversationId = id;
     requestQueue?.select(id);
     clearPreviews();
     clearQuote();
     historyStorage = conversations.history();
     chat.clear();
     chat.setRunning(false);
-    chat.setInput('');
+    chat.setInput(drafts.get(id) ?? '');
     chat.appendMany(historyToTurns(historyStorage.load()));
     renderSessions();
     if (focus) chat.focus();
   };
+  title.addEventListener('click', () => {
+    rememberDraft();
+    const sessions = conversations.searchSnapshot();
+    const current = sessions.find((item) => item.id === displayedConversationId);
+    // An accepted user turn can be visible before its history is persisted.
+    const executing =
+      controller?.isRunning() ||
+      (planning && !planning.signal.aborted) ||
+      (replyAbort && !replyAbort.signal.aborted) ||
+      requestQueue?.state(displayedConversationId).entries.some((entry) => entry.id === requestQueue?.activeId);
+    const unstored = current?.empty && chat.el.querySelector('.cui-msg-user, .cui-msg-agent');
+    const latest = sessions.reduce<(typeof sessions)[number] | undefined>(
+      (latest, item) => (!item.empty && (!latest || item.updatedAt > latest.updatedAt) ? item : latest),
+      undefined,
+    );
+    const draft = drafts.has(displayedConversationId)
+      ? displayedConversationId
+      : [...drafts.keys()].reverse().find((id) => sessions.some((item) => item.id === id));
+    const target = executing || unstored ? displayedConversationId : (latest?.id ?? draft ?? displayedConversationId);
+    // Returning to the displayed chat must not cancel its live answer or review.
+    if (target !== displayedConversationId) switchConversation(target);
+    showView('chat');
+  });
   clearBtn.addEventListener('click', () => {
     speech?.close();
     switchConversation(conversations.create().id);
@@ -2698,6 +2731,9 @@ export function createAgentPanel(
     store: conversations,
     onFocusAfterDeletion: () => conversationList?.focus(),
     onBeforeRestore: (deleted) => {
+      if (deleted && deleted !== 'all') drafts.delete(deleted);
+      else drafts.clear();
+      if (deleted === 'all' || deleted === displayedConversationId) chat.setInput('');
       if (deleted && deleted !== 'all') requestQueue?.invalidate(deleted);
       else requestQueue?.invalidateAll();
       conversationRevision++;
@@ -2707,9 +2743,8 @@ export function createAgentPanel(
       chat.setRunning(false);
     },
     onRestore: () => {
-      const draft = chat.getInput();
-      switchConversation(conversations.activeId, false);
-      chat.setInput(draft);
+      if (conversations.searchSnapshot().some((item) => item.id === displayedConversationId)) rememberDraft();
+      switchConversation(conversations.activeId, false, false);
     },
   });
   settings.append(historyControls.el);
@@ -2898,7 +2933,11 @@ export function createAgentPanel(
   historyView.hidden = true;
   conversationList = createConversationList({
     store: conversations,
-    pendingConversations: () => requestQueue?.pendingConversations() ?? [],
+    pendingConversations: () => [
+      ...(requestQueue?.pendingConversations() ?? []),
+      ...drafts.keys(),
+      ...(chat.getInput().trim() ? [displayedConversationId] : []),
+    ],
     onSelect: (id) => {
       speech?.close();
       switchConversation(id);
@@ -2912,6 +2951,7 @@ export function createAgentPanel(
 
   chat.el.append(writeDestination);
   function showView(view: 'chat' | 'settings' | 'history'): void {
+    if (view === 'history') rememberDraft();
     viewRevision++;
     speech?.close();
     panel.dataset.view = view;

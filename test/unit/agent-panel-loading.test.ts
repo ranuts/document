@@ -2997,6 +2997,217 @@ function enterQueueDraft(panel: HTMLElement, text: string): void {
   input.dispatchEvent(new Event('input', { bubbles: true }));
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
 }
+
+it('opens the latest meaningful chat from the assistant title without loading opted-out history', () => {
+  const panel = createAgentPanel();
+  const store = state.conversations!;
+  const first = store.activeId;
+  vi.spyOn(Date, 'now').mockReturnValueOnce(10);
+  store.history().save([{ role: 'user', content: 'Older chat' }]);
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  const latest = store.activeId;
+  vi.spyOn(Date, 'now').mockReturnValueOnce(20);
+  store.history().save([{ role: 'user', content: 'Latest chat' }]);
+  openSession(panel, first);
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  const restore = vi.spyOn(store, 'restoreSaved');
+  const history = vi.spyOn(store, 'history');
+  const title = panel.querySelector<HTMLButtonElement>('button.agent-panel-title');
+  expect(title).not.toBeNull();
+  expect(title!.type).toBe('button');
+  expect(title!.textContent).toBe(t('agentTitle'));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  title!.click();
+  expect(panel.dataset.view).toBe('chat');
+  expect(store.activeId).toBe(latest);
+  expect(panel.querySelector('.cui-msg-user')?.textContent).toBe('Latest chat');
+  expect(restore).not.toHaveBeenCalled();
+  expect(history).toHaveBeenCalledOnce();
+});
+
+it('keeps drafts with their displayed owners across new-chat and title navigation', () => {
+  const panel = createAgentPanel();
+  const store = state.conversations!;
+  const original = store.activeId;
+  store.history().save([{ role: 'user', content: 'Existing chat' }]);
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Original draft';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  const blank = store.activeId;
+  expect(input.value).toBe('');
+  input.value = 'Blank chat draft';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-title')!.click();
+  expect(store.activeId).toBe(original);
+  expect(input.value).toBe('Original draft');
+  openSession(panel, blank);
+  expect(input.value).toBe('Blank chat draft');
+  expect(store.history().load()).toEqual([]);
+  openSession(panel, original);
+  expect(input.value).toBe('Original draft');
+});
+
+it('keeps the existing draft or empty chat when the title has no meaningful history', () => {
+  const panel = createAgentPanel();
+  const original = activeSession();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Unsent draft';
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  panel.querySelector<HTMLButtonElement>('.agent-panel-title')!.click();
+  expect(panel.dataset.view).toBe('chat');
+  expect(activeSession()).toBe(original);
+  expect(input.value).toBe('Unsent draft');
+  input.value = '';
+  panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+  panel.querySelector<HTMLButtonElement>('.agent-panel-title')!.click();
+  expect(panel.dataset.view).toBe('chat');
+  expect(activeSession()).toBe(original);
+  expect(state.conversations!.list()).toHaveLength(1);
+});
+
+it('does not interrupt the displayed new chat while its first request is still validating', async () => {
+  state.ready = true;
+  const panel = createPreparedPanel();
+  state.conversations!.history().save([{ role: 'user', content: 'Older chat' }]);
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  const original = activeSession();
+  let finish!: () => void;
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  state.semanticGate = new Promise<void>((resolve) => {
+    finish = resolve;
+  });
+  enterQueueDraft(panel, 'Tell me a brief story');
+  await vi.waitFor(() => expect(panel.querySelector('.agent-queue-entry')).not.toBeNull());
+  expect(state.conversations!.history().load()).toEqual([]);
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  panel.querySelector<HTMLButtonElement>('.agent-panel-title')!.click();
+  expect(panel.dataset.view).toBe('chat');
+  expect(activeSession()).toBe(original);
+  finish();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+});
+
+it('returns to a paused chat from the title without resuming its queued requests', async () => {
+  state.ready = true;
+  const calls: string[] = [];
+  state.queueStream = (text, _delta, signal) =>
+    new Promise((_resolve, reject) => {
+      calls.push(text);
+      signal?.addEventListener('abort', () => reject(signal.reason), { once: true });
+    });
+  const panel = createPreparedPanel();
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(calls).toHaveLength(1));
+  const original = activeSession();
+  enterQueueDraft(panel, 'Hi');
+  panel.querySelector<HTMLButtonElement>('.agent-panel-title')!.click();
+  expect(calls).toEqual(['Hello']);
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  panel.querySelector<HTMLButtonElement>('.agent-panel-title')!.click();
+  expect(activeSession()).toBe(original);
+  expect(calls).toEqual(['Hello']);
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(1);
+  expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false);
+});
+
+it('keeps the displayed live answer even when another conversation receives a newer update', async () => {
+  state.ready = true;
+  let finish!: () => void;
+  let aborted = false;
+  state.queueStream = (_text, _delta, signal) =>
+    new Promise((resolve) => {
+      finish = resolve;
+      signal?.addEventListener(
+        'abort',
+        () => {
+          aborted = true;
+        },
+        { once: true },
+      );
+    });
+  const panel = createPreparedPanel();
+  const store = state.conversations!;
+  const previous = store.activeId;
+  store.history().save([{ role: 'user', content: 'Previous chat' }]);
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  const current = store.activeId;
+  enterQueueDraft(panel, 'Hello');
+  await vi.waitFor(() => expect(finish).toBeDefined());
+  vi.spyOn(Date, 'now').mockReturnValueOnce(Date.now() + 1000);
+  store.history(previous).save([{ role: 'user', content: 'Later background result' }]);
+  panel.querySelector<HTMLButtonElement>('.agent-panel-title')!.click();
+  expect(store.activeId).toBe(current);
+  expect(aborted).toBe(false);
+  finish();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+});
+
+it('returns to a draft-only chat when the title has no saved messages', () => {
+  const panel = createAgentPanel();
+  const original = activeSession();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Draft-only chat';
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  panel.querySelector<HTMLButtonElement>('.agent-panel-title')!.click();
+  expect(activeSession()).toBe(original);
+  expect(input.value).toBe('Draft-only chat');
+});
+
+it('clears noncurrent draft-only history membership on restore without keeping its old draft', async () => {
+  const panel = createAgentPanel();
+  const store = state.conversations!;
+  const blank = store.activeId;
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Discarded by restore';
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  store.history().save([{ role: 'user', content: 'Current chat' }]);
+  vi.spyOn(store, 'restoreSaved').mockResolvedValue();
+  panel.querySelector<HTMLButtonElement>('.agent-history-restore')!.click();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-user')?.textContent).toBe('Current chat'));
+  panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+  expect(panel.querySelector(`.agent-conversation-open[data-id="${blank}"]`)).toBeNull();
+  expect(input.value).toBe('');
+});
+
+it('preserves the current draft when deleting a different draft-only conversation', async () => {
+  const panel = createAgentPanel();
+  const store = state.conversations!;
+  const other = store.activeId;
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Deleted draft';
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  const current = store.activeId;
+  input.value = 'Current draft';
+  panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+  panel.querySelector<HTMLButtonElement>(`.agent-conversation-delete[data-id="${other}"]`)!.click();
+  panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+  await vi.waitFor(() => expect(store.list().some((item) => item.id === other)).toBe(false));
+  expect(store.activeId).toBe(current);
+  expect(input.value).toBe('Current draft');
+  panel.querySelector<HTMLButtonElement>('.agent-panel-title')!.click();
+  expect(store.activeId).toBe(current);
+  expect(input.value).toBe('Current draft');
+});
+
+it('reloads replaced history after restore while retaining only the surviving current draft', async () => {
+  const panel = createAgentPanel();
+  const store = state.conversations!;
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Surviving draft';
+  const restore = vi.spyOn(store, 'restoreSaved').mockImplementation(async () => {
+    store.history().save([{ role: 'user', content: 'Restored chat' }]);
+  });
+  panel.querySelector<HTMLButtonElement>('.agent-history-restore')!.click();
+  await vi.waitFor(() => expect(restore).toHaveBeenCalledOnce());
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-user')?.textContent).toBe('Restored chat'));
+  expect(input.value).toBe('Surviving draft');
+  panel.querySelector<HTMLButtonElement>('.agent-history-delete-current')!.click();
+  panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+  await vi.waitFor(() => expect(input.value).toBe(''));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-user')).toBeNull());
+});
 it('executes queued drafts in FIFO order and echoes them only after the active host turn settles', async () => {
   state.ready = true;
   const calls: string[] = [];

@@ -778,12 +778,17 @@ r-dropdown[role='listbox'] {
   padding: 8px 16px;
   gap: 2px;
 }
-.agent-panel-title {
+.agent-panel-header .agent-panel-title {
   flex: 1;
+  width: auto;
+  justify-content: flex-start;
+  text-align: left;
+  font-family: inherit;
   font-weight: var(--ran-text-heading-weight);
   font-size: 15px;
   letter-spacing: -0.02em;
   min-width: 0;
+  color: var(--ran-color-text);
 }
 .agent-panel-settings {
   display: flex;
@@ -1001,7 +1006,9 @@ r-dropdown[role='listbox'] {
   .agent-history-view {
     padding: 16px;
   }
-  .agent-panel-title {
+  .agent-panel-header .agent-panel-title {
+    flex: 1;
+    width: auto;
     font-size: 14px;
   }
   .agent-panel .cui-footer {
