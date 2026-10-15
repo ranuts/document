@@ -13,6 +13,12 @@ import {
 } from './conversation-db';
 export type { Conversation } from './conversation-db';
 
+export interface ConversationSearchRecord extends Conversation {
+  readonly empty: boolean;
+  /** Returns detached searchable text, never the owner's message array. */
+  text(): Iterable<string>;
+}
+
 export interface ConversationStoreOptions {
   repository?: ConversationRepository;
   onError?: (error: unknown) => void;
@@ -44,6 +50,42 @@ export function createConversationStore(onChange?: () => void, options: Conversa
   let savePending = false;
   let saveQueued = false;
   const detached = new WeakMap<ConversationRecord, ConversationRecord>();
+
+  const searchRecords = new WeakMap<ConversationRecord, ConversationSearchRecord>();
+  let searchOwner: ConversationRecord[] | undefined;
+  let searchEntries: readonly ConversationSearchRecord[] = [];
+  const searchSnapshot = (): readonly ConversationSearchRecord[] => {
+    if (searchOwner === sessions) return searchEntries;
+    searchOwner = sessions;
+    searchEntries = sessions.map((record) => {
+      let entry = searchRecords.get(record);
+      if (!entry) {
+        const { id, title, createdAt, updatedAt } = record;
+        entry = {
+          id,
+          title,
+          createdAt,
+          updatedAt,
+          empty: !title && !record.messages.length,
+          *text() {
+            for (const message of record.messages) {
+              const parts =
+                typeof message.content === 'string'
+                  ? [message.content]
+                  : message.content.filter((part) => part.type === 'text').map((part) => part.text);
+              for (const text of parts) {
+                for (let offset = 0; offset < text.length; offset += 4096) yield text.slice(offset, offset + 4096);
+                yield ' ';
+              }
+            }
+          },
+        };
+        searchRecords.set(record, entry);
+      }
+      return entry;
+    });
+    return searchEntries;
+  };
 
   const snapshot = (): ConversationData => structuredClone({ version: 1, activeId: active, sessions });
   // Session records are replaced on edits, so unchanged messages need only one detached copy.
@@ -168,10 +210,11 @@ export function createConversationStore(onChange?: () => void, options: Conversa
       return saving;
     },
     list,
+    searchSnapshot,
     history,
     create: () => {
       const item = blankConversation();
-      sessions.push(item);
+      sessions = [...sessions, item];
       touched.add(item.id);
       active = item.id;
       changed();

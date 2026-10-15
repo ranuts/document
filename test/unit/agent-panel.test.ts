@@ -1,4 +1,5 @@
 import { t, getLanguage, setLanguage, LanguageCode } from '@ranuts/shared/i18n';
+import * as historyList from '../../lib/agent-plugin/ui/history-list';
 import { ChatView } from '@ranuts/chat-ui';
 import type { EditorApi } from '../../lib/agent-plugin/editor-bridge';
 import { afterEach, expect, it, vi } from 'vitest';
@@ -148,7 +149,8 @@ it('groups conversation switching and creation ahead of the transcript', () => {
   const panel = createAgentPanel();
   const bar = panel.querySelector('.agent-conversations')!;
   expect(bar.querySelector('.agent-history-search')).not.toBeNull();
-  expect(bar.querySelector('.agent-conversation-open[aria-current="true"]')).not.toBeNull();
+  expect(bar.querySelector('.agent-conversation-open')).toBeNull();
+  expect(bar.querySelector('.agent-history-empty')?.textContent).toBe(t('agentHistoryEmpty'));
   expect(bar.closest('.agent-history-view')?.hasAttribute('hidden')).toBe(true);
   expect(panel.querySelector('.agent-panel-header .agent-panel-clear')).not.toBeNull();
   panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
@@ -547,4 +549,47 @@ it('automatically exposes selected text without changing the draft', () => {
   expect(panel.querySelector('.agent-panel-quote')).toBeNull();
   expect(panel.querySelector('.agent-quoted-text')?.textContent).toBe('Private selected words');
   expect(panel.querySelector('.agent-composer-tools')).toBeNull();
+});
+
+it('suspends history while closed, hidden or in BFCache and disposes on terminal pagehide', async () => {
+  const original = historyList.createConversationList;
+  let list!: ReturnType<typeof original>;
+  const factory = vi.spyOn(historyList, 'createConversationList').mockImplementation((options) => {
+    list = original(options);
+    vi.spyOn(list, 'setActive');
+    vi.spyOn(list, 'dispose');
+    return list;
+  });
+  let visible = true;
+  const visibility = vi
+    .spyOn(document, 'visibilityState', 'get')
+    .mockImplementation(() => (visible ? 'visible' : 'hidden'));
+  try {
+    const panel = createAgentPanel();
+    expect(list.setActive).toHaveBeenLastCalledWith(false);
+    panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+    expect(list.setActive).toHaveBeenLastCalledWith(true);
+    setAgentPanelOpen(false);
+    expect(list.setActive).toHaveBeenLastCalledWith(false);
+    setAgentPanelOpen(true);
+    expect(list.setActive).toHaveBeenLastCalledWith(true);
+    visible = false;
+    document.dispatchEvent(new Event('visibilitychange'));
+    expect(list.setActive).toHaveBeenLastCalledWith(false);
+    visible = true;
+    document.dispatchEvent(new Event('visibilitychange'));
+    expect(list.setActive).toHaveBeenLastCalledWith(true);
+    window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
+    expect(list.setActive).toHaveBeenLastCalledWith(false);
+    expect(list.dispose).not.toHaveBeenCalled();
+    window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+    expect(list.setActive).toHaveBeenLastCalledWith(true);
+    await setAgentPanelEnabled(false);
+    expect(list.setActive).toHaveBeenLastCalledWith(false);
+    window.dispatchEvent(new PageTransitionEvent('pagehide'));
+    expect(list.dispose).toHaveBeenCalledOnce();
+  } finally {
+    factory.mockRestore();
+    visibility.mockRestore();
+  }
 });

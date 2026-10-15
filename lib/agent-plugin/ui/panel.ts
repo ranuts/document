@@ -240,6 +240,7 @@ export function createAgentPanel(
     if (next && !open && hasConfiguration) showView('chat');
     const returnToDocument = !next && panel.contains(document.activeElement);
     open = next;
+    syncHistoryActivity();
     contextLifecycle?.update();
     panel.classList.toggle('agent-panel-hidden', !next);
     syncSidebar();
@@ -272,6 +273,7 @@ export function createAgentPanel(
         }
       }
       enabled = next;
+      syncHistoryActivity();
       contextLifecycle?.update();
       if (!next) {
         resetController();
@@ -873,6 +875,33 @@ export function createAgentPanel(
     planning = null;
   };
   let conversationList: ReturnType<typeof createConversationList> | undefined;
+  let historySuspended = false;
+  let historyDisposed = false;
+  function syncHistoryActivity(): void {
+    conversationList?.setActive(
+      !historyDisposed &&
+        !historySuspended &&
+        open &&
+        enabled &&
+        document.visibilityState !== 'hidden' &&
+        panel.dataset.view === 'history',
+    );
+  }
+  document.addEventListener('visibilitychange', syncHistoryActivity);
+  window.addEventListener('pagehide', (event) => {
+    historySuspended = true;
+    syncHistoryActivity();
+    if (!event.persisted) {
+      historyDisposed = true;
+      conversationList?.dispose();
+      document.removeEventListener('visibilitychange', syncHistoryActivity);
+    }
+  });
+  window.addEventListener('pageshow', (event) => {
+    if (!event.persisted || historyDisposed) return;
+    historySuspended = false;
+    syncHistoryActivity();
+  });
   const syncContext = () => {
     if (!open || !enabled || document.visibilityState === 'hidden') return;
     syncPanelContext({
@@ -2594,6 +2623,7 @@ export function createAgentPanel(
     settings.classList.toggle('agent-panel-settings-hidden', view !== 'settings');
     chat.el.hidden = view !== 'chat';
     historyView.hidden = view !== 'history';
+    syncHistoryActivity();
     settingsBtn.setAttribute('aria-expanded', String(view === 'settings'));
     syncRuntimeStatus();
     historyBtn.setAttribute('aria-expanded', String(view === 'history'));
