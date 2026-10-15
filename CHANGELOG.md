@@ -9,6 +9,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Starting assistant dictation or editing a draft during first-use setup no longer
+  gets interrupted by the background model-cache check opening settings.
 - Docker deployments accessed over ordinary HTTP can load the document converter
   in Chrome without a WASM content-decoding error ([#267](https://github.com/ranuts/document/issues/267)).
 - Stopping a browser-local assistant response no longer prevents the next question

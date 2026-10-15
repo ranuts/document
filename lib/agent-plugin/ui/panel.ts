@@ -2644,6 +2644,11 @@ export function createAgentPanel(
   setOpen(!options.background);
   void historyControls.start();
   showView('chat');
+  // Cache discovery may choose a default view only until chat interaction starts.
+  // Capture clicks because speech controls stop propagation before requesting permission.
+  const keepChatVisible = () => viewRevision++;
+  chat.el.addEventListener('click', keepChatVisible, { capture: true });
+  chat.el.addEventListener('input', keepChatVisible);
   // Keep the empty-composer setup link and contextual main action from duplicating.
   chat.el.querySelector('.cui-input')!.addEventListener('input', () => {
     if (chat.getInput().trim()) prepareAction.hidden = true;
