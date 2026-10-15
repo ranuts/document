@@ -868,3 +868,34 @@ it('keeps cancellation settlement owned by Apply until the operation actually se
   expect(settled.mock.calls[0][0].status).toBe('cancelled');
   view.dispose();
 });
+it('rests an invalidated applying card after a late verified resolution without claiming verification', async () => {
+  const view = new ActionPreview();
+  let finish!: (status: 'verified') => void;
+  const settled = vi.fn();
+  view.show(
+    {
+      target: { label: 'DOCX', selectedText: '' },
+      plan: { tool: 'insert_text', input: { text: 'Draft' } },
+      isCurrent: () => true,
+      cancel: vi.fn(),
+      apply: () =>
+        new Promise((resolve) => {
+          finish = resolve;
+        }),
+    },
+    undefined,
+    undefined,
+    settled,
+  );
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  view.invalidate();
+  expect(settled).not.toHaveBeenCalled();
+  finish('verified');
+  await Promise.resolve();
+  expect(settled).toHaveBeenCalledOnce();
+  expect(settled.mock.calls[0][0].status).toBe('cancelled');
+  expect(view.el.dataset.state).toBe('cancelled');
+  expect(view.el.hasAttribute('aria-busy')).toBe(false);
+  expect(view.el.querySelector('[role=status]')?.textContent).toBe('Stopped.');
+  view.dispose();
+});
