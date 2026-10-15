@@ -170,3 +170,29 @@ draft-only history access, keyboard entry and preservation of a live answer.
 Another Chromium check confirmed that asynchronous Send preparation restores
 input focus after native disabled-button blur while respecting deliberate focus
 on another control. Neither probe uses a real microphone or measures GPU latency.
+
+## Fresh-review continuity checkpoint
+
+The follow-up design records defects reproduced at `62c614c` rather than treating
+its green CI as proof of complete interaction correctness. At `ef01e2b`, 300
+focused unit tests and three real-editor history cases passed. A separate
+Chromium delayed-IndexedDB/held-classification probe verified that the original
+first-request owner stays reachable, preparing actions are disabled truthfully,
+the next draft survives hydration and the answer completes. Twelve preparation
+states (English/Chinese, 320/432/520 pixels, light/dark) had zero horizontal
+overflow. The narrow empty welcome was found to auto-scroll above its viewport;
+that separate defect is included in the bounded-rendering follow-up.
+
+At `fcb36f0`, the production build and 295 independently run focused unit tests
+passed. Seven serialized real-editor dictation/queue cases passed, including
+first permission and Word/Excel/PowerPoint/PDF dictation. The Word queue case
+edits and selects document text while an ordinary answer is held. Separate
+Chromium greeting/routed-chat probes completed their answers and queued greeting
+after an SDK edit. The controlled recognition probe dictated during a held
+answer, finalized once on explicit Send and waited for physical request
+settlement before the next model call. These probes do not use a physical
+microphone or establish real local-model inference latency.
+
+Specification and independent quality review approved both follow-up chunks.
+Search, exact budgeting, bounded message restoration and local request timing
+are subsequent checkpoints; these results do not claim to validate them.
