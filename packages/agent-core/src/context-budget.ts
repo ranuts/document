@@ -29,7 +29,11 @@ export function budgetMessages(messages: LLMMessage[], maxBytes = DEFAULT_CONTEX
   return messages.slice(first);
 }
 
-/** Count the complete provider request, including its system prompt and template. */
+/** Count the complete provider request, including its system prompt and template.
+ * Exponential bracketing and refinement reduce native calls. Counts need not be
+ * monotonic: return the most context among measured fits, never an inferred fit
+ * or a promise of the globally longest suffix. Every overflow checks the latest turn.
+ */
 export async function budgetMessagesByTokens(
   messages: LLMMessage[],
   count: (messages: LLMMessage[]) => Promise<{ promptTokens: number; contextTokens: number }>,
@@ -43,9 +47,15 @@ export async function budgetMessagesByTokens(
       ? [index]
       : [],
   );
-  let first = 0;
-  for (;;) {
+  const boundaries = [0, ...starts.filter((start) => start > 0)];
+  type Measurement = { messages: LLMMessage[]; trimmed: boolean; promptTokens: number; contextTokens: number };
+  const measured = new Map<number, Measurement>();
+  const best: { index: number; value?: Measurement } = { index: Infinity };
+  const measure = async (index: number): Promise<boolean> => {
     signal?.throwIfAborted();
+    const cached = measured.get(index);
+    if (cached) return cached.promptTokens <= cached.contextTokens - reservedTokens;
+    const first = boundaries[index];
     const candidate = messages.slice(first);
     const { promptTokens, contextTokens } = await count(candidate);
     signal?.throwIfAborted();
@@ -57,11 +67,41 @@ export async function budgetMessagesByTokens(
     ) {
       throw new Error('Invalid token count');
     }
-    if (promptTokens <= contextTokens - reservedTokens) {
-      return { messages: candidate, trimmed: first > 0, promptTokens, contextTokens };
+    const value = { messages: candidate, trimmed: first > 0, promptTokens, contextTokens };
+    measured.set(index, value);
+    const fits = promptTokens <= contextTokens - reservedTokens;
+    if (fits && index < best.index) {
+      best.index = index;
+      best.value = value;
     }
-    const next = starts.find((start) => start > first);
-    if (next === undefined) throw new Error('agentContextTooLong');
-    first = next;
+    return fits;
+  };
+  if (await measure(0)) {
+    signal?.throwIfAborted();
+    return best.value!;
   }
+  const latest = boundaries.length - 1;
+  let lower = 0;
+  let upper = Math.min(1, latest);
+  while (upper > lower) {
+    if (await measure(upper)) break;
+    lower = upper;
+    upper = Math.min(latest, upper * 2);
+  }
+  if (!best.value) {
+    // This exact check also covers assistant-only histories with no turn boundary.
+    if (await measure(latest)) {
+      signal?.throwIfAborted();
+      return best.value!;
+    }
+    signal?.throwIfAborted();
+    throw new Error('agentContextTooLong');
+  }
+  while (upper - lower > 1) {
+    const middle = Math.floor((lower + upper) / 2);
+    if (await measure(middle)) upper = middle;
+    else lower = middle;
+  }
+  signal?.throwIfAborted();
+  return best.value;
 }
