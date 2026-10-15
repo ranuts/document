@@ -177,6 +177,21 @@ replacement for the existing semantic router.
 - Run required lint/typecheck/format/build, focused and full units, then serialized
   real-editor E2E. Inspect light/dark, 320/432/520 widths, Chinese and reduced motion.
 
+## Selection disclosure and conversation entry
+
+The selected-text header, preview and composer share a consistent left inset.
+Replace the native solid disclosure marker with a thin chevron. Opening and
+closing both animate without replacing the selected text or disturbing editor
+selection. Rapid reversal remains safe, and reduced motion removes the
+transition. The disclosure stays keyboard accessible with an explicit expanded
+state and visible focus.
+
+The assistant title is a keyboard-accessible entry to the most recently used
+in-memory conversation; create one when none exists. Preserve drafts and the
+existing session-switch cancellation rules. Returning through the title must
+not automatically resume paused requests or silently restore disk history when
+history saving is disabled.
+
 ## References
 
 - [ChatGPT desktop follow-ups](https://learn.chatgpt.com/docs/prompting)
