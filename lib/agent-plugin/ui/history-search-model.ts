@@ -20,17 +20,56 @@ export type SearchRequest =
   | { type: 'update'; revision: number; entries: SearchEntry[]; removed: string[] }
   | { type: 'query'; revision: number; request: number; query: string };
 
-/** Streaming KMP matching: no whole-record assembly or query-sized overlap buffers. */
-export function createSearchMatcher(id: string, query: string) {
-  const prefix = new Uint32Array(query.length);
-  for (let index = 1, previous = 0; index < query.length; index++) {
-    while (previous && query[index] !== query[previous]) previous = prefix[previous - 1];
-    if (query[index] === query[previous]) previous++;
-    prefix[index] = previous;
+export function normalizeSearchWhitespace(text: string): string {
+  return text.replace(/\s+/g, ' ');
+}
+
+/** Shared identity for the list, engine and Worker results. Never truncate a query. */
+export function canonicalSearchQuery(text: string): string {
+  return normalizeSearchWhitespace(text).trim().toLocaleLowerCase();
+}
+
+export interface CompiledSearchQuery {
+  readonly text: string;
+  readonly prefix: Uint32Array;
+}
+
+/** Count comparisons, including prefix backtracking, so long patterns can yield. */
+export function createSearchCompiler(text: string) {
+  const compiled: CompiledSearchQuery = { text, prefix: new Uint32Array(text.length) };
+  let index = 1;
+  let previous = 0;
+  return {
+    compiled,
+    advance(comparisons = 4096): boolean {
+      while (index < text.length && comparisons-- > 0) {
+        if (previous && text[index] !== text[previous]) previous = compiled.prefix[previous - 1];
+        else {
+          if (text[index] === text[previous]) previous++;
+          compiled.prefix[index++] = previous;
+        }
+      }
+      return index >= text.length;
+    },
+  };
+}
+
+/** Workers compile once per request; main-thread fallback advances cooperatively. */
+export function compileSearchQuery(text: string): CompiledSearchQuery {
+  const compiler = createSearchCompiler(text);
+  while (!compiler.advance()) {
+    /* Worker-owned preparation. */
   }
+  return compiler.compiled;
+}
+
+/** Streaming KMP matching: no whole-record assembly or query-sized overlap buffers. */
+export function createSearchMatcher(id: string, compiled: CompiledSearchQuery) {
+  const { text: query, prefix } = compiled;
   let matched = 0;
   let tail = '';
   return (entry: SearchEntry): SearchMatch | undefined => {
+    if (!query) return;
     for (let index = 0; index < entry.normalized.length; index++) {
       while (matched && entry.normalized[index] !== query[matched]) matched = prefix[matched - 1];
       if (entry.normalized[index] === query[matched]) matched++;

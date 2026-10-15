@@ -3,6 +3,19 @@ import { createConversationStore } from '../../lib/agent-plugin/ui/sessions';
 import { createConversationList } from '../../lib/agent-plugin/ui/history-list';
 
 const rows = (el: HTMLElement) => Array.from(el.querySelectorAll<HTMLButtonElement>('.agent-conversation-open'));
+
+it('accepts canonical whitespace search results instead of leaving the list pending', async () => {
+  const store = createConversationStore();
+  store.history().save([{ role: 'user', content: 'Alpha  \n beta' }]);
+  const list = createConversationList({ store, onSelect: vi.fn(), onDelete: vi.fn() });
+  document.body.append(list.el);
+  const input = list.el.querySelector<HTMLInputElement>('input')!;
+  input.value = ' ALPHA   beta ';
+  input.dispatchEvent(new Event('input'));
+  await vi.waitFor(() => expect(list.el.querySelector('ul')?.getAttribute('aria-busy')).toBe('false'));
+  expect(rows(list.el)).toHaveLength(1);
+  list.dispose();
+});
 afterEach(() => document.body.replaceChildren());
 
 it('searches titles and message content locally and opens the matching conversation', async () => {

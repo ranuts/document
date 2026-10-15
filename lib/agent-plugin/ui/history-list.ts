@@ -2,7 +2,7 @@ import { ButtonBuilder, Div, InputBuilder, Span, View } from 'ranui/builder';
 import { getLanguage, t } from '@ranuts/shared/i18n';
 import type { Conversation, createConversationStore } from './sessions';
 import { createHistorySearch } from './history-search';
-import type { SearchMatch } from './history-search-model';
+import { canonicalSearchQuery, type SearchMatch } from './history-search-model';
 
 interface ConversationListOptions {
   store: ReturnType<typeof createConversationStore>;
@@ -188,7 +188,7 @@ export function createConversationList({ store, onSelect, onDelete, pendingConve
     render();
   }
   const onInput = () => {
-    const next = search.value.trim().toLocaleLowerCase();
+    const next = canonicalSearchQuery(search.value);
     if (next === query) return;
     query = next;
     limit = 40;
