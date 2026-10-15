@@ -128,9 +128,9 @@ test('restores a long saved conversation and switches sessions with completed an
   await expect(search).toBeFocused();
   await expect(page.locator('.agent-conversation-open')).toHaveAttribute('data-id', ids.long);
   await page.keyboard.press('Escape');
-  await expect(rows).toHaveCount(40);
-  await loadAllEarlier();
   await expect(rows).toHaveCount(400);
+  await expect(rows.first().locator('.cui-bubble')).toHaveText('Question 0');
+  await expect(rows.last().locator('.cui-copy')).toBeEnabled();
   await expect(page.locator('.cui-input')).toHaveValue('Next request');
 });
 
@@ -359,5 +359,132 @@ test('keeps the first validating request in its original chat while startup hist
     await expect(page.locator('.cui-msg-user')).toHaveCount(1);
   } finally {
     releaseRouting?.();
+  }
+});
+
+test('deleting an inactive saved chat preserves a held reply and the next draft in a real editor', async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.goto('/');
+  const inactive = await page.evaluate(async () => {
+    localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem('agent_conversation_saving_v2', 'true');
+    localStorage.setItem(
+      'agent-writing-endpoint',
+      JSON.stringify({
+        version: 1,
+        kind: 'loopback',
+        baseUrl: 'http://localhost:11434',
+        model: 'history-deletion-test',
+      }),
+    );
+    const current = crypto.randomUUID();
+    const inactive = crypto.randomUUID();
+    const request = indexedDB.open('document-ai-conversations', 2);
+    request.onupgradeneeded = () => {
+      request.result.createObjectStore('conversations');
+      request.result.createObjectStore('sessions');
+    };
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const tx = db.transaction(['conversations', 'sessions'], 'readwrite');
+    tx.objectStore('conversations').put(
+      { version: 2, revision: 1, activeId: current, sessionIds: [current, inactive] },
+      'state',
+    );
+    tx.objectStore('sessions').put(
+      {
+        id: current,
+        title: 'Current chat',
+        createdAt: 1,
+        updatedAt: 2,
+        messages: [
+          { role: 'user', content: 'Existing request' },
+          { role: 'assistant', content: 'Existing answer' },
+        ],
+      },
+      current,
+    );
+    tx.objectStore('sessions').put(
+      {
+        id: inactive,
+        title: 'Inactive chat',
+        createdAt: 1,
+        updatedAt: 1,
+        messages: [
+          { role: 'user', content: 'Inactive request' },
+          { role: 'assistant', content: 'Inactive answer' },
+        ],
+      },
+      inactive,
+    );
+    await new Promise<void>((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onabort = () => reject(tx.error);
+    });
+    db.close();
+    return inactive;
+  });
+  let release!: () => void;
+  const hold = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  let answers = 0;
+  await page.route('http://localhost:11434/api/**', async (route) => {
+    if (route.request().method() === 'OPTIONS') {
+      await route.fulfill({
+        status: 204,
+        headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type' },
+      });
+      return;
+    }
+    if (route.request().url().endsWith('/tags')) {
+      await route.fulfill({ json: { models: [{ name: 'history-deletion-test' }] } });
+      return;
+    }
+    const body = route.request().postDataJSON();
+    if (body.format?.properties?.task) {
+      await route.fulfill({
+        json: { done: true, message: { role: 'assistant', content: '{"task":"chat","language":"en"}' } },
+      });
+      return;
+    }
+    answers++;
+    await hold;
+    await route.fulfill({
+      json: { done: true, message: { role: 'assistant', content: 'The held answer survived deletion.' } },
+    });
+  });
+  try {
+    await page.goto('/editor?new=docx&locale=en');
+    await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+    await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+    await expect(page.locator('.cui-msg-user .cui-bubble')).toHaveText('Existing request');
+    const input = page.locator('.cui-input');
+    await input.fill('Hello');
+    await page.locator('.cui-send').click();
+    await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
+    await expect(page.locator('.cui-send')).toHaveAccessibleName('Send');
+    await page.locator('.cui-send').click();
+    await expect.poll(() => answers).toBe(1);
+    await input.fill('Keep this next draft');
+    await page.locator('.agent-history-toggle').click();
+    await page.locator(`.agent-conversation-delete[data-id="${inactive}"]`).click();
+    await page.locator('.agent-history-confirm').click();
+    await expect(page.locator('.agent-conversation-open')).toHaveCount(1);
+    await expect(page.getByRole('searchbox', { name: 'Search conversations' })).toBeFocused();
+    await expect(page.locator('.cui-send-stop')).toHaveCount(1);
+    await page.keyboard.press('Escape');
+    await expect(input).toHaveValue('Keep this next draft');
+    release();
+    await expect(page.locator('.cui-msg-agent .cui-bubble').last()).toHaveText('The held answer survived deletion.');
+    await expect(page.locator('.cui-send-stop')).toHaveCount(0);
+    await expect(page.locator('.cui-msg-user .cui-bubble')).toHaveText(['Existing request', 'Hello']);
+    await expect(page.locator('.cui-msg-agent').last().locator('.cui-copy')).toBeEnabled();
+    await expect(input).toHaveValue('Keep this next draft');
+    expect(answers).toBe(1);
+  } finally {
+    release();
   }
 });

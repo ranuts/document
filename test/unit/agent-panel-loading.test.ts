@@ -3198,6 +3198,141 @@ it('preserves the current draft when deleting a different draft-only conversatio
   expect(input.value).toBe('Current draft');
 });
 
+it('preserves deletion continuity for a held current reply and its next draft', async () => {
+  state.ready = true;
+  let finish!: () => void;
+  let aborted = false;
+  let calls = 0;
+  state.queueStream = async (_text, delta, signal) => {
+    if (++calls > 1) return;
+    delta('Partial ');
+    signal?.addEventListener(
+      'abort',
+      () => {
+        aborted = true;
+      },
+      { once: true },
+    );
+    await new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+  };
+  const panel = createPreparedPanel();
+  const store = state.conversations!;
+  const other = store.activeId;
+  store.history().save([{ role: 'user', content: 'Other chat' }]);
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  const current = store.activeId;
+  enterQueueDraft(panel, 'Hello');
+  const dispose = vi.spyOn(AgentChatController.prototype, 'dispose');
+  try {
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+    const live = panel.querySelector('.cui-streaming');
+    enterQueueDraft(panel, 'Hi');
+    const queuedId = panel.querySelector<HTMLElement>('.agent-queue-edit')!.dataset.entry;
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = 'Keep next draft';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    dispose.mockClear();
+    panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+    panel.querySelector<HTMLButtonElement>(`.agent-conversation-delete[data-id="${other}"]`)!.click();
+    panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+    await vi.waitFor(() => expect(panel.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true));
+    expect(store.activeId).toBe(current);
+    expect(aborted).toBe(false);
+    expect(dispose).not.toHaveBeenCalled();
+    expect(panel.querySelector('.cui-streaming')).toBe(live);
+    expect(panel.querySelector<HTMLElement>('.agent-queue-edit')?.dataset.entry).toBe(queuedId);
+    expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hi');
+    expect(calls).toBe(1);
+    expect(panel.querySelector('.cui-send-stop')).not.toBeNull();
+    expect(input.value).toBe('Keep next draft');
+    finish();
+    await vi.waitFor(() =>
+      expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('Partial answer'),
+    );
+    await vi.waitFor(() => expect(calls).toBe(2));
+    expect(input.value).toBe('Keep next draft');
+  } finally {
+    dispose.mockRestore();
+    finish?.();
+  }
+});
+it('preserves deletion continuity for loaded pages, action nodes, draft and reading offset', async () => {
+  const panel = createAgentPanel();
+  const store = state.conversations!;
+  const current = store.activeId;
+  store.history().save(
+    Array.from({ length: 100 }, (_, index) => ({
+      role: index % 2 ? 'assistant' : 'user',
+      content: `Message ${index}`,
+    })),
+  );
+  panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+  const other = store.activeId;
+  store.history().save([{ role: 'user', content: 'Other chat' }]);
+  openSession(panel, current);
+  panel.querySelector<HTMLButtonElement>('.cui-load-earlier')!.click();
+  const messages = panel.querySelector<HTMLElement>('.cui-messages')!;
+  expect(messages.querySelectorAll('.cui-msg')).toHaveLength(80);
+  const first = messages.querySelector('.cui-msg');
+  const copy = messages.querySelector('.cui-copy');
+  messages.scrollTop = 150;
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Keep reading draft';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+  panel.querySelector<HTMLButtonElement>(`.agent-conversation-delete[data-id="${other}"]`)!.click();
+  panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+  await vi.waitFor(() => expect(panel.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true));
+  expect(messages.querySelectorAll('.cui-msg')).toHaveLength(80);
+  expect(messages.querySelector('.cui-msg')).toBe(first);
+  expect(messages.querySelector('.cui-copy')).toBe(copy);
+  expect(messages.scrollTop).toBe(150);
+  expect(input.value).toBe('Keep reading draft');
+});
+it.each([true, false])(
+  'preserves deletion continuity for navigation during awaited deletion: initially current=%s',
+  async (initiallyCurrent) => {
+    const panel = createAgentPanel();
+    const store = state.conversations!;
+    const target = store.activeId;
+    store.history().save([{ role: 'user', content: 'Target chat' }]);
+    panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+    const next = store.activeId;
+    store.history().save([{ role: 'user', content: 'Next chat' }]);
+    if (initiallyCurrent) openSession(panel, target);
+    let finish!: () => void;
+    vi.spyOn(store, 'flush').mockImplementation(
+      () =>
+        new Promise<void>((resolve) => {
+          finish = resolve;
+        }),
+    );
+    panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+    panel.querySelector<HTMLButtonElement>(`.agent-conversation-delete[data-id="${target}"]`)!.click();
+    panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+    try {
+      openSession(panel, next);
+      const row = panel.querySelector('.cui-msg-user');
+      const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+      input.value = 'New owner draft';
+      input.focus();
+      finish();
+      await vi.waitFor(() =>
+        expect(panel.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true),
+      );
+      expect(store.activeId).toBe(next);
+      expect(panel.querySelector('.cui-msg-user')).toBe(row);
+      expect(input.value).toBe('New owner draft');
+      expect(document.activeElement).toBe(input);
+    } finally {
+      finish?.();
+    }
+  },
+);
+
 it('reloads replaced history after restore while retaining only the surviving current draft', async () => {
   const panel = createAgentPanel();
   const store = state.conversations!;
@@ -3758,7 +3893,7 @@ it('pauses older queued requests after a model failure instead of treating promi
   expect(calls).toEqual(['Hello']);
   expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(2);
 });
-it.each(['restore', 'import', 'delete-current'] as const)(
+it.each(['restore', 'import', 'delete-current', 'delete-all'] as const)(
   'invalidates volatile pending work on history %s',
   async (action) => {
     state.ready = true;
@@ -3774,7 +3909,7 @@ it.each(['restore', 'import', 'delete-current'] as const)(
     await vi.waitFor(() => expect(calls).toHaveLength(1));
     enterQueueDraft(panel, 'Hi');
     panel.querySelector<HTMLButtonElement>(`.agent-history-${action}`)!.click();
-    if (action === 'delete-current') panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+    if (action.startsWith('delete-')) panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
     await vi.waitFor(() => expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0));
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(calls).toEqual(['Hello']);
@@ -4191,9 +4326,26 @@ it('serializes completed document-result Apply with a fresh Send until the actua
     generate.mockRestore();
   }
 });
-it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent', 'stop-fresh'] as const)(
+it.each([
+  'fresh',
+  'resume',
+  'send-now',
+  'provider',
+  'switch',
+  'failed',
+  'sent',
+  'stop-fresh',
+  'delete-current',
+  'delete-all',
+] as const)(
   'holds a retained native Apply through actual settlement during %s and records only verified owned execution',
   async (mode) => {
+    if (mode === 'delete-all')
+      state.conversationRepository = {
+        load: async () => null,
+        save: async (_data, revision) => revision + 1,
+        clear: async () => 1,
+      };
     state.nativeEndpoint = true;
     state.editorReady = true;
     state.editorKind = 'slide';
@@ -4253,6 +4405,7 @@ it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent', 
       enterQueueDraft(panel, 'Put a title on this slide');
       await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
       const original = panel.querySelector<HTMLElement>('.agent-plan-preview')!;
+      const originalOwner = activeSession();
       if (mode === 'resume') enterQueueDraft(panel, 'Hello');
       original.querySelector<HTMLElement>('.agent-plan-refine')!.click();
       await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
@@ -4284,6 +4437,16 @@ it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent', 
         panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
         enterQueueDraft(panel, 'Hi');
       }
+      if (mode === 'delete-current' || mode === 'delete-all') {
+        panel.querySelector<HTMLButtonElement>(`.agent-history-${mode}`)!.click();
+        panel.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+        await vi.waitFor(() => expect(activeSession()).not.toBe(originalOwner));
+        await vi.waitFor(() =>
+          expect(panel.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true),
+        );
+        enterQueueDraft(panel, 'Hi');
+        expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hi');
+      }
       expect(answers).toEqual([]);
       finishApply!();
       if (mode === 'failed' || mode === 'sent') {
@@ -4294,7 +4457,10 @@ it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent', 
       if (mode === 'provider') {
         await vi.waitFor(() => expect(original.dataset.state).not.toBe('applying'));
         expect(answers).toEqual([]);
-      } else await vi.waitFor(() => expect(answers).toEqual([mode === 'switch' ? 'Hi' : 'Hello']));
+      } else
+        await vi.waitFor(() =>
+          expect(answers).toEqual([mode === 'switch' || mode.startsWith('delete-') ? 'Hi' : 'Hello']),
+        );
       const history = state.conversations!.history().load();
       const blocks = history.flatMap((message) => (typeof message.content === 'string' ? [] : message.content));
       const receipts = blocks.filter(
@@ -4308,7 +4474,11 @@ it.each(['fresh', 'resume', 'send-now', 'provider', 'switch', 'failed', 'sent', 
           name: 'add_slide_text',
           input: { text: 'Original native' },
         });
-      if (mode === 'send-now') expect(aborts).toBe(1);
+      if (mode === 'send-now' || mode.startsWith('delete-')) expect(aborts).toBe(1);
+      if (mode.startsWith('delete-')) {
+        expect(state.conversations!.searchSnapshot().some((item) => item.id === originalOwner)).toBe(false);
+        expect(JSON.stringify(history)).not.toContain('Original native');
+      }
     } finally {
       finishApply?.();
       vi.unstubAllGlobals();

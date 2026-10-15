@@ -58,7 +58,7 @@ it('requires explicit opt-in to save and restores after a previously enabled pre
   const next = createHistoryControls({ store: restored, onRestore: restore });
   await next.start();
   expect(restored.history().load()[0].content).toBe('my local conversation');
-  expect(restore).toHaveBeenCalledOnce();
+  expect(restore).toHaveBeenCalledExactlyOnceWith();
 });
 
 it('requires an explicit second action to delete all history and supports cancellation', async () => {
@@ -305,4 +305,51 @@ it.each([
   expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true);
   expect(document.activeElement).toBe(search);
   expect(store.activeId).toBe(current);
+});
+
+it.each(['success', 'remove failure', 'flush failure'] as const)(
+  'settles single deletion exactly once with its identity on %s',
+  async (mode) => {
+    const store = createConversationStore();
+    const target = store.activeId;
+    store.history().save([{ role: 'user', content: 'Delete this owner' }]);
+    if (mode === 'remove failure') vi.spyOn(store, 'remove').mockRejectedValue(new Error('Remove unavailable'));
+    if (mode === 'flush failure') vi.spyOn(store, 'flush').mockRejectedValue(new Error('Flush unavailable'));
+    const before = vi.fn();
+    const restored = vi.fn();
+    const controls = createHistoryControls({ store, onBeforeRestore: before, onRestore: restored });
+    document.body.append(controls.el);
+    controls.el.querySelector<HTMLButtonElement>('.agent-history-delete-current')!.click();
+    controls.el.querySelector<HTMLButtonElement>('.agent-history-confirm')!.click();
+    await vi.waitFor(() =>
+      expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true),
+    );
+    expect(before).toHaveBeenCalledExactlyOnceWith(target);
+    expect(restored).toHaveBeenCalledExactlyOnceWith(target);
+  },
+);
+it('settles clear-all exactly once only on successful retry while preserving confirmation and focus on failure', async () => {
+  const store = createConversationStore();
+  store.history().save([{ role: 'user', content: 'Keep until successful clear' }]);
+  vi.spyOn(store, 'clearAll').mockRejectedValueOnce(new Error('Clear unavailable'));
+  const restored = vi.fn();
+  const controls = createHistoryControls({ store, onRestore: restored });
+  document.body.append(controls.el);
+  const trigger = controls.el.querySelector<HTMLButtonElement>('.agent-history-delete-all')!;
+  trigger.click();
+  const confirm = controls.el.querySelector<HTMLButtonElement>('.agent-history-confirm')!;
+  confirm.focus();
+  confirm.click();
+  await vi.waitFor(() =>
+    expect(controls.el.querySelector('.agent-history-status')?.textContent).toBe(t('agentHistorySaveFailed')),
+  );
+  expect(restored).not.toHaveBeenCalled();
+  expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(false);
+  expect(document.activeElement).toBe(confirm);
+  confirm.click();
+  await vi.waitFor(() =>
+    expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true),
+  );
+  expect(restored).toHaveBeenCalledExactlyOnceWith('all');
+  expect(document.activeElement).toBe(trigger);
 });

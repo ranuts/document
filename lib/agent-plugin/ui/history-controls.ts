@@ -5,7 +5,7 @@ import type { createConversationStore } from './sessions';
 const SAVE_PREFERENCE = 'agent_conversation_saving_v2';
 export interface HistoryControlsOptions {
   store: ReturnType<typeof createConversationStore>;
-  onRestore(): void;
+  onRestore(deleted?: string): void;
   onBeforeRestore?(deleted?: string): void;
   onFocusAfterDeletion?(): void;
 }
@@ -110,8 +110,9 @@ export function createHistoryControls(options: HistoryControlsOptions) {
       sync();
     }
   };
-  const restoreView = () => {
-    options.onRestore();
+  const restoreView = (deleted?: string) => {
+    if (deleted === undefined) options.onRestore();
+    else options.onRestore(deleted);
     confirmation.hidden = true;
     deletion = undefined;
   };
@@ -178,9 +179,12 @@ export function createHistoryControls(options: HistoryControlsOptions) {
     if (!target) return;
     const trigger = deletionTrigger;
     let restoreFocus = confirmation.contains(document.activeElement);
+    let settled = false;
     const finishDeletion = () => {
+      if (settled) return;
+      settled = true;
       restoreFocus &&= document.activeElement === document.body || confirmation.contains(document.activeElement);
-      restoreView();
+      restoreView(target);
     };
     void run(async () => {
       options.onBeforeRestore?.(target);

@@ -2808,13 +2808,26 @@ export function createAgentPanel(
       if (deleted === 'all' || deleted === displayedConversationId) chat.setInput('');
       if (deleted && deleted !== 'all') requestQueue?.invalidate(deleted);
       else requestQueue?.invalidateAll();
+      if (deleted && deleted !== 'all' && deleted !== displayedConversationId) return;
       conversationRevision++;
       invalidatePlans();
       controller?.dispose();
       controller = null;
       chat.setRunning(false);
     },
-    onRestore: () => {
+    onRestore: (deleted) => {
+      // Recheck the current owner at settlement: navigation may have happened
+      // while storage was pending, including after deleting the previously active chat.
+      if (
+        deleted &&
+        deleted !== 'all' &&
+        deleted !== displayedConversationId &&
+        conversations.activeId === displayedConversationId &&
+        conversations.searchSnapshot().some((item) => item.id === displayedConversationId)
+      ) {
+        renderSessions();
+        return;
+      }
       if (
         restoringInitialHistory &&
         conversations.activeId === displayedConversationId &&
