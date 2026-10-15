@@ -35,8 +35,9 @@ The voice-only head `91ad1dd` passed all reported GitHub checks, including three
 E2E variants, timing budgets, lint, preview smoke and Cloudflare deployment.
 That result does not validate subsequent continuity changes.
 
-Final functional, visual and exact-head CI results will be recorded after the
-implementation and reviews finish.
+Final delivery status and exact-head CI results are tracked in
+[PR #271](https://github.com/ranuts/document/pull/271). Earlier checkpoint results
+below distinguish their source revisions from the final local source checkpoint.
 
 ## Integrated queue checkpoint
 
@@ -145,5 +146,27 @@ which mocked strong capture but omitted the newly required lightweight scope.
 The repaired fixture then passed all seven cases at `3457bd0`, preserving the
 write, cancellation and conversation-ownership assertions. Repository lint,
 workspace/application type checks and formatting passed; both quality entry
-points verified all 1,511 immutable evaluation artifacts. Final queue integration
-checks remain pending.
+points verified all 1,511 immutable evaluation artifacts. Queue integration
+was subsequently validated at the checkpoints above.
+
+## Final local source checkpoint
+
+At `6e4b8b4`, all 5,661 unit tests in 194 files passed. The production build,
+workspace/application type checks and formatting passed. Full lint passed at
+the Apply checkpoint; the subsequent header change also passed focused lint
+and the complete workspace/application type check. All 1,511 immutable
+evaluation artifacts were verified unchanged.
+
+Specification and code-quality review approved the complete source, including
+physical Apply settlement, retained native verified receipts, asynchronous Send
+focus, selection disclosure and conversation-title navigation. Twenty-two
+serialized real-editor write/workspace/queue/Stop cases passed at the Apply
+checkpoint. The final combined editor run and exact-head CI are reported in
+the PR rather than inferred from those earlier runs.
+
+A separate Chromium check passed both saved-history and empty-history title
+entry. It verified latest meaningful chat selection, per-chat draft ownership,
+draft-only history access, keyboard entry and preservation of a live answer.
+Another Chromium check confirmed that asynchronous Send preparation restores
+input focus after native disabled-button blur while respecting deliberate focus
+on another control. Neither probe uses a real microphone or measures GPU latency.

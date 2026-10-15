@@ -186,10 +186,14 @@ selection. Rapid reversal remains safe, and reduced motion removes the
 transition. The disclosure stays keyboard accessible with an explicit expanded
 state and visible focus.
 
-The assistant title is a keyboard-accessible entry to the most recently used
-in-memory conversation; create one when none exists. Preserve drafts and the
-existing session-switch cancellation rules. Returning through the title must
-not automatically resume paused requests or silently restore disk history when
+The assistant title is a keyboard-accessible entry to the latest meaningful
+in-memory conversation; a newer blank placeholder must not hide it. Keep the
+current live turn in place even before its messages are stored. Fall back to an
+existing draft or create a conversation when none exists. Preserve drafts under
+their displayed conversation owner, including draft-only history access, and
+keep the existing session-switch cancellation rules. Deleting a conversation
+cannot copy its draft into another one. Returning through the title must not
+automatically resume paused requests or silently restore disk history when
 history saving is disabled.
 
 ## References
