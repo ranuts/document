@@ -35,11 +35,11 @@ test/e2e/{agent-request-queue,agent-dictation,agent-stop-resume}.spec.ts.
 
 ## Chunk 3: Bounded search and exact token budgeting
 
-Files: history-search{,-model,.worker}.ts; test/unit/agent-history-search.test.ts;
+Files: history-search{,-model,.worker}.ts and history-list.ts; test/unit/{agent-history-search,agent-history-list}.test.ts;
 packages/agent-core/src/context-budget.ts and llm/wllama.ts; test/unit/agent-context-budget.test.ts and the existing Wllama provider test owner.
 
 - [ ] RED: copied repeated whitespace and cross-segment whitespace match in Worker/fallback; prefix is shared once per query; long-query fallback yields and cancellation wins.
-- [ ] Implement canonical whitespace normalization, reusable KMP compilation and inner deadline checks. Preserve existing bounded extraction/progress/idle behavior. Focused tests/lint; search functional commit.
+- [ ] Implement shared canonical query normalization in both list identity and engine, reusable KMP compilation and inner deadline checks. Preserve existing bounded extraction/progress/idle behavior. Focused tests/lint; search functional commit.
 - [ ] RED: 1000 complete turns retain a fitting recent suffix with a bounded (e.g. <=32) exact-count callback budget; newest-too-large, exact reserved equality, nonmonotonic counts, tool pairs, abort and malformed counts still behave correctly.
 - [ ] Implement coarse bracketing/refinement, reuse counted fitting results, and return only an exactly verified candidate. Rebuild the Wllama completion request from returned budget.messages and integration-test that a rejected last probe cannot be sent. Focused runtime/provider tests/typecheck; CPU performance functional commit.
 - [ ] Specification gate then independent quality gate.
@@ -48,12 +48,12 @@ packages/agent-core/src/context-budget.ts and llm/wllama.ts; test/unit/agent-con
 
 Files: packages/chat-ui/src/{chat-view,types,styles}.ts; optional focused history-window.ts;
 lib/agent-plugin/ui/panel.ts; shared README/CLAUDE; seven i18n tables/types;
-test/unit/{chat-view-performance,chat-view-results,agent-panel-loading}.test.ts;
+test/unit/{chat-view-performance,chat-view-results,chat-view-layout,agent-panel-loading}.test.ts;
 test/e2e/agent-history-rendering.spec.ts.
 
 - [ ] RED: restoring 1000 messages mounts only the latest bounded window and renders no omitted Markdown; full older history remains accessible in order; source-level last-answer/document getters still work outside the DOM window; a giant restored message uses a bounded preview with explicit full-source expansion.
 - [ ] Add an opt-in bounded restoration entry point with a localized older-message control; keep appendMany default behavior. Prepend batches without replacing existing message nodes, stealing focus, disturbing a live stream or resetting the draft/viewport anchor.
-- [ ] Test cross-boundary tool groups, nearest-prior-user recovery ownership, lastUserText after prepend, a single oversized turn with <=40 initial rows, copy/interrupted artifact semantics, clear/switch/dispose, reduced motion and keyboard; update old 400-row E2E to explicitly load older rows while retaining all content/action assertions.
+- [ ] Keep an empty welcome at its initial viewport position when the preparation footer grows (no bottom following before any actual message). Test cross-boundary tool groups, nearest-prior-user recovery ownership, lastUserText after prepend, a single oversized turn with <=40 initial rows, copy/interrupted artifact semantics, clear/switch/dispose, reduced motion and keyboard; update old 400-row E2E to explicitly load older rows while retaining all content/action assertions.
 - [ ] Focused tests/typecheck/lint; commit perf(chat-ui): restore long conversations in bounded windows.
 - [ ] Specification gate then independent quality gate.
 
