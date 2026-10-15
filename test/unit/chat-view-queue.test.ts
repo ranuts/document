@@ -99,3 +99,44 @@ it('returns focus to the draft when clearing disables and blurs the clicked Queu
   view.el.querySelector('textarea')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   expect(document.activeElement).toBe(external);
 });
+it.each([
+  { queueEnabled: true, moveFocus: false },
+  { queueEnabled: true, moveFocus: true },
+  { queueEnabled: false, moveFocus: false },
+])('preserves intended Send focus through asynchronous preparation: %j', async ({ queueEnabled, moveFocus }) => {
+  let finish!: (ready: boolean) => void;
+  const sendRequest = vi.fn();
+  view = new ChatView({
+    onSend: sendRequest,
+    ...(queueEnabled ? { onQueue: sendRequest } : {}),
+    beforeSend: () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+  });
+  document.body.append(view.el);
+  view.setInput('Prepared draft');
+  const send = view.el.querySelector<HTMLButtonElement>('.cui-send')!;
+  let disabled = send.disabled;
+  Object.defineProperty(send, 'disabled', {
+    configurable: true,
+    get: () => disabled,
+    set: (value) => {
+      disabled = value;
+      if (value) send.blur();
+    },
+  });
+  const other = document.createElement('button');
+  document.body.append(other);
+  send.focus();
+  send.click();
+  expect(disabled).toBe(true);
+  expect(document.activeElement).toBe(document.body);
+  if (moveFocus) other.focus();
+  finish(true);
+  await Promise.resolve();
+  expect(sendRequest).toHaveBeenCalledExactlyOnceWith('Prepared draft');
+  expect(document.activeElement).toBe(
+    moveFocus ? other : queueEnabled ? view.el.querySelector('.cui-input') : document.body,
+  );
+});

@@ -675,7 +675,12 @@ export class ChatView {
       return;
     }
     const revision = this.submissionRevision;
+    let restoreFocus = !!this.options.onQueue && document.activeElement === this.sendBtn;
     if (this.options.beforeSend) {
+      const movedFocus = (event: FocusEvent) => {
+        if (event.target !== this.sendBtn) restoreFocus = false;
+      };
+      if (restoreFocus) document.addEventListener('focusin', movedFocus);
       try {
         const preparation = this.options.beforeSend();
         if (typeof preparation === 'boolean') {
@@ -689,6 +694,7 @@ export class ChatView {
         // A failed input preparation must leave the editable draft intact.
         return;
       } finally {
+        document.removeEventListener('focusin', movedFocus);
         this.preparingSend = false;
         this.updateSendState();
       }
@@ -703,7 +709,6 @@ export class ChatView {
     )
       return;
     if (this.options.canSend?.(readyText) === false) return;
-    const restoreFocus = this.options.onQueue && document.activeElement === this.sendBtn;
     this.setInput('');
     if (restoreFocus) this.input.focus({ preventScroll: true });
     if (this.running && this.options.onQueue) this.options.onQueue(readyText);
