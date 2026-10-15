@@ -342,3 +342,23 @@ coverage thresholds. Statements/branches/functions/lines were respectively
 formatting and the production build passed. Both archive-aware quality entry
 points verified all 1,511 immutable evaluation artifacts. Final remote results
 and the exact deployed commit remain linked from PR #271.
+
+## Title navigation during dictation
+
+A fresh review reproduced an ownership gap at `12c8f66`: title navigation
+restored the destination draft before closing recognition, allowing the old
+dictation to overwrite it. Three regression cases failed in starting, listening
+and finishing states. Closing speech before remembering the draft and choosing
+the title destination preserves both owners; obsolete recognition callbacks
+cannot change either restored draft.
+
+The repair passed all 5,858 unit tests in 200 files with the existing coverage
+thresholds, lint/types, formatting and production build. Both quality entry
+points verified 1,511 immutable evaluation artifacts. Thirteen serialized
+real-editor cases passed, including first permission, dictation in Word/Excel/
+PowerPoint/PDF, history restoration/deletion and Stop followed by new questions.
+All four editor dictation cases now verify title navigation, the destination
+draft, the original dictated draft and ignored late recognition results.
+Independent source review approved this focused repair. Recognition remains a
+controlled fixture, not a physical microphone test. Exact-head remote delivery
+status is recorded in PR #271.

@@ -326,5 +326,32 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
         releaseAnswer?.();
       }
     }
+    await expect(page.locator('.cui-send-stop')).toHaveCount(0);
+    await input.fill('Original conversation draft');
+    await page.locator('.agent-panel-clear').click();
+    await expect(input).toHaveValue('');
+    await input.fill('New conversation draft');
+    await page.locator('.agent-speech-mic').click();
+    await page.evaluate(() => {
+      const recognition = (window as unknown as { recognition: { onstart(): void; onresult(event: unknown): void } })
+        .recognition;
+      recognition.onstart();
+      recognition.onresult({ results: [{ isFinal: false, 0: { transcript: 'Dictated continuation' } }] });
+    });
+    await expect(input).toHaveValue('New conversation draft Dictated continuation');
+    await page.locator('.agent-panel-title').click();
+    await expect(input).toHaveValue('Original conversation draft');
+    await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'idle');
+    await expect(page.locator('.cui-msg-user').first()).toHaveText('Hello from dictation');
+    await page.evaluate(() => {
+      const recognition = (window as unknown as { recognition: { onresult(event: unknown): void; onend(): void } })
+        .recognition;
+      recognition.onresult({ results: [{ isFinal: true, 0: { transcript: 'Obsolete speech' } }] });
+      recognition.onend();
+    });
+    await expect(input).toHaveValue('Original conversation draft');
+    await page.locator('.agent-history-toggle').click();
+    await page.locator('.agent-conversation-open').filter({ hasText: 'New conversation' }).click();
+    await expect(input).toHaveValue('New conversation draft Dictated continuation');
   });
 }

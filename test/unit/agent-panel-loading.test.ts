@@ -3214,6 +3214,61 @@ it('keeps drafts with their displayed owners across new-chat and title navigatio
   expect(input.value).toBe('Original draft');
 });
 
+it.each(['starting', 'listening', 'finishing'] as const)(
+  'keeps %s dictation with its owner when the title returns to another chat',
+  (phase) => {
+    class Recognition {
+      static current: Recognition;
+      constructor() {
+        Recognition.current = this;
+      }
+      onstart?: () => void;
+      onend?: () => void;
+      onresult?: (event: unknown) => void;
+      start = vi.fn();
+      stop = vi.fn();
+      abort = vi.fn();
+    }
+    vi.stubGlobal('SpeechRecognition', Recognition);
+    try {
+      const panel = createAgentPanel();
+      const store = state.conversations!;
+      const original = store.activeId;
+      store.history().save([{ role: 'user', content: 'Existing chat' }]);
+      const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+      input.value = 'Original target draft';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+      const owner = store.activeId;
+      input.value = 'New chat draft';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      panel.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+      const recognition = Recognition.current;
+      if (phase !== 'starting') {
+        recognition.onstart?.();
+        recognition.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'Dictated continuation' } }] });
+      }
+      if (phase === 'finishing') panel.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+      expect(panel.querySelector<HTMLElement>('.agent-speech')!.dataset.state).toBe(phase);
+      const dictated = input.value;
+      panel.querySelector<HTMLButtonElement>('.agent-panel-title')!.click();
+      expect(store.activeId).toBe(original);
+      expect(recognition.abort).toHaveBeenCalledOnce();
+      expect(input.value).toBe('Original target draft');
+      recognition.onstart?.();
+      recognition.onresult?.({ results: [{ isFinal: true, 0: { transcript: 'Obsolete speech' } }] });
+      recognition.onend?.();
+      expect(input.value).toBe('Original target draft');
+      openSession(panel, owner);
+      expect(input.value).toBe(dictated);
+      openSession(panel, original);
+      expect(input.value).toBe('Original target draft');
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  },
+);
+
 it('keeps the existing draft or empty chat when the title has no meaningful history', () => {
   const panel = createAgentPanel();
   const original = activeSession();
