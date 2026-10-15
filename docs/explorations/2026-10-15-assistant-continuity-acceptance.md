@@ -109,4 +109,8 @@ write-tool and process-feedback regressions passed, including Word, spreadsheet
 and slide writes, review, refinement and cancellation. The full unit checkpoint
 passed 5,557 tests and exposed four failures in the older write-reply fixture,
 which mocked strong capture but omitted the newly required lightweight scope.
-Fixture repair and final queue integration checks remain pending.
+The repaired fixture then passed all seven cases at `3457bd0`, preserving the
+write, cancellation and conversation-ownership assertions. Repository lint,
+workspace/application type checks and formatting passed; both quality entry
+points verified all 1,511 immutable evaluation artifacts. Final queue integration
+checks remain pending.
