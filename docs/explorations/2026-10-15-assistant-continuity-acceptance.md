@@ -300,3 +300,45 @@ and input left coordinates matched exactly; disclosure opening, closing, reversa
 keyboard and reduced motion passed. Pending controls kept the next draft focused,
 both queued entries and independent Stop visible, with zero horizontal overflow.
 The 12 preparation states also retained scrollTop=0 and a visible welcome title.
+
+## Actual timing and final source review
+
+Specification, independent quality and final integration review approved source
+`8ca217d`. The presentation observer belongs to the logical stream that captured
+it: replacing even the same callback cannot adopt an old buffer, tail, completion
+or layout event. Superseded requests keep that outcome independently of explicit
+Stop, and deleting an inactive conversation does not supersede the active one.
+
+Chromium 151 verified the actual shared-view presentation boundary: no callback
+before the animation frame, one after visible text is laid out, none while
+transparent or detached, none after Stop, and no adoption by a replacement
+observer. A fresh stream invoked the replacement once. The 108KB fixture's
+visibility probe inspected one Range of at most 64 characters. This observes DOM
+presentation, not compositor paint or raw model-token arrival.
+
+Production-editor controlled-transport probes also completed Hello and routed
+ordinary chat while the document changed, then delivered the queued greeting.
+Observed filtered/presented/completed timings were ordered; Hello had no routing
+field. Switching chats sealed the old request as superseded without a presented
+field, while the new owner completed with its own measurements. Unsupported
+provider stages stayed absent. The eight rotating Performance measure names
+contained numeric durations and status only, with no prompt, document text,
+conversation identifier, credential, persistence or upload. These fixtures do
+not measure physical microphone recognition or local-GPU first-token/drain time.
+
+The final serialized real-editor regression at this source passed 74 of 77
+selected cases in 5.3 minutes, with three unavailable legacy DOC/XLS/PPT corpus
+cases explicitly skipped and no failures. Coverage includes all four editor
+composers and dictation, initial microphone permission, history hydration and
+inactive deletion, next-question queue, Stop during routing/answer followed by
+new questions, actual process feedback, locale/layout, offline preparation,
+reviewed native writes and PDF read/note/Undo contracts. The preview was restarted
+after an earlier interrupted run became unresponsive; its isolated Word control
+and the entire subsequent run passed without changing product source.
+
+At source `8ca217d`, all 5,855 unit tests in 200 files passed with the existing
+coverage thresholds. Statements/branches/functions/lines were respectively
+85.4%/82.34%/87.27%/87.77%. Repository lint, workspace/application types,
+formatting and the production build passed. Both archive-aware quality entry
+points verified all 1,511 immutable evaluation artifacts. Final remote results
+and the exact deployed commit remain linked from PR #271.
