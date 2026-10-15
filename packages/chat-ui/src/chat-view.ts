@@ -84,6 +84,10 @@ export class ChatView {
   // Content mutations consume this state; only scrolling, jumping to the end,
   // or clearing a conversation may change it. Reflow is not reader intent.
   private following = true;
+  private nativeScrollTarget?: number;
+  // Delivery from a canceled animation cannot establish fresh reader intent.
+  // The next scrolling gesture or explicit jump releases this interruption.
+  private nativeScrollInterrupted = false;
   private scrollHeight = 0;
   private viewportHeight = 0;
   private disposed = false;
@@ -116,17 +120,40 @@ export class ChatView {
       .attr('aria-busy', 'false')
       .attr('tabindex', '-1')
       .on('scroll', () => {
-        if (this.emptyEl.parentElement === this.messagesEl) return;
+        if (this.disposed || this.emptyEl.parentElement === this.messagesEl) return;
+        if (this.nativeScrollTarget !== undefined) {
+          this.scrollToEnd();
+          return;
+        }
         // Reflow can emit scroll before ResizeObserver. Changed geometry does
         // not establish that the reader intentionally scrolled away.
         const unchanged =
           this.scrollHeight === this.messagesEl.scrollHeight && this.viewportHeight === this.messagesEl.clientHeight;
-        if (!this.scrollHeight || unchanged || this.nearBottom()) this.following = this.nearBottom();
+        if (!this.nativeScrollInterrupted && (!this.scrollHeight || unchanged || this.nearBottom()))
+          this.following = this.nearBottom();
         this.recordScrollGeometry();
         updateScroll();
       })
       .children(this.emptyEl)
       .build();
+    this.messagesEl.addEventListener('scrollend', (event) => {
+      if (!this.disposed && event.target === this.messagesEl && this.nativeScrollTarget !== undefined)
+        this.scrollToEnd(true);
+    });
+    this.messagesEl.addEventListener('wheel', () => this.readerScrollIntent(), { passive: true });
+    this.messagesEl.addEventListener('touchmove', () => this.readerScrollIntent(), { passive: true });
+    this.messagesEl.addEventListener('keydown', (event) => {
+      if (
+        event.defaultPrevented ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        !['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key) ||
+        (event.target instanceof Element && event.target.closest('input,textarea,select,[contenteditable]'))
+      )
+        return;
+      this.readerScrollIntent();
+    });
 
     // Jump-to-latest button — appears when the user scrolls up.
     this.scrollBtn = ButtonBuilder()
@@ -492,6 +519,7 @@ export class ChatView {
 
   private loadEarlierHistory(): void {
     if (!this.historyStart || this.disposed) return;
+    if (this.nativeScrollTarget !== undefined) this.readerScrollIntent();
     const bounds = this.messagesEl.getBoundingClientRect();
     const candidates = [
       ...this.messagesEl.querySelectorAll<HTMLElement>('.cui-bubble, .cui-activity summary, .cui-activity li'),
@@ -751,6 +779,7 @@ export class ChatView {
 
   /** Remove all messages and restore the empty state. */
   clear(): void {
+    this.resetNativeScroll();
     this.submissionRevision++;
     this.historyRevision++;
     this.restoredHistory = [];
@@ -936,6 +965,7 @@ export class ChatView {
   /** Release layout observers and transient feedback when the host unmounts. */
   dispose(): void {
     if (this.disposed) return;
+    this.resetNativeScroll();
     this.disposed = true;
     this.historyRevision++;
     this.restoredHistory = [];
@@ -1015,18 +1045,52 @@ export class ChatView {
   }
 
   private scrollToEnd(smooth = false): void {
+    if (this.disposed) return;
     this.following = true;
+    this.nativeScrollInterrupted = false;
     if (this.emptyEl.parentElement === this.messagesEl) {
       this.updateScrollBtn();
       return;
     }
-    const reduceMotion = smooth && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    this.messagesEl.scrollTo({
-      top: this.messagesEl.scrollHeight,
-      behavior: smooth && !reduceMotion ? 'smooth' : 'auto',
-    });
+    const native = smooth || this.nativeScrollTarget !== undefined;
+    const reduceMotion = native && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (native && !reduceMotion) {
+      const floor = Math.max(0, this.messagesEl.scrollHeight - this.messagesEl.clientHeight);
+      // Native progress is not a reader gesture. Only measured current-floor
+      // arrival settles ownership, including browsers without scrollend.
+      if (Math.abs(this.messagesEl.scrollTop - floor) <= 1) this.nativeScrollTarget = undefined;
+      else if (smooth || this.nativeScrollTarget !== floor) {
+        this.nativeScrollTarget = floor;
+        this.messagesEl.scrollTo({ top: this.messagesEl.scrollHeight, behavior: 'smooth' });
+      }
+    } else {
+      this.nativeScrollTarget = undefined;
+      this.messagesEl.scrollTo({ top: this.messagesEl.scrollHeight, behavior: 'auto' });
+    }
     this.recordScrollGeometry();
     this.updateScrollBtn();
+  }
+
+  private readerScrollIntent(): void {
+    if (this.disposed) return;
+    if (this.nativeScrollTarget === undefined) {
+      this.nativeScrollInterrupted = false;
+      return;
+    }
+    this.nativeScrollTarget = undefined;
+    this.nativeScrollInterrupted = true;
+    this.following = false;
+    // An instant command at the current offset aborts actual native motion.
+    this.messagesEl.scrollTo({ top: this.messagesEl.scrollTop, behavior: 'instant' });
+    this.recordScrollGeometry();
+    this.updateScrollBtn();
+  }
+
+  private resetNativeScroll(): void {
+    if (this.nativeScrollTarget !== undefined)
+      this.messagesEl.scrollTo({ top: this.messagesEl.scrollTop, behavior: 'instant' });
+    this.nativeScrollTarget = undefined;
+    this.nativeScrollInterrupted = false;
   }
 
   private updateScrollBtn(): void {
