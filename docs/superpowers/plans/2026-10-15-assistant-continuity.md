@@ -119,16 +119,20 @@ workspace/process E2E.
 
 - [x] Align the selected-text disclosure and add a thin chevron, reversible
       open/close motion, reduced-motion support and keyboard regression coverage.
-- [ ] Make the assistant title return to the latest meaningful conversation,
+- [x] Make the assistant title return to the latest meaningful conversation,
       falling back to an existing draft or new conversation, without resuming
       paused requests or restoring disabled disk history.
-- [ ] Integrate functional commits onto `fix/speech-first-permission`, retaining
+- [x] Integrate functional commits onto `fix/speech-first-permission`, retaining
       91ad1dd and updating PR #271 rather than creating another PR.
-- [ ] Run full unit suite, lint/typecheck, format and production build. Serialize
+- [x] Run full unit suite, lint/typecheck, format and production build. Serialize
       real-editor browser runs to avoid resource contention.
-- [ ] Capture and inspect history/queue/Stop states in light/dark, minimum and
+- [x] Capture and inspect history/queue/Stop states in light/dark, minimum and
       wider panels, Chinese, keyboard and reduced motion. Record limitations.
-- [ ] Record synthetic before/after model calls, input context/SDK reads and UI
+- [x] Record synthetic before/after model calls, input context/SDK reads and UI
       work. Separate those facts from unmeasured physical GPU latency.
-- [ ] Update changelog, concise acceptance record and PR title/body for the final
-      scope; verify clean checkout/latest base, push and inspect exact-SHA CI.
+- [x] Update changelog, concise acceptance record and PR title/body for the final
+      scope; verify the latest base and keep functional commits separate.
+
+Delivery and exact-head CI results are tracked in
+[PR #271](https://github.com/ranuts/document/pull/271). Its verdict stays pending
+until final editor validation and CI complete.

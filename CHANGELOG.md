@@ -28,7 +28,7 @@ notes. Entries describe what users experience, not internal refactors.
 - **Start with a task for the document in front of you.** Assistant suggestions
   follow the editor and selection. Choose a task to prepare an editable request,
   then send. If the document scope changes, your draft is kept for you to confirm
-  again.
+  again. Selected passages align with the input and expand or collapse smoothly.
 - **Read drafts and review changes more clearly.** Document drafts and incomplete
   responses have distinct labels. Change reviews emphasize Apply and Cancel,
   with editing, refinement, copying and location in More actions.
@@ -42,6 +42,8 @@ notes. Entries describe what users experience, not internal refactors.
   Large histories load in pages and search without rebuilding every conversation.
   Compact row actions confirm which conversation will be deleted; history
   saving and data tools stay available in a collapsed section.
+  Click the assistant title to return to your latest conversation; unsent drafts
+  stay with their own chat and remain reachable from history.
 
 - **Keep document structure when writing an assistant draft.** Word headings,
   lists and emphasis remain formatted; long slide content continues on fitted
