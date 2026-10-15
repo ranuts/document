@@ -261,3 +261,38 @@ it.each(SHELL_LOCALES)('preserves writing setup guidance through formatting and 
     setLanguage(LanguageCode.EN);
   }
 });
+
+it('classifies every current document capability using the shared host outcome protocol', async () => {
+  const { documentTools } = await import('../../lib/agent-plugin/document-tool-plan');
+  const { documentToolTurnStatus } = await import('../../lib/agent-plugin/ui/presentation');
+  const names = new Set(
+    (['word', 'cell', 'slide', 'pdf'] as const).flatMap((kind) =>
+      documentTools({ kind, selectionCharacters: 1 }).map((tool) => tool.name),
+    ),
+  );
+  expect(names.size).toBeGreaterThan(0);
+  expect(names.has('get_pdf_text')).toBe(true);
+  expect(names.has('add_pdf_comment')).toBe(true);
+  expect(names.has('create_slide')).toBe(true);
+  for (const name of names) {
+    for (const [result, expected] of [
+      [{ status: 'cancelled' }, 'stopped'],
+      [{ status: 'sent' }, 'failed'],
+      [{ status: 'expired' }, 'failed'],
+      [{ status: 'failed' }, 'failed'],
+      [{ status: 'verified' }, 'success'],
+      [{ status: 'completed', result: { unavailable: true } }, 'failed'],
+      [{ status: 'completed', result: { text: '' } }, 'failed'],
+      [{ status: 'completed', result: { text: '  ' } }, 'failed'],
+      [{ status: 'completed', result: { text: 'actual content' } }, undefined],
+    ] as const) {
+      expect(
+        documentToolTurnStatus({ type: 'tool_result', name, content: JSON.stringify(result), isError: false }),
+        name,
+      ).toBe(expected);
+    }
+  }
+  expect(
+    documentToolTurnStatus({ type: 'tool_result', name: 'custom', content: '{"status":"cancelled"}', isError: false }),
+  ).toBeUndefined();
+});
