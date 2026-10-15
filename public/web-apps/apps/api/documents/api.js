@@ -1508,7 +1508,8 @@
         config.title && (typeof config.title === 'string') && (iframe.title = config.title);
         iframe.allowFullscreen = true;
         iframe.setAttribute("allowfullscreen",""); // for IE11
-        iframe.setAttribute("onmousewheel",""); // for Safari on Mac
+        // Modified 2026-10-15: retain Safari's listener without an inline CSP handler.
+        iframe.onmousewheel = function () {}; // for Safari on Mac
         iframe.setAttribute("allow", "autoplay; camera; microphone; display-capture; clipboard-write;");
 
 		if (config.type == "mobile")

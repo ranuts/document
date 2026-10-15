@@ -130,6 +130,9 @@ The changes made to it are:
     en.json by bin/locale-fill.mjs for the seven site languages. Untranslated
     keys returned `undefined` and crashed the tooltip renderer. Values only;
     no key is removed.
+  * public/web-apps/apps/api/documents/api.js -- modified 2026-10-15 to
+    register the Safari mousewheel compatibility listener as a function rather
+    than an inline event attribute, preserving the editor's strict CSP.
   * public/web-apps help content trimmed from the shipped tree.
   * public/web-apps/apps/{common,*/main}/index*.html -- entry shells with
     branded titles now use neutral titles and an empty favicon. An inline
