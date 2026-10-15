@@ -66,7 +66,12 @@ export class ActionPreview {
     this.labels();
     if (this.action && !this.settled && this.editor.hidden) this.renderComparison(this.action.review);
   };
-  constructor(private readonly options: { beforeApply?(): (status: 'success' | 'failed' | 'stopped') => void } = {}) {
+  constructor(
+    private readonly options: {
+      beforeApply?(): (status: 'success' | 'failed' | 'stopped') => void;
+      onApplyStop?(): void;
+    } = {},
+  ) {
     this.draft.className = 'agent-plan-draft';
     this.draft.maxLength = 8000;
     this.editor.hidden = true;
@@ -131,7 +136,10 @@ export class ActionPreview {
         this.status.textContent = displayError(error);
       }
     });
-    this.cancelButton.addEventListener('click', () => this.hide());
+    this.cancelButton.addEventListener('click', () => {
+      if (this.el.dataset.state === 'applying') this.options.onApplyStop?.();
+      this.hide();
+    });
     this.copyButton.addEventListener('click', () => {
       void this.copy();
     });
