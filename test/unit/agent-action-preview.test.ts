@@ -839,3 +839,32 @@ it('omits an empty secondary disclosure for a destructive proposal with no secon
   expect(view.el.querySelector<HTMLElement>('.agent-plan-secondary')!.hidden).toBe(true);
   view.dispose();
 });
+it('keeps cancellation settlement owned by Apply until the operation actually settles', async () => {
+  const view = new ActionPreview();
+  let finish!: (status: 'verified') => void;
+  const settled = vi.fn();
+  view.show(
+    {
+      target: { label: 'DOCX', selectedText: '' },
+      plan: { tool: 'insert_text', input: { text: 'Draft' } },
+      isCurrent: () => true,
+      cancel: vi.fn(),
+      apply: () =>
+        new Promise((resolve) => {
+          finish = resolve;
+        }),
+    },
+    undefined,
+    undefined,
+    settled,
+  );
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  expect(view.pending()).toBeUndefined();
+  view.hide();
+  expect(settled).not.toHaveBeenCalled();
+  finish('verified');
+  await Promise.resolve();
+  expect(settled).toHaveBeenCalledOnce();
+  expect(settled.mock.calls[0][0].status).toBe('cancelled');
+  view.dispose();
+});

@@ -541,22 +541,32 @@ export class ActionPreview {
     this.copyButton.hidden = true;
     this.status.textContent = t('agentPlanApplying');
     this.labels();
+    // Apply owns this callback until its actual promise settles. pending() is
+    // deliberately false now; hide/invalidate must not release its queue early.
+    const signal = this.abort?.signal;
+    const onSettled = this.onSettled;
+    const onApplied = this.onApplied;
+    this.onSettled = undefined;
+    let outcome: ReviewOutcome;
     try {
-      const result = await action.apply(this.abort?.signal);
-      if (this.action === action && !this.abort?.signal.aborted) {
-        this.onApplied?.(result, action);
+      const result = await action.apply(signal);
+      if (signal?.aborted || this.action !== action) outcome = { status: 'cancelled', action };
+      else {
+        onApplied?.(result, action);
         this.status.textContent = t(result === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
         this.finish(result);
-        this.settle({ status: result, action });
+        outcome = { status: result, action };
       }
     } catch (error) {
       if (this.action === action) {
-        this.status.textContent = this.abort?.signal.aborted ? t('agentStopped') : displayError(error);
+        this.status.textContent = signal?.aborted ? t('agentStopped') : displayError(error);
         this.finish('failed');
-        this.settle({ status: 'failed', action, error });
       }
+      outcome = signal?.aborted ? { status: 'cancelled', action } : { status: 'failed', action, error };
     }
+    onSettled?.(outcome);
   }
+
   private settle(outcome: ReviewOutcome): void {
     const callback = this.onSettled;
     this.onSettled = undefined;
