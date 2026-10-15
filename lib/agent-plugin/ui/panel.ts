@@ -2811,6 +2811,8 @@ export function createAgentPanel(
     if (focus) chat.focus();
   };
   title.addEventListener('click', () => {
+    // Dictation must settle into its original composer before navigation restores another draft.
+    speech?.close();
     rememberDraft();
     const sessions = conversations.searchSnapshot();
     const current = sessions.find((item) => item.id === displayedConversationId);

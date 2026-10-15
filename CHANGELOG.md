@@ -9,6 +9,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Returning to the latest assistant conversation during dictation keeps each
+  chat's draft intact and ignores late speech results after navigation.
 - The first assistant request stays in its original chat while saved conversations
   finish loading. Requests being prepared or stopped show their state and keep
   unavailable queue actions disabled until recovery is ready.
