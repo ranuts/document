@@ -320,6 +320,7 @@ export const ko: Partial<I18nMessages> = {
   agentHistoryYesterday: '어제',
   agentHistoryEarlier: '이전',
   agentHistoryEmpty: '아직 대화가 없습니다',
+  agentHistorySearching: '검색 중…',
   agentHistoryLoadMore: '더 보기',
   agentNoConversationsFound: '일치하는 대화가 없습니다',
   agentHistoryDataControls: '기록 및 데이터',

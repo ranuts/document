@@ -309,6 +309,7 @@ export const zhCN: I18nMessages = {
   agentHistoryYesterday: '昨天',
   agentHistoryEarlier: '更早',
   agentHistoryEmpty: '暂无对话记录',
+  agentHistorySearching: '正在搜索…',
   agentHistoryLoadMore: '加载更多',
   agentNoConversationsFound: '没有找到匹配的对话',
   agentHistoryDataControls: '历史与数据',

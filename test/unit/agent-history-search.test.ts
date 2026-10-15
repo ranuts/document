@@ -377,3 +377,58 @@ it.each(['idle', 'watchdog', 'fallback'])('cancels pending %s work when suspende
   expect(receive).not.toHaveBeenCalled();
   search.dispose();
 });
+
+it('processes multiple bounded corpus posts in one task before yielding', async () => {
+  vi.useFakeTimers();
+  const post = vi.fn();
+  vi.stubGlobal(
+    'Worker',
+    class {
+      postMessage = post;
+      terminate() {}
+      addEventListener() {}
+    },
+  );
+  const store = createConversationStore();
+  store.history().save([{ role: 'user', content: 'x'.repeat(1024 * 1024) }]);
+  const search = createHistorySearch(vi.fn());
+  search.update(store.searchSnapshot());
+  search.query('missing');
+  await vi.advanceTimersByTimeAsync(0);
+  const updates = post.mock.calls.map(([message]) => message).filter((message) => message.type === 'update');
+  expect(updates.length).toBeGreaterThan(1);
+  expect(updates.length).toBeLessThanOrEqual(32);
+  expect(updates.every((message) => JSON.stringify(message).length < 40_000)).toBe(true);
+  expect(post.mock.calls.some(([message]) => message.type === 'query')).toBe(false);
+  search.dispose();
+});
+
+it('yields after the time budget even when more bounded transfer batches remain', async () => {
+  vi.useFakeTimers();
+  let elapsed = 0;
+  const now = vi.spyOn(performance, 'now').mockImplementation(() => elapsed);
+  const post = vi.fn((message: { type: string }) => {
+    if (message.type === 'update') elapsed += 2;
+  });
+  vi.stubGlobal(
+    'Worker',
+    class {
+      postMessage = post;
+      terminate() {}
+      addEventListener() {}
+    },
+  );
+  const store = createConversationStore();
+  store.history().save([{ role: 'user', content: 'x'.repeat(1024 * 1024) }]);
+  const search = createHistorySearch(vi.fn());
+  try {
+    search.update(store.searchSnapshot());
+    search.query('missing');
+    await vi.advanceTimersByTimeAsync(0);
+    expect(post.mock.calls.filter(([message]) => message.type === 'update')).toHaveLength(2);
+    expect(vi.getTimerCount()).toBe(1);
+  } finally {
+    search.dispose();
+    now.mockRestore();
+  }
+});

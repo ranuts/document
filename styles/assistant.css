@@ -1847,3 +1847,14 @@ r-dropdown[role='listbox'] {
   outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
+
+.agent-history-search-status {
+  min-height: 1.5em;
+  margin: var(--ran-space-1) 0 0;
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+  line-height: 1.5;
+}
+.agent-history-search-status + .agent-conversation-list {
+  margin-top: var(--ran-space-1);
+}

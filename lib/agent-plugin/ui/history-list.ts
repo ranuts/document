@@ -18,10 +18,11 @@ export function createConversationList({ store, onSelect, onDelete }: Conversati
   searchIcon.innerHTML =
     '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>';
   const searchRow = Div().class('agent-history-search-row').children(searchIcon, search).build();
+  const searchStatus = View('p').class('agent-history-search-status').attr('role', 'status').build();
   const list = View('ul').class('agent-conversation-list').build();
   const empty = View('p').class('agent-history-empty').attr('role', 'status').build();
   const more = ButtonBuilder().class('agent-history-more').attr('type', 'button').build();
-  const el = Div().class('agent-conversations').children(heading, searchRow, list, empty, more).build();
+  const el = Div().class('agent-conversations').children(heading, searchRow, searchStatus, list, empty, more).build();
   let active = true;
   let disposed = false;
   let suspended = false;
@@ -57,7 +58,10 @@ export function createConversationList({ store, onSelect, onDelete }: Conversati
     search.setAttribute('aria-label', t('agentSearchConversations'));
     list.setAttribute('aria-label', t('agentConversations'));
     if (more.textContent !== t('agentHistoryLoadMore')) more.textContent = t('agentHistoryLoadMore');
-    if (query && !matches) {
+    const pending = Boolean(query && !matches);
+    const status = pending ? t('agentHistorySearching') : '';
+    if (searchStatus.textContent !== status) searchStatus.textContent = status;
+    if (pending) {
       list.setAttribute('aria-busy', 'true');
       const ids = new Set(sessions.map((session) => session.id));
       for (const [id, node] of nodes)
