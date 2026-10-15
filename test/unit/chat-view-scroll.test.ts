@@ -164,6 +164,36 @@ it('does not treat typing or a nested editable navigation key as transcript scro
   editor.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
   expect(messages.scrollTo).not.toHaveBeenCalled();
 });
+it.each(['pointerdown', 'mousedown'] as const)('cancels a native jump before an own-scrollbar %s drag', (type) => {
+  if (type === 'mousedown') vi.stubGlobal('PointerEvent', undefined);
+  const { view, messages, move, jump, grow } = mount();
+  jump();
+  move(250);
+  messages.dispatchEvent(new Event(type, { bubbles: true }));
+  expect(messages.scrollTo).toHaveBeenLastCalledWith({ top: 250, behavior: 'instant' });
+  // A compatibility mouse event from the same pointer must not release cancellation.
+  if (type === 'pointerdown') messages.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+  vi.mocked(messages.scrollTo).mockClear();
+  move(1000);
+  messages.dispatchEvent(new Event('scrollend'));
+  grow(1600);
+  resize([], {} as ResizeObserver);
+  view.appendDelta('After scrollbar drag');
+  flush();
+  expect(messages.scrollTo).not.toHaveBeenCalled();
+  jump();
+  expect(messages.scrollTo).toHaveBeenLastCalledWith({ top: 1600, behavior: 'smooth' });
+});
+it('does not interpret pointer events on nested transcript controls as scrollbar intent', () => {
+  const { view, messages, move, jump, grow } = mount();
+  jump();
+  move(250);
+  messages.querySelector('.cui-copy')!.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+  messages.querySelector('.cui-copy')!.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+  grow(1600);
+  view.append({ role: 'agent', text: 'Still following' });
+  expect(messages.scrollTo).toHaveBeenLastCalledWith({ top: 1600, behavior: 'smooth' });
+});
 it('uses an immediate jump for reduced motion', () => {
   vi.stubGlobal('matchMedia', () => ({ matches: true }));
   const { view, messages, jump, grow } = mount();
