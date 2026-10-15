@@ -26,6 +26,7 @@ experience; it does not claim native mid-token steering for browser models.
 
 Allowed: assistant UI/history/session modules, request context/intent/controller,
 document-tool-action lightweight target capture (preserving write verification),
+an additive optional agent-core runtime completion-cause flag,
 chat-ui source/public docs, relevant worker/scheduler modules, seven locale
 tables/types, focused unit/E2E regressions, changelog and these task records.
 
@@ -95,6 +96,13 @@ stopped, failed, limited, review-pending or superseded. A resolved Promise alone
 cannot advance the queue. UI acknowledgement and provider drain are distinct;
 the provider remains serialized even if abort releases its caller early. Late
 finalizers cannot clear another turn. Provider changes invalidate pending scope.
+
+The runtime may report an optional completed-by-tool flag to distinguish a
+terminal tool receipt from an empty ordinary answer, without re-running tool
+callbacks. This flag alone is insufficient for host success: native document
+receipts for cancelled, sent, expired, failed or unavailable reads must pause
+dependent execution. Existing callers that ignore the additive flag keep their
+current behavior; provider and persistence contracts remain unchanged.
 
 When paused, sending a new draft queues it without resuming older work. Resume
 continues FIFO; Send now promotes the selected entry and explicitly resumes it.
