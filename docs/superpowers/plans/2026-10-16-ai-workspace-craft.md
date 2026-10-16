@@ -62,10 +62,12 @@ Task 4 evidence: commits `529af94`, `c94e07a`; 62 focused and 93 offline tests, 
 
 Files: new artifacts/edit-proposal.ts and ui/artifact-workflow.ts; artifacts-view.ts; panel/request queue integration; locales; store/view/proposal/routing tests.
 
-- [ ] Test exact selected offsets and full-document draft capture, expectedVersion and content freshness, cancellation, conflict and edits during inference.
-- [ ] Add explicit refine input and optional host callback with artifact-origin binding. Reuse prepared provider/queue, no Office tools. Stream a proposal, preview diff, accept into editable draft only after confirmation.
-- [ ] Add direct keep-as-new recovery for conflicts and version caps, preserving provenance; no overwrite or automatic version save.
-- [ ] Browser selected/full edit, stop, late response and conflict; verify and commit.
+- [x] Test exact selected offsets and full-document draft capture, expectedVersion and content freshness, cancellation, conflict and edits during inference.
+- [x] Add explicit refine input and optional host callback with artifact-origin binding. Reuse prepared provider/queue, no Office tools. Stream a proposal, preview diff, accept into editable draft only after confirmation.
+- [x] Add direct keep-as-new recovery for conflicts and version caps, preserving provenance; no overwrite or automatic version save.
+- [x] Browser selected/full edit, stop, late response and conflict; verify and commit.
+
+Task 5 evidence: commit `ed7035a`; 333 tests across eight files and eight browser scenarios passed, lint/types/format passed after final changes. Spec/quality approved; recovery keeps artifact origin, async acceptance/recovery and IME races verified; narrow light/dark screenshots inspected.
 
 ### Task 6: Declarative structured artifacts and export
 
