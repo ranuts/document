@@ -201,8 +201,8 @@ body.agent-panel-resizing #app iframe {
   max-width: min(88%, 64ch);
 }
 .agent-panel .cui-composer:focus-within {
-  border-color: var(--ran-color-primary);
-  box-shadow: 0 0 0 1px var(--ran-color-primary);
+  border-color: var(--ran-color-text-secondary);
+  box-shadow: none;
 }
 .agent-panel .cui-message-actions .cui-apply {
   min-height: var(--ran-size-7);
@@ -626,9 +626,7 @@ r-dropdown[role='listbox'] {
 @media (max-width: 480px) {
   .agent-panel-header button,
   .agent-panel-quote,
-  .agent-panel-clear,
-  .agent-panel .cui-send,
-  .agent-panel .cui-stop {
+  .agent-panel-clear {
     width: 44px;
     height: 44px;
     flex-shrink: 0;
@@ -968,7 +966,7 @@ r-dropdown[role='listbox'] {
   border-color: var(--ran-color-border);
   background: var(--ran-color-bg-elevated);
   border-radius: var(--ran-radius-md);
-  padding: 13px;
+  padding: var(--ran-space-3);
 }
 .agent-panel .cui-msg-user .cui-bubble {
   padding: 12px 16px;
@@ -978,17 +976,8 @@ r-dropdown[role='listbox'] {
 .agent-panel .cui-send,
 .agent-panel .cui-stop {
   border-radius: var(--ran-radius-sm);
-  width: var(--ran-size-8, 36px);
-  height: var(--ran-size-8, 36px);
-}
-/* Both execution controls keep the same geometry at narrow panel widths,
-   including a docked panel in a wide editor window. */
-@container agent-panel (max-width: 480px) {
-  .agent-panel .cui-send,
-  .agent-panel .cui-stop {
-    width: 40px;
-    height: 40px;
-  }
+  width: var(--ran-size-7);
+  height: var(--ran-size-7);
 }
 @media (pointer: coarse) {
   .agent-panel .cui-send,
@@ -1399,7 +1388,7 @@ r-dropdown[role='listbox'] {
   --ran-select-hover-border: 1px solid transparent;
   --ran-select-height: 32px;
   --ran-select-min-height: 32px;
-  --ran-select-font-size: var(--ran-text-label-2);
+  --ran-select-font-size: var(--ran-text-label-3);
   --ran-select-color: var(--ran-color-text-secondary);
   --ran-select-item-hover-color: var(--ran-color-text);
   --ran-select-search-focus-color: var(--ran-color-text);
@@ -2157,6 +2146,11 @@ r-dropdown[role='listbox'] {
   min-height: 36px;
   cursor: pointer;
   text-align: start;
+}
+.agent-panel .cui-composer .agent-sources-toggle {
+  min-height: var(--ran-size-7);
+  padding: var(--ran-space-1) var(--ran-space-2);
+  font-size: var(--ran-text-label-3);
 }
 .agent-workspace-view button:hover,
 .agent-artifacts button:hover,

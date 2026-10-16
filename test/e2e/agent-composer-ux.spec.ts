@@ -213,9 +213,106 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
   });
 }
 
-for (const width of [360, 1280]) {
+for (const width of [320, 360, 1280]) {
   test(`composer stays compact and grows with multiline drafts at ${width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: 900 });
+    await page.addInitScript(() => {
+      localStorage.setItem('document-assistant-enabled', 'true');
+      localStorage.setItem(
+        'agent-writing-endpoint',
+        JSON.stringify({
+          version: 1,
+          kind: 'loopback',
+          baseUrl: 'http://localhost:11434',
+          model: 'density-test',
+          preference: 'device-first',
+          localWritingConsent: false,
+        }),
+      );
+    });
+    await page.route('http://localhost:11434/api/**', (route) =>
+      route.fulfill({ json: { models: [{ name: 'density-test' }] } }),
+    );
+    await page.goto('/editor?new=docx&locale=en');
+    await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+    await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+    const input = page.locator('.cui-input');
+    const composer = page.locator('.cui-composer');
+    await expect(input).toBeVisible();
+    const send = page.locator('.cui-send');
+    await input.fill('A draft before reconnecting');
+    await expect(send).toHaveAccessibleName('Reconnect');
+    // Preparation stays a readable text action rather than a clipped icon square.
+    expect((await send.boundingBox())!.width).toBeGreaterThan(32);
+    expect(await send.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
+    await send.click();
+    await expect(send).toHaveAccessibleName('Send');
+    await expect(input).toHaveValue('A draft before reconnecting');
+    await input.fill('');
+    await expect(send).toBeDisabled();
+    const controls = [send, page.locator('.agent-sources-toggle'), page.locator('.agent-speech-mic')];
+    const bounds = await Promise.all(controls.map((control) => control.boundingBox()));
+    for (const box of bounds) expect(box!.height).toBe(32);
+    expect(bounds[0]!.width).toBe(32);
+    const centers = bounds.map((box) => box!.y + box!.height / 2);
+    expect(Math.max(...centers) - Math.min(...centers)).toBeLessThanOrEqual(1);
+    await expect(page.locator('.agent-sources-toggle')).toHaveCSS('font-size', '12px');
+    await expect(page.locator('.agent-speech-language')).toHaveCSS('--ran-select-font-size', '12px');
+    await expect(composer).toHaveCSS('padding', '12px');
+    if (width === 1280) expect((await page.locator('.agent-runtime-panel').boundingBox())!.width).toBe(432);
+    const empty = (await composer.boundingBox())!.height;
+    await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`composer-empty-${width}.png`) });
+    expect(empty).toBeLessThan(115);
+    await input.focus();
+    const focus = await composer.evaluate((el) => {
+      const style = getComputedStyle(el);
+      return {
+        border: style.borderTopWidth,
+        color: style.borderTopColor,
+        shadow: style.boxShadow,
+      };
+    });
+    expect(focus.border).toBe('1px');
+    expect(focus.shadow).toBe('none');
+    // Resolve the semantic token through a temporary inherited color, including dark mode.
+    const neutral = await composer.evaluate((el) => {
+      const probe = document.createElement('span');
+      probe.style.color = 'var(--ran-color-text-secondary)';
+      el.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    });
+    expect(focus.color).toBe(neutral);
+    await input.fill(Array.from({ length: 12 }, (_, i) => `第 ${i + 1} 行：保持原文的事实和数字。`).join('\n'));
+    expect((await input.boundingBox())!.height).toBeGreaterThan(80);
+    expect((await input.boundingBox())!.height).toBeLessThanOrEqual(160);
+    expect((await composer.boundingBox())!.height).toBeGreaterThan(empty + 40);
+    await page
+      .locator('.agent-runtime-panel')
+      .screenshot({ path: testInfo.outputPath(`composer-multiline-${width}.png`) });
+    await input.fill('Short draft');
+    await expect(send).toBeEnabled();
+    await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`composer-short-${width}.png`) });
+    await page.evaluate(() => document.documentElement.setAttribute('data-ran-theme', 'dark'));
+    await expect(composer).toHaveCSS('box-shadow', 'none');
+    await page.locator('.agent-sources-toggle').focus();
+    expect(await page.locator('.agent-sources-toggle').evaluate((el) => getComputedStyle(el).outlineWidth)).toBe('2px');
+    await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`composer-dark-${width}.png`) });
+    await expect.poll(async () => (await composer.boundingBox())!.height).toBeLessThanOrEqual(empty + 1);
+    await input.fill('');
+    await expect.poll(async () => (await composer.boundingBox())!.height).toBeLessThanOrEqual(empty + 1);
+    expect(await composer.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
+    await page
+      .locator('.agent-runtime-panel')
+      .screenshot({ path: testInfo.outputPath(`composer-compact-${width}.png`) });
+  });
+}
+
+test.describe('coarse pointer composer', () => {
+  test.use({ hasTouch: true });
+  test('retains a 44-pixel execution target on touch hardware', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 900 });
     await page.addInitScript(() => {
       localStorage.setItem('document-assistant-enabled', 'true');
       localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
@@ -223,21 +320,10 @@ for (const width of [360, 1280]) {
     await page.goto('/editor?new=docx&locale=en');
     await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
     await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
-    const input = page.locator('.cui-input');
-    const composer = page.locator('.cui-composer');
-    await expect(input).toBeVisible();
-    const empty = (await composer.boundingBox())!.height;
-    expect(empty).toBeLessThan(115);
-    await input.fill(Array.from({ length: 12 }, (_, i) => `第 ${i + 1} 行：保持原文的事实和数字。`).join('\n'));
-    expect((await input.boundingBox())!.height).toBeGreaterThan(80);
-    expect((await input.boundingBox())!.height).toBeLessThanOrEqual(160);
-    expect((await composer.boundingBox())!.height).toBeGreaterThan(empty + 40);
-    await input.fill('Short draft');
-    await expect.poll(async () => (await composer.boundingBox())!.height).toBeLessThanOrEqual(empty + 1);
-    await input.fill('');
-    await expect.poll(async () => (await composer.boundingBox())!.height).toBeLessThanOrEqual(empty + 1);
-    await page
-      .locator('.agent-runtime-panel')
-      .screenshot({ path: testInfo.outputPath(`composer-compact-${width}.png`) });
+    expect(await page.evaluate(() => matchMedia('(pointer: coarse)').matches)).toBe(true);
+    const send = page.locator('.cui-send');
+    await expect(send).toBeVisible();
+    expect((await send.boundingBox())!.width).toBe(44);
+    expect((await send.boundingBox())!.height).toBe(44);
   });
-}
+});
