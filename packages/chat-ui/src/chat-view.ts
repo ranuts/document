@@ -938,7 +938,7 @@ export class ChatView {
       if (options.focus && composer.focused) this.input.focus({ preventScroll: true });
       this.input.scrollTop = composer.scrollTop;
     }
-    if (options.focus && !composer.focused) this.messagesEl.focus({ preventScroll: true });
+    if (options.focus && !this.composing && !composer.focused) this.messagesEl.focus({ preventScroll: true });
     this.resetNativeScroll();
     if (transcript.following) {
       this.scrollToEnd();
