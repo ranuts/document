@@ -149,6 +149,39 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
       await input.fill(draft + draft);
       await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
+      // Workspace navigation preserves the draft selection and detached reading position.
+      await input.evaluate((el: HTMLTextAreaElement) => el.setSelectionRange(4, 17, 'backward'));
+      await page.locator('.agent-sources-toggle').click();
+      await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'sources');
+      await page.getByRole('button', { name: 'Back to conversation' }).click();
+      await expect(input).toHaveValue(draft + draft);
+      expect(
+        await input.evaluate((el: HTMLTextAreaElement) => [el.selectionStart, el.selectionEnd, el.selectionDirection]),
+      ).toEqual([4, 17, 'backward']);
+      await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
+      await expect(input).not.toBeFocused();
+      await page.getByRole('button', { name: 'Close assistant', exact: true }).click();
+      await expect(input).toBeHidden();
+      await page.evaluate(() => window.__toggleAgentPanel?.());
+      await expect(input).toBeVisible();
+      await expect(input).toHaveValue(draft + draft);
+      expect(
+        await input.evaluate((el: HTMLTextAreaElement) => [el.selectionStart, el.selectionEnd, el.selectionDirection]),
+      ).toEqual([4, 17, 'backward']);
+      await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
+      await expect(input).not.toBeFocused();
+      await page.getByRole('button', { name: 'New conversation', exact: true }).click();
+      await expect(input).toHaveValue('');
+      await expect(page.locator('.cui-msg-agent')).toHaveCount(0);
+      expect(await input.evaluate((el: HTMLTextAreaElement) => [el.selectionStart, el.selectionEnd])).toEqual([0, 0]);
+      await page.getByRole('button', { name: 'Conversations', exact: true }).click();
+      await page.locator('.agent-conversation-open').filter({ hasText: 'Hello' }).click();
+      await expect(input).toHaveValue(draft + draft);
+      expect(
+        await input.evaluate((el: HTMLTextAreaElement) => [el.selectionStart, el.selectionEnd, el.selectionDirection]),
+      ).toEqual([4, 17, 'backward']);
+      await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
+      await expect(input).not.toBeFocused();
       await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
       const copy = page.locator('.cui-copy').first();
       const width = (await copy.boundingBox())!.width;

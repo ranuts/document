@@ -1,3 +1,4 @@
+import { createWorkspaceNavigation } from './workspace-navigation';
 import { createArtifactStore, type ArtifactProvenance } from '../artifacts/store';
 import { createArtifactsView } from './artifacts-view';
 import { ReferenceSources } from '../connectors/reference-sources';
@@ -276,7 +277,10 @@ export function createAgentPanel(
   const syncSidebar = (): void => sidebar.update(panel.isConnected, open);
   let speech: ReturnType<typeof mountSpeechInput> | undefined;
   const setOpen = (next: boolean): void => {
-    if (!next) speech?.close();
+    if (!next) {
+      speech?.close();
+      if (open && panel.dataset.view === 'chat') navigation.capture(displayedConversationId);
+    }
     if (next && !open && hasConfiguration) showView('chat');
     const returnToDocument = !next && panel.contains(document.activeElement);
     open = next;
@@ -297,7 +301,7 @@ export function createAgentPanel(
         if (open) {
           if (panel.dataset.view === 'settings') settingsHeading.focus();
           else if (panel.dataset.view === 'history') conversationList?.focus();
-          else chat.focus();
+          else if (!navigation.restore(displayedConversationId, true)) chat.focus();
         }
       });
   };
@@ -1082,6 +1086,7 @@ export function createAgentPanel(
   const initialConversationId = displayedConversationId;
   let restoringInitialHistory = false;
   const drafts = new Map<string, string>();
+  const navigation = createWorkspaceNavigation(chat);
   const rememberDraft = () => {
     const text = chat.getInput();
     if (text.trim()) drafts.set(displayedConversationId, text);
@@ -2861,7 +2866,10 @@ export function createAgentPanel(
     blockedWritingRequest = undefined;
     stagedWritingRequest = '';
     stagedReadRequest = '';
-    if (saveDraft) rememberDraft();
+    if (saveDraft) {
+      rememberDraft();
+      if (!chat.el.hidden) navigation.capture(displayedConversationId);
+    }
     activeTiming?.cancel('superseded');
     requestQueue?.pause(displayedConversationId);
     conversationRevision++;
@@ -2882,7 +2890,8 @@ export function createAgentPanel(
     chat.setInput(drafts.get(id) ?? '');
     chat.restoreHistory(historyToTurns(historyStorage.load()));
     renderSessions();
-    if (focus) chat.focus();
+    const restored = !chat.el.hidden && navigation.restore(id, focus);
+    if (focus && !restored && !chat.el.hidden) chat.focus();
   };
   title.addEventListener('click', () => {
     // Dictation must settle into its original composer before navigation restores another draft.
@@ -2920,6 +2929,7 @@ export function createAgentPanel(
       referenceSources.forget(deleted && deleted !== 'all' ? deleted : undefined);
       sourceView.cancelPending();
       sourceView.refresh();
+      navigation.forget(deleted && deleted !== 'all' ? deleted : undefined);
       if (deleted && deleted !== 'all') drafts.delete(deleted);
       else drafts.clear();
       if (deleted === 'all' || deleted === displayedConversationId) chat.setInput('');
@@ -3189,9 +3199,11 @@ export function createAgentPanel(
 
   chat.el.append(writeDestination);
   function showView(view: 'chat' | 'settings' | 'history' | 'sources' | 'artifacts'): void {
+    speech?.close();
+    const leavingChat = panel.dataset.view === 'chat' && view !== 'chat';
+    if (leavingChat) navigation.capture(displayedConversationId);
     if (view === 'history') rememberDraft();
     viewRevision++;
-    speech?.close();
     panel.dataset.view = view;
     if (view === 'settings') modelRow.insertBefore(runtimeRow, modelActions);
     else panel.insertBefore(runtimeRow, settings);
@@ -3212,7 +3224,7 @@ export function createAgentPanel(
     else if (view === 'history') conversationList?.focus();
     else if (view === 'sources') sourceView.focus();
     else if (view === 'artifacts') artifactsBtn.focus();
-    else chat.focus();
+    else if (!navigation.restore(displayedConversationId, true)) chat.focus();
   }
   for (const [element, trigger] of [
     [sourceView.el, sourcesBtn],

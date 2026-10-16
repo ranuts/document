@@ -191,3 +191,16 @@ inspiration; this component deliberately preserves raw incomplete source.
 call advances a distinct revision; a live stream retains its creation revision
 through flush/completion. Replacement must not adopt old buffered content or a
 late tail, including when the host rearms the same callback function.
+
+## Ephemeral navigation state
+
+`captureNavigation()` records reader attachment, a visible source-row anchor and
+composer selection. `restoreNavigation(snapshot, { focus?: boolean })` restores
+selection only when the host-owned draft still matches, leaves active IME composition
+alone and never replaces text. Focus is opt-in and returns to the captured composer
+or transcript rather than always entering the composer. Historical reading remains
+detached from new streamed output; a previously following reader sees current output.
+Hidden or zero-height views must be restored again after becoming visible. Clear or
+changed history can invalidate an anchor; no unrelated absolute offset is restored.
+Hosts must key snapshots by conversation identity, discard them on deletion and keep
+retention bounded. Snapshots are volatile presentation state, not persisted history.

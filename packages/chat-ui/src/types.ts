@@ -89,3 +89,24 @@ export interface ChatViewOptions {
   /** Initial labels; change later with {@link ChatView.setLabels}. */
   labels?: ChatViewLabels;
 }
+
+/** Ephemeral presentation state. Hosts keep draft text and conversation identity separately. */
+export interface ChatNavigationSnapshot {
+  readonly composer: {
+    readonly fingerprint: string;
+    readonly scrollTop: number;
+    readonly start: number;
+    readonly end: number;
+    readonly direction: 'forward' | 'backward' | 'none';
+    readonly focused: boolean;
+  };
+  readonly transcript: {
+    readonly focused: boolean;
+    readonly following: boolean;
+    readonly interrupted: boolean;
+    readonly top: number;
+    readonly historyStart: number;
+    readonly historyLength: number;
+    readonly anchor?: { readonly fingerprint: string; readonly occurrence: number; readonly offset: number };
+  };
+}

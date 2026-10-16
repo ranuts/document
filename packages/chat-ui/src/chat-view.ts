@@ -3,7 +3,13 @@ import { throttle } from 'ranuts/utils';
 import { ensureChatUiStyles } from './styles';
 import { renderMarkdown } from './markdown';
 import { StreamingMarkdown, STREAMING_MARKDOWN_LIMIT } from './streaming-markdown';
-import type { ChatMessage, ChatViewLabels, ChatViewOptions, RestoreHistoryOptions } from './types';
+import type {
+  ChatNavigationSnapshot,
+  ChatMessage,
+  ChatViewLabels,
+  ChatViewOptions,
+  RestoreHistoryOptions,
+} from './types';
 
 const ICON_SEND =
   '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>';
@@ -22,6 +28,13 @@ const ICON_DRAFT =
 
 /** Distance (px) from the bottom within which we keep auto-scrolling on new content. */
 const STICK_THRESHOLD = 60;
+
+// Compact identity for ephemeral presentation snapshots; never persisted or used for authorization.
+function navigationFingerprint(text: string): string {
+  let hash = 2166136261;
+  for (let index = 0; index < text.length; index++) hash = Math.imul(hash ^ text.charCodeAt(index), 16777619);
+  return `${text.length}:${hash >>> 0}`;
+}
 
 /**
  * A framework-free chat UI: a scrolling message list with streaming support and
@@ -84,6 +97,7 @@ export class ChatView {
   // Content mutations consume this state; only scrolling, jumping to the end,
   // or clearing a conversation may change it. Reflow is not reader intent.
   private following = true;
+  private readonly navigationAnchors = new WeakMap<ChatNavigationSnapshot, HTMLElement>();
   private nativeScrollTarget?: number;
   // Delivery from a canceled animation cannot establish fresh reader intent.
   // The next scrolling gesture or explicit jump releases this interruption.
@@ -872,6 +886,94 @@ export class ChatView {
   setInput(text: string): void {
     this.input.value = text;
     this.input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  /** Capture reader attachment and draft selection without taking ownership of draft text. */
+  captureNavigation(): ChatNavigationSnapshot {
+    const rows = Array.from(this.messagesEl.querySelectorAll<HTMLElement>('.cui-msg[data-source]'));
+    const bounds = this.messagesEl.getBoundingClientRect();
+    const anchor = rows.find((row) => row.getBoundingClientRect().bottom > bounds.top) ?? rows[0];
+    const key = (row: HTMLElement) => navigationFingerprint(`${row.dataset.role}:${row.dataset.source}`);
+    const fingerprint = anchor ? key(anchor) : undefined;
+    const snapshot: ChatNavigationSnapshot = {
+      composer: {
+        fingerprint: navigationFingerprint(this.input.value),
+        scrollTop: this.input.scrollTop,
+        start: this.input.selectionStart,
+        end: this.input.selectionEnd,
+        direction: this.input.selectionDirection,
+        focused: document.activeElement === this.input,
+      },
+      transcript: {
+        focused: this.messagesEl.contains(document.activeElement),
+        following: this.following,
+        interrupted: this.nativeScrollInterrupted,
+        top: this.messagesEl.scrollTop,
+        historyStart: this.historyStart,
+        historyLength: this.restoredHistory.length,
+        anchor:
+          anchor && fingerprint
+            ? {
+                fingerprint,
+                occurrence: rows.slice(0, rows.indexOf(anchor)).filter((row) => key(row) === fingerprint).length,
+                offset: anchor.getBoundingClientRect().top - bounds.top,
+              }
+            : undefined,
+      },
+    };
+    if (anchor) this.navigationAnchors.set(snapshot, anchor);
+    return snapshot;
+  }
+
+  /** Restore only matching content. Focus is explicit; active IME composition is untouched. */
+  restoreNavigation(snapshot: ChatNavigationSnapshot, options: { focus?: boolean } = {}): void {
+    if (this.disposed || this.el.closest('[hidden]') || !this.messagesEl.clientHeight) return;
+    const { composer, transcript } = snapshot;
+    if (!this.composing && composer.fingerprint === navigationFingerprint(this.input.value)) {
+      this.input.setSelectionRange(
+        Math.min(composer.start, this.input.value.length),
+        Math.min(composer.end, this.input.value.length),
+        composer.direction,
+      );
+      if (options.focus && composer.focused) this.input.focus({ preventScroll: true });
+      this.input.scrollTop = composer.scrollTop;
+    }
+    if (options.focus && !composer.focused) this.messagesEl.focus({ preventScroll: true });
+    this.resetNativeScroll();
+    if (transcript.following) {
+      this.scrollToEnd();
+      return;
+    }
+    // Recreate only the already visited history window, never fetch additional host data.
+    if (transcript.historyLength === this.restoredHistory.length)
+      while (this.historyStart > transcript.historyStart) this.prependHistoryWindow();
+    const rows = Array.from(this.messagesEl.querySelectorAll<HTMLElement>('.cui-msg[data-source]'));
+    const anchor = transcript.anchor;
+    const mountedAnchor = this.navigationAnchors.get(snapshot);
+    const row =
+      mountedAnchor && this.messagesEl.contains(mountedAnchor)
+        ? mountedAnchor
+        : anchor
+          ? rows.filter(
+              (row) => navigationFingerprint(`${row.dataset.role}:${row.dataset.source}`) === anchor.fingerprint,
+            )[anchor.occurrence]
+          : undefined;
+    if (!row) return;
+    this.following = false;
+    // Stale native scroll delivery must not reattach a restored historical reader.
+    this.nativeScrollInterrupted = true;
+    const bounds = this.messagesEl.getBoundingClientRect();
+    const delta = row.getBoundingClientRect().top - bounds.top - anchor!.offset;
+    const measured = row.getBoundingClientRect().height > 0;
+    this.messagesEl.scrollTop = Math.max(
+      0,
+      Math.min(
+        this.messagesEl.scrollHeight - this.messagesEl.clientHeight,
+        measured ? this.messagesEl.scrollTop + delta : transcript.top,
+      ),
+    );
+    this.recordScrollGeometry();
+    this.updateScrollBtn();
   }
 
   /** Refresh host readiness without changing the draft or submitting it. */
