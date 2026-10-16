@@ -19,6 +19,7 @@ const labels: SourcesLabels = {
   loading: 'Reading',
   failed: 'Failed',
   tooLarge: 'Too large',
+  limit: 'Remove a source before adding another',
   unsupported: 'Unsupported',
   remove: 'Remove',
   attached: 'Browse files',
@@ -141,4 +142,85 @@ it('hides cloud discovery offline while keeping attachments and local MCP contro
   expect(sources.list()).toHaveLength(1);
   view.dispose();
   network.mockRestore();
+});
+
+it('restores the Drive connect action after authorization expires without losing attached snapshots', async () => {
+  let expired = false;
+  const fetcher = vi.fn(
+    async () =>
+      new Response(
+        JSON.stringify(
+          expired
+            ? { error: 'reconnect_required' }
+            : { files: [{ id: 'file', name: 'Policy' }], nextPageToken: 'next' },
+        ),
+        { status: expired ? 401 : 200, headers: { 'content-type': 'application/json' } },
+      ),
+  );
+  vi.stubGlobal('fetch', fetcher);
+  const sources = new ReferenceSources();
+  sources.add({ id: 'saved', connector: 'google', title: 'Attached', text: 'snapshot' });
+  const view = createSourcesView({ sources, labels, changed: vi.fn(), close: vi.fn() });
+  document.body.append(view.el);
+  const cloud = view.el.querySelector('.agent-cloud-sources')!;
+  const connect = [...cloud.querySelectorAll('button')].find((b) => b.textContent === 'Connect')!;
+  const browse = [...cloud.querySelectorAll('button')].find((b) => b.textContent === 'Browse files')!;
+  browse.click();
+  await vi.waitFor(() => expect(connect.hidden).toBe(true));
+  expired = true;
+  [...cloud.querySelectorAll('button')].find((b) => b.textContent === 'Policy')!.click();
+  await vi.waitFor(() => expect(view.el.querySelector('.agent-sources-status')!.textContent).toBe('Reconnect'));
+  expect(connect.hidden).toBe(false);
+  expect(cloud.querySelector('.agent-source-options')!.childElementCount).toBe(0);
+  expect([...cloud.querySelectorAll('button')].find((b) => b.textContent === 'More')!.hidden).toBe(true);
+  expect(sources.list()).toHaveLength(1);
+  expect(fetcher).toHaveBeenCalledTimes(2);
+  view.dispose();
+});
+it('restores MCP connection controls after an expired token so a replacement token can be entered', async () => {
+  const { McpResources } = await import('../../lib/agent-plugin/connectors/reference-sources');
+  const list = vi.spyOn(McpResources.prototype, 'list').mockResolvedValue([{ uri: 'resource:one', name: 'Policy' }]);
+  const read = vi.spyOn(McpResources.prototype, 'read').mockRejectedValueOnce(new Error('source-auth'));
+  read.mockResolvedValue({ id: 'retried', connector: 'mcp', title: 'Policy', text: 'Readable after reconnect' });
+  const view = createSourcesView({ sources: new ReferenceSources(), labels, changed: vi.fn(), close: vi.fn() });
+  document.body.append(view.el);
+  const details = view.el.querySelector('details')!;
+  (details.querySelector('[type=url]') as HTMLInputElement).value = 'https://mcp.example.test';
+  const connect = [...details.querySelectorAll('button')].find((b) => b.textContent === 'Connect')!;
+  connect.click();
+  await vi.waitFor(() => expect(connect.hidden).toBe(true));
+  [...details.querySelectorAll('button')].find((b) => b.textContent === 'Policy')!.click();
+  await vi.waitFor(() => expect(view.el.querySelector('.agent-sources-status')!.textContent).toBe('Reconnect'));
+  expect(connect.hidden).toBe(false);
+  expect(details.querySelector('.agent-source-options')!.childElementCount).toBe(0);
+  (details.querySelector('[type=password]') as HTMLInputElement).value = 'replacement-token';
+  connect.click();
+  await vi.waitFor(() => expect(list).toHaveBeenCalledTimes(2));
+  await vi.waitFor(() => expect(connect.hidden).toBe(true));
+  [...details.querySelectorAll('button')].find((b) => b.textContent === 'Policy')!.click();
+  await vi.waitFor(() => expect(view.el.querySelector('.agent-source-row')?.textContent).toContain('Policy'));
+  expect((details.querySelector('[type=password]') as HTMLInputElement).value).toBe('');
+  view.dispose();
+  vi.restoreAllMocks();
+});
+it('explains the five attachment limit and lets removal unblock the next attachment', async () => {
+  const sources = new ReferenceSources();
+  for (let i = 0; i < 5; i++) sources.add({ id: String(i), connector: 'local', title: String(i), text: 'text' });
+  const fetcher = vi.fn();
+  vi.stubGlobal('fetch', fetcher);
+  const view = createSourcesView({ sources, labels, changed: vi.fn(), close: vi.fn() });
+  document.body.append(view.el);
+  const input = view.el.querySelector<HTMLInputElement>('[type=file]')!;
+  const file = new File(['text'], 'sixth.txt');
+  Object.defineProperty(file, 'text', { value: async () => 'text' });
+  Object.defineProperty(input, 'files', { value: [file] });
+  input.dispatchEvent(new Event('change'));
+  await vi.waitFor(() => expect(view.el.querySelector('.agent-sources-status')!.textContent).toBe(labels.limit));
+  expect(sources.list()).toHaveLength(5);
+  (view.el.querySelector('.agent-source-row button') as HTMLButtonElement).click();
+  input.dispatchEvent(new Event('change'));
+  await vi.waitFor(() => expect(sources.list().some((s) => s.title === 'sixth.txt')).toBe(true));
+  expect(sources.list()).toHaveLength(5);
+  expect(fetcher).not.toHaveBeenCalled();
+  view.dispose();
 });

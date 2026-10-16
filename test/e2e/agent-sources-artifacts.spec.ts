@@ -252,3 +252,118 @@ test('offline workspace hides cloud discovery and download controls while retain
   await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
   await expect(page.locator('.cui-input')).toHaveValue('Keep this draft offline');
 });
+
+test('expired Drive authorization and attachment limits expose usable recovery actions', async ({ page }) => {
+  test.setTimeout(90000);
+  await page.addInitScript(() => {
+    localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+  });
+  let reads = 0;
+  await page.route('**/api/connectors/google/**', async (route) => {
+    if (route.request().url().includes('/read')) {
+      reads++;
+      await route.fulfill({ status: 401, json: { error: 'reconnect_required' } });
+    } else await route.fulfill({ json: { files: [{ id: 'policy', name: 'Policy' }], nextPageToken: 'next' } });
+  });
+  await page.goto('/editor?new=docx&locale=en');
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+  await page.locator('.agent-sources-toggle').click();
+  const input = page.locator('.agent-sources-view input[type=file]');
+  for (let i = 1; i <= 5; i++) {
+    await input.setInputFiles({
+      name: `note-${i}.txt`,
+      mimeType: 'text/plain',
+      buffer: Buffer.from('Local reference'),
+    });
+    await expect(page.locator('.agent-source-row')).toHaveCount(i);
+  }
+  await input.setInputFiles({ name: 'sixth.txt', mimeType: 'text/plain', buffer: Buffer.from('Sixth reference') });
+  await expect(page.locator('.agent-sources-status')).toHaveText(
+    'You can attach up to 5 sources. Remove one before adding another.',
+  );
+  await page.locator('.agent-source-row button').first().click();
+  await input.setInputFiles({ name: 'sixth.txt', mimeType: 'text/plain', buffer: Buffer.from('Sixth reference') });
+  await expect(page.locator('.agent-source-row')).toHaveCount(5);
+  await expect(page.locator('.agent-sources-attached')).toContainText('sixth.txt');
+  const cloud = page.locator('.agent-cloud-sources');
+  const connect = cloud.getByRole('button', { name: 'Connect', exact: true });
+  await cloud.getByRole('button', { name: 'Browse files', exact: true }).click();
+  await expect(connect).toBeHidden();
+  await cloud.getByRole('button', { name: 'Policy', exact: true }).click();
+  await expect(page.locator('.agent-sources-status')).toContainText('Connect again');
+  await expect(connect).toBeVisible();
+  await expect(cloud.getByRole('button', { name: 'Policy', exact: true })).toHaveCount(0);
+  await expect(cloud.getByRole('button', { name: 'Load more', exact: true })).toBeHidden();
+  await expect(page.locator('.agent-source-row')).toHaveCount(5);
+  expect(reads).toBe(1);
+});
+
+test('discard restores artifact titles and a full version history can continue as a new artifact', async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(90000);
+  await page.addInitScript(() => {
+    localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+  });
+  await page.goto('/editor?new=docx&locale=en');
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+  await page.evaluate(async () => {
+    const request = indexedDB.open('document-ai-artifacts', 1);
+    request.onupgradeneeded = () => {
+      request.result.createObjectStore('artifacts', { keyPath: 'id' });
+      request.result.createObjectStore('summaries', { keyPath: 'id' });
+    };
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const now = Date.now();
+    const tx = db.transaction(['artifacts', 'summaries'], 'readwrite');
+    tx.objectStore('artifacts').put({
+      id: 'full-history',
+      title: 'Saved title',
+      updatedAt: now,
+      versions: Array.from({ length: 20 }, (_, i) => ({ version: i + 1, text: `Version ${i + 1}`, createdAt: now })),
+      provenance: { sources: [{ title: 'Policy', connector: 'local' }] },
+    });
+    tx.objectStore('summaries').put({ id: 'full-history', title: 'Saved title', updatedAt: now, version: 20 });
+    await new Promise<void>((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onabort = () => reject(tx.error);
+    });
+    db.close();
+  });
+  await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
+  await page.getByRole('button', { name: 'Saved title', exact: true }).click();
+  const title = page.locator('.agent-artifact-editor input');
+  const text = page.locator('.agent-artifact-editor textarea');
+  const versions = page.locator('.agent-artifact-editor select');
+  await versions.selectOption('1');
+  await title.fill('Unsaved title');
+  await versions.selectOption('20');
+  await page.locator('[data-action=discardChanges]').click();
+  await expect(title).toHaveValue('Saved title');
+  await expect(text).toHaveValue('Version 20');
+  await expect(page.locator('[data-action=saveVersion]')).toBeDisabled();
+  await text.fill('Continue this draft');
+  await page.locator('[data-action=saveVersion]').click();
+  await expect(page.locator('.agent-artifact-status')).toContainText('20 versions');
+  await expect(text).toHaveValue('Continue this draft');
+  await page.setViewportSize({ width: 360, height: 700 });
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('artifact-version-recovery.png') });
+  await page.getByRole('button', { name: 'Save as new artifact', exact: true }).click();
+  await expect(page.locator('.agent-artifact-status')).toHaveText('Saved on this device');
+  await expect(versions.locator('option')).toHaveCount(1);
+  await expect(text).toHaveValue('Continue this draft');
+  await expect(page.locator('.agent-artifact-provenance')).toContainText('Policy');
+  await page.reload();
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+  await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
+  await expect(page.locator('.agent-artifacts-list li')).toHaveCount(2);
+});

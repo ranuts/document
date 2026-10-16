@@ -486,4 +486,9 @@ export const zhCN: I18nMessages = {
   agentArtifactProvenance: '创建时的资料来源',
   agentArtifactSaveResult: '保存为成果',
   agentOfflineFeaturesHint: '当前离线。仍可使用本地文件、已保存的成果，以及可用的本地模型或服务。',
+  agentSourcesLimit: '最多可附加 5 份资料，请先移除一份再添加。',
+  agentArtifactVersionLimit: '此成果已达到 20 个版本，请另存为新成果以继续编辑。',
+  agentArtifactCountLimit: '已保存 50 个成果，请先删除一个再保存新成果。',
+  agentArtifactTextLimit: '内容超过 128 KiB，请缩短后再保存。',
+  agentArtifactSaveNew: '另存为新成果',
 };

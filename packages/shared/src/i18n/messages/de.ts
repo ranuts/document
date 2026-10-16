@@ -536,4 +536,9 @@ export const de: Partial<I18nMessages> = {
   agentArtifactSaveResult: 'Als Artefakt speichern',
   agentOfflineFeaturesHint:
     'Offline. Verwende lokale Dateien, gespeicherte Ergebnisse oder ein verfügbares lokales Modell bzw. einen lokalen Dienst.',
+  agentSourcesLimit: 'Sie können bis zu 5 Quellen anhängen. Entfernen Sie eine, bevor Sie eine weitere hinzufügen.',
+  agentArtifactVersionLimit: 'Dieses Artefakt hat 20 Versionen. Speichern Sie den Entwurf als neues Artefakt.',
+  agentArtifactCountLimit: 'Sie haben 50 Artefakte. Löschen Sie eines, bevor Sie ein neues speichern.',
+  agentArtifactTextLimit: 'Der Inhalt überschreitet 128 KiB. Kürzen Sie ihn vor dem Speichern.',
+  agentArtifactSaveNew: 'Als neues Artefakt speichern',
 };

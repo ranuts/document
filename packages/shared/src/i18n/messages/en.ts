@@ -513,4 +513,9 @@ export const en: I18nMessages = {
   agentArtifactProvenance: 'Sources at creation',
   agentArtifactSaveResult: 'Save as artifact',
   agentOfflineFeaturesHint: 'Offline. Use local files, saved results, or an available local model or service.',
+  agentSourcesLimit: 'You can attach up to 5 sources. Remove one before adding another.',
+  agentArtifactVersionLimit: 'This artifact has 20 versions. Save your draft as a new artifact to continue.',
+  agentArtifactCountLimit: 'You have 50 artifacts. Delete one before saving a new artifact.',
+  agentArtifactTextLimit: 'Content exceeds 128 KiB. Shorten it before saving.',
+  agentArtifactSaveNew: 'Save as new artifact',
 };

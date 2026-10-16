@@ -524,4 +524,10 @@ export const es: Partial<I18nMessages> = {
   agentArtifactSaveResult: 'Guardar como artefacto',
   agentOfflineFeaturesHint:
     'Sin conexión. Usa archivos locales, resultados guardados o un modelo o servicio local disponible.',
+  agentSourcesLimit: 'Puede adjuntar hasta 5 fuentes. Quite una antes de añadir otra.',
+  agentArtifactVersionLimit:
+    'Este artefacto tiene 20 versiones. Guarde el borrador como un artefacto nuevo para continuar.',
+  agentArtifactCountLimit: 'Tiene 50 artefactos. Elimine uno antes de guardar otro.',
+  agentArtifactTextLimit: 'El contenido supera los 128 KiB. Acórtelo antes de guardar.',
+  agentArtifactSaveNew: 'Guardar como artefacto nuevo',
 };
