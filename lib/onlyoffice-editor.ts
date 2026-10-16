@@ -364,7 +364,10 @@ export function createEditorInstance(config: {
       if (closeRevision !== getDocumentCloseRevision()) throw new DOMException('Document closed', 'AbortError');
     };
     assertNotClosed();
-    registerOpenAttempt(config);
+    // This editor owns its retry until another queued mount replaces it or
+    // the document is explicitly closed. A failed pending download does not
+    // retire the mounted editor, even though it aborts that request's token.
+    registerOpenAttempt({ ...config, isCurrent: () => closeRevision === getDocumentCloseRevision() });
     resetUnsavedChanges();
     resolveBuildBitness();
     const { fileName, fileType, binData, readonly = false } = config;

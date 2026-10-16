@@ -24,10 +24,14 @@ const FAULT_KEY = '__oo_x2t_open_fault__';
 test.describe('open retry after an environment failure (real editor)', () => {
   test.describe.configure({ timeout: 180_000 });
 
-  test('a boot-state conversion failure is retried and the document opens', async ({ page, l0 }) => {
+  test('a boot-state failure is retried even after a newer download fails', async ({ page, l0 }) => {
     // The injected rejection travels the same route as the real one.
     l0.allowFrameError(/Document conversion failed/);
     l0.allowConsole(/Document conversion failed|open conversion failed|retrying the open|fetchFonts called before/);
+    l0.allowConsole(/^Error opening document from URL:/);
+    await page.route('https://files.example.invalid/missing-retry.docx', (route) =>
+      route.fulfill({ status: 404, body: 'missing', headers: { 'Access-Control-Allow-Origin': '*' } }),
+    );
 
     await page.addInitScript(
       ([key]) => {
@@ -54,14 +58,21 @@ test.describe('open retry after an environment failure (real editor)', () => {
               () =>
               (...args: unknown[]) => {
                 if (sessionStorage.getItem(key) === 'armed') {
-                  sessionStorage.setItem(key, 'fired');
+                  sessionStorage.setItem(key, 'waiting');
                   // Verbatim shape of the real failure: the vendor's fetchFonts
                   // dereferencing g_font_loader.fontFiles[index].Id too early.
-                  return Promise.reject(
-                    new Error(
-                      "Document conversion failed: TypeError: Cannot read properties of undefined (reading 'Id')",
-                    ),
-                  );
+                  return new Promise((_resolve, reject) => {
+                    const timer = setInterval(() => {
+                      if (sessionStorage.getItem(key) !== 'release') return;
+                      clearInterval(timer);
+                      sessionStorage.setItem(key, 'fired');
+                      reject(
+                        new Error(
+                          "Document conversion failed: TypeError: Cannot read properties of undefined (reading 'Id')",
+                        ),
+                      );
+                    }, 10);
+                  });
                 }
                 return impl(...args);
               },
@@ -107,6 +118,20 @@ test.describe('open retry after an environment failure (real editor)', () => {
         buffer,
         readonly: false,
       });
+
+      const waitingDeadline = Date.now() + 60_000;
+      while (sessionStorage.getItem('__oo_x2t_open_fault__') !== 'waiting') {
+        if (Date.now() > waitingDeadline) throw new Error('the conversion fault was never reached');
+        await new Promise((resolve) => setTimeout(resolve, 20));
+      }
+      let newerError = '';
+      try {
+        await post('document:open-url', { url: 'https://files.example.invalid/missing-retry.docx' });
+      } catch (error) {
+        newerError = String(error);
+      }
+      if (!newerError.includes('404')) throw new Error(`expected a failed newer download, got: ${newerError}`);
+      sessionStorage.setItem('__oo_x2t_open_fault__', 'release');
 
       // The real signal: the rebuilt editor finished loading the document.
       const findApi = (win: Window): any => {

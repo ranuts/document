@@ -86,6 +86,7 @@ export function openAttemptHoldsBytes(): boolean {
 function retryCurrentOpen(reason: string): boolean {
   const attempt = currentOpenAttempt;
   if (!attempt || attempt.retried || attempt.isCurrent?.() === false) return false;
+  const isCurrent = () => currentOpenAttempt === attempt && attempt.isCurrent?.() !== false;
   if (classifyOpenFailure(reason) !== 'environment') return false;
   attempt.retried = true;
   openRetryInFlight = true;
@@ -94,7 +95,7 @@ function retryCurrentOpen(reason: string): boolean {
   // Deferred: this runs from the failing frame's rejection handler, and the
   // rebuild tears that frame down.
   setTimeout(() => {
-    if (!runOpen || currentOpenAttempt !== attempt || attempt.isCurrent?.() === false) {
+    if (!runOpen || !isCurrent()) {
       if (currentOpenAttempt === attempt) openRetryInFlight = false;
       return;
     }
@@ -104,9 +105,9 @@ function retryCurrentOpen(reason: string): boolean {
       binData: attempt.binData,
       readonly: attempt.readonly,
       isRetry: true,
-      isCurrent: attempt.isCurrent,
+      isCurrent,
     }).catch((error) => {
-      if (currentOpenAttempt !== attempt || attempt.isCurrent?.() === false) return;
+      if (!isCurrent()) return;
       console.error('[OO] open retry failed to start:', error);
       openRetryInFlight = false;
       markDocumentOpenFailed(String(error));
