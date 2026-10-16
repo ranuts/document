@@ -1,6 +1,12 @@
 /** Shared ownership for local, new and embedded document opens. */
 let revision = 0;
 let current: AbortController | undefined;
+let closedRevision = 0;
+
+/** Explicit closes invalidate even a replacement that has already begun teardown. */
+export function getDocumentCloseRevision(): number {
+  return closedRevision;
+}
 
 export function beginDocumentOpen() {
   current?.abort(new DOMException('Document open superseded', 'AbortError'));
@@ -31,5 +37,5 @@ export function isMountedDocumentOpen(id: number): boolean {
 export function cancelDocumentOpen(): void {
   current?.abort(new DOMException('Document closed', 'AbortError'));
   current = undefined;
-  mountedRevision = ++revision;
+  mountedRevision = closedRevision = ++revision;
 }

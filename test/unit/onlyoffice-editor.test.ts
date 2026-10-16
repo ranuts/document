@@ -43,6 +43,8 @@ import {
   toUint8Array,
 } from '../../lib/onlyoffice-editor';
 import { installOpenFailureGuard } from '../../lib/onlyoffice/open-failure';
+import { beginDocumentOpen, cancelDocumentOpen } from '../../lib/document-open';
+import { fetchRemoteDocument } from '../../lib/remote-document';
 
 function makeEditor(extra: Record<string, unknown> = {}) {
   return { sendCommand: vi.fn(), ...extra };
@@ -307,6 +309,58 @@ describe('onlyoffice-editor', () => {
       current = false;
       await vi.advanceTimersByTimeAsync(200);
       await failed;
+      expect(DocEditor).not.toHaveBeenCalled();
+    });
+
+    it('finishes a replacement after teardown when a newer download fails', async () => {
+      vi.useFakeTimers();
+      const destroyEditor = vi.fn();
+      (window as any).editor = { destroyEditor };
+      const replacement = { destroyEditor: vi.fn() };
+      (window as any).DocsAPI = {
+        DocEditor: vi.fn(function () {
+          return replacement;
+        }),
+      };
+      const owner = beginDocumentOpen();
+      const opening = createEditorInstance({
+        fileName: 'replacement.docx',
+        fileType: 'docx',
+        isCurrent: owner.isCurrent,
+      });
+      const outcome = opening.then(
+        () => 'mounted',
+        () => 'cancelled',
+      );
+      await vi.advanceTimersByTimeAsync(50);
+      expect(destroyEditor).toHaveBeenCalledOnce();
+      const newer = beginDocumentOpen();
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('missing', { status: 404 })));
+      try {
+        await expect(fetchRemoteDocument('https://files.example/missing.docx', {}, newer.signal)).rejects.toThrow(
+          '404',
+        );
+        await vi.advanceTimersByTimeAsync(1000);
+        expect(await outcome).toBe('mounted');
+        expect(window.editor).toBe(replacement);
+      } finally {
+        vi.unstubAllGlobals();
+      }
+    });
+
+    it('does not resurrect a replacement closed during teardown', async () => {
+      vi.useFakeTimers();
+      (window as any).editor = { destroyEditor: vi.fn() };
+      const DocEditor = vi.fn();
+      (window as any).DocsAPI = { DocEditor };
+      const owner = beginDocumentOpen();
+      const opening = createEditorInstance({ fileName: 'closed.docx', fileType: 'docx', isCurrent: owner.isCurrent });
+      const failed = expect(opening).rejects.toMatchObject({ name: 'AbortError' });
+      await vi.advanceTimersByTimeAsync(50);
+      cancelDocumentOpen();
+      await vi.advanceTimersByTimeAsync(1000);
+      await failed;
+      expect(window.editor).toBeUndefined();
       expect(DocEditor).not.toHaveBeenCalled();
     });
 

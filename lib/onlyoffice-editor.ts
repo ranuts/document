@@ -1,4 +1,5 @@
 import { isEmbedMode } from './embed-mode';
+import { getDocumentCloseRevision } from './document-open';
 import 'ranui/message';
 import { waitForAppWorkerControl } from './offline-worker-control';
 import { getOnlyOfficeLang, t } from '@ranuts/shared/i18n';
@@ -353,11 +354,16 @@ export function createEditorInstance(config: {
   /** Set only by retryCurrentOpen: keeps the attempt's one retry budget. */
   isRetry?: boolean;
 }): Promise<void> {
+  const closeRevision = getDocumentCloseRevision();
   return queueEditorOperation(async () => {
     const assertCurrent = () => {
       if (config.isCurrent && !config.isCurrent()) throw new DOMException('Document open superseded', 'AbortError');
     };
     assertCurrent();
+    const assertNotClosed = () => {
+      if (closeRevision !== getDocumentCloseRevision()) throw new DOMException('Document closed', 'AbortError');
+    };
+    assertNotClosed();
     registerOpenAttempt(config);
     resetUnsavedChanges();
     resolveBuildBitness();
@@ -409,7 +415,11 @@ export function createEditorInstance(config: {
     const editorLang = getOnlyOfficeLang();
     console.log('Creating new editor instance for:', fileName, 'type:', fileType);
 
-    assertCurrent();
+    // Once teardown starts, finish this replacement before serving the next
+    // queued open. A later failed download must not leave the editor empty.
+    // With no editor to replace, obsolete work can still be skipped safely.
+    if (!hasExistingEditor) assertCurrent();
+    assertNotClosed();
     createPersonalEditorInstance({ fileName, fileType, binData, editorLang });
   });
 }
