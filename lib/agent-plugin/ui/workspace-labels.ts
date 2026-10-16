@@ -78,3 +78,26 @@ export function resultActionLabels(): ResultActionLabels {
     keep: t('agentResultKeepDraft'),
   };
 }
+
+import type { ArtifactWorkflowLabels } from './artifact-workflow';
+export function artifactWorkflowLabels(): ArtifactWorkflowLabels {
+  return {
+    entire: t('agentArtifactRevisionEntire'),
+    selected: t('agentSelectionContext'),
+    recovered: t('agentArtifactRevisionRecovered'),
+    partial: t('agentArtifactRevisionPartial'),
+    showFull: t('agentShowFullMessage'),
+    refine: t('agentArtifactRevisionRefine'),
+    instruction: t('agentArtifactRevisionInstruction'),
+    submit: t('agentArtifactRevisionSubmit'),
+    accept: t('agentArtifactRevisionAccept'),
+    reject: t('agentArtifactRevisionReject'),
+    waiting: t('agentArtifactRevisionWaiting'),
+    ready: t('agentArtifactRevisionReady'),
+    stale: t('agentArtifactRevisionStale'),
+    failed: t('agentArtifactRevisionFailed'),
+    accepted: t('agentArtifactRevisionAccepted'),
+    stop: t('agentStop'),
+    stopped: t('agentStopped'),
+  };
+}

@@ -2222,6 +2222,9 @@ r-dropdown[role='listbox'] {
   margin-block-end: var(--ran-space-2);
 }
 .agent-artifact-editor > textarea {
+  field-sizing: content;
+  min-height: 6em;
+  max-height: 40vh;
   border: 0;
   border-radius: 0;
   padding-inline: 0;
@@ -2356,4 +2359,62 @@ r-dropdown[role='listbox'] {
   border: 0;
   border-radius: 0;
   padding: 0;
+}
+
+/* Revision is a quiet disclosure on the artifact canvas, not another card. */
+.agent-artifact-workflow {
+  margin-block: var(--ran-space-3);
+  min-width: 0;
+}
+.agent-artifact-workflow form:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ran-space-2);
+  margin-block: var(--ran-space-2);
+}
+.agent-artifact-workflow form input {
+  flex: 1 1 160px;
+  min-width: 0;
+  border-radius: 0;
+  border-width: 0 0 1px;
+  padding-inline: 0;
+}
+.agent-artifact-workflow > p {
+  color: var(--ran-color-text-secondary);
+  font-size: 0.875em;
+  margin-block: var(--ran-space-2);
+  overflow-wrap: anywhere;
+}
+.agent-artifact-workflow > p:empty {
+  display: none;
+}
+.agent-artifact-diff {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 16em;
+  overflow: auto;
+  line-height: 1.6;
+  padding-block: var(--ran-space-2);
+}
+.agent-artifact-diff del {
+  color: var(--ran-color-text-secondary);
+}
+.agent-artifact-diff ins {
+  background: color-mix(in srgb, var(--ran-color-primary) 12%, transparent);
+  text-decoration: none;
+}
+.agent-artifact-workflow button[data-action='accept'] {
+  color: var(--ran-color-primary);
+  font-weight: 600;
+}
+.agent-artifact-workflow button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.agent-artifact-scope {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--ran-color-text-secondary);
+  font-size: 0.875em;
 }

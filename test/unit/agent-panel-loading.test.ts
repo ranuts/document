@@ -1,3 +1,4 @@
+import 'fake-indexeddb/auto';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createAgentPanel, setAgentPanelOpen } from '../../lib/agent-plugin/ui/panel';
 import { t } from '@ranuts/shared/i18n';
@@ -5209,4 +5210,58 @@ it('keeps a known blocked writing request in the composer and opens settings ins
   expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0);
   expect(panel.querySelectorAll('.cui-msg-error')).toHaveLength(0);
   expect(state.writing).not.toHaveBeenCalled();
+});
+
+it('keeps artifact refinement independent of unavailable Office context and retries setup explicitly', async () => {
+  const { createArtifactStore } = await import('../../lib/agent-plugin/artifacts/store');
+  const artifact = await createArtifactStore().create({
+    title: 'Standalone draft',
+    text: 'Only artifact content',
+    provenance: {},
+  });
+  state.editorReady = false;
+  const panel = createAgentPanel();
+  panel.querySelector<HTMLButtonElement>('.agent-workspace-toggle')!.click();
+  await vi.waitFor(() => expect(panel.querySelector(`[data-artifact="${artifact.id}"]`)).not.toBeNull());
+  panel.querySelector<HTMLButtonElement>(`[data-artifact="${artifact.id}"]`)!.click();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-artifact-editor textarea')).not.toBeNull());
+  panel.querySelector<HTMLButtonElement>('[data-action=refine]')!.click();
+  const instruction = panel.querySelector<HTMLInputElement>('.agent-artifact-workflow input')!;
+  instruction.value = 'Shorten';
+  const send = () =>
+    panel
+      .querySelector<HTMLFormElement>('.agent-artifact-workflow form')!
+      .dispatchEvent(new Event('submit', { cancelable: true }));
+  send();
+  await vi.waitFor(() =>
+    expect(panel.querySelector('.agent-artifact-workflow [role=status]')?.textContent).toBe(
+      t('agentArtifactRevisionPrepare'),
+    ),
+  );
+  expect(state.preload).not.toHaveBeenCalled();
+  state.preload.mockImplementation(async () => {
+    state.ready = true;
+  });
+  panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
+  await vi.waitFor(() => expect(state.ready).toBe(true));
+  await vi.waitFor(() => expect(panel.querySelector('.agent-model-status')?.textContent).not.toBe(t('agentPreparing')));
+  const calls: string[] = [];
+  state.queueStream = async (text) => {
+    calls.push(text);
+  };
+  send();
+  await vi.waitFor(() =>
+    expect(panel.querySelector('.agent-artifact-workflow [role=status]')?.textContent).toBe(
+      t('agentArtifactRevisionReady'),
+    ),
+  );
+  expect(calls).toHaveLength(1);
+  expect(calls[0]).toContain('Only artifact content');
+  expect(state.routing).not.toHaveBeenCalled();
+  expect(state.generate).not.toHaveBeenCalled();
+  expect(state.toolPlan).not.toHaveBeenCalled();
+  expect(state.apply).not.toHaveBeenCalled();
+  expect(panel.querySelector<HTMLTextAreaElement>('.agent-artifact-editor textarea')!.value).toBe(
+    'Only artifact content',
+  );
 });

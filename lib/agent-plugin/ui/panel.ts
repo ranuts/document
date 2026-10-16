@@ -2,9 +2,10 @@ import { createResultActions } from './result-actions';
 import { createWorkspaceNavigation } from './workspace-navigation';
 import { createArtifactStore, type ArtifactProvenance } from '../artifacts/store';
 import { createArtifactsView } from './artifacts-view';
+import { createArtifactRequestOwner, type ArtifactRequestBinding } from './artifact-request';
 import { ReferenceSources } from '../connectors/reference-sources';
 import { createSourcesView } from './sources-view';
-import { sourcesLabels, artifactLabels, resultActionLabels } from './workspace-labels';
+import { sourcesLabels, artifactLabels, artifactWorkflowLabels, resultActionLabels } from './workspace-labels';
 import { runDocumentTask } from '../document-task';
 import { readReceipt } from './read-receipt';
 import type { ReviewOutcome } from '../review-outcome';
@@ -247,9 +248,12 @@ export function createAgentPanel(
   let requestQueue: RequestQueue<PanelRequestBinding> | undefined;
   let activeTiming: RequestTiming | undefined;
   let providerBindingRevision = 0;
+  let artifactRequests: ReturnType<typeof createArtifactRequestOwner> | undefined;
+  let invalidateArtifactWorkflow = () => {};
   const invalidateRequestBindings = () => {
     activeTiming?.cancel('superseded');
     providerBindingRevision++;
+    invalidateArtifactWorkflow();
     requestQueue?.pauseAll();
   };
   window.addEventListener('pagehide', () => {
@@ -257,18 +261,25 @@ export function createAgentPanel(
     requestQueue?.pauseAll();
   });
   const referenceSources = new ReferenceSources();
-  interface PanelRequestBinding {
+  interface CommonRequestBinding {
     sources: ReturnType<ReferenceSources['capture']>;
     conversation: string;
     providerRevision: number;
-    readonly: boolean;
-    target: ReturnType<typeof captureDocumentToolScope> | null;
-    snapshot: ComposerContext | null;
-    intent: StagedRequestIntent | null;
-    refinement: ReturnType<ProposalContext['capture']>;
-    card?: ActionPreview;
-    proposal?: NonNullable<ReturnType<ActionPreview['pending']>>['plan'];
   }
+  type PanelRequestBinding = CommonRequestBinding &
+    (
+      | {
+          origin: 'document';
+          readonly: boolean;
+          target: ReturnType<typeof captureDocumentToolScope> | null;
+          snapshot: ComposerContext | null;
+          intent: StagedRequestIntent | null;
+          refinement: ReturnType<ProposalContext['capture']>;
+          card?: ActionPreview;
+          proposal?: NonNullable<ReturnType<ActionPreview['pending']>>['plan'];
+        }
+      | ArtifactRequestBinding
+    );
   const mountSidebar = () =>
     createSidebarEntry(
       () => setOpen(!open),
@@ -1897,7 +1908,16 @@ export function createAgentPanel(
     getDraft: () => chat.getInput(),
     setDraft: (text) => chat.setInput(text),
     focus: () => chat.focus(),
-    prepare: (text) => {
+    restore: (entry) => {
+      if (entry.binding.origin !== 'artifact') return false;
+      showView('artifacts');
+      void artifactsView.recover(entry.binding.request.draft, entry.text).then((recovered) => {
+        if (recovered) requestQueue?.remove(entry.binding.conversation, entry.id);
+      });
+      return true;
+    },
+    prepare: (text, entry) => {
+      if (entry?.binding.origin === 'artifact') return false;
       if (!needsWritingSetup(text)) return false;
       prepareSelectedSource(text);
       return true;
@@ -1908,12 +1928,16 @@ export function createAgentPanel(
     execute: (entry, accept) => submit(entry, accept),
     cancel: () => {
       activeTiming?.cancel('stopped');
+      if (artifactRequests?.cancelActive()) return;
       chat.observePresentation();
       controller?.stop();
       if (refiningPreview) planning?.abort();
       else invalidatePlans();
     },
-    revoke: (entry) => revokeHostRead(entry.binding.intent?.hostRead),
+    revoke: (entry) => {
+      if (entry.binding.origin === 'document') revokeHostRead(entry.binding.intent?.hostRead);
+      else entry.binding.request.fail(t('agentStopped'));
+    },
     changed: () => {
       if (blockedWritingRequest && !pendingWritingText()) {
         blockedWritingRequest = undefined;
@@ -1953,6 +1977,7 @@ export function createAgentPanel(
       conversations.activeId,
       text,
       {
+        origin: 'document',
         conversation: conversations.activeId,
         sources: referenceSources.capture(),
         providerRevision: providerBindingRevision,
@@ -1972,6 +1997,8 @@ export function createAgentPanel(
   const submit = async (entry: QueuedRequest<PanelRequestBinding>, accept: () => boolean): Promise<TurnResult> => {
     const text = entry.text;
     const trimmed = text.trim();
+    if (entry.binding.origin === 'artifact')
+      return artifactRequests!.execute({ ...entry, binding: entry.binding }, accept);
     const binding = entry.binding;
     const sourceContext = binding.sources.references.length
       ? serializeRequestContext(
@@ -3092,8 +3119,14 @@ export function createAgentPanel(
   });
 
   const artifactsBtn = View<HTMLButtonElement>('button').class('agent-workspace-toggle').attr('type', 'button').build();
+  const artifactStore = createArtifactStore();
   const artifactsView = createArtifactsView({
-    store: createArtifactStore(),
+    store: artifactStore,
+    refinement: {
+      labels: artifactWorkflowLabels(),
+      stop: () => requestQueue?.pause(conversations.activeId),
+      submit: (request) => artifactRequests!.enqueue(request),
+    },
     labels: artifactLabels(),
     conversation: () => conversations.activeId,
     onClose: () => showView('chat'),
@@ -3118,6 +3151,38 @@ export function createAgentPanel(
       }
     },
   });
+  artifactRequests = createArtifactRequestOwner({
+    store: artifactStore,
+    sources: () => referenceSources.capture(),
+    conversation: () => conversations.activeId,
+    providerRevision: () => providerBindingRevision,
+    enabled: () => enabled,
+    // Selecting a destination never silently falls back to another prepared model.
+    provider: () =>
+      runtimeCleanup ||
+      cacheBusy ||
+      modelLoading ||
+      (selectedSource === 'service' && endpointSettings.kind !== 'loopback' && navigator.onLine === false)
+        ? undefined
+        : selectedSource === 'service'
+          ? endpointConnection.current
+          : webllmProvider,
+    isCurrentDraft: (draft) => artifactsView.isCurrentDraft(draft),
+    enqueue: (text, binding) => requestQueue!.enqueue(binding.conversation, text, binding),
+    cancel: (id, conversation) => {
+      if (requestQueue?.activeId === id) requestQueue.pause(conversation);
+      else requestQueue?.remove(conversation, id);
+    },
+    labels: () => ({
+      stale: t('agentArtifactRevisionStale'),
+      prepare: t('agentArtifactRevisionPrepare'),
+      failed: t('agentArtifactRevisionFailed'),
+      stopped: t('agentStopped'),
+      tooLarge: t('agentArtifactTextLimit'),
+    }),
+    error: displayError,
+  });
+  invalidateArtifactWorkflow = () => artifactsView.cancelPending();
   artifactsBtn.addEventListener('click', () => showView(panel.dataset.view === 'artifacts' ? 'chat' : 'artifacts'));
   window.addEventListener('pagehide', (event) => {
     if (!event.persisted) artifactsView.dispose();
@@ -3131,6 +3196,7 @@ export function createAgentPanel(
     labels: sourcesLabels(),
     close: () => showView('chat'),
     changed: () => {
+      artifactsView.cancelPending();
       if (!sourceState.isCurrent()) invalidateRequestBindings();
       sourceState = referenceSources.capture();
       sourceSummary.hidden = referenceSources.list().length === 0;
@@ -3312,6 +3378,7 @@ export function createAgentPanel(
     settingsView.syncLabels();
     sourceView.setLabels(sourcesLabels());
     artifactsView.setLabels(artifactLabels());
+    artifactsView.setRefinementLabels(artifactWorkflowLabels());
     resultActions.refresh();
     artifactsBtn.title = t('agentArtifactTitle');
     artifactsBtn.setAttribute('aria-label', t('agentArtifactTitle'));
