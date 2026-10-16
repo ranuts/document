@@ -84,6 +84,7 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   test.setTimeout(90000);
   await page.addInitScript(() => {
     localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem('agent_conversation_saving_v2', 'true');
     localStorage.setItem(
       'agent-writing-endpoint',
       JSON.stringify({
@@ -109,7 +110,7 @@ test('attached reference excerpts reach only the explicitly selected AI service'
     else {
       bodies.push(route.request().postData() ?? '');
       await route.fulfill({
-        json: { message: { role: 'assistant', content: 'I can read the attached notes.' }, done: true },
+        json: { message: { role: 'assistant', content: 'I can read the attached notes. [S1]' }, done: true },
       });
     }
   });
@@ -123,6 +124,12 @@ test('attached reference excerpts reach only the explicitly selected AI service'
     buffer: Buffer.from('Only this reference is attached.'),
   });
   await expect(page.locator('.agent-source-row')).toContainText('notes.txt');
+  const sourceSearch = page.getByRole('searchbox', { name: 'Search sources', exact: true });
+  await sourceSearch.fill('only this');
+  await page.locator('.agent-source-row summary').click();
+  await expect(page.locator('.agent-source-preview mark')).toHaveText('Only this');
+  await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('source-search-preview.png') });
+  await sourceSearch.fill('');
   expect(bodies).toEqual([]);
   await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
   await page.locator('.cui-input').fill('Hello');
@@ -132,6 +139,19 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   await expect(page.locator('.cui-msg-agent')).toContainText('I can read');
   expect(bodies).toHaveLength(1);
   expect(bodies[0]).toContain('Only this reference is attached.');
+  await page.locator('.agent-sources-toggle').click();
+  await page.getByRole('button', { name: 'Remove: notes.txt', exact: true }).click();
+  await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
+  await page.getByRole('button', { name: 'Open source: notes.txt', exact: true }).click();
+  await expect(page.locator('.cui-bubble .agent-source-preview pre')).toContainText('Only this reference is attached.');
+  expect(bodies).toHaveLength(1);
+  await page.reload();
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+  await page.getByRole('button', { name: 'Open source: notes.txt', exact: true }).click();
+  await expect(page.locator('.cui-bubble .agent-source-preview pre')).toContainText('Only this reference is attached.');
+  expect(bodies).toHaveLength(1);
+  await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('captured-source-citation.png') });
   const followUp = page.getByRole('button', { name: 'Summarize answer', exact: true });
   await expect(followUp).toBeVisible();
   await page.locator('.cui-input').fill('Keep this draft');

@@ -86,7 +86,16 @@ export async function runDocumentTask(
   provider: LLMProvider,
   request: string,
   options: DocumentAgentToolOptions &
-    Pick<AgentRunOptions, 'signal' | 'onEvent' | 'onToolExchange' | 'assertCurrent' | 'requestContext'> & {
+    Pick<
+      AgentRunOptions,
+      | 'signal'
+      | 'onEvent'
+      | 'onToolExchange'
+      | 'assertCurrent'
+      | 'requestContext'
+      | 'onRequestContext'
+      | 'annotateAssistant'
+    > & {
       /** Host accepts execution only after capability preflight succeeds. May throw to retain the pending request. */
       beforeRun?(): void;
     },
@@ -122,6 +131,8 @@ export async function runDocumentTask(
     {
       tools: prepared.tools,
       requestContext: options.requestContext,
+      onRequestContext: options.onRequestContext,
+      annotateAssistant: options.annotateAssistant,
       signal: options.signal,
       onEvent: options.onEvent,
       onToolExchange: options.onToolExchange,

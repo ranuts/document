@@ -327,3 +327,33 @@ it('a delayed disconnect cannot erase a newer attachment status', async () => {
   await vi.waitFor(() => expect(view.el.querySelector('.agent-source-row')?.textContent).toContain('fresh.txt'));
   view.dispose();
 });
+it('finds and highlights late attached-source hits without reading the network', async () => {
+  const sources = new ReferenceSources();
+  sources.add({
+    id: 'one',
+    connector: 'local',
+    title: 'Long notes',
+    text: 'prefix '.repeat(3000) + '<script>Budget   forecast</script>',
+  });
+  const fetcher = vi.fn();
+  vi.stubGlobal('fetch', fetcher);
+  const view = createSourcesView({
+    sources,
+    labels: { ...labels, search: 'Search sources', previewTruncated: 'Partial preview' },
+    changed: vi.fn(),
+    close: vi.fn(),
+  });
+  document.body.append(view.el);
+  const input = view.el.querySelector('input[type=search]') as HTMLInputElement;
+  input.value = 'budget forecast';
+  input.dispatchEvent(new Event('input'));
+  expect(view.el.querySelectorAll('.agent-source-row')).toHaveLength(1);
+  const detail = view.el.querySelector('details.agent-source-preview') as HTMLDetailsElement;
+  detail.open = true;
+  detail.dispatchEvent(new Event('toggle'));
+  expect(detail.querySelector('mark')?.textContent).toBe('Budget   forecast');
+  expect(detail.querySelector('script')).toBeNull();
+  expect(detail.querySelector('small')?.textContent).toBe('Partial preview');
+  expect(fetcher).not.toHaveBeenCalled();
+  view.dispose();
+});

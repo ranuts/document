@@ -153,3 +153,33 @@ it('forgets deleted conversation attachments and invalidates their snapshots', (
   expect(current.isCurrent()).toBe(false);
   expect(sources.list()).toEqual([]);
 });
+it('loads explicit bounded MCP pages, deduplicates entries and stops cursor cycles', async () => {
+  let page = 0;
+  const fetcher = vi.fn(async (_url: unknown, init?: RequestInit) => {
+    const request = JSON.parse(String(init?.body));
+    const result =
+      request.method === 'initialize'
+        ? { protocolVersion: '2025-11-25' }
+        : request.method === 'resources/list'
+          ? ++page === 1
+            ? { resources: [{ uri: 'notes://one', name: 'One' }], nextCursor: 'next' }
+            : {
+                resources: [
+                  { uri: 'notes://one', name: 'One' },
+                  { uri: 'notes://two', name: 'Two' },
+                ],
+                nextCursor: 'next',
+              }
+          : {};
+    return new Response(JSON.stringify({ id: request.id, result }), {
+      headers: { 'content-type': 'application/json' },
+    });
+  });
+  const client = new McpResources('https://example.com/mcp', '', fetcher as typeof fetch);
+  expect(await client.list()).toHaveLength(1);
+  expect(page).toBe(1);
+  expect(client.continuation).toBe('next');
+  expect(await client.list('next')).toEqual([{ uri: 'notes://two', name: 'Two' }]);
+  expect(client.continuation).toBe('');
+  await expect(client.list('next')).rejects.toThrow('invalid-response');
+});

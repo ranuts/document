@@ -49,6 +49,10 @@ export interface AgentRunOptions {
   onFirstProviderText?: () => void;
   /** Host-supplied scope metadata, sent as quoted reference data without storing it. */
   requestContext?: string;
+  /** Observe the exact optional context remaining after runtime budgeting. */
+  onRequestContext?: (reference: string | undefined) => void;
+  /** Host annotation is attached to this exact response, never inferred from text. */
+  annotateAssistant?: (message: LLMMessage) => LLMMessage['hostPresentation'];
   /** Checkpoint a complete tool call/result exchange before the next inference. */
   onToolExchange?: (messages: LLMMessage[]) => void;
   /** Progress callback. */
@@ -129,9 +133,11 @@ export async function runAgent(
         )
       : { messages, trimmed: false };
     const contextualMessages = contextual.messages;
-    const requestMessages = exactBudget
+    options.onRequestContext?.(contextual.reference);
+    const budgetedMessages = exactBudget
       ? [...contextualMessages]
       : budgetMessages(contextualMessages, options.maxContextBytes);
+    const requestMessages = budgetedMessages.map(({ hostPresentation: _presentation, ...message }) => message);
     if ((contextual.trimmed || requestMessages.length < messages.length) && !contextNoticeSent) {
       contextNoticeSent = true;
       options.onContextTrimmed?.();
@@ -166,7 +172,8 @@ export async function runAgent(
     }
 
     if (options.signal?.aborted) return { text: '', messages, toolCallCount, stoppedOnLimit: false, aborted: true };
-    messages.push(response.assistant);
+    const presentation = options.annotateAssistant?.(response.assistant);
+    messages.push(presentation ? { ...response.assistant, hostPresentation: presentation } : response.assistant);
     if (response.toolCalls.length === 0) {
       return { text: response.text, messages, toolCallCount, stoppedOnLimit: false, aborted: false };
     }

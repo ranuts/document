@@ -285,11 +285,16 @@ export async function handleGoogleConnector(request: Request, env: GoogleConnect
     if (!session) return json({ error: 'reconnect_required' }, 401);
     const headers = { Authorization: `Bearer ${session.access}` };
     if (action === 'list') {
+      const search = (url.searchParams.get('q') ?? '').trim();
+      if (search.length > 200 || /[\x00-\x1f]/u.test(search)) return json({ error: 'invalid_query' }, 400);
+      const literal = search.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
       const upstream = new URL('https://www.googleapis.com/drive/v3/files');
       upstream.search = new URLSearchParams({
         pageSize: '30',
         fields: 'nextPageToken,files(id,name,mimeType,modifiedTime,size)',
-        q: "trashed = false and (mimeType = 'application/vnd.google-apps.document' or mimeType = 'text/plain' or mimeType = 'text/markdown' or mimeType = 'text/csv' or mimeType = 'application/json')",
+        q:
+          "trashed = false and (mimeType = 'application/vnd.google-apps.document' or mimeType = 'text/plain' or mimeType = 'text/markdown' or mimeType = 'text/csv' or mimeType = 'application/json')" +
+          (search ? ` and name contains '${literal}'` : ''),
         ...(url.searchParams.get('pageToken') ? { pageToken: url.searchParams.get('pageToken')!.slice(0, 2048) } : {}),
       }).toString();
       const result = JSON.parse(await google(upstream.href, { headers }));

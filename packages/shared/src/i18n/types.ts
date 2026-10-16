@@ -480,6 +480,10 @@ export interface I18nMessages {
   agentSourcesAttached: string;
   agentSourcesAttach: string;
   agentSourcesClose: string;
+  agentSourcesPreviewTruncated: string;
+  agentSourcesPartial: string;
+  agentSourcesSearch: string;
+  agentSourcesOpen: string;
   agentSourcesMore: string;
   agentSourcesExcerpt: string;
   agentArtifactTitle: string;

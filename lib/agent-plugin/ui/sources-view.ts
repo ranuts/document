@@ -1,3 +1,6 @@
+import { sourcePreview } from './source-preview';
+import { sourceMatches } from '../connectors/reference-search';
+import { renderSearchText } from './search-highlight';
 import { Div, View } from 'ranui/builder';
 import { ReferenceSources, McpResources, boundedText, readLocalReference } from '../connectors/reference-sources';
 
@@ -26,6 +29,9 @@ export interface SourcesLabels {
   attach: string;
   close: string;
   more: string;
+  search?: string;
+  openSource?: string;
+  previewTruncated?: string;
 }
 /** Source management is explicit and independent from inference-provider configuration. */
 export function createSourcesView(options: {
@@ -41,6 +47,19 @@ export function createSourcesView(options: {
   const excerpt = View('p').class('agent-entry-note').build();
   const offlineHint = View('p').class('agent-offline-hint agent-entry-note').attr('role', 'status').build();
   const status = View('p').class('agent-sources-status').attr('role', 'status').build();
+  const search = View<HTMLInputElement>('input').attr('type', 'search').build();
+  const driveSearch = View<HTMLInputElement>('input').attr('type', 'search').build();
+  search.addEventListener('input', () => {
+    update();
+    filterDiscovered();
+  });
+  driveSearch.maxLength = 200;
+  driveSearch.addEventListener('input', () => {
+    cancelPending();
+    nextPage = '';
+    more.hidden = true;
+    driveRows.replaceChildren();
+  });
   const attached = Div().class('agent-sources-attached').build();
   const local = View<HTMLInputElement>('input').attr('type', 'file').attr('accept', '.txt,.md,.csv,.tsv,.json').build();
   const localHint = View('p').class('agent-entry-note').build();
@@ -86,18 +105,33 @@ export function createSourcesView(options: {
         mcpConnected = true;
         syncConnectionActions();
         mcpRows.replaceChildren();
-        for (const resource of resources) {
-          const row = button(
-            () =>
-              void run(async (isCurrent) => {
-                const source = await current.read(resource.uri);
-                if (current !== client) return;
-                attach(source, isCurrent);
-              }, 'mcp'),
-          );
-          row.textContent = resource.name;
-          mcpRows.append(row);
-        }
+        renderMcp(resources, current);
+      }, 'mcp'),
+  );
+  function renderMcp(resources: Awaited<ReturnType<McpResources['list']>>, current: McpResources) {
+    for (const resource of resources) {
+      const row = button(
+        () =>
+          void run(async (isCurrent) => {
+            const source = await current.read(resource.uri);
+            if (current !== client) return;
+            attach(source, isCurrent);
+          }, 'mcp'),
+      );
+      row.textContent = resource.name;
+      row.dataset.sourceTitle = resource.name;
+      mcpRows.append(row);
+    }
+    mcpMore.hidden = !current.continuation;
+    filterDiscovered();
+  }
+  const mcpMore = button(
+    () =>
+      void run(async (isCurrent) => {
+        const current = client;
+        if (!current?.continuation) return;
+        const rows = await current.list(current.continuation);
+        if (isCurrent() && current === client) renderMcp(rows, current);
       }, 'mcp'),
   );
   const disconnect = button(() => {
@@ -159,6 +193,8 @@ export function createSourcesView(options: {
   });
   const driveList = button(() => void run((isCurrent) => listDrive('', isCurrent), 'google'));
   let nextPage = '';
+  const drivePages = new Set<string>();
+  const driveFiles = new Set<string>();
   const more = button(() => void run((isCurrent) => listDrive(nextPage, isCurrent), 'google'));
   const label = (control: HTMLElement, key: string) => {
     const wrapper = View('label').build();
@@ -173,10 +209,10 @@ export function createSourcesView(options: {
   const tokenField = label(token, '');
   const mcpDetails = View<HTMLDetailsElement>('details').class('agent-disclosure agent-source-settings').build();
   const mcpSummary = View('summary').children(mcpHeading).build();
-  mcpDetails.append(mcpSummary, urlField.wrapper, tokenField.wrapper, connect, disconnect, mcpRows);
+  mcpDetails.append(mcpSummary, urlField.wrapper, tokenField.wrapper, connect, disconnect, mcpRows, mcpMore);
   const driveSection = View('section')
     .class('agent-cloud-sources')
-    .children(driveHeading, driveHint, drive, driveList, driveDisconnect, driveRows, more)
+    .children(driveHeading, driveHint, drive, driveSearch, driveList, driveDisconnect, driveRows, more)
     .build();
   el.append(
     back,
@@ -184,6 +220,7 @@ export function createSourcesView(options: {
     excerpt,
     offlineHint,
     status,
+    search,
     attached,
     localHeading,
     attachFile,
@@ -193,6 +230,7 @@ export function createSourcesView(options: {
     driveSection,
   );
   function syncConnectionActions() {
+    mcpMore.hidden = !mcpConnected || !client?.continuation;
     connect.hidden = mcpConnected;
     disconnect.hidden = !mcpConnected;
     drive.hidden = driveConnected;
@@ -223,12 +261,25 @@ export function createSourcesView(options: {
     return data;
   }
   async function listDrive(pageToken: string, isCurrent: () => boolean) {
-    const result = await google(`list${pageToken ? `?pageToken=${encodeURIComponent(pageToken)}` : ''}`);
+    const params = new URLSearchParams({ q: driveSearch.value.trim() });
+    if (pageToken) params.set('pageToken', pageToken);
+    const result = await google(`list?${params}`);
     if (!isCurrent()) return;
-    if (!pageToken) driveRows.replaceChildren();
+    if (!pageToken) {
+      driveRows.replaceChildren();
+      drivePages.clear();
+      driveFiles.clear();
+    } else drivePages.add(pageToken);
     if (!Array.isArray(result.files)) throw new Error('source-failed');
     for (const file of result.files.slice(0, 30)) {
-      if (typeof file.id !== 'string' || typeof file.name !== 'string') continue;
+      if (
+        typeof file.id !== 'string' ||
+        typeof file.name !== 'string' ||
+        driveFiles.has(file.id) ||
+        driveFiles.size >= 300
+      )
+        continue;
+      driveFiles.add(file.id);
       const row = button(
         () =>
           void run(async (isCurrent) => {
@@ -247,12 +298,23 @@ export function createSourcesView(options: {
           }, 'google'),
       );
       row.textContent = file.name;
+      row.dataset.sourceTitle = file.name;
       driveRows.append(row);
     }
     driveConnected = true;
     syncConnectionActions();
-    nextPage = typeof result.nextPageToken === 'string' ? result.nextPageToken : '';
+    const token = result.nextPageToken;
+    nextPage =
+      typeof token === 'string' &&
+      token.length <= 2048 &&
+      token !== pageToken &&
+      !drivePages.has(token) &&
+      drivePages.size < 9 &&
+      driveFiles.size < 300
+        ? token
+        : '';
     more.hidden = !nextPage;
+    filterDiscovered();
   }
   async function run(action: (isCurrent: () => boolean) => Promise<void>, connector?: 'mcp' | 'google') {
     if (busy || disposed) return;
@@ -307,11 +369,26 @@ export function createSourcesView(options: {
         attach(await readLocalReference(file), isCurrent);
       });
   });
+  function filterDiscovered() {
+    for (const container of [mcpRows, driveRows])
+      for (const row of container.children) {
+        renderSearchText(
+          row as HTMLElement,
+          (row as HTMLElement).dataset.sourceTitle ?? '',
+          search.value.replace(/\s+/gu, ' ').trim().toLocaleLowerCase(),
+        );
+        (row as HTMLElement).hidden = !sourceMatches(
+          { title: (row as HTMLElement).dataset.sourceTitle ?? '', text: '' },
+          search.value,
+        );
+      }
+  }
   function update() {
     attached.replaceChildren();
     for (const source of options.sources.list()) {
       const row = Div().class('agent-source-row').build();
-      const text = View('span').text(source.title).build();
+      if (!sourceMatches(source, search.value)) continue;
+      const text = sourcePreview(source, labels.openSource ?? labels.excerpt, search.value, labels.previewTruncated);
       const remove = button(() => {
         options.sources.remove(source.id);
         update();
@@ -340,6 +417,12 @@ export function createSourcesView(options: {
   function setLabels(next: SourcesLabels) {
     labels = next;
     heading.textContent = labels.title;
+    search.placeholder = labels.search ?? labels.title;
+    search.setAttribute('aria-label', labels.search ?? labels.title);
+    driveSearch.placeholder = labels.search ?? labels.drive;
+    driveSearch.setAttribute('aria-label', `${labels.drive}: ${labels.search ?? labels.title}`);
+    mcpMore.textContent = labels.more;
+    mcpMore.hidden = !client?.continuation;
     offlineHint.textContent = labels.offline;
     syncConnectivity();
     excerpt.textContent = labels.excerpt;

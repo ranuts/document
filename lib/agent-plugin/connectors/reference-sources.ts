@@ -119,6 +119,11 @@ export class McpResources {
   private session = '';
   private initialized = false;
   private resources = new Map<string, McpResource>();
+  private cursors = new Set<string>();
+  private nextCursor = '';
+  get continuation(): string {
+    return this.nextCursor;
+  }
   private readonly lifetime = new AbortController();
   constructor(
     url: string,
@@ -223,7 +228,12 @@ export class McpResources {
     if (message?.id !== id || message.error || !message.result) throw new Error('source-invalid-response');
     return message.result;
   }
-  async list(): Promise<McpResource[]> {
+  async list(cursor = ''): Promise<McpResource[]> {
+    if (
+      cursor &&
+      (cursor !== this.nextCursor || cursor.length > 2048 || this.cursors.has(cursor) || this.cursors.size >= 9)
+    )
+      throw new Error('source-invalid-response');
     if (!this.initialized) {
       const init = await this.rpc('initialize', {
         protocolVersion: '2025-11-25',
@@ -234,13 +244,31 @@ export class McpResources {
       this.initialized = true;
       await this.rpc('notifications/initialized', {}, true);
     }
-    const result = await this.rpc('resources/list', {});
+    const result = await this.rpc('resources/list', cursor ? { cursor } : {});
     if (!Array.isArray(result.resources)) throw new Error('source-invalid-response');
-    this.resources.clear();
+    if (!cursor) {
+      this.resources.clear();
+      this.cursors.clear();
+    } else this.cursors.add(cursor);
+    const page: McpResource[] = [];
     for (const item of result.resources.slice(0, 100))
       if (typeof item?.uri === 'string' && typeof item?.name === 'string')
-        this.resources.set(item.uri, { uri: item.uri, name: item.name.slice(0, 200) });
-    return [...this.resources.values()];
+        if (item.uri.length <= 2048 && !this.resources.has(item.uri) && this.resources.size < 500) {
+          const resource = { uri: item.uri, name: item.name.slice(0, 200) };
+          this.resources.set(item.uri, resource);
+          page.push(resource);
+        }
+    const next = result.nextCursor;
+    this.nextCursor =
+      typeof next === 'string' &&
+      next.length <= 2048 &&
+      next !== cursor &&
+      !this.cursors.has(next) &&
+      this.resources.size < 500 &&
+      this.cursors.size < 9
+        ? next
+        : '';
+    return page;
   }
   async read(uri: string): Promise<ReferenceText> {
     const resource = this.resources.get(uri);

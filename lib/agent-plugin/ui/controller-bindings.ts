@@ -39,6 +39,7 @@ export function createDocumentControllerBindings(host: BindingOptions): AgentCha
 
 interface NativeRequestOptions {
   references?: readonly ReferenceExcerpt[];
+  onEvidence?: (evidence: import('./request-context').SerializedRequestContext['evidence']) => void;
   target: ReturnType<typeof captureDocumentToolScope>;
   instruction: string;
   snapshot: ComposerContext;
@@ -63,17 +64,19 @@ export function createNativeDocumentRequest(host: NativeRequestOptions): TurnReq
   return {
     tools: {},
     assertCurrent,
-    getRequestContext: () =>
-      host.scope.deferNative && !host.references?.length
-        ? undefined
-        : serializeRequestContext(
-            {
-              editor: host.snapshot.context,
-              references: host.references,
-              selection: { text: host.snapshot.text, truncated: host.snapshot.truncated },
-            },
-            host.instruction,
-          ).serialized,
+    getRequestContext: () => {
+      if (host.scope.deferNative && !host.references?.length) return undefined;
+      const result = serializeRequestContext(
+        {
+          editor: host.snapshot.context,
+          references: host.references,
+          selection: { text: host.snapshot.text, truncated: host.snapshot.truncated },
+        },
+        host.instruction,
+      );
+      host.onEvidence?.(result.evidence);
+      return result.serialized;
+    },
     prepareRun: async (request, signal) =>
       prepareDocumentTask(host.provider, request, {
         target: host.target,

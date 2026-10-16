@@ -3,6 +3,7 @@ import { getEditorApi } from '../editor-bridge';
 import { readWordBodyText } from '../word-text-read';
 import { readPresentationShapeText } from '../slide-text-read';
 import { captureComposerContext } from './composer-context';
+import { safeSourceUri } from '../connectors/reference-search';
 import type { DocumentContext } from '../document-context';
 
 interface ReadContent {
@@ -16,6 +17,9 @@ interface ReadContent {
   unavailable?: true;
 }
 export interface ReferenceExcerpt {
+  id?: string;
+  sourceId?: string;
+  uri?: string;
   title: string;
   connector: string;
   text: string;
@@ -157,7 +161,12 @@ export function captureRequestContext(source: RequestSourceScope = 'document'): 
   return result;
 }
 
+export interface SourceEvidence extends ReferenceExcerpt {
+  id: string;
+  sourceId: string;
+}
 export interface SerializedRequestContext {
+  evidence: readonly Readonly<SourceEvidence>[];
   context: Pick<RequestContext, 'editor' | 'content' | 'references'> & { selection?: RequestContext['selection'] };
   serialized: string;
 }
@@ -171,7 +180,9 @@ export function serializeRequestContext(reference: RequestContext, instruction: 
     editor: reference.editor && { ...reference.editor },
     ...(reference.references?.length
       ? {
-          references: reference.references.slice(0, 5).map(({ title, connector, text }) => ({
+          references: reference.references.slice(0, 5).map(({ id, sourceId, title, connector, text }, index) => ({
+            id: `S${index + 1}`,
+            sourceId: (sourceId ?? id ?? `source-${index + 1}`).slice(0, 100),
             title: title.slice(0, 200),
             connector: connector.slice(0, 40),
             text,
@@ -207,5 +218,22 @@ export function serializeRequestContext(reference: RequestContext, instruction: 
     }
     clip(low);
   }
-  return { context, serialized: serialize() };
+  return {
+    context,
+    serialized: serialize(),
+    evidence: Object.freeze(
+      (context.references ?? []).map((source) =>
+        Object.freeze({
+          ...source,
+          ...(safeSourceUri(reference.references?.find((item) => (item.sourceId ?? item.id) === source.sourceId)?.uri)
+            ? {
+                uri: safeSourceUri(
+                  reference.references?.find((item) => (item.sourceId ?? item.id) === source.sourceId)?.uri,
+                ),
+              }
+            : {}),
+        } as SourceEvidence),
+      ),
+    ),
+  };
 }

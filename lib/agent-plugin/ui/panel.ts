@@ -87,6 +87,8 @@ import {
   documentTaskFailureText,
   documentToolTurnStatus,
 } from './presentation';
+import { capturedEvidence } from './source-evidence';
+import { presentSourceCitations } from './source-citations';
 import { historyToTurns } from './storage';
 import { createConversationStore } from './sessions';
 import { createHistoryControls } from './history-controls';
@@ -607,6 +609,7 @@ export function createAgentPanel(
   let syncOfflineSettings = () => {};
   let loadingFraction: number | undefined;
   let loadingBackend: 'webllm' | 'wllama' | undefined;
+  let evidenceBaseline: unknown;
   let resultMetadata: Readonly<Record<string, unknown>> | undefined;
   const chatLabels = (): ChatViewLabels => ({
     saveMessage: t('agentArtifactSaveResult'),
@@ -743,6 +746,8 @@ export function createAgentPanel(
     requireDocumentArtifact: true,
     canApplyMessage: () => captureDocumentContext()?.kind === 'word' && !getReadonlyMode(),
     onApplyMessage: (text) => applyReply(text),
+    presentMessage: (bubble, metadata) =>
+      presentSourceCitations(bubble, metadata, t('agentSourcesOpen'), t('agentSourcesPartial')),
     onSaveMessage: async (text, metadata) => {
       showView('artifacts');
       return artifactsView.save(text, metadata as ArtifactProvenance | undefined);
@@ -822,7 +827,7 @@ export function createAgentPanel(
     chat.append(
       turn.role === 'error'
         ? { ...turn, text: displayError(turn.text) }
-        : { ...turn, ...(turn.role === 'agent' ? { metadata: resultMetadata } : {}) },
+        : { ...turn, ...(turn.role === 'agent' ? { metadata: turn.metadata ?? resultMetadata } : {}) },
     );
   };
   let planning: AbortController | null = null;
@@ -1126,6 +1131,15 @@ export function createAgentPanel(
   // The editor tools must be passed explicitly now that the (editor-agnostic)
   // runtime no longer defaults to them.
   const controllerOptions = {
+    getResponseMetadata: () =>
+      Array.isArray(resultMetadata?.evidence) && resultMetadata.evidence.length ? resultMetadata : undefined,
+    onRequestContext: (context: string | undefined) => {
+      if (resultMetadata)
+        resultMetadata = Object.freeze({
+          ...resultMetadata,
+          evidence: capturedEvidence(context, evidenceBaseline),
+        });
+    },
     tools: agentTools,
     onAgentDelta: (delta: string): void => chat.appendDelta(delta, { metadata: resultMetadata }),
     onAgentStreamEnd: (): void => chat.endStream(),
@@ -1613,6 +1627,10 @@ export function createAgentPanel(
     const generation = controllerGeneration;
     const conversation = conversationRevision;
     return createNativeDocumentRequest({
+      onEvidence: (evidence) => {
+        evidenceBaseline = evidence;
+        if (resultMetadata) resultMetadata = Object.freeze({ ...resultMetadata, evidence });
+      },
       target,
       instruction,
       snapshot,
@@ -1955,12 +1973,14 @@ export function createAgentPanel(
     const text = entry.text;
     const trimmed = text.trim();
     const binding = entry.binding;
-    const sourceReference = binding.sources.references.length
+    const sourceContext = binding.sources.references.length
       ? serializeRequestContext(
           { editor: null, selection: { text: '', truncated: false }, references: binding.sources.references },
           trimmed,
-        ).serialized
+        )
       : undefined;
+    const sourceReference = sourceContext?.serialized;
+    let requestEvidence = sourceContext?.evidence;
     const executionRevision = conversationRevision;
     const owned = (status: TurnResult['status']): TurnResult => ({
       turnId: entry.id,
@@ -2254,8 +2274,10 @@ export function createAgentPanel(
         throw new Error(t('agentPlanExpired'));
       if (!accept()) throw new DOMException('Request stopped before execution', 'AbortError');
       accepted = true;
+      evidenceBaseline = requestEvidence;
       resultMetadata = Object.freeze({
         conversation: binding.conversation,
+        evidence: requestEvidence,
         sources: binding.sources.references.map(({ title, connector }) => ({ title, connector })),
       });
       chat.observePresentation(() => timing.presented());
@@ -2456,6 +2478,11 @@ export function createAgentPanel(
           const result = await runDocumentTask(routingProvider!, text, {
             ...taskOptions,
             requestContext: sourceReference,
+            onRequestContext: controllerOptions.onRequestContext,
+            annotateAssistant: () =>
+              controllerOptions.getResponseMetadata()
+                ? { id: crypto.randomUUID(), metadata: controllerOptions.getResponseMetadata()! }
+                : undefined,
             signal: abort.signal,
             beforeRun: () => {
               abort.signal.throwIfAborted();
@@ -2798,8 +2825,9 @@ export function createAgentPanel(
                   references: binding.sources.references,
                 },
                 trimmed,
-              ).serialized
+              )
             : undefined;
+        requestEvidence = reference?.evidence;
         beginExecution();
         const result = await ctl.send(trimmed, {
           echoUser: false,
@@ -2817,7 +2845,7 @@ export function createAgentPanel(
               )
                 throw new Error(t('agentPlanExpired'));
             },
-            getRequestContext: () => reference,
+            getRequestContext: () => reference?.serialized,
           },
         });
         turnStatus = result.status;
@@ -2863,10 +2891,15 @@ export function createAgentPanel(
         });
       return measured(stopped ? 'stopped' : 'failed');
     } finally {
+      const completedMetadata = controllerOptions.getResponseMetadata();
+      for (const message of operationHistory)
+        if (message.role === 'assistant' && !message.hostGuidance && !message.hostPresentation && completedMetadata)
+          message.hostPresentation = { id: crypto.randomUUID(), metadata: completedMetadata };
       timing.finish(turnStatus);
       if (activeTiming === timing) {
         activeTiming = undefined;
         resultMetadata = undefined;
+        evidenceBaseline = undefined;
         chat.observePresentation();
       }
       previousPreview?.setRefining(false);
