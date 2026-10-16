@@ -1421,6 +1421,10 @@ r-dropdown[role='listbox'] {
 }
 /* While dictating, the fixed language lane displays the live state instead.
    Its disabled selector keeps its bounds, and the trailing controls stay put. */
+/* Give live dictation priority over the secondary source picker. */
+.agent-panel .cui-actions:has(.agent-speech[data-feedback='true']) .agent-sources-toggle {
+  display: none;
+}
 .agent-speech[data-feedback='true'] .agent-speech-language {
   visibility: hidden;
 }
