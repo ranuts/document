@@ -54,7 +54,10 @@ export class LoopbackProvider implements LocalLLMProvider {
       body: body ? JSON.stringify(body) : undefined,
     });
     combined.throwIfAborted();
-    if (!response.ok) throw new Error('Local service request failed');
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw Object.assign(new Error('Local service request failed'), { status: response.status });
+    }
     const result: unknown = await response.json();
     combined.throwIfAborted();
     return result;

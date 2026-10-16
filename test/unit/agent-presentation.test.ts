@@ -296,3 +296,42 @@ it('classifies every current document capability using the shared host outcome p
     documentToolTurnStatus({ type: 'tool_result', name: 'custom', content: '{"status":"cancelled"}', isError: false }),
   ).toBeUndefined();
 });
+
+it.each([
+  ['OpenAI request failed: 401 private-key=secret', 'agentServiceAuthFailed'],
+  ['Ollama request failed: 429 private-response', 'agentServiceRateLimited'],
+  ['OpenAI request failed: 503 private-host', 'agentServiceUnavailable'],
+  ['OpenAI request failed: 504 private-host', 'agentServiceTimedOut'],
+  ['Failed to fetch', 'agentServiceNetworkFailed'],
+] as const)('explains known service failure %s without disclosing provider details', (reason, key) => {
+  const text = displayError(new Error(reason));
+  expect(text).toBe(t(key));
+  expect(text).not.toBe(t('agentRequestFailed'));
+  expect(text).not.toMatch(/private|secret/);
+  expect(displayError(text)).toBe(text);
+});
+
+it('uses structured SDK status and timeout types without showing response bodies', () => {
+  expect(displayError(Object.assign(new Error('private body'), { status: 403 }))).toBe(t('agentServiceAuthFailed'));
+  expect(displayError(new DOMException('private host', 'TimeoutError'))).toBe(t('agentServiceTimedOut'));
+  expect(displayError(new Error('unrecognized private-host'))).toBe(t('agentRequestFailed'));
+});
+
+it.each(SHELL_LOCALES)('retains safe service guidance saved in %s across language changes', (language) => {
+  try {
+    setLanguage(language);
+    const guidance = displayError(new Error('OpenAI request failed: 503 private-body'));
+    expect(guidance).toBe(t('agentServiceUnavailable'));
+    setLanguage(LanguageCode.EN);
+    expect(displayError(guidance)).toBe(t('agentServiceUnavailable'));
+    expect(displayError(guidance + ' private-body')).toBe(t('agentRequestFailed'));
+  } finally {
+    setLanguage(LanguageCode.EN);
+  }
+});
+
+it('retains service categories after runtime error events serialize owned provider errors', () => {
+  expect(displayError('Ollama request failed: 503 private response')).toBe(t('agentServiceUnavailable'));
+  expect(displayError('OpenAI request failed: 429 private response')).toBe(t('agentServiceRateLimited'));
+  expect(displayError('a private unrecognized 503 response')).toBe(t('agentRequestFailed'));
+});

@@ -1,35 +1,79 @@
-import { expect, it, vi } from 'vitest';
 import { getLanguage, setLanguage, t, LanguageCode } from '@ranuts/shared/i18n';
+import { afterEach, expect, it, vi } from 'vitest';
 import { createPanelSettingsView } from '../../lib/agent-plugin/ui/settings-view';
 
-function fixture(selectedSource = 'local') {
-  const controls: Omit<Parameters<typeof createPanelSettingsView>[0], 'selectedSource'> = {
-    modelSelect: document.createElement('div'),
-    modelMemory: document.createElement('div'),
-    loadBtn: document.createElement('div'),
-    modelRow: document.createElement('div'),
-    ggufRow: document.createElement('div'),
-    endpointRow: document.createElement('div'),
-    endpointKind: document.createElement('div'),
-    endpointBaseUrl: document.createElement('div'),
-    endpointModel: document.createElement('div'),
-    endpointKey: document.createElement('div'),
-    endpointConnect: document.createElement('div'),
-    endpointStatus: document.createElement('div'),
-    providerSelect: document.createElement('div'),
-    consentLabel: document.createElement('div'),
-    writePreference: document.createElement('div'),
-    reviewLabel: document.createElement('div'),
-    localModelId: document.createElement('div'),
-    localModelUrl: document.createElement('div'),
-    localModelLib: document.createElement('div'),
+function setup(selectedSource: string) {
+  const control = () => document.createElement('div');
+  const controls = {
+    modelSelect: control(),
+    modelMemory: control(),
+    loadBtn: control(),
+    modelRow: control(),
+    ggufRow: control(),
+    endpointRow: control(),
+    endpointKind: control(),
+    endpointBaseUrl: control(),
+    endpointModel: control(),
+    endpointKey: control(),
+    endpointConnect: control(),
+    endpointStatus: control(),
+    providerSelect: control(),
+    consentLabel: control(),
+    writePreference: control(),
+    reviewLabel: control(),
+    localModelId: control(),
+    localModelUrl: control(),
+    localModelLib: control(),
+    selectedSource,
   };
-  const view = createPanelSettingsView({ ...controls, selectedSource });
-  return { view, controls };
+  const view = createPanelSettingsView(controls);
+  document.body.append(view.sourcePicker, view.localCard, view.serviceCard, view.advanced);
+  return { controls, view };
 }
 
+function expectScope(fixture: ReturnType<typeof setup>, local: boolean) {
+  const { controls, view } = fixture;
+  expect(view.localCard.hidden).toBe(!local);
+  expect(view.serviceCard.hidden).toBe(local);
+  expect(controls.providerSelect.parentElement!.hidden).toBe(!local);
+  expect(controls.consentLabel.hidden).toBe(!local);
+  expect(controls.writePreference.parentElement!.hidden).toBe(!local);
+  expect(view.customSources.hidden).toBe(!local);
+  expect(controls.reviewLabel.hidden).toBe(false);
+}
+
+afterEach(() => document.body.replaceChildren());
+
+it.each(['local', 'service'])('initializes %s settings without unrelated local controls', (source) => {
+  const fixture = setup(source);
+  expectScope(fixture, source === 'local');
+});
+
+it('updates scope on source changes and retains populated labels and field values', () => {
+  const fixture = setup('local');
+  const { controls, view } = fixture;
+  controls.localModelId.textContent = 'My local model';
+  view.sourcePicker.value = 'service';
+  view.sourcePicker.dispatchEvent(new Event('change'));
+  expectScope(fixture, false);
+  view.syncLabels();
+  expect(controls.providerSelect.parentElement!.querySelector('span')!.textContent).not.toBe('');
+  expectScope(fixture, false);
+  view.sourcePicker.value = 'local';
+  view.sourcePicker.dispatchEvent(new Event('change'));
+  expectScope(fixture, true);
+  expect(controls.localModelId.textContent).toBe('My local model');
+});
+
+it('supports programmatic source changes', () => {
+  const fixture = setup('local');
+  fixture.view.setSource('service');
+  expectScope(fixture, false);
+  expect(fixture.view.sourcePicker.getAttribute('value')).toBe('service');
+});
+
 it('assembles existing controls and preserves their listeners', () => {
-  const { view, controls } = fixture();
+  const { view, controls } = setup('local');
   expect(view.modelActions.contains(controls.loadBtn)).toBe(true);
   expect(view.serviceCard.contains(controls.endpointKey)).toBe(true);
   expect(view.customSources.contains(controls.localModelLib)).toBe(true);
@@ -40,7 +84,7 @@ it('assembles existing controls and preserves their listeners', () => {
 });
 
 it('retains the selected source and disclosure as independently owned settings controls', () => {
-  const { view } = fixture('service');
+  const { view } = setup('service');
   expect(view.sourcePicker.getAttribute('value')).toBe('service');
   expect(view.localCard.className).toContain('agent-device-section');
   expect(view.serviceCard.className).toContain('agent-service-section');
@@ -54,7 +98,7 @@ it('retains the selected source and disclosure as independently owned settings c
 it('refreshes labels without resetting the selected source or disclosure state', () => {
   const previous = getLanguage();
   try {
-    const { view, controls } = fixture('service');
+    const { view, controls } = setup('service');
     view.advanced.open = true;
     setLanguage(previous === LanguageCode.EN ? LanguageCode.ZH : LanguageCode.EN);
     view.syncLabels();

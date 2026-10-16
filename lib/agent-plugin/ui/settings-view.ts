@@ -84,13 +84,9 @@ export function createPanelSettingsView(controls: SettingsControls) {
   const advancedSummary = View('summary').build();
   const advancedTitle = Span().build();
   advancedSummary.append(advancedTitle);
-  advanced.append(
-    advancedSummary,
-    field(providerSelect, 'agentProviderLabel'),
-    consentLabel,
-    field(writePreference, 'agentWritePreference'),
-    reviewLabel,
-  );
+  const providerField = field(providerSelect, 'agentProviderLabel');
+  const writePreferenceField = field(writePreference, 'agentWritePreference');
+  advanced.append(advancedSummary, providerField, consentLabel, writePreferenceField, reviewLabel);
   const customSources = View('section')
     .class('agent-custom-sources')
     .children(
@@ -113,6 +109,18 @@ export function createPanelSettingsView(controls: SettingsControls) {
     )
     .build() as HTMLElement & { value: string };
   sourcePicker.setAttribute('aria-label', t('agentSourceLabel'));
+  const setSource = (source: string) => {
+    const local = source === 'local';
+    localCard.hidden = !local;
+    serviceCard.hidden = local;
+    providerField.hidden = !local;
+    consentLabel.hidden = !local;
+    writePreferenceField.hidden = !local;
+    customSources.hidden = !local;
+    sourcePicker.setAttribute('value', source);
+  };
+  sourcePicker.addEventListener('change', () => setSource(sourcePicker.value));
+  setSource(selectedSource);
   const syncLabels = () => {
     fieldLabels.forEach(({ title, key }) => {
       title.textContent = t(key);
@@ -141,5 +149,6 @@ export function createPanelSettingsView(controls: SettingsControls) {
     settingsHero,
     sourcePicker,
     syncLabels,
+    setSource,
   };
 }

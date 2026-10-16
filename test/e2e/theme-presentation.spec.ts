@@ -89,3 +89,30 @@ test('both theme variants are available in the offline core cache', async ({ pag
   });
   expect(cached).toEqual([true, true, true, true, true]);
 });
+
+for (const theme of ['light', 'dark'] as const) {
+  test(`${theme} tab icons have transparent backgrounds in SVG and PNG`, async ({ page }) => {
+    await page.goto('/');
+    const samples = await page.evaluate(async (variant) => {
+      return Promise.all(
+        ['svg', 'png'].map(async (extension) => {
+          const image = new Image();
+          image.src = `/icons/document-${variant}${extension === 'png' ? '-32' : ''}.${extension}`;
+          await image.decode();
+          const canvas = document.createElement('canvas');
+          canvas.width = canvas.height = 32;
+          const context = canvas.getContext('2d')!;
+          context.drawImage(image, 0, 0, 32, 32);
+          return {
+            edgeAlpha: context.getImageData(1, 16, 1, 1).data[3],
+            markAlpha: context.getImageData(7, 12, 1, 1).data[3],
+          };
+        }),
+      );
+    }, theme);
+    for (const sample of samples) {
+      expect(sample.edgeAlpha).toBe(0);
+      expect(sample.markAlpha).toBeGreaterThan(0);
+    }
+  });
+}

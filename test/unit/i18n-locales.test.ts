@@ -51,13 +51,13 @@ const CORE_KEYS: Array<keyof I18nMessages> = [
  */
 const SAME_AS_ENGLISH: Partial<Record<string, Array<keyof I18nMessages>>> = {
   // Vendor product names stay as-is; the surrounding sentence is translated.
-  de: ['themeSystem', 'agentEndpointAnthropic', 'agentEndpointGemini'],
+  de: ['agentArtifactVersion', 'themeSystem', 'agentEndpointAnthropic', 'agentEndpointGemini'],
   es: ['themeSystem', 'agentRoleError', 'agentEndpointAnthropic', 'agentEndpointGemini'],
   pt: ['themeSystem', 'agentEndpointAnthropic', 'agentEndpointGemini'],
 };
 
 /** The product name, which reads the same in every language. */
-const NEVER_TRANSLATED: Array<keyof I18nMessages> = ['webOffice'];
+const NEVER_TRANSLATED: Array<keyof I18nMessages> = ['webOffice', 'agentSourcesDrive'];
 
 const restore = () => {
   setLanguage(LanguageCode.EN);

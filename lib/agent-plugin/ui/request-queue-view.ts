@@ -2,6 +2,8 @@ import { ButtonBuilder, Div, Span, View } from 'ranui/builder';
 import { t } from '@ranuts/shared/i18n';
 import type { RequestQueueState } from './request-queue';
 
+let queueViewSequence = 0;
+
 /** Compact host presentation; pending text never becomes a conversation message. */
 export function createRequestQueueView(options: {
   edit(id: string): void;
@@ -13,12 +15,33 @@ export function createRequestQueueView(options: {
   const el = View('section').class('agent-request-queue').build();
   const title = Span().class('agent-queue-title').build();
   const resume = ButtonBuilder().class('agent-queue-resume').attr('type', 'button').on('click', options.resume).build();
-  const list = View('ol').class('agent-queue-list').build();
+  const list = View('ol').class('agent-queue-list').attr('id', `agent-queue-list-${++queueViewSequence}`).build();
+  const toggle = ButtonBuilder().class('agent-queue-toggle').attr('type', 'button').children(title).build();
+  toggle.setAttribute('aria-controls', list.id);
+  let open = false;
+  let conversation: string | undefined;
+  const syncDisclosure = () => {
+    list.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+  };
+  toggle.addEventListener('click', () => {
+    open = !open;
+    syncDisclosure();
+  });
+  list.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !open) return;
+    event.preventDefault();
+    event.stopPropagation();
+    open = false;
+    syncDisclosure();
+    toggle.focus();
+  });
+  syncDisclosure();
   const feedback = Span().class('agent-queue-feedback').attr('role', 'status').build();
-  el.append(Div().class('agent-queue-heading').children(title, resume).build(), list, feedback);
+  el.append(Div().class('agent-queue-heading').children(toggle, resume).build(), list, feedback);
   el.hidden = true;
   let expanded: string | undefined;
-  function update<Binding>(state: RequestQueueState<Binding>): void {
+  function update<Binding>(state: RequestQueueState<Binding>, conversationId?: string): void {
     feedback.textContent = '';
     const focused =
       document.activeElement instanceof HTMLElement && el.contains(document.activeElement)
@@ -26,6 +49,12 @@ export function createRequestQueueView(options: {
         : undefined;
     const owner = focused?.dataset.entry;
     const action = focused?.dataset.action;
+    if (conversationId !== conversation || el.hidden || !state.entries.length) {
+      open = false;
+      expanded = undefined;
+    }
+    conversation = conversationId;
+    syncDisclosure();
     el.hidden = !state.entries.length;
     const executable = state.entries.filter((entry) => !entry.recoverOnly).length;
     title.textContent = executable
@@ -105,14 +134,14 @@ export function createRequestQueueView(options: {
       list.append(row);
     }
     if (focused && !state.entries.length) options.focus();
-    else if (focused && (focused !== resume || resume.hidden)) {
+    else if (focused && focused !== toggle && (focused !== resume || resume.hidden)) {
       const available = [...list.querySelectorAll<HTMLButtonElement>('button')].filter(
         (button) => !button.disabled && !button.hidden && !button.closest('[hidden]'),
       );
       const replacement = available.find(
         (button) => button.dataset.entry === owner && button.dataset.action === action,
       );
-      const target = replacement ?? available[0] ?? (!resume.hidden ? resume : undefined);
+      const target = replacement ?? available[0] ?? toggle;
       if (target) target.focus();
       else options.focus();
     }

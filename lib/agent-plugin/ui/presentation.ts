@@ -1,3 +1,4 @@
+import { requestErrorKey } from './request-error';
 import { isDocumentToolName } from '../document-tool-plan';
 import { t, getLanguage, i18n, SHELL_LOCALES } from '@ranuts/shared/i18n';
 import type { AgentEvent, AgentRunResult } from '@ranuts/agent-core/runtime';
@@ -110,6 +111,8 @@ export function toolLabel(name: string): string {
 
 /** Only known product guidance is safe to display; SDK/network errors are private. */
 export function displayError(error: unknown): string {
+  const serviceError = requestErrorKey(error);
+  if (serviceError) return t(serviceError);
   const text = error instanceof Error ? error.message : String(error);
   if (
     [
@@ -216,6 +219,12 @@ export function displayError(error: unknown): string {
   ]);
   if (guidance.has(text)) return guidance.get(text)!;
   const known = [
+    'agentServiceAuthFailed',
+    'agentServiceRateLimited',
+    'agentServiceUnavailable',
+    'agentServiceTimedOut',
+    'agentServiceNetworkFailed',
+
     'agentWritingNeedsLocalService',
     'agentWritingOfflineNeedsDevice',
     'agentSummaryNotShorter',

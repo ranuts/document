@@ -13,6 +13,7 @@ it('keeps pending text out of messages and restores focus to the composer when t
   expect(view.el.querySelector('.cui-msg')).toBeNull();
   expect(view.el.querySelector('.agent-queue-text')?.textContent).toBe('Original <request>');
   expect(view.el.querySelector('.agent-queue-text')?.querySelector('request')).toBeNull();
+  view.el.querySelector<HTMLButtonElement>('.agent-queue-toggle')!.click();
   view.el.querySelector<HTMLButtonElement>('.agent-queue-more')!.click();
   const button = view.el.querySelector<HTMLButtonElement>('.agent-queue-remove')!;
   expect(button.getAttribute('aria-label')).toBe('Remove: Original <request>');
@@ -34,6 +35,7 @@ it('keeps focus on a stable action through updates and provides localized occupi
   document.body.append(view.el);
   const state = { entries: [{ id: 'first', text: 'Request', binding: {} }], paused: false };
   view.update(state);
+  view.el.querySelector<HTMLButtonElement>('.agent-queue-toggle')!.click();
   view.el.querySelector<HTMLButtonElement>('.agent-queue-edit')!.focus();
   view.update({ ...state, paused: true });
   expect(document.activeElement).toBe(view.el.querySelector('.agent-queue-edit'));
@@ -86,15 +88,16 @@ it('clears transient occupied feedback when the queue changes or another convers
   expect(view.el.querySelector('.agent-queue-feedback')?.textContent).toBe('');
 });
 
-it('returns focus to the composer when preparation disables the previously focused request action', () => {
+it('returns focus to the summary when preparation disables the previously focused request action', () => {
   const focus = vi.fn();
   const view = createRequestQueueView({ focus, edit: vi.fn(), remove: vi.fn(), sendNow: vi.fn(), resume: vi.fn() });
   document.body.append(view.el);
   const entries = [{ id: 'first', text: 'Request', binding: {} }];
   view.update({ entries, paused: true });
+  view.el.querySelector<HTMLButtonElement>('.agent-queue-toggle')!.click();
   view.el.querySelector<HTMLButtonElement>('.agent-queue-edit')!.focus();
   view.update({ entries, paused: false, preparing: { id: 'first', stopping: false } });
-  expect(focus).toHaveBeenCalledOnce();
+  expect(document.activeElement).toBe(view.el.querySelector('.agent-queue-toggle'));
 });
 
 it('keeps secondary actions in a keyboard accessible disclosure and restores focus on Escape', () => {
@@ -103,6 +106,7 @@ it('keeps secondary actions in a keyboard accessible disclosure and restores foc
   document.body.append(view.el);
   const entries = [{ id: 'first', text: 'First request', binding: {} }];
   view.update({ entries, paused: true });
+  view.el.querySelector<HTMLButtonElement>('.agent-queue-toggle')!.click();
   const more = view.el.querySelector<HTMLButtonElement>('.agent-queue-more')!;
   const actions = view.el.querySelector<HTMLElement>('.agent-queue-actions')!;
   expect(more).not.toBeNull();
@@ -132,6 +136,7 @@ it('allows only one disclosure and returns focus to editing when preparation hid
     { id: 'second', text: 'Second', binding: {} },
   ];
   view.update({ entries, paused: true });
+  view.el.querySelector<HTMLButtonElement>('.agent-queue-toggle')!.click();
   const toggles = view.el.querySelectorAll<HTMLButtonElement>('.agent-queue-more');
   toggles[0]!.click();
   toggles[1]!.click();
@@ -144,4 +149,56 @@ it('allows only one disclosure and returns focus to editing when preparation hid
   expect(document.activeElement).toBe(view.el.querySelector('.agent-queue-edit'));
   expect([...view.el.querySelectorAll<HTMLElement>('.agent-queue-actions')].every((el) => el.hidden)).toBe(true);
   expect(view.el.querySelectorAll<HTMLButtonElement>('.agent-queue-more')[1]!.disabled).toBe(true);
+});
+
+it('collapses the queue to an accessible summary, preserves expansion and resets for another chat', () => {
+  const view = createRequestQueueView({
+    focus: vi.fn(),
+    edit: vi.fn(),
+    remove: vi.fn(),
+    sendNow: vi.fn(),
+    resume: vi.fn(),
+  });
+  document.body.append(view.el);
+  const state = { entries: [{ id: 'one', text: 'First', binding: {} }], paused: false };
+  view.update(state, 'chat-one');
+  const toggle = view.el.querySelector<HTMLButtonElement>('.agent-queue-toggle')!;
+  const list = view.el.querySelector<HTMLOListElement>('.agent-queue-list')!;
+  expect(toggle).not.toBeNull();
+  expect(toggle.getAttribute('aria-expanded')).toBe('false');
+  expect(toggle.getAttribute('aria-controls')).toBe(list.id);
+  expect(list.hidden).toBe(true);
+  toggle.click();
+  expect(list.hidden).toBe(false);
+  view.update({ ...state, entries: [...state.entries, { id: 'two', text: 'Next', binding: {} }] }, 'chat-one');
+  expect(toggle.getAttribute('aria-expanded')).toBe('true');
+  view.el.querySelector<HTMLButtonElement>('.agent-queue-edit')!.focus();
+  list.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+  expect(list.hidden).toBe(true);
+  expect(document.activeElement).toBe(toggle);
+  toggle.click();
+  view.update(state, 'chat-two');
+  expect(list.hidden).toBe(true);
+  expect(document.activeElement).toBe(toggle);
+});
+
+it('starts a fresh batch collapsed and never exposes hidden row actions to focus restoration', () => {
+  const view = createRequestQueueView({
+    focus: vi.fn(),
+    edit: vi.fn(),
+    remove: vi.fn(),
+    sendNow: vi.fn(),
+    resume: vi.fn(),
+  });
+  document.body.append(view.el);
+  const entries = [{ id: 'one', text: 'First', binding: {} }];
+  view.update({ entries, paused: true });
+  const toggle = view.el.querySelector<HTMLButtonElement>('.agent-queue-toggle')!;
+  toggle.click();
+  view.update({ entries: [], paused: true });
+  view.update({ entries, paused: true });
+  expect(toggle.getAttribute('aria-expanded')).toBe('false');
+  toggle.focus();
+  view.update({ entries, paused: false, preparing: { id: 'one', stopping: false } });
+  expect(document.activeElement).toBe(toggle);
 });

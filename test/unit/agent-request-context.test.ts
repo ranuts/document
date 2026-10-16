@@ -145,3 +145,16 @@ it('keeps a single source copy and exact PDF metadata when bounding a page envel
   expect(captured.content.text).toHaveLength(8000);
   expect(captured.content.truncated).toBe(false);
 });
+
+it('budgets external reference excerpts with provenance without mutating captured sources', async () => {
+  const { serializeRequestContext } = await import('../../lib/agent-plugin/ui/request-context');
+  const reference = {
+    editor: null,
+    selection: { text: '', truncated: false },
+    references: [{ title: 'Notes', connector: 'local', text: '中'.repeat(10000) }],
+  };
+  const result = serializeRequestContext(reference, 'Summarize my notes');
+  expect(result.context.references?.[0]).toMatchObject({ title: 'Notes', connector: 'local', truncated: true });
+  expect(new TextEncoder().encode(JSON.stringify(result.serialized)).length).toBeLessThan(4096);
+  expect(reference.references[0].text).toHaveLength(10000);
+});

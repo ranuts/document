@@ -1380,7 +1380,7 @@ it('executes successive explicit writing requests only after separate confirmati
   expect(panel.querySelector('details.cui-activity')).toBeNull();
   input.value = '你好';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
   expect(panel.querySelector('.cui-msg-error')).toBeNull();
   expect(state.apply).toHaveBeenCalledTimes(2);
 });
@@ -2028,18 +2028,19 @@ it('discards a pending endpoint connection after its destination changes', async
   }
 });
 
-it('keeps the endpoint connection failure visible in settings', async () => {
-  vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Unavailable')));
+it.each([
+  ['Unavailable', 'agentEndpointFailed'],
+  ['Failed to fetch', 'agentServiceNetworkFailed'],
+] as const)('keeps actionable endpoint connection guidance for %s visible in settings', async (reason, key) => {
+  vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error(reason)));
   try {
     const panel = createPreparedPanel();
     const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
     model.value = 'model';
     model.dispatchEvent(new Event('change'));
     panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
-    await vi.waitFor(() =>
-      expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentEndpointFailed')),
-    );
-    expect(panel.querySelector('.agent-panel-endpoint-status')?.textContent).toBe(t('agentEndpointFailed'));
+    await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t(key)));
+    expect(panel.querySelector('.agent-panel-endpoint-status')?.textContent).toBe(t(key));
   } finally {
     vi.unstubAllGlobals();
   }
@@ -2403,7 +2404,7 @@ it('preserves a failed routing request and lets the next Excel question start fr
   state.semanticResponse = '{"task":"chat","language":"en"}';
   input.value = '你好';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
   expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
   expect(panel.querySelectorAll('.cui-msg-error')).toHaveLength(1);
   expect(state.apply).not.toHaveBeenCalled();
@@ -2929,7 +2930,7 @@ it('answers an exact greeting without displaying a classification phase or copyi
     const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
     input.value = 'Hello';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
     expect(activity).not.toHaveBeenCalledWith('routing');
     expect(send).toHaveBeenCalledOnce();
     const request = send.mock.calls[0][1]!.request!;
@@ -3112,7 +3113,7 @@ it('stages a selected summary as a trusted read and answers only on explicit Sen
     expect(send).not.toHaveBeenCalled();
     expect(state.writing).not.toHaveBeenCalled();
     panel.querySelector<HTMLButtonElement>('.cui-send')!.click();
-    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
     expect(send).toHaveBeenCalledOnce();
     expect(send.mock.calls[0][1]?.request?.tools).toEqual({});
     expect(state.writing).not.toHaveBeenCalled();
@@ -3143,7 +3144,7 @@ it('keeps semantic routing for an exact greeting while an unexecuted suggestion 
     expect(activity).not.toHaveBeenCalledWith('routing');
     expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(1);
     panel.querySelector<HTMLButtonElement>('.agent-queue-send-now')!.click();
-    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
     expect(activity).toHaveBeenCalledWith('routing');
     expect(state.apply).not.toHaveBeenCalled();
   } finally {
@@ -3162,7 +3163,7 @@ it.each(['English selection '.repeat(600), '中文选区。'.repeat(2000), '"\\\
     const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
     input.value = 'Tell me a brief story';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+    await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
     expect(panel.querySelector('.cui-msg-error')).toBeNull();
   },
 );
@@ -3316,7 +3317,7 @@ it('does not interrupt the displayed new chat while its first request is still v
   expect(panel.dataset.view).toBe('chat');
   expect(activeSession()).toBe(original);
   finish();
-  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
 });
 
 it('returns to a paused chat from the title without resuming its queued requests', async () => {
@@ -3372,7 +3373,7 @@ it('keeps the displayed live answer even when another conversation receives a ne
   expect(store.activeId).toBe(current);
   expect(aborted).toBe(false);
   finish();
-  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
 });
 
 it('returns to a draft-only chat when the title has no saved messages', () => {
@@ -3687,7 +3688,7 @@ it.each(['running', 'stopped', 'scope-changed'] as const)(
     expect(stored.repository.save.mock.calls.every(([data]) => !JSON.stringify(data).includes(text))).toBe(true);
     if (mode !== 'stopped') finishRouting();
     if (mode === 'running') {
-      await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+      await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
       expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
     } else {
       await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
@@ -3723,7 +3724,7 @@ it('keeps an accepted first answer active while initial history hydration finish
   expect(activeSession()).toBe(original);
   expect(aborted).toBe(false);
   finishAnswer();
-  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('answer'));
 });
 
 it('executes queued drafts in FIFO order and echoes them only after the active host turn settles', async () => {

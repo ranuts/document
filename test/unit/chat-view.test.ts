@@ -87,7 +87,7 @@ it('applies the finished streamed answer only on click and prevents duplicate wr
   expect(button).not.toBeNull();
   button.click();
   button.click();
-  await vi.waitFor(() => expect(button.textContent).toBe('Written'));
+  await vi.waitFor(() => expect(view.el.querySelector('.cui-apply-status')?.textContent).toBe('Written'));
   expect(apply).toHaveBeenCalledExactlyOnceWith('First paragraph');
   expect(button.disabled).toBe(true);
 });
@@ -605,5 +605,36 @@ it('does not send into a new conversation after an asynchronous preparation', as
   await Promise.resolve();
   expect(onSend).not.toHaveBeenCalled();
   expect(view.getInput()).toBe('New draft');
+  view.dispose();
+});
+
+it.each(['verified', 'sent', 'failed'] as const)(
+  'turns a settled %s write into a status while keeping copy available',
+  async (outcome) => {
+    const view = new ChatView({ onSend: vi.fn(), onApplyMessage: async () => outcome });
+    document.body.append(view.el);
+    view.append({ role: 'agent', text: 'Draft', documentArtifact: true });
+    const apply = view.el.querySelector<HTMLButtonElement>('.cui-apply')!;
+    apply.focus();
+    apply.click();
+    await vi.waitFor(() => expect(view.el.querySelector('.cui-apply-status')?.getAttribute('role')).toBe('status'));
+    expect(view.el.querySelector('.cui-apply')).toBeNull();
+    expect(document.activeElement).toBe(view.el.querySelector('.cui-copy'));
+    expect(view.el.querySelector<HTMLButtonElement>('.cui-copy')!.disabled).toBe(false);
+    view.dispose();
+  },
+);
+
+it('saves a completed streamed result with its captured host metadata', async () => {
+  const save = vi.fn();
+  const metadata = { conversation: 'one', sources: [{ title: 'Notes', connector: 'local' }] };
+  const view = new ChatView({ onSend: vi.fn(), onSaveMessage: save, labels: { saveMessage: 'Save artifact' } });
+  document.body.append(view.el);
+  view.setRunning(true);
+  view.appendDelta('Draft', { metadata });
+  view.endStream();
+  view.setRunning(false);
+  (view.el.querySelector('.cui-save') as HTMLButtonElement).click();
+  await vi.waitFor(() => expect(save).toHaveBeenCalledWith('Draft', metadata));
   view.dispose();
 });

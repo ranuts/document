@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import { LoopbackProvider, validateLoopbackUrl } from '../../packages/agent-core/src/llm/loopback';
 import { createProvider } from '../../packages/agent-core/src/llm/factory';
 it('is reachable through the factory, which requires an explicit model', () => {
@@ -164,4 +164,14 @@ it('continues after an editor tool using documented native tool history', async 
       { role: 'user', content: 'What changed?' },
     ],
   });
+});
+
+it('retains safe HTTP status without reading provider error bodies', async () => {
+  const body = vi.fn();
+  const provider = new LoopbackProvider({
+    model: 'test',
+    fetchImpl: async () => ({ ok: false, status: 503, text: body }) as unknown as Response,
+  });
+  await expect(provider.preload()).rejects.toMatchObject({ status: 503, message: 'Local service request failed' });
+  expect(body).not.toHaveBeenCalled();
 });

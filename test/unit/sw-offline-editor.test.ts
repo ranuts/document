@@ -1,8 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 
 it.each([
+  ['/api/connectors/google/status', false],
+  ['/api/connectors/google/list', false],
+  ['/api/connectors/google/read?id=private', false],
+  ['/api/connectors/google/callback?code=private', false],
   ['/editor?new=docx&saved=local', true],
   ['/editor.html?new=xlsx', true],
   ['/unrelated?new=docx', false],
@@ -70,4 +74,28 @@ it.each([
     waitUntil: () => {},
   });
   expect(await response.catch(() => undefined)).toBe(expected ? shell : undefined);
+});
+it('never intercepts authenticated connector responses or callback URLs', () => {
+  const listeners = new Map<string, (event: any) => void>();
+  const respond = vi.fn();
+  const cache = vi.fn();
+  runInNewContext(readFileSync('public/sw.js', 'utf8'), {
+    URL,
+    Promise,
+    Date,
+    self: {
+      location: { origin: 'https://editor.example' },
+      addEventListener: (name: string, listener: (event: any) => void) => listeners.set(name, listener),
+    },
+    caches: { match: cache, open: cache },
+    fetch: cache,
+  });
+  for (const path of ['status', 'list', 'read?id=private', 'callback?code=private'])
+    listeners.get('fetch')!({
+      request: { method: 'GET', url: `https://editor.example/api/connectors/google/${path}`, mode: 'navigate' },
+      respondWith: respond,
+      waitUntil: vi.fn(),
+    });
+  expect(respond).not.toHaveBeenCalled();
+  expect(cache).not.toHaveBeenCalled();
 });

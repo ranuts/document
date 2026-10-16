@@ -85,6 +85,12 @@ for (const ext of ['docx', 'pptx'] as const) {
       await expect(page.locator('.agent-panel-title')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
       await expect(page.locator('.cui-progress')).toHaveCSS('border-top-width', '0px');
       await expect(page.locator('.cui-progress')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+      await expect(page.locator('.agent-queue-toggle')).toHaveAttribute('aria-expanded', 'false');
+      await expect(page.locator('.agent-queue-list')).toBeHidden();
+      await page
+        .locator('.agent-runtime-panel')
+        .screenshot({ path: testInfo.outputPath(`queue-${ext}-collapsed.png`) });
+      await page.locator('.agent-queue-toggle').click();
       await page.locator('.agent-queue-more').first().click();
       await page
         .locator('.agent-runtime-panel')

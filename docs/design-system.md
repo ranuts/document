@@ -155,8 +155,8 @@ Keep this functional icon separate from legal attribution and from page headers.
 
 Browser favicons use `document-light.svg` / `document-dark.svg` and their 32 px
 PNG fallbacks. Both share the abstract mark geometry. The light variant uses the
-light background / foreground tokens; the dark variant resolves
-`--ran-background-100` to #000000, `--ran-gray-1000` to #ededed. Regenerate these PNGs with the same command above.
+foreground token on a transparent canvas; the dark variant uses
+`--ran-gray-1000` (#ededed) on the same transparent canvas. Browser tab icons must not inherit the filled PWA installation tile. Regenerate these PNGs with the same command above.
 
 `public/theme-presentation.js` follows the effective `data-ran-theme`, then the
 stored choice, then the system preference. It updates the favicon, native

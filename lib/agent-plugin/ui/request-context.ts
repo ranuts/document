@@ -15,7 +15,14 @@ interface ReadContent {
   truncated?: boolean;
   unavailable?: true;
 }
+export interface ReferenceExcerpt {
+  title: string;
+  connector: string;
+  text: string;
+  truncated?: boolean;
+}
 export interface RequestContext {
+  references?: readonly ReferenceExcerpt[];
   editor: DocumentContext | null;
   selection: { text: string; truncated: boolean };
   content?: ReadContent;
@@ -151,7 +158,7 @@ export function captureRequestContext(source: RequestSourceScope = 'document'): 
 }
 
 export interface SerializedRequestContext {
-  context: Pick<RequestContext, 'editor' | 'content'> & { selection?: RequestContext['selection'] };
+  context: Pick<RequestContext, 'editor' | 'content' | 'references'> & { selection?: RequestContext['selection'] };
   serialized: string;
 }
 
@@ -162,6 +169,15 @@ export interface SerializedRequestContext {
 export function serializeRequestContext(reference: RequestContext, instruction: string): SerializedRequestContext {
   const context: SerializedRequestContext['context'] = {
     editor: reference.editor && { ...reference.editor },
+    ...(reference.references?.length
+      ? {
+          references: reference.references.slice(0, 5).map(({ title, connector, text }) => ({
+            title: title.slice(0, 200),
+            connector: connector.slice(0, 40),
+            text,
+          })),
+        }
+      : {}),
     ...(reference.content ? { content: { ...reference.content } } : { selection: { ...reference.selection } }),
   };
   const serialize = () => JSON.stringify(context);
@@ -171,19 +187,25 @@ export function serializeRequestContext(reference: RequestContext, instruction: 
     encoder.encode(JSON.stringify(instruction)).byteLength +
     REQUEST_ENVELOPE_HEADROOM;
   // Content already owns the requested source; do not also send the selection copy.
-  const source = context.content ?? context.selection;
-  if (source?.text && bytes() > MAX_REFERENCE_REQUEST_BYTES) {
-    const characters = [...source.text];
-    source.truncated = true;
+  const sources = [context.content ?? context.selection, ...(context.references ?? [])].filter(
+    (source): source is NonNullable<typeof source> & { text: string } => typeof source?.text === 'string',
+  );
+  if (bytes() > MAX_REFERENCE_REQUEST_BYTES && sources.length) {
+    const originals = sources.map((source) => [...source.text]);
+    const clip = (length: number) =>
+      sources.forEach((source, index) => {
+        source.text = originals[index].slice(0, length).join('');
+        if (length < originals[index].length) source.truncated = true;
+      });
     let low = 0,
-      high = characters.length;
+      high = Math.max(...originals.map((text) => text.length));
     while (low < high) {
       const middle = Math.ceil((low + high) / 2);
-      source.text = characters.slice(0, middle).join('');
+      clip(middle);
       if (bytes() <= MAX_REFERENCE_REQUEST_BYTES) low = middle;
       else high = middle - 1;
     }
-    source.text = characters.slice(0, low).join('');
+    clip(low);
   }
   return { context, serialized: serialize() };
 }
