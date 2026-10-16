@@ -58,6 +58,7 @@ export function createSourcesView(options: {
   let busy = false;
   let mcpConnected = false;
   let driveConnected = false;
+  let driveDisconnecting = false;
   let operationId = 0;
   const attach = (source: Parameters<ReferenceSources['add']>[0], isCurrent: () => boolean) => {
     if (isCurrent()) {
@@ -110,7 +111,7 @@ export function createSourcesView(options: {
     update();
   });
   const drive = button(() => {
-    if (busy || disposed || navigator.onLine === false) return;
+    if (busy || disposed || driveDisconnecting || navigator.onLine === false) return;
     const popup = window.open('about:blank', '_blank', 'popup,width=560,height=720');
     if (!popup) {
       status.textContent = labels.failed;
@@ -133,6 +134,8 @@ export function createSourcesView(options: {
     }, 'google');
   });
   const driveDisconnect = button(() => {
+    if (driveDisconnecting) return;
+    driveDisconnecting = true;
     cancelPending();
     driveConnected = false;
     syncConnectionActions();
@@ -148,6 +151,10 @@ export function createSourcesView(options: {
       })
       .catch(() => {
         if (!disposed && epoch === revision && operation === operationId) status.textContent = labels.failed;
+      })
+      .finally(() => {
+        driveDisconnecting = false;
+        if (!disposed) syncConnectionActions();
       });
   });
   const driveList = button(() => void run((isCurrent) => listDrive('', isCurrent), 'google'));
@@ -189,6 +196,8 @@ export function createSourcesView(options: {
     connect.hidden = mcpConnected;
     disconnect.hidden = !mcpConnected;
     drive.hidden = driveConnected;
+    drive.disabled = driveDisconnecting;
+    driveList.disabled = driveDisconnecting;
     driveDisconnect.hidden = !driveConnected;
   }
   async function google(path: string, method = 'GET'): Promise<Record<string, unknown>> {
