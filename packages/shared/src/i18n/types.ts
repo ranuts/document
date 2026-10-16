@@ -527,6 +527,13 @@ export interface I18nMessages {
   agentArtifactVersionLimit: string;
   agentArtifactCountLimit: string;
   agentArtifactTextLimit: string;
+  agentArtifactExport: string;
+  agentArtifactImport: string;
+  agentArtifactImportHint: string;
+  agentArtifactPreview: string;
+  agentArtifactNext: string;
+  agentArtifactPrevious: string;
+  agentArtifactStructuredHint: string;
   agentArtifactSaveNew: string;
   agentResultSaving: string;
   agentResultSaved: string;

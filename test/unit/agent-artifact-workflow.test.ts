@@ -226,3 +226,30 @@ it('never submits a partially composed instruction through Enter or form submiss
   expect(submit).toHaveBeenCalledOnce();
   flow.dispose();
 });
+it('requires a valid same-kind whole structured AI result and tells the provider the bounded schema', async () => {
+  const text = JSON.stringify({ kind: 'table', columns: ['A'], rows: [['one']] });
+  const bound = captureArtifactDraft({ ...draft, text, start: 0, end: 0, payloadKind: 'table' });
+  const chat = vi.fn().mockResolvedValue({
+    text: JSON.stringify({ kind: 'slides', slides: [{ title: 'oops', body: 'changed kind' }] }),
+    toolCalls: [],
+    stopReason: 'end_turn',
+    assistant: { role: 'assistant', content: 'bad' },
+  });
+  const options = {
+    provider: { isReady: () => true, chat } as any,
+    draft: bound,
+    instruction: 'Shorten',
+    signal: new AbortController().signal,
+    current: () => true,
+    delta: vi.fn(),
+  };
+  await expect(runArtifactRevision(options)).rejects.toThrow('invalid');
+  expect(chat.mock.calls[0][0][0].content).toContain('10000 cells');
+  chat.mockResolvedValue({
+    text: JSON.stringify({ kind: 'table', columns: ['A'], rows: [['two']] }),
+    toolCalls: [],
+    stopReason: 'end_turn',
+    assistant: { role: 'assistant', content: 'valid' },
+  });
+  expect(await runArtifactRevision(options)).toContain('two');
+});

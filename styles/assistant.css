@@ -2418,3 +2418,60 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text-secondary);
   font-size: 0.875em;
 }
+
+/* Structured results share the flat local workspace; only the data viewport scrolls. */
+.agent-artifact-data-preview {
+  overflow-x: auto;
+  max-width: 100%;
+  font-size: var(--ran-font-size-small, 12px);
+}
+.agent-artifact-data-preview > p {
+  color: var(--ran-color-text-secondary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.agent-artifact-data-preview table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.agent-artifact-data-preview th,
+.agent-artifact-data-preview td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--ran-color-border);
+  text-align: start;
+  min-width: 80px;
+  max-width: 220px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.agent-artifact-presentation details > button,
+.agent-artifact-data-preview > button {
+  margin-inline-end: 8px;
+}
+.agent-artifact-presentation summary {
+  color: var(--ran-color-text-secondary);
+  cursor: pointer;
+  padding-block: 8px;
+}
+
+.agent-artifact-editor textarea.agent-artifact-cell {
+  border: 0;
+  border-radius: 0;
+  min-height: 2em;
+  resize: none;
+  max-height: 8em;
+  padding: 2px;
+  font: inherit;
+}
+.agent-artifact-data-preview > textarea.agent-artifact-cell {
+  min-height: 3em;
+}
+.agent-artifact-editor > details > textarea {
+  font-family: monospace;
+  font-size: 12px;
+}
+.agent-artifact-editor > details > summary {
+  cursor: pointer;
+  color: var(--ran-color-text-secondary);
+  padding-block: 8px;
+}

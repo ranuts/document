@@ -530,6 +530,15 @@ export const ko: Partial<I18nMessages> = {
   agentArtifactVersionLimit: '이 결과물은 버전이 20개입니다. 계속하려면 초안을 새 결과물로 저장하세요.',
   agentArtifactCountLimit: '결과물이 50개입니다. 새로 저장하려면 하나를 삭제하세요.',
   agentArtifactTextLimit: '내용이 128 KiB를 초과합니다. 줄인 후 저장하세요.',
+  agentArtifactExport: '내보내기',
+  agentArtifactImport: '구조화된 결과 가져오기',
+  agentArtifactImportHint:
+    'schemaVersion:1 및 payload가 있는 JSON을 붙여 넣으세요. table은 columns와 rows, slides는 slides:[{title,body}]를 사용합니다. 저장 전에 검증합니다.',
+  agentArtifactPreview: '미리 보기',
+  agentArtifactNext: '다음',
+  agentArtifactPrevious: '이전',
+  agentArtifactStructuredHint:
+    '셀 또는 슬라이드 내용을 직접 편집하세요. AI 변경 사항을 검토한 뒤 전체 결과를 바꿉니다. CSV / Markdown / JSON으로 내보낼 수 있습니다. 문서에 직접 적용은 지원하지 않습니다.',
   agentArtifactSaveNew: '새 결과물로 저장',
   agentResultSaving: '저장 중…',
   agentResultSaved: '저장됨',

@@ -553,6 +553,15 @@ export const es: Partial<I18nMessages> = {
     'Este artefacto tiene 20 versiones. Guarde el borrador como un artefacto nuevo para continuar.',
   agentArtifactCountLimit: 'Tiene 50 artefactos. Elimine uno antes de guardar otro.',
   agentArtifactTextLimit: 'El contenido supera los 128 KiB. Acórtelo antes de guardar.',
+  agentArtifactExport: 'Exportar',
+  agentArtifactImport: 'Importar resultado estructurado',
+  agentArtifactImportHint:
+    'Pega JSON con schemaVersion:1 y payload. table contiene columns y rows; slides contiene slides:[{title,body}]. Se valida antes de guardar.',
+  agentArtifactPreview: 'Vista previa',
+  agentArtifactNext: 'Siguiente',
+  agentArtifactPrevious: 'Anterior',
+  agentArtifactStructuredHint:
+    'Edita las celdas o el texto de las diapositivas. Los cambios de IA reemplazan todo el resultado tras revisarlos. Exporta CSV / Markdown / JSON; no se admite aplicarlo directamente al documento.',
   agentArtifactSaveNew: 'Guardar como artefacto nuevo',
   agentResultSaving: 'Guardando…',
   agentResultSaved: 'Guardado',

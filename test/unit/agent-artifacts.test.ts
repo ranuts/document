@@ -60,3 +60,44 @@ it('copies bounded provenance and rejects invalid title and multibyte text', asy
     store.create({ title: 'title', text: 'body', provenance: { conversation: 'x'.repeat(201) } }),
   ).rejects.toThrow('limit');
 });
+it('persists independent structured snapshots and keeps atomic version ownership', async () => {
+  const store = createArtifactStore();
+  const payload = { kind: 'table' as const, columns: ['Name'], rows: [['first']] };
+  const a = await store.create({
+    title: 'Table',
+    text: JSON.stringify(payload),
+    payload,
+    provenance: { sources: [{ title: 'Policy', connector: 'local' }] },
+  });
+  payload.rows[0][0] = 'changed';
+  expect(a.versions[0].payload).toEqual({ kind: 'table', columns: ['Name'], rows: [['first']] });
+  const next = { kind: 'slides' as const, slides: [{ title: 'Title', body: 'Body' }] };
+  await store.update(a.id, 1, { title: 'Slides', text: JSON.stringify(next), payload: next });
+  await expect(store.update(a.id, 1, { title: 'Stale', text: JSON.stringify(next), payload: next })).rejects.toThrow(
+    'conflict',
+  );
+  expect((await store.get(a.id))?.provenance.sources?.[0].title).toBe('Policy');
+  await expect(store.create({ title: 'bad', text: 'mismatch', payload: next, provenance: {} })).rejects.toThrow(
+    'invalid',
+  );
+});
+it('preserves full legacy capacity and rejects corrupted schemas on read without overwriting', async () => {
+  const store = createArtifactStore();
+  const a = await store.create({ title: 'Legacy', text: 'x'.repeat(131072), provenance: {} });
+  expect((await store.get(a.id))?.versions[0].text.length).toBe(131072);
+  await new Promise<void>((resolve, reject) => {
+    const r = indexedDB.open(ARTIFACT_DB_NAME, 1);
+    r.onsuccess = () => {
+      const db = r.result;
+      const tx = db.transaction('artifacts', 'readwrite');
+      tx.objectStore('artifacts').put({ ...a, versions: [{ ...a.versions[0], schemaVersion: 2 }] });
+      tx.oncomplete = () => {
+        db.close();
+        resolve();
+      };
+      tx.onerror = () => reject(tx.error);
+    };
+  });
+  await expect(store.get(a.id)).rejects.toThrow('invalid');
+  await expect(store.update(a.id, 1, { title: 'bad', text: 'new' })).rejects.toThrow('invalid');
+});
