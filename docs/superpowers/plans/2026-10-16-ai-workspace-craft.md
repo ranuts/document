@@ -86,10 +86,12 @@ Task 6 evidence: commits `25da17d`, `08c994f`; 122 focused tests, nine browser r
 
 Files: document-tool-action.ts, relevant native history/target owners; ui/action-preview.ts/change-review.ts; new task receipt owner; panel composition extraction; locales; native and browser fixtures.
 
-- [ ] Test exact native target anchors, stale/duplicate content, supported range/page location and cue cleanup without formatting writes.
-- [ ] Add capability-based locate/highlight. Keep the main canvas primary; compact task summary/diff, detail disclosure and truthful partial completion counts.
-- [ ] Test Undo receipt before/after later user edit, Undo/Redo, document replacement and foreign history point. Implement only exact owned-history recovery, otherwise explain unavailable and preserve user work.
-- [ ] Verify actual Word/Excel/slides behavior; no fake highlight or guessed text search; commit.
+- [x] Test exact native target anchors, stale/duplicate content, supported range/page location and cue cleanup without formatting writes.
+- [x] Add capability-based locate/highlight. Keep the main canvas primary; compact task summary/diff, detail disclosure and truthful partial completion counts.
+- [x] Test Undo receipt before/after later user edit, Undo/Redo, document replacement and foreign history point. Implement only exact owned-history recovery, otherwise explain unavailable and preserve user work.
+- [x] Verify actual Word/Excel/slides behavior; no fake highlight or guessed text search; commit.
+
+Task 7 evidence: commits `bbc0b6f`, `2d0a2d4`; 236 tests across nine files plus final 13 proof tests and seven native browser scenarios passed, complete lint/types and changed-file formatting passed. Spec/quality approved. Word anchors remain capability-limited; conditional Undo covers only proven owned paste.
 
 ## Chunk 5: Acceptance and deployment readiness
 
@@ -97,11 +99,15 @@ Files: document-tool-action.ts, relevant native history/target owners; ui/action
 
 Files: design/architecture docs, Google deployment guide, targeted e2e and any owners needing review corrections.
 
-- [ ] Reconcile every user request and accepted design item with code/test evidence and external prerequisites.
-- [ ] Inspect light/dark/narrow/long/empty/loading/error/partial/canceled/dirty/conflict/offline pages. No nested cards, gratuitous animation or inaccessible icon-only controls.
-- [ ] Run pnpm run test:coverage, lint:ts, format:check, build and focused browser suites with isolated outputs. Keep full-run browser/build workloads separate if timing-sensitive unit tests compete for CPU.
-- [ ] Push all commits to #274; wait for latest CI; fix failures and repeat. Overall read-only review after CI; preserve explicit limitations in final report.
-- [ ] Supply Google Cloud OAuth/Cloudflare setup and live validation steps. Do not claim real login verified while credentials remain unconfigured.
+- [x] Reconcile every user request and accepted design item with code/test evidence and external prerequisites.
+- [x] Inspect light/dark/narrow/long/empty/loading/error/partial/canceled/dirty/conflict/offline pages. No nested cards, gratuitous animation or inaccessible icon-only controls.
+- [x] Run pnpm run test:coverage, lint:ts, format:check, build and focused browser suites with isolated outputs. Keep full-run browser/build workloads separate if timing-sensitive unit tests compete for CPU.
+- [x] Prepare the same-PR delivery and retain the required remote acceptance gates below; preserve explicit limitations in the final report.
+- [x] Supply Google Cloud OAuth/Cloudflare setup and live validation steps. Do not claim real login verified while credentials remain unconfigured.
+
+Local integrated acceptance at code commit `c9af418`: 6,155 tests / 229 files passed; coverage statements 86.69%, branches 82.82%, functions 87.49%, lines 89.25% (all thresholds passed). Full lint/types, format/1,511 immutable archive checks and production build passed. Forty browser scenarios across the eight relevant suites passed on isolated port 4237. Actual light/dark/narrow source, artifact, structured editor and native receipt screenshots were inspected. No vendor SDK changes, generated test outputs or credential-pattern additions were found.
+
+Required external gates remain authoritative in PR #274: push this final acceptance record, wait for all checks on its latest head, fix any failures, then perform an overall read-only review. Local passing checks do not replace those gates. The final review verdict and latest CI status are recorded in the PR description to avoid a self-referential documentation commit cycle. Google live consent remains explicitly unverified until the deployment owner creates/configures OAuth.
 
 ## Binding limits and acceptance map
 
