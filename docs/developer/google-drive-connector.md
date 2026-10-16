@@ -19,6 +19,20 @@ Sessions last at most one hour and never request refresh tokens. Expired authori
 
 The callback uses a nonce-authorized inline script and same-origin `BroadcastChannel`, not `window.opener`, so the editor's COOP/COEP isolation does not need weakening. Open a blank popup synchronously from the user's gesture, call `start`, then navigate that popup to `authorizationUrl`. Listen to `document-google-connector`, treat its `{type:'google-connector-complete',success:boolean}` message as a refresh hint, and fetch `status` for authoritative state. The callback also displays a plain close-window instruction when script or popup behavior is unavailable. Do not log callback URLs: their query includes a short-lived authorization code.
 
+## Deployment acceptance checklist
+
+Current integration status (2026-10-16): the OAuth client has not been created or configured. Automated tests use mocked Google endpoints. Real consent, deployed token exchange and live Drive reads remain unverified.
+
+1. Choose the stable HTTPS deployment origin and deploy Pages Functions with the static site. Register its exact callback URL above, enable Drive API and prepare the consent audience/test account.
+2. Set all four bindings above in the appropriate Cloudflare deployment environment, then redeploy. Keep the client secret and encryption secret in server-side secret bindings. Do not paste them into issues, chat, screenshots or a frontend environment file.
+3. Open `/api/connectors/google/status` on that origin. Expect JSON with `configured:true` and `connected:false` before connecting. An HTML response indicates missing routing/functions; `not_configured` indicates missing or invalid bindings. Neither is a successful connection.
+4. From Sources, explicitly choose Connect. Verify the consent screen identifies the intended app and read-only Drive permission. Cancel once and confirm the editor stays usable with a clear disconnected state; then connect with a test account.
+5. Browse and attach a supported test file. Confirm no model request occurs until an explicit AI request, and that its captured reference belongs to the intended conversation.
+6. Disconnect, confirm browsing requires reconnect and that local references remain usable. Repeat after session expiry. Check popup completion under the deployed COOP/COEP policy without weakening isolation headers.
+7. Check an offline session and an unconfigured preview: network actions should be unavailable with understandable guidance while local models, prepared local readers and artifacts remain usable. Do not copy production credentials into PR previews to make this test pass.
+
+Record the tested deployment origin, build commit, date and pass/fail outcomes without tokens, authorization codes or private file contents. Only mark live authorization verified after these deployed checks pass.
+
 ## Browser API contract
 
 All routes are same-origin under `/api/connectors/google`, use `credentials: 'same-origin'`, and return `Cache-Control: no-store`. Mutations require a same-origin `Origin` header.
