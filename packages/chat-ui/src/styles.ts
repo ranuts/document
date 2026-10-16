@@ -63,6 +63,9 @@ export const CHAT_UI_CSS = `
 .cui-message-actions button { border:0; background:transparent; color:var(--cui-muted); cursor:pointer; font:inherit; font-size:var(--ran-text-label-3, 12px); min-height:var(--ran-size-7, 32px); padding:var(--ran-space-1, 4px) var(--ran-space-2, 8px); border-radius:var(--ran-radius-sm, 6px); transition:background-color var(--ran-motion-duration-fast, .15s), color var(--ran-motion-duration-fast, .15s); }
 .cui-message-actions button:hover:not(:disabled) { color:var(--cui-text); background:var(--cui-user-bg); }
 .cui-message-actions button:disabled { opacity:.5; cursor:default; }
+.cui-message-actions .cui-apply { color:var(--cui-text); font-weight:var(--ran-text-label-weight, 500); }
+.cui-message-actions .cui-save[data-state='saved'] { color:var(--cui-text); }
+.cui-message-actions .cui-follow-up { padding-inline:var(--ran-space-1, 4px); }
 .cui-message-actions .cui-copy { flex:0 0 var(--ran-size-7, 32px); width:var(--ran-size-7, 32px); padding:0; display:inline-flex; align-items:center; justify-content:center; }
 .cui-message-actions .cui-copy svg { flex-shrink:0; }
 .cui-apply-status { color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); }

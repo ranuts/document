@@ -31,6 +31,9 @@ export interface ChatViewLabels {
   /** Empty-state hint shown when there are no messages. */
   empty?: string;
   saveMessage?: string;
+  savingMessage?: string;
+  savedMessage?: string;
+  saveFailed?: string;
   copy?: string;
   copied?: string;
   copyFailed?: string;
@@ -64,6 +67,14 @@ export interface RestoreHistoryOptions {
   pageSize?: number;
 }
 
+export type MessageSaveOutcome = 'saved' | 'failed' | 'cancelled';
+export interface ChatMessageAction {
+  readonly id: string;
+  readonly label: string;
+  /** Explicit activation only; receives the original completed source. */
+  run(text: string): void;
+}
+
 export interface ChatViewOptions {
   /** Opt into bounded incremental Markdown; legacy plain streaming remains the default. */
   streamingMarkdown?: boolean;
@@ -84,7 +95,12 @@ export interface ChatViewOptions {
   /** Only explicitly marked artifacts may offer host write actions. */
   requireDocumentArtifact?: boolean;
   /** Optional explicit persistence action owned by the host. */
-  onSaveMessage?: (text: string, metadata?: Readonly<Record<string, unknown>>) => Promise<void> | void;
+  onSaveMessage?: (
+    text: string,
+    metadata?: Readonly<Record<string, unknown>>,
+  ) => Promise<MessageSaveOutcome | void> | MessageSaveOutcome | void;
+  /** At most two host-defined secondary actions; never inferred from response HTML. */
+  getMessageActions?: (message: ChatMessage) => readonly ChatMessageAction[];
   onApplyMessage?: (text: string) => Promise<'verified' | 'sent' | 'retry' | 'failed'>;
   /** Initial labels; change later with {@link ChatView.setLabels}. */
   labels?: ChatViewLabels;
