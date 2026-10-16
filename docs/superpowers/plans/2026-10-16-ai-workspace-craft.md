@@ -50,9 +50,11 @@ Task 3 evidence: commit `47f1c3a`; full 6,051 tests across 219 files, seven sour
 
 Files: new connectors/document-reference-readers.ts and PDF worker adapter; reference-sources dispatch; package exports/dependencies if necessary; UI accepted file types/help; unit malformed/overflow/cancel fixtures; e2e active document preservation.
 
-- [ ] Test DOCX/PPTX XML text order, bounded XLSX cells/sheets and standalone PDF extraction with no createEditorInstance call.
-- [ ] Implement safe bounded readers; enforce compressed/inflated/output/page/cell limits and deadlines; lazy-load heavy parsing. Surface unsupported/encrypted/corrupt files accurately.
-- [ ] Verify attaching Office/PDF never replaces or edits the current document and offline-ready readers work after assets are prepared. Commit.
+- [x] Test DOCX/PPTX XML text order, bounded XLSX cells/sheets and standalone PDF extraction with no createEditorInstance call.
+- [x] Implement safe bounded readers; enforce compressed/inflated/output/page/cell limits and deadlines; lazy-load heavy parsing. Surface unsupported/encrypted/corrupt files accurately.
+- [x] Verify attaching Office/PDF never replaces or edits the current document and offline-ready readers work after assets are prepared. Commit.
+
+Task 4 evidence: commits `529af94`, `c94e07a`; 62 focused and 93 offline tests, real four-format browser isolation and prepared offline reload passed; full lint/type/format passed. Spec/quality approved; final styled light/dark narrow screenshots inspected.
 
 ## Chunk 3: Artifacts as working results
 
