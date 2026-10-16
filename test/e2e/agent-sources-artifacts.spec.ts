@@ -367,3 +367,42 @@ test('discard restores artifact titles and a full version history can continue a
   await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
   await expect(page.locator('.agent-artifacts-list li')).toHaveCount(2);
 });
+
+test('switching conversations releases a pending source read without attaching its late result', async ({ page }) => {
+  test.setTimeout(90000);
+  await page.addInitScript(() => {
+    localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+  });
+  let release!: () => void;
+  let reading = false;
+  const waitForRelease = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route('**/api/connectors/google/**', async (route) => {
+    if (route.request().url().includes('/read')) {
+      reading = true;
+      await waitForRelease;
+      await route.fulfill({ json: { text: 'Old conversation private data' } });
+    } else await route.fulfill({ json: { files: [{ id: 'old', name: 'Old policy' }] } });
+  });
+  await page.goto('/editor?new=docx&locale=en');
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+  await page.locator('.agent-sources-toggle').click();
+  await page.getByRole('button', { name: 'Browse files', exact: true }).click();
+  await page.getByRole('button', { name: 'Old policy', exact: true }).click();
+  await expect.poll(() => reading).toBe(true);
+  await page.locator('.agent-panel-clear').click();
+  await page.locator('.agent-sources-toggle').click();
+  await page
+    .locator('.agent-sources-view input[type=file]')
+    .setInputFiles({ name: 'fresh.txt', mimeType: 'text/plain', buffer: Buffer.from('New conversation data') });
+  await expect(page.locator('.agent-source-row')).toHaveText('fresh.txtRemove');
+  const completed = page.waitForResponse((response) => response.url().includes('/api/connectors/google/read'));
+  release();
+  await completed;
+  await expect(page.locator('.agent-source-row')).toHaveText('fresh.txtRemove');
+  await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
+  await expect(page.locator('.agent-sources-summary')).toHaveText('fresh.txt');
+});
