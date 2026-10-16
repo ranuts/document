@@ -163,3 +163,27 @@ locally; an external agent controls how it handles returned content. Where
 the API is absent, this is a no-op.
 
 Tools are available on top-level editor pages when the browser provides the WebMCP API. Direct full-text reading currently supports word-processing documents; other document types can be exported with `save_document` for the agent to read.
+
+### Read-only document references
+
+The AI Sources view can attach TXT/Markdown/CSV/TSV/JSON (256 KiB), or DOCX,
+XLSX, PPTX and text-bearing PDF (20 MiB input, 256 KiB extracted text). Files
+are parsed independently of the open editor. Attaching never opens, replaces,
+edits or saves the current document. Parsing stays local; only the excerpts
+captured for an explicit AI request are sent to its selected service.
+
+OOXML readers bound archives to 2,000 entries and 32 MiB actual cumulative
+inflation, check ZIP integrity, scan at most 100,000 XML elements before DOM
+parsing, and reject entities/DTDs. Extraction allows 10,000 paragraphs or
+10,000 cells across 20 workbook sheets. Slide order follows presentation
+relationships; formulas are not evaluated. Unsupported embedded media is not
+OCRed. PDF.js is lazy-loaded with its bundled worker, no remote fonts or URLs;
+PDFs allow 100 pages. Scanned PDFs without text explain that OCR is required.
+Encrypted, malformed, excessive and timed-out documents receive distinct
+recovery messages. Extraction has a 15-second deadline and is canceled when
+the conversation changes or the panel is disposed. No password is collected.
+
+Offline Office extraction uses the prepared app assets; PDF extraction also
+requires the optional assistant assets to have been prepared before going
+offline. The module worker is included in that explicit preparation, never a
+remote CDN dependency. Original attachment bytes are not persisted.

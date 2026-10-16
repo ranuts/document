@@ -130,3 +130,7 @@
 # Executable code restrictions belong to the model Worker, not vendor iframe HTML.
 /assets/webllm.worker-*.js
   Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:
+
+# PDF extraction module worker must remain executable under strict MIME checks.
+/assets/pdf.worker.min-*.mjs
+  Content-Type: text/javascript; charset=utf-8

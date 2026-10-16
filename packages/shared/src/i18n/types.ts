@@ -475,6 +475,10 @@ export interface I18nMessages {
   agentSourcesLoading: string;
   agentSourcesFailed: string;
   agentSourcesTooLarge: string;
+  agentSourcesCorrupt: string;
+  agentSourcesEncrypted: string;
+  agentSourcesEmpty: string;
+  agentSourcesTimeout: string;
   agentSourcesUnsupported: string;
   agentSourcesRemove: string;
   agentSourcesAttached: string;

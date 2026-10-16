@@ -1,3 +1,4 @@
+import { withReferenceAbort } from './reference-lifetime';
 /** Explicit read-only reference sources. Text is untrusted data, never agent instructions. */
 export interface ReferenceText {
   id: string;
@@ -60,10 +61,35 @@ export class ReferenceSources {
     });
   }
 }
-export async function readLocalReference(file: File): Promise<ReferenceText> {
-  if (!/\.(?:txt|md|csv|tsv|json)$/i.test(file.name)) throw new Error('source-unsupported');
-  if (file.size > MAX_REFERENCE_BYTES) throw new Error('source-too-large');
-  const text = await file.text();
+export async function readLocalReference(file: File, signal?: AbortSignal): Promise<ReferenceText> {
+  const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
+  const office = ['docx', 'xlsx', 'pptx'].includes(extension);
+  const document = office || extension === 'pdf';
+  if (!document && !['txt', 'md', 'csv', 'tsv', 'json'].includes(extension)) throw new Error('source-unsupported');
+  if (file.size > (document ? 20 * 1024 * 1024 : MAX_REFERENCE_BYTES)) throw new Error('source-too-large');
+  const deadline = AbortSignal.timeout(15000);
+  const operation = signal ? AbortSignal.any([signal, deadline]) : deadline;
+  operation.throwIfAborted();
+  let text: string;
+  try {
+    if (document) {
+      const bytes = new Uint8Array(await withReferenceAbort(file.arrayBuffer(), operation));
+      operation.throwIfAborted();
+      text = office
+        ? await (
+            await withReferenceAbort(import('./document-reference-readers'), operation)
+          ).readOfficeReference(bytes, extension, operation)
+        : await (
+            await withReferenceAbort(import('./pdf-reference-reader'), operation)
+          ).readPdfReference(bytes, operation);
+    } else text = await withReferenceAbort(file.text(), operation);
+    operation.throwIfAborted();
+  } catch (error) {
+    if (deadline.aborted && !signal?.aborted) throw new Error('source-timeout');
+    if (operation.aborted) throw operation.reason;
+    if (document && !(error instanceof Error && error.message.startsWith('source-'))) throw new Error('source-corrupt');
+    throw error;
+  }
   if (text.includes('\0')) throw new Error('source-unsupported');
   return { id: crypto.randomUUID(), connector: 'local', title: file.name, text };
 }

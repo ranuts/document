@@ -357,3 +357,28 @@ it('finds and highlights late attached-source hits without reading the network',
   expect(fetcher).not.toHaveBeenCalled();
   view.dispose();
 });
+it.each(['corrupt', 'encrypted', 'empty', 'timeout'] as const)(
+  'shows actionable %s failures rather than offline',
+  async (code) => {
+    const view = createSourcesView({
+      sources: new ReferenceSources(),
+      labels: { ...labels, [code]: `Explanation ${code}` },
+      changed: vi.fn(),
+      close: vi.fn(),
+    });
+    const file = {
+      name: 'broken.txt',
+      size: 1,
+      text: async () => {
+        throw new Error(`source-${code}`);
+      },
+    };
+    const input = view.el.querySelector('input[type=file]')!;
+    Object.defineProperty(input, 'files', { value: [file] });
+    input.dispatchEvent(new Event('change'));
+    await vi.waitFor(() =>
+      expect(view.el.querySelector('.agent-sources-status')!.textContent).toBe(`Explanation ${code}`),
+    );
+    view.dispose();
+  },
+);

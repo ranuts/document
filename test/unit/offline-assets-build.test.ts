@@ -118,3 +118,34 @@ it('fails the build when an import graph edge is missing', async () => {
     await rm(dir, { recursive: true, force: true });
   }
 });
+
+it('prepares bundled PDF module workers as optional runtime assets', async () => {
+  const { dir, manifest } = await fixture();
+  try {
+    manifest.engine.assets = ['assets/pdf.worker.min-test.mjs'];
+    await writeFile(join(dir, 'assets', 'pdf.worker.min-test.mjs'), '');
+    await writeFile(join(dir, '.vite', 'manifest.json'), JSON.stringify(manifest));
+    await stampOfflineAssets(dir);
+    const source = await readFile(join(dir, 'sw.js'), 'utf8');
+    expect(JSON.parse(source.match(/const ASSISTANT_ASSETS_TO_CACHE = (\[.*?\]);/)![1])).toContain(
+      '/assets/pdf.worker.min-test.mjs',
+    );
+    expect(JSON.parse(source.match(/const APP_ASSETS_TO_CACHE = (\[.*?\]);/)![1])).not.toContain(
+      '/assets/pdf.worker.min-test.mjs',
+    );
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+it('keeps the local token and font stylesheets available after an offline reload', async () => {
+  const { dir } = await fixture();
+  try {
+    await writeFile(join(dir, 'ran-tokens.css'), ':root{--ran-font-family:system-ui}');
+    await writeFile(join(dir, 'ran-fonts', 'fonts.css'), '@font-face{}');
+    const assets = await stampOfflineAssets(dir);
+    expect(assets).toContain('/ran-tokens.css');
+    expect(assets).toContain('/ran-fonts/fonts.css');
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});

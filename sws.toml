@@ -88,3 +88,9 @@ Cache-Control = "public, max-age=31536000, immutable"
 source = "/assets/webllm.worker-*.js"
 [advanced.headers.headers]
 Content-Security-Policy = "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:"
+
+# PDF extraction uses a bundled module worker, including offline.
+[[advanced.headers]]
+source = "/assets/pdf.worker.min-*.mjs"
+[advanced.headers.headers]
+Content-Type = "text/javascript; charset=utf-8"

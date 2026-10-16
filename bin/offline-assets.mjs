@@ -2,7 +2,7 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const ASSISTANT_ENTRY = 'lib/agent-plugin/agent-plugin.ts';
-const GENERATED_ASSET = /^assets\/[A-Za-z0-9_.-]+\.(?:js|css|wasm|woff2)$/;
+const GENERATED_ASSET = /^assets\/[A-Za-z0-9_.-]+\.(?:m?js|css|wasm|woff2)$/;
 
 /** Follow app edges, optionally deferring lazy imports and attached runtime assets. */
 function collectAssets(manifest, roots, excluded = new Set(), includeRuntime = true) {
@@ -15,7 +15,7 @@ function collectAssets(manifest, roots, excluded = new Set(), includeRuntime = t
     if (!chunk) throw new Error(`Missing offline manifest dependency: ${key}`);
     // Worker outputs can appear in a static UI chunk's assets without being a
     // static import. Keep its styles and fonts, but defer executable payloads.
-    const attachedAssets = (chunk.assets ?? []).filter((asset) => includeRuntime || !/\.(?:js|wasm)$/.test(asset));
+    const attachedAssets = (chunk.assets ?? []).filter((asset) => includeRuntime || !/\.(?:m?js|wasm)$/.test(asset));
     for (const asset of [chunk.file, ...(chunk.css ?? []), ...attachedAssets]) {
       if (!GENERATED_ASSET.test(asset)) throw new Error(`Unsupported offline asset: ${asset}`);
       assets.add(`/${asset}`);
@@ -45,10 +45,15 @@ export async function stampOfflineAssets(directory) {
   // Worker outputs may be emitted outside the main manifest's dependency graph.
   // They belong to the optional inference runtime, never to the first visit.
   for (const name of await readdir(join(directory, 'assets'))) {
-    if (/\.(?:js|css|wasm)$/.test(name)) optional.add(`/assets/${name}`);
+    if (/\.(?:m?js|css|wasm)$/.test(name)) optional.add(`/assets/${name}`);
   }
   const fonts = (await readdir(join(directory, 'ran-fonts'))).filter((name) => name.endsWith('.woff2'));
   for (const name of fonts) core.add(`/ran-fonts/${name}`);
+  // Vite-only previews retain the stable token URL; production builds may
+  // fingerprint it. Both shipped styles must work before any offline reload.
+  for (const name of await readdir(directory))
+    if (/^ran-tokens(?:\.[A-Za-z0-9_-]+)?\.css$/.test(name)) core.add(`/${name}`);
+  if ((await readdir(join(directory, 'ran-fonts'))).includes('fonts.css')) core.add('/ran-fonts/fonts.css');
   const assets = [...core].sort();
   const assistantAssets = [...optional].filter((asset) => !core.has(asset)).sort();
   const path = join(directory, 'sw.js');

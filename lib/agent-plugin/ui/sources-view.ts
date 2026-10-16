@@ -23,6 +23,10 @@ export interface SourcesLabels {
   failed: string;
   tooLarge: string;
   limit: string;
+  corrupt?: string;
+  encrypted?: string;
+  empty?: string;
+  timeout?: string;
   unsupported: string;
   remove: string;
   attached: string;
@@ -61,7 +65,10 @@ export function createSourcesView(options: {
     driveRows.replaceChildren();
   });
   const attached = Div().class('agent-sources-attached').build();
-  const local = View<HTMLInputElement>('input').attr('type', 'file').attr('accept', '.txt,.md,.csv,.tsv,.json').build();
+  const local = View<HTMLInputElement>('input')
+    .attr('type', 'file')
+    .attr('accept', '.txt,.md,.csv,.tsv,.json,.docx,.xlsx,.pptx,.pdf')
+    .build();
   const localHint = View('p').class('agent-entry-note').build();
   const url = View<HTMLInputElement>('input').attr('type', 'url').build();
   const token = View<HTMLInputElement>('input').attr('type', 'password').attr('autocomplete', 'off').build();
@@ -75,6 +82,7 @@ export function createSourcesView(options: {
   let disposed = false;
   let epoch = 0;
   let busy = false;
+  let localOperation: AbortController | undefined;
   let mcpConnected = false;
   let driveConnected = false;
   let driveDisconnecting = false;
@@ -342,20 +350,19 @@ export function createSourcesView(options: {
           }
           syncConnectionActions();
         }
-        status.textContent =
-          error instanceof Error && error.message === 'source-offline'
-            ? labels.offline
-            : error instanceof Error && error.message === 'source-limit'
-              ? labels.limit
-              : error instanceof Error && error.message === 'source-too-large'
-                ? labels.tooLarge
-                : error instanceof Error && error.message === 'source-unsupported'
-                  ? labels.unsupported
-                  : error instanceof Error && error.message === 'source-auth'
-                    ? labels.reconnect
-                    : error instanceof Error && error.message === 'source-unavailable'
-                      ? labels.unavailable
-                      : labels.failed;
+        const errors: Record<string, string | undefined> = {
+          'source-corrupt': labels.corrupt,
+          'source-encrypted': labels.encrypted,
+          'source-empty': labels.empty,
+          'source-timeout': labels.timeout,
+          'source-offline': labels.offline,
+          'source-limit': labels.limit,
+          'source-too-large': labels.tooLarge,
+          'source-unsupported': labels.unsupported,
+          'source-auth': labels.reconnect,
+          'source-unavailable': labels.unavailable,
+        };
+        status.textContent = (error instanceof Error ? errors[error.message] : undefined) ?? labels.failed;
       }
     } finally {
       if (id === operationId) busy = false;
@@ -366,7 +373,12 @@ export function createSourcesView(options: {
     local.value = '';
     if (file)
       void run(async (isCurrent) => {
-        attach(await readLocalReference(file), isCurrent);
+        localOperation = new AbortController();
+        try {
+          attach(await readLocalReference(file, localOperation.signal), isCurrent);
+        } finally {
+          if (isCurrent()) localOperation = undefined;
+        }
       });
   });
   function filterDiscovered() {
@@ -455,6 +467,8 @@ export function createSourcesView(options: {
   window.addEventListener('offline', syncConnectivity);
   setLabels(labels);
   function cancelPending() {
+    localOperation?.abort();
+    localOperation = undefined;
     epoch++;
     operationId++;
     busy = false;
@@ -468,6 +482,8 @@ export function createSourcesView(options: {
     refresh: update,
     dispose: () => {
       disposed = true;
+      localOperation?.abort();
+      localOperation = undefined;
       epoch++;
       client?.disconnect();
       channel?.close();
