@@ -1467,8 +1467,10 @@ it('previews a model-selected document operation before applying', async () => {
   panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
   await vi.waitFor(() => expect(state.apply).toHaveBeenCalledOnce());
   expect(state.toolPlan.mock.calls[0][2]).toEqual({ kind: 'slide', page: 1 });
-  expect(panel.querySelector('.agent-plan-preview')).not.toBeNull();
-  expect(panel.textContent).toContain(t('agentPlanVerified'));
+  const preview = panel.querySelector<HTMLElement>('.agent-plan-preview')!;
+  await vi.waitFor(() => expect(preview.dataset.state).toBe('verified'));
+  expect(preview.querySelector('[role="status"]')?.textContent).toBe(t('agentChangeVerified'));
+  expect(preview.querySelector<HTMLElement>('.agent-plan-receipt-undo')?.hidden).toBe(true);
 });
 
 it.each(['webllm', 'wllama'] as const)('uses the actual %s backend to choose tool prompt caching', async (backend) => {
@@ -1699,6 +1701,7 @@ it.each(['stop', 'new conversation', 'switch conversation'] as const)(
     expect(state.apply).toHaveBeenCalledOnce();
     expect(state.toolPlan).not.toHaveBeenCalled();
     expect(panel.textContent).not.toContain(t('agentPlanVerified'));
+    expect(panel.textContent).not.toContain(t('agentChangeVerified'));
     if (interruption !== 'stop') {
       if (interruption === 'switch conversation') {
         expect(panel.querySelector('.cui-msg-user')?.textContent).toBe('Previous conversation');
@@ -1735,6 +1738,7 @@ it('processes Stop after showing an immediate read result and before starting th
     expect(state.apply).toHaveBeenCalledOnce();
     expect(panel.textContent).toContain(t('agentStopped'));
     expect(panel.textContent).not.toContain(t('agentPlanVerified'));
+    expect(panel.textContent).not.toContain(t('agentChangeVerified'));
   } finally {
     observer.disconnect();
   }
@@ -1766,7 +1770,7 @@ it('retains the completed read and verification error without reporting sequence
   const check = () => {
     expect(panel.querySelector('.cui-activity')?.textContent).toContain('B2: "30"');
     expect(panel.textContent).not.toContain(t('agentPlanVerified'));
-    expect(panel.textContent).not.toContain(t('agentPlanVerified'));
+    expect(panel.textContent).not.toContain(t('agentChangeVerified'));
   };
   check();
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
@@ -4073,6 +4077,7 @@ it('waits for a cancelled review Apply to actually settle before Send now starts
   await vi.waitFor(() => expect(calls).toEqual(['Hello']));
   expect(panel.querySelector('.agent-plan-preview')?.getAttribute('data-state')).toBe('cancelled');
   expect(panel.querySelector('.agent-plan-preview')?.textContent).not.toContain(t('agentPlanVerified'));
+  expect(panel.querySelector('.agent-plan-preview')?.textContent).not.toContain(t('agentChangeVerified'));
 });
 it('keeps a queued request pending through a readiness failure and preserves a different composer draft', async () => {
   state.ready = true;
@@ -4280,6 +4285,7 @@ it('pauses queued work when an explicit direct operation has no verified capabil
     expect(calls).toEqual([]);
     expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hello');
     expect(panel.textContent).not.toContain(t('agentPlanVerified'));
+    expect(panel.textContent).not.toContain(t('agentChangeVerified'));
     expect(panel.querySelector('.agent-queue-resume')?.hasAttribute('hidden')).toBe(false);
   } finally {
     execute.mockRestore();
