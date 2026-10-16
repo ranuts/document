@@ -18,7 +18,7 @@ export function presentSourceCitations(
     for (const trigger of triggers)
       trigger.setAttribute(
         'aria-expanded',
-        String(activePreview?.id === trigger.dataset.sourceId && activePreview.el.open),
+        String(activePreview !== undefined && activePreview.id === trigger.dataset.sourceId && activePreview.el.open),
       );
   };
   const walker = document.createTreeWalker(bubble, NodeFilter.SHOW_TEXT);

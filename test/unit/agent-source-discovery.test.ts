@@ -42,6 +42,11 @@ it('links only known captured ids and retains excerpts after attachment removal'
   bubble.querySelector('button')!.click();
   await vi.waitFor(() => expect(bubble.textContent).toContain('<script>captured</script>'));
   expect(bubble.querySelector('script')).toBeNull();
+  const trigger = bubble.querySelector('button')!;
+  expect(trigger.getAttribute('aria-expanded')).toBe('true');
+  trigger.click();
+  expect(bubble.querySelector('.agent-source-preview')).toBeNull();
+  expect(trigger.getAttribute('aria-expanded')).toBe('false');
 });
 import { capturedEvidence, validSourcePresentation } from '../../lib/agent-plugin/ui/source-evidence';
 import { historyToTurns, isMessage } from '../../lib/agent-plugin/ui/storage';
