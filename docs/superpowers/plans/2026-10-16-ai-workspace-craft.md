@@ -73,10 +73,12 @@ Task 5 evidence: commit `ed7035a`; 333 tests across eight files and eight browse
 
 Files: artifacts/store.ts + new payload/export modules; artifacts-view.ts focused renderers; native plan schema/integration for bounded tables/slides; locales; fixtures/unit/e2e.
 
-- [ ] Test old text records, bounded text/table/slides discriminants, invalid schema, atomic conflicts and CSV formula-safe quoting.
-- [ ] Add safe structured editors/previews and offline TXT/Markdown/CSV/JSON exports. Reuse existing native review for supported destinations; add a bounded set-range contract only if atomic history grouping and verification are demonstrable.
-- [ ] Offer native document export after reviewed application; standalone Office export must use an independent conversion contract, never export the user's current document as if it were the artifact.
-- [ ] Verify persistence, no code/HTML execution, offline, narrow layout and generated Office outputs where supported; commit.
+- [x] Test old text records, bounded text/table/slides discriminants, invalid schema, atomic conflicts and CSV formula-safe quoting.
+- [x] Add safe structured editors/previews and offline TXT/Markdown/CSV/JSON exports. Reuse existing native review for supported destinations; add a bounded set-range contract only if atomic history grouping and verification are demonstrable.
+- [x] Offer native document export after reviewed application; standalone Office export must use an independent conversion contract, never export the user's current document as if it were the artifact.
+- [x] Verify persistence, no code/HTML execution, offline, narrow layout and generated Office outputs where supported; commit.
+
+Task 6 evidence: commits `25da17d`, `08c994f`; 122 focused tests, nine browser regressions plus structured AI/offline/slides flow passed, TypeScript/lint/format passed. Spec/quality approved including final DOM ordering; default light/dark narrow screenshots inspected. Unsupported native structured writes use explicit export fallback.
 
 ## Chunk 4: Native review, location and recovery
 
