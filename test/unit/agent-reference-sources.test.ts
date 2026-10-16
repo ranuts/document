@@ -7,7 +7,7 @@ import {
 
 it('accepts bounded text files and rejects binary or oversized sources', async () => {
   expect((await readLocalReference(new File(['hello'], 'notes.md'))).text).toBe('hello');
-  await expect(readLocalReference(new File(['binary'], 'notes.docx'))).rejects.toThrow('unsupported');
+  await expect(readLocalReference(new File(['binary'], 'notes.docx'))).rejects.toThrow('corrupt');
   await expect(readLocalReference(new File(['x'.repeat(262145)], 'large.txt'))).rejects.toThrow('too-large');
 });
 it('captures immutable references and invalidates a snapshot on disconnect', () => {
@@ -182,4 +182,32 @@ it('loads explicit bounded MCP pages, deduplicates entries and stops cursor cycl
   expect(await client.list('next')).toEqual([{ uri: 'notes://two', name: 'Two' }]);
   expect(client.continuation).toBe('');
   await expect(client.list('next')).rejects.toThrow('invalid-response');
+});
+it('releases canceled file reads and ignores their late completion', async () => {
+  let complete!: (value: string) => void;
+  const file = {
+    name: 'slow.txt',
+    size: 10,
+    text: () => new Promise<string>((resolve) => (complete = resolve)),
+  } as File;
+  const controller = new AbortController();
+  const pending = readLocalReference(file, controller.signal);
+  controller.abort();
+  await expect(pending).rejects.toThrow();
+  complete('late text');
+});
+it('reports the deadline when an underlying file read never settles', async () => {
+  vi.useFakeTimers();
+  // AbortSignal.timeout uses the platform clock, so substitute a controllable deadline.
+  const controller = new AbortController();
+  const timeout = vi.spyOn(AbortSignal, 'timeout').mockReturnValue(controller.signal);
+  try {
+    const file = { name: 'slow.txt', size: 10, text: () => new Promise<string>(() => {}) } as File;
+    const pending = readLocalReference(file);
+    controller.abort(new DOMException('Timed out', 'TimeoutError'));
+    await expect(pending).rejects.toThrow('source-timeout');
+  } finally {
+    timeout.mockRestore();
+    vi.useRealTimers();
+  }
 });
