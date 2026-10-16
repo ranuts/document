@@ -1,3 +1,10 @@
+import {
+  captureArtifactDraft,
+  replaceArtifactRange,
+  sameArtifactDraft,
+  type ArtifactDraftBinding,
+} from '../artifacts/edit-proposal';
+import { createArtifactWorkflow, type ArtifactWorkflowLabels, type ArtifactRevisionRequest } from './artifact-workflow';
 import type { MessageSaveOutcome } from '@ranuts/chat-ui';
 import { ButtonBuilder, Div, View } from 'ranui/builder';
 import { ArtifactError, type Artifact, type ArtifactProvenance, type ArtifactStore } from '../artifacts/store';
@@ -31,6 +38,11 @@ export function createArtifactsView(options: {
   onApply(text: string): Promise<unknown> | unknown;
   onClose?(): void;
   conversation?(): string;
+  refinement?: {
+    labels: ArtifactWorkflowLabels;
+    submit(request: ArtifactRevisionRequest): void | (() => void);
+    stop(): void;
+  };
 }) {
   const el = View('section').class('agent-artifacts').build();
   const heading = View('h2').build();
@@ -40,6 +52,13 @@ export function createArtifactsView(options: {
   let labels = options.labels;
   let current: Artifact | undefined;
   let dirty = false;
+  let draftRevision = 0;
+  let workflow: ReturnType<typeof createArtifactWorkflow> | undefined;
+  let captureDraft: (() => ArtifactDraftBinding) | undefined;
+  const invalidateDraft = () => {
+    ++draftRevision;
+    workflow?.invalidate();
+  };
   let disposed = false;
   let generation = 0;
   let busy = false;
@@ -74,7 +93,7 @@ export function createArtifactsView(options: {
           }[e.code] as keyof ArtifactsLabels)
         : 'failed';
     status.textContent = labels[key];
-    if (e instanceof ArtifactError && e.code === 'version-limit') {
+    if (e instanceof ArtifactError && (e.code === 'version-limit' || e.code === 'conflict')) {
       status.append(
         ' ',
         button('saveNew', () => {
@@ -118,6 +137,10 @@ export function createArtifactsView(options: {
     }
   }
   function reset(): void {
+    invalidateDraft();
+    workflow?.dispose();
+    workflow = undefined;
+    captureDraft = undefined;
     cancelConfirmation?.();
     cancelConfirmation = undefined;
     buttons.clear();
@@ -175,6 +198,7 @@ export function createArtifactsView(options: {
     const text = View('textarea').attr('aria-label', labels.textField).build() as HTMLTextAreaElement;
     text.value = a.versions.at(-1)!.text;
     const changed = () => {
+      invalidateDraft();
       dirty = true;
       const save = body.querySelector<HTMLButtonElement>('[data-action="saveVersion"]');
       if (save) save.disabled = false;
@@ -184,6 +208,7 @@ export function createArtifactsView(options: {
     select.addEventListener('change', () => {
       const value = select.value;
       const load = () => {
+        invalidateDraft();
         selectedVersion = value;
         title.value = a.title;
         text.value = a.versions.find((v) => String(v.version) === value)!.text;
@@ -237,6 +262,47 @@ export function createArtifactsView(options: {
     );
     const form = Div().class('agent-artifact-editor').children(title, select, text, origin, actions).build();
     body.append(back, form);
+    captureDraft = () =>
+      captureArtifactDraft({
+        artifactId: a.id,
+        expectedVersion: a.versions.at(-1)!.version,
+        revision: draftRevision,
+        title: title.value,
+        text: text.value,
+        start: text.selectionStart,
+        end: text.selectionEnd,
+      });
+    if (options.refinement) {
+      const isCurrent = (bound: ArtifactDraftBinding) =>
+        !disposed && !!captureDraft && sameArtifactDraft(bound, captureDraft());
+      workflow = createArtifactWorkflow({
+        labels: options.refinement.labels,
+        capture: () => captureDraft?.(),
+        useEntire: () => text.setSelectionRange(0, 0),
+        isCurrent,
+        submit: options.refinement.submit,
+        stop: options.refinement.stop,
+        accept: async (bound, replacement, hostCurrent) => {
+          if (!hostCurrent() || !isCurrent(bound)) return false;
+          const persisted = await options.store.get(bound.artifactId);
+          if (!hostCurrent() || !isCurrent(bound)) return false;
+          if (!persisted || persisted.versions.at(-1)?.version !== bound.expectedVersion) {
+            error(new ArtifactError('conflict'));
+            return false;
+          }
+          text.value = replaceArtifactRange(bound, replacement);
+          dirty = true;
+          ++draftRevision;
+          body.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled = false;
+          text.focus();
+          text.setSelectionRange(bound.start, bound.start + replacement.length);
+          return true;
+        },
+      });
+      form.append(workflow.el);
+      for (const event of ['select', 'click', 'keyup', 'input'])
+        text.addEventListener(event, () => workflow?.refreshScope());
+    }
     form.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled = true;
     title.focus();
   }
@@ -304,11 +370,55 @@ export function createArtifactsView(options: {
         discard(create, () => settle('cancelled'));
       });
     },
+    recover(bound: ArtifactDraftBinding, instruction: string): Promise<boolean> {
+      if (disposed || busy) return Promise.resolve(false);
+      // Opening this view may already have launched a metadata refresh. Recovery
+      // takes presentation ownership before it can remove the queued instruction.
+      ++generation;
+      const stage = () => {
+        const text = body.querySelector<HTMLTextAreaElement>('textarea');
+        if (!text || !workflow) return false;
+        const matching = text.value === bound.text;
+        // Old offsets are never applied to a newer body. A changed selection
+        // request must select afresh or explicitly choose the entire artifact.
+        text.setSelectionRange(
+          matching && bound.scope === 'selection' ? bound.start : 0,
+          matching && bound.scope === 'selection' ? bound.end : 0,
+        );
+        workflow.restoreInstruction(instruction, !matching && bound.scope === 'selection');
+        return true;
+      };
+      if (current?.id === bound.artifactId && captureDraft) return Promise.resolve(stage());
+      return new Promise((resolve) => {
+        discard(
+          () => {
+            const revision = ++generation;
+            void perform(async () => {
+              const artifact = await options.store.get(bound.artifactId);
+              if (disposed || revision !== generation) return;
+              if (!artifact) throw new ArtifactError('missing');
+              editor(artifact);
+              resolve(stage());
+            }).then(() => resolve(false));
+          },
+          () => resolve(false),
+        );
+      });
+    },
     cancelPending(): void {
+      ++generation;
+      invalidateDraft();
       if (cancelConfirmation) status.textContent = '';
       cancelConfirmation?.();
       cancelConfirmation = undefined;
       for (const settle of pendingSaves) settle('cancelled');
+    },
+    setRefinementLabels(next: ArtifactWorkflowLabels): void {
+      if (options.refinement) options.refinement.labels = next;
+      workflow?.setLabels(next);
+    },
+    isCurrentDraft(bound: ArtifactDraftBinding): boolean {
+      return !disposed && !!captureDraft && sameArtifactDraft(bound, captureDraft());
     },
     setLabels(next: ArtifactsLabels): void {
       labels = next;
@@ -332,6 +442,7 @@ export function createArtifactsView(options: {
     },
     dispose(): void {
       disposed = true;
+      workflow?.dispose();
       cancelConfirmation?.();
       cancelConfirmation = undefined;
       for (const settle of pendingSaves) settle('cancelled');

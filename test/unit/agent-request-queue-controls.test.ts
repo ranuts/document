@@ -57,11 +57,38 @@ it('prepares the queued text rather than a different composer draft and never re
   });
   view.update(queue.state('chat'));
   view.el.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
-  expect(prepare).toHaveBeenCalledWith('Polish selection');
+  expect(prepare).toHaveBeenCalledWith('Polish selection', expect.objectContaining({ id: 'one', binding: {} }));
   expect(resume).not.toHaveBeenCalled();
   view.el.querySelectorAll<HTMLButtonElement>('.agent-queue-send-now')[1]!.click();
   expect(send).not.toHaveBeenCalled();
   prepare.mockReturnValue(false);
   view.el.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
   expect(resume).toHaveBeenCalledWith('chat');
+});
+it('lets origin-aware recovery intercept an entry before generic chat restoration', () => {
+  const restore = vi.fn(() => true),
+    setDraft = vi.fn(),
+    prepare = vi.fn(() => false);
+  const queue = new RequestQueue<any>({
+    execute: async (entry) => ({ turnId: entry.id, status: 'failed' }),
+    cancel: vi.fn(),
+    revoke: vi.fn(),
+    changed: vi.fn(),
+  });
+  const entry = queue.enqueue('origin', 'Artifact only', { origin: 'artifact' });
+  const view = createRequestQueueControls({
+    queue: () => queue,
+    conversation: () => 'origin',
+    getDraft: () => '',
+    setDraft,
+    focus: vi.fn(),
+    prepare,
+    restore,
+  });
+  view.update(queue.state('origin'), 'origin');
+  (view.el.querySelector('.agent-queue-edit') as HTMLButtonElement).click();
+  expect(restore).toHaveBeenCalledWith(entry);
+  expect(setDraft).not.toHaveBeenCalled();
+  (view.el.querySelector('.agent-queue-send-now') as HTMLButtonElement).click();
+  expect(prepare).toHaveBeenCalledWith('Artifact only', entry);
 });

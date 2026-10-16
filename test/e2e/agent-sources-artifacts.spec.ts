@@ -406,7 +406,7 @@ test('discard restores artifact titles and a full version history can continue a
   });
   await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
   await page.getByRole('button', { name: 'Saved title', exact: true }).click();
-  const title = page.locator('.agent-artifact-editor input');
+  const title = page.getByRole('textbox', { name: 'Title', exact: true });
   const text = page.locator('.agent-artifact-editor textarea');
   const versions = page.locator('.agent-artifact-editor select');
   await versions.selectOption('1');
