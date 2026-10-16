@@ -140,6 +140,8 @@ export class ActionPreview {
     });
     this.receiptUndo.addEventListener('click', () => {
       if (this.el.dataset.state !== 'verified' || this.receiptUndo.hidden) return;
+      const restoreFocus =
+        document.activeElement === this.receiptUndo || this.receiptUndo.contains(document.activeElement);
       let undone = false;
       let uncertain = false;
       try {
@@ -152,13 +154,14 @@ export class ActionPreview {
       this.undoFeedback.textContent = t(
         uncertain ? 'agentUndoUnverified' : undone ? 'agentChangeUndone' : 'agentUndoUnavailable',
       );
+      this.status.textContent = t(undone ? 'agentChangeUndone' : 'agentChangeVerified');
       if (undone) {
-        this.status.textContent = t('agentChangeUndone');
         this.undoFeedback.textContent = '';
         this.el.dataset.state = 'undone';
         this.receiptLocate.hidden = true;
         this.receiptActions.hidden = true;
       }
+      if (restoreFocus) this.record.querySelector('summary')?.focus();
     });
     this.receiptLocate.addEventListener('click', () => {
       if (this.el.dataset.state !== 'verified') return;

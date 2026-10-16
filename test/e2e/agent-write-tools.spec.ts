@@ -349,6 +349,11 @@ test.describe('agent document writes (real editor)', () => {
     await expect(replacement.locator('.agent-plan-receipt-undo')).toBeVisible();
     await replacement.locator('.agent-plan-receipt-undo').click();
     await expect(replacement).toHaveAttribute('data-state', 'undone');
+    await expect(replacement.locator('.agent-plan-status')).toHaveText(
+      'Change undone. Redo is available in the editor.',
+    );
+    await expect(replacement.locator('.agent-plan-undo-feedback')).toHaveText('');
+    await expect(replacement.locator('.agent-plan-record > summary')).toBeFocused();
     await expect.poll(() => readWordText(page)).not.toContain('Final reviewed text');
     await page.evaluate(() => {
       const win = window.__ooFrames.editor() as unknown as { Asc: { editor: { Redo(): void } } };

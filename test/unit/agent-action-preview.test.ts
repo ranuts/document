@@ -1051,3 +1051,55 @@ it('reports verified application without promising custom Undo when it is unavai
   expect(view.el.querySelector<HTMLElement>('.agent-plan-receipt-actions')?.hidden).toBe(true);
   view.dispose();
 });
+it.each(['success', 'expired', 'uncertain'] as const)(
+  'settles the %s Undo receipt truthfully and returns keyboard focus to View changes',
+  async (outcome) => {
+    const view = new ActionPreview();
+    document.body.append(view.el);
+    view.show({
+      target: { label: 'DOCX', selectedText: '' },
+      plan: { tool: 'insert_text', input: { text: 'Draft' } },
+      isCurrent: () => true,
+      cancel: vi.fn(),
+      undo: () => {
+        if (outcome === 'uncertain') throw new Error('native');
+        return outcome === 'success';
+      },
+      apply: async () => 'verified',
+    });
+    view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+    await vi.waitFor(() => expect(view.el.dataset.state).toBe('verified'));
+    const undo = view.el.querySelector<HTMLElement>('.agent-plan-receipt-undo')!;
+    undo.tabIndex = 0;
+    undo.focus();
+    expect(document.activeElement).toBe(undo);
+    undo.click();
+    expect(view.el.dataset.state).toBe(outcome === 'success' ? 'undone' : 'verified');
+    expect(view.el.querySelector('[role="status"]')?.textContent).toBe(
+      outcome === 'success' ? 'Change undone. Redo is available in the editor.' : 'Change verified.',
+    );
+    expect(view.el.querySelector('.agent-plan-undo-feedback')?.textContent === '').toBe(outcome === 'success');
+    expect(document.activeElement).toBe(view.el.querySelector('.agent-plan-record > summary'));
+    view.dispose();
+  },
+);
+it('does not steal composer focus when Undo is clicked programmatically', async () => {
+  const view = new ActionPreview();
+  document.body.append(view.el);
+  const input = document.createElement('textarea');
+  document.body.append(input);
+  view.show({
+    target: { label: 'DOCX', selectedText: '' },
+    plan: { tool: 'insert_text', input: { text: 'Draft' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    undo: () => true,
+    apply: async () => 'verified',
+  });
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(view.el.dataset.state).toBe('verified'));
+  input.focus();
+  view.el.querySelector<HTMLElement>('.agent-plan-receipt-undo')!.click();
+  expect(document.activeElement).toBe(input);
+  view.dispose();
+});
