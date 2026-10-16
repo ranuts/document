@@ -515,4 +515,6 @@ export const ja: Partial<I18nMessages> = {
   agentArtifactDiscardChanges: '未保存の変更を破棄',
   agentArtifactProvenance: '作成時のソース',
   agentArtifactSaveResult: '成果物として保存',
+  agentOfflineFeaturesHint:
+    'オフラインです。ローカルファイル、保存済みの成果物、利用可能なローカルモデルやサービスを使用できます。',
 };

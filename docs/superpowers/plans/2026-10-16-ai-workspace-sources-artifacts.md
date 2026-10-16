@@ -49,3 +49,7 @@ Implemented the source-specific settings, compact composer/queue/result feedback
 Full local coverage run: 5,988 tests across 213 files passed, meeting coverage thresholds (88.6% lines, 82.37% branches). Subsequent focused regressions cover conversation-source deletion, human-readable provenance after locale changes, existing settings listener/disclosure behavior and cloud cache-hint visibility. Sixteen final assistant/PDF browser scenarios passed; theme/icon scenarios and the two queue scenarios passed in dedicated runs. Type/lint, format and production build passed. Inspected source, artifact and cloud settings screenshots in narrow/light/dark states.
 
 Google handler verification uses mocked Google endpoints. Real consent and token exchange on the deployed host remain a deployment check requiring the documented OAuth configuration; no live Google authorization is claimed. Final remote CI verdict is tracked in PR #274.
+
+## Offline follow-up
+
+Implemented connectivity-aware progressive disclosure: hide network-only Drive and model-download controls while retaining local files, attached snapshots, saved artifacts, cached models, GGUF files and local/LAN endpoints. Preserve drafts and configuration across connectivity changes without automatic requests. Regression coverage includes real browser offline artifact version saves and restoration without connector calls. Full coverage: 5,997 tests across 213 files; thresholds passed. Type checking, formatting and production build passed.

@@ -522,4 +522,6 @@ export const es: Partial<I18nMessages> = {
   agentArtifactDiscardChanges: 'Descartar cambios sin guardar',
   agentArtifactProvenance: 'Fuentes al crear',
   agentArtifactSaveResult: 'Guardar como artefacto',
+  agentOfflineFeaturesHint:
+    'Sin conexión. Usa archivos locales, resultados guardados o un modelo o servicio local disponible.',
 };

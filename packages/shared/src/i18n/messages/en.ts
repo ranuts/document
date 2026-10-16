@@ -512,4 +512,5 @@ export const en: I18nMessages = {
   agentArtifactDiscardChanges: 'Discard unsaved changes',
   agentArtifactProvenance: 'Sources at creation',
   agentArtifactSaveResult: 'Save as artifact',
+  agentOfflineFeaturesHint: 'Offline. Use local files, saved results, or an available local model or service.',
 };

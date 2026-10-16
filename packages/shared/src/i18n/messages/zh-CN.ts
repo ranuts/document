@@ -485,4 +485,5 @@ export const zhCN: I18nMessages = {
   agentArtifactDiscardChanges: '放弃未保存的修改',
   agentArtifactProvenance: '创建时的资料来源',
   agentArtifactSaveResult: '保存为成果',
+  agentOfflineFeaturesHint: '当前离线。仍可使用本地文件、已保存的成果，以及可用的本地模型或服务。',
 };

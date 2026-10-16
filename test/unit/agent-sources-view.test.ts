@@ -3,6 +3,7 @@ import { createSourcesView, type SourcesLabels } from '../../lib/agent-plugin/ui
 import { ReferenceSources } from '../../lib/agent-plugin/connectors/reference-sources';
 const labels: SourcesLabels = {
   title: 'Sources',
+  offline: 'Offline',
   excerpt: 'Bounded excerpts',
   local: 'Local files',
   localHint: 'Text only',
@@ -54,7 +55,7 @@ it('explains missing cloud deployment without displaying returned HTML or privat
   const view = createSourcesView({ sources: new ReferenceSources(), labels, changed: vi.fn(), close: vi.fn() });
   document.body.append(view.el);
   [...view.el.querySelectorAll('button')].find((b) => b.textContent === 'Browse files')!.click();
-  await vi.waitFor(() => expect(view.el.querySelector('[role=status]')!.textContent).toBe('Unavailable'));
+  await vi.waitFor(() => expect(view.el.querySelector('.agent-sources-status')!.textContent).toBe('Unavailable'));
   expect(view.el.textContent).not.toContain('private server');
   view.dispose();
 });
@@ -119,4 +120,25 @@ it('closes a stale authorization popup when disconnect wins over start', async (
   expect(popup.location.href).toBe('');
   view.dispose();
   vi.restoreAllMocks();
+});
+it('hides cloud discovery offline while keeping attachments and local MCP controls, without reconnecting online', () => {
+  const network = vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false);
+  const fetcher = vi.fn();
+  vi.stubGlobal('fetch', fetcher);
+  const sources = new ReferenceSources();
+  sources.add({ id: 'cached-drive', connector: 'google', title: 'Cached policy', text: 'Already attached' });
+  const view = createSourcesView({ sources, labels, changed: vi.fn(), close: vi.fn() });
+  document.body.append(view.el);
+  expect((view.el.querySelector('.agent-cloud-sources') as HTMLElement).hidden).toBe(true);
+  expect(view.el.querySelector('.agent-source-row')?.textContent).toContain('Cached policy');
+  expect(view.el.querySelector('details')).toBeTruthy();
+  expect(view.el.querySelector('[type=file]')).toBeTruthy();
+  expect((view.el.querySelector('.agent-offline-hint') as HTMLElement).hidden).toBe(false);
+  network.mockReturnValue(true);
+  window.dispatchEvent(new Event('online'));
+  expect((view.el.querySelector('.agent-cloud-sources') as HTMLElement).hidden).toBe(false);
+  expect(fetcher).not.toHaveBeenCalled();
+  expect(sources.list()).toHaveLength(1);
+  view.dispose();
+  network.mockRestore();
 });

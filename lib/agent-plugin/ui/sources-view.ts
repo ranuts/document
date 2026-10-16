@@ -3,6 +3,7 @@ import { ReferenceSources, McpResources, boundedText, readLocalReference } from 
 
 export interface SourcesLabels {
   title: string;
+  offline: string;
   excerpt: string;
   local: string;
   localHint: string;
@@ -37,7 +38,8 @@ export function createSourcesView(options: {
   const heading = View('h2').build();
   heading.tabIndex = -1;
   const excerpt = View('p').class('agent-entry-note').build();
-  const status = View('p').attr('role', 'status').build();
+  const offlineHint = View('p').class('agent-offline-hint agent-entry-note').attr('role', 'status').build();
+  const status = View('p').class('agent-sources-status').attr('role', 'status').build();
   const attached = Div().class('agent-sources-attached').build();
   const local = View<HTMLInputElement>('input').attr('type', 'file').attr('accept', '.txt,.md,.csv,.tsv,.json').build();
   const localHint = View('p').class('agent-entry-note').build();
@@ -107,7 +109,7 @@ export function createSourcesView(options: {
     update();
   });
   const drive = button(() => {
-    if (busy || disposed) return;
+    if (busy || disposed || navigator.onLine === false) return;
     const popup = window.open('about:blank', '_blank', 'popup,width=560,height=720');
     if (!popup) {
       status.textContent = labels.failed;
@@ -163,10 +165,15 @@ export function createSourcesView(options: {
   const mcpDetails = View<HTMLDetailsElement>('details').class('agent-disclosure agent-source-settings').build();
   const mcpSummary = View('summary').children(mcpHeading).build();
   mcpDetails.append(mcpSummary, urlField.wrapper, tokenField.wrapper, connect, disconnect, mcpRows);
+  const driveSection = View('section')
+    .class('agent-cloud-sources')
+    .children(driveHeading, driveHint, drive, driveList, driveDisconnect, driveRows, more)
+    .build();
   el.append(
     back,
     heading,
     excerpt,
+    offlineHint,
     status,
     attached,
     localHeading,
@@ -174,13 +181,7 @@ export function createSourcesView(options: {
     localField.wrapper,
     localHint,
     mcpDetails,
-    driveHeading,
-    driveHint,
-    drive,
-    driveList,
-    driveDisconnect,
-    driveRows,
-    more,
+    driveSection,
   );
   function syncConnectionActions() {
     connect.hidden = mcpConnected;
@@ -189,6 +190,7 @@ export function createSourcesView(options: {
     driveDisconnect.hidden = !driveConnected;
   }
   async function google(path: string, method = 'GET'): Promise<Record<string, unknown>> {
+    if (navigator.onLine === false) throw new Error('source-offline');
     const response = await fetch(`/api/connectors/google/${path}`, {
       method,
       credentials: 'same-origin',
@@ -250,15 +252,17 @@ export function createSourcesView(options: {
     } catch (error) {
       if (!disposed && revision === epoch)
         status.textContent =
-          error instanceof Error && error.message === 'source-too-large'
-            ? labels.tooLarge
-            : error instanceof Error && error.message === 'source-unsupported'
-              ? labels.unsupported
-              : error instanceof Error && error.message === 'source-auth'
-                ? labels.reconnect
-                : error instanceof Error && error.message === 'source-unavailable'
-                  ? labels.unavailable
-                  : labels.failed;
+          error instanceof Error && error.message === 'source-offline'
+            ? labels.offline
+            : error instanceof Error && error.message === 'source-too-large'
+              ? labels.tooLarge
+              : error instanceof Error && error.message === 'source-unsupported'
+                ? labels.unsupported
+                : error instanceof Error && error.message === 'source-auth'
+                  ? labels.reconnect
+                  : error instanceof Error && error.message === 'source-unavailable'
+                    ? labels.unavailable
+                    : labels.failed;
     } finally {
       busy = false;
     }
@@ -304,6 +308,8 @@ export function createSourcesView(options: {
   function setLabels(next: SourcesLabels) {
     labels = next;
     heading.textContent = labels.title;
+    offlineHint.textContent = labels.offline;
+    syncConnectivity();
     excerpt.textContent = labels.excerpt;
     back.textContent = labels.close;
     localHeading.textContent = labels.local;
@@ -325,6 +331,13 @@ export function createSourcesView(options: {
     more.hidden = !nextPage;
     update();
   }
+  function syncConnectivity() {
+    const offline = navigator.onLine === false;
+    driveSection.hidden = offline;
+    offlineHint.hidden = !offline;
+  }
+  window.addEventListener('online', syncConnectivity);
+  window.addEventListener('offline', syncConnectivity);
   setLabels(labels);
   return {
     el,
@@ -340,6 +353,8 @@ export function createSourcesView(options: {
       epoch++;
       client?.disconnect();
       channel?.close();
+      window.removeEventListener('online', syncConnectivity);
+      window.removeEventListener('offline', syncConnectivity);
       token.value = '';
     },
   };

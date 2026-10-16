@@ -500,4 +500,5 @@ export interface I18nMessages {
   agentArtifactDiscardChanges: string;
   agentArtifactProvenance: string;
   agentArtifactSaveResult: string;
+  agentOfflineFeaturesHint: string;
 }

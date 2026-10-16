@@ -23,3 +23,7 @@ Updates check the expected version inside the same read-write transaction that a
 `ui/artifacts-view.ts` owns local text editing, version selection and conflict presentation. The generic chat package provides an optional host save action with opaque, render-time provenance. It does not know IndexedDB or connectors. Source titles and conversation identity are captured with live results; old restored results with no retained source metadata do not invent source provenance.
 
 Applying an artifact captures a fresh Word target and creates the existing `ActionPreview`; nothing writes until the user confirms that preview. Queue application leases, target freshness, host verification and native Undo remain the existing owners. The artifact editor never executes generated code or renders arbitrary HTML.
+
+## Offline availability
+
+Offline mode hides Google Drive authorization and browsing, the downloadable model catalog and remote model URLs. It retains attached reference snapshots, local file attachment, saved artifact editing and versions, cached model management, local GGUF files, and local or LAN services/MCP. Existing cloud configuration remains inspectable. Connectivity restoration only restores controls; it never authorizes, downloads, reconnects or resends automatically. Browser connectivity is a presentation signal; actual request failures still receive actionable recovery messages.
