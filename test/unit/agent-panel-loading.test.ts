@@ -24,6 +24,7 @@ const state = vi.hoisted(() => ({
     undefined | import('../../lib/agent-plugin/ui/conversation-db').ConversationRepository,
   preload: vi.fn(),
   dispose: vi.fn().mockResolvedValue(undefined),
+  actionDispose: vi.fn(),
   progress: [] as Array<(value: { text: string; progress?: number }) => void>,
   unavailable: undefined as undefined | (() => void),
   ready: false,
@@ -361,6 +362,7 @@ vi.mock('../../lib/agent-plugin/document-tool-action', () => {
     captureDocumentToolTarget: capture,
     captureDocumentToolScope: capture,
     DocumentToolAction: class {
+      dispose = state.actionDispose;
       cancel() {}
       isCurrent() {
         return state.targetCurrent;
@@ -387,6 +389,7 @@ afterEach(() => {
   document.body.replaceChildren();
   state.preload.mockReset();
   state.dispose.mockClear();
+  state.actionDispose.mockClear();
   state.progress.length = 0;
   state.ready = false;
   state.conversations = undefined;
@@ -1579,6 +1582,7 @@ it('cancels native writing of the previous answer from the visible Stop button',
   try {
     expect(forwarded).toBeInstanceOf(AbortSignal);
     expect(forwarded!.aborted).toBe(true);
+    await vi.waitFor(() => expect(state.actionDispose).toHaveBeenCalledOnce());
     await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
     expect(panel.querySelector('.cui-msg-status')?.textContent).toContain(t('agentStopped'));
     expect(panel.querySelector('.cui-msg-status .cui-restore')).not.toBeNull();
