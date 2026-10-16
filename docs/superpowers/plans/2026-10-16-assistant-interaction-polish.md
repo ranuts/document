@@ -23,7 +23,7 @@ User confirmed that nested cards and outlined controls consume too much space. F
 - [x] Add browser assertions for transparent queue, draft and review surfaces; confirm existing cards fail.
 - [x] Remove outer/nested preview surfaces, queue tray, boxed welcome actions and secondary control borders. Keep useful content width and comfortable touch targets.
 - [x] Inspect real-editor light/dark, empty, queued, restored draft and review screenshots, including long content and narrow widths.
-- [ ] Run relevant browser/unit/type/format checks and append a commit to PR #274. Investigate any CI failures in the same PR.
+- [x] Run relevant browser/unit/type/format checks and append a commit to PR #274. Investigate any CI failures in the same PR.
 
 Follow-up verification: eight real-editor visual/interaction tests passed after flattening; 126 preview/chat/task-entry unit tests passed. Type/lint, format and build passed. The previously failing CI open-retry case passed in two independent local runs; retain its strict assertions and verify the next CI run. Also corrected welcome-action selector specificity and replaced separated focus rings with one contiguous input boundary.
 
@@ -35,7 +35,7 @@ User approved compact input, collapsed queue and focused result actions, and ask
 - [x] Queue: collapsed count/state disclosure, persistent user expansion while requests advance, Escape/focus behavior, reset on conversation switch or a fresh batch. Keep Resume reachable and retain original requests.
 - [x] Results: write actions become clear status after settlement; retry remains actionable and copy remains independent. Avoid disabled primary controls masquerading as available actions.
 - [x] Errors: classify known service/network/resource failures into localized actionable guidance without exposing private endpoint/server details. Retain guarded generic fallback and verified-change accounting.
-- [ ] Add regression tests before implementation, inspect real AI task states in light/dark/narrow layouts, run full checks and append commits to #274. Verify remote CI.
+- [x] Add regression tests before implementation, inspect real AI task states in light/dark/narrow layouts, run full checks and append commits to #274. Verify remote CI.
 
 ### Architecture assessment and scope
 

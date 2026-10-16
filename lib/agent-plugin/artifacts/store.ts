@@ -29,13 +29,15 @@ export interface ArtifactStore {
   delete(id: string): Promise<void>;
 }
 export class ArtifactError extends Error {
-  constructor(readonly code: 'conflict' | 'limit' | 'missing' | 'invalid') {
+  constructor(
+    readonly code: 'conflict' | 'limit' | 'text-limit' | 'count-limit' | 'version-limit' | 'missing' | 'invalid',
+  ) {
     super(`Artifact ${code}`);
   }
 }
 function validate(title: string, text: string): void {
   if (!title.trim() || title.length > 200 || !text.trim()) throw new ArtifactError('invalid');
-  if (new TextEncoder().encode(text).length > 128 * 1024) throw new ArtifactError('limit');
+  if (new TextEncoder().encode(text).length > 128 * 1024) throw new ArtifactError('text-limit');
 }
 function provenance(input: ArtifactProvenance): ArtifactProvenance {
   if (
@@ -109,7 +111,7 @@ export function createArtifactStore(): ArtifactStore {
       return run('readwrite', (tx, done, fail) => {
         const count = tx.objectStore('summaries').count();
         count.onsuccess = () => {
-          if (count.result >= 50) return fail(new ArtifactError('limit'));
+          if (count.result >= 50) return fail(new ArtifactError('count-limit'));
           const now = Date.now();
           const a: Artifact = {
             id: crypto.randomUUID(),
@@ -141,7 +143,7 @@ export function createArtifactStore(): ArtifactStore {
           const a = r.result as Artifact | undefined;
           if (!a) return fail(new ArtifactError('missing'));
           if (a.versions.at(-1)!.version !== expectedVersion) return fail(new ArtifactError('conflict'));
-          if (a.versions.length >= 20) return fail(new ArtifactError('limit'));
+          if (a.versions.length >= 20) return fail(new ArtifactError('version-limit'));
           const now = Date.now();
           a.title = input.title.trim();
           a.updatedAt = now;

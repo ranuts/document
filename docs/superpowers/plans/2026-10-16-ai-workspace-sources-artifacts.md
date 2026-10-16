@@ -53,3 +53,7 @@ Google handler verification uses mocked Google endpoints. Real consent and token
 ## Offline follow-up
 
 Implemented connectivity-aware progressive disclosure: hide network-only Drive and model-download controls while retaining local files, attached snapshots, saved artifacts, cached models, GGUF files and local/LAN endpoints. Preserve drafts and configuration across connectivity changes without automatic requests. Regression coverage includes real browser offline artifact version saves and restoration without connector calls. Full coverage: 5,997 tests across 213 files; thresholds passed. Type checking, formatting and production build passed.
+
+## Review recovery fixes
+
+Four review findings now have regression coverage: expired Drive/MCP authorization restores explicit connection controls; discarding version edits restores both title and text; artifact count/text/version capacity errors are distinct with save-as-new recovery at the version cap; attachment overflow explains the five-source limit and removal unblocks retry. Canceling a version switch preserves the previously selected version and draft. No automatic reconnect, source removal or overwrite of existing artifact history is introduced.

@@ -19,6 +19,7 @@ export interface SourcesLabels {
   loading: string;
   failed: string;
   tooLarge: string;
+  limit: string;
   unsupported: string;
   remove: string;
   attached: string;
@@ -91,12 +92,12 @@ export function createSourcesView(options: {
                 const source = await current.read(resource.uri);
                 if (current !== client) return;
                 attach(source);
-              }),
+              }, 'mcp'),
           );
           row.textContent = resource.name;
           mcpRows.append(row);
         }
-      }),
+      }, 'mcp'),
   );
   const disconnect = button(() => {
     epoch++;
@@ -129,7 +130,7 @@ export function createSourcesView(options: {
         popup.close();
         throw error;
       }
-    });
+    }, 'google');
   });
   const driveDisconnect = button(() => {
     epoch++;
@@ -148,9 +149,9 @@ export function createSourcesView(options: {
         if (!disposed && epoch === revision) status.textContent = labels.failed;
       });
   });
-  const driveList = button(() => void run(() => listDrive()));
+  const driveList = button(() => void run(() => listDrive(), 'google'));
   let nextPage = '';
-  const more = button(() => void run(() => listDrive(nextPage)));
+  const more = button(() => void run(() => listDrive(nextPage), 'google'));
   const label = (control: HTMLElement, key: string) => {
     const wrapper = View('label').build();
     const text = View('span').text(key).build();
@@ -230,7 +231,7 @@ export function createSourcesView(options: {
               text: read.text,
               uri: `https://drive.google.com/file/d/${encodeURIComponent(file.id)}/view`,
             });
-          }),
+          }, 'google'),
       );
       row.textContent = file.name;
       driveRows.append(row);
@@ -240,7 +241,7 @@ export function createSourcesView(options: {
     nextPage = typeof result.nextPageToken === 'string' ? result.nextPageToken : '';
     more.hidden = !nextPage;
   }
-  async function run(action: () => Promise<void>) {
+  async function run(action: () => Promise<void>, connector?: 'mcp' | 'google') {
     if (busy || disposed) return;
     const revision = epoch;
     operationEpoch = revision;
@@ -250,19 +251,36 @@ export function createSourcesView(options: {
       await action();
       if (!disposed && revision === epoch) status.textContent = '';
     } catch (error) {
-      if (!disposed && revision === epoch)
+      if (!disposed && revision === epoch) {
+        if (error instanceof Error && error.message === 'source-auth') {
+          if (connector === 'mcp') {
+            client?.disconnect();
+            client = undefined;
+            mcpConnected = false;
+            mcpRows.replaceChildren();
+          } else if (connector === 'google') {
+            driveConnected = false;
+            driveRows.replaceChildren();
+            nextPage = '';
+            more.hidden = true;
+          }
+          syncConnectionActions();
+        }
         status.textContent =
           error instanceof Error && error.message === 'source-offline'
             ? labels.offline
-            : error instanceof Error && error.message === 'source-too-large'
-              ? labels.tooLarge
-              : error instanceof Error && error.message === 'source-unsupported'
-                ? labels.unsupported
-                : error instanceof Error && error.message === 'source-auth'
-                  ? labels.reconnect
-                  : error instanceof Error && error.message === 'source-unavailable'
-                    ? labels.unavailable
-                    : labels.failed;
+            : error instanceof Error && error.message === 'source-limit'
+              ? labels.limit
+              : error instanceof Error && error.message === 'source-too-large'
+                ? labels.tooLarge
+                : error instanceof Error && error.message === 'source-unsupported'
+                  ? labels.unsupported
+                  : error instanceof Error && error.message === 'source-auth'
+                    ? labels.reconnect
+                    : error instanceof Error && error.message === 'source-unavailable'
+                      ? labels.unavailable
+                      : labels.failed;
+      }
     } finally {
       busy = false;
     }
@@ -300,7 +318,7 @@ export function createSourcesView(options: {
           const state = await google('status');
           if (!state.connected) throw new Error('source-auth');
           await listDrive();
-        });
+        }, 'google');
     };
   } catch {
     /* Explicit list remains available. */

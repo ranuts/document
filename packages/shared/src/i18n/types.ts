@@ -501,4 +501,9 @@ export interface I18nMessages {
   agentArtifactProvenance: string;
   agentArtifactSaveResult: string;
   agentOfflineFeaturesHint: string;
+  agentSourcesLimit: string;
+  agentArtifactVersionLimit: string;
+  agentArtifactCountLimit: string;
+  agentArtifactTextLimit: string;
+  agentArtifactSaveNew: string;
 }

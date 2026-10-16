@@ -503,4 +503,9 @@ export const ko: Partial<I18nMessages> = {
   agentArtifactProvenance: '생성 시 자료 출처',
   agentArtifactSaveResult: '아티팩트로 저장',
   agentOfflineFeaturesHint: '오프라인입니다. 로컬 파일, 저장된 결과, 사용 가능한 로컬 모델이나 서비스를 사용하세요.',
+  agentSourcesLimit: '자료는 최대 5개까지 첨부할 수 있습니다. 하나를 제거한 후 추가하세요.',
+  agentArtifactVersionLimit: '이 결과물은 버전이 20개입니다. 계속하려면 초안을 새 결과물로 저장하세요.',
+  agentArtifactCountLimit: '결과물이 50개입니다. 새로 저장하려면 하나를 삭제하세요.',
+  agentArtifactTextLimit: '내용이 128 KiB를 초과합니다. 줄인 후 저장하세요.',
+  agentArtifactSaveNew: '새 결과물로 저장',
 };

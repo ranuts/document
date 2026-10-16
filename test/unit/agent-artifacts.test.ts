@@ -29,17 +29,19 @@ it('atomically rejects competing edits without losing versions', async () => {
 });
 it('bounds text and version history without deleting saved versions', async () => {
   const store = createArtifactStore();
-  await expect(store.create({ title: 'Draft', text: 'x'.repeat(131073), provenance: {} })).rejects.toThrow('limit');
+  await expect(store.create({ title: 'Draft', text: 'x'.repeat(131073), provenance: {} })).rejects.toThrow(
+    'text-limit',
+  );
   const a = await store.create({ title: 'Draft', text: 'one', provenance: {} });
   for (let version = 1; version < 20; version++)
     await store.update(a.id, version, { title: 'Draft', text: String(version) });
-  await expect(store.update(a.id, 20, { title: 'Draft', text: 'extra' })).rejects.toThrow('limit');
+  await expect(store.update(a.id, 20, { title: 'Draft', text: 'extra' })).rejects.toThrow('version-limit');
   expect((await store.get(a.id))?.versions).toHaveLength(20);
 });
 it('limits artifact metadata independently of full text and rejects edits after deletion', async () => {
   const store = createArtifactStore();
   for (let i = 0; i < 50; i++) await store.create({ title: String(i), text: 'body', provenance: {} });
-  await expect(store.create({ title: 'extra', text: 'body', provenance: {} })).rejects.toThrow('limit');
+  await expect(store.create({ title: 'extra', text: 'body', provenance: {} })).rejects.toThrow('count-limit');
   const first = (await store.list())[0];
   await store.delete(first.id);
   await expect(store.update(first.id, 1, { title: 'new', text: 'body' })).rejects.toThrow('missing');
@@ -53,7 +55,7 @@ it('copies bounded provenance and rejects invalid title and multibyte text', asy
   provenance.sources[0].title = 'changed';
   expect((await store.get(a.id))?.provenance.sources?.[0].title).toBe('reference');
   await expect(store.update(a.id, 1, { title: ' ', text: 'body' })).rejects.toThrow('invalid');
-  await expect(store.update(a.id, 1, { title: 'title', text: '中'.repeat(44000) })).rejects.toThrow('limit');
+  await expect(store.update(a.id, 1, { title: 'title', text: '中'.repeat(44000) })).rejects.toThrow('text-limit');
   await expect(
     store.create({ title: 'title', text: 'body', provenance: { conversation: 'x'.repeat(201) } }),
   ).rejects.toThrow('limit');

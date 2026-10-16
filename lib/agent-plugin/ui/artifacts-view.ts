@@ -15,6 +15,10 @@ export interface ArtifactsLabels {
   saved: string;
   conflict: string;
   limit: string;
+  versionLimit: string;
+  countLimit: string;
+  textLimit: string;
+  saveNew: string;
   failed: string;
   discardChanges: string;
   provenance: string;
@@ -47,8 +51,38 @@ export function createArtifactsView(options: {
     return b;
   }
   function error(e: unknown): void {
-    status.textContent =
-      e instanceof ArtifactError && (e.code === 'conflict' || e.code === 'limit') ? labels[e.code] : labels.failed;
+    const key =
+      e instanceof ArtifactError
+        ? ({
+            conflict: 'conflict',
+            limit: 'limit',
+            'version-limit': 'versionLimit',
+            'count-limit': 'countLimit',
+            'text-limit': 'textLimit',
+            missing: 'failed',
+            invalid: 'failed',
+          }[e.code] as keyof ArtifactsLabels)
+        : 'failed';
+    status.textContent = labels[key];
+    if (e instanceof ArtifactError && e.code === 'version-limit') {
+      status.append(
+        ' ',
+        button('saveNew', () => {
+          void perform(async () => {
+            const title = body.querySelector<HTMLInputElement>('input')!;
+            const text = body.querySelector<HTMLTextAreaElement>('textarea')!;
+            const a = await options.store.create({
+              title: title.value,
+              text: text.value,
+              provenance: current!.provenance,
+            });
+            editor(a);
+            status.textContent = labels.saved;
+            body.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+          });
+        }),
+      );
+    }
   }
   async function perform(task: () => Promise<void>): Promise<void> {
     if (busy || disposed) return;
@@ -83,6 +117,7 @@ export function createArtifactsView(options: {
       document.createTextNode(labels.discardChanges + ' '),
       button('discardChanges', () => {
         dirty = false;
+        status.textContent = '';
         next();
       }),
       button('cancel', () => {
@@ -113,7 +148,8 @@ export function createArtifactsView(options: {
       option.textContent = `${labels.version} ${v.version}`;
       select.append(option);
     }
-    select.value = String(a.versions.at(-1)!.version);
+    let selectedVersion = String(a.versions.at(-1)!.version);
+    select.value = selectedVersion;
     const text = View('textarea').attr('aria-label', labels.textField).build() as HTMLTextAreaElement;
     text.value = a.versions.at(-1)!.text;
     const changed = () => {
@@ -126,12 +162,14 @@ export function createArtifactsView(options: {
     select.addEventListener('change', () => {
       const value = select.value;
       const load = () => {
+        selectedVersion = value;
+        title.value = a.title;
         text.value = a.versions.find((v) => String(v.version) === value)!.text;
         dirty = value !== String(a.versions.at(-1)!.version);
         body.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled = !dirty;
       };
       if (dirty) {
-        select.value = String(a.versions.at(-1)!.version);
+        select.value = selectedVersion;
         discard(() => {
           select.value = value;
           load();

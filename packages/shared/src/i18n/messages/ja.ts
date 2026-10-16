@@ -517,4 +517,10 @@ export const ja: Partial<I18nMessages> = {
   agentArtifactSaveResult: '成果物として保存',
   agentOfflineFeaturesHint:
     'オフラインです。ローカルファイル、保存済みの成果物、利用可能なローカルモデルやサービスを使用できます。',
+  agentSourcesLimit: '添付できる資料は 5 件までです。追加する前に 1 件削除してください。',
+  agentArtifactVersionLimit:
+    'この成果は 20 バージョンに達しました。続けるには下書きを新しい成果として保存してください。',
+  agentArtifactCountLimit: '成果が 50 件に達しました。新しく保存する前に 1 件削除してください。',
+  agentArtifactTextLimit: '内容が 128 KiB を超えています。短くしてから保存してください。',
+  agentArtifactSaveNew: '新しい成果として保存',
 };
