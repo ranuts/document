@@ -192,3 +192,18 @@ it('restores the scroll position inside a long composer draft', () => {
   view.restoreNavigation(snapshot);
   expect(input.scrollTop).toBe(80);
 });
+it('keeps active IME focus when restoring a snapshot captured from historical reading', () => {
+  const { view, input, messages } = mount();
+  view.setInput('正在输入');
+  messages.focus();
+  const snapshot = view.captureNavigation();
+  input.focus();
+  input.setSelectionRange(1, 2);
+  input.dispatchEvent(new Event('compositionstart'));
+  view.restoreNavigation(snapshot, { focus: true });
+  expect(document.activeElement).toBe(input);
+  expect([input.selectionStart, input.selectionEnd]).toEqual([1, 2]);
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  expect(view.getInput()).toBe('正在输入');
+  input.dispatchEvent(new Event('compositionend'));
+});
