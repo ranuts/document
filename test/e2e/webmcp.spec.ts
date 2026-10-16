@@ -81,6 +81,8 @@ test.describe('WebMCP tools (real editor)', () => {
   });
 
   test('open a buffer, read its text, export it — through the tools only', async ({ page }) => {
+    // Act as soon as the tools register: do not wait for the startup document.
+    // L0 must reject any uncaught cancellation from the superseded startup.
     await page.goto('/editor?new=docx');
     await expect
       .poll(() => page.evaluate(() => Object.keys((window as any).__webmcpTools ?? {})), { timeout: 60_000 })
@@ -114,6 +116,7 @@ test.describe('WebMCP tools (real editor)', () => {
   });
 
   test('create_document starts each kind, and rejects one it does not know', async ({ page }) => {
+    // Creating through the tool may supersede the still-pending ?new=docx open.
     await page.goto('/editor?new=docx');
     await expect
       .poll(() => page.evaluate(() => Object.keys((window as any).__webmcpTools ?? {})), { timeout: 60_000 })

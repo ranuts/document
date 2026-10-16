@@ -27,3 +27,17 @@ through the real frame guard. Without the fix it constructs only one editor and
 reports a terminal error. With the fix it rebuilds the original document.
 `invalidates a queued retry when another editor takes ownership` also fails
 before the fix and protects the queue-entry ownership check.
+
+## Startup cancellation
+
+The fire-and-forget startup task awaited `onCreateNew` without handling its new
+AbortError result. A WebMCP request arriving as soon as tools registered could
+replace that startup open, producing an unhandled rejection. The startup caller
+now consumes only AbortError; other failures keep their existing error path, and
+direct tool/embed calls still receive their own operation's failures.
+
+Reverse verification: after the first two fixes but before the startup catch,
+both `webmcp.spec.ts` cases for opening a buffer and creating a spreadsheet fail
+with L0 `unhandledrejection: Document open superseded`. These are the same cases
+that failed in the Pages and Docker CI jobs. They deliberately do not wait for
+the startup document before calling the tools.

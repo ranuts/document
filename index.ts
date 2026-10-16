@@ -189,7 +189,11 @@ void (async () => {
   }
 
   if (createNewOnLoad && !isEmbedded) {
-    await onCreateNew(`.${newExt}`, { docId: savedParam || undefined });
+    await onCreateNew(`.${newExt}`, { docId: savedParam || undefined }).catch((error: unknown) => {
+      // A user or WebMCP tool can replace the startup open before it mounts.
+      // That cancellation belongs to this fire-and-forget startup task.
+      if ((error as { name?: string })?.name !== 'AbortError') throw error;
+    });
     return;
   }
 
