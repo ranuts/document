@@ -266,6 +266,7 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       expect(await composer.boundingBox()).toEqual(compact);
       const liveStatus = page.locator('.agent-speech-feedback [role="status"]');
       await expect(liveStatus).toHaveText('Listening…');
+      await expect(page.locator('.agent-sources-toggle')).toBeHidden();
       expect(await liveStatus.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
       await expect(page.locator('.agent-speech-language')).toBeHidden();
       await page.screenshot({ path: testInfo.outputPath('speech-compact.png') });
