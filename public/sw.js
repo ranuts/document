@@ -508,6 +508,9 @@ self.addEventListener('fetch', (event) => {
   // 2. Only handle same-origin requests to avoid caching external APIs/documents
   if (url.origin !== self.location.origin) return;
 
+  // Optional authenticated connector APIs and OAuth callbacks are never offline assets.
+  if (url.pathname.startsWith('/api/connectors/')) return;
+
   // Match Pages' canonical route offline too. Otherwise the cached root shell
   // would resolve its relative assets under /editor/ and render a blank page.
   if (event.request.mode === 'navigate' && url.pathname === '/editor/') {

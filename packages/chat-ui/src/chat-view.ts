@@ -383,6 +383,26 @@ export class ChatView {
         );
       });
       actions.append(copy);
+      if (this.options.onSaveMessage && !message.interrupted) {
+        const save = ButtonBuilder()
+          .class('cui-save')
+          .attr('type', 'button')
+          .text(this.labels.saveMessage ?? 'Save result')
+          .build();
+        save.addEventListener('click', async () => {
+          const text = row.dataset.source ?? message.text;
+          if (this.disposed || this.running || save.disabled || !text.trim()) return;
+          save.disabled = true;
+          try {
+            await this.options.onSaveMessage!(text, message.metadata);
+          } catch {
+            this.feedbackEl.textContent = this.labels.checkDocument ?? 'Check result';
+          } finally {
+            save.disabled = false;
+          }
+        });
+        actions.append(save);
+      }
       if (
         this.options.onApplyMessage &&
         (this.options.canApplyMessage?.() ?? true) &&
@@ -413,6 +433,13 @@ export class ChatView {
                 ? (this.labels.applyMessage ?? 'Write to document')
                 : (this.labels.checkDocument ?? 'Check document');
           apply.disabled = result !== 'retry' || this.running;
+          if (result !== 'retry' && row.contains(apply)) {
+            const receipt = Span().class('cui-apply-status').attr('role', 'status').text(apply.textContent).build();
+            receipt.dataset.state = result;
+            const restoreFocus = document.activeElement === apply;
+            apply.replaceWith(receipt);
+            if (restoreFocus && row.isConnected && !this.disposed) copy.focus();
+          }
         });
         actions.prepend(apply);
       }
@@ -590,7 +617,7 @@ export class ChatView {
    * Append streamed text to a live agent bubble, creating it on the first delta.
    * Call {@link endStream} when the turn completes.
    */
-  appendDelta(delta: string, metadata: Pick<ChatMessage, 'documentArtifact'> = {}): void {
+  appendDelta(delta: string, metadata: Pick<ChatMessage, 'documentArtifact' | 'metadata'> = {}): void {
     if (!delta || this.disposed || this.stopping) return;
     const firstForPhase = !this.respondingHasText;
     this.respondingHasText = true;
@@ -869,7 +896,7 @@ export class ChatView {
       button.textContent = labels.expandMessage ?? 'Show full message';
     for (const button of this.messagesEl.querySelectorAll<HTMLButtonElement>('.cui-copy'))
       this.updateCopyButton(button);
-    for (const button of this.messagesEl.querySelectorAll<HTMLElement>('.cui-apply')) {
+    for (const button of this.messagesEl.querySelectorAll<HTMLElement>('.cui-apply, .cui-apply-status')) {
       const state = button.dataset.state;
       button.title = labels.applyTip ?? 'Insert at the cursor or replace the selected text';
       button.textContent =
@@ -881,6 +908,8 @@ export class ChatView {
               ? (labels.checkDocument ?? 'Check document')
               : (labels.applyMessage ?? 'Write to document');
     }
+    for (const button of this.messagesEl.querySelectorAll('.cui-save'))
+      button.textContent = labels.saveMessage ?? 'Save result';
     for (const button of this.messagesEl.querySelectorAll('.cui-restore'))
       button.textContent = labels.restore ?? 'Restore request';
     for (const header of this.messagesEl.querySelectorAll<HTMLElement>('.cui-result-header'))

@@ -1,3 +1,8 @@
+import { createArtifactStore, type ArtifactProvenance } from '../artifacts/store';
+import { createArtifactsView } from './artifacts-view';
+import { ReferenceSources } from '../connectors/reference-sources';
+import { createSourcesView } from './sources-view';
+import { sourcesLabels, artifactLabels } from './workspace-labels';
 import { runDocumentTask } from '../document-task';
 import { readReceipt } from './read-receipt';
 import type { ReviewOutcome } from '../review-outcome';
@@ -27,7 +32,7 @@ import { getEditorApi } from '../editor-bridge';
 import { mountReviewSettings } from './review-settings';
 import { createModelCacheSettings } from './model-cache-settings';
 import { mountPanelContext, syncPanelContext } from './panel-context';
-import { createRequestQueueView } from './request-queue-view';
+import { createRequestQueueControls } from './request-queue-controls';
 import { RequestQueue, type QueuedRequest } from './request-queue';
 import { createTaskEntry, isCurrentHostRead, revokeHostRead, type StagedRequestIntent } from './task-entry';
 import { prepareHostRead } from './host-read-request';
@@ -247,7 +252,9 @@ export function createAgentPanel(
     activeTiming?.cancel('superseded');
     requestQueue?.pauseAll();
   });
+  const referenceSources = new ReferenceSources();
   interface PanelRequestBinding {
+    sources: ReturnType<ReferenceSources['capture']>;
     conversation: string;
     providerRevision: number;
     readonly: boolean;
@@ -594,7 +601,9 @@ export function createAgentPanel(
   let cacheBusy = false;
   let loadingFraction: number | undefined;
   let loadingBackend: 'webllm' | 'wllama' | undefined;
+  let resultMetadata: Readonly<Record<string, unknown>> | undefined;
   const chatLabels = (): ChatViewLabels => ({
+    saveMessage: t('agentArtifactSaveResult'),
     conversation: t('agentTitle'),
     send: t('agentSend'),
     queue: t('agentQueueAction'),
@@ -724,6 +733,10 @@ export function createAgentPanel(
     requireDocumentArtifact: true,
     canApplyMessage: () => captureDocumentContext()?.kind === 'word' && !getReadonlyMode(),
     onApplyMessage: (text) => applyReply(text),
+    onSaveMessage: async (text, metadata) => {
+      showView('artifacts');
+      await artifactsView.save(text, metadata as ArtifactProvenance | undefined);
+    },
     onStop: () => requestQueue?.pause(conversations.activeId),
     labels: chatLabels(),
   });
@@ -785,7 +798,11 @@ export function createAgentPanel(
   };
   window.addEventListener('pagehide', clearPreviews);
   const appendTurn = (turn: ChatTurn): void => {
-    chat.append(turn.role === 'error' ? { ...turn, text: displayError(turn.text) } : turn);
+    chat.append(
+      turn.role === 'error'
+        ? { ...turn, text: displayError(turn.text) }
+        : { ...turn, ...(turn.role === 'agent' ? { metadata: resultMetadata } : {}) },
+    );
   };
   let planning: AbortController | null = null;
 
@@ -1068,7 +1085,7 @@ export function createAgentPanel(
   // runtime no longer defaults to them.
   const controllerOptions = {
     tools: agentTools,
-    onAgentDelta: (delta: string): void => chat.appendDelta(delta),
+    onAgentDelta: (delta: string): void => chat.appendDelta(delta, { metadata: resultMetadata }),
     onAgentStreamEnd: (): void => chat.endStream(),
     storage: historyStorage,
   };
@@ -1243,10 +1260,11 @@ export function createAgentPanel(
       );
       if (!connected) return;
       hasConfiguration = true;
-    } catch {
+    } catch (error) {
       if (endpointConnection.revision > attempt + 1) return;
       disconnectEndpoint();
-      failure = t('agentEndpointFailed');
+      const guidance = displayError(error);
+      failure = guidance === t('agentRequestFailed') ? t('agentEndpointFailed') : guidance;
       note.textContent = failure;
     }
     syncEndpointForm(failure);
@@ -1371,7 +1389,7 @@ export function createAgentPanel(
         : '';
     syncWriteDestination();
     runtimeRow.hidden = !loadingStatus.textContent || (panel.dataset.view === 'settings' && !modelLoading);
-    note.hidden = modelLoading && panel.dataset.view === 'settings';
+    note.hidden = selectedSource !== 'local' || (modelLoading && panel.dataset.view === 'settings');
     loadProgress.hidden = !modelLoading;
     if (loadingFraction === undefined) loadProgress.removeAttribute('value');
     else loadProgress.value = loadingFraction;
@@ -1534,6 +1552,7 @@ export function createAgentPanel(
     snapshot: ComposerContext,
     scope: RequestScopePolicy,
     readonly: boolean,
+    sources: ReturnType<ReferenceSources['capture']>,
   ): TurnRequest => {
     const generation = controllerGeneration;
     const conversation = conversationRevision;
@@ -1543,8 +1562,10 @@ export function createAgentPanel(
       snapshot,
       scope,
       readonly,
+      references: sources.references,
       provider: endpointConnection.current!,
-      isCurrent: () => enabled && generation === controllerGeneration && conversation === conversationRevision,
+      isCurrent: () =>
+        enabled && sources.isCurrent() && generation === controllerGeneration && conversation === conversationRevision,
       review: waitForToolReview,
       appendTurn,
     });
@@ -1796,33 +1817,16 @@ export function createAgentPanel(
     }
   };
 
-  const pendingQueue = createRequestQueueView({
+  const pendingQueue = createRequestQueueControls({
+    queue: () => requestQueue,
+    conversation: () => conversations.activeId,
+    getDraft: () => chat.getInput(),
+    setDraft: (text) => chat.setInput(text),
     focus: () => chat.focus(),
-    edit: (id) => {
-      if (chat.getInput().trim()) {
-        pendingQueue.occupied();
-        return;
-      }
-      if (
-        !requestQueue?.restore(conversations.activeId, id, true, (text) => {
-          chat.setInput(text);
-          chat.focus();
-        })
-      )
-        pendingQueue.unavailable();
-    },
-    remove: (id) => {
-      requestQueue?.remove(conversations.activeId, id);
-    },
-    sendNow: (id) => {
-      const entry = requestQueue?.state(conversations.activeId).entries.find((entry) => entry.id === id);
-      if (entry && needsWritingSetup(entry.text)) prepareSelectedSource(entry.text);
-      else requestQueue?.sendNow(conversations.activeId, id);
-    },
-    resume: () => {
-      const next = requestQueue?.state(conversations.activeId).entries.find((entry) => !entry.recoverOnly);
-      if (next && needsWritingSetup(next.text)) prepareSelectedSource(next.text);
-      else requestQueue?.resume(conversations.activeId);
+    prepare: (text) => {
+      if (!needsWritingSetup(text)) return false;
+      prepareSelectedSource(text);
+      return true;
     },
   });
   chat.pendingEl.append(pendingQueue.el);
@@ -1841,7 +1845,7 @@ export function createAgentPanel(
         blockedWritingRequest = undefined;
         syncRuntimeStatus();
       }
-      pendingQueue.update(requestQueue!.state(conversations.activeId));
+      pendingQueue.update(requestQueue!.state(conversations.activeId), conversations.activeId);
       conversationList?.sync();
     },
   });
@@ -1876,6 +1880,7 @@ export function createAgentPanel(
       text,
       {
         conversation: conversations.activeId,
+        sources: referenceSources.capture(),
         providerRevision: providerBindingRevision,
         readonly: getReadonlyMode(),
         target,
@@ -1894,6 +1899,12 @@ export function createAgentPanel(
     const text = entry.text;
     const trimmed = text.trim();
     const binding = entry.binding;
+    const sourceReference = binding.sources.references.length
+      ? serializeRequestContext(
+          { editor: null, selection: { text: '', truncated: false }, references: binding.sources.references },
+          trimmed,
+        ).serialized
+      : undefined;
     const executionRevision = conversationRevision;
     const owned = (status: TurnResult['status']): TurnResult => ({
       turnId: entry.id,
@@ -1918,6 +1929,7 @@ export function createAgentPanel(
       referenced: !!stagedIntent || !!binding.proposal || binding.refinement.kind !== 'none',
     });
     if (
+      !binding.sources.isCurrent() ||
       binding.conversation !== conversations.activeId ||
       binding.providerRevision !== providerBindingRevision ||
       (scope.editorBound && (binding.readonly !== getReadonlyMode() || !requestTarget?.isCurrent(false))) ||
@@ -2176,6 +2188,7 @@ export function createAgentPanel(
     const beginExecution = (): void => {
       if (accepted) return;
       if (
+        !binding.sources.isCurrent() ||
         generation !== controllerGeneration ||
         conversation !== conversationRevision ||
         binding.providerRevision !== providerBindingRevision ||
@@ -2185,6 +2198,10 @@ export function createAgentPanel(
         throw new Error(t('agentPlanExpired'));
       if (!accept()) throw new DOMException('Request stopped before execution', 'AbortError');
       accepted = true;
+      resultMetadata = Object.freeze({
+        conversation: binding.conversation,
+        sources: binding.sources.references.map(({ title, connector }) => ({ title, connector })),
+      });
       chat.observePresentation(() => timing.presented());
       appendTurn({ role: 'user', text });
     };
@@ -2194,7 +2211,7 @@ export function createAgentPanel(
       timing.filteredText();
       partialTaskAnswer += delta;
       chat.setActivity('responding');
-      chat.appendDelta(delta);
+      chat.appendDelta(delta, { metadata: resultMetadata });
     });
     if (previousPreview) {
       refiningPreview = previousPreview;
@@ -2233,7 +2250,7 @@ export function createAgentPanel(
       ) {
         chat.setActivity('responding');
         if (!requestTarget) throw new Error(t('agentPlanExpired'));
-        const native = nativeRequest(requestTarget, trimmed, snapshot, scope, binding.readonly);
+        const native = nativeRequest(requestTarget, trimmed, snapshot, scope, binding.readonly, binding.sources);
         const abort = new AbortController();
         planning = abort;
         const prepared = await native.prepareRun!(trimmed, abort.signal);
@@ -2311,24 +2328,31 @@ export function createAgentPanel(
         const abort = new AbortController();
         planning = abort;
         chat.setActivity('responding');
-        const body = await generateDocumentDraft(routingProvider, trimmed, abort.signal, (delta) => {
-          if (
-            !abort.signal.aborted &&
-            enabled &&
-            generation === controllerGeneration &&
-            conversation === conversationRevision &&
-            binding.readonly === getReadonlyMode() &&
-            requestTarget?.isCurrent(false)
-          ) {
-            // The schema decoder already separates body text from the envelope.
-            // Preserve document syntax instead of interpreting it as chat JSON.
-            timing.filteredText();
-            partialTaskAnswer += delta;
-            chat.appendDelta(delta, { documentArtifact: true });
-          }
-        });
+        const body = await generateDocumentDraft(
+          routingProvider,
+          trimmed,
+          abort.signal,
+          (delta) => {
+            if (
+              !abort.signal.aborted &&
+              enabled &&
+              generation === controllerGeneration &&
+              conversation === conversationRevision &&
+              binding.readonly === getReadonlyMode() &&
+              requestTarget?.isCurrent(false)
+            ) {
+              // The schema decoder already separates body text from the envelope.
+              // Preserve document syntax instead of interpreting it as chat JSON.
+              timing.filteredText();
+              partialTaskAnswer += delta;
+              chat.appendDelta(delta, { documentArtifact: true, metadata: resultMetadata });
+            }
+          },
+          sourceReference,
+        );
         abort.signal.throwIfAborted();
         if (
+          !binding.sources.isCurrent() ||
           !enabled ||
           generation !== controllerGeneration ||
           conversation !== conversationRevision ||
@@ -2375,6 +2399,7 @@ export function createAgentPanel(
           };
           const result = await runDocumentTask(routingProvider!, text, {
             ...taskOptions,
+            requestContext: sourceReference,
             signal: abort.signal,
             beforeRun: () => {
               abort.signal.throwIfAborted();
@@ -2382,7 +2407,8 @@ export function createAgentPanel(
               operationHistory.push({ role: 'user', content: text });
             },
             assertCurrent: () => {
-              if (!currentTarget.isCurrent(false)) throw new Error(t('agentPlanExpired'));
+              if (!binding.sources.isCurrent() || !currentTarget.isCurrent(false))
+                throw new Error(t('agentPlanExpired'));
             },
             onToolExchange: record,
             onEvent: (event) => {
@@ -2437,6 +2463,7 @@ export function createAgentPanel(
           target.context,
           abort.signal,
           {
+            referenceData: sourceReference,
             pendingProposal: request.refinement ? pendingProposal : undefined,
             stableCapabilityPrefix:
               webllmProvider instanceof WllamaProvider ||
@@ -2562,7 +2589,7 @@ export function createAgentPanel(
           let partialAnswer = '';
           const display = new AssistantDisplayStream((delta) => {
             partialAnswer += delta;
-            chat.appendDelta(delta);
+            chat.appendDelta(delta, { metadata: resultMetadata });
           });
           try {
             const answer = await generateReadAnswer(
@@ -2580,6 +2607,7 @@ export function createAgentPanel(
                 )
                   display.push(delta);
               },
+              sourceReference,
             );
             abort.signal.throwIfAborted();
             if (
@@ -2645,12 +2673,14 @@ export function createAgentPanel(
             text: source,
             instruction: trimmed,
             targetLanguage: languageSelect.value as WritingLanguage,
+            referenceData: sourceReference,
           },
           abort.signal,
         );
         const plan = { tool: 'insert_text' as const, input: { text: body } };
         abort.signal.throwIfAborted();
         if (
+          !binding.sources.isCurrent() ||
           generation !== controllerGeneration ||
           conversation !== conversationRevision ||
           (target && !target.isCurrent()) ||
@@ -2702,14 +2732,18 @@ export function createAgentPanel(
         chat.setActivity('responding');
         const pdf = snapshot.context?.kind === 'pdf';
         const safe = !pendingProposal && safeChatIntent(trimmed);
-        const reference = scope.editorBound
-          ? serializeRequestContext(
-              pdf && !safe
-                ? captureRequestContext('pdf-page')
-                : { editor: snapshot.context, selection: { text: snapshot.text, truncated: snapshot.truncated } },
-              trimmed,
-            ).serialized
-          : undefined;
+        const reference =
+          scope.editorBound || binding.sources.references.length
+            ? serializeRequestContext(
+                {
+                  ...(pdf && !safe
+                    ? captureRequestContext('pdf-page')
+                    : { editor: snapshot.context, selection: { text: snapshot.text, truncated: snapshot.truncated } }),
+                  references: binding.sources.references,
+                },
+                trimmed,
+              ).serialized
+            : undefined;
         beginExecution();
         const result = await ctl.send(trimmed, {
           echoUser: false,
@@ -2721,6 +2755,7 @@ export function createAgentPanel(
                 !enabled ||
                 generation !== controllerGeneration ||
                 conversation !== conversationRevision ||
+                !binding.sources.isCurrent() ||
                 binding.providerRevision !== providerBindingRevision ||
                 (scope.editorBound && (binding.readonly !== getReadonlyMode() || !requestTarget?.isCurrent(false)))
               )
@@ -2775,6 +2810,7 @@ export function createAgentPanel(
       timing.finish(turnStatus);
       if (activeTiming === timing) {
         activeTiming = undefined;
+        resultMetadata = undefined;
         chat.observePresentation();
       }
       previousPreview?.setRefining(false);
@@ -2808,6 +2844,9 @@ export function createAgentPanel(
     controller = null;
     conversations.select(id);
     displayedConversationId = id;
+    sourceView.cancelPending();
+    referenceSources.select(id);
+    sourceView.refresh();
     requestQueue?.select(id);
     clearPreviews();
     clearQuote();
@@ -2852,6 +2891,9 @@ export function createAgentPanel(
     store: conversations,
     onFocusAfterDeletion: () => conversationList?.focus(),
     onBeforeRestore: (deleted) => {
+      referenceSources.forget(deleted && deleted !== 'all' ? deleted : undefined);
+      sourceView.cancelPending();
+      sourceView.refresh();
       if (deleted && deleted !== 'all') drafts.delete(deleted);
       else drafts.clear();
       if (deleted === 'all' || deleted === displayedConversationId) chat.setInput('');
@@ -2948,11 +2990,68 @@ export function createAgentPanel(
     writingSelect.setAttribute('aria-label', t('agentTaskLabel'));
     languageSelect.setAttribute('aria-label', t('agentTaskLanguage'));
     chat.setLabels(chatLabels()); // Send/Stop/placeholder/empty + role chips
-    pendingQueue.update(requestQueue!.state(conversations.activeId));
+    pendingQueue.update(requestQueue!.state(conversations.activeId), conversations.activeId);
     syncProviderUi(); // refresh key placeholder / model hint in the new language
     contextLifecycle?.update();
   });
 
+  const artifactsBtn = View<HTMLButtonElement>('button').class('agent-workspace-toggle').attr('type', 'button').build();
+  const artifactsView = createArtifactsView({
+    store: createArtifactStore(),
+    labels: artifactLabels(),
+    conversation: () => conversations.activeId,
+    onClose: () => showView('chat'),
+    onApply: async (text) => {
+      showView('chat');
+      try {
+        if (requestQueue?.busy || getReadonlyMode()) throw new Error(t('agentApplyBusy'));
+        const target = captureDocumentToolTarget();
+        if (target.context.kind !== 'word') throw new Error(t('agentWordOnly'));
+        invalidatePlans();
+        preview = createPreview();
+        previews.add(preview);
+        const action = new DocumentToolAction(target, {
+          tool: 'insert_text',
+          input: { text, format: 'markdown' },
+          readOnly: false,
+        });
+        preview.show(action);
+        chat.appendContent(preview.el);
+      } catch (error) {
+        appendTurn({ role: 'error', text: displayError(error) });
+      }
+    },
+  });
+  artifactsBtn.addEventListener('click', () => showView(panel.dataset.view === 'artifacts' ? 'chat' : 'artifacts'));
+  window.addEventListener('pagehide', (event) => {
+    if (!event.persisted) artifactsView.dispose();
+  });
+  referenceSources.select(conversations.activeId);
+  const sourcesBtn = View<HTMLButtonElement>('button').class('agent-sources-toggle').attr('type', 'button').build();
+  const sourceSummary = View('p').class('agent-sources-summary agent-entry-note').build();
+  let sourceState = referenceSources.capture();
+  const sourceView = createSourcesView({
+    sources: referenceSources,
+    labels: sourcesLabels(),
+    close: () => showView('chat'),
+    changed: () => {
+      if (!sourceState.isCurrent()) invalidateRequestBindings();
+      sourceState = referenceSources.capture();
+      sourceSummary.hidden = referenceSources.list().length === 0;
+      sourceSummary.textContent = referenceSources
+        .list()
+        .map((source) => source.title)
+        .join(' · ');
+      sourceSummary.title = t('agentSourcesExcerpt');
+      sourcesBtn.textContent = `${t('agentSourcesSources')}${referenceSources.list().length ? ` · ${referenceSources.list().length}` : ''}`;
+    },
+  });
+  sourcesBtn.addEventListener('click', () => showView(panel.dataset.view === 'sources' ? 'chat' : 'sources'));
+  chat.actionsEl.prepend(sourcesBtn);
+  chat.contextEl.append(sourceSummary);
+  window.addEventListener('pagehide', (event) => {
+    if (!event.persisted) sourceView.dispose();
+  });
   const historyBtn = document.createElement('button');
   historyBtn.type = 'button';
   historyBtn.className = 'agent-history-toggle';
@@ -2984,9 +3083,9 @@ export function createAgentPanel(
   const syncSource = () => {
     if (selectedSource !== sourcePicker.value) invalidateRequestBindings();
     selectedSource = sourcePicker.value;
-    localCard.hidden = sourcePicker.value !== 'local';
-    serviceCard.hidden = sourcePicker.value !== 'service';
+    settingsView.setSource(selectedSource);
     cacheList.hidden = sourcePicker.value !== 'local';
+    note.hidden = sourcePicker.value !== 'local';
     syncRuntimeStatus();
   };
   sourcePicker.addEventListener('change', syncSource);
@@ -3053,11 +3152,12 @@ export function createAgentPanel(
     onDelete: (id, trigger) => historyControls?.requestDelete(id, trigger),
   });
   historyView.append(conversationList.el, historyControls.el);
+  header.insertBefore(artifactsBtn, settingsBtn);
   header.insertBefore(historyBtn, settingsBtn);
   header.insertBefore(clearBtn, settingsBtn);
 
   chat.el.append(writeDestination);
-  function showView(view: 'chat' | 'settings' | 'history'): void {
+  function showView(view: 'chat' | 'settings' | 'history' | 'sources' | 'artifacts'): void {
     if (view === 'history') rememberDraft();
     viewRevision++;
     speech?.close();
@@ -3067,6 +3167,11 @@ export function createAgentPanel(
     settings.classList.toggle('agent-panel-settings-hidden', view !== 'settings');
     chat.el.hidden = view !== 'chat';
     historyView.hidden = view !== 'history';
+    sourceView.el.hidden = view !== 'sources';
+    artifactsView.el.hidden = view !== 'artifacts';
+    artifactsBtn.setAttribute('aria-expanded', String(view === 'artifacts'));
+    if (view === 'artifacts') void artifactsView.refresh();
+    sourcesBtn.setAttribute('aria-expanded', String(view === 'sources'));
     syncHistoryActivity();
     settingsBtn.setAttribute('aria-expanded', String(view === 'settings'));
     syncRuntimeStatus();
@@ -3074,7 +3179,21 @@ export function createAgentPanel(
     if (!open) return;
     if (view === 'settings') settingsHeading.focus();
     else if (view === 'history') conversationList?.focus();
+    else if (view === 'sources') sourceView.focus();
+    else if (view === 'artifacts') artifactsBtn.focus();
     else chat.focus();
+  }
+  for (const [element, trigger] of [
+    [sourceView.el, sourcesBtn],
+    [artifactsView.el, artifactsBtn],
+  ] as const) {
+    element.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.stopPropagation();
+        showView('chat');
+        trigger.focus();
+      }
+    });
   }
   historyBtn.addEventListener('click', () => showView(panel.dataset.view === 'history' ? 'chat' : 'history'));
   historyView.addEventListener('keydown', (event) => {
@@ -3086,6 +3205,12 @@ export function createAgentPanel(
   });
   const syncProductLabels = () => {
     settingsView.syncLabels();
+    sourceView.setLabels(sourcesLabels());
+    artifactsView.setLabels(artifactLabels());
+    artifactsBtn.title = t('agentArtifactTitle');
+    artifactsBtn.setAttribute('aria-label', t('agentArtifactTitle'));
+    artifactsBtn.innerHTML =
+      '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg>';
     refinementLabel.textContent = t('agentRefiningProposal');
     refinementCancel.textContent = t('agentPlanCancel');
     disableLabel.textContent = t('agentEnable');
@@ -3099,7 +3224,7 @@ export function createAgentPanel(
   clearBtn.addEventListener('click', () => showView('chat'));
   clearBtn.title = t('agentNewConversation');
   clearBtn.setAttribute('aria-label', t('agentNewConversation'));
-  panel.append(header, runtimeRow, settings, historyView, chat.el);
+  panel.append(header, runtimeRow, settings, historyView, sourceView.el, artifactsView.el, chat.el);
   document.body.append(panel);
   const endpoint = configuredEndpoint(endpointSettings);
   hasConfiguration =

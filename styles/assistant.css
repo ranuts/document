@@ -614,14 +614,14 @@ r-dropdown[role='listbox'] {
   min-height: 32px;
 }
 .agent-panel .cui-input {
-  min-height: 56px;
+  min-height: 1.65em;
   border: 0;
   border-radius: 0;
   box-shadow: none;
   line-height: 1.65;
 }
 .agent-panel .cui-composer-bar {
-  margin-top: 16px;
+  margin-top: var(--ran-space-2);
 }
 @media (max-width: 480px) {
   .agent-panel-header button,
@@ -672,8 +672,8 @@ r-dropdown[role='listbox'] {
     padding: 10px;
   }
   .agent-panel .cui-input {
-    min-height: 40px;
-    max-height: 40px;
+    min-height: 1.65em;
+    max-height: 160px;
   }
   .agent-panel .cui-composer-bar {
     margin-top: 8px;
@@ -2071,4 +2071,199 @@ r-dropdown[role='listbox'] {
 /* The composer owns progress while a request is active; the queue keeps its original text. */
 .cui-root[data-activity] .agent-queue-state {
   display: none;
+}
+
+/* The queue summary stays reachable without exposing every pending draft. */
+.agent-request-queue .agent-queue-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  min-width: 0;
+  padding-inline: 0;
+  text-align: start;
+}
+.agent-queue-toggle::before {
+  content: '›';
+  color: var(--ran-color-text-secondary);
+  transform: rotate(0deg);
+}
+.agent-queue-toggle[aria-expanded='true']::before {
+  transform: rotate(90deg);
+}
+
+/* Sources and saved results share the assistant canvas, never nested cards. */
+.agent-workspace-view,
+.agent-artifacts {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--ran-space-4);
+}
+.agent-workspace-view[hidden],
+.agent-artifacts[hidden] {
+  display: none;
+}
+.agent-workspace-view h2,
+.agent-artifacts h2 {
+  margin: var(--ran-space-3) 0 var(--ran-space-5);
+  font-size: 1.2em;
+}
+.agent-workspace-view h3 {
+  margin: var(--ran-space-5) 0 var(--ran-space-2);
+  font-size: 1em;
+  font-weight: 600;
+}
+.agent-workspace-view label,
+.agent-artifact-editor label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-2);
+  margin-block: var(--ran-space-3);
+}
+.agent-workspace-view input,
+.agent-artifact-editor input,
+.agent-artifact-editor textarea,
+.agent-artifact-editor select {
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  background: transparent;
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  padding: var(--ran-space-2);
+}
+.agent-artifact-editor textarea {
+  min-height: 16em;
+  resize: vertical;
+  line-height: 1.6;
+}
+.agent-workspace-view button,
+.agent-artifacts button,
+.agent-sources-toggle,
+.agent-workspace-toggle {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  padding: var(--ran-space-2);
+  min-height: 36px;
+  cursor: pointer;
+  text-align: start;
+}
+.agent-workspace-view button:hover,
+.agent-artifacts button:hover,
+.agent-sources-toggle:hover,
+.agent-workspace-toggle:hover {
+  background: var(--ran-color-fill-secondary);
+}
+.agent-workspace-view button:focus-visible,
+.agent-artifacts button:focus-visible,
+.agent-sources-toggle:focus-visible,
+.agent-workspace-toggle:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+}
+.agent-source-row,
+.agent-artifact-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  flex-wrap: wrap;
+}
+.agent-source-row span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.agent-sources-attached:empty {
+  display: none;
+}
+.agent-sources-summary {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+.agent-artifact-provenance,
+.agent-artifact-status {
+  color: var(--ran-color-text-secondary);
+  font-size: 0.875em;
+  overflow-wrap: anywhere;
+}
+.agent-artifacts-list {
+  display: flex;
+  flex-direction: column;
+}
+.agent-artifacts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.agent-artifact-editor > input {
+  border: 0;
+  border-radius: 0;
+  font-weight: 600;
+  font-size: 1.125em;
+  padding-inline: 0;
+  margin-block: var(--ran-space-3);
+}
+.agent-artifact-editor > select {
+  border: 0;
+  width: auto;
+  max-width: 100%;
+  padding-inline: 0;
+  color: var(--ran-color-text-secondary);
+  margin-block-end: var(--ran-space-2);
+}
+.agent-artifact-editor > textarea {
+  border: 0;
+  border-radius: 0;
+  padding-inline: 0;
+}
+.agent-artifact-editor > input:focus-visible,
+.agent-artifact-editor > textarea:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 3px;
+}
+.agent-artifact-actions button[data-action='apply'] {
+  color: var(--ran-color-primary);
+  font-weight: 600;
+}
+.agent-artifact-actions button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+/* The language picker yields space before it can cover Stop/Send. */
+.agent-speech-language {
+  flex: 1 1 96px;
+  width: auto;
+  min-width: 0;
+  max-width: 96px;
+}
+.agent-sources-view [hidden] {
+  display: none;
+}
+.agent-sources-view [role='status']:empty {
+  display: none;
+}
+.agent-source-settings {
+  margin-block: var(--ran-space-4);
+}
+.agent-source-settings summary {
+  cursor: pointer;
+  padding-block: var(--ran-space-2);
+}
+.agent-source-settings summary h3 {
+  display: inline;
+  margin: 0;
+}
+.agent-source-options {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.agent-source-options button {
+  overflow-wrap: anywhere;
 }

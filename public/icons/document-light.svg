@@ -7,7 +7,6 @@
   aria-labelledby="title"
 >
   <title id="title">Document Editor — offset aperture</title>
-  <rect width="512" height="512" rx="96" fill="#ffffff" />
   <g fill="#171717">
     <path d="M264 62Q282 52 282 74V162L140 246L194 288V400L86 314Q74 304 74 286V178Q74 163 87 155Z" />
     <path

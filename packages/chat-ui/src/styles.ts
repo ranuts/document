@@ -65,6 +65,7 @@ export const CHAT_UI_CSS = `
 .cui-message-actions button:disabled { opacity:.5; cursor:default; }
 .cui-message-actions .cui-copy { flex:0 0 var(--ran-size-7, 32px); width:var(--ran-size-7, 32px); padding:0; display:inline-flex; align-items:center; justify-content:center; }
 .cui-message-actions .cui-copy svg { flex-shrink:0; }
+.cui-apply-status { color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); }
 .cui-feedback { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
 .cui-root :is(button,summary,pre,.cui-table):focus-visible { outline:2px solid var(--ran-color-link, #0070f3); outline-offset:3px; }
 .cui-streaming .cui-message-actions { display:none; }
@@ -95,7 +96,7 @@ export const CHAT_UI_CSS = `
 .cui-composer-bar { display:flex; align-items:center; gap:8px; margin-top:12px; }
 .cui-actions { display:flex; flex:1; min-width:0; align-items:center; gap:6px; font-size:12px; flex-wrap:wrap; }
 .cui-context:empty { display:none; }
-.cui-input { min-width:0; width:100%; box-sizing:border-box; resize:none; overflow-y:auto; border:0; outline:none; background:transparent; padding:0; font:inherit; line-height:1.5; color:inherit; max-height:160px; min-height:40px; }
+.cui-input { min-width:0; width:100%; box-sizing:border-box; resize:none; overflow-y:auto; border:0; outline:none; background:transparent; padding:0; font:inherit; line-height:1.5; color:inherit; max-height:160px; min-height:1.5em; }
 .cui-input::placeholder { color:var(--cui-muted); }
 .cui-send, .cui-stop { flex:0 0 auto; width:var(--ran-size-8, 36px); height:var(--ran-size-8, 36px); box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:0; border-radius:var(--ran-radius-sm, 6px); cursor:pointer; background:var(--cui-accent); color:var(--cui-accent-contrast); transition:background-color var(--ran-motion-duration-fast, .15s), color var(--ran-motion-duration-fast, .15s); }
 .cui-send:hover:not(:disabled) { background:color-mix(in srgb, var(--cui-accent) 85%, var(--cui-bg)); }

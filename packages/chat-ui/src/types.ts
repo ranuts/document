@@ -3,6 +3,8 @@ export type ChatRole = 'user' | 'agent' | 'tool' | 'status' | 'error';
 
 /** A single rendered message. */
 export interface ChatMessage {
+  /** Opaque host provenance captured when this message is created; never sent to the model. */
+  metadata?: Readonly<Record<string, unknown>>;
   role: ChatRole;
   text: string;
   interrupted?: true;
@@ -28,6 +30,7 @@ export interface ChatViewLabels {
   placeholder?: string;
   /** Empty-state hint shown when there are no messages. */
   empty?: string;
+  saveMessage?: string;
   copy?: string;
   copied?: string;
   copyFailed?: string;
@@ -80,6 +83,8 @@ export interface ChatViewOptions {
   canApplyMessage?: () => boolean;
   /** Only explicitly marked artifacts may offer host write actions. */
   requireDocumentArtifact?: boolean;
+  /** Optional explicit persistence action owned by the host. */
+  onSaveMessage?: (text: string, metadata?: Readonly<Record<string, unknown>>) => Promise<void> | void;
   onApplyMessage?: (text: string) => Promise<'verified' | 'sent' | 'retry' | 'failed'>;
   /** Initial labels; change later with {@link ChatView.setLabels}. */
   labels?: ChatViewLabels;

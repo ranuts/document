@@ -8,7 +8,7 @@ import type { AgentChatControllerOptions, ChatTurn, TurnRequest } from './contro
 import type { ComposerContext } from './composer-context';
 import type { RequestScopePolicy } from './request-scope';
 import { readReceipt } from './read-receipt';
-import { captureRequestContext, serializeRequestContext } from './request-context';
+import { captureRequestContext, serializeRequestContext, type ReferenceExcerpt } from './request-context';
 
 interface BindingOptions {
   base: AgentChatControllerOptions;
@@ -38,6 +38,7 @@ export function createDocumentControllerBindings(host: BindingOptions): AgentCha
 }
 
 interface NativeRequestOptions {
+  references?: readonly ReferenceExcerpt[];
   target: ReturnType<typeof captureDocumentToolScope>;
   instruction: string;
   snapshot: ComposerContext;
@@ -63,11 +64,12 @@ export function createNativeDocumentRequest(host: NativeRequestOptions): TurnReq
     tools: {},
     assertCurrent,
     getRequestContext: () =>
-      host.scope.deferNative
+      host.scope.deferNative && !host.references?.length
         ? undefined
         : serializeRequestContext(
             {
               editor: host.snapshot.context,
+              references: host.references,
               selection: { text: host.snapshot.text, truncated: host.snapshot.truncated },
             },
             host.instruction,

@@ -179,3 +179,32 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
     }
   });
 }
+
+for (const width of [360, 1280]) {
+  test(`composer stays compact and grows with multiline drafts at ${width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.addInitScript(() => {
+      localStorage.setItem('document-assistant-enabled', 'true');
+      localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+    });
+    await page.goto('/editor?new=docx&locale=en');
+    await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+    await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+    const input = page.locator('.cui-input');
+    const composer = page.locator('.cui-composer');
+    await expect(input).toBeVisible();
+    const empty = (await composer.boundingBox())!.height;
+    expect(empty).toBeLessThan(115);
+    await input.fill(Array.from({ length: 12 }, (_, i) => `第 ${i + 1} 行：保持原文的事实和数字。`).join('\n'));
+    expect((await input.boundingBox())!.height).toBeGreaterThan(80);
+    expect((await input.boundingBox())!.height).toBeLessThanOrEqual(160);
+    expect((await composer.boundingBox())!.height).toBeGreaterThan(empty + 40);
+    await input.fill('Short draft');
+    await expect.poll(async () => (await composer.boundingBox())!.height).toBeLessThanOrEqual(empty + 1);
+    await input.fill('');
+    await expect.poll(async () => (await composer.boundingBox())!.height).toBeLessThanOrEqual(empty + 1);
+    await page
+      .locator('.agent-runtime-panel')
+      .screenshot({ path: testInfo.outputPath(`composer-compact-${width}.png`) });
+  });
+}

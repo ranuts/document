@@ -61,7 +61,11 @@ export async function generateDocumentToolSequence(
   request: string,
   context: DocumentContext,
   signal: AbortSignal,
-  options: { stableCapabilityPrefix?: boolean; pendingProposal?: Pick<DocumentToolPlan, 'tool' | 'input'> } = {},
+  options: {
+    referenceData?: string;
+    stableCapabilityPrefix?: boolean;
+    pendingProposal?: Pick<DocumentToolPlan, 'tool' | 'input'>;
+  } = {},
 ): Promise<readonly DocumentToolPlan[]> {
   signal.throwIfAborted();
   if (!request.trim() || request.length > 8000) throw new Error('Invalid document operation request');
