@@ -101,6 +101,8 @@ export interface ChatViewOptions {
   ) => Promise<MessageSaveOutcome | void> | MessageSaveOutcome | void;
   /** At most two host-defined secondary actions; never inferred from response HTML. */
   getMessageActions?: (message: ChatMessage) => readonly ChatMessageAction[];
+  /** Presentation-only decoration after safe Markdown rendering; raw copy/source stays unchanged. */
+  presentMessage?: (bubble: HTMLElement, metadata?: Readonly<Record<string, unknown>>) => void;
   onApplyMessage?: (text: string) => Promise<'verified' | 'sent' | 'retry' | 'failed'>;
   /** Initial labels; change later with {@link ChatView.setLabels}. */
   labels?: ChatViewLabels;

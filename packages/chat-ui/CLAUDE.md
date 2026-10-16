@@ -219,3 +219,9 @@ their meaning and stages drafts; ChatView does not infer capabilities from prose
 Actions stay unavailable during streaming/running, IME composition and interrupted
 output. They never call `onSend` implicitly. Keep document application as the single
 primary action, with Save, Copy and follow-ups secondary.
+
+`presentMessage(bubble, metadata)` is an optional host presentation hook after safe
+Markdown rendering of completed/restored assistant messages. Hosts can decorate
+literal citation tokens using captured metadata. It receives no model authority;
+unknown tokens must stay plain. Decoration never changes raw source used for Copy,
+Save or follow-ups. Live metadata is pinned when the stream bubble is first created.

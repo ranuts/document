@@ -30,6 +30,7 @@ export interface ChatTurn {
   /** Text-only result; no host write action may be reconstructed. */
   copyOnly?: true;
   documentArtifact?: true;
+  metadata?: Readonly<Record<string, unknown>>;
 }
 
 export interface AgentChatControllerOptions {
@@ -47,6 +48,8 @@ export interface AgentChatControllerOptions {
   /** Persist/restore conversation history across reloads. */
   storage?: HistoryStorage;
   onContextTrimmed?: () => void;
+  onRequestContext?: (context: string | undefined) => void;
+  getResponseMetadata?: () => Readonly<Record<string, unknown>> | undefined;
   getRequestContext?: () => string | undefined;
   assertCurrent?: () => void;
 }
@@ -131,9 +134,16 @@ export class AgentChatController {
     let toolFailed = false;
     let verifiedChanges = 0;
     let interruptedText = '';
+    let interruptedPresentation: LLMMessage['hostPresentation'];
     const saveStoppedTurn = () => {
       if (!current()) return;
-      if (interruptedText) this.history.push({ role: 'assistant', content: interruptedText, interrupted: true });
+      if (interruptedText)
+        this.history.push({
+          role: 'assistant',
+          content: interruptedText,
+          interrupted: true,
+          ...(interruptedPresentation ? { hostPresentation: interruptedPresentation } : {}),
+        });
       const status = { role: 'assistant' as const, content: t('agentStopped'), hostGuidance: 'status' as const };
       this.history.push(status);
       saveHistory();
@@ -144,6 +154,10 @@ export class AgentChatController {
       if (delta) run.timing?.filteredText();
       visibleAnswer = true;
       if (this.options.onAgentDelta) {
+        if (!interruptedText) {
+          const metadata = this.options.getResponseMetadata?.();
+          interruptedPresentation = metadata ? { id: crypto.randomUUID(), metadata } : undefined;
+        }
         interruptedText += delta;
         this.options.onAgentDelta(delta);
       }
@@ -151,6 +165,7 @@ export class AgentChatController {
     let displayStream = new AssistantDisplayStream(emitDelta);
     const resetSegment = () => {
       interruptedText = '';
+      interruptedPresentation = undefined;
       displayStream = new AssistantDisplayStream(emitDelta);
     };
     try {
@@ -199,6 +214,14 @@ export class AgentChatController {
           saveHistory();
         },
         requestContext,
+        onRequestContext: this.options.onRequestContext,
+        annotateAssistant: (message) => {
+          const metadata = this.options.getResponseMetadata?.();
+          return metadata &&
+            (typeof message.content === 'string' || !message.content.some((block) => block.type === 'tool_use'))
+            ? { id: crypto.randomUUID(), metadata }
+            : undefined;
+        },
         assertCurrent: () => {
           assertLive();
           assertCurrent?.();
@@ -273,7 +296,13 @@ export class AgentChatController {
           const guidance = documentTaskFailureText(error, verifiedChanges);
           if (interruptedText || verifiedChanges > 0) {
             const failure = { role: 'assistant' as const, content: guidance, hostGuidance: 'error' as const };
-            if (interruptedText) this.history.push({ role: 'assistant', content: interruptedText, interrupted: true });
+            if (interruptedText)
+              this.history.push({
+                role: 'assistant',
+                content: interruptedText,
+                interrupted: true,
+                ...(interruptedPresentation ? { hostPresentation: interruptedPresentation } : {}),
+              });
             this.history.push(failure);
             saveHistory();
           }

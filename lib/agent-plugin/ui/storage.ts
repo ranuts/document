@@ -7,6 +7,7 @@
  * stored message history back to display {@link ChatTurn}s using the same
  * role/prefix conventions the controller emits live.
  */
+import { validSourcePresentation } from './source-evidence';
 import { localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
 import { assistantPresentation, toolLabel, displayError } from './presentation';
 import type { ChatTurn } from './controller';
@@ -19,6 +20,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 export function isMessage(value: unknown): value is LLMMessage {
   if (!isRecord(value) || (value.role !== 'user' && value.role !== 'assistant')) return false;
+  if (
+    value.hostPresentation !== undefined &&
+    (value.role !== 'assistant' || !validSourcePresentation(value.hostPresentation))
+  )
+    return false;
   if (value.copyOnly !== undefined && value.copyOnly !== true) return false;
   if (
     value.documentArtifact !== undefined &&
@@ -101,6 +107,7 @@ export function historyToTurns(messages: LLMMessage[]): ChatTurn[] {
             (message as LLMMessage & { hostGuidance?: 'tool' | 'status' | 'error' }).hostGuidance ??
             (message.role === 'assistant' ? 'agent' : 'user'),
           text,
+          ...(message.hostPresentation ? { metadata: message.hostPresentation.metadata } : {}),
           ...(message.documentArtifact ? { documentArtifact: true as const } : {}),
           ...((message as LLMMessage & { copyOnly?: true }).copyOnly ? { copyOnly: true as const } : {}),
           ...(message.role === 'assistant' &&
@@ -121,6 +128,7 @@ export function historyToTurns(messages: LLMMessage[]): ChatTurn[] {
           turns.push({
             role: message.role === 'assistant' ? 'agent' : 'user',
             text,
+            ...(message.hostPresentation ? { metadata: message.hostPresentation.metadata } : {}),
             ...(message.role === 'assistant' && message.interrupted ? { interrupted: true as const } : {}),
           });
       } else if (block.type === 'tool_use') {

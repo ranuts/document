@@ -26,6 +26,9 @@ export function sourcesLabels(): SourcesLabels {
     attach: t('agentSourcesAttach'),
     close: t('agentSourcesClose'),
     more: t('agentSourcesMore'),
+    search: t('agentSourcesSearch'),
+    previewTruncated: t('agentSourcesPreviewTruncated'),
+    openSource: t('agentSourcesOpen'),
   };
 }
 

@@ -2316,3 +2316,44 @@ r-dropdown[role='listbox'] {
   outline: 2px solid var(--ran-color-link, #0070f3);
   outline-offset: 2px;
 }
+
+/* Source disclosure stays flat; citations open captured text without a network read. */
+.agent-source-preview {
+  min-width: 0;
+  flex: 1;
+}
+.agent-source-preview summary {
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.agent-source-preview pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  color: var(--ran-color-text-secondary);
+  max-height: 16rem;
+  overflow: auto;
+  margin: 0.5rem 0;
+}
+.agent-source-preview small {
+  color: var(--ran-color-text-secondary);
+}
+.agent-source-citation {
+  display: inline;
+  border: 0;
+  padding: 0 0.15em;
+  background: none;
+  color: var(--ran-color-primary);
+  font: inherit;
+  cursor: pointer;
+}
+.agent-source-citation:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+}
+.cui-bubble .agent-source-preview pre {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}

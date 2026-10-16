@@ -37,16 +37,18 @@ Record the tested deployment origin, build commit, date and pass/fail outcomes w
 
 All routes are same-origin under `/api/connectors/google`, use `credentials: 'same-origin'`, and return `Cache-Control: no-store`. Mutations require a same-origin `Origin` header.
 
-| Route               | Method | Result                                                                                        |
-| ------------------- | ------ | --------------------------------------------------------------------------------------------- |
-| `/start`            | POST   | `{authorizationUrl}`; navigate the user-initiated popup                                       |
-| `/callback`         | GET    | Google-owned redirect target; HTML completion page, no tokens                                 |
-| `/status`           | GET    | `{configured:true,connected:boolean,expiresAt?:number}`; epoch milliseconds                   |
-| `/list?pageToken=…` | GET    | `{files:[{id,name,mimeType,modifiedTime,size?}],nextPageToken?}`; 30 supported files per page |
-| `/read?id=…`        | GET    | `{id,name,mimeType,modifiedTime?,text}`                                                       |
-| `/disconnect`       | POST   | `{connected:false}`; attempts Google revocation and always clears local cookies               |
+| Route                   | Method | Result                                                                                                                 |
+| ----------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `/start`                | POST   | `{authorizationUrl}`; navigate the user-initiated popup                                                                |
+| `/callback`             | GET    | Google-owned redirect target; HTML completion page, no tokens                                                          |
+| `/status`               | GET    | `{configured:true,connected:boolean,expiresAt?:number}`; epoch milliseconds                                            |
+| `/list?q=…&pageToken=…` | GET    | `{files:[{id,name,mimeType,modifiedTime,size?}],nextPageToken?}`; 30 supported files per page; optional filename query |
+| `/read?id=…`            | GET    | `{id,name,mimeType,modifiedTime?,text}`                                                                                |
+| `/disconnect`           | POST   | `{connected:false}`; attempts Google revocation and always clears local cookies                                        |
 
-Missing server configuration returns HTTP 503 and `{configured:false,connected:false,error:'not_configured'}`. A static deployment may instead return an HTML 404; the client must distinguish that from successful JSON. Other sanitized error codes include `invalid_origin`, `method_not_allowed`, `reconnect_required`, `invalid_file`, `unsupported_file`, `source_too_large`, and `service_unavailable`. Upstream response bodies, access tokens and request secrets are never included in error output. Treat 401 as a disconnected state and offer explicit reconnect; do not automatically resend a user request.
+Missing server configuration returns HTTP 503 and `{configured:false,connected:false,error:'not_configured'}`. A static deployment may instead return an HTML 404; the client must distinguish that from successful JSON. Other sanitized error codes include `invalid_origin`, `method_not_allowed`, `reconnect_required`, `invalid_file`, `invalid_query`, `unsupported_file`, `source_too_large`, and `service_unavailable`. Upstream response bodies, access tokens and request secrets are never included in error output. Treat 401 as a disconnected state and offer explicit reconnect; do not automatically resend a user request.
+
+Filename search accepts up to 200 characters, rejects control characters, and escapes quotes and backslashes as one Drive query literal. It cannot supply arbitrary query predicates or API URLs. Page tokens remain bounded to 2,048 characters; the client requires explicit Load more, deduplicates files and stops repeated cursors and traversal limits.
 
 Supported content is Google Docs exported as plain text and UTF-8 plain text, Markdown, CSV and JSON files. Binary Office/PDF files are deliberately excluded. Responses are streamed with a 128 KiB bound (including files with no Content-Length), a 15-second timeout and no upstream redirects. Only fixed Google API endpoints can be fetched; file IDs and supported MIME types are validated. The later AI request envelope has its own smaller budget, so selecting a file does not mean its entire text will fit into a model request. Display any truncation at that boundary.
 

@@ -634,3 +634,56 @@ it('does not observe provider text that arrives after abort', async () => {
   );
   expect(observed).not.toHaveBeenCalled();
 });
+it('associates host annotations with the exact response while excluding them from provider requests', async () => {
+  const chat = vi.fn().mockResolvedValue(textResponse('answer [S1]'));
+  const metadata = { evidence: [{ id: 'S1', text: 'captured source' }] };
+  const first = await runAgent({ name: 'test', isReady: () => true, chat }, 'question', {
+    annotateAssistant: () => ({ id: 'response-1', metadata }),
+  });
+  expect(first.messages.at(-1)?.hostPresentation).toEqual({ id: 'response-1', metadata });
+  await runAgent({ name: 'test', isReady: () => true, chat }, 'again', { history: first.messages });
+  expect(JSON.stringify(chat.mock.calls[1][0])).not.toContain('captured source');
+  expect(JSON.stringify(chat.mock.calls[1][0])).not.toContain('hostPresentation');
+});
+it('reports the exact clipped optional context before inference', async () => {
+  const observe = vi.fn();
+  const chat = vi.fn().mockResolvedValue(textResponse('answer'));
+  await runAgent({ name: 'test', isReady: () => true, chat }, 'question', {
+    maxContextBytes: 600,
+    requestContext: JSON.stringify({ references: [{ id: 'S1', text: 'x'.repeat(5000) }] }),
+    onRequestContext: observe,
+  });
+  const sent = observe.mock.calls[0][0];
+  expect(JSON.parse(sent).references[0].text.length).toBeLessThan(5000);
+  expect(chat.mock.calls[0][0].at(-1).content).toContain(sent);
+});
+it('preserves each response annotation when later tool exchanges reduce available evidence', async () => {
+  let evidence = '';
+  let id = 0;
+  const chat = vi
+    .fn()
+    .mockResolvedValueOnce(toolResponse('read-1', 'read_source', {}))
+    .mockResolvedValueOnce(textResponse('answer [S1]'));
+  const result = await runAgent({ name: 'test', isReady: () => true, chat }, 'question', {
+    maxContextBytes: 1600,
+    requestContext: JSON.stringify({ references: [{ id: 'S1', text: 'x'.repeat(2000) }] }),
+    tools: {
+      read_source: {
+        name: 'read_source',
+        description: 'read',
+        inputSchema: {},
+        readOnlyHint: true,
+        execute: async () => 'z'.repeat(500),
+      },
+    },
+    onRequestContext: (context) => {
+      evidence = context ?? '';
+    },
+    annotateAssistant: () => ({ id: `message-${++id}`, metadata: { evidence } }),
+  });
+  const responses = result.messages.filter((message) => message.hostPresentation);
+  expect(responses.map((message) => message.hostPresentation!.id)).toEqual(['message-1', 'message-2']);
+  const first = JSON.parse(responses[0].hostPresentation!.metadata.evidence as string).references[0].text;
+  const second = JSON.parse(responses[1].hostPresentation!.metadata.evidence as string).references[0].text;
+  expect(first.length).toBeGreaterThan(second.length);
+});

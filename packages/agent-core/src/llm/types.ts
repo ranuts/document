@@ -31,6 +31,8 @@ export type LLMContent =
 /** A conversation message. `content` is plain text or a list of blocks. */
 export interface LLMMessage {
   role: 'user' | 'assistant';
+  /** Opaque host presentation, stripped at runtime provider boundary. Never model context. */
+  hostPresentation?: { id: string; metadata: Readonly<Record<string, unknown>> };
   content: string | LLMContent[];
   /** Visible partial prose preserved after cancellation; never a complete answer. */
   interrupted?: true;

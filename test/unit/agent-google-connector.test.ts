@@ -147,6 +147,25 @@ describe('optional Google Drive server connector', () => {
     fetcher.mockResolvedValueOnce(new Response(JSON.stringify({ mimeType: 'application/pdf' })));
     expect((await handleGoogleConnector(request('read?id=abc', { headers: { cookie } }), env)).status).toBe(415);
   });
+  it('escapes bounded Drive filename search as one literal and rejects oversized queries', async () => {
+    const fetcher = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'token', expires_in: 3600 })));
+    vi.stubGlobal('fetch', fetcher);
+    const { cookie } = await connect();
+    fetcher.mockResolvedValueOnce(new Response(JSON.stringify({ files: [] })));
+    const query = "a' or trashed = true or name contains 'b\\c";
+    const response = await handleGoogleConnector(
+      request(`list?q=${encodeURIComponent(query)}`, { headers: { cookie } }),
+      env,
+    );
+    expect(response.status).toBe(200);
+    const sent = new URL(fetcher.mock.calls[1][0]).searchParams.get('q')!;
+    expect(sent).toContain("name contains 'a\\' or trashed = true or name contains \\'b\\\\c'");
+    expect(
+      (await handleGoogleConnector(request(`list?q=${'x'.repeat(201)}`, { headers: { cookie } }), env)).status,
+    ).toBe(400);
+  });
   it('clears sessions despite revoke failure, hides upstream bodies, and expires sessions', async () => {
     const fetcher = vi
       .fn()

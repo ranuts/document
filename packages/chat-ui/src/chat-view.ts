@@ -106,6 +106,7 @@ export class ChatView {
   private viewportHeight = 0;
   private disposed = false;
   private readonly actionLabels = new WeakMap<HTMLButtonElement, () => string>();
+  private readonly messageMetadata = new WeakMap<HTMLElement, Readonly<Record<string, unknown>> | undefined>();
   private readonly copyTimers = new Map<HTMLButtonElement, ReturnType<typeof setTimeout>>();
   /** The agent bubble currently receiving streamed deltas, if any. */
   private liveMsg: HTMLDivElement | null = null;
@@ -363,8 +364,10 @@ export class ChatView {
         }
       } else renderMarkdown(bubble, visibleText);
     }
+    if (message.role === 'agent') this.options.presentMessage?.(bubble, message.metadata);
     const row = Div().class(`cui-msg cui-msg-${message.role}`).attr('data-role', message.role).children(bubble).build();
 
+    this.messageMetadata.set(row, message.metadata);
     const actions = Div().class('cui-message-actions').build();
     if (message.role === 'agent') {
       const copy = ButtonBuilder().class('cui-copy').attr('type', 'button').build();
@@ -566,6 +569,7 @@ export class ChatView {
       if (markdown) {
         try {
           renderMarkdown(bubble, message.text);
+          this.options.presentMessage?.(bubble, message.metadata);
         } catch {
           bubble.textContent = message.text;
         }
@@ -695,6 +699,7 @@ export class ChatView {
     if (this.liveMsg) this.liveMsg.dataset.source = this.liveText;
     const bubble = this.liveMsg?.querySelector<HTMLElement>('.cui-bubble');
     if (bubble && !this.liveMarkdown) renderMarkdown(bubble, this.liveText);
+    if (bubble && this.liveMsg) this.options.presentMessage?.(bubble, this.messageMetadata.get(this.liveMsg));
     if (
       bubble &&
       this.liveText &&
@@ -732,6 +737,7 @@ export class ChatView {
       const bubble = row.querySelector<HTMLElement>('.cui-bubble');
       if (markdown) markdown.update(text, true);
       else if (bubble) renderMarkdown(bubble, text);
+      if (bubble) this.options.presentMessage?.(bubble, this.messageMetadata.get(row));
       this.updateActivity();
       if (bubble && this.following) this.finishAppendLayout(true);
       return;
@@ -749,6 +755,7 @@ export class ChatView {
         const bubble = row.querySelector<HTMLElement>('.cui-bubble');
         if (markdown) markdown.update(text, true);
         else if (bubble) renderMarkdown(bubble, text);
+        if (bubble) this.options.presentMessage?.(bubble, this.messageMetadata.get(row));
         this.scheduleLayout();
       }, 0);
     });

@@ -1,7 +1,10 @@
 /**
  * Default system prompt for the document-editing agent. Provider-agnostic.
  */
+export const REFERENCE_CITATION_RULE =
+  'When an explanatory answer relies on supplied references with ids S1–S5, cite the matching id as [S1]. Cite only supplied ids and supported claims. Keep citations out of replacement document bodies and structured operation fields.';
 export const DEFAULT_SYSTEM_PROMPT = [
+  REFERENCE_CITATION_RULE,
   'You are a document-editing assistant working inside an OnlyOffice editor.',
   'The open file may be a Word document, an Excel spreadsheet, or a PowerPoint',
   'presentation. Only the tool definitions supplied for this request are available.',
@@ -29,6 +32,7 @@ export const DEFAULT_SYSTEM_PROMPT = [
  * host-owned Write action. Chat replies themselves do not modify the file.
  */
 export const CHAT_ONLY_SYSTEM_PROMPT = [
+  REFERENCE_CITATION_RULE,
   'You are a local writing assistant for Word, Excel and PowerPoint documents.',
   "For ordinary chat, provide concise ready-to-use text in the user's language. Chat replies do not edit files.",
   'When the application requests structured output, follow its task and JSON schema exactly, without commentary.',

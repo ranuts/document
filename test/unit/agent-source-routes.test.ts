@@ -10,7 +10,9 @@ const response = (text: string): LLMResponse => ({
   assistant: { role: 'assistant', content: text },
 });
 const reference = JSON.stringify({
-  references: [{ title: 'Policy', connector: 'local', text: 'Reference policy 123' }],
+  references: [
+    { id: 'S1', sourceId: 'policy-source', title: 'Policy', connector: 'local', text: 'Reference policy 123' },
+  ],
 });
 it('grounds native-disabled task execution in captured source data', async () => {
   const chat = vi.fn(async () => response('Based on policy.'));
@@ -26,6 +28,7 @@ it('grounds native-disabled task execution in captured source data', async () =>
     },
   );
   expect(JSON.stringify(chat.mock.calls[0])).toContain('Reference policy 123');
+  expect(JSON.stringify(chat.mock.calls[0])).toContain('cite the matching id as [S1]');
 });
 it('grounds structured planning and read continuations without adding source instructions as capabilities', async () => {
   const generateJSON = vi.fn(async () => response(JSON.stringify({ tool: 'get_selection', input: {} })));
@@ -49,4 +52,5 @@ it('grounds structured planning and read continuations without adding source ins
     reference,
   );
   expect(JSON.stringify(chat.mock.calls[0])).toContain('Reference policy 123');
+  expect(JSON.stringify(chat.mock.calls[0])).toContain('cite the matching id as [S1]');
 });

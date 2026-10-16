@@ -85,3 +85,12 @@ Keep local provider context construction/exact budgeting, first-text and total
 execution usage separate from host elapsed arrival/presentation clocks and
 backend first-token/prefill fields. Provider execution excludes queue/model load;
 unsupported stages remain absent. See README for provider-specific semantics.
+
+Host presentation metadata is optional and opaque: `LLMMessage.hostPresentation`
+contains a host-minted response id and bounded domain-owned metadata. Use
+`annotateAssistant(message)` to associate it with the exact inference response;
+do not reconstruct ownership from text or array indexes. The runtime strips this
+field from all provider-bound messages. `onRequestContext(reference)` observes the
+actual optional reference surviving runtime budgeting before each inference, so a
+host may retain only the excerpts that were sent. Provider-specific exact token
+budgets may still remove historical turns; presentation data is never context.
