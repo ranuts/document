@@ -358,7 +358,7 @@ export const en: I18nMessages = {
   agentQueueComposerOccupied: 'Your draft is not empty. Send or clear it before editing a pending request.',
   agentQueueEditUnavailable: 'This request is not available to edit. Check the pending list and try again.',
   agentQueueScopeChanged:
-    'The original document or model changed. Edit this request to send it with the current context.',
+    'The document, model or attached sources changed. Edit this request to use the current context.',
   agentStopping: 'Stopping…',
   agentNeedKey: 'Please enter an API Key first.',
   agentNoCompletedAnswer: 'Generate a complete answer before writing it to the document.',

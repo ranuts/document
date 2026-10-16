@@ -362,7 +362,8 @@ export const ja: Partial<I18nMessages> = {
   agentQueueMoreActions: 'その他の操作',
   agentQueueComposerOccupied: '入力欄に下書きがあります。送信または消去してから編集してください。',
   agentQueueEditUnavailable: 'このリクエストは現在編集できません。保留中の一覧を確認して、もう一度お試しください。',
-  agentQueueScopeChanged: '元の文書またはモデルが変更されました。編集して現在の内容で再送信してください。',
+  agentQueueScopeChanged:
+    '文書、モデル、または添付資料が変更されました。現在のコンテキストで送信するには、このリクエストを編集してください。',
   agentStopping: '停止中…',
   agentNeedKey: '先に API キーを入力してください。',
   agentNoCompletedAnswer: '文書に挿入する前に、回答を最後まで生成してください。',

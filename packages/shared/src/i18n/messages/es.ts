@@ -368,7 +368,7 @@ export const es: Partial<I18nMessages> = {
   agentQueueEditUnavailable:
     'Esta solicitud no se puede editar ahora. Revisa la lista de pendientes e inténtalo de nuevo.',
   agentQueueScopeChanged:
-    'El documento o modelo original cambió. Edita la solicitud para enviarla con el contexto actual.',
+    'El documento, modelo o las fuentes adjuntas cambiaron. Edita esta solicitud para usar el contexto actual.',
   agentStopping: 'Deteniendo…',
   agentNeedKey: 'Introduce primero una clave de API.',
   agentNoCompletedAnswer: 'Genera una respuesta completa antes de insertarla en el documento.',

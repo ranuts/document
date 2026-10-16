@@ -378,7 +378,7 @@ export const de: Partial<I18nMessages> = {
   agentQueueEditUnavailable:
     'Diese Anfrage kann derzeit nicht bearbeitet werden. Prüfe die Warteliste und versuche es erneut.',
   agentQueueScopeChanged:
-    'Das ursprüngliche Dokument oder Modell wurde geändert. Bearbeiten Sie die Anfrage, um sie im aktuellen Kontext zu senden.',
+    'Das Dokument, Modell oder angehängte Quellen wurden geändert. Bearbeite diese Anfrage, um den aktuellen Kontext zu verwenden.',
   agentStopping: 'Wird angehalten…',
   agentNeedKey: 'Bitte zuerst einen API-Schlüssel eingeben.',
   agentNoCompletedAnswer: 'Erstelle eine vollständige Antwort, bevor du sie ins Dokument einfügst.',
