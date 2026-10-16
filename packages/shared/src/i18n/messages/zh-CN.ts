@@ -338,7 +338,7 @@ export const zhCN: I18nMessages = {
   agentQueueMoreActions: '更多操作',
   agentQueueComposerOccupied: '输入框中已有草稿。发送或清空后再编辑待发请求。',
   agentQueueEditUnavailable: '暂时无法编辑此请求。请查看待发列表后重试。',
-  agentQueueScopeChanged: '原文档或模型已变化。请编辑此请求后，使用当前上下文重新发送。',
+  agentQueueScopeChanged: '文档、模型或附加资料已变化。请编辑此请求，使用当前上下文重新发送。',
   agentStopping: '正在停止…',
   agentNeedKey: '请先填写 API Key。',
   agentNoCompletedAnswer: '请先生成一条完整回答，再写入文档。',
