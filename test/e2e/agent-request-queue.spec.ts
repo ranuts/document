@@ -80,8 +80,15 @@ for (const ext of ['docx', 'pptx'] as const) {
       const stop = page.locator('.cui-send-stop');
       const sendSize = await send.boundingBox();
       const stopSize = await stop.boundingBox();
+      expect(sendSize?.width).toBe(32);
+      expect(sendSize?.height).toBe(32);
       expect(sendSize?.width).toBe(stopSize?.width);
       expect(sendSize?.height).toBe(stopSize?.height);
+      expect(sendSize!.y).toBe(stopSize!.y);
+      const toolbarBounds = await page.locator('.agent-speech-mic').boundingBox();
+      expect(toolbarBounds!.height).toBe(32);
+      expect(toolbarBounds!.y).toBe(sendSize!.y);
+      expect(await page.locator('.cui-composer').evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
       await expect(page.locator('.agent-panel-title')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
       await expect(page.locator('.cui-progress')).toHaveCSS('border-top-width', '0px');
       await expect(page.locator('.cui-progress')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
