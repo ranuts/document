@@ -306,6 +306,8 @@ it('a delayed disconnect cannot erase a newer attachment status', async () => {
   const disconnect = [...cloud.querySelectorAll('button')].find((b) => b.textContent === 'Disconnect')!;
   await vi.waitFor(() => expect(disconnect.hidden).toBe(false));
   disconnect.click();
+  const reconnect = [...cloud.querySelectorAll('button')].find((b) => b.textContent === 'Connect')!;
+  expect(reconnect.disabled).toBe(true);
   let finishFile!: (text: string) => void;
   const file = new File(['body'], 'fresh.txt');
   Object.defineProperty(file, 'text', {
@@ -320,6 +322,7 @@ it('a delayed disconnect cannot erase a newer attachment status', async () => {
   finishDisconnect(new Response('{}', { headers: { 'content-type': 'application/json' } }));
   await new Promise((r) => setTimeout(r, 0));
   expect(view.el.querySelector('.agent-sources-status')!.textContent).toBe('Reading');
+  expect(reconnect.disabled).toBe(false);
   finishFile('fresh data');
   await vi.waitFor(() => expect(view.el.querySelector('.agent-source-row')?.textContent).toContain('fresh.txt'));
   view.dispose();
