@@ -284,6 +284,7 @@ export const en: I18nMessages = {
   agentChangesFailed: '{count} failed',
   agentChangesCancelled: '{count} cancelled',
   agentUndoUnverified: 'Undo could not be confirmed. Check the document before using Undo again.',
+  agentChangeVerified: 'Change verified.',
   agentUndoChange: 'Undo change',
   agentChangeUndone: 'Change undone. Redo is available in the editor.',
   agentUndoUnavailable:

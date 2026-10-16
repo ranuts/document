@@ -287,6 +287,7 @@ export const pt: Partial<I18nMessages> = {
   agentChangesFailed: '{count} alteração falhou',
   agentChangesCancelled: '{count} alteração cancelada',
   agentUndoUnverified: 'Não foi possível confirmar a reversão. Verifique o documento antes de desfazer novamente.',
+  agentChangeVerified: 'Alteração verificada.',
   agentUndoChange: 'Desfazer alteração',
   agentChangeUndone: 'Alteração desfeita. É possível refazer no editor.',
   agentUndoUnavailable: 'Não é mais seguro desfazer aqui. Desfazer no editor pode afetar edições posteriores.',

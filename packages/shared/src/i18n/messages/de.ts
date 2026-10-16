@@ -300,6 +300,7 @@ export const de: Partial<I18nMessages> = {
   agentChangesFailed: '{count} Änderung fehlgeschlagen',
   agentChangesCancelled: '{count} Änderung abgebrochen',
   agentUndoUnverified: 'Rückgängig konnte nicht bestätigt werden. Prüfen Sie das Dokument vor einem weiteren Versuch.',
+  agentChangeVerified: 'Änderung bestätigt.',
   agentUndoChange: 'Änderung rückgängig',
   agentChangeUndone: 'Änderung rückgängig gemacht. Wiederholen ist im Editor möglich.',
   agentUndoUnavailable:

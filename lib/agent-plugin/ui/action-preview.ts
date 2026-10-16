@@ -41,6 +41,7 @@ export class ActionPreview {
     .attr('aria-atomic', 'true')
     .build();
   private readonly undoFeedback = Span().class('agent-plan-undo-feedback').attr('aria-live', 'polite').build();
+  private readonly receiptActions = Div().class('agent-plan-buttons agent-plan-receipt-actions').build();
   private readonly receiptUndo = View('r-button').attr('type', 'text').class('agent-plan-receipt-undo').build();
   private readonly receiptLocate = View('r-button').attr('type', 'text').class('agent-plan-receipt-locate').build();
   private readonly applyButton = View('r-button').attr('type', 'primary').class('agent-plan-apply').build();
@@ -101,9 +102,11 @@ export class ActionPreview {
     this.record.className = 'agent-plan-record';
     this.record.hidden = true;
     this.receiptLocate.hidden = true;
+    this.receiptActions.hidden = true;
     this.receiptUndo.hidden = true;
     this.undoFeedback.textContent = '';
     this.el.hidden = true;
+    this.receiptActions.append(this.receiptLocate, this.receiptUndo);
     this.el.append(
       this.title,
       this.target,
@@ -117,8 +120,7 @@ export class ActionPreview {
       this.editor,
       this.status,
       this.record,
-      this.receiptLocate,
-      this.receiptUndo,
+      this.receiptActions,
       this.undoFeedback,
       Div()
         .class('agent-plan-buttons agent-plan-primary-buttons')
@@ -146,6 +148,7 @@ export class ActionPreview {
         uncertain = true;
       }
       this.receiptUndo.hidden = true;
+      this.receiptActions.hidden = this.receiptLocate.hidden;
       this.undoFeedback.textContent = t(
         uncertain ? 'agentUndoUnverified' : undone ? 'agentChangeUndone' : 'agentUndoUnavailable',
       );
@@ -154,6 +157,7 @@ export class ActionPreview {
         this.undoFeedback.textContent = '';
         this.el.dataset.state = 'undone';
         this.receiptLocate.hidden = true;
+        this.receiptActions.hidden = true;
       }
     });
     this.receiptLocate.addEventListener('click', () => {
@@ -334,6 +338,7 @@ export class ActionPreview {
     this.editor.querySelector<HTMLElement>('.agent-plan-buttons')!.hidden = false;
     this.record.hidden = true;
     this.receiptLocate.hidden = true;
+    this.receiptActions.hidden = true;
     this.receiptUndo.hidden = true;
     this.undoFeedback.textContent = '';
     this.record.open = false;
@@ -643,6 +648,8 @@ export class ActionPreview {
     this.record.append(summary);
     this.receiptLocate.hidden = state !== 'verified' || !this.action?.locate;
     this.receiptUndo.hidden = state !== 'verified' || !this.action?.undo;
+    this.receiptActions.hidden = this.receiptUndo.hidden && this.receiptLocate.hidden;
+    if (state === 'verified' && this.receiptUndo.hidden) this.status.textContent = t('agentChangeVerified');
     if (state === 'verified') {
       const undo = document.createElement('p');
       undo.className = 'agent-plan-undo';

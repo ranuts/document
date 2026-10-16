@@ -276,6 +276,7 @@ export interface I18nMessages {
   agentChangesFailed: string;
   agentChangesCancelled: string;
   agentUndoUnverified: string;
+  agentChangeVerified: string;
   agentUndoChange: string;
   agentChangeUndone: string;
   agentUndoUnavailable: string;

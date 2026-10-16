@@ -323,6 +323,19 @@ test.describe('agent document writes (real editor)', () => {
     await expect(replacement.locator('.agent-plan-secondary')).toBeHidden();
     await expect(replacement).toHaveAttribute('data-state', 'verified');
     await replacement.screenshot({ path: testInfo.outputPath('review-verified.png') });
+    const panel = page.locator('.agent-runtime-panel');
+    await panel.screenshot({ path: testInfo.outputPath('receipt-light.png') });
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await panel.screenshot({ path: testInfo.outputPath('receipt-dark.png') });
+    await page.emulateMedia({ colorScheme: 'light' });
+    await panel.evaluate((element) => {
+      (element as HTMLElement).style.width = '320px';
+    });
+    await panel.screenshot({ path: testInfo.outputPath('receipt-narrow.png') });
+    await panel.evaluate((element) => {
+      (element as HTMLElement).style.removeProperty('width');
+    });
+
     await expect(page.locator('.agent-readiness')).toHaveText('');
     await replacement.locator('.agent-plan-record summary').click();
     await expect(replacement.locator('.agent-plan-record')).toContainText('Final reviewed text');
