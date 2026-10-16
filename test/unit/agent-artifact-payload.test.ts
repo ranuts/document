@@ -6,9 +6,11 @@ it('copies structured values and rejects malformed, sparse and excessive shapes'
   const copy = validatePayload(p);
   p.rows[0][0] = 'changed';
   expect(copy).toEqual({ kind: 'table', columns: ['Name'], rows: [['one']] });
+  const sparseSlides: unknown[] = [];
+  sparseSlides.length = 2;
   for (const bad of [
     { kind: 'table', columns: ['a'], rows: [[]] },
-    { kind: 'slides', slides: new Array(2) },
+    { kind: 'slides', slides: sparseSlides },
     { kind: 'table', columns: Array(51).fill('a'), rows: [] },
     { kind: 'text', text: 'x', execute: 'bad' },
     { kind: 'slides', slides: [{ title: 'x', body: '中'.repeat(6000) }] },
