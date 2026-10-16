@@ -57,3 +57,5 @@ Implemented connectivity-aware progressive disclosure: hide network-only Drive a
 ## Review recovery fixes
 
 Four review findings now have regression coverage: expired Drive/MCP authorization restores explicit connection controls; discarding version edits restores both title and text; artifact count/text/version capacity errors are distinct with save-as-new recovery at the version cap; attachment overflow explains the five-source limit and removal unblocks retry. Canceling a version switch preserves the previously selected version and draft. No automatic reconnect, source removal or overwrite of existing artifact history is introduced.
+
+Final review additionally found that an obsolete source read retained the busy lock after a conversation switch. Each operation now owns its own validity guard and busy settlement; switching or disconnecting releases obsolete UI ownership immediately, while late results cannot attach or alter the newer status. Regression coverage includes both settlement orders and a real-browser delayed Drive read across a new conversation.

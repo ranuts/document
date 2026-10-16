@@ -58,9 +58,9 @@ export function createSourcesView(options: {
   let busy = false;
   let mcpConnected = false;
   let driveConnected = false;
-  let operationEpoch = 0;
-  const attach = (source: Parameters<ReferenceSources['add']>[0]) => {
-    if (!disposed && operationEpoch === epoch) {
+  let operationId = 0;
+  const attach = (source: Parameters<ReferenceSources['add']>[0], isCurrent: () => boolean) => {
+    if (isCurrent()) {
       options.sources.add(source);
       update();
     }
@@ -73,7 +73,7 @@ export function createSourcesView(options: {
   const back = button(options.close);
   const connect = button(
     () =>
-      void run(async () => {
+      void run(async (isCurrent) => {
         client?.disconnect();
         options.sources.disconnect('mcp');
         options.changed();
@@ -81,17 +81,17 @@ export function createSourcesView(options: {
         token.value = '';
         const current = client;
         const resources = await current.list();
-        if (disposed || operationEpoch !== epoch || client !== current) return;
+        if (!isCurrent() || client !== current) return;
         mcpConnected = true;
         syncConnectionActions();
         mcpRows.replaceChildren();
         for (const resource of resources) {
           const row = button(
             () =>
-              void run(async () => {
+              void run(async (isCurrent) => {
                 const source = await current.read(resource.uri);
                 if (current !== client) return;
-                attach(source);
+                attach(source, isCurrent);
               }, 'mcp'),
           );
           row.textContent = resource.name;
@@ -100,7 +100,7 @@ export function createSourcesView(options: {
       }, 'mcp'),
   );
   const disconnect = button(() => {
-    epoch++;
+    cancelPending();
     client?.disconnect();
     client = undefined;
     mcpConnected = false;
@@ -116,10 +116,10 @@ export function createSourcesView(options: {
       status.textContent = labels.failed;
       return;
     }
-    void run(async () => {
+    void run(async (isCurrent) => {
       try {
         const result = await google('start', 'POST');
-        if (disposed || operationEpoch !== epoch) {
+        if (!isCurrent()) {
           popup.close();
           return;
         }
@@ -133,7 +133,7 @@ export function createSourcesView(options: {
     }, 'google');
   });
   const driveDisconnect = button(() => {
-    epoch++;
+    cancelPending();
     driveConnected = false;
     syncConnectionActions();
     options.sources.disconnect('google');
@@ -141,17 +141,18 @@ export function createSourcesView(options: {
     driveRows.replaceChildren();
     status.textContent = labels.loading;
     const revision = epoch;
+    const operation = operationId;
     void google('disconnect', 'POST')
       .then(() => {
-        if (!disposed && epoch === revision) status.textContent = '';
+        if (!disposed && epoch === revision && operation === operationId) status.textContent = '';
       })
       .catch(() => {
-        if (!disposed && epoch === revision) status.textContent = labels.failed;
+        if (!disposed && epoch === revision && operation === operationId) status.textContent = labels.failed;
       });
   });
-  const driveList = button(() => void run(() => listDrive(), 'google'));
+  const driveList = button(() => void run((isCurrent) => listDrive('', isCurrent), 'google'));
   let nextPage = '';
-  const more = button(() => void run(() => listDrive(nextPage), 'google'));
+  const more = button(() => void run((isCurrent) => listDrive(nextPage, isCurrent), 'google'));
   const label = (control: HTMLElement, key: string) => {
     const wrapper = View('label').build();
     const text = View('span').text(key).build();
@@ -212,25 +213,28 @@ export function createSourcesView(options: {
       );
     return data;
   }
-  async function listDrive(pageToken = '') {
+  async function listDrive(pageToken: string, isCurrent: () => boolean) {
     const result = await google(`list${pageToken ? `?pageToken=${encodeURIComponent(pageToken)}` : ''}`);
+    if (!isCurrent()) return;
     if (!pageToken) driveRows.replaceChildren();
-    if (disposed || operationEpoch !== epoch) return;
     if (!Array.isArray(result.files)) throw new Error('source-failed');
     for (const file of result.files.slice(0, 30)) {
       if (typeof file.id !== 'string' || typeof file.name !== 'string') continue;
       const row = button(
         () =>
-          void run(async () => {
+          void run(async (isCurrent) => {
             const read = await google(`read?id=${encodeURIComponent(file.id)}`);
             if (typeof read.text !== 'string') throw new Error('source-failed');
-            attach({
-              id: crypto.randomUUID(),
-              connector: 'google',
-              title: file.name,
-              text: read.text,
-              uri: `https://drive.google.com/file/d/${encodeURIComponent(file.id)}/view`,
-            });
+            attach(
+              {
+                id: crypto.randomUUID(),
+                connector: 'google',
+                title: file.name,
+                text: read.text,
+                uri: `https://drive.google.com/file/d/${encodeURIComponent(file.id)}/view`,
+              },
+              isCurrent,
+            );
           }, 'google'),
       );
       row.textContent = file.name;
@@ -241,17 +245,18 @@ export function createSourcesView(options: {
     nextPage = typeof result.nextPageToken === 'string' ? result.nextPageToken : '';
     more.hidden = !nextPage;
   }
-  async function run(action: () => Promise<void>, connector?: 'mcp' | 'google') {
+  async function run(action: (isCurrent: () => boolean) => Promise<void>, connector?: 'mcp' | 'google') {
     if (busy || disposed) return;
     const revision = epoch;
-    operationEpoch = revision;
+    const id = ++operationId;
+    const isCurrent = () => !disposed && revision === epoch && id === operationId;
     busy = true;
     status.textContent = labels.loading;
     try {
-      await action();
-      if (!disposed && revision === epoch) status.textContent = '';
+      await action(isCurrent);
+      if (isCurrent()) status.textContent = '';
     } catch (error) {
-      if (!disposed && revision === epoch) {
+      if (isCurrent()) {
         if (error instanceof Error && error.message === 'source-auth') {
           if (connector === 'mcp') {
             client?.disconnect();
@@ -282,15 +287,15 @@ export function createSourcesView(options: {
                       : labels.failed;
       }
     } finally {
-      busy = false;
+      if (id === operationId) busy = false;
     }
   }
   local.addEventListener('change', () => {
     const file = local.files?.[0];
     local.value = '';
     if (file)
-      void run(async () => {
-        attach(await readLocalReference(file));
+      void run(async (isCurrent) => {
+        attach(await readLocalReference(file), isCurrent);
       });
   });
   function update() {
@@ -314,10 +319,10 @@ export function createSourcesView(options: {
     channel = new BroadcastChannel('document-google-connector');
     channel.onmessage = (event) => {
       if (event.data?.type === 'google-connector-complete')
-        void run(async () => {
+        void run(async (isCurrent) => {
           const state = await google('status');
           if (!state.connected) throw new Error('source-auth');
-          await listDrive();
+          await listDrive('', isCurrent);
         }, 'google');
     };
   } catch {
@@ -357,12 +362,15 @@ export function createSourcesView(options: {
   window.addEventListener('online', syncConnectivity);
   window.addEventListener('offline', syncConnectivity);
   setLabels(labels);
+  function cancelPending() {
+    epoch++;
+    operationId++;
+    busy = false;
+    status.textContent = '';
+  }
   return {
     el,
-    cancelPending: () => {
-      epoch++;
-      status.textContent = '';
-    },
+    cancelPending,
     focus: () => heading.focus(),
     setLabels,
     refresh: update,

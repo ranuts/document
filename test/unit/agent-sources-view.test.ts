@@ -224,3 +224,103 @@ it('explains the five attachment limit and lets removal unblock the next attachm
   expect(fetcher).not.toHaveBeenCalled();
   view.dispose();
 });
+
+it('accepts new conversation attachments while an obsolete read is still pending and ignores its result', async () => {
+  const sources = new ReferenceSources();
+  sources.select('old');
+  const view = createSourcesView({ sources, labels, changed: vi.fn(), close: vi.fn() });
+  document.body.append(view.el);
+  const input = view.el.querySelector<HTMLInputElement>('[type=file]')!;
+  let resolveOld!: (text: string) => void;
+  const old = new File(['old'], 'old.txt');
+  Object.defineProperty(old, 'text', {
+    value: () =>
+      new Promise<string>((r) => {
+        resolveOld = r;
+      }),
+  });
+  Object.defineProperty(input, 'files', { configurable: true, value: [old] });
+  input.dispatchEvent(new Event('change'));
+  view.cancelPending();
+  sources.select('new');
+  const fresh = new File(['new'], 'new.txt');
+  Object.defineProperty(fresh, 'text', { value: async () => 'new conversation data' });
+  Object.defineProperty(input, 'files', { configurable: true, value: [fresh] });
+  input.dispatchEvent(new Event('change'));
+  await vi.waitFor(() => expect(sources.list().map((s) => s.title)).toEqual(['new.txt']));
+  resolveOld('stale private data');
+  await new Promise((r) => setTimeout(r, 0));
+  expect(sources.list().map((s) => s.title)).toEqual(['new.txt']);
+  sources.select('old');
+  expect(sources.list()).toEqual([]);
+  view.dispose();
+});
+
+it('an obsolete completion cannot clear the status or busy ownership of a newer read', async () => {
+  const sources = new ReferenceSources();
+  sources.select('old');
+  const view = createSourcesView({ sources, labels, changed: vi.fn(), close: vi.fn() });
+  document.body.append(view.el);
+  const input = view.el.querySelector<HTMLInputElement>('[type=file]')!;
+  const callbacks: Array<(text: string) => void> = [];
+  const choose = (name: string) => {
+    const file = new File(['text'], name);
+    Object.defineProperty(file, 'text', { value: () => new Promise<string>((r) => callbacks.push(r)) });
+    Object.defineProperty(input, 'files', { configurable: true, value: [file] });
+    input.dispatchEvent(new Event('change'));
+  };
+  choose('old.txt');
+  view.cancelPending();
+  sources.select('new');
+  choose('new.txt');
+  expect(callbacks).toHaveLength(2);
+  callbacks[0]('stale data');
+  await new Promise((r) => setTimeout(r, 0));
+  expect(view.el.querySelector('.agent-sources-status')!.textContent).toBe('Reading');
+  choose('should-not-start-while-new-read-is-busy.txt');
+  expect(callbacks).toHaveLength(2);
+  callbacks[1]('current data');
+  await vi.waitFor(() => expect(sources.list().map((s) => s.title)).toEqual(['new.txt']));
+  expect(view.el.querySelector('.agent-sources-status')!.textContent).toBe('');
+  view.dispose();
+});
+
+it('a delayed disconnect cannot erase a newer attachment status', async () => {
+  let finishDisconnect!: (response: Response) => void;
+  vi.stubGlobal(
+    'fetch',
+    vi.fn((url: string) =>
+      url.endsWith('/disconnect')
+        ? new Promise<Response>((r) => {
+            finishDisconnect = r;
+          })
+        : Promise.resolve(
+            new Response(JSON.stringify({ files: [] }), { headers: { 'content-type': 'application/json' } }),
+          ),
+    ),
+  );
+  const view = createSourcesView({ sources: new ReferenceSources(), labels, changed: vi.fn(), close: vi.fn() });
+  document.body.append(view.el);
+  const cloud = view.el.querySelector('.agent-cloud-sources')!;
+  [...cloud.querySelectorAll('button')].find((b) => b.textContent === 'Browse files')!.click();
+  const disconnect = [...cloud.querySelectorAll('button')].find((b) => b.textContent === 'Disconnect')!;
+  await vi.waitFor(() => expect(disconnect.hidden).toBe(false));
+  disconnect.click();
+  let finishFile!: (text: string) => void;
+  const file = new File(['body'], 'fresh.txt');
+  Object.defineProperty(file, 'text', {
+    value: () =>
+      new Promise<string>((r) => {
+        finishFile = r;
+      }),
+  });
+  const input = view.el.querySelector<HTMLInputElement>('[type=file]')!;
+  Object.defineProperty(input, 'files', { value: [file] });
+  input.dispatchEvent(new Event('change'));
+  finishDisconnect(new Response('{}', { headers: { 'content-type': 'application/json' } }));
+  await new Promise((r) => setTimeout(r, 0));
+  expect(view.el.querySelector('.agent-sources-status')!.textContent).toBe('Reading');
+  finishFile('fresh data');
+  await vi.waitFor(() => expect(view.el.querySelector('.agent-source-row')?.textContent).toContain('fresh.txt'));
+  view.dispose();
+});
