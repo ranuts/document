@@ -388,3 +388,52 @@ it('reserves space for the complete user instruction by reducing only reference 
   expect(chat).toHaveBeenCalledOnce();
   expect(bounded.context.selection?.truncated).toBe(true);
 });
+
+it('budgets attached snapshots together with the captured host read and full instruction', () => {
+  const state = editor('word');
+  state.body.mockReturnValue('Captured document body '.repeat(1000));
+  const references = [{ id: 'attached', title: 'Notes', connector: 'local', text: 'Budget evidence '.repeat(1000) }];
+  const instruction = 'Explain the complete selected passage. '.repeat(20);
+  const read = prepareHostRead(stage('read'), instruction, references);
+  const context = JSON.parse(read.request.getRequestContext()!);
+  expect(context.content.scope).toBe('document-body');
+  expect(context.content.truncated).toBe(true);
+  expect(context.references[0]).toMatchObject({ id: 'S1', sourceId: 'attached', title: 'Notes' });
+  expect(read.evidence[0].text).toBe(context.references[0].text);
+  expect(read.evidence[0].text.length).toBeLessThan(references[0].text.length);
+  references[0].text = 'changed after preparation';
+  expect(JSON.parse(read.request.getRequestContext()!).references[0].text).not.toContain('changed');
+  expect(new TextEncoder().encode(read.request.getRequestContext()!).length).toBeLessThanOrEqual(4096);
+  expect(read.request.tools).toEqual({});
+  expect(read.request.maxIterations).toBe(1);
+});
+
+it('sends trusted-read attachments and full instruction once without classifier or tools', async () => {
+  editor('word', 'Host-selected passage');
+  const instruction = 'Explain this passage using the attached notes.';
+  const read = prepareHostRead(stage('explain'), instruction, [
+    { id: 'notes', title: 'Attached notes', connector: 'local', text: 'Independent attached evidence' },
+  ]);
+  const observed = vi.fn();
+  const preflight = vi.fn();
+  const chat = vi.fn(async (messages, tools) => {
+    expect(messages.at(-1).content).toContain('Host-selected passage');
+    expect(messages.at(-1).content).toContain('Independent attached evidence');
+    expect(messages.at(-1).content.endsWith(instruction)).toBe(true);
+    expect(tools).toEqual([]);
+    return {
+      text: 'Answer [S1]',
+      toolCalls: [],
+      stopReason: 'stop',
+      assistant: { role: 'assistant' as const, content: 'Answer [S1]' },
+    };
+  });
+  const controller = new AgentChatController({ name: 'test', isReady: () => true, chat } as LLMProvider, () => {}, {
+    prepareRun: preflight,
+    onRequestContext: observed,
+  });
+  expect((await controller.send(instruction, { request: read.request })).status).toBe('success');
+  expect(chat).toHaveBeenCalledOnce();
+  expect(preflight).not.toHaveBeenCalled();
+  expect(observed).toHaveBeenCalledWith(read.request.getRequestContext());
+});

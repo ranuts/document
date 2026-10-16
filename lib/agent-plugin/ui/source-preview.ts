@@ -16,7 +16,6 @@ export function sourcePreview(
   const excerpt = document.createElement('pre');
   details.addEventListener('toggle', () => {
     if (details.open) renderSearchText(excerpt, window.text, query);
-    else excerpt.replaceChildren();
   });
   details.append(summary, excerpt);
   if (window.partial || source.truncated) {

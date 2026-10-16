@@ -1,10 +1,19 @@
 import { t } from '@ranuts/shared/i18n';
-import { captureRequestContext, serializeRequestContext } from './request-context';
+import {
+  captureRequestContext,
+  serializeRequestContext,
+  type ReferenceExcerpt,
+  type SourceEvidence,
+} from './request-context';
 import { hostReadTarget, isCurrentHostRead, type HostReadTask } from './task-entry';
 import type { TurnRequest } from './controller';
 
 /** A host-created task reads its captured source once, with no classifier or tools. */
-export function prepareHostRead(task: HostReadTask, instruction = ''): { request: TurnRequest; receipt: string } {
+export function prepareHostRead(
+  task: HostReadTask,
+  instruction = '',
+  references: readonly ReferenceExcerpt[] = [],
+): { request: TurnRequest; receipt: string; evidence: readonly Readonly<SourceEvidence>[] } {
   const target = hostReadTarget(task);
   const assertCurrent = () => {
     if (!isCurrentHostRead(task) || !target.isCurrent(false)) throw new Error('agentPlanExpired');
@@ -12,7 +21,7 @@ export function prepareHostRead(task: HostReadTask, instruction = ''): { request
   assertCurrent();
   const reference = captureRequestContext(task.scope);
   assertCurrent();
-  const bounded = serializeRequestContext(reference, instruction);
+  const bounded = serializeRequestContext({ ...reference, references }, instruction);
   const content = bounded.context.content;
   const scope =
     content?.scope === 'pdf-page'
@@ -33,6 +42,7 @@ export function prepareHostRead(task: HostReadTask, instruction = ''): { request
         : undefined;
   return {
     receipt,
+    evidence: bounded.evidence,
     request: {
       tools: {},
       maxIterations: 1,

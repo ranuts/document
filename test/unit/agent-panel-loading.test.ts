@@ -4556,8 +4556,10 @@ it('serializes completed document-result Apply with a fresh Send until the actua
     state.semanticResponse = undefined;
     enterQueueDraft(panel, 'Hello');
     expect(calls).toEqual([]);
+    expect(state.actionDispose).not.toHaveBeenCalled();
     finishApply();
     await vi.waitFor(() => expect(calls).toEqual(['Hello']));
+    expect(state.actionDispose).toHaveBeenCalledOnce();
   } finally {
     generate.mockRestore();
   }
@@ -5275,3 +5277,36 @@ it('keeps artifact refinement independent of unavailable Office context and retr
     'Only artifact content',
   );
 });
+
+it.each(['error', 'expired', 'abort'] as const)(
+  'disposes a completed result action after %s settlement',
+  async (mode) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.toolContext = 'word';
+    state.semanticResponse = '{"task":"compose","language":"en"}';
+    const draft = await import('../../lib/agent-plugin/ui/document-draft');
+    const generate = vi.spyOn(draft, 'generateDocumentDraft').mockResolvedValue('Completed article');
+    try {
+      const panel = createPreparedPanel();
+      document.body.append(panel);
+      enterQueueDraft(panel, 'Write an article about autumn');
+      await vi.waitFor(() => expect(panel.querySelector('.cui-apply')).not.toBeNull());
+      await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+      let completed = false;
+      state.apply.mockImplementationOnce(async (signal: AbortSignal) => {
+        if (mode === 'error') throw new Error('native failure');
+        if (mode === 'abort') window.dispatchEvent(new Event('pagehide'));
+        else panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
+        if (mode === 'abort') expect(signal.aborted).toBe(true);
+        completed = true;
+        return 'verified';
+      });
+      panel.querySelector<HTMLButtonElement>('.cui-apply')!.click();
+      await vi.waitFor(() => expect(state.actionDispose).toHaveBeenCalledOnce());
+      expect(completed).toBe(mode !== 'error');
+    } finally {
+      generate.mockRestore();
+    }
+  },
+);
