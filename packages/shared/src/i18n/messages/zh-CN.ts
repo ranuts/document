@@ -512,6 +512,15 @@ export const zhCN: I18nMessages = {
   agentArtifactVersionLimit: '此成果已达到 20 个版本，请另存为新成果以继续编辑。',
   agentArtifactCountLimit: '已保存 50 个成果，请先删除一个再保存新成果。',
   agentArtifactTextLimit: '内容超过 128 KiB，请缩短后再保存。',
+  agentArtifactExport: '导出',
+  agentArtifactImport: '导入结构化成果',
+  agentArtifactImportHint:
+    '粘贴 {"schemaVersion":1,"payload":{"kind":"table","columns":["名称"],"rows":[["内容"]]}}，或包含 slides:[{title,body}] 的幻灯片数据。保存前会验证格式。',
+  agentArtifactPreview: '预览',
+  agentArtifactNext: '下一页',
+  agentArtifactPrevious: '上一页',
+  agentArtifactStructuredHint:
+    '直接编辑单元格或幻灯片内容。AI 修改会先展示差异，再替换整个结构化成果。可导出 CSV、Markdown 或 JSON；暂不支持直接应用到当前文档。',
   agentArtifactSaveNew: '另存为新成果',
   agentResultSaving: '保存中…',
   agentResultSaved: '已保存',

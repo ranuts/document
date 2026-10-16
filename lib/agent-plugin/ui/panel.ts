@@ -761,7 +761,15 @@ export function createAgentPanel(
       presentSourceCitations(bubble, metadata, t('agentSourcesOpen'), t('agentSourcesPartial')),
     onSaveMessage: async (text, metadata) => {
       showView('artifacts');
-      return artifactsView.save(text, metadata as ArtifactProvenance | undefined);
+      return artifactsView.save(
+        text,
+        metadata
+          ? {
+              conversation: metadata.conversation as string | undefined,
+              sources: metadata.sources as ArtifactProvenance['sources'],
+            }
+          : undefined,
+      );
     },
     onStop: () => requestQueue?.pause(conversations.activeId),
     labels: chatLabels(),

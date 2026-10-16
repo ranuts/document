@@ -643,3 +643,75 @@ it('keeps recovered clean-artifact instructions when an earlier list refresh set
   expect((view.el.querySelector('form input') as HTMLInputElement).value).toBe('Keep this instruction');
   view.dispose();
 });
+it('imports a validated structured result, paginates preview, preserves JSON edits and hides unsupported native apply', async () => {
+  const store = createArtifactStore();
+  const apply = vi.fn();
+  const view = createArtifactsView({ store, labels, onApply: apply });
+  document.body.append(view.el);
+  await view.refresh();
+  (view.el.querySelector('[data-action=import]') as HTMLButtonElement).click();
+  const title = view.el.querySelector('input')!;
+  title.value = 'Table';
+  const text = view.el.querySelector('textarea')!;
+  text.value = JSON.stringify({
+    schemaVersion: 1,
+    payload: { kind: 'table', columns: ['Name'], rows: Array.from({ length: 25 }, (_, i) => ['row ' + i]) },
+  });
+  text.dispatchEvent(new Event('input'));
+  (view.el.querySelector('[data-action=saveNew]') as HTMLButtonElement).click();
+  await tick();
+  expect(view.el.querySelectorAll('table tr')).toHaveLength(11);
+  expect((view.el.querySelector('[data-action=apply]') as HTMLButtonElement).hidden).toBe(true);
+  expect(apply).not.toHaveBeenCalled();
+  const editor = view.el.querySelector<HTMLTextAreaElement>('textarea[data-artifact-source]')!;
+  editor.value = 'invalid JSON';
+  editor.dispatchEvent(new Event('input'));
+  (view.el.querySelector('[data-action=saveVersion]') as HTMLButtonElement).click();
+  await tick();
+  expect(editor.value).toBe('invalid JSON');
+  expect((await store.get((await store.list())[0].id))?.versions).toHaveLength(1);
+  view.dispose();
+});
+it('keeps a structured cell focused while typing, persists edits and can restore a prior version', async () => {
+  const store = createArtifactStore();
+  const payload = { kind: 'table' as const, columns: ['Name'], rows: [['one']] };
+  const a = await store.create({ title: 'Data', text: JSON.stringify(payload), payload, provenance: {} });
+  const view = createArtifactsView({ store, labels, onApply: vi.fn() });
+  document.body.append(view.el);
+  await view.refresh();
+  (view.el.querySelector('[data-artifact]') as HTMLButtonElement).click();
+  await tick();
+  const cell = view.el.querySelector<HTMLTextAreaElement>('td textarea')!;
+  cell.focus();
+  cell.value = 'two';
+  cell.setSelectionRange(2, 2);
+  cell.dispatchEvent(new Event('input'));
+  expect(document.activeElement).toBe(cell);
+  expect(cell.selectionStart).toBe(2);
+  expect(view.el.querySelector<HTMLDetailsElement>('.agent-artifact-editor > details')?.open).toBe(false);
+  (view.el.querySelector('[data-action=saveVersion]') as HTMLButtonElement).click();
+  await tick();
+  expect((await store.get(a.id))?.versions[1].payload).toEqual({ ...payload, rows: [['two']] });
+  const select = view.el.querySelector('select')!;
+  select.value = '1';
+  select.dispatchEvent(new Event('change'));
+  expect(view.el.querySelector<HTMLTextAreaElement>('td textarea')?.value).toBe('one');
+  view.dispose();
+});
+it('retains imported text payload envelopes when editing a version', async () => {
+  const store = createArtifactStore();
+  const payload = { kind: 'text' as const, text: 'one' };
+  const a = await store.create({ title: 'Text', text: 'one', payload, provenance: {} });
+  const view = createArtifactsView({ store, labels, onApply: vi.fn() });
+  document.body.append(view.el);
+  await view.refresh();
+  (view.el.querySelector('[data-artifact]') as HTMLButtonElement).click();
+  await tick();
+  const text = view.el.querySelector('textarea')!;
+  text.value = 'two';
+  text.dispatchEvent(new Event('input'));
+  (view.el.querySelector('[data-action=saveVersion]') as HTMLButtonElement).click();
+  await tick();
+  expect((await store.get(a.id))?.versions[1].payload).toEqual({ kind: 'text', text: 'two' });
+  view.dispose();
+});

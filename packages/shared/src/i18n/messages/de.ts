@@ -564,6 +564,15 @@ export const de: Partial<I18nMessages> = {
   agentArtifactVersionLimit: 'Dieses Artefakt hat 20 Versionen. Speichern Sie den Entwurf als neues Artefakt.',
   agentArtifactCountLimit: 'Sie haben 50 Artefakte. Löschen Sie eines, bevor Sie ein neues speichern.',
   agentArtifactTextLimit: 'Der Inhalt überschreitet 128 KiB. Kürzen Sie ihn vor dem Speichern.',
+  agentArtifactExport: 'Exportieren',
+  agentArtifactImport: 'Strukturiertes Ergebnis importieren',
+  agentArtifactImportHint:
+    'JSON mit schemaVersion:1 und payload einfügen. table enthält columns und rows, slides enthält slides:[{title,body}]. Vor dem Speichern wird geprüft.',
+  agentArtifactPreview: 'Vorschau',
+  agentArtifactNext: 'Weiter',
+  agentArtifactPrevious: 'Zurück',
+  agentArtifactStructuredHint:
+    'Zellen oder Folientexte direkt bearbeiten. KI-Änderungen ersetzen nach Prüfung das gesamte Ergebnis. CSV / Markdown / JSON exportieren; direktes Anwenden im Dokument wird nicht unterstützt.',
   agentArtifactSaveNew: 'Als neues Artefakt speichern',
   agentResultSaving: 'Wird gespeichert…',
   agentResultSaved: 'Gespeichert',

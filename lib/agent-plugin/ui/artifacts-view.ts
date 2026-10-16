@@ -1,3 +1,5 @@
+import { createArtifactPresentation, type ArtifactPresentationLabels } from './artifact-presentation';
+import { validatePayload, payloadText } from '../artifacts/payload';
 import {
   captureArtifactDraft,
   replaceArtifactRange,
@@ -8,7 +10,7 @@ import { createArtifactWorkflow, type ArtifactWorkflowLabels, type ArtifactRevis
 import type { MessageSaveOutcome } from '@ranuts/chat-ui';
 import { ButtonBuilder, Div, View } from 'ranui/builder';
 import { ArtifactError, type Artifact, type ArtifactProvenance, type ArtifactStore } from '../artifacts/store';
-export interface ArtifactsLabels {
+export interface ArtifactsLabels extends ArtifactPresentationLabels {
   title: string;
   empty: string;
   back: string;
@@ -51,6 +53,7 @@ export function createArtifactsView(options: {
   el.append(heading, body, status);
   let labels = options.labels;
   let current: Artifact | undefined;
+  let activePresentation: ReturnType<typeof createArtifactPresentation> | undefined;
   let dirty = false;
   let draftRevision = 0;
   let workflow: ReturnType<typeof createArtifactWorkflow> | undefined;
@@ -79,6 +82,20 @@ export function createArtifactsView(options: {
     buttons.add(b);
     return b;
   }
+  function draftContent(text: string) {
+    const version = current?.versions.find(
+      (v) => String(v.version) === body.querySelector<HTMLSelectElement>('select')?.value,
+    );
+    if (!version?.payload) return { text };
+    if (version.payload.kind === 'text') return { text, payload: validatePayload({ kind: 'text', text }) };
+    try {
+      const payload = validatePayload(JSON.parse(text));
+      if (payload.kind !== version.payload.kind) throw new Error('Changed kind');
+      return { text: payloadText(payload), payload };
+    } catch {
+      throw new ArtifactError('invalid');
+    }
+  }
   function error(e: unknown): void {
     const key =
       e instanceof ArtifactError
@@ -89,7 +106,7 @@ export function createArtifactsView(options: {
             'count-limit': 'countLimit',
             'text-limit': 'textLimit',
             missing: 'failed',
-            invalid: 'failed',
+            invalid: 'importHint',
           }[e.code] as keyof ArtifactsLabels)
         : 'failed';
     status.textContent = labels[key];
@@ -99,15 +116,15 @@ export function createArtifactsView(options: {
         button('saveNew', () => {
           void perform(async () => {
             const title = body.querySelector<HTMLInputElement>('input')!;
-            const text = body.querySelector<HTMLTextAreaElement>('textarea')!;
+            const text = body.querySelector<HTMLTextAreaElement>('textarea[data-artifact-source]')!;
             const a = await options.store.create({
               title: title.value,
-              text: text.value,
+              ...draftContent(text.value),
               provenance: current!.provenance,
             });
             editor(a);
             status.textContent = labels.saved;
-            body.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+            body.querySelector<HTMLTextAreaElement>('textarea[data-artifact-source]')?.focus();
           });
         }),
       );
@@ -116,6 +133,7 @@ export function createArtifactsView(options: {
   async function perform(task: () => Promise<void>): Promise<boolean> {
     if (busy || disposed) return false;
     busy = true;
+    activePresentation?.setDisabled(true);
     for (const b of buttons) b.disabled = true;
     for (const input of body.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
       'input,textarea,select',
@@ -129,6 +147,7 @@ export function createArtifactsView(options: {
       return false;
     } finally {
       busy = false;
+      activePresentation?.setDisabled(false);
       for (const b of buttons) b.disabled = b.dataset.action === 'saveVersion' && !dirty;
       for (const input of body.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
         'input,textarea,select',
@@ -138,6 +157,8 @@ export function createArtifactsView(options: {
   }
   function reset(): void {
     invalidateDraft();
+    activePresentation?.dispose();
+    activePresentation = undefined;
     workflow?.dispose();
     workflow = undefined;
     captureDraft = undefined;
@@ -195,8 +216,23 @@ export function createArtifactsView(options: {
     }
     let selectedVersion = String(a.versions.at(-1)!.version);
     select.value = selectedVersion;
-    const text = View('textarea').attr('aria-label', labels.textField).build() as HTMLTextAreaElement;
+    const text = View('textarea')
+      .attr('aria-label', labels.textField)
+      .attr('data-artifact-source', 'true')
+      .build() as HTMLTextAreaElement;
+    text.dataset.artifactSource = 'true';
     text.value = a.versions.at(-1)!.text;
+    const presentationHost = document.createElement('div');
+    const source = document.createElement('details');
+    const sourceSummary = document.createElement('summary');
+    sourceSummary.textContent = labels.textField + ' · JSON';
+    sourceSummary.dataset.artifactSourceSummary = 'true';
+    source.append(sourceSummary, text);
+    source.hidden = !(a.versions.at(-1)!.payload && a.versions.at(-1)!.payload!.kind !== 'text');
+    if (source.hidden) source.removeChild(text);
+    let presentation = createArtifactPresentation(text, labels, a.versions.at(-1)!.payload, () => title.value);
+    activePresentation = presentation;
+    presentationHost.append(presentation.el);
     const changed = () => {
       invalidateDraft();
       dirty = true;
@@ -211,7 +247,20 @@ export function createArtifactsView(options: {
         invalidateDraft();
         selectedVersion = value;
         title.value = a.title;
-        text.value = a.versions.find((v) => String(v.version) === value)!.text;
+        const loaded = a.versions.find((v) => String(v.version) === value)!;
+        text.value = loaded.text;
+        presentation.dispose();
+        presentation = createArtifactPresentation(text, labels, loaded.payload, () => title.value);
+        activePresentation = presentation;
+        presentationHost.replaceChildren(presentation.el);
+        source.hidden = !loaded.payload || loaded.payload.kind === 'text';
+        if (source.hidden) {
+          source.open = false;
+          if (text.parentElement === source) source.removeChild(text);
+          form.insertBefore(text, presentationHost);
+        } else source.append(text);
+        const apply = body.querySelector<HTMLButtonElement>('[data-action=apply]');
+        if (apply) apply.hidden = loaded.payload?.kind !== undefined && loaded.payload.kind !== 'text';
         dirty = value !== String(a.versions.at(-1)!.version);
         body.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled = !dirty;
       };
@@ -233,14 +282,15 @@ export function createArtifactsView(options: {
         void perform(async () => {
           const updated = await options.store.update(a.id, a.versions.at(-1)!.version, {
             title: title.value,
-            text: text.value,
+            ...draftContent(text.value),
           });
           editor(updated);
           status.textContent = labels.saved;
-          body.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+          body.querySelector<HTMLTextAreaElement>('textarea[data-artifact-source]')?.focus();
         });
       }),
       button('apply', () => {
+        if (presentation.kind !== 'text') return;
         void perform(async () => {
           await options.onApply(text.value);
         });
@@ -260,8 +310,13 @@ export function createArtifactsView(options: {
         );
       }),
     );
-    const form = Div().class('agent-artifact-editor').children(title, select, text, origin, actions).build();
+    const form = Div()
+      .class('agent-artifact-editor')
+      .children(title, select, ...(source.hidden ? [text] : []), presentationHost, source, origin, actions)
+      .build();
     body.append(back, form);
+    const applyButton = actions.querySelector<HTMLButtonElement>('[data-action=apply]')!;
+    applyButton.hidden = !!a.versions.at(-1)!.payload && a.versions.at(-1)!.payload!.kind !== 'text';
     captureDraft = () =>
       captureArtifactDraft({
         artifactId: a.id,
@@ -269,8 +324,9 @@ export function createArtifactsView(options: {
         revision: draftRevision,
         title: title.value,
         text: text.value,
-        start: text.selectionStart,
-        end: text.selectionEnd,
+        ...(presentation.kind === 'table' || presentation.kind === 'slides' ? { payloadKind: presentation.kind } : {}),
+        start: presentation.kind === 'text' ? text.selectionStart : 0,
+        end: presentation.kind === 'text' ? text.selectionEnd : 0,
       });
     if (options.refinement) {
       const isCurrent = (bound: ArtifactDraftBinding) =>
@@ -290,12 +346,26 @@ export function createArtifactsView(options: {
             error(new ArtifactError('conflict'));
             return false;
           }
+          if (bound.payloadKind) {
+            try {
+              const payload = validatePayload(JSON.parse(replacement));
+              if (payload.kind !== bound.payloadKind) return false;
+              replacement = payloadText(payload);
+            } catch {
+              error(new ArtifactError('invalid'));
+              return false;
+            }
+          }
           text.value = replaceArtifactRange(bound, replacement);
+          presentation.refresh();
           dirty = true;
           ++draftRevision;
           body.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled = false;
-          text.focus();
-          text.setSelectionRange(bound.start, bound.start + replacement.length);
+          if (bound.payloadKind) presentationHost.querySelector('textarea')?.focus();
+          else {
+            text.focus();
+            text.setSelectionRange(bound.start, bound.start + replacement.length);
+          }
           return true;
         },
       });
@@ -332,6 +402,75 @@ export function createArtifactsView(options: {
         list.append(View('li').children(open).build());
       }
       body.append(list);
+      body.append(
+        button('import', () =>
+          discard(() => {
+            reset();
+            const title = document.createElement('input');
+            title.setAttribute('aria-label', labels.titleField);
+            title.maxLength = 200;
+            const data = document.createElement('textarea');
+            data.maxLength = 262144;
+            const importForm = document.createElement('div');
+            importForm.className = 'agent-artifact-editor';
+            body.append(importForm);
+            data.setAttribute('aria-label', labels.import);
+            data.placeholder = labels.importHint;
+            const hint = document.createElement('p');
+            hint.textContent = labels.importHint;
+            importForm.append(
+              title,
+              hint,
+              data,
+              button('saveNew', () => {
+                void perform(async () => {
+                  let envelope: { schemaVersion?: unknown; payload?: unknown };
+                  try {
+                    if (new TextEncoder().encode(data.value).length > 262144) throw new Error('too large');
+                    envelope = JSON.parse(data.value);
+                  } catch {
+                    throw new ArtifactError('invalid');
+                  }
+                  if (
+                    !envelope ||
+                    envelope.schemaVersion !== 1 ||
+                    Object.keys(envelope).some((k) => !['schemaVersion', 'payload'].includes(k))
+                  )
+                    throw new ArtifactError('invalid');
+                  let payload;
+                  try {
+                    payload = validatePayload(envelope.payload);
+                  } catch {
+                    throw new ArtifactError('invalid');
+                  }
+                  const a = await options.store.create({
+                    title: title.value,
+                    text: payloadText(payload),
+                    payload,
+                    provenance: { conversation: options.conversation?.() },
+                  });
+                  editor(a);
+                  status.textContent = labels.saved;
+                });
+              }),
+              button('back', () =>
+                discard(() => {
+                  dirty = false;
+                  void refresh();
+                }),
+              ),
+            );
+            data.addEventListener('input', () => {
+              dirty = true;
+            });
+            title.addEventListener('input', () => {
+              dirty = true;
+            });
+            title.focus();
+          }),
+        ),
+      );
+
       if (options.onClose) body.append(button('back', options.onClose));
       if (el.isConnected) body.querySelector('button')?.focus();
     } catch (e) {
@@ -376,7 +515,7 @@ export function createArtifactsView(options: {
       // takes presentation ownership before it can remove the queued instruction.
       ++generation;
       const stage = () => {
-        const text = body.querySelector<HTMLTextAreaElement>('textarea');
+        const text = body.querySelector<HTMLTextAreaElement>('textarea[data-artifact-source]');
         if (!text || !workflow) return false;
         const matching = text.value === bound.text;
         // Old offsets are never applied to a newer body. A changed selection
@@ -423,6 +562,9 @@ export function createArtifactsView(options: {
     setLabels(next: ArtifactsLabels): void {
       labels = next;
       heading.textContent = labels.title;
+      activePresentation?.setLabels(labels);
+      const sourceSummary = body.querySelector('[data-artifact-source-summary]');
+      if (sourceSummary) sourceSummary.textContent = labels.textField + ' · JSON';
       for (const b of buttons) {
         const key = b.dataset.action as keyof ArtifactsLabels;
         if (!b.dataset.artifact) b.textContent = labels[key];
@@ -435,13 +577,14 @@ export function createArtifactsView(options: {
       }
       for (const [selector, key] of [
         ['input', 'titleField'],
-        ['textarea', 'textField'],
+        ['textarea[data-artifact-source]', 'textField'],
         ['select', 'version'],
       ] as const)
         body.querySelector(selector)?.setAttribute('aria-label', labels[key]);
     },
     dispose(): void {
       disposed = true;
+      activePresentation?.dispose();
       workflow?.dispose();
       cancelConfirmation?.();
       cancelConfirmation = undefined;

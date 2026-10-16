@@ -473,3 +473,142 @@ test('switching conversations releases a pending source read without attaching i
   await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
   await expect(page.locator('.agent-sources-summary')).toHaveText('fresh.txt');
 });
+
+test('structured results validate explicitly, preview compactly and export without a network', async ({
+  page,
+  context,
+}, testInfo) => {
+  test.setTimeout(90000);
+  await page.goto('/');
+  await page.evaluate(() => {
+    localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem(
+      'agent-writing-endpoint',
+      JSON.stringify({
+        version: 1,
+        kind: 'loopback',
+        baseUrl: 'http://localhost:11434',
+        model: 'structured-test',
+        preference: 'device-first',
+        localWritingConsent: false,
+      }),
+    );
+  });
+  let calls = 0;
+  const requests: Record<string, unknown>[] = [];
+  await page.route('http://localhost:11434/api/**', async (route) => {
+    if (route.request().method() === 'OPTIONS') {
+      await route.fulfill({
+        status: 204,
+        headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type' },
+      });
+      return;
+    }
+    if (route.request().url().endsWith('/tags')) {
+      await route.fulfill({ json: { models: [{ name: 'structured-test' }] } });
+      return;
+    }
+    requests.push(JSON.parse(route.request().postData()!));
+    const result =
+      ++calls === 1
+        ? { kind: 'slides', slides: [{ title: 'Wrong kind', body: 'Rejected' }] }
+        : {
+            kind: 'table',
+            columns: ['Name', 'Value'],
+            rows: Array.from({ length: 25 }, (_, i) => [i === 0 ? 'AI row' : 'row ' + i, i === 0 ? '=1+1' : 'value']),
+          };
+    await route.fulfill({
+      json: { message: { role: 'assistant', content: JSON.stringify(result) }, done: true, done_reason: 'stop' },
+    });
+  });
+  await page.goto('/editor?new=docx&locale=en');
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+  await page.locator('.agent-panel-settings-toggle').click();
+  await page.locator('.agent-panel-endpoint-connect').click();
+  await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
+  await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
+  await page.getByRole('button', { name: 'Import structured result', exact: true }).click();
+  await page.locator('.agent-artifact-editor input').fill('Release table');
+  const payload = {
+    kind: 'table',
+    columns: ['Name', 'Value'],
+    rows: Array.from({ length: 25 }, (_, i) => ['row ' + i, i === 0 ? '=1+1' : 'value']),
+  };
+  await page.locator('.agent-artifact-editor textarea').fill(JSON.stringify({ schemaVersion: 1, payload }));
+  await page.getByRole('button', { name: 'Save as new artifact', exact: true }).click();
+  await expect(page.locator('.agent-artifact-data-preview table tr')).toHaveCount(11);
+  await expect(page.getByRole('button', { name: 'Review in document', exact: true })).toBeHidden();
+  await page.getByRole('button', { name: 'Refine with AI', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Describe the change…', exact: true }).fill('Rename the first row');
+  await page.getByRole('button', { name: 'Suggest changes', exact: true }).click();
+  await expect(page.locator('.agent-artifact-workflow')).toContainText('The revision could not finish');
+  await expect(page.getByRole('button', { name: 'Use in draft', exact: true })).toBeHidden();
+  await expect(page.locator('.agent-artifact-data-preview td textarea').first()).toHaveValue('row 0');
+  await page.getByRole('button', { name: 'Suggest changes', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Use in draft', exact: true })).toBeVisible();
+  expect(JSON.stringify(requests[1])).toContain('10000 cells');
+  expect(requests[1].tools ?? []).toEqual([]);
+  await page.getByRole('button', { name: 'Use in draft', exact: true }).click();
+  await expect(page.locator('.agent-artifact-data-preview td textarea').first()).toHaveValue('AI row');
+  await expect(page.locator('.agent-artifact-editor select option')).toHaveCount(1);
+  await page.getByRole('button', { name: 'Save version', exact: true }).click();
+  await expect(page.locator('.agent-artifact-editor select option')).toHaveCount(2);
+  for (const theme of ['light', 'dark'] as const) {
+    await page.setViewportSize({ width: 360, height: 760 });
+    await page.emulateMedia({ colorScheme: theme });
+    await page.locator('.agent-artifact-editor > input').scrollIntoViewIfNeeded();
+    await page
+      .locator('.agent-runtime-panel')
+      .screenshot({ path: testInfo.outputPath(`structured-default-${theme}.png`) });
+  }
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(
+    page.locator('.agent-artifact-data-preview tbody textarea, .agent-artifact-data-preview tr textarea').nth(2),
+  ).toHaveValue('row 10');
+  await context.setOffline(true);
+  await page.getByText('Export', { exact: true }).click();
+  const download = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'CSV', exact: true }).click();
+  const file = await download;
+  expect(file.suggestedFilename()).toBe('Release table.csv');
+  for (const theme of ['light', 'dark'] as const) {
+    await page.setViewportSize({ width: 360, height: 760 });
+    await page.emulateMedia({ colorScheme: theme });
+    await expect
+      .poll(() => page.locator('.agent-runtime-panel').evaluate((el) => el.scrollWidth - el.clientWidth))
+      .toBeLessThan(2);
+    await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`structured-${theme}.png`) });
+  }
+  await page.locator('.agent-artifacts').getByRole('button', { name: 'Back', exact: true }).click();
+  await page.getByRole('button', { name: 'Import structured result', exact: true }).click();
+  await page.locator('.agent-artifact-editor input').fill('Release slides');
+  await page.locator('.agent-artifact-editor textarea').fill(
+    JSON.stringify({
+      schemaVersion: 1,
+      payload: {
+        kind: 'slides',
+        slides: [
+          { title: 'Release summary', body: 'A concise update for the team.' },
+          { title: 'Next steps', body: 'Review and publish.' },
+        ],
+      },
+    }),
+  );
+  await page.getByRole('button', { name: 'Save as new artifact', exact: true }).click();
+  const slideBody = page.locator('.agent-artifact-data-preview > textarea').nth(1);
+  await slideBody.focus();
+  await slideBody.press('End');
+  await slideBody.press('!');
+  await expect(slideBody).toBeFocused();
+  await page.getByRole('button', { name: 'Save version', exact: true }).click();
+  for (const theme of ['light', 'dark'] as const) {
+    await page.emulateMedia({ colorScheme: theme });
+    await page.locator('.agent-artifact-editor > input').scrollIntoViewIfNeeded();
+    await expect
+      .poll(() => page.locator('.agent-runtime-panel').evaluate((el) => el.scrollWidth - el.clientWidth))
+      .toBeLessThan(2);
+    await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`slides-default-${theme}.png`) });
+  }
+  await context.setOffline(false);
+});

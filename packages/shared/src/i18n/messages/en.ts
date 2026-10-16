@@ -540,6 +540,15 @@ export const en: I18nMessages = {
   agentArtifactVersionLimit: 'This artifact has 20 versions. Save your draft as a new artifact to continue.',
   agentArtifactCountLimit: 'You have 50 artifacts. Delete one before saving a new artifact.',
   agentArtifactTextLimit: 'Content exceeds 128 KiB. Shorten it before saving.',
+  agentArtifactExport: 'Export',
+  agentArtifactImport: 'Import structured result',
+  agentArtifactImportHint:
+    'Paste {"schemaVersion":1,"payload":{"kind":"table","columns":["Name"],"rows":[["Value"]]}} or a slides payload with slides:[{title,body}]. Data is validated before saving.',
+  agentArtifactPreview: 'Preview',
+  agentArtifactNext: 'Next',
+  agentArtifactPrevious: 'Previous',
+  agentArtifactStructuredHint:
+    'Edit cells or slide text directly. AI refinement replaces the entire structured result after review. Export CSV / Markdown / JSON to use in other apps; applying structured data to this document is not supported.',
   agentArtifactSaveNew: 'Save as new artifact',
   agentResultSaving: 'Saving…',
   agentResultSaved: 'Saved',

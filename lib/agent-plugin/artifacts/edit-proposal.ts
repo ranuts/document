@@ -1,5 +1,6 @@
 /** Native textarea offsets are UTF-16, not code-point indices. No DOM or model ownership. */
 export interface ArtifactDraft {
+  readonly payloadKind?: 'table' | 'slides';
   readonly artifactId: string;
   readonly expectedVersion: number;
   readonly revision: number;

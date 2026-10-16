@@ -545,6 +545,15 @@ export const ja: Partial<I18nMessages> = {
     'この成果は 20 バージョンに達しました。続けるには下書きを新しい成果として保存してください。',
   agentArtifactCountLimit: '成果が 50 件に達しました。新しく保存する前に 1 件削除してください。',
   agentArtifactTextLimit: '内容が 128 KiB を超えています。短くしてから保存してください。',
+  agentArtifactExport: 'エクスポート',
+  agentArtifactImport: '構造化した結果をインポート',
+  agentArtifactImportHint:
+    'schemaVersion:1 と payload を含む JSON を貼り付けてください。table は columns と rows、slides は slides:[{title,body}] を使用します。保存前に検証します。',
+  agentArtifactPreview: 'プレビュー',
+  agentArtifactNext: '次へ',
+  agentArtifactPrevious: '前へ',
+  agentArtifactStructuredHint:
+    'セルやスライドの内容を直接編集します。AI の変更は結果全体の差分を確認してから反映します。CSV / Markdown / JSON を出力できます。文書への直接適用は未対応です。',
   agentArtifactSaveNew: '新しい成果として保存',
   agentResultSaving: '保存中…',
   agentResultSaved: '保存しました',
