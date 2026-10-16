@@ -168,3 +168,87 @@ test('cloud model settings exclude browser runtime configuration and cache hints
   await expect(page.locator('.agent-panel-note')).toBeHidden();
   await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('cloud-settings.png') });
 });
+
+test('offline workspace hides cloud discovery and download controls while retaining local work without automatic reconnect', async ({
+  page,
+  context,
+}, testInfo) => {
+  test.setTimeout(90000);
+  await page.addInitScript(() => {
+    localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+  });
+  const connectorRequests: string[] = [];
+  page.on('request', (request) => {
+    if (request.url().includes('/api/connectors/')) connectorRequests.push(request.url());
+  });
+  await page.goto('/editor?new=docx&locale=en');
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+  await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
+  await page.locator('.cui-input').fill('Keep this draft offline');
+  await page.evaluate(async () => {
+    const request = indexedDB.open('document-ai-artifacts', 1);
+    request.onupgradeneeded = () => {
+      request.result.createObjectStore('artifacts', { keyPath: 'id' });
+      request.result.createObjectStore('summaries', { keyPath: 'id' });
+    };
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const tx = db.transaction(['artifacts', 'summaries'], 'readwrite');
+    const now = Date.now();
+    tx.objectStore('artifacts').put({
+      id: 'offline-draft',
+      title: 'Offline draft',
+      updatedAt: now,
+      versions: [{ version: 1, text: 'Editable offline', createdAt: now }],
+      provenance: {},
+    });
+    tx.objectStore('summaries').put({ id: 'offline-draft', title: 'Offline draft', updatedAt: now, version: 1 });
+    await new Promise<void>((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onabort = () => reject(tx.error);
+    });
+    db.close();
+  });
+  await context.setOffline(true);
+  await page.locator('.agent-sources-toggle').click();
+  await expect(page.locator('.agent-cloud-sources')).toBeHidden();
+  await expect(page.locator('.agent-sources-view .agent-offline-hint')).toBeVisible();
+  await expect(page.locator('.agent-source-settings')).toBeVisible();
+  await page.locator('.agent-sources-view input[type=file]').setInputFiles({
+    name: 'offline.txt',
+    mimeType: 'text/plain',
+    buffer: Buffer.from('Available without a network.'),
+  });
+  await expect(page.locator('.agent-source-row')).toContainText('offline.txt');
+  await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('sources-offline.png') });
+  await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
+  await expect(page.locator('.agent-sources-summary')).toHaveText('offline.txt');
+  await page.locator('.agent-panel-settings-toggle').click();
+  await expect(page.locator('.agent-panel-settings > .agent-offline-hint')).toBeVisible();
+  await expect(page.locator('.agent-model-choice')).toBeHidden();
+  await expect(page.locator('.agent-panel-load')).toBeHidden();
+  await page.locator('.agent-preferences summary').click();
+  await expect(page.locator('.agent-panel-provider')).toBeVisible();
+  await expect(page.locator('.agent-custom-sources')).toBeHidden();
+  await expect(page.locator('.agent-model-cache')).toBeVisible();
+  await page.locator('.agent-panel-settings-toggle').click();
+  await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
+  await expect(page.locator('.agent-artifacts')).toBeVisible();
+  await page.getByRole('button', { name: 'Offline draft', exact: true }).click();
+  await page.locator('.agent-artifact-editor textarea').fill('Saved without a network');
+  await page.getByRole('button', { name: 'Save version', exact: true }).click();
+  await expect(page.locator('.agent-artifact-editor select option')).toHaveCount(2);
+  await expect(page.locator('.agent-artifact-status')).toHaveText('Saved on this device');
+  await context.setOffline(false);
+  await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
+  await page.locator('.agent-sources-toggle').click();
+  await expect(page.locator('.agent-cloud-sources')).toBeVisible();
+  await expect(page.locator('.agent-source-row')).toContainText('offline.txt');
+  expect(connectorRequests).toEqual([]);
+  await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
+  await expect(page.locator('.cui-input')).toHaveValue('Keep this draft offline');
+});

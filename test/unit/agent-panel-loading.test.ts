@@ -2503,7 +2503,7 @@ it.each(['chat', 'tools'] as const)('keeps connected-service readiness accurate 
   expect(panel.querySelector('.cui-send')?.hasAttribute('disabled')).toBe(false);
   Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
   window.dispatchEvent(new Event('offline'));
-  expect(readiness.textContent).toBe(t('agentPrepareRequired'));
+  expect(readiness.textContent).toBe(t('agentOfflineFeaturesHint'));
   expect(panel.querySelector('.cui-send')?.hasAttribute('disabled')).toBe(true);
   expect(panel.querySelector('.agent-panel-write-destination')?.textContent).toContain(
     t('agentWriteDestinationOfflineUnavailable'),

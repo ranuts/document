@@ -517,4 +517,6 @@ export const pt: Partial<I18nMessages> = {
   agentArtifactDiscardChanges: 'Descartar alterações não salvas',
   agentArtifactProvenance: 'Fontes na criação',
   agentArtifactSaveResult: 'Salvar como artefato',
+  agentOfflineFeaturesHint:
+    'Sem conexão. Use arquivos locais, resultados salvos ou um modelo ou serviço local disponível.',
 };

@@ -61,6 +61,9 @@ export function createPanelSettingsView(controls: SettingsControls) {
   const serviceCard = View('section').build();
   serviceCard.className = 'agent-use-card agent-service-section';
   const serviceHint = View('p').build();
+  const offlineHint = View('p').class('agent-offline-hint').attr('role', 'status').build();
+  let online = navigator.onLine !== false;
+  let source = selectedSource;
   const fieldLabels: Array<{ title: HTMLElement; key: keyof I18nMessages }> = [];
   const field = (control: HTMLElement, key: keyof I18nMessages) => {
     const wrapper = Label().build();
@@ -109,15 +112,25 @@ export function createPanelSettingsView(controls: SettingsControls) {
     )
     .build() as HTMLElement & { value: string };
   sourcePicker.setAttribute('aria-label', t('agentSourceLabel'));
-  const setSource = (source: string) => {
+  const syncAvailability = () => {
     const local = source === 'local';
     localCard.hidden = !local;
     serviceCard.hidden = local;
     providerField.hidden = !local;
     consentLabel.hidden = !local;
     writePreferenceField.hidden = !local;
-    customSources.hidden = !local;
+    modelChoice.hidden = !local || !online;
+    customSources.hidden = !local || !online;
+    offlineHint.hidden = online;
+  };
+  const setSource = (nextSource: string) => {
+    source = nextSource;
     sourcePicker.setAttribute('value', source);
+    syncAvailability();
+  };
+  const setOnline = (nextOnline: boolean) => {
+    online = nextOnline;
+    syncAvailability();
   };
   sourcePicker.addEventListener('change', () => setSource(sourcePicker.value));
   setSource(selectedSource);
@@ -127,6 +140,7 @@ export function createPanelSettingsView(controls: SettingsControls) {
     });
     settingsHeading.textContent = t('agentSettings');
     serviceHint.textContent = t('agentUseServiceHint');
+    offlineHint.textContent = t('agentOfflineFeaturesHint');
     advancedTitle.textContent = t('agentPreferences');
     customSources.querySelector('h3')!.textContent = t('agentCustomModel');
     sourcePicker.setAttribute('aria-label', t('agentSourceLabel'));
@@ -143,6 +157,7 @@ export function createPanelSettingsView(controls: SettingsControls) {
     localCard,
     serviceCard,
     serviceHint,
+    offlineHint,
     advanced,
     advancedTitle,
     customSources,
@@ -150,5 +165,6 @@ export function createPanelSettingsView(controls: SettingsControls) {
     sourcePicker,
     syncLabels,
     setSource,
+    setOnline,
   };
 }

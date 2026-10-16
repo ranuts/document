@@ -3,6 +3,7 @@ import type { SourcesLabels } from './sources-view';
 export function sourcesLabels(): SourcesLabels {
   return {
     title: t('agentSourcesSources'),
+    offline: t('agentOfflineFeaturesHint'),
     excerpt: t('agentSourcesExcerpt'),
     local: t('agentSourcesLocal'),
     localHint: t('agentSourcesLocalHint'),

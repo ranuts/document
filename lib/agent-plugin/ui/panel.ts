@@ -599,6 +599,7 @@ export function createAgentPanel(
   let runtimeCleanup: Promise<void> | null = null;
   let runtimeCleanupFailed = false;
   let cacheBusy = false;
+  let syncOfflineSettings = () => {};
   let loadingFraction: number | undefined;
   let loadingBackend: 'webllm' | 'wllama' | undefined;
   let resultMetadata: Readonly<Record<string, unknown>> | undefined;
@@ -749,6 +750,17 @@ export function createAgentPanel(
   const prepareAction = ButtonBuilder().class('agent-prepare-action').attr('type', 'button').build();
   function prepareSelectedSource(requestText = chat.getInput() || pendingWritingText()): void {
     if (endpointConnection.pending || modelLoading || runtimeCleanup || cacheBusy || !enabled) return;
+    if (
+      navigator.onLine === false &&
+      ((selectedSource === 'service' && endpointSettings.kind !== 'loopback') ||
+        (selectedSource === 'local' &&
+          !(currentProvider() === 'webllm' && cachedLocalModel) &&
+          !webllmProvider?.isReady() &&
+          !ggufFiles.files?.length))
+    ) {
+      showView('settings');
+      return;
+    }
     if (needsWritingSetup(requestText)) {
       showView('settings');
       const disclosure = localWritingConsent.closest('details');
@@ -1210,6 +1222,8 @@ export function createAgentPanel(
       ? t(cloud ? 'agentEndpointConfigured' : 'agentEndpointConnected')
       : status;
     endpointConnect.textContent = endpointConnection.current ? t('agentEndpointDisconnect') : t('agentEndpointConnect');
+    endpointConnect.hidden =
+      navigator.onLine === false && cloud && !endpointConnection.current && !endpointConnection.pending;
     syncRuntimeStatus();
   };
   const disconnectEndpoint = (): void => {
@@ -1313,13 +1327,18 @@ export function createAgentPanel(
     }
   };
   function syncRuntimeStatus(): void {
+    syncOfflineSettings();
+    const offline = navigator.onLine === false;
+    const availableLocalCache = currentProvider() === 'webllm' && cachedLocalModel;
     const localReady = !!webllmProvider?.isReady();
     const release = settings.querySelector<HTMLElement>('.agent-release-memory');
     if (release) release.hidden = !localReady;
     for (const button of [loadBtn, ggufLoad]) {
       button.textContent = t(modelLoading ? 'agentPreparing' : localReady ? 'agentModelInUse' : 'agentLoadModel');
       button.toggleAttribute('disabled', modelLoading || localReady || !enabled || cacheBusy);
-      button.hidden = modelLoading;
+      button.hidden =
+        modelLoading ||
+        (offline && (button === loadBtn ? !availableLocalCache || localReady : !ggufFiles.files?.length || localReady));
     }
     const ready = localReady || useEndpointForChat();
     let reason = ready ? '' : t('agentPrepareRequired');
@@ -1329,6 +1348,7 @@ export function createAgentPanel(
     else if (cacheBusy) reason = t('agentCacheBusy');
     else if (endpointConnection.pending) reason = t('agentEndpointConnecting');
     else if (modelLoading) reason = t('agentPreparing');
+    else if (!ready && offline) reason = t('agentOfflineFeaturesHint');
     else if (!ready && selectedSource === 'service' && endpointStatus.textContent) reason = endpointStatus.textContent;
     let writingBlocked = false;
     if (needsWritingSetup(chat.getInput() || pendingWritingText())) {
@@ -1353,6 +1373,7 @@ export function createAgentPanel(
     const endpoint = configuredEndpoint(endpointSettings);
     const canReconnect = !!(
       endpoint &&
+      (!offline || endpoint.kind === 'loopback') &&
       (!isCloudEndpointKind(endpoint.kind) || getEndpointKey(endpointKeySlot(endpoint.kind)))
     );
     prepareAction.textContent =
@@ -1363,8 +1384,10 @@ export function createAgentPanel(
               ? 'agentSettings'
               : selectedSource === 'service' && canReconnect
                 ? 'agentReconnectService'
-                : selectedSource === 'local' && (hasConfiguration || cachedLocalModel)
-                  ? cachedLocalModel
+                : selectedSource === 'local' &&
+                    (hasConfiguration || availableLocalCache) &&
+                    (!offline || availableLocalCache || !!ggufFiles.files?.length)
+                  ? availableLocalCache
                     ? 'agentResumeModel'
                     : 'agentLoadModel'
                   : 'agentSettings',
@@ -1389,7 +1412,10 @@ export function createAgentPanel(
         : '';
     syncWriteDestination();
     runtimeRow.hidden = !loadingStatus.textContent || (panel.dataset.view === 'settings' && !modelLoading);
-    note.hidden = selectedSource !== 'local' || (modelLoading && panel.dataset.view === 'settings');
+    note.hidden =
+      selectedSource !== 'local' ||
+      (modelLoading && panel.dataset.view === 'settings') ||
+      (offline && !availableLocalCache && !localReady && !ggufFiles.files?.length);
     loadProgress.hidden = !modelLoading;
     if (loadingFraction === undefined) loadProgress.removeAttribute('value');
     else loadProgress.value = loadingFraction;
@@ -3079,7 +3105,12 @@ export function createAgentPanel(
     localModelLib,
     selectedSource,
   });
-  const { settingsHeading, modelActions, localCard, serviceCard, advanced, settingsHero, sourcePicker } = settingsView;
+  const { settingsHeading, modelActions, localCard, serviceCard, advanced, settingsHero, sourcePicker, offlineHint } =
+    settingsView;
+  syncOfflineSettings = () => {
+    settingsView.setOnline(navigator.onLine !== false);
+    ggufUrl.hidden = navigator.onLine === false;
+  };
   const syncSource = () => {
     if (selectedSource !== sourcePicker.value) invalidateRequestBindings();
     selectedSource = sourcePicker.value;
@@ -3117,7 +3148,7 @@ export function createAgentPanel(
   modelActions.append(modelCacheSettings.release);
   syncSource();
   void refreshCache();
-  settings.replaceChildren(settingsHero, sourcePicker, localCard, serviceCard, cacheList, note, advanced);
+  settings.replaceChildren(settingsHero, sourcePicker, offlineHint, localCard, serviceCard, cacheList, note, advanced);
   const disableRow = document.createElement('div');
   disableRow.className = 'agent-enable-row';
   const disableLabel = document.createElement('span');

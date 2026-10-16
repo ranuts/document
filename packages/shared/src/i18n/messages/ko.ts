@@ -502,4 +502,5 @@ export const ko: Partial<I18nMessages> = {
   agentArtifactDiscardChanges: '저장하지 않은 변경 버리기',
   agentArtifactProvenance: '생성 시 자료 출처',
   agentArtifactSaveResult: '아티팩트로 저장',
+  agentOfflineFeaturesHint: '오프라인입니다. 로컬 파일, 저장된 결과, 사용 가능한 로컬 모델이나 서비스를 사용하세요.',
 };

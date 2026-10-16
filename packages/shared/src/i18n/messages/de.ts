@@ -534,4 +534,6 @@ export const de: Partial<I18nMessages> = {
   agentArtifactDiscardChanges: 'Ungespeicherte Änderungen verwerfen',
   agentArtifactProvenance: 'Quellen bei Erstellung',
   agentArtifactSaveResult: 'Als Artefakt speichern',
+  agentOfflineFeaturesHint:
+    'Offline. Verwende lokale Dateien, gespeicherte Ergebnisse oder ein verfügbares lokales Modell bzw. einen lokalen Dienst.',
 };
