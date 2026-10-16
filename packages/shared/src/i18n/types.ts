@@ -503,6 +503,7 @@ export interface I18nMessages {
   agentArtifactTitle: string;
   agentArtifactEmpty: string;
   agentArtifactBack: string;
+  agentArtifactBackToList: string;
   agentArtifactTitleField: string;
   agentArtifactTextField: string;
   agentArtifactVersion: string;

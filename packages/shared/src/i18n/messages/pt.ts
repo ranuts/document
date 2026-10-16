@@ -520,6 +520,7 @@ export const pt: Partial<I18nMessages> = {
   agentArtifactTitle: 'Artefatos',
   agentArtifactEmpty: 'Salve resultados aqui para editar e manter versões neste dispositivo.',
   agentArtifactBack: 'Voltar',
+  agentArtifactBackToList: 'Voltar aos resultados',
   agentArtifactTitleField: 'Título',
   agentArtifactTextField: 'Conteúdo',
   agentArtifactVersion: 'Versão',

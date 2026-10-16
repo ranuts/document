@@ -525,6 +525,7 @@ export const es: Partial<I18nMessages> = {
   agentArtifactTitle: 'Artefactos',
   agentArtifactEmpty: 'Guarda resultados aquí para editarlos y conservar versiones en este dispositivo.',
   agentArtifactBack: 'Volver',
+  agentArtifactBackToList: 'Volver a los resultados',
   agentArtifactTitleField: 'Título',
   agentArtifactTextField: 'Contenido',
   agentArtifactVersion: 'Versión',

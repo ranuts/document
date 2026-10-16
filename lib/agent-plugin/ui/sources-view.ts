@@ -1,3 +1,4 @@
+import { createViewHeader, labelViewBack } from './view-header';
 import { sourcePreview } from './source-preview';
 import { sourceMatches } from '../connectors/reference-search';
 import { renderSearchText } from './search-highlight';
@@ -223,8 +224,7 @@ export function createSourcesView(options: {
     .children(driveHeading, driveHint, drive, driveSearch, driveList, driveDisconnect, driveRows, more)
     .build();
   el.append(
-    back,
-    heading,
+    createViewHeader(heading, back),
     excerpt,
     offlineHint,
     status,
@@ -438,7 +438,7 @@ export function createSourcesView(options: {
     offlineHint.textContent = labels.offline;
     syncConnectivity();
     excerpt.textContent = labels.excerpt;
-    back.textContent = labels.close;
+    labelViewBack(back, labels.close);
     localHeading.textContent = labels.local;
     attachFile.textContent = labels.attach;
     syncConnectionActions();

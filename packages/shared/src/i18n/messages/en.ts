@@ -515,6 +515,7 @@ export const en: I18nMessages = {
   agentArtifactTitle: 'Artifacts',
   agentArtifactEmpty: 'Save useful results here to edit and keep versions on this device.',
   agentArtifactBack: 'Back',
+  agentArtifactBackToList: 'Back to artifacts',
   agentArtifactTitleField: 'Title',
   agentArtifactTextField: 'Content',
   agentArtifactVersion: 'Version',

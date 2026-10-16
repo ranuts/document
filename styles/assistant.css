@@ -114,7 +114,9 @@ body.agent-panel-resizing #app iframe {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--ran-space-2) 0;
+  box-sizing: border-box;
+  min-height: var(--ran-size-7);
+  padding: var(--ran-space-1) 0;
   color: var(--ran-color-text-secondary);
   font-weight: var(--ran-text-label-weight);
   cursor: pointer;
@@ -159,14 +161,16 @@ body.agent-panel-resizing #app iframe {
   flex-basis: 100%;
 }
 .agent-history-options button {
-  min-height: var(--ran-size-6);
+  box-sizing: border-box;
+  min-height: var(--ran-size-7);
   max-width: 100%;
   padding: var(--ran-space-1) var(--ran-space-2);
-  border: 1px solid var(--ran-color-border-secondary);
+  border: 0;
   border-radius: var(--ran-radius-sm);
-  background: var(--ran-color-bg-elevated);
+  background: transparent;
   color: var(--ran-color-text);
   font: inherit;
+  font-size: var(--ran-text-label-3);
   overflow-wrap: anywhere;
   cursor: pointer;
 }
@@ -797,7 +801,7 @@ r-dropdown[role='listbox'] {
   overflow: auto;
   flex: 1 1 auto;
   max-height: none;
-  padding: 16px;
+  padding: var(--ran-space-4);
   gap: var(--ran-space-4);
   border-bottom: 0;
   scrollbar-width: thin;
@@ -869,8 +873,10 @@ r-dropdown[role='listbox'] {
   justify-content: space-between;
   align-items: center;
   list-style: none;
-  padding: 12px 0;
-  font-weight: 500;
+  box-sizing: border-box;
+  min-height: var(--ran-size-7);
+  padding: var(--ran-space-1) 0;
+  font-weight: var(--ran-text-label-weight);
 }
 .agent-preferences > :not(summary) {
   margin-top: 16px;
@@ -879,7 +885,7 @@ r-dropdown[role='listbox'] {
   flex: 1;
   min-height: 0;
   overflow: auto;
-  padding: var(--ran-space-6) var(--ran-space-4);
+  padding: var(--ran-space-4);
 }
 .agent-welcome {
   padding: 40px 28px;
@@ -1073,8 +1079,8 @@ r-dropdown[role='listbox'] {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  gap: 8px;
-  font-size: 12px;
+  gap: var(--ran-space-2);
+  font-size: var(--ran-text-label-3);
   line-height: 1.6;
   color: var(--ran-color-text-secondary);
 }
@@ -1090,31 +1096,51 @@ r-dropdown[role='listbox'] {
 .agent-panel-settings r-select {
   width: 100%;
   min-width: 0;
-  --ran-input-border-radius: 8px;
-  --ran-input-min-height: 32px;
-  --ran-input-content-min-height: 30px;
-  --ran-input-content-font-size: 13px;
-  --ran-input-content-padding: 0 12px;
-  --ran-select-border-radius: 8px;
-  --ran-select-height: 32px;
-  --ran-select-font-size: 13px;
+  --ran-input-border-radius: var(--ran-radius-sm);
+  --ran-input-min-height: var(--ran-size-7);
+  --ran-input-content-min-height: calc(var(--ran-size-7) - 2px);
+  --ran-input-content-font-size: var(--ran-text-label-2);
+  --ran-input-content-padding: 0 var(--ran-space-3);
+  --ran-select-border-radius: var(--ran-radius-sm);
+  --ran-select-height: var(--ran-size-7);
+  --ran-select-font-size: var(--ran-text-label-2);
 }
 .agent-panel-settings r-button {
   --ran-btn-padding: 0;
 }
 .agent-panel-settings r-button::part(content) {
   box-sizing: border-box;
-  min-height: 32px;
+  min-height: var(--ran-size-7);
   display: flex;
   align-items: center;
-  font-size: 12px;
-  padding: 5px 10px;
+  font-size: var(--ran-text-label-3);
+  padding: var(--ran-space-1) var(--ran-space-3);
+  border-color: transparent;
+  background: transparent;
+  color: var(--ran-color-text);
 }
-.agent-panel-load::part(content),
-.agent-panel-endpoint-connect::part(content) {
+.agent-panel-settings r-button:not([disabled]):hover::part(content) {
+  background: var(--ran-color-bg-hover);
+}
+.agent-panel-settings r-button:not([disabled]):active::part(content) {
+  background: var(--ran-color-bg-active);
+}
+.agent-panel-settings .agent-panel-load::part(content),
+.agent-panel-settings .agent-panel-endpoint-connect::part(content) {
   border-color: var(--ran-color-primary);
   background: var(--ran-color-primary);
   color: var(--ran-color-primary-text);
+}
+.agent-panel-settings :is(.agent-panel-load, .agent-panel-endpoint-connect):not([disabled]):hover::part(content) {
+  background: var(--ran-color-primary-hover);
+}
+.agent-panel-settings :is(.agent-panel-load, .agent-panel-endpoint-connect):not([disabled]):active::part(content) {
+  background: var(--ran-color-primary-active);
+}
+.agent-panel-settings r-button[disabled]::part(content) {
+  border-color: transparent;
+  color: var(--ran-color-text-disabled);
+  background: transparent;
 }
 .agent-panel-endpoint-connect {
   align-self: flex-start;
@@ -1154,15 +1180,6 @@ r-dropdown[role='listbox'] {
 .agent-panel-settings > .agent-panel-note {
   margin: -8px 0 0;
 }
-@container agent-panel (max-width: 370px) {
-  .agent-panel-settings {
-    padding: 16px;
-  }
-
-  .agent-settings-hero h2 {
-    font-size: 24px;
-  }
-}
 
 /* Compact model settings: one source and one active configuration. */
 .agent-source-picker {
@@ -1184,7 +1201,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-model-cache > summary {
   cursor: pointer;
-  min-height: 32px;
+  min-height: var(--ran-size-7);
   display: flex;
   align-items: center;
   font-size: var(--ran-text-label-2);
@@ -1386,7 +1403,7 @@ r-dropdown[role='listbox'] {
   --ran-select-background-color: transparent;
   --ran-select-border: 1px solid transparent;
   --ran-select-hover-border: 1px solid transparent;
-  --ran-select-height: 32px;
+  --ran-select-height: var(--ran-size-7);
   --ran-select-min-height: 32px;
   --ran-select-font-size: var(--ran-text-label-3);
   --ran-select-color: var(--ran-color-text-secondary);
@@ -1662,7 +1679,9 @@ r-dropdown[role='listbox'] {
   display: flex;
   align-items: center;
   gap: var(--ran-space-2);
-  padding: var(--ran-space-2) var(--ran-space-3);
+  box-sizing: border-box;
+  min-height: var(--ran-size-7);
+  padding: var(--ran-space-1) var(--ran-space-2);
   border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-sm);
   color: var(--ran-color-text-secondary);
@@ -1680,7 +1699,7 @@ r-dropdown[role='listbox'] {
   background: transparent;
   color: var(--ran-color-text);
   font: inherit;
-  font-size: var(--ran-text-label-1);
+  font-size: var(--ran-text-label-2);
   line-height: var(--ran-line-height);
 }
 .agent-history-search:focus {
@@ -1802,7 +1821,7 @@ r-dropdown[role='listbox'] {
   margin-top: var(--ran-space-3);
 }
 .agent-welcome-hint {
-  margin: 0 0 var(--ran-space-5);
+  margin: 0 0 var(--ran-space-6);
   font-size: 13px;
   line-height: 1.65;
 }
@@ -2058,7 +2077,7 @@ r-dropdown[role='listbox'] {
 .agent-search-match {
   color: inherit;
   background: color-mix(in srgb, var(--ran-color-primary) 18%, transparent);
-  border-radius: var(--ran-radius-xs, 2px);
+  border-radius: var(--ran-radius-sm);
   font-weight: 600;
   padding: 0;
 }
@@ -2100,22 +2119,22 @@ r-dropdown[role='listbox'] {
 }
 .agent-workspace-view h2,
 .agent-artifacts h2 {
-  margin: var(--ran-space-3) 0 var(--ran-space-5);
-  font-size: 1.2em;
+  margin: 0;
+  font-size: var(--ran-text-heading-3);
 }
 .agent-workspace-view h3 {
-  margin: var(--ran-space-5) 0 var(--ran-space-2);
-  font-size: 1em;
-  font-weight: 600;
+  margin: var(--ran-space-6) 0 var(--ran-space-2);
+  font-size: var(--ran-text-label-1);
+  font-weight: var(--ran-text-heading-weight);
 }
 .agent-workspace-view label,
 .agent-artifact-editor label {
   display: flex;
   flex-direction: column;
   gap: var(--ran-space-2);
-  margin-block: var(--ran-space-3);
+  margin-block: var(--ran-space-4);
 }
-.agent-workspace-view input,
+.agent-workspace-view input:not([type='checkbox']):not([type='radio']):not([type='file']),
 .agent-artifact-editor input,
 .agent-artifact-editor textarea,
 .agent-artifact-editor select {
@@ -2127,7 +2146,9 @@ r-dropdown[role='listbox'] {
   background: transparent;
   border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-sm);
-  padding: var(--ran-space-2);
+  padding: var(--ran-space-1) var(--ran-space-2);
+  min-height: var(--ran-size-7);
+  font-size: var(--ran-text-label-2);
 }
 .agent-artifact-editor textarea {
   min-height: 16em;
@@ -2138,12 +2159,18 @@ r-dropdown[role='listbox'] {
 .agent-artifacts button,
 .agent-sources-toggle,
 .agent-workspace-toggle {
+  box-sizing: border-box;
+  max-width: 100%;
   color: inherit;
   background: transparent;
   border: 0;
+  border-radius: var(--ran-radius-sm);
   font: inherit;
-  padding: var(--ran-space-2);
-  min-height: 36px;
+  font-size: var(--ran-text-label-3);
+  line-height: var(--ran-line-height);
+  overflow-wrap: anywhere;
+  padding: var(--ran-space-1) var(--ran-space-2);
+  min-height: var(--ran-size-7);
   cursor: pointer;
   text-align: start;
 }
@@ -2152,18 +2179,120 @@ r-dropdown[role='listbox'] {
   padding: var(--ran-space-1) var(--ran-space-2);
   font-size: var(--ran-text-label-3);
 }
-.agent-workspace-view button:hover,
-.agent-artifacts button:hover,
-.agent-sources-toggle:hover,
-.agent-workspace-toggle:hover {
-  background: var(--ran-color-fill-secondary);
+.agent-workspace-view button:hover:enabled,
+.agent-artifacts button:hover:enabled,
+.agent-history-options button:hover:enabled,
+.agent-view-back:hover:enabled,
+.agent-sources-toggle:hover:enabled,
+.agent-workspace-toggle:hover:enabled {
+  background: var(--ran-color-bg-hover);
 }
+.agent-workspace-view input:focus-visible,
+.agent-artifact-editor select:focus-visible,
+.agent-artifact-workflow input:focus-visible,
 .agent-workspace-view button:focus-visible,
 .agent-artifacts button:focus-visible,
 .agent-sources-toggle:focus-visible,
 .agent-workspace-toggle:focus-visible {
   outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;
+}
+/* View owners keep navigation callbacks; the chrome shares one token rhythm. */
+.agent-panel .agent-view-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  margin-block-end: var(--ran-space-4);
+  min-width: 0;
+}
+.agent-panel .agent-view-header h2 {
+  margin: 0;
+  min-width: 0;
+  font-size: var(--ran-text-heading-3);
+  font-weight: var(--ran-text-heading-weight);
+  letter-spacing: var(--ran-text-heading-tracking);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.agent-settings-hero .agent-view-header {
+  margin-block-end: 0;
+}
+.agent-panel .agent-view-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-width: var(--ran-size-7);
+  min-height: var(--ran-size-7);
+  padding: var(--ran-space-2);
+  border: 0;
+  border-radius: var(--ran-radius-sm);
+  color: var(--ran-color-text-secondary);
+  background: transparent;
+  cursor: pointer;
+}
+.agent-panel .agent-view-back:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+}
+.agent-workspace-view button:active:enabled,
+.agent-artifacts button:active:enabled,
+.agent-history-options button:active:enabled,
+.agent-view-back:active:enabled {
+  background: var(--ran-color-bg-active);
+}
+.agent-panel :is(.agent-workspace-view, .agent-artifacts, .agent-history-options, .agent-view-header) button:disabled {
+  color: var(--ran-color-text-disabled);
+  cursor: default;
+  background: transparent;
+}
+.agent-artifacts button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):enabled {
+  background: var(--ran-color-primary);
+  color: var(--ran-color-primary-text);
+}
+.agent-artifacts button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):hover:enabled {
+  background: var(--ran-color-primary-hover);
+}
+.agent-artifacts
+  button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):active:enabled {
+  background: var(--ran-color-primary-active);
+}
+.agent-history-options
+  button:is(.agent-history-delete-current, .agent-history-delete-all, .agent-history-confirm):enabled,
+.agent-artifacts button:is([data-action='delete'], [data-action='confirmDelete']):enabled {
+  color: var(--ran-color-danger);
+}
+.agent-artifacts > div > p {
+  font-size: var(--ran-text-label-3);
+  color: var(--ran-color-text-secondary);
+  line-height: 1.6;
+}
+.agent-artifacts-list button {
+  font-size: var(--ran-text-label-2);
+}
+@media (pointer: coarse) {
+  .agent-panel :is(.agent-workspace-view, .agent-artifacts, .agent-history-options, .agent-view-header) button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .agent-workspace-view input:not([type='checkbox']):not([type='radio']):not([type='file']),
+  .agent-artifact-editor > select,
+  .agent-artifact-editor > input,
+  .agent-artifact-workflow form input,
+  .agent-history-search-row {
+    min-height: 44px;
+  }
+  .agent-panel-settings :is(r-input, r-select) {
+    --ran-input-min-height: 44px;
+    --ran-input-content-min-height: 42px;
+    --ran-select-height: 44px;
+  }
+  .agent-panel-settings r-button::part(content),
+  .agent-panel .agent-disclosure > summary,
+  .agent-history-management > summary {
+    min-height: 44px;
+  }
 }
 .agent-source-row,
 .agent-artifact-actions {
@@ -2234,10 +2363,7 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-primary);
   font-weight: 600;
 }
-.agent-artifact-actions button:disabled {
-  opacity: 0.45;
-  cursor: default;
-}
+
 /* The language picker yields space before it can cover Stop/Send. */
 .agent-speech-language {
   flex: 1 1 96px;
@@ -2274,7 +2400,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-source-settings summary {
   cursor: pointer;
-  padding-block: var(--ran-space-2);
+  padding-block: var(--ran-space-1);
 }
 .agent-source-settings summary h3 {
   display: inline;
@@ -2418,14 +2544,7 @@ r-dropdown[role='listbox'] {
   background: color-mix(in srgb, var(--ran-color-primary) 12%, transparent);
   text-decoration: none;
 }
-.agent-artifact-workflow button[data-action='accept'] {
-  color: var(--ran-color-primary);
-  font-weight: 600;
-}
-.agent-artifact-workflow button:disabled {
-  opacity: 0.45;
-  cursor: default;
-}
+
 .agent-artifact-scope {
   flex-basis: 100%;
   margin: 0;
@@ -2437,7 +2556,7 @@ r-dropdown[role='listbox'] {
 .agent-artifact-data-preview {
   overflow-x: auto;
   max-width: 100%;
-  font-size: var(--ran-font-size-small, 12px);
+  font-size: var(--ran-text-label-3);
 }
 .agent-artifact-data-preview > p {
   color: var(--ran-color-text-secondary);

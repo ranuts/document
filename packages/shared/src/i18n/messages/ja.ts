@@ -518,6 +518,7 @@ export const ja: Partial<I18nMessages> = {
   agentArtifactTitle: '成果物',
   agentArtifactEmpty: '結果を保存して、この端末で編集・バージョン管理できます。',
   agentArtifactBack: '戻る',
+  agentArtifactBackToList: '成果物一覧に戻る',
   agentArtifactTitleField: 'タイトル',
   agentArtifactTextField: '内容',
   agentArtifactVersion: 'バージョン',
