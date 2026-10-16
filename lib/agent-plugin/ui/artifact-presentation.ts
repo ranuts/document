@@ -37,9 +37,6 @@ export function createArtifactPresentation(
     preview.replaceChildren();
     if (kind === 'text') return;
     const data = payload();
-    const caption = document.createElement('p');
-    caption.textContent = labels.preview;
-    preview.append(caption);
     if (data.kind === 'table') {
       page = Math.min(page, Math.max(0, Math.ceil(data.rows.length / 10) - 1));
       const table = document.createElement('table');

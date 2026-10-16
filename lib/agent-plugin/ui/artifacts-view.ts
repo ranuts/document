@@ -259,6 +259,8 @@ export function createArtifactsView(options: {
           if (text.parentElement === source) source.removeChild(text);
           form.insertBefore(text, presentationHost);
         } else source.append(text);
+        if (presentation.kind !== 'text') form.insertBefore(actions, presentationHost);
+        else form.insertBefore(actions, workflow?.el ?? null);
         const apply = body.querySelector<HTMLButtonElement>('[data-action=apply]');
         if (apply) apply.hidden = loaded.payload?.kind !== undefined && loaded.payload.kind !== 'text';
         dirty = value !== String(a.versions.at(-1)!.version);
@@ -314,6 +316,7 @@ export function createArtifactsView(options: {
       .class('agent-artifact-editor')
       .children(title, select, ...(source.hidden ? [text] : []), presentationHost, source, origin, actions)
       .build();
+    if (presentation.kind !== 'text') form.insertBefore(actions, presentationHost);
     body.append(back, form);
     const applyButton = actions.querySelector<HTMLButtonElement>('[data-action=apply]')!;
     applyButton.hidden = !!a.versions.at(-1)!.payload && a.versions.at(-1)!.payload!.kind !== 'text';

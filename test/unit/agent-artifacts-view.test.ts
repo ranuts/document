@@ -661,6 +661,12 @@ it('imports a validated structured result, paginates preview, preserves JSON edi
   (view.el.querySelector('[data-action=saveNew]') as HTMLButtonElement).click();
   await tick();
   expect(view.el.querySelectorAll('table tr')).toHaveLength(11);
+  expect(
+    view.el
+      .querySelector('.agent-artifact-actions')!
+      .compareDocumentPosition(view.el.querySelector('.agent-artifact-presentation')!) &
+      Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
   expect((view.el.querySelector('[data-action=apply]') as HTMLButtonElement).hidden).toBe(true);
   expect(apply).not.toHaveBeenCalled();
   const editor = view.el.querySelector<HTMLTextAreaElement>('textarea[data-artifact-source]')!;
