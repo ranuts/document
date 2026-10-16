@@ -128,6 +128,9 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   await sourceSearch.fill('only this');
   await page.locator('.agent-source-row summary').click();
   await expect(page.locator('.agent-source-preview mark')).toHaveText('Only this');
+  await page.locator('.agent-source-row summary').click();
+  await page.locator('.agent-source-row summary').click();
+  await expect(page.locator('.agent-source-preview pre mark')).toHaveText('Only this');
   await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('source-search-preview.png') });
   await sourceSearch.fill('');
   expect(bodies).toEqual([]);
@@ -143,6 +146,9 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   await page.getByRole('button', { name: 'Remove: notes.txt', exact: true }).click();
   await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
   await page.getByRole('button', { name: 'Open source: notes.txt', exact: true }).click();
+  await expect(page.locator('.cui-bubble .agent-source-preview pre')).toContainText('Only this reference is attached.');
+  await page.locator('.cui-bubble .agent-source-preview summary').click();
+  await page.locator('.cui-bubble .agent-source-preview summary').click();
   await expect(page.locator('.cui-bubble .agent-source-preview pre')).toContainText('Only this reference is attached.');
   expect(bodies).toHaveLength(1);
   await page.reload();

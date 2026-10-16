@@ -1881,12 +1881,13 @@ export function createAgentPanel(
       bindingRevision === providerBindingRevision;
     let attempted = false;
     let applicationStatus: 'success' | 'failed' | 'stopped' = 'failed';
+    let action: DocumentToolAction | undefined;
     writingReply = true;
     try {
       const target = captureDocumentToolTarget();
       if (target.context.kind !== 'word') throw new Error(t('agentWordOnly'));
       invalidatePlans();
-      const action = new DocumentToolAction(target, {
+      action = new DocumentToolAction(target, {
         tool: 'insert_text',
         input: { text, format: 'markdown' },
         readOnly: false,
@@ -1908,6 +1909,7 @@ export function createAgentPanel(
         });
       return attempted ? 'failed' : 'retry';
     } finally {
+      action?.dispose();
       writingReply = false;
       if (replyAbort === abort) replyAbort = null;
       release(applicationStatus);
@@ -2340,12 +2342,13 @@ export function createAgentPanel(
       if (stagedIntent?.hostRead) {
         if (!isCurrentHostRead(stagedIntent.hostRead)) throw new Error(t('agentPlanExpired'));
         chat.setActivity('reading');
-        const read = prepareHostRead(stagedIntent.hostRead, trimmed);
+        const read = prepareHostRead(stagedIntent.hostRead, trimmed, binding.sources.references);
         if (read.request.reply) {
           appendTurn({ role: 'tool', text: read.request.reply });
           return measured('failed');
         }
         read.request.assertCurrent();
+        requestEvidence = read.evidence;
         beginExecution();
         appendTurn({ role: 'tool', text: read.receipt });
         chat.setActivity('responding');

@@ -88,3 +88,25 @@ it('centers a bounded source preview on late literal search hits', () => {
   expect(result.text.length).toBeLessThanOrEqual(8000);
   expect(result.partial).toBe(true);
 });
+
+import { sourcePreview } from '../../lib/agent-plugin/ui/source-preview';
+it.each(['attachment', 'citation'])('keeps the %s excerpt on disclosure reopen', async (kind) => {
+  const source = { id: 'S1', sourceId: 'one', title: 'Notes', connector: 'local', text: 'Captured budget evidence' };
+  const bubble = document.createElement('div');
+  if (kind === 'citation') {
+    bubble.textContent = 'Answer [S1]';
+    presentSourceCitations(bubble, { evidence: [source] }, 'Open source');
+    bubble.querySelector('button')!.click();
+  } else bubble.append(sourcePreview(source, 'Open source', 'budget'));
+  const detail = bubble.querySelector('details')!;
+  expect(detail.querySelector('pre')!.textContent).toBe('');
+  detail.open = true;
+  detail.dispatchEvent(new Event('toggle'));
+  expect(detail.querySelector('pre')!.textContent).toBe(source.text);
+  detail.open = false;
+  detail.dispatchEvent(new Event('toggle'));
+  detail.open = true;
+  detail.dispatchEvent(new Event('toggle'));
+  expect(detail.querySelector('pre')!.textContent).toBe(source.text);
+  if (kind === 'attachment') expect(detail.querySelector('mark')!.textContent).toBe('budget');
+});
