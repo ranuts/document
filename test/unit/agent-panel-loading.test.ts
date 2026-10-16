@@ -2174,6 +2174,7 @@ it('warms a downloaded model directly from chat, preserving the draft without se
 it.each(['给选中的文字进行润色', '润色选中的文字', 'Hello', 'Polish the selected text'])(
   'offers model preparation consistently for %s',
   async (request) => {
+    allowBrowserLocalWriting();
     state.cached = true;
     state.editorReady = true;
     state.source = 'Selected text';
@@ -2816,26 +2817,35 @@ it.each(['complete', 'cancel'] as const)(
   },
 );
 
-it('preserves a naturally routed rewrite request and offers settings when local writing is not enabled', async () => {
-  state.ready = true;
-  state.editorReady = true;
-  state.source = 'Original selected text';
-  state.semanticResponse = '{"task":"rewrite","language":"en"}';
-  const panel = createPreparedPanel();
-  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  input.value = 'Improve this selection';
-  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
-  expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingNeedsLocalService'));
-  expect(input.value).toBe('');
-  expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Improve this selection');
-  expect(state.conversations!.history().load()).toEqual([]);
-  expect(state.writing).not.toHaveBeenCalled();
-  const setup = panel.querySelector<HTMLButtonElement>('.agent-prepare-action')!;
-  expect(setup.hidden).toBe(false);
-  setup.click();
-  expect(panel.getAttribute('data-view')).toBe('settings');
-});
+it.each(['', 'Hello there'])(
+  'preserves a blocked rewrite and opens its settings with composer draft %j',
+  async (draft) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.source = 'Original selected text';
+    state.semanticResponse = '{"task":"rewrite","language":"en"}';
+    const panel = createPreparedPanel();
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = 'Improve this selection';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+    expect(panel.querySelector('.cui-msg-error')).toBeNull();
+    expect(input.value).toBe('');
+    expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Improve this selection');
+    input.value = draft;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    panel.querySelector<HTMLButtonElement>('.agent-queue-resume')!.click();
+    expect(input.value).toBe(draft);
+    expect(panel.getAttribute('data-view')).toBe('settings');
+    expect(panel.querySelectorAll('.cui-msg-error')).toHaveLength(0);
+    expect(state.conversations!.history().load()).toEqual([]);
+    expect(state.writing).not.toHaveBeenCalled();
+    const setup = panel.querySelector<HTMLButtonElement>('.agent-prepare-action')!;
+    expect(setup.hidden).toBe(Boolean(draft));
+    if (!draft) setup.click();
+    expect(panel.getAttribute('data-view')).toBe('settings');
+  },
+);
 
 it('keeps the draft unsent if the editor selection changes while dictation is finishing', async () => {
   const recognition: { current?: { onresult?: (event: unknown) => void; onend?: () => void } } = {};
@@ -5180,3 +5190,22 @@ it.each(['switch', 'close', 'disable', 'delete', 'pagehide'] as const)(
     }
   },
 );
+
+it('keeps a known blocked writing request in the composer and opens settings instead of enqueueing failures', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.source = 'Original selected text';
+  const panel = createPreparedPanel();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-panel-load')?.textContent).toBe(t('agentModelInUse')));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Polish the selected text';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  const send = panel.querySelector<HTMLButtonElement>('.cui-send')!;
+  expect(send.textContent).toBe(t('agentSettings'));
+  send.click();
+  expect(input.value).toBe('Polish the selected text');
+  expect(panel.dataset.view).toBe('settings');
+  expect(panel.querySelectorAll('.agent-queue-entry')).toHaveLength(0);
+  expect(panel.querySelectorAll('.cui-msg-error')).toHaveLength(0);
+  expect(state.writing).not.toHaveBeenCalled();
+});

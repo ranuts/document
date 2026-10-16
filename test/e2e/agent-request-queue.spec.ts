@@ -75,6 +75,19 @@ for (const ext of ['docx', 'pptx'] as const) {
       await expect(input).toHaveValue('');
       await expect(input).toBeFocused();
       await page.getByRole('separator', { name: 'Resize AI panel' }).press('Home');
+      const stop = page.locator('.cui-send-stop');
+      const sendSize = await send.boundingBox();
+      const stopSize = await stop.boundingBox();
+      expect(sendSize?.width).toBe(stopSize?.width);
+      expect(sendSize?.height).toBe(stopSize?.height);
+      await expect(page.locator('.agent-panel-title')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+      await expect(page.locator('.cui-progress')).toHaveCSS('border-top-width', '0px');
+      await expect(page.locator('.cui-progress')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+      await page.locator('.agent-queue-more').first().click();
+      await page
+        .locator('.agent-runtime-panel')
+        .screenshot({ path: testInfo.outputPath(`queue-${ext}-320-light-actions.png`) });
+      await page.locator('.agent-queue-remove').first().press('Escape');
       await page.evaluate(() => document.documentElement.setAttribute('data-ran-theme', 'dark'));
       await expect
         .poll(() => page.locator('.cui-composer').evaluate((el) => el.scrollWidth - el.clientWidth))
@@ -102,6 +115,11 @@ for (const ext of ['docx', 'pptx'] as const) {
       expect(calls).toEqual(['Hello', 'Hi']);
       await page.locator('.agent-queue-resume').click();
       await expect.poll(() => calls).toEqual(['Hello', 'Hi', 'Hey']);
+      await page.locator('.agent-queue-more').click();
+      await expect(page.locator('.agent-queue-more')).toHaveAttribute('aria-expanded', 'true');
+      await page.locator('.agent-queue-send-now').press('Escape');
+      await expect(page.locator('.agent-queue-more')).toBeFocused();
+      await page.locator('.agent-queue-more').click();
       await page.locator('.agent-queue-send-now').click();
       await expect.poll(() => calls).toEqual(['Hello', 'Hi', 'Hey', 'Hello there']);
       releases.get('Hello there')!();

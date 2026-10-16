@@ -176,3 +176,59 @@ it('includes only queue-backed empty sessions and refreshes their visibility wit
   expect(rows(list.el)).toHaveLength(0);
   list.dispose();
 });
+
+it.each(['refers', '中文', '.*[x]', '<img>'])(
+  'highlights every literal %s match safely in titles and snippets',
+  async (query) => {
+    const store = createConversationStore();
+    const content = `${query.toUpperCase()} then ${query}`;
+    store.history().save([{ role: 'user', content }]);
+    const list = createConversationList({ store, onSelect: vi.fn(), onDelete: vi.fn() });
+    document.body.append(list.el);
+    const input = list.el.querySelector<HTMLInputElement>('input')!;
+    input.value = query;
+    input.dispatchEvent(new Event('input'));
+    await vi.waitFor(() => expect(list.el.querySelector('ul')?.getAttribute('aria-busy')).toBe('false'));
+    for (const selector of ['.agent-conversation-title', '.agent-conversation-snippet']) {
+      const text = list.el.querySelector(selector)!;
+      expect(Array.from(text.querySelectorAll('mark.agent-search-match')).map((mark) => mark.textContent)).toEqual([
+        query.toUpperCase(),
+        query,
+      ]);
+      expect(text.textContent).toBe(content);
+    }
+    expect(list.el.querySelector('img')).toBeNull();
+    const first = rows(list.el)[0];
+    first.focus();
+    const mark = first.querySelector('mark');
+    list.sync();
+    expect(first.querySelector('mark')).toBe(mark);
+    expect(document.activeElement).toBe(first);
+    input.value = 'then';
+    input.dispatchEvent(new Event('input'));
+    await vi.waitFor(() => expect(list.el.querySelector('ul')?.getAttribute('aria-busy')).toBe('false'));
+    expect(Array.from(first.querySelectorAll('mark')).map((node) => node.textContent)).toEqual(['then', 'then']);
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+    expect(rows(list.el)[0]).toBe(first);
+    expect(first.querySelector('mark')).toBeNull();
+    list.dispose();
+  },
+);
+
+it('maps canonical whitespace and lowercase expansion matches back to displayed text', async () => {
+  const store = createConversationStore();
+  store.history().save([{ role: 'user', content: 'İ prefix Alpha  \n beta ALPHA beta' }]);
+  const list = createConversationList({ store, onSelect: vi.fn(), onDelete: vi.fn() });
+  const input = list.el.querySelector<HTMLInputElement>('input')!;
+  input.value = ' ALPHA   beta ';
+  input.dispatchEvent(new Event('input'));
+  await vi.waitFor(() => expect(list.el.querySelector('ul')?.getAttribute('aria-busy')).toBe('false'));
+  expect(
+    Array.from(list.el.querySelectorAll('.agent-conversation-title mark')).map((node) => node.textContent),
+  ).toEqual(['Alpha beta', 'ALPHA beta']);
+  expect(
+    Array.from(list.el.querySelectorAll('.agent-conversation-snippet mark')).map((node) => node.textContent),
+  ).toEqual(['Alpha beta', 'ALPHA beta']);
+  list.dispose();
+});

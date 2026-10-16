@@ -628,10 +628,34 @@ export function createAgentPanel(
     const provider = useEndpointForChat() ? endpointConnection.current : webllmProvider;
     return intent?.kind === 'clarify' && (writingSelect.value === 'tools' || provider?.isReady()) ? null : intent;
   };
+  let blockedWritingRequest: { id: string; text: string } | undefined;
+  let stagedWritingRequest = '';
+  let stagedReadRequest = '';
+  const pendingWritingText = (): string =>
+    blockedWritingRequest &&
+    requestQueue?.state(conversations.activeId).entries.some((entry) => entry.id === blockedWritingRequest?.id)
+      ? blockedWritingRequest.text
+      : '';
+  const needsWritingSetup = (text: string): boolean => {
+    const draft = text.trim();
+    if (draft && (draft === stagedReadRequest || selectedRefinementCard?.pending() || preview?.pending())) return false;
+    const task = draft ? classifyRequest(draft).task : 'chat';
+    if (
+      !['rewrite', 'summarize', 'translate', 'compose'].includes(task) &&
+      !(draft && (draft === pendingWritingText() || draft === stagedWritingRequest))
+    )
+      return false;
+    try {
+      return resolveRoute().kind === 'blocked';
+    } catch {
+      return true;
+    }
+  };
   const chat = new ChatView({
     streamingMarkdown: true,
     canSend: (text) => {
       if (!enabled || runtimeCleanup || runtimeCleanupFailed || cacheBusy) return false;
+      if (needsWritingSetup(text)) return false;
       // Ordinary typing with a ready model does not need to query the editor.
       if (
         !!webllmProvider?.isReady() ||
@@ -657,7 +681,12 @@ export function createAgentPanel(
         return;
       if (runtimeCleanup || cacheBusy || modelLoading || endpointConnection.pending)
         return { label: readinessText.textContent || t('agentPreparing'), run: prepareSelectedSource, disabled: true };
-      return { label: prepareAction.textContent || t('agentSettings'), run: prepareSelectedSource };
+      return {
+        label: needsWritingSetup(chat.getInput())
+          ? t('agentSettings')
+          : prepareAction.textContent || t('agentSettings'),
+        run: prepareSelectedSource,
+      };
     },
     beforeSend: () => {
       if (!taskEntry.check(chat.getInput())) {
@@ -705,9 +734,9 @@ export function createAgentPanel(
   readiness.className = 'agent-readiness';
   const readinessText = Span().id('agent-readiness').attr('role', 'status').build();
   const prepareAction = ButtonBuilder().class('agent-prepare-action').attr('type', 'button').build();
-  function prepareSelectedSource(): void {
+  function prepareSelectedSource(requestText = chat.getInput() || pendingWritingText()): void {
     if (endpointConnection.pending || modelLoading || runtimeCleanup || cacheBusy || !enabled) return;
-    if (proposalMode && writingSelect.value !== 'tools' && resolveRoute().kind === 'blocked') {
+    if (needsWritingSetup(requestText)) {
       showView('settings');
       const disclosure = localWritingConsent.closest('details');
       if (disclosure) disclosure.open = true;
@@ -722,7 +751,7 @@ export function createAgentPanel(
     } else if (hasConfiguration || cachedLocalModel) void loadModel();
     else showView('settings');
   }
-  prepareAction.addEventListener('click', prepareSelectedSource);
+  prepareAction.addEventListener('click', () => prepareSelectedSource());
   readiness.append(readinessText, prepareAction);
   for (const control of chat.el.querySelectorAll('.cui-input, .cui-send'))
     control.setAttribute('aria-describedby', 'agent-readiness');
@@ -825,6 +854,11 @@ export function createAgentPanel(
     capture: captureComposerContext,
     captureTarget: captureDocumentToolScope,
     onStage: (intent) => {
+      stagedReadRequest = intent.hostRead ? chat.getInput().trim() : '';
+      stagedWritingRequest =
+        !intent.hostRead && ['rewrite', 'summarize', 'translate', 'compose'].includes(intent.task)
+          ? chat.getInput().trim()
+          : '';
       writingSelect.value = intent.hostRead || intent.task === 'compose' ? 'chat' : intent.task;
       proposalMode = !intent.hostRead && !['chat', 'compose'].includes(intent.task);
       syncRuntimeStatus();
@@ -1279,7 +1313,7 @@ export function createAgentPanel(
     else if (modelLoading) reason = t('agentPreparing');
     else if (!ready && selectedSource === 'service' && endpointStatus.textContent) reason = endpointStatus.textContent;
     let writingBlocked = false;
-    if (proposalMode && writingSelect.value !== 'tools') {
+    if (needsWritingSetup(chat.getInput() || pendingWritingText())) {
       try {
         const route = resolveRoute();
         if (route.kind === 'blocked') {
@@ -1780,8 +1814,16 @@ export function createAgentPanel(
     remove: (id) => {
       requestQueue?.remove(conversations.activeId, id);
     },
-    sendNow: (id) => requestQueue?.sendNow(conversations.activeId, id),
-    resume: () => requestQueue?.resume(conversations.activeId),
+    sendNow: (id) => {
+      const entry = requestQueue?.state(conversations.activeId).entries.find((entry) => entry.id === id);
+      if (entry && needsWritingSetup(entry.text)) prepareSelectedSource(entry.text);
+      else requestQueue?.sendNow(conversations.activeId, id);
+    },
+    resume: () => {
+      const next = requestQueue?.state(conversations.activeId).entries.find((entry) => !entry.recoverOnly);
+      if (next && needsWritingSetup(next.text)) prepareSelectedSource(next.text);
+      else requestQueue?.resume(conversations.activeId);
+    },
   });
   chat.pendingEl.append(pendingQueue.el);
   requestQueue = new RequestQueue<PanelRequestBinding>({
@@ -1795,6 +1837,10 @@ export function createAgentPanel(
     },
     revoke: (entry) => revokeHostRead(entry.binding.intent?.hostRead),
     changed: () => {
+      if (blockedWritingRequest && !pendingWritingText()) {
+        blockedWritingRequest = undefined;
+        syncRuntimeStatus();
+      }
       pendingQueue.update(requestQueue!.state(conversations.activeId));
       conversationList?.sync();
     },
@@ -2694,6 +2740,16 @@ export function createAgentPanel(
         !chat.getInput().trim()
       )
         chat.setInput(text);
+      if (
+        !accepted &&
+        caughtError instanceof Error &&
+        ['agentWritingNeedsLocalService', 'agentWritingOfflineNeedsDevice'].includes(caughtError.message)
+      ) {
+        // Setup requirements are actionable UI state, not failed conversation turns.
+        // Retain this unaccepted request in its original queue slot for recovery.
+        blockedWritingRequest = { id: entry.id, text: trimmed };
+        return measured('failed');
+      }
       const error =
         caughtError instanceof Error && caughtError.message === 'agentProposalUnchanged' && !previousPreview?.pending()
           ? new Error(t('agentPlanExpired'))
@@ -2740,6 +2796,9 @@ export function createAgentPanel(
     }
   };
   const switchConversation = (id: string, focus = true, saveDraft = true): void => {
+    blockedWritingRequest = undefined;
+    stagedWritingRequest = '';
+    stagedReadRequest = '';
     if (saveDraft) rememberDraft();
     activeTiming?.cancel('superseded');
     requestQueue?.pause(displayedConversationId);
@@ -3063,8 +3122,7 @@ export function createAgentPanel(
   chat.el.addEventListener('input', keepChatVisible);
   // Keep the empty-composer setup link and contextual main action from duplicating.
   chat.el.querySelector('.cui-input')!.addEventListener('input', () => {
-    if (chat.getInput().trim()) prepareAction.hidden = true;
-    else syncRuntimeStatus();
+    syncRuntimeStatus();
   });
 
   // Older default-model loads may have cached files without a saved preset.

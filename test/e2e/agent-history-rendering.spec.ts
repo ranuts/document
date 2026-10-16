@@ -215,6 +215,9 @@ test('pages and searches one thousand saved conversations without cloning or rep
   await expect(rows).toHaveCount(1);
   await expect(rows).toHaveAttribute('data-id', ids.late);
   await expect(rows.locator('.agent-conversation-snippet')).toContainText('needle stored in message 997');
+  await expect(rows.locator('.agent-conversation-snippet mark.agent-search-match')).toHaveText(
+    'needle stored in message 997',
+  );
   const before = await page.evaluate(() => ({
     ...(window as unknown as { __historySearchMetrics: { messageArrayClones: number; corpusPosts: number } })
       .__historySearchMetrics,
@@ -232,6 +235,7 @@ test('pages and searches one thousand saved conversations without cloning or rep
   expect(after.corpusPosts - before.corpusPosts).toBe(0);
   await search.fill('');
   await expect(rows).toHaveCount(40);
+  await expect(rows.locator('mark.agent-search-match')).toHaveCount(0);
   await expect(page.locator(`.agent-conversation-open[data-id="${ids.active}"]`)).toHaveAttribute(
     'aria-current',
     'true',
@@ -342,6 +346,9 @@ test('keeps the first validating request in its original chat while startup hist
     await expect.poll(() => typeof releaseRouting).toBe('function');
     await expect(page.locator('.agent-queue-text')).toHaveText('Tell me a brief story');
     await expect(page.locator('.agent-queue-state')).toHaveText('Preparing your request…');
+    await expect(page.locator('.cui-root')).toHaveAttribute('data-activity', /.+/);
+    await expect(page.locator('.agent-queue-state')).toBeHidden();
+    await expect(page.locator('.agent-queue-entry')).toHaveAttribute('aria-busy', 'true');
     for (const action of ['edit', 'remove', 'send-now'])
       await expect(page.locator(`.agent-queue-${action}`)).toBeDisabled();
     await expect(page.locator('.cui-stop')).toBeEnabled();
