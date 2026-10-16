@@ -157,3 +157,105 @@ test.describe('coarse pointer workspace', () => {
     }
   });
 });
+
+// Observe closed ranui shadow surfaces without changing shadow mode or rendering.
+// The cache contains a one-byte fixture; no model download or inference occurs.
+test('cached-model delete keeps its danger role through confirmation and pending deletion', async ({ page }) => {
+  test.setTimeout(90000);
+  await page.addInitScript(() => {
+    localStorage.setItem('document-assistant-enabled', 'true');
+    localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+    const roots = new WeakMap<Element, ShadowRoot>();
+    const attach = Element.prototype.attachShadow;
+    Element.prototype.attachShadow = function (options) {
+      const root = attach.call(this, options);
+      roots.set(this, root);
+      return root;
+    };
+    Object.assign(window, {
+      assistantCommandStyle(button: Element) {
+        const surface = roots.get(button)?.querySelector('[part="content"]');
+        if (!surface) throw new Error('Missing ranui command surface');
+        const style = getComputedStyle(surface);
+        return { color: style.color, background: style.backgroundColor };
+      },
+    });
+    const remove = FileSystemDirectoryHandle.prototype.removeEntry;
+    let release: () => void = () => {};
+    const hold = new Promise<void>((resolve) => (release = resolve));
+    FileSystemDirectoryHandle.prototype.removeEntry = async function (name, options) {
+      if (name.includes('command-fixture.gguf')) await hold;
+      return remove.call(this, name, options);
+    };
+    Object.assign(window, { releaseCommandDeletion: release });
+  });
+  await page.goto('/');
+  await page.evaluate(async () => {
+    const cache = await (await navigator.storage.getDirectory()).getDirectoryHandle('cache', { create: true });
+    for (const [name, value] of [
+      ['command-fixture.gguf', 'x'],
+      [
+        '__metadata__command-fixture.gguf',
+        JSON.stringify({ originalURL: 'https://example.invalid/command-fixture.gguf', originalSize: 1, etag: '' }),
+      ],
+    ]) {
+      const writable = await (await cache.getFileHandle(name, { create: true })).createWritable();
+      await writable.write(value);
+      await writable.close();
+    }
+  });
+  await page.goto('/editor?new=docx&locale=en');
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+  await page.locator('.agent-panel-settings-toggle').click();
+  await expect(page.locator('.agent-model-cache > summary')).toContainText('(1)');
+  await page.locator('.agent-model-cache > summary').click();
+  const row = page.locator('.agent-model-cache-row', { hasText: 'command-fixture.gguf' });
+  const remove = row.locator('.agent-cache-delete');
+  const surface = (control = remove) =>
+    control.evaluate((button) =>
+      (
+        window as unknown as {
+          assistantCommandStyle(button: Element): { color: string; background: string };
+        }
+      ).assistantCommandStyle(button),
+    );
+  const tokenColor = async (token: string) =>
+    page.evaluate((name) => {
+      const probe = document.createElement('span');
+      probe.style.color = `var(${name})`;
+      document.body.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    }, token);
+  const danger = await tokenColor('--ran-color-danger');
+  const disabled = await tokenColor('--ran-color-text-disabled');
+  await expect.poll(async () => (await surface()).color).toBe(danger);
+  const idle = (await surface()).background;
+  await remove.hover();
+  expect((await surface()).color).toBe(danger);
+  expect((await surface()).background).not.toBe(idle);
+  await remove.click();
+  await expect(remove).toHaveText('Confirm deletion');
+  expect((await surface()).color).toBe(danger);
+  const cancel = row.locator('.agent-cache-cancel');
+  expect((await surface(cancel)).background).toBe('rgba(0, 0, 0, 0)');
+  await cancel.hover();
+  expect((await surface(cancel)).background).toBe(await tokenColor('--ran-color-bg-hover'));
+  await page.mouse.down();
+  expect((await surface(cancel)).background).toBe(await tokenColor('--ran-color-bg-active'));
+  await page.mouse.up();
+  await expect(remove).toHaveText('Delete download');
+  await remove.click();
+  await expect(remove).toHaveText('Confirm deletion');
+  expect((await surface()).color).toBe(danger);
+  await remove.click();
+  await expect(remove).toHaveAttribute('disabled', '');
+  await expect.poll(async () => (await surface()).color).toBe(disabled);
+  const pending = (await surface()).background;
+  await remove.hover();
+  expect((await surface()).background).toBe(pending);
+  await page.evaluate(() => (window as unknown as { releaseCommandDeletion(): void }).releaseCommandDeletion());
+  await expect(row).toHaveCount(0);
+});
