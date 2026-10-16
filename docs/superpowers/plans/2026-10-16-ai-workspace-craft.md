@@ -130,13 +130,13 @@ Standalone reference budgets: 20 MiB compressed input, 2,000 ZIP entries, 32 MiB
 
 ## Chunk 6: Live-preview composer proportions
 
-The latest owner feedback continues the approved compact design. Implementation uses the existing checkout and PR #274.
+The latest owner feedback continues the approved compact design. PR #274 merged during the walkthrough, so the density correction is delivered as a small follow-up branch based on the updated main. The transplanted source tree is identical to the locally verified tree.
 
 - [x] Walk through the deployed preview: enable/open, draft/navigation, optional connector failure, structured artifact import/edit/save version; inspect desktop and narrow composition.
 - [x] Add browser geometry assertions for matching 32-pixel desktop send/stop/source/voice lanes, single focus border and no overflow. Exercise a docked narrow panel and small windows; retain coarse-pointer 44-pixel targets. Run before styling to demonstrate the regression.
 - [x] In `styles/assistant.css`, consolidate host composer geometry: 12-pixel token inset, 32-pixel execution controls, consistent toolbar labels/lanes, no narrow-panel enlargement, single neutral focused boundary. At widths up to 360 pixels use 4-pixel toolbar gaps and public select inset variables so a busy state never reduces the language label to an empty chevron. Keep existing coarse-pointer override and keyboard affordances.
-- [x] Run composer, queue, result hierarchy, sidebar/settings, source/artifact and error recovery browser suites, lint/types/format; inspect real screenshots. Prepare the same-PR delivery; retain the remote preview/CI/review gates below.
+- [x] Run composer, queue, result hierarchy, sidebar/settings, source/artifact and error recovery browser suites, lint/types/format; inspect real screenshots. Prepare the follow-up delivery; retain the remote preview/CI/review gates below.
 
 Local evidence at code commit `6e22dad`: the initial 12 browser scenarios passed, followed by 10 narrow-language/voice scenarios and a final 35-scenario integration run across ten UI suites. Full lint/types, format/1,511 immutable archive checks and production build passed. Both meaningful regressions were observed before their CSS fixes: desktop controls enlarged to 40 pixels, and a busy 320-pixel language label had zero available text width. Spec and quality reviews approved the final changes. Root inspected actual light/dark/short/busy screenshots.
 
-Required remote gates: push the acceptance record, verify the new deployed preview, wait for all checks on the latest head and review the final increment. Record the authoritative result in PR #274, preserving the distinction between direct preview navigation/artifact checks and controlled model/voice responses.
+Required remote gates: push the acceptance record, verify the new deployed preview, wait for all checks on the latest head and review the final increment. Record the authoritative result in the follow-up PR, preserving the distinction between direct preview navigation/artifact checks and controlled model/voice responses.
