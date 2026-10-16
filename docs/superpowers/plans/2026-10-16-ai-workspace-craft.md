@@ -14,11 +14,13 @@
 
 Files: packages/chat-ui/src/types.ts, chat-view.ts; new lib/agent-plugin/ui/workspace-navigation.ts; panel.ts view/conversation coordination; unit chat-view/navigation and e2e composer.
 
-- [ ] Add failing tests for caret/selection and scroll restoration, reading while streaming, safe restoration after content changes, and a new conversation with no old snapshot.
-- [ ] Run focused Vitest and confirm the missing behavior fails.
-- [ ] Implement capture/restore viewport contracts (scroll anchor/follow state plus composer selection), a bounded per-conversation/view owner, and integration that does not steal historical focus.
-- [ ] Verify generic ChatView has no source/provider/storage dependencies; test normal/hidden/suspended lifecycle and IME.
-- [ ] Run unit/browser regression and commit.
+- [x] Add failing tests for caret/selection and scroll restoration, reading while streaming, safe restoration after content changes, and a new conversation with no old snapshot.
+- [x] Run focused Vitest and confirm the missing behavior fails.
+- [x] Implement capture/restore viewport contracts (scroll anchor/follow state plus composer selection), a bounded per-conversation/view owner, and integration that does not steal historical focus.
+- [x] Verify generic ChatView has no source/provider/storage dependencies; test normal/hidden/suspended lifecycle and IME.
+- [x] Run unit/browser regression and commit.
+
+Task 1 evidence: commits `b56be65`, `c32d423`; 215 ChatView/navigation tests, six composer browser cases, TypeScript and formatting passed. Spec and quality reviews approved; IME focus regression verified red then green.
 
 ### Task 2: Quiet feedback and staged follow-ups
 
