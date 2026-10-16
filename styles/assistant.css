@@ -1117,7 +1117,7 @@ r-dropdown[role='listbox'] {
   padding: var(--ran-space-1) var(--ran-space-3);
   border-color: transparent;
   background: transparent;
-  color: var(--ran-color-text);
+  color: var(--ran-btn-color, var(--ran-color-text));
 }
 .agent-panel-settings r-button:not([disabled]):hover::part(content) {
   background: var(--ran-color-bg-hover);
