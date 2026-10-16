@@ -2245,6 +2245,24 @@ r-dropdown[role='listbox'] {
   min-width: 0;
   max-width: 96px;
 }
+/* A narrow toolbar keeps a real language label when Stop joins Send.
+   Use the select's public spacing hooks rather than losing its text lane. */
+@container agent-panel (max-width: 360px) {
+  .agent-panel .cui-composer-bar,
+  .agent-panel .cui-actions {
+    gap: var(--ran-space-1);
+  }
+  .agent-panel .cui-composer .agent-sources-toggle {
+    padding-inline: var(--ran-space-1);
+  }
+  .agent-speech-language {
+    --ran-select-padding: 0 var(--ran-space-1);
+    --ran-select-item-left: 0;
+    --ran-select-item-right: var(--ran-size-1);
+    --ran-select-icon-inset-inline-end: 0;
+    --ran-select-font-weight: var(--ran-text-copy-weight);
+  }
+}
 .agent-sources-view [hidden] {
   display: none;
 }

@@ -89,6 +89,35 @@ for (const ext of ['docx', 'pptx'] as const) {
       expect(toolbarBounds!.height).toBe(32);
       expect(toolbarBounds!.y).toBe(sendSize!.y);
       expect(await page.locator('.cui-composer').evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
+      const language = page.locator('.agent-speech-language');
+      const languageMetrics = () =>
+        language.evaluate((el) => {
+          const root = el.shadowRoot ?? (el as HTMLElement & { _shadowDom: ShadowRoot })._shadowDom;
+          const label = root.querySelector('[part="selection-item"]')!;
+          const range = document.createRange();
+          range.selectNodeContents(label);
+          return {
+            width: label.getBoundingClientRect().width,
+            textWidth: range.getBoundingClientRect().width,
+            text: label.textContent,
+            scroll: label.scrollWidth,
+            client: label.clientWidth,
+          };
+        });
+      const english = await languageMetrics();
+      expect(english.text).toBe('English');
+      expect(english.width).toBeGreaterThanOrEqual(english.textWidth);
+      // Longer locale names may truncate; the label must retain a readable lane.
+      await language.evaluate((el) => {
+        (el as HTMLElement & { value: string }).value = 'pt-BR';
+      });
+      const longer = await languageMetrics();
+      expect(longer.text).toBe('Português');
+      expect(longer.width).toBeGreaterThanOrEqual(32);
+      expect(longer.scroll).toBeGreaterThan(longer.client);
+      await language.evaluate((el) => {
+        (el as HTMLElement & { value: string }).value = 'en-US';
+      });
       await expect(page.locator('.agent-panel-title')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
       await expect(page.locator('.cui-progress')).toHaveCSS('border-top-width', '0px');
       await expect(page.locator('.cui-progress')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
@@ -97,6 +126,9 @@ for (const ext of ['docx', 'pptx'] as const) {
       await page
         .locator('.agent-runtime-panel')
         .screenshot({ path: testInfo.outputPath(`queue-${ext}-collapsed.png`) });
+      await page
+        .locator('.cui-footer')
+        .screenshot({ path: testInfo.outputPath(`queue-${ext}-320-composer-light.png`) });
       await page.locator('.agent-queue-toggle').click();
       await page.locator('.agent-queue-more').first().click();
       await page
@@ -108,6 +140,7 @@ for (const ext of ['docx', 'pptx'] as const) {
         .poll(() => page.locator('.cui-composer').evaluate((el) => el.scrollWidth - el.clientWidth))
         .toBeLessThan(2);
       await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`queue-${ext}-320-dark.png`) });
+      await page.locator('.cui-footer').screenshot({ path: testInfo.outputPath(`queue-${ext}-320-composer-dark.png`) });
       if (ext === 'docx') {
         await page.evaluate(() => {
           const win = window.__ooFrames.readyEditor() as unknown as {
