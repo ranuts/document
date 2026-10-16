@@ -24,9 +24,9 @@ export const CHAT_UI_CSS = `
 .cui-msg-user { align-self:flex-end; max-width:88%; }
 .cui-msg-user .cui-bubble { background:var(--cui-user-bg); padding:10px 14px; border-radius:16px; }
 .cui-msg-agent { align-self:stretch; }
-/* Only host-marked content receives a document surface. Ordinary answers keep
-   the full reading width and receipts keep their separate disclosure. */
-.cui-msg-agent[data-document-artifact] { box-sizing:border-box; padding:var(--ran-space-4, 16px); gap:var(--ran-space-3, 12px); border:1px solid var(--cui-border); border-radius:var(--ran-radius-md, 12px); background:var(--cui-surface); }
+/* Host-marked drafts keep their identity header and full reading width.
+   Review receipts keep their separate disclosure without nesting surfaces. */
+.cui-msg-agent[data-document-artifact] { box-sizing:border-box; padding:0; gap:var(--ran-space-3, 12px); border:0; border-radius:0; background:transparent; }
 .cui-result-header { display:flex; align-items:center; min-width:0; gap:var(--ran-space-2, 8px); color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); font-weight:var(--ran-text-label-weight, 500); line-height:1.5; }
 .cui-result-icon { display:inline-flex; flex:0 0 var(--ran-size-1, 16px); align-items:center; justify-content:center; }
 .cui-result-icon svg { width:var(--ran-size-1, 16px); height:var(--ran-size-1, 16px); }
@@ -90,7 +90,7 @@ export const CHAT_UI_CSS = `
 .cui-composer { display:flex; flex-direction:column; padding:12px; border:1px solid var(--cui-border); border-radius:12px; background:var(--cui-bg); }
 .cui-pending:empty { display:none; }
 .cui-stop[hidden] { display:none; }
-.cui-root .cui-stop { background:var(--cui-surface); color:var(--cui-text); border:1px solid var(--cui-border); }
+.cui-root .cui-stop { background:transparent; color:var(--cui-text); border:0; }
 .cui-composer:focus-within { border-color:var(--cui-muted); }
 .cui-composer-bar { display:flex; align-items:center; gap:8px; margin-top:12px; }
 .cui-actions { display:flex; flex:1; min-width:0; align-items:center; gap:6px; font-size:12px; flex-wrap:wrap; }

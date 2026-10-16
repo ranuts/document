@@ -56,6 +56,8 @@ test('restored drafts retain clear identity, readable narrow content and source-
   await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
   const draft = page.locator('.cui-msg-agent[data-document-artifact]');
   await expect(draft.locator('.cui-result-label')).toHaveText('Document draft');
+  await expect(draft).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(draft).toHaveCSS('border-left-width', '0px');
   await expect(page.locator('[data-interrupted] .cui-result-label')).toHaveText('Incomplete response');
   await expect(page.locator('.cui-apply')).toHaveCount(0);
   await expect(draft).toHaveAttribute('data-source', source);

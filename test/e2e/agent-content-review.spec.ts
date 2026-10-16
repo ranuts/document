@@ -91,6 +91,9 @@ test('formatted Word content retains native headings and lists with safe readbac
   await page.locator('.cui-input').press('Enter');
   const preview = page.locator('.agent-plan-preview').last();
   await expect(preview.locator('.agent-plan-diff')).toContainText('Budget');
+  await expect(preview).toHaveCSS('border-left-width', '0px');
+  await expect(preview).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await preview.screenshot({ path: testInfo.outputPath('review-flat.png') });
   await expect(page.locator('.cui-root')).toHaveAttribute('data-activity', 'reviewing');
   await expect(page.locator('.cui-elapsed')).toBeHidden();
   await expect(page.locator('.cui-elapsed')).toHaveText('');
