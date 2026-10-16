@@ -45,6 +45,7 @@ import {
 import { installOpenFailureGuard } from '../../lib/onlyoffice/open-failure';
 import { beginDocumentOpen, cancelDocumentOpen } from '../../lib/document-open';
 import { fetchRemoteDocument } from '../../lib/remote-document';
+import { getDocumentOpenError } from '../../lib/onlyoffice/open-state';
 
 function makeEditor(extra: Record<string, unknown> = {}) {
   return { sendCommand: vi.fn(), ...extra };
@@ -362,6 +363,46 @@ describe('onlyoffice-editor', () => {
       await failed;
       expect(window.editor).toBeUndefined();
       expect(DocEditor).not.toHaveBeenCalled();
+    });
+
+    it('retries the mounted document after a newer download fails', async () => {
+      vi.useFakeTimers();
+      const DocEditor = vi.fn(function (_id: string, _config: any) {
+        return { destroyEditor: vi.fn() };
+      });
+      (window as any).DocsAPI = { DocEditor };
+      const owner = beginDocumentOpen();
+      const opening = createEditorInstance({
+        fileName: 'mounted.docx',
+        fileType: 'docx',
+        binData: new ArrayBuffer(8),
+        isCurrent: owner.isCurrent,
+      });
+      await vi.advanceTimersByTimeAsync(200);
+      await opening;
+      const newer = beginDocumentOpen();
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('missing', { status: 404 })));
+      try {
+        await expect(fetchRemoteDocument('https://files.example/missing.docx', {}, newer.signal)).rejects.toThrow(
+          '404',
+        );
+        let reject!: (event: unknown) => void;
+        const sendEvent = vi.fn();
+        installOpenFailureGuard({
+          addEventListener: (type: string, handler: (event: unknown) => void) => {
+            if (type === 'unhandledrejection') reject = handler;
+          },
+          Asc: { editor: { sendEvent } },
+        } as unknown as Window);
+        reject({ reason: new Error('X2T module failed to instantiate: Failed to fetch') });
+        await vi.advanceTimersByTimeAsync(1000);
+        expect(DocEditor).toHaveBeenCalledTimes(2);
+        expect(DocEditor.mock.calls[1][1].document.title).toBe('mounted.docx');
+        expect(getDocumentOpenError()).toBeNull();
+        expect(sendEvent).not.toHaveBeenCalled();
+      } finally {
+        vi.unstubAllGlobals();
+      }
     });
 
     it.each(['docx', 'xlsx', 'pptx'])(
