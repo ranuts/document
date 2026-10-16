@@ -4,6 +4,52 @@ import type { Conversation, createConversationStore } from './sessions';
 import { createHistorySearch } from './history-search';
 import { canonicalSearchQuery, type SearchMatch } from './history-search-model';
 
+/** Cache unchanged text/query pairs so syncing preserves mark and focused row nodes. */
+const highlightedText = new WeakMap<HTMLElement, { text: string; query: string }>();
+
+function renderSearchText(element: HTMLElement, text: string, query: string) {
+  const previous = highlightedText.get(element);
+  if (previous?.text === text && previous.query === query) return;
+  highlightedText.set(element, { text, query });
+  if (!query) {
+    element.textContent = text;
+    return;
+  }
+  // Search collapses whitespace and lowercases. Keep source offsets even when
+  // whitespace contracts or Unicode lowercase expands (for example İ → i̇).
+  let normalized = '';
+  const starts: number[] = [];
+  const ends: number[] = [];
+  for (const part of text.matchAll(/\s+|[^\s]/gu)) {
+    const token = /\s/.test(part[0]) ? ' ' : part[0];
+    normalized += token;
+    for (let index = 0; index < token.toLocaleLowerCase().length; index++) {
+      starts.push(part.index);
+      ends.push(part.index + part[0].length);
+    }
+  }
+  // Lowercase the whole string to preserve contextual mappings such as final sigma.
+  normalized = normalized.toLocaleLowerCase();
+  const fragment = document.createDocumentFragment();
+  let cursor = 0;
+  let offset = 0;
+  while ((offset = normalized.indexOf(query, offset)) !== -1) {
+    const start = starts[offset];
+    const end = ends[offset + query.length - 1];
+    if (start >= cursor) {
+      fragment.append(document.createTextNode(text.slice(cursor, start)));
+      const mark = document.createElement('mark');
+      mark.className = 'agent-search-match';
+      mark.textContent = text.slice(start, end);
+      fragment.append(mark);
+      cursor = end;
+    }
+    offset += query.length;
+  }
+  fragment.append(document.createTextNode(text.slice(cursor)));
+  element.replaceChildren(fragment);
+}
+
 interface ConversationListOptions {
   store: ReturnType<typeof createConversationStore>;
   onSelect(id: string): void;
@@ -67,6 +113,10 @@ export function createConversationList({ store, onSelect, onDelete, pendingConve
     if (pending) {
       list.setAttribute('aria-busy', 'true');
       const ids = new Set(sessions.map((session) => session.id));
+      for (const node of nodes.values()) {
+        renderSearchText(node.title, node.title.textContent || '', query);
+        renderSearchText(node.snippet, node.snippet.textContent || '', query);
+      }
       for (const [id, node] of nodes)
         if (!ids.has(id)) {
           node.row.remove();
@@ -138,7 +188,7 @@ export function createConversationList({ store, onSelect, onDelete, pendingConve
         nodes.set(session.id, node);
       }
       const title = session.title || t('agentNewConversation');
-      if (node.title.textContent !== title) node.title.textContent = title;
+      renderSearchText(node.title, title, query);
       node.open.title = title;
       node.open.setAttribute('aria-current', String(session.id === store.activeId));
       if (node.current.textContent !== t('agentCurrentConversation'))
@@ -148,7 +198,7 @@ export function createConversationList({ store, onSelect, onDelete, pendingConve
       const date = dateFormat.format(session.updatedAt);
       if (node.date.textContent !== date) node.date.textContent = date;
       const snippet = snippets.get(session.id) || '';
-      if (node.snippet.textContent !== snippet) node.snippet.textContent = snippet;
+      renderSearchText(node.snippet, snippet, query);
       node.snippet.hidden = !query || !snippet;
       node.remove.title = t('agentDeleteConversation');
       node.remove.setAttribute('aria-label', `${t('agentDeleteConversation')}: ${title}`);

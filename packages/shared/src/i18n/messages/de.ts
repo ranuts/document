@@ -363,7 +363,8 @@ export const de: Partial<I18nMessages> = {
   agentQueueResume: 'Fortsetzen',
   agentQueueEdit: 'Bearbeiten',
   agentQueueRemove: 'Entfernen',
-  agentQueueSendNow: 'Jetzt senden',
+  agentQueueSendNow: 'Als Nächstes senden',
+  agentQueueMoreActions: 'Weitere Aktionen',
   agentQueueComposerOccupied: 'Ein Entwurf ist vorhanden. Senden oder leeren Sie ihn vor dem Bearbeiten.',
   agentQueueEditUnavailable:
     'Diese Anfrage kann derzeit nicht bearbeitet werden. Prüfe die Warteliste und versuche es erneut.',

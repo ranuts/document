@@ -344,7 +344,8 @@ export const en: I18nMessages = {
   agentQueueResume: 'Resume',
   agentQueueEdit: 'Edit',
   agentQueueRemove: 'Remove',
-  agentQueueSendNow: 'Send now',
+  agentQueueSendNow: 'Send next',
+  agentQueueMoreActions: 'More actions',
   agentQueueComposerOccupied: 'Your draft is not empty. Send or clear it before editing a pending request.',
   agentQueueEditUnavailable: 'This request is not available to edit. Check the pending list and try again.',
   agentQueueScopeChanged:

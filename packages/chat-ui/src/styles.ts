@@ -7,7 +7,7 @@ import { Style } from 'ranui/builder';
  *
  * Visual language follows modern AI chat UIs: bubble-less, full-width assistant
  * text for readability; a compact accent bubble for the user; a rounded composer
- * with an embedded circular send button; subtle tool/error chips.
+ * with aligned send and stop controls; subtle tool/error chips.
  */
 export const CHAT_UI_CSS = `
 .cui-root { --cui-accent:var(--ran-color-primary, #171717); --cui-accent-contrast:var(--ran-color-primary-text, #fff); --cui-bg:var(--ran-color-bg, #fff); --cui-user-bg:var(--ran-color-bg-muted, #f4f4f4); --cui-text:var(--ran-color-text, #171717); --cui-muted:var(--ran-color-text-secondary, #737373); --cui-border:var(--ran-color-border, #e5e5e5); --cui-surface:var(--ran-color-bg-subtle, var(--cui-user-bg)); position:relative; display:flex; flex-direction:column; min-height:0; height:100%; background:var(--cui-bg); color:var(--cui-text); font-family:var(--ran-font-family, system-ui, sans-serif); font-size:var(--ran-text-copy-2, 14px); line-height:1.7; -webkit-font-smoothing:antialiased; }
@@ -76,11 +76,10 @@ export const CHAT_UI_CSS = `
 .cui-activity li { padding:4px 0; }
 .cui-msg-status { color:var(--cui-muted); font-size:12px; }
 .cui-msg-error .cui-bubble { padding:12px; border:1px solid var(--cui-border); border-radius:10px; font-size:13px; }
-.cui-progress { flex:0 0 auto; display:flex; align-items:center; gap:var(--ran-space-3, 12px); margin:0 var(--ran-space-4, 16px); padding:var(--ran-space-2, 8px) var(--ran-space-3, 12px); border:1px solid var(--cui-border); border-radius:var(--ran-radius-sm, 6px); background:var(--cui-surface); }
+.cui-progress { flex:0 0 auto; display:flex; align-items:baseline; gap:var(--ran-space-3, 12px); margin:0 var(--ran-space-4, 16px); padding:var(--ran-space-2, 8px) 0; min-width:0; }
 .cui-status { flex:1; min-width:0; display:flex; align-items:center; gap:var(--ran-space-2, 8px); color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); line-height:1.5; }
-.cui-elapsed { flex:0 0 auto; color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); line-height:1.5; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.cui-elapsed { flex:0 0 auto; margin-left:auto; color:var(--cui-muted); font-size:var(--ran-text-label-3, 12px); line-height:1.5; font-variant-numeric:tabular-nums; white-space:nowrap; }
 .cui-progress[hidden],.cui-elapsed[hidden] { display:none; }
-.cui-root:is([data-activity="reviewing"],[data-activity="stopping"]) .cui-progress { border-color:transparent; background:transparent; padding-inline:0; }
 .cui-status:empty { display:none; }
 /* One activity cue at a time: the waiting row gives way to the live-text
    cursor when responding. A human review is a resting state, not loading. */
@@ -98,15 +97,20 @@ export const CHAT_UI_CSS = `
 .cui-context:empty { display:none; }
 .cui-input { min-width:0; width:100%; box-sizing:border-box; resize:none; overflow-y:auto; border:0; outline:none; background:transparent; padding:0; font:inherit; line-height:1.5; color:inherit; max-height:160px; min-height:40px; }
 .cui-input::placeholder { color:var(--cui-muted); }
-.cui-send, .cui-stop { flex:0 0 auto; width:30px; height:30px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:0; border-radius:8px; cursor:pointer; background:var(--cui-accent); color:var(--cui-accent-contrast); }
-.cui-send:disabled, .cui-stop:disabled { opacity:.35; cursor:default; }
+.cui-send, .cui-stop { flex:0 0 auto; width:var(--ran-size-8, 36px); height:var(--ran-size-8, 36px); box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:0; border-radius:var(--ran-radius-sm, 6px); cursor:pointer; background:var(--cui-accent); color:var(--cui-accent-contrast); transition:background-color var(--ran-motion-duration-fast, .15s), color var(--ran-motion-duration-fast, .15s); }
+.cui-send:hover:not(:disabled) { background:color-mix(in srgb, var(--cui-accent) 85%, var(--cui-bg)); }
+.cui-root .cui-stop:hover:not(:disabled) { background:var(--cui-user-bg); border-color:var(--cui-muted); }
+.cui-send:disabled, .cui-stop:disabled { background:var(--cui-surface); color:var(--cui-muted); opacity:.5; cursor:default; }
+@media (pointer:coarse) {
+  .cui-send, .cui-stop { width:44px; height:44px; }
+}
 .cui-root .cui-send.cui-send-prepare { width:auto; max-width:100%; padding:0 8px; font:inherit; font-size:12px; background:transparent; color:var(--cui-text); text-decoration:underline; text-underline-offset:3px; }
 .cui-streaming:not(.cui-streaming-markdown) .cui-bubble::after { content:''; display:inline-block; width:6px; height:6px; margin-left:5px; border-radius:50%; background:currentColor; vertical-align:middle; }
 .cui-root[data-activity="responding"] .cui-streaming:not(.cui-streaming-markdown) .cui-bubble::after { animation:cui-answer-pulse 1.4s ease-in-out infinite; }
 @keyframes cui-loading-turn { to { transform:rotate(360deg); } }
 @keyframes cui-answer-pulse { 0%,100% { opacity:.45; transform:scale(.85); } 50% { opacity:1; transform:scale(1.15); } }
 @media (prefers-reduced-motion:reduce) {
-  .cui-message-actions button { transition:none; }
+  .cui-message-actions button, .cui-send, .cui-stop { transition:none; }
   .cui-root[data-activity] .cui-status::before,.cui-root[data-activity] .cui-streaming .cui-bubble::after { animation:none; transform:none; opacity:1; }
 }
 `;

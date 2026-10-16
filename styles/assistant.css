@@ -627,7 +627,8 @@ r-dropdown[role='listbox'] {
   .agent-panel-header button,
   .agent-panel-quote,
   .agent-panel-clear,
-  .agent-panel .cui-send {
+  .agent-panel .cui-send,
+  .agent-panel .cui-stop {
     width: 44px;
     height: 44px;
     flex-shrink: 0;
@@ -789,6 +790,7 @@ r-dropdown[role='listbox'] {
   letter-spacing: -0.02em;
   min-width: 0;
   color: var(--ran-color-text);
+  background: transparent;
 }
 .agent-panel-settings {
   display: flex;
@@ -973,10 +975,27 @@ r-dropdown[role='listbox'] {
   border-radius: 12px 12px 3px 12px;
   background: var(--ran-color-bg-muted);
 }
-.agent-panel .cui-send {
+.agent-panel .cui-send,
+.agent-panel .cui-stop {
   border-radius: var(--ran-radius-sm);
-  width: 34px;
-  height: 34px;
+  width: var(--ran-size-8, 36px);
+  height: var(--ran-size-8, 36px);
+}
+/* Both execution controls keep the same geometry at narrow panel widths,
+   including a docked panel in a wide editor window. */
+@container agent-panel (max-width: 480px) {
+  .agent-panel .cui-send,
+  .agent-panel .cui-stop {
+    width: 40px;
+    height: 40px;
+  }
+}
+@media (pointer: coarse) {
+  .agent-panel .cui-send,
+  .agent-panel .cui-stop {
+    width: 44px;
+    height: 44px;
+  }
 }
 .agent-panel .agent-document-scope {
   margin: 0;
@@ -1139,7 +1158,7 @@ r-dropdown[role='listbox'] {
   margin: 3px 0 0;
   accent-color: var(--ran-color-primary);
 }
-.agent-panel-header button[aria-expanded='true'] {
+.agent-panel-header button[aria-expanded='true']:not(.agent-panel-title) {
   background: var(--ran-color-bg-muted);
   color: var(--ran-color-text);
 }
@@ -1915,11 +1934,15 @@ r-dropdown[role='listbox'] {
 .agent-request-queue {
   min-width: 0;
   margin-bottom: var(--ran-space-2);
+  padding: var(--ran-space-2);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-md);
+  background: var(--ran-color-bg-muted);
   font-size: var(--ran-text-label-3);
   color: var(--ran-color-text);
 }
 .agent-request-queue[hidden],
-.agent-queue-resume[hidden] {
+.agent-request-queue [hidden] {
   display: none;
 }
 .agent-queue-heading,
@@ -1931,6 +1954,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-queue-heading {
   justify-content: space-between;
+  padding-inline: var(--ran-space-1);
 }
 .agent-queue-title {
   color: var(--ran-color-text-secondary);
@@ -1939,14 +1963,20 @@ r-dropdown[role='listbox'] {
   max-height: min(28vh, 200px);
   overflow-y: auto;
   overflow-x: hidden;
-  margin: var(--ran-space-1) 0;
+  margin: var(--ran-space-1) 0 0;
   padding: 0;
   list-style: none;
+  counter-reset: request;
 }
 .agent-queue-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   min-width: 0;
-  padding: var(--ran-space-2) 0;
-  border-bottom: 1px solid var(--ran-color-border);
+  counter-increment: request;
+}
+.agent-queue-entry + .agent-queue-entry {
+  border-top: 1px solid var(--ran-color-border);
 }
 .agent-queue-text {
   display: -webkit-box;
@@ -1958,13 +1988,37 @@ r-dropdown[role='listbox'] {
 }
 .agent-request-queue button {
   max-width: 100%;
+  min-height: 32px;
   padding: var(--ran-space-1) var(--ran-space-2);
-  border: 1px solid var(--ran-color-border);
+  border: 1px solid transparent;
   border-radius: var(--ran-radius-sm);
-  background: var(--ran-color-bg);
+  background: transparent;
   color: inherit;
   font: inherit;
+  cursor: pointer;
   overflow-wrap: anywhere;
+}
+.agent-request-queue button:hover {
+  background: var(--ran-color-bg);
+}
+.agent-request-queue .agent-queue-edit {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ran-space-2);
+  text-align: start;
+  min-width: 0;
+}
+.agent-queue-edit::before {
+  content: counter(request) '.';
+  color: var(--ran-color-text-secondary);
+}
+.agent-request-queue .agent-queue-more {
+  min-width: 32px;
+  font-size: 20px;
+}
+.agent-request-queue .agent-queue-resume {
+  background: var(--ran-color-bg);
+  border-color: var(--ran-color-border);
 }
 .agent-request-queue button:disabled {
   opacity: 0.45;
@@ -1972,13 +2026,46 @@ r-dropdown[role='listbox'] {
 }
 .agent-request-queue button:focus-visible {
   outline: 2px solid var(--ran-color-primary);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
 .agent-queue-actions {
-  margin-top: var(--ran-space-1);
+  grid-column: 1 / -1;
+  padding: 0 var(--ran-space-1) var(--ran-space-1);
+}
+.agent-queue-actions button {
+  border-color: var(--ran-color-border);
+  background: var(--ran-color-bg);
+}
+.agent-queue-state,
+.agent-queue-recovery {
+  grid-column: 1 / -1;
+  padding-inline: var(--ran-space-2);
+  color: var(--ran-color-text-secondary);
 }
 .agent-queue-feedback {
   display: block;
   color: var(--ran-color-text-secondary);
   overflow-wrap: anywhere;
+}
+.agent-queue-feedback:empty {
+  display: none;
+}
+@media (pointer: coarse) {
+  .agent-request-queue button {
+    min-height: 44px;
+  }
+}
+
+/* Literal search matches remain readable on selected rows and in either theme. */
+.agent-search-match {
+  color: inherit;
+  background: color-mix(in srgb, var(--ran-color-primary) 18%, transparent);
+  border-radius: var(--ran-radius-xs, 2px);
+  font-weight: 600;
+  padding: 0;
+}
+
+/* The composer owns progress while a request is active; the queue keeps its original text. */
+.cui-root[data-activity] .agent-queue-state {
+  display: none;
 }
