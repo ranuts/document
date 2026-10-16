@@ -506,4 +506,17 @@ export interface I18nMessages {
   agentArtifactCountLimit: string;
   agentArtifactTextLimit: string;
   agentArtifactSaveNew: string;
+  agentResultSaving: string;
+  agentResultSaved: string;
+  agentResultSaveFailed: string;
+  agentResultShorter: string;
+  agentResultBullets: string;
+  agentResultSummarize: string;
+  agentResultShorterPrompt: string;
+  agentResultBulletsPrompt: string;
+  agentResultSummarizePrompt: string;
+  agentResultPrevious: string;
+  agentResultDraftChoice: string;
+  agentResultUseSuggestion: string;
+  agentResultKeepDraft: string;
 }

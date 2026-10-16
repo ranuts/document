@@ -87,10 +87,11 @@ it('keeps an unsaved editor when a new result or back navigation is requested', 
   const text = view.el.querySelector('textarea')!;
   text.value = 'edited';
   text.dispatchEvent(new Event('input'));
-  await view.save('second');
+  const pendingSave = view.save('second');
   expect(await store.list()).toHaveLength(1);
   expect(text.value).toBe('edited');
   (view.el.querySelector('[data-action="cancel"]') as HTMLButtonElement).click();
+  expect(await pendingSave).toBe('cancelled');
   (view.el.querySelector('[data-action="back"]') as HTMLButtonElement).click();
   expect(view.el.querySelector('textarea')?.value).toBe('edited');
   (view.el.querySelector('[data-action="discardChanges"]') as HTMLButtonElement).click();
@@ -250,5 +251,72 @@ it('canceling a version switch preserves the previously selected version and edi
   expect(title.value).toBe('Keep my title');
   expect(view.el.querySelector('textarea')!.value).toBe('one');
   expect((view.el.querySelector('[data-action=saveVersion]') as HTMLButtonElement).disabled).toBe(false);
+  view.dispose();
+});
+it('reports cancelled save after keeping a dirty draft and settles pending confirmation on disposal', async () => {
+  const store = createArtifactStore();
+  const view = createArtifactsView({ store, labels, onApply: vi.fn() });
+  document.body.append(view.el);
+  expect(await view.save('first')).toBe('saved');
+  const text = view.el.querySelector('textarea')!;
+  text.value = 'unsaved';
+  text.dispatchEvent(new Event('input'));
+  const pending = view.save('second');
+  let settled = false;
+  void pending.then(() => {
+    settled = true;
+  });
+  await Promise.resolve();
+  expect(settled).toBe(false);
+  view.el.querySelector<HTMLButtonElement>('[data-action=cancel]')!.click();
+  expect(await pending).toBe('cancelled');
+  expect(text.value).toBe('unsaved');
+  const closing = view.save('third');
+  view.dispose();
+  expect(await closing).toBe('cancelled');
+  expect(await store.list()).toHaveLength(1);
+});
+it('reports storage failure rather than successful save', async () => {
+  const store = createArtifactStore();
+  vi.spyOn(store, 'create').mockRejectedValue(new Error('full'));
+  const view = createArtifactsView({ store, labels, onApply: vi.fn() });
+  expect(await view.save('answer')).toBe('failed');
+  view.dispose();
+});
+it('settles replaced confirmations and cancels navigation without adopting a late saved editor', async () => {
+  const store = createArtifactStore();
+  const view = createArtifactsView({ store, labels, onApply: vi.fn() });
+  document.body.append(view.el);
+  await view.save('first');
+  const text = view.el.querySelector('textarea')!;
+  text.value = 'draft';
+  text.dispatchEvent(new Event('input'));
+  const first = view.save('second');
+  const second = view.save('third');
+  expect(await first).toBe('cancelled');
+  view.cancelPending();
+  expect(await second).toBe('cancelled');
+  expect(view.el.querySelector('[data-action=discardChanges]')).toBeNull();
+  expect(text.value).toBe('draft');
+  // Return to the list explicitly before testing a delayed successful write.
+  view.el.querySelector<HTMLButtonElement>('[data-action=back]')!.click();
+  view.el.querySelector<HTMLButtonElement>('[data-action=discardChanges]')!.click();
+  await tick();
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const create = store.create.bind(store);
+  vi.spyOn(store, 'create').mockImplementation(async (input) => {
+    const a = await create(input);
+    await gate;
+    return a;
+  });
+  const pending = view.save('late result');
+  view.cancelPending();
+  expect(await pending).toBe('cancelled');
+  release();
+  await tick();
+  expect(view.el.querySelector('textarea')).toBeNull();
   view.dispose();
 });

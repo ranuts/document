@@ -1,3 +1,4 @@
+import type { MessageSaveOutcome } from '@ranuts/chat-ui';
 import { ButtonBuilder, Div, View } from 'ranui/builder';
 import { ArtifactError, type Artifact, type ArtifactProvenance, type ArtifactStore } from '../artifacts/store';
 export interface ArtifactsLabels {
@@ -42,11 +43,20 @@ export function createArtifactsView(options: {
   let disposed = false;
   let generation = 0;
   let busy = false;
+  const pendingSaves = new Set<(outcome: MessageSaveOutcome) => void>();
+  let cancelConfirmation: (() => void) | undefined;
   const buttons = new Set<HTMLButtonElement>();
   function button(key: keyof ArtifactsLabels, run: () => void): HTMLButtonElement {
     const b = ButtonBuilder().attr('type', 'button').text(labels[key]).build();
     b.dataset.action = key;
-    b.addEventListener('click', run);
+    b.addEventListener('click', () => {
+      if (key !== 'discardChanges' && key !== 'cancel' && cancelConfirmation) {
+        cancelConfirmation();
+        cancelConfirmation = undefined;
+        status.textContent = '';
+      }
+      run();
+    });
     buttons.add(b);
     return b;
   }
@@ -84,8 +94,8 @@ export function createArtifactsView(options: {
       );
     }
   }
-  async function perform(task: () => Promise<void>): Promise<void> {
-    if (busy || disposed) return;
+  async function perform(task: () => Promise<void>): Promise<boolean> {
+    if (busy || disposed) return false;
     busy = true;
     for (const b of buttons) b.disabled = true;
     for (const input of body.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
@@ -94,8 +104,10 @@ export function createArtifactsView(options: {
       input.disabled = true;
     try {
       await task();
+      return !disposed;
     } catch (e) {
       if (!disposed) error(e);
+      return false;
     } finally {
       busy = false;
       for (const b of buttons) b.disabled = b.dataset.action === 'saveVersion' && !dirty;
@@ -106,21 +118,31 @@ export function createArtifactsView(options: {
     }
   }
   function reset(): void {
+    cancelConfirmation?.();
+    cancelConfirmation = undefined;
     buttons.clear();
     body.replaceChildren();
     status.textContent = '';
     heading.textContent = labels.title;
   }
-  function discard(next: () => void): void {
-    if (!dirty) return next();
+  function discard(next: () => void, cancelled?: () => void): void {
+    cancelConfirmation?.();
+    cancelConfirmation = cancelled;
+    if (!dirty) {
+      cancelConfirmation = undefined;
+      return next();
+    }
     status.replaceChildren(
       document.createTextNode(labels.discardChanges + ' '),
       button('discardChanges', () => {
+        cancelConfirmation = undefined;
         dirty = false;
         status.textContent = '';
         next();
       }),
       button('cancel', () => {
+        cancelConfirmation?.();
+        cancelConfirmation = undefined;
         status.textContent = '';
       }),
     );
@@ -253,28 +275,40 @@ export function createArtifactsView(options: {
   return {
     el,
     refresh,
-    save: async function save(text: string, origin?: ArtifactProvenance): Promise<void> {
-      if (dirty) {
-        discard(() => {
-          void save(text, origin);
-        });
-        return;
-      }
-      await perform(async () => {
-        const a = await options.store.create({
-          title:
-            text
-              .trim()
-              .split('\n')[0]
-              .replace(/^#{1,6}\s+/, '')
-              .slice(0, 100) || labels.title,
-          text,
-          provenance: origin ?? { conversation: options.conversation?.() },
-        });
-        ++generation;
-        editor(a);
-        status.textContent = labels.saved;
+    save(text: string, origin?: ArtifactProvenance): Promise<MessageSaveOutcome> {
+      if (disposed || busy) return Promise.resolve('cancelled');
+      return new Promise((resolve) => {
+        const settle = (outcome: MessageSaveOutcome) => {
+          pendingSaves.delete(settle);
+          resolve(outcome);
+        };
+        pendingSaves.add(settle);
+        const create = () => {
+          void perform(async () => {
+            const a = await options.store.create({
+              title:
+                text
+                  .trim()
+                  .split('\n')[0]
+                  .replace(/^#{1,6}\s+/, '')
+                  .slice(0, 100) || labels.title,
+              text,
+              provenance: origin ?? { conversation: options.conversation?.() },
+            });
+            if (disposed || !pendingSaves.has(settle)) return;
+            ++generation;
+            editor(a);
+            if (!disposed) status.textContent = labels.saved;
+          }).then((success) => settle(success ? 'saved' : disposed ? 'cancelled' : 'failed'));
+        };
+        discard(create, () => settle('cancelled'));
       });
+    },
+    cancelPending(): void {
+      if (cancelConfirmation) status.textContent = '';
+      cancelConfirmation?.();
+      cancelConfirmation = undefined;
+      for (const settle of pendingSaves) settle('cancelled');
     },
     setLabels(next: ArtifactsLabels): void {
       labels = next;
@@ -298,6 +332,9 @@ export function createArtifactsView(options: {
     },
     dispose(): void {
       disposed = true;
+      cancelConfirmation?.();
+      cancelConfirmation = undefined;
+      for (const settle of pendingSaves) settle('cancelled');
       ++generation;
       buttons.clear();
       el.remove();

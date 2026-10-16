@@ -1,9 +1,10 @@
+import { createResultActions } from './result-actions';
 import { createWorkspaceNavigation } from './workspace-navigation';
 import { createArtifactStore, type ArtifactProvenance } from '../artifacts/store';
 import { createArtifactsView } from './artifacts-view';
 import { ReferenceSources } from '../connectors/reference-sources';
 import { createSourcesView } from './sources-view';
-import { sourcesLabels, artifactLabels } from './workspace-labels';
+import { sourcesLabels, artifactLabels, resultActionLabels } from './workspace-labels';
 import { runDocumentTask } from '../document-task';
 import { readReceipt } from './read-receipt';
 import type { ReviewOutcome } from '../review-outcome';
@@ -609,6 +610,9 @@ export function createAgentPanel(
   let resultMetadata: Readonly<Record<string, unknown>> | undefined;
   const chatLabels = (): ChatViewLabels => ({
     saveMessage: t('agentArtifactSaveResult'),
+    savingMessage: t('agentResultSaving'),
+    savedMessage: t('agentResultSaved'),
+    saveFailed: t('agentResultSaveFailed'),
     conversation: t('agentTitle'),
     send: t('agentSend'),
     queue: t('agentQueueAction'),
@@ -735,12 +739,13 @@ export function createAgentPanel(
     },
     onSend: (text) => enqueueRequest(text),
     onQueue: (text) => enqueueRequest(text),
+    getMessageActions: (message) => resultActions.actions(message),
     requireDocumentArtifact: true,
     canApplyMessage: () => captureDocumentContext()?.kind === 'word' && !getReadonlyMode(),
     onApplyMessage: (text) => applyReply(text),
     onSaveMessage: async (text, metadata) => {
       showView('artifacts');
-      await artifactsView.save(text, metadata as ArtifactProvenance | undefined);
+      return artifactsView.save(text, metadata as ArtifactProvenance | undefined);
     },
     onStop: () => requestQueue?.pause(conversations.activeId),
     labels: chatLabels(),
@@ -896,6 +901,26 @@ export function createAgentPanel(
       proposalMode = !intent.hostRead && !['chat', 'compose'].includes(intent.task);
       syncRuntimeStatus();
     },
+  });
+  const resultActions = createResultActions({
+    composer: chat.el.querySelector('textarea')!,
+    getInput: () => chat.getInput(),
+    setInput: (text) => chat.setInput(text),
+    focus: () => chat.focus(),
+    session: () => conversations.activeId,
+    labels: resultActionLabels,
+    onStage: () => {
+      taskEntry.inputChanged(chat.getInput());
+      stagedReadRequest = '';
+      stagedWritingRequest = '';
+      writingSelect.value = 'chat';
+      proposalMode = false;
+      syncRuntimeStatus();
+    },
+  });
+  chat.contextEl.append(resultActions.el);
+  window.addEventListener('pagehide', (event) => {
+    if (!event.persisted) resultActions.dispose();
   });
   chat.emptyActionsEl.prepend(welcomeHint, taskEntry.el);
   chat.el.querySelector('textarea')!.addEventListener('input', (event) => {
@@ -2863,6 +2888,8 @@ export function createAgentPanel(
     }
   };
   const switchConversation = (id: string, focus = true, saveDraft = true): void => {
+    resultActions.cancel();
+    artifactsView.cancelPending();
     blockedWritingRequest = undefined;
     stagedWritingRequest = '';
     stagedReadRequest = '';
@@ -3200,6 +3227,8 @@ export function createAgentPanel(
   chat.el.append(writeDestination);
   function showView(view: 'chat' | 'settings' | 'history' | 'sources' | 'artifacts'): void {
     speech?.close();
+    if (view !== 'chat') resultActions.cancel();
+    if (view !== 'artifacts') artifactsView.cancelPending();
     const leavingChat = panel.dataset.view === 'chat' && view !== 'chat';
     if (leavingChat) navigation.capture(displayedConversationId);
     if (view === 'history') rememberDraft();
@@ -3250,6 +3279,7 @@ export function createAgentPanel(
     settingsView.syncLabels();
     sourceView.setLabels(sourcesLabels());
     artifactsView.setLabels(artifactLabels());
+    resultActions.refresh();
     artifactsBtn.title = t('agentArtifactTitle');
     artifactsBtn.setAttribute('aria-label', t('agentArtifactTitle'));
     artifactsBtn.innerHTML =

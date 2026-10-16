@@ -204,3 +204,18 @@ Hidden or zero-height views must be restored again after becoming visible. Clear
 changed history can invalidate an anchor; no unrelated absolute offset is restored.
 Hosts must key snapshots by conversation identity, discard them on deletion and keep
 retention bounded. Snapshots are volatile presentation state, not persisted history.
+
+## Optional result actions
+
+`onSaveMessage` may return `saved`, `failed` or `cancelled`. Only an explicit
+`saved` outcome earns the local saved receipt; legacy `void` returns stay neutral.
+Pending and failure/success labels use `savingMessage`, `saveFailed`, and
+`savedMessage`. Hosts must settle dirty-editor confirmations on cancel, replacement,
+navigation and disposal. Late settlements cannot update a cleared transcript.
+
+`getMessageActions(message)` injects at most two secondary plain-text actions.
+Each action has an `id`, `label`, and `run(originalSource)` callback. The host owns
+their meaning and stages drafts; ChatView does not infer capabilities from prose.
+Actions stay unavailable during streaming/running, IME composition and interrupted
+output. They never call `onSend` implicitly. Keep document application as the single
+primary action, with Save, Copy and follow-ups secondary.

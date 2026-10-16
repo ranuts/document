@@ -80,7 +80,7 @@ test('local sources and versioned artifacts remain explicit, compact and reviewe
   await expect(page.locator('.agent-plan-preview')).toContainText('Release note');
 });
 
-test('attached reference excerpts reach only the explicitly selected AI service', async ({ page }) => {
+test('attached reference excerpts reach only the explicitly selected AI service', async ({ page }, testInfo) => {
   test.setTimeout(90000);
   await page.addInitScript(() => {
     localStorage.setItem('document-assistant-enabled', 'true');
@@ -132,8 +132,55 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   await expect(page.locator('.cui-msg-agent')).toContainText('I can read');
   expect(bodies).toHaveLength(1);
   expect(bodies[0]).toContain('Only this reference is attached.');
+  const followUp = page.getByRole('button', { name: 'Summarize answer', exact: true });
+  await expect(followUp).toBeVisible();
+  await page.locator('.cui-input').fill('Keep this draft');
+  await followUp.focus();
+  await followUp.press('Enter');
+  await expect(page.locator('.agent-result-choice')).toBeVisible();
+  await page.setViewportSize({ width: 360, height: 700 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('follow-up-choice-narrow.png') });
+  await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+  await page
+    .locator('.agent-runtime-panel')
+    .screenshot({ path: testInfo.outputPath('follow-up-choice-narrow-dark.png') });
+  await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
+  await expect(page.locator('.cui-input')).toHaveValue('Keep this draft');
+  expect(bodies).toHaveLength(1);
+  await page.getByRole('button', { name: 'Keep my draft', exact: true }).click();
+  await expect(page.locator('.cui-input')).toHaveValue('Keep this draft');
+  await followUp.click();
+  await page.locator('.cui-input').focus();
+  await page.locator('.cui-input').dispatchEvent('compositionstart');
+  await page.getByRole('button', { name: 'Use suggestion', exact: true }).click();
+  await expect(page.locator('.cui-input')).toHaveValue('Keep this draft');
+  await expect(page.locator('.cui-input')).toBeFocused();
+  await page.locator('.cui-input').dispatchEvent('compositionend');
+  await page.getByRole('button', { name: 'Use suggestion', exact: true }).click();
+  await expect(page.locator('.cui-input')).toHaveValue(
+    /Summarize the following answer[\s\S]*I can read the attached notes/,
+  );
+  await expect(page.locator('.cui-input')).toBeFocused();
+  expect(bodies).toHaveLength(1);
   await page.locator('.cui-save').click();
   await expect(page.locator('.agent-artifact-provenance')).toContainText('notes.txt');
+  await page.locator('.agent-artifact-editor textarea').fill('Keep artifact draft');
+  await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
+  await expect(page.locator('.cui-save')).toHaveText('Saved');
+  await page.locator('.cui-save').click();
+  await expect(page.locator('.agent-artifact-status')).toContainText('Discard unsaved changes');
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await expect(page.locator('.agent-artifact-editor textarea')).toHaveValue('Keep artifact draft');
+  await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
+  await expect(page.locator('.cui-save')).toHaveText('Save as artifact');
+  await page.setViewportSize({ width: 360, height: 700 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect
+    .poll(() => page.locator('.cui-message-actions').evaluate((el) => el.scrollWidth - el.clientWidth))
+    .toBeLessThan(2);
+  expect(bodies).toHaveLength(1);
+  await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('result-actions-narrow.png') });
 });
 
 test('cloud model settings exclude browser runtime configuration and cache hints', async ({ page }, testInfo) => {

@@ -105,6 +105,7 @@ export class ChatView {
   private scrollHeight = 0;
   private viewportHeight = 0;
   private disposed = false;
+  private readonly actionLabels = new WeakMap<HTMLButtonElement, () => string>();
   private readonly copyTimers = new Map<HTMLButtonElement, ReturnType<typeof setTimeout>>();
   /** The agent bubble currently receiving streamed deltas, if any. */
   private liveMsg: HTMLDivElement | null = null;
@@ -407,15 +408,44 @@ export class ChatView {
           const text = row.dataset.source ?? message.text;
           if (this.disposed || this.running || save.disabled || !text.trim()) return;
           save.disabled = true;
+          save.dataset.state = 'pending';
+          this.updateSaveButton(save);
+          let outcome: 'saved' | 'failed' | 'cancelled' | void;
           try {
-            await this.options.onSaveMessage!(text, message.metadata);
+            outcome = await this.options.onSaveMessage!(text, message.metadata);
           } catch {
-            this.feedbackEl.textContent = this.labels.checkDocument ?? 'Check result';
-          } finally {
-            save.disabled = false;
+            outcome = 'failed';
           }
+          if (this.disposed || !this.messagesEl.contains(row)) return;
+          save.dataset.state = outcome === 'saved' || outcome === 'failed' ? outcome : '';
+          save.disabled = false;
+          this.updateSaveButton(save);
+          if (outcome === 'saved' || outcome === 'failed') this.feedbackEl.textContent = save.textContent;
         });
         actions.append(save);
+      }
+      if (!message.interrupted && !message.copyOnly) {
+        for (const action of (this.options.getMessageActions?.(message) ?? []).slice(0, 2)) {
+          const button = ButtonBuilder().class('cui-follow-up').attr('type', 'button').text(action.label).build();
+          this.actionLabels.set(
+            button,
+            () =>
+              this.options.getMessageActions?.(message).find((item) => item.id === action.id)?.label ?? action.label,
+          );
+          button.addEventListener('click', () => {
+            if (
+              this.composing ||
+              this.disposed ||
+              this.running ||
+              row.hasAttribute('data-interrupted') ||
+              !this.messagesEl.contains(row)
+            )
+              return;
+            const source = row.dataset.source ?? message.text;
+            if (source.trim()) action.run(source);
+          });
+          actions.append(button);
+        }
       }
       if (
         this.options.onApplyMessage &&
@@ -692,6 +722,7 @@ export class ChatView {
     row.dataset.source = text;
     row.dataset.interrupted = 'true';
     row.querySelector('.cui-apply')?.remove();
+    row.querySelectorAll('.cui-save, .cui-follow-up').forEach((action) => action.remove());
     this.updateResultPresentation(row);
     row.classList.remove('cui-streaming', 'cui-streaming-markdown');
     this.liveMsg = null;
@@ -746,6 +777,17 @@ export class ChatView {
   }
 
   /** Result identity follows host metadata, never model prose or tool receipts. */
+  private updateSaveButton(button: HTMLButtonElement): void {
+    button.textContent =
+      button.dataset.state === 'saved'
+        ? (this.labels.savedMessage ?? 'Saved')
+        : button.dataset.state === 'failed'
+          ? (this.labels.saveFailed ?? 'Save failed · Retry')
+          : button.dataset.state === 'pending'
+            ? (this.labels.savingMessage ?? 'Saving…')
+            : (this.labels.saveMessage ?? 'Save result');
+  }
+
   private updateResultPresentation(row: HTMLElement): void {
     if (!row.hasAttribute('data-document-artifact') && !row.hasAttribute('data-interrupted')) return;
     let header = row.querySelector<HTMLElement>('.cui-result-header');
@@ -1010,8 +1052,10 @@ export class ChatView {
               ? (labels.checkDocument ?? 'Check document')
               : (labels.applyMessage ?? 'Write to document');
     }
-    for (const button of this.messagesEl.querySelectorAll('.cui-save'))
-      button.textContent = labels.saveMessage ?? 'Save result';
+    for (const button of this.messagesEl.querySelectorAll<HTMLButtonElement>('.cui-follow-up'))
+      button.textContent = this.actionLabels.get(button)?.() ?? button.textContent;
+    for (const button of this.messagesEl.querySelectorAll<HTMLButtonElement>('.cui-save'))
+      this.updateSaveButton(button);
     for (const button of this.messagesEl.querySelectorAll('.cui-restore'))
       button.textContent = labels.restore ?? 'Restore request';
     for (const header of this.messagesEl.querySelectorAll<HTMLElement>('.cui-result-header'))

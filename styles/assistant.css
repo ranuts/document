@@ -2280,3 +2280,39 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text-secondary);
   line-height: 1.6;
 }
+
+.agent-result-choice {
+  padding: var(--ran-space-2) 0;
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+}
+.agent-result-choice[hidden] {
+  display: none;
+}
+.agent-result-choice p {
+  margin: 0 0 var(--ran-space-1);
+}
+.agent-result-choice-preview {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.agent-result-choice button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: var(--ran-space-1) var(--ran-space-2);
+  min-height: var(--ran-size-7);
+  cursor: pointer;
+  font: inherit;
+}
+.agent-result-choice button[data-action='replace'] {
+  color: var(--ran-color-text);
+  font-weight: 500;
+}
+.agent-result-choice button:focus-visible {
+  outline: 2px solid var(--ran-color-link, #0070f3);
+  outline-offset: 2px;
+}

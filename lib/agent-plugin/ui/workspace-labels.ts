@@ -55,3 +55,19 @@ export function artifactLabels(): ArtifactsLabels {
     provenance: t('agentArtifactProvenance'),
   };
 }
+
+import type { ResultActionLabels } from './result-actions';
+export function resultActionLabels(): ResultActionLabels {
+  return {
+    shorter: t('agentResultShorter'),
+    bullets: t('agentResultBullets'),
+    summarize: t('agentResultSummarize'),
+    shorterPrompt: t('agentResultShorterPrompt'),
+    bulletsPrompt: t('agentResultBulletsPrompt'),
+    summarizePrompt: t('agentResultSummarizePrompt'),
+    source: t('agentResultPrevious'),
+    conflict: t('agentResultDraftChoice'),
+    replace: t('agentResultUseSuggestion'),
+    keep: t('agentResultKeepDraft'),
+  };
+}
