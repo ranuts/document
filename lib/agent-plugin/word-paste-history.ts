@@ -138,6 +138,18 @@ export function beginWordPasteHistory(
         fail();
       redo.discard();
       finished = true;
+      const committedItems = [...marker!.Items],
+        description = marker!.Description;
+      const prefixDescriptions = prefix.map(({ point }) => point.Description);
+      // Bind completion to this exact point before callers yield past cleanup.
+      return {
+        isCurrent: () =>
+          ownsPoint() &&
+          prefix.every(({ point }, at) => point.Description === prefixDescriptions[at]) &&
+          marker!.Description === description &&
+          marker!.Items.length === committedItems.length &&
+          committedItems.every((item, at) => marker!.Items[at] === item),
+      };
     },
   };
 }

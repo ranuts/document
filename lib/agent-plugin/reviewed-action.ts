@@ -1,3 +1,4 @@
+import { takeCompletedPaste, type CompletedPaste } from './completed-paste';
 import { readWordBodyText } from './word-text-read';
 import { parseActionPlan, type ActionEditor, type ActionPlan } from '@ranuts/agent-core/llm/action-plan';
 import { getReadonlyMode } from '../onlyoffice/readonly';
@@ -196,6 +197,15 @@ export class ReviewedAction {
   readonly plan: Readonly<ActionPlan>;
   readonly review?: ChangeReview;
   private consumed = false;
+  private receipt?: CompletedPaste;
+  get undo(): (() => boolean) | undefined {
+    return this.receipt?.available() ? () => this.receipt!.undo() : undefined;
+  }
+  dispose(): void {
+    this.receipt?.dispose();
+    this.receipt = undefined;
+  }
+
   constructor(
     readonly target: ActionTarget,
     plan: ActionPlan,
@@ -217,6 +227,7 @@ export class ReviewedAction {
     return !this.consumed && this.target.isCurrent();
   }
   cancel(): void {
+    this.dispose();
     this.consumed = true;
   }
   async apply(signal?: AbortSignal): Promise<'sent' | 'verified'> {
@@ -224,10 +235,21 @@ export class ReviewedAction {
     if (!this.isCurrent()) throw new Error('This proposal has expired. Generate a new proposal.');
     this.target.assertSupported?.(this.plan);
     this.consumed = true;
-    await agentTools[this.plan.tool].execute(this.plan.input, signal);
-    if (!this.target.verify) return 'sent';
-    if (!(await this.target.verify(this.plan)))
-      throw new Error('The change could not be verified. Check the document and use Undo if needed.');
-    return 'verified';
+    const result = await agentTools[this.plan.tool].execute(this.plan.input, signal);
+    this.receipt = takeCompletedPaste(result);
+    try {
+      signal?.throwIfAborted();
+      if (!this.target.verify) {
+        this.dispose();
+        return 'sent';
+      }
+      if (!(await this.target.verify(this.plan)))
+        throw new Error('The change could not be verified. Check the document and use Undo if needed.');
+      signal?.throwIfAborted();
+      return 'verified';
+    } catch (error) {
+      this.dispose();
+      throw error;
+    }
   }
 }

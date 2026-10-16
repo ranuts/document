@@ -102,7 +102,11 @@ export interface EditorCommon {
 
 export interface EditorContext {
   presentationBuilder?: PresentationBuilder;
-  AscDFH?: { historydescription_GroupPoints: number; historydescription_Pdf_AddComment?: number };
+  AscDFH?: {
+    historydescription_GroupPoints: number;
+    historydescription_Document_PasteHotKey?: number;
+    historydescription_Pdf_AddComment?: number;
+  };
   AscPDF?: {
     ANNOTATIONS_TYPES: { Text: number };
     CreateAnnotByProps(props: Record<string, unknown>, doc: PdfDocument): PdfDocument['annots'][number];

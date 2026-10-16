@@ -16,6 +16,8 @@ export interface PreviewAction {
   isCurrent(): boolean;
   cancel(): void;
   locate?(): void;
+  readonly undo?: () => boolean;
+  dispose?(): void;
   apply(signal?: AbortSignal): Promise<'sent' | 'verified'>;
   readonly review?: ChangeReview;
   readonly result?: unknown;
@@ -38,6 +40,8 @@ export class ActionPreview {
     .attr('role', 'status')
     .attr('aria-atomic', 'true')
     .build();
+  private readonly undoFeedback = Span().class('agent-plan-undo-feedback').attr('aria-live', 'polite').build();
+  private readonly receiptUndo = View('r-button').attr('type', 'text').class('agent-plan-receipt-undo').build();
   private readonly receiptLocate = View('r-button').attr('type', 'text').class('agent-plan-receipt-locate').build();
   private readonly applyButton = View('r-button').attr('type', 'primary').class('agent-plan-apply').build();
   private readonly copyButton = View('r-button').attr('type', 'text').class('agent-plan-copy').build();
@@ -97,6 +101,8 @@ export class ActionPreview {
     this.record.className = 'agent-plan-record';
     this.record.hidden = true;
     this.receiptLocate.hidden = true;
+    this.receiptUndo.hidden = true;
+    this.undoFeedback.textContent = '';
     this.el.hidden = true;
     this.el.append(
       this.title,
@@ -112,6 +118,8 @@ export class ActionPreview {
       this.status,
       this.record,
       this.receiptLocate,
+      this.receiptUndo,
+      this.undoFeedback,
       Div()
         .class('agent-plan-buttons agent-plan-primary-buttons')
         .children(this.applyButton, this.cancelButton)
@@ -128,12 +136,32 @@ export class ActionPreview {
         this.status.textContent = displayError(error);
       }
     });
+    this.receiptUndo.addEventListener('click', () => {
+      if (this.el.dataset.state !== 'verified' || this.receiptUndo.hidden) return;
+      let undone = false;
+      let uncertain = false;
+      try {
+        undone = this.action?.undo?.() === true;
+      } catch {
+        uncertain = true;
+      }
+      this.receiptUndo.hidden = true;
+      this.undoFeedback.textContent = t(
+        uncertain ? 'agentUndoUnverified' : undone ? 'agentChangeUndone' : 'agentUndoUnavailable',
+      );
+      if (undone) {
+        this.status.textContent = t('agentChangeUndone');
+        this.undoFeedback.textContent = '';
+        this.el.dataset.state = 'undone';
+        this.receiptLocate.hidden = true;
+      }
+    });
     this.receiptLocate.addEventListener('click', () => {
       if (this.el.dataset.state !== 'verified') return;
       try {
         this.action?.locate?.();
       } catch (error) {
-        this.status.textContent = displayError(error);
+        this.undoFeedback.textContent = displayError(error);
       }
     });
     this.cancelButton.addEventListener('click', () => {
@@ -201,6 +229,7 @@ export class ActionPreview {
     else if (this.action?.plan.tool === 'add_slide_text') this.applyButton.textContent = t('agentAddSlideText');
     else if (this.action?.plan.tool === 'sort_range') this.applyButton.textContent = t('agentSortRange');
     else if (this.action?.plan.tool === 'add_comment') this.applyButton.textContent = t('agentAddComment');
+    this.receiptUndo.textContent = t('agentUndoChange');
     this.locateButton.textContent = this.receiptLocate.textContent = t('agentLocateTarget');
     this.cancelButton.textContent = t(this.el.dataset.state === 'applying' ? 'agentStop' : 'agentPlanCancel');
     this.copyButton.textContent = t('agentCopy');
@@ -305,6 +334,8 @@ export class ActionPreview {
     this.editor.querySelector<HTMLElement>('.agent-plan-buttons')!.hidden = false;
     this.record.hidden = true;
     this.receiptLocate.hidden = true;
+    this.receiptUndo.hidden = true;
+    this.undoFeedback.textContent = '';
     this.record.open = false;
     this.record.replaceChildren();
     this.content.hidden = this.afterLabel.hidden = false;
@@ -519,6 +550,7 @@ export class ActionPreview {
     const restore = this.el.contains(document.activeElement);
     this.abort?.abort();
     this.action?.cancel();
+    this.action?.dispose?.();
     if (this.action) this.settle({ status: 'cancelled', action: this.action });
     this.action = null;
     this.stopObserving();
@@ -610,6 +642,7 @@ export class ActionPreview {
     summary.textContent = t('agentViewChanges');
     this.record.append(summary);
     this.receiptLocate.hidden = state !== 'verified' || !this.action?.locate;
+    this.receiptUndo.hidden = state !== 'verified' || !this.action?.undo;
     if (state === 'verified') {
       const undo = document.createElement('p');
       undo.className = 'agent-plan-undo';

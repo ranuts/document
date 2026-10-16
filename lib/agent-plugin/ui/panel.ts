@@ -1,3 +1,4 @@
+import { createTaskReceipt } from './task-receipt';
 import { createResultActions } from './result-actions';
 import { createWorkspaceNavigation } from './workspace-navigation';
 import { createArtifactStore, type ArtifactProvenance } from '../artifacts/store';
@@ -837,7 +838,10 @@ export function createAgentPanel(
   let selectedRefinementCard: ActionPreview | undefined;
   let refiningPreview: ActionPreview | undefined;
   const previews = new Set([preview]);
+  const taskReceiptViews = new Set<ReturnType<typeof createTaskReceipt>>();
   const clearPreviews = (): void => {
+    for (const receipt of taskReceiptViews) receipt.dispose();
+    taskReceiptViews.clear();
     for (const item of previews) item.dispose();
     previews.clear();
   };
@@ -2159,11 +2163,12 @@ export function createAgentPanel(
             const target = directTarget;
             name = 'insert_text';
             input = { text: answer, format: 'markdown' };
-            result = {
-              outcome: await new DocumentToolAction(target, { tool: 'insert_text', input, readOnly: false }).apply(
-                directAbort.signal,
-              ),
-            };
+            const action = new DocumentToolAction(target, { tool: 'insert_text', input, readOnly: false });
+            try {
+              result = { outcome: await action.apply(directAbort.signal) };
+            } finally {
+              action.dispose();
+            }
           } else if (intent.kind === 'sum_range' || intent.kind === 'sort_range' || intent.kind === 'slide') {
             name = intent.kind === 'slide' ? 'slide_action' : intent.kind;
             const { kind: _kind, ...parameters } = intent;
@@ -2489,6 +2494,9 @@ export function createAgentPanel(
         if (!request.refinement && !literalToolRequest && !isModelFreeToolRequest(trimmed, target.context)) {
           let currentTarget = target;
           const taskReceipts: typeof operationHistory = [];
+          const taskReceipt = createTaskReceipt();
+          taskReceiptViews.add(taskReceipt);
+          chat.appendContent(taskReceipt.el);
           let taskError: string | undefined;
           let taskStatus: ReturnType<typeof documentToolTurnStatus>;
           const taskOptions: DocumentAgentToolOptions = {
@@ -2531,6 +2539,7 @@ export function createAgentPanel(
             onToolExchange: record,
             onEvent: (event) => {
               if (generation !== controllerGeneration || conversation !== conversationRevision) return;
+              taskReceipt.observe(event);
               const status = documentToolTurnStatus(event);
               if (status && (status !== 'success' || !taskStatus)) taskStatus = status;
               if (event.type === 'assistant_delta') {

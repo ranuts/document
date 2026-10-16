@@ -558,3 +558,18 @@ it('bounds lightweight selection text while retaining full public target capture
   expect(captureDocumentToolScope().selectedText).toHaveLength(8000);
   expect(captureDocumentToolTarget().selectedText).toHaveLength(9000);
 });
+it('locates a captured slide by identity after reordering without choosing duplicate text', () => {
+  const state = mount();
+  const original = state.logic.Slides[0];
+  const other = {};
+  const goToPage = vi.fn();
+  Object.assign(state.api, { goToPage });
+  const action = new DocumentToolAction(captureDocumentToolTarget(), plan('add_slide_text', { text: 'same' }, 'slide'));
+  state.logic.Slides.unshift(other);
+  action.locate!();
+  expect(goToPage).toHaveBeenCalledWith(1);
+  state.logic.Slides.splice(1, 1, {});
+  expect(state.logic.Slides.includes(original)).toBe(false);
+  expect(() => action.locate!()).toThrow(/expired/i);
+  expect(goToPage).toHaveBeenCalledOnce();
+});

@@ -201,6 +201,13 @@ for (const cancel of [false, true]) {
     await second.locator(cancel ? '.agent-plan-cancel' : '.agent-plan-apply').click();
     await expect(page.locator('.cui-send-stop')).toHaveCount(0);
     expect(decisions).toBe(cancel ? 2 : 3);
+    const receipt = page.locator('.agent-task-receipt');
+    await expect(receipt).toBeVisible();
+    await expect(receipt).not.toHaveAttribute('open', '');
+    await expect(receipt.locator('summary')).toContainText(cancel ? '1 verified' : '2 verified');
+    if (cancel) await expect(receipt.locator('summary')).toContainText('1 cancelled');
+    await receipt.locator('summary').click();
+    await expect(receipt.locator('li')).toHaveCount(2);
     const slides = await page.evaluate(() => {
       const win = window.__ooFrames.readyEditor() as any;
       const doc = (win.Asc?.editor ?? win.editor).WordControl.m_oLogicDocument;

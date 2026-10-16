@@ -1,3 +1,4 @@
+import { bindCompletedPaste } from './completed-paste';
 import { getPdfTextTool, addPdfCommentTool } from './pdf-tools';
 import { setDocumentReviewMode } from './review-mode';
 import { fillSeriesTool } from './fill-series';
@@ -58,8 +59,8 @@ export const insertTextTool: AgentTool<InsertTextParams, { inserted: true; lengt
       throw new TypeError('insert_text requires a string "text" parameter');
     }
     const api = requireEditorApi();
-    await pasteWordHtml(api, wordContent(text, format).html, signal);
-    return { inserted: true, length: text.length };
+    const receipt = await pasteWordHtml(api, wordContent(text, format).html, signal);
+    return bindCompletedPaste({ inserted: true as const, length: text.length }, receipt);
   },
 };
 
@@ -117,8 +118,8 @@ export const replaceSelectionTool: AgentTool<
       throw new Error('No text selection');
     // The bundled plugin wrapper calls an absent native ReplaceTextSmart method.
     // Native HTML paste replaces the current selection and retains normal Undo.
-    await pasteWordHtml(api, textToHtml(text), signal);
-    return { replaced: true, length: text.length };
+    const receipt = await pasteWordHtml(api, textToHtml(text), signal);
+    return bindCompletedPaste({ replaced: true as const, length: text.length }, receipt);
   },
 };
 
