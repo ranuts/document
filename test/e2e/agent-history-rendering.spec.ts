@@ -79,6 +79,26 @@ test('restores a long saved conversation and switches sessions with completed an
   await expect(rows.first().locator('.cui-bubble')).toHaveText('Question 0');
   await expect(rows.last().locator('.cui-bubble strong')).toHaveText('Answer 199');
   await expect(rows.last().locator('.cui-copy')).toBeEnabled();
+  // A visited window belongs to the reader: returning must recover this old
+  // message, not discard it in favor of the most recent initial page.
+  const composer = page.locator('.cui-input');
+  const transcript = page.locator('.cui-messages');
+  const retainedDraft = 'Keep this historical question draft';
+  await composer.fill(retainedDraft);
+  await composer.evaluate((element: HTMLTextAreaElement) => element.setSelectionRange(3, 12, 'backward'));
+  const historicalAnchor = rows.filter({ has: page.locator('.cui-bubble', { hasText: /^Question 60$/ }) });
+  await historicalAnchor.evaluate((element) => {
+    const log = element.closest<HTMLElement>('.cui-messages')!;
+    log.scrollTop += element.getBoundingClientRect().top - log.getBoundingClientRect().top + 12;
+  });
+  await expect.poll(() => transcript.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+  const anchorOffset = () =>
+    historicalAnchor.evaluate(
+      (element) => element.getBoundingClientRect().top - element.closest('.cui-messages')!.getBoundingClientRect().top,
+    );
+  await expect.poll(async () => Math.abs((await anchorOffset()) + 12)).toBeLessThanOrEqual(1);
+  const retainedOffset = await anchorOffset();
+  await transcript.focus();
   await page.locator('.agent-history-toggle').click();
   const search = page.getByRole('searchbox', { name: 'Search conversations' });
   await search.fill('Short answer');
@@ -90,11 +110,23 @@ test('restores a long saved conversation and switches sessions with completed an
   await page.locator(`.agent-conversation-open[data-id="${ids.short}"]`).click();
   await expect(rows).toHaveCount(2);
   await expect(rows.last().locator('.cui-bubble')).toHaveText('Short answer');
+  await expect(composer).toHaveValue('');
   await page.locator('.agent-history-toggle').click();
   await page.locator(`.agent-conversation-open[data-id="${ids.long}"]`).click();
-  await expect(rows).toHaveCount(40);
-  await loadAllEarlier();
+  // The 40-message cap applies to the initial page and each explicit earlier
+  // page. Navigation restores only pages this reader already expanded.
   await expect(rows).toHaveCount(400);
+  await expect(earlier).toBeHidden();
+  await expect.poll(async () => Math.abs((await anchorOffset()) - retainedOffset)).toBeLessThanOrEqual(1);
+  await expect(transcript).toBeFocused();
+  await expect(composer).toHaveValue(retainedDraft);
+  expect(
+    await composer.evaluate((element: HTMLTextAreaElement) => [
+      element.selectionStart,
+      element.selectionEnd,
+      element.selectionDirection,
+    ]),
+  ).toEqual([3, 12, 'backward']);
   await expect(rows.last()).toHaveAttribute('data-source', '**Answer 199**');
   await page.locator('.cui-input').fill('Next request');
   await expect(page.locator('.cui-input')).toHaveValue('Next request');

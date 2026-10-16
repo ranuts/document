@@ -145,6 +145,12 @@ preflight failure, and advance their queue only on explicit successful outcomes.
 Bounded restoration is opt-in. Convert host history to complete display messages
 before calling `restoreHistory`; do not slice before conversion because adjacent
 status/interruption metadata and request recovery can cross a window boundary.
+`restoreHistory` initially renders at most 40 source messages; each explicit
+Load earlier action adds at most another 40. This is a page-size limit, not a
+lifetime cap on rows the user has chosen to reveal. A same-conversation
+`restoreNavigation` may recreate those already visited pages to recover a
+historical anchor. It does not reveal additional pages or fetch host data. A
+fresh conversation without a snapshot still starts at the initial page limit.
 Full restored source remains available to source getters and copy/apply. Only
 restored previews are capped at 8000 characters, with explicit expansion.
 Prepending is render-only: it must not interrupt a live bubble, mutate the latest

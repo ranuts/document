@@ -207,3 +207,24 @@ it('keeps active IME focus when restoring a snapshot captured from historical re
   expect(view.getInput()).toBe('正在输入');
   input.dispatchEvent(new Event('compositionend'));
 });
+it('restores only visited pages and keeps unvisited history behind the earlier control', () => {
+  const { view, messages } = mount();
+  const history = Array.from({ length: 200 }, (_, index) => ({ role: 'agent' as const, text: `Answer ${index}` }));
+  view.restoreHistory(history);
+  const rows = () => view.el.querySelectorAll<HTMLElement>('.cui-msg');
+  expect(rows()).toHaveLength(40);
+  view.el.querySelector<HTMLButtonElement>('.cui-load-earlier')!.click();
+  expect(rows()).toHaveLength(80);
+  messages.scrollTop = 120;
+  messages.dispatchEvent(new Event('scroll'));
+  const snapshot = view.captureNavigation();
+  view.restoreHistory(history);
+  expect(rows()).toHaveLength(40);
+  view.restoreNavigation(snapshot);
+  expect(rows()).toHaveLength(80);
+  expect(rows()[0].dataset.source).toBe('Answer 120');
+  const earlier = view.el.querySelector<HTMLButtonElement>('.cui-load-earlier')!;
+  expect(earlier.hidden).toBe(false);
+  earlier.click();
+  expect(rows()).toHaveLength(120);
+});
