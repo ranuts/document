@@ -1016,3 +1016,38 @@ it('reports uncertain native Undo separately and never retries it', async () => 
   expect(view.el.querySelector('.agent-plan-undo-feedback')?.textContent).toContain('could not be confirmed');
   view.dispose();
 });
+it('keeps completed receipt actions in one compact text-action row', async () => {
+  const view = new ActionPreview();
+  view.show({
+    target: { label: 'DOCX', selectedText: '' },
+    plan: { tool: 'insert_text', input: { text: 'Draft' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    undo: () => true,
+    locate: () => {},
+    apply: async () => 'verified',
+  });
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(view.el.dataset.state).toBe('verified'));
+  const row = view.el.querySelector('.agent-plan-receipt-actions.agent-plan-buttons');
+  expect(row).not.toBeNull();
+  expect(row?.querySelector('.agent-plan-receipt-undo')).not.toBeNull();
+  expect(row?.querySelector('.agent-plan-receipt-locate')).not.toBeNull();
+  expect(row?.contains(view.el.querySelector('.agent-plan-undo-feedback'))).toBe(false);
+  view.dispose();
+});
+it('reports verified application without promising custom Undo when it is unavailable', async () => {
+  const view = new ActionPreview();
+  view.show({
+    target: { label: 'Sheet', selectedText: '' },
+    plan: { tool: 'set_cell', input: { cell: 'B2', value: '1' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    apply: async () => 'verified',
+  });
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(view.el.dataset.state).toBe('verified'));
+  expect(view.el.querySelector('[role="status"]')?.textContent).toBe('Change verified.');
+  expect(view.el.querySelector<HTMLElement>('.agent-plan-receipt-actions')?.hidden).toBe(true);
+  view.dispose();
+});

@@ -267,6 +267,7 @@ export const zhCN: I18nMessages = {
   agentChangesFailed: '{count} 项更改失败',
   agentChangesCancelled: '{count} 项更改已取消',
   agentUndoUnverified: '无法确认撤销结果。请先检查文档，再决定是否继续撤销。',
+  agentChangeVerified: '更改已验证。',
   agentUndoChange: '撤销此更改',
   agentChangeUndone: '已撤销，可在编辑器中重做。',
   agentUndoUnavailable: '此处已无法安全撤销。请在编辑器中谨慎撤销，可能会同时撤销后续编辑。',

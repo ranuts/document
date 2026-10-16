@@ -132,7 +132,7 @@ for (const native of [false, true])
 for (const cancel of [false, true]) {
   test(`schema task: a reviewed slide addition ${cancel ? 'stops before a cancelled text insertion' : 'continues with text on the new slide'}`, async ({
     page,
-  }) => {
+  }, testInfo) => {
     test.setTimeout(120_000);
     await page.addInitScript(() =>
       localStorage.setItem(
@@ -206,6 +206,21 @@ for (const cancel of [false, true]) {
     await expect(receipt).not.toHaveAttribute('open', '');
     await expect(receipt.locator('summary')).toContainText(cancel ? '1 verified' : '2 verified');
     if (cancel) await expect(receipt.locator('summary')).toContainText('1 cancelled');
+    if (!cancel) {
+      const panel = page.locator('.agent-runtime-panel');
+      await panel.screenshot({ path: testInfo.outputPath('task-summary-light.png') });
+      await page.emulateMedia({ colorScheme: 'dark' });
+      await panel.screenshot({ path: testInfo.outputPath('task-summary-dark.png') });
+      await page.emulateMedia({ colorScheme: 'light' });
+      await panel.evaluate((element) => {
+        (element as HTMLElement).style.width = '320px';
+      });
+      await panel.screenshot({ path: testInfo.outputPath('task-summary-narrow.png') });
+      await panel.evaluate((element) => {
+        (element as HTMLElement).style.removeProperty('width');
+      });
+    }
+
     await receipt.locator('summary').click();
     await expect(receipt.locator('li')).toHaveCount(2);
     const slides = await page.evaluate(() => {

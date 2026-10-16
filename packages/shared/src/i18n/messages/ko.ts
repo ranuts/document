@@ -281,6 +281,7 @@ export const ko: Partial<I18nMessages> = {
   agentChangesFailed: '변경 {count}개 실패',
   agentChangesCancelled: '변경 {count}개 취소됨',
   agentUndoUnverified: '실행 취소 결과를 확인할 수 없습니다. 다시 취소하기 전에 문서를 확인하세요.',
+  agentChangeVerified: '변경이 확인되었습니다.',
   agentUndoChange: '변경 실행 취소',
   agentChangeUndone: '변경을 취소했습니다. 편집기에서 다시 실행할 수 있습니다.',
   agentUndoUnavailable: '여기서 안전하게 취소할 수 없습니다. 편집기에서 실행 취소하면 이후 편집도 취소될 수 있습니다.',

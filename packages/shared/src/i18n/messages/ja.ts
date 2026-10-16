@@ -288,6 +288,7 @@ export const ja: Partial<I18nMessages> = {
   agentChangesFailed: '{count} 件の変更が失敗',
   agentChangesCancelled: '{count} 件の変更をキャンセル',
   agentUndoUnverified: '元に戻せたか確認できません。再度操作する前に文書を確認してください。',
+  agentChangeVerified: '変更を確認しました。',
   agentUndoChange: '変更を元に戻す',
   agentChangeUndone: '変更を元に戻しました。エディターでやり直せます。',
   agentUndoUnavailable: 'ここでは安全に元に戻せません。エディターの「元に戻す」は後の編集も戻す場合があります。',
