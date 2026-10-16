@@ -721,3 +721,55 @@ it('retains imported text payload envelopes when editing a version', async () =>
   expect((await store.get(a.id))?.versions[1].payload).toEqual({ kind: 'text', text: 'two' });
   view.dispose();
 });
+
+it('keeps destination-aware header Back in the busy registry and guards imported drafts', async () => {
+  const store = createArtifactStore();
+  const a = await store.create({ title: 'Draft', text: 'original', provenance: {} });
+  const close = vi.fn();
+  const view = createArtifactsView({
+    store,
+    labels: {
+      ...labels,
+      import: 'Import',
+      backToConversation: 'Back to conversation',
+      backToList: 'Back to artifacts',
+    },
+    onApply: vi.fn(),
+    onClose: close,
+  });
+  document.body.append(view.el);
+  await view.refresh();
+  const back = () => view.el.querySelector<HTMLButtonElement>('.agent-view-header [data-action=back]')!;
+  expect(back().getAttribute('aria-label')).toBe('Back to conversation');
+  expect(view.el.querySelectorAll('[data-action=back]')).toHaveLength(1);
+  let resolve!: (value: typeof a) => void;
+  vi.spyOn(store, 'get').mockImplementationOnce(() => new Promise((r) => (resolve = r)));
+  view.el.querySelector<HTMLButtonElement>('[data-artifact]')!.click();
+  expect(back().disabled).toBe(true);
+  back().click();
+  expect(close).not.toHaveBeenCalled();
+  resolve(a);
+  await tick();
+  expect(back().disabled).toBe(false);
+  expect(back().getAttribute('aria-label')).toBe('Back to artifacts');
+  view.setLabels({ ...labels, backToList: '返回成果列表' });
+  expect(back().getAttribute('aria-label')).toBe('返回成果列表');
+  expect(back().querySelectorAll('svg')).toHaveLength(1);
+  back().click();
+  await tick();
+  expect(document.activeElement).toBe(view.el.querySelector('h2'));
+  view.el.querySelector<HTMLButtonElement>('[data-action=import]')!.click();
+  const data = view.el.querySelector('textarea')!;
+  data.value = 'unfinished import';
+  data.dispatchEvent(new Event('input'));
+  back().click();
+  expect(view.el.querySelector('textarea')).toBe(data);
+  view.el.querySelector<HTMLButtonElement>('[data-action=cancel]')!.click();
+  expect(data.value).toBe('unfinished import');
+  back().click();
+  view.el.querySelector<HTMLButtonElement>('[data-action=discardChanges]')!.click();
+  await tick();
+  expect(view.el.querySelector('textarea')).toBeNull();
+  expect(view.el.querySelectorAll('[data-action=back]')).toHaveLength(1);
+  view.dispose();
+});

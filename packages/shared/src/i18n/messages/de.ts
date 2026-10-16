@@ -538,6 +538,7 @@ export const de: Partial<I18nMessages> = {
   agentArtifactTitle: 'Artefakte',
   agentArtifactEmpty: 'Nützliche Ergebnisse hier speichern, bearbeiten und lokal versionieren.',
   agentArtifactBack: 'Zurück',
+  agentArtifactBackToList: 'Zurück zu den Ergebnissen',
   agentArtifactTitleField: 'Titel',
   agentArtifactTextField: 'Inhalt',
   agentArtifactVersion: 'Version',

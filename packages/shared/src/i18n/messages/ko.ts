@@ -505,6 +505,7 @@ export const ko: Partial<I18nMessages> = {
   agentArtifactTitle: '아티팩트',
   agentArtifactEmpty: '결과를 저장하고 이 기기에서 편집하며 버전을 보관하세요.',
   agentArtifactBack: '뒤로',
+  agentArtifactBackToList: '결과물 목록으로 돌아가기',
   agentArtifactTitleField: '제목',
   agentArtifactTextField: '내용',
   agentArtifactVersion: '버전',

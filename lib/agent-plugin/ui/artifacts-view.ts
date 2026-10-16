@@ -1,3 +1,4 @@
+import { createViewHeader, labelViewBack } from './view-header';
 import { createArtifactPresentation, type ArtifactPresentationLabels } from './artifact-presentation';
 import { validatePayload, payloadText } from '../artifacts/payload';
 import {
@@ -14,6 +15,8 @@ export interface ArtifactsLabels extends ArtifactPresentationLabels {
   title: string;
   empty: string;
   back: string;
+  backToConversation?: string;
+  backToList?: string;
   titleField: string;
   textField: string;
   version: string;
@@ -48,9 +51,12 @@ export function createArtifactsView(options: {
 }) {
   const el = View('section').class('agent-artifacts').build();
   const heading = View('h2').build();
+  heading.tabIndex = -1;
+  const header = createViewHeader(heading);
+  let backDestination: 'conversation' | 'list' = 'conversation';
   const body = Div().build();
   const status = View('p').class('agent-artifact-status').attr('role', 'status').build();
-  el.append(heading, body, status);
+  el.append(header, body, status);
   let labels = options.labels;
   let current: Artifact | undefined;
   let activePresentation: ReturnType<typeof createArtifactPresentation> | undefined;
@@ -69,7 +75,10 @@ export function createArtifactsView(options: {
   let cancelConfirmation: (() => void) | undefined;
   const buttons = new Set<HTMLButtonElement>();
   function button(key: keyof ArtifactsLabels, run: () => void): HTMLButtonElement {
-    const b = ButtonBuilder().attr('type', 'button').text(labels[key]).build();
+    const b = ButtonBuilder()
+      .attr('type', 'button')
+      .text(labels[key] ?? '')
+      .build();
     b.dataset.action = key;
     b.addEventListener('click', () => {
       if (key !== 'discardChanges' && key !== 'cancel' && cancelConfirmation) {
@@ -81,6 +90,14 @@ export function createArtifactsView(options: {
     });
     buttons.add(b);
     return b;
+  }
+  function setBack(back: HTMLButtonElement, destination: 'conversation' | 'list'): void {
+    backDestination = destination;
+    labelViewBack(
+      back,
+      (destination === 'conversation' ? labels.backToConversation : labels.backToList) ?? labels.back,
+    );
+    header.prepend(back);
   }
   function draftContent(text: string) {
     const version = current?.versions.find(
@@ -109,7 +126,7 @@ export function createArtifactsView(options: {
             invalid: 'importHint',
           }[e.code] as keyof ArtifactsLabels)
         : 'failed';
-    status.textContent = labels[key];
+    status.textContent = labels[key] ?? labels.failed;
     if (e instanceof ArtifactError && (e.code === 'version-limit' || e.code === 'conflict')) {
       status.append(
         ' ',
@@ -165,6 +182,7 @@ export function createArtifactsView(options: {
     cancelConfirmation?.();
     cancelConfirmation = undefined;
     buttons.clear();
+    header.replaceChildren(heading);
     body.replaceChildren();
     status.textContent = '';
     heading.textContent = labels.title;
@@ -201,6 +219,7 @@ export function createArtifactsView(options: {
         void refresh();
       }),
     );
+    setBack(back, 'list');
     const title = View('input')
       .attr('type', 'text')
       .attr('maxlength', '200')
@@ -317,7 +336,7 @@ export function createArtifactsView(options: {
       .children(title, select, ...(source.hidden ? [text] : []), presentationHost, source, origin, actions)
       .build();
     if (presentation.kind !== 'text') form.insertBefore(actions, presentationHost);
-    body.append(back, form);
+    body.append(form);
     const applyButton = actions.querySelector<HTMLButtonElement>('[data-action=apply]')!;
     applyButton.hidden = !!a.versions.at(-1)!.payload && a.versions.at(-1)!.payload!.kind !== 'text';
     captureDraft = () =>
@@ -456,12 +475,15 @@ export function createArtifactsView(options: {
                   status.textContent = labels.saved;
                 });
               }),
+            );
+            setBack(
               button('back', () =>
                 discard(() => {
                   dirty = false;
                   void refresh();
                 }),
               ),
+              'list',
             );
             data.addEventListener('input', () => {
               dirty = true;
@@ -474,8 +496,8 @@ export function createArtifactsView(options: {
         ),
       );
 
-      if (options.onClose) body.append(button('back', options.onClose));
-      if (el.isConnected) body.querySelector('button')?.focus();
+      if (options.onClose) setBack(button('back', options.onClose), 'conversation');
+      if (el.isConnected) heading.focus();
     } catch (e) {
       if (!disposed) error(e);
     }
@@ -570,7 +592,12 @@ export function createArtifactsView(options: {
       if (sourceSummary) sourceSummary.textContent = labels.textField + ' · JSON';
       for (const b of buttons) {
         const key = b.dataset.action as keyof ArtifactsLabels;
-        if (!b.dataset.artifact) b.textContent = labels[key];
+        if (key === 'back') {
+          labelViewBack(
+            b,
+            (backDestination === 'conversation' ? labels.backToConversation : labels.backToList) ?? labels.back,
+          );
+        } else if (!b.dataset.artifact) b.textContent = labels[key] ?? '';
       }
       for (const option of body.querySelectorAll('option')) option.textContent = `${labels.version} ${option.value}`;
       const origin = body.querySelector('.agent-artifact-provenance');
@@ -594,6 +621,7 @@ export function createArtifactsView(options: {
       for (const settle of pendingSaves) settle('cancelled');
       ++generation;
       buttons.clear();
+      header.replaceChildren(heading);
       el.remove();
     },
     get current() {

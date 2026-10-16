@@ -1,3 +1,4 @@
+import { createViewHeader, labelViewBack } from './view-header';
 import { createTaskReceipt } from './task-receipt';
 import { createResultActions } from './result-actions';
 import { createWorkspaceNavigation } from './workspace-navigation';
@@ -3263,6 +3264,10 @@ export function createAgentPanel(
   });
   const { settingsHeading, modelActions, localCard, serviceCard, advanced, settingsHero, sourcePicker, offlineHint } =
     settingsView;
+  const settingsBack = document.createElement('button');
+  settingsBack.type = 'button';
+  settingsBack.addEventListener('click', () => showView('chat'));
+  settingsHero.replaceChildren(createViewHeader(settingsHeading, settingsBack));
   syncOfflineSettings = () => {
     settingsView.setOnline(navigator.onLine !== false);
     ggufUrl.hidden = navigator.onLine === false;
@@ -3338,7 +3343,11 @@ export function createAgentPanel(
     },
     onDelete: (id, trigger) => historyControls?.requestDelete(id, trigger),
   });
-  historyView.append(conversationList.el, historyControls.el);
+  const historyBack = document.createElement('button');
+  historyBack.type = 'button';
+  historyBack.addEventListener('click', () => showView('chat'));
+  const historyHeading = conversationList.el.querySelector('h2')!;
+  historyView.append(createViewHeader(historyHeading, historyBack), conversationList.el, historyControls.el);
   header.insertBefore(artifactsBtn, settingsBtn);
   header.insertBefore(historyBtn, settingsBtn);
   header.insertBefore(clearBtn, settingsBtn);
@@ -3396,6 +3405,8 @@ export function createAgentPanel(
   });
   const syncProductLabels = () => {
     settingsView.syncLabels();
+    labelViewBack(settingsBack, t('agentBackToChat'));
+    labelViewBack(historyBack, t('agentBackToChat'));
     sourceView.setLabels(sourcesLabels());
     artifactsView.setLabels(artifactLabels());
     artifactsView.setRefinementLabels(artifactWorkflowLabels());

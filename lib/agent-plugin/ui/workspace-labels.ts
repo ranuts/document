@@ -42,6 +42,8 @@ export function artifactLabels(): ArtifactsLabels {
     title: t('agentArtifactTitle'),
     empty: t('agentArtifactEmpty'),
     back: t('agentArtifactBack'),
+    backToConversation: t('agentBackToChat'),
+    backToList: t('agentArtifactBackToList'),
     titleField: t('agentArtifactTitleField'),
     textField: t('agentArtifactTextField'),
     version: t('agentArtifactVersion'),

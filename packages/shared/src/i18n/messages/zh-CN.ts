@@ -488,6 +488,7 @@ export const zhCN: I18nMessages = {
   agentArtifactTitle: '成果',
   agentArtifactEmpty: '将有用的结果保存在这里，在此设备编辑并保留版本。',
   agentArtifactBack: '返回',
+  agentArtifactBackToList: '返回成果列表',
   agentArtifactTitleField: '标题',
   agentArtifactTextField: '内容',
   agentArtifactVersion: '版本',
