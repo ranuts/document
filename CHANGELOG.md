@@ -9,6 +9,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- A failed download started while switching documents no longer leaves the
+  editor empty. Closing the editor still cancels an unfinished replacement.
 - Saving keeps edits made during conversion or writing protected. Further edits
   after a save reactivate the unsaved-changes warning and recovery snapshots.
 - Long document context no longer blocks a short assistant question. Partial
