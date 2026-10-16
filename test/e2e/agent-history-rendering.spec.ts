@@ -132,11 +132,19 @@ test('restores a long saved conversation and switches sessions with completed an
   await expect(page.locator('.cui-input')).toHaveValue('Next request');
   await page.locator('.agent-history-toggle').click();
   const history = page.locator('.agent-history-view');
-  const titleBox = await history.locator('.agent-history-heading').boundingBox();
+  const viewHeader = history.locator('.agent-view-header');
+  await expect(viewHeader.locator('.agent-history-heading')).toHaveCount(1);
+  const back = viewHeader.getByRole('button', { name: 'Back to conversation', exact: true });
+  await expect(back).toHaveCount(1);
+  const viewHeaderBox = await viewHeader.boundingBox();
+  const titleBox = await viewHeader.locator('.agent-history-heading').boundingBox();
+  const backBox = await back.boundingBox();
   const headerBox = await page.locator('.agent-runtime-panel .agent-panel-title').boundingBox();
-  expect(Math.abs(titleBox!.x - headerBox!.x)).toBeLessThanOrEqual(1);
+  expect(Math.abs(viewHeaderBox!.x - headerBox!.x)).toBeLessThanOrEqual(1);
   const rowBox = await history.locator('.agent-conversation-title').first().boundingBox();
-  expect(Math.abs(titleBox!.x - rowBox!.x)).toBeLessThanOrEqual(1);
+  expect(Math.abs(viewHeaderBox!.x - rowBox!.x)).toBeLessThanOrEqual(1);
+  // The owned title follows the compact Back target and the shared 8px gap.
+  expect(Math.abs(titleBox!.x - (backBox!.x + backBox!.width + 8))).toBeLessThanOrEqual(1);
   await page.locator('.agent-runtime-panel').screenshot({ path: test.info().outputPath('history-light.png') });
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.locator('.agent-runtime-panel').screenshot({ path: test.info().outputPath('history-dark.png') });
