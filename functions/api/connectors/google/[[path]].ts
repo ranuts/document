@@ -286,7 +286,8 @@ export async function handleGoogleConnector(request: Request, env: GoogleConnect
     const headers = { Authorization: `Bearer ${session.access}` };
     if (action === 'list') {
       const search = (url.searchParams.get('q') ?? '').trim();
-      if (search.length > 200 || /[\x00-\x1f]/u.test(search)) return json({ error: 'invalid_query' }, 400);
+      if (search.length > 200 || Array.from(search).some((character) => character.charCodeAt(0) < 32))
+        return json({ error: 'invalid_query' }, 400);
       const literal = search.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
       const upstream = new URL('https://www.googleapis.com/drive/v3/files');
       upstream.search = new URLSearchParams({
