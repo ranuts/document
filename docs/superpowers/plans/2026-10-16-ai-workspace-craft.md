@@ -39,10 +39,12 @@ Task 2 evidence: commit `8fceaae`; 235 focused unit tests, eight browser regress
 
 Files: connectors/reference-sources.ts, new ui/source-preview.ts, sources-view.ts, request-context.ts and every existing reference consumer; panel/message metadata; Google backend list; seven locales; focused unit/e2e.
 
-- [ ] Write failing tests for source search/preview, safe URIs and captured ids after removal, truncation and citation resolution without arbitrary links.
-- [ ] Add explicit local/discovered source search, read-only excerpt details and source limits. Add Drive q search and bounded MCP pagination/continuation with no automatic hidden fetch.
-- [ ] Carry source ids into bounded request excerpts and render-time metadata. Resolve clickable citations only against captured references; unknown ids stay plain text. Preserve original response for copy/export.
-- [ ] Verify offline, expired connection, canceled reads and all inference routes; browser source preview and source-linked answer; commit.
+- [x] Write failing tests for source search/preview, safe URIs and captured ids after removal, truncation and citation resolution without arbitrary links.
+- [x] Add explicit local/discovered source search, read-only excerpt details and source limits. Add Drive q search and bounded MCP pagination/continuation with no automatic hidden fetch.
+- [x] Carry source ids into bounded request excerpts and render-time metadata. Resolve clickable citations only against captured references; unknown ids stay plain text. Preserve original response for copy/export.
+- [x] Verify offline, expired connection, canceled reads and all inference routes; browser source preview and source-linked answer; commit.
+
+Task 3 evidence: commit `47f1c3a`; full 6,051 tests across 219 files, seven sources/artifacts browser cases, TypeScript/format/lint passed. Spec and quality reviews approved, including final per-response persistence and disclosure refinements; screenshots inspected.
 
 ### Task 4: Standalone document references
 
