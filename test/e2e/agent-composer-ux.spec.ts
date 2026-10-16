@@ -294,6 +294,7 @@ for (const width of [320, 360, 1280]) {
     await input.fill('Short draft');
     await expect(send).toBeEnabled();
     await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`composer-short-${width}.png`) });
+    await composer.screenshot({ path: testInfo.outputPath(`composer-only-${width}.png`) });
     await page.evaluate(() => document.documentElement.setAttribute('data-ran-theme', 'dark'));
     await expect(composer).toHaveCSS('box-shadow', 'none');
     await page.locator('.agent-sources-toggle').focus();
