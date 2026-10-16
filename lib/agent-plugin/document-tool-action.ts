@@ -1,3 +1,4 @@
+import { takeCompletedPaste, type CompletedPaste } from './completed-paste';
 import { textToHtml, wordContent } from './word-content';
 import { getPdfDocument } from './pdf-tools';
 import { readWordBodyText } from './word-text-read';
@@ -67,6 +68,7 @@ interface ScopeApi extends EditorApi {
     };
   };
   getCurrentPage?(): number;
+  goToPage?(page: number): void;
   asc_getActiveWorksheetIndex?(): number;
   asc_getWorksheetId?(index: number): string;
   wb?: { getWorksheet(): { model: SheetModel }; scrollToCell?(row: number, column: number): void };
@@ -115,6 +117,10 @@ function captureTarget(full: boolean): DocumentToolTarget {
   const points = history?.Points?.map((point) => ({ point, length: point.Items.length }));
   const tracked = Number.isInteger(historyIndex) && !!points;
   const logic = api.WordControl?.m_oLogicDocument;
+  const capturedSlide =
+    context.kind === 'slide' && Number.isInteger(context.page) && context.page! > 0
+      ? logic?.Slides?.[context.page! - 1]
+      : undefined;
   const controller = context.kind === 'slide' ? logic?.GetCurrentController?.() : undefined;
   const selectedObjects = controller?.selectedObjects?.slice();
   const selectedContent = controller?.getTargetDocContent?.();
@@ -270,7 +276,7 @@ function captureTarget(full: boolean): DocumentToolTarget {
     ...(context.kind === 'cell' && typeof api.wb?.scrollToCell === 'function'
       ? {
           locate: (plan: DocumentToolPlan) => {
-            if (!isCurrent(false)) throw new Error('agentPlanExpired');
+            if (!sameDocument()) throw new Error('agentPlanExpired');
             const destination =
               plan.tool === 'fill_series'
                 ? buildSeries(plan.input as unknown as SeriesInput).range
@@ -278,6 +284,15 @@ function captureTarget(full: boolean): DocumentToolTarget {
             const bounds = parseOfficeRange(destination);
             // Native viewport movement does not select or modify the range.
             api.wb!.scrollToCell!(bounds.r1, bounds.c1);
+          },
+        }
+      : {}),
+    ...(capturedSlide && typeof api.goToPage === 'function'
+      ? {
+          locate: () => {
+            const page = logic?.Slides?.indexOf(capturedSlide) ?? -1;
+            if (!sameDocument() || page < 0) throw new Error('agentPlanExpired');
+            api.goToPage!(page);
           },
         }
       : {}),
@@ -345,6 +360,15 @@ export class DocumentToolAction {
   readonly plan: DocumentToolPlan;
   readonly review?: ChangeReview;
   private consumed = false;
+  private receipt?: CompletedPaste;
+  get undo(): (() => boolean) | undefined {
+    return this.receipt?.available() ? () => this.receipt!.undo() : undefined;
+  }
+  dispose(): void {
+    this.receipt?.dispose();
+    this.receipt = undefined;
+  }
+
   private output: unknown;
   private continuation?: DocumentToolTarget;
   get continuationTarget(): DocumentToolTarget | undefined {
@@ -357,7 +381,7 @@ export class DocumentToolAction {
     if (!this.target.locate) return undefined;
     return () => {
       const owner = this.consumed ? this.continuation : this.target;
-      if (!owner?.isCurrent(false)) throw new Error('This proposal has expired. Generate a new proposal.');
+      if (!owner) throw new Error('This proposal has expired. Generate a new proposal.');
       owner.locate?.(this.plan);
     };
   }
@@ -398,6 +422,7 @@ export class DocumentToolAction {
     return !this.consumed && this.target.isCurrent(!this.plan.readOnly);
   }
   cancel(): void {
+    this.dispose();
     this.consumed = true;
   }
   async apply(signal?: AbortSignal): Promise<'sent' | 'verified'> {
@@ -406,17 +431,33 @@ export class DocumentToolAction {
     this.target.assertSupported?.(this.plan);
     this.consumed = true;
     this.output = await agentTools[this.plan.tool].execute(this.plan.input, signal);
-    const verified = await this.target.verify?.(this.plan);
+    this.receipt = takeCompletedPaste(this.output);
+    let verified: boolean | undefined;
+    try {
+      verified = await this.target.verify?.(this.plan);
+      signal?.throwIfAborted();
+    } catch (error) {
+      this.dispose();
+      throw error;
+    }
     signal?.throwIfAborted();
-    if (verified === false)
+    if (verified === false) {
+      this.dispose();
       throw new Error('The change could not be verified. Check the document and use Undo if needed.');
+    }
     if (
       verified === true ||
       (this.output && typeof this.output === 'object' && 'verified' in this.output && this.output.verified === true)
     ) {
-      this.continuation = this.target.captureAfterOperation?.(this.plan);
+      try {
+        this.continuation = this.target.captureAfterOperation?.(this.plan);
+      } catch (error) {
+        this.dispose();
+        throw error;
+      }
       return 'verified';
     }
+    this.dispose();
     return 'sent';
   }
 }

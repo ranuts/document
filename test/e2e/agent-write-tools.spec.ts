@@ -333,8 +333,15 @@ test.describe('agent document writes (real editor)', () => {
     });
     expect(fits).toBe(true);
     await page.screenshot({ path: testInfo.outputPath('review-record.png') });
-    await undo(page);
+    await expect(replacement.locator('.agent-plan-receipt-undo')).toBeVisible();
+    await replacement.locator('.agent-plan-receipt-undo').click();
+    await expect(replacement).toHaveAttribute('data-state', 'undone');
     await expect.poll(() => readWordText(page)).not.toContain('Final reviewed text');
+    await page.evaluate(() => {
+      const win = window.__ooFrames.editor() as unknown as { Asc: { editor: { Redo(): void } } };
+      win.Asc.editor.Redo();
+    });
+    await expect.poll(() => readWordText(page)).toContain('Final reviewed text');
     await expect(page.locator('.cui-msg-error')).toHaveCount(1);
     await expect(page.locator('.cui-msg-error')).toHaveAttribute(
       'data-source',
@@ -348,6 +355,18 @@ test.describe('agent document writes (real editor)', () => {
     expect(await readCell(page, 'B1')).toBe('');
     await confirmCellWrite(page, 'B1', 'agent wrote this');
     await expect.poll(() => readCell(page, 'B1'), { timeout: 30_000 }).toBe('agent wrote this');
+    const review = page.locator('.agent-plan-preview').last();
+    await page.evaluate(() => {
+      const win = window.__ooFrames.editor() as unknown as { Asc: { editor: { asc_findCell(cell: string): void } } };
+      win.Asc.editor.asc_findCell('D4');
+    });
+    await review.locator('.agent-plan-receipt-locate').click();
+    expect(
+      await page.evaluate(() => {
+        const win = window.__ooFrames.editor() as unknown as { Asc: { editor: { asc_getActiveRangeStr(): string } } };
+        return win.Asc.editor.asc_getActiveRangeStr();
+      }),
+    ).toBe('D4');
     await undo(page);
     await expect.poll(() => readCell(page, 'B1')).not.toBe('agent wrote this');
   });
@@ -554,7 +573,37 @@ test.describe('agent document writes (real editor)', () => {
     expect(await countSlides(page)).toBe(before);
     await review.locator('.agent-plan-apply').click();
     await expect.poll(() => countSlides(page)).toBe(before + 1);
-    await undo(page);
+    await expect(review).toHaveAttribute('data-state', 'verified');
+    await review.locator('.agent-plan-receipt-locate').click();
+    expect(
+      await page.evaluate(() => {
+        const win = window.__ooFrames.editor() as unknown as { Asc: { editor: { getCurrentPage(): number } } };
+        return win.Asc.editor.getCurrentPage();
+      }),
+    ).toBe(before);
+    await page.evaluate((index) => {
+      const win = window.__ooFrames.editor() as unknown as {
+        Asc: {
+          editor: {
+            WordControl: {
+              m_oLogicDocument: { shiftSlides(position: number, indices: number[], copy: boolean): void };
+            };
+            goToPage(page: number): void;
+          };
+        };
+      };
+      win.Asc.editor.WordControl.m_oLogicDocument.shiftSlides(0, [index], false);
+      win.Asc.editor.goToPage(1);
+    }, before);
+    await review.locator('.agent-plan-receipt-locate').click();
+    expect(
+      await page.evaluate(() => {
+        const win = window.__ooFrames.editor() as unknown as { Asc: { editor: { getCurrentPage(): number } } };
+        return win.Asc.editor.getCurrentPage();
+      }),
+    ).toBe(0);
+    await undo(page); // Undo the user's reorder.
+    await undo(page); // Undo the earlier slide addition.
     await expect.poll(() => countSlides(page)).toBe(before);
   });
 
@@ -566,4 +615,62 @@ test.describe('agent document writes (real editor)', () => {
     await undo(page);
     await expect.poll(() => countSlides(page)).toBe(before);
   });
+  for (const later of ['edit', 'Undo/Redo'])
+    test(`refuses a completed Word receipt after later ${later}`, async ({ page }) => {
+      await page.addInitScript(() =>
+        localStorage.setItem(
+          'agent-writing-endpoint',
+          JSON.stringify({
+            version: 1,
+            kind: 'loopback',
+            baseUrl: 'http://localhost:11434',
+            model: 'receipt-test',
+            preference: 'device-first',
+            localWritingConsent: false,
+          }),
+        ),
+      );
+      await page.route('http://localhost:11434/api/**', async (route) => {
+        if (route.request().url().endsWith('/tags')) {
+          await route.fulfill({ json: { models: [{ name: 'receipt-test' }] } });
+          return;
+        }
+        const request = route.request().postDataJSON();
+        const output = request.format?.properties?.task
+          ? { task: 'tools', language: 'en' }
+          : { tool: 'insert_text', input: { text: 'Owned paste' } };
+        await route.fulfill({
+          json: {
+            done: true,
+            done_reason: 'stop',
+            message: { content: JSON.stringify(taskProtocol(request, output)) },
+          },
+        });
+      });
+      await openEditorWithPanel(page, 'docx');
+      await page.locator('.agent-panel-settings-toggle').click();
+      await page.locator('.agent-panel-endpoint-connect').click();
+      await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
+      await page.locator('.agent-panel-settings-toggle').click();
+      await send(page, 'Insert exactly this plain text at the cursor: Owned paste');
+      const review = page.locator('.agent-plan-preview').last();
+      await review.locator('.agent-plan-apply').click();
+      await expect(review).toHaveAttribute('data-state', 'verified');
+      await expect(review.locator('.agent-plan-receipt-undo')).toBeVisible();
+      await page.evaluate((later) => {
+        const win = window.__ooFrames.editor() as unknown as {
+          Asc: { editor: { pluginMethod_InputText(text: string): void; Undo(): void; Redo(): void } };
+        };
+        if (later === 'edit') win.Asc.editor.pluginMethod_InputText(' User edit');
+        else {
+          win.Asc.editor.Undo();
+          win.Asc.editor.Redo();
+        }
+      }, later);
+      const before = await readWordText(page);
+      await review.locator('.agent-plan-receipt-undo').click();
+      await expect(review).toHaveAttribute('data-state', 'verified');
+      await expect(review.locator('.agent-plan-undo-feedback')).toContainText('editor');
+      expect(await readWordText(page)).toBe(before);
+    });
 });

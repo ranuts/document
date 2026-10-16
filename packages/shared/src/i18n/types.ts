@@ -270,6 +270,15 @@ export interface I18nMessages {
   agentReviewValue: string;
   agentCalculatedValue: string;
   agentUndoInEditor: string;
+  agentReceiptDetailsLimit: string;
+  agentChangesVerified: string;
+  agentChangesSent: string;
+  agentChangesFailed: string;
+  agentChangesCancelled: string;
+  agentUndoUnverified: string;
+  agentUndoChange: string;
+  agentChangeUndone: string;
+  agentUndoUnavailable: string;
   agentSlideTitleTooLong: string;
   agentSlideContentTooLong: string;
   agentSlidesAdded: string;

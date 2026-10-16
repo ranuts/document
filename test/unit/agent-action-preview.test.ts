@@ -718,7 +718,7 @@ it('keeps verified records compact with native Undo guidance and location access
   location!.click();
   expect(locate).toHaveBeenCalledOnce();
   expect(view.el.querySelector('.agent-plan-undo')?.textContent).toBe(
-    'Use Undo in the editor to restore the previous content.',
+    'Use editor Undo carefully; it may also undo later edits.',
   );
   expect(view.el.querySelector('details.agent-plan-record')?.hasAttribute('open')).toBe(false);
   view.dispose();
@@ -949,3 +949,70 @@ it.each(['complete', 'invalidate', 'hide'] as const)(
     expect(release).toHaveBeenCalledOnce();
   },
 );
+it('offers one local Undo receipt without turning a later refusal into a failed apply', async () => {
+  const view = new ActionPreview();
+  const dispose = vi.fn();
+  const undo = vi.fn(() => false);
+  const action = {
+    target: { label: 'DOCX', selectedText: '' },
+    plan: { tool: 'insert_text', input: { text: 'Draft' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    dispose,
+    undo,
+    apply: async () => 'verified' as const,
+  };
+  view.show(action);
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(view.el.dataset.state).toBe('verified'));
+  const button = view.el.querySelector<HTMLElement>('.agent-plan-receipt-undo');
+  expect(button).not.toBeNull();
+  button!.click();
+  expect(undo).toHaveBeenCalledOnce();
+  expect(view.el.dataset.state).toBe('verified');
+  expect(view.el.querySelector('.agent-plan-undo-feedback')?.textContent).toContain('editor');
+  view.dispose();
+  expect(dispose).toHaveBeenCalled();
+});
+it('keeps location failure separate from the verified success receipt', async () => {
+  const view = new ActionPreview();
+  view.show({
+    target: { label: 'Sheet', selectedText: '' },
+    plan: { tool: 'set_cell', input: { cell: 'B2', value: '1' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    apply: async () => 'verified',
+    locate: () => {
+      throw new Error('agentPlanExpired');
+    },
+  });
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(view.el.dataset.state).toBe('verified'));
+  const status = view.el.querySelector('[role="status"]')!.textContent;
+  view.el.querySelector<HTMLElement>('.agent-plan-receipt-locate')!.click();
+  expect(view.el.querySelector('[role="status"]')!.textContent).toBe(status);
+  expect(view.el.querySelector('.agent-plan-undo-feedback')?.textContent).toBeTruthy();
+  view.dispose();
+});
+it('reports uncertain native Undo separately and never retries it', async () => {
+  const view = new ActionPreview();
+  const undo = vi.fn(() => {
+    throw new Error('native failure');
+  });
+  view.show({
+    target: { label: 'DOCX', selectedText: '' },
+    plan: { tool: 'insert_text', input: { text: 'Draft' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    undo,
+    apply: async () => 'verified',
+  });
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(view.el.dataset.state).toBe('verified'));
+  const button = view.el.querySelector<HTMLElement>('.agent-plan-receipt-undo')!;
+  button.click();
+  button.click();
+  expect(undo).toHaveBeenCalledOnce();
+  expect(view.el.querySelector('.agent-plan-undo-feedback')?.textContent).toContain('could not be confirmed');
+  view.dispose();
+});
