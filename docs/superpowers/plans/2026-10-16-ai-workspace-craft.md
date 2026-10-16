@@ -26,10 +26,12 @@ Task 1 evidence: commits `b56be65`, `c32d423`; 215 ChatView/navigation tests, si
 
 Files: packages/chat-ui/src/types.ts/chat-view.ts/styles.ts; new lib/agent-plugin/ui/result-actions.ts; panel integration; seven locales; unit chat-view/result-actions; browser result hierarchy.
 
-- [ ] Test copy check receipt and save success/failure/cancel outcomes; do not claim saved after domain cancellation.
-- [ ] Test bounded host follow-ups that stage relevant draft text, never send and preserve an existing draft via a visible choice.
-- [ ] Implement optional message actions and truthful state labels with keyboard/IME access. Compute suggestions from known host task/result scope, not arbitrary response HTML.
-- [ ] Inspect one primary action, secondary text/icon actions, narrow layout and reduced motion. Verify and commit.
+- [x] Test copy check receipt and save success/failure/cancel outcomes; do not claim saved after domain cancellation.
+- [x] Test bounded host follow-ups that stage relevant draft text, never send and preserve an existing draft via a visible choice.
+- [x] Implement optional message actions and truthful state labels with keyboard/IME access. Compute suggestions from known host task/result scope, not arbitrary response HTML.
+- [x] Inspect one primary action, secondary text/icon actions, narrow layout and reduced motion. Verify and commit.
+
+Task 2 evidence: commit `8fceaae`; 235 focused unit tests, eight browser regressions plus final IME/preview browser recheck, TypeScript/lint/format passed. Spec and quality reviews approved; narrow light/dark screenshots inspected.
 
 ## Chunk 2: Understandable sources
 
