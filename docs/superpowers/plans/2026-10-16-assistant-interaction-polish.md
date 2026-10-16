@@ -15,3 +15,14 @@ Scope: panel request/readiness gates, queue view and its styles, history-list hi
 - [x] Review caller contracts and create a new PR from current main (PR #273 is already merged).
 
 Verification: 5,926 unit tests across 206 files passed with coverage; 15 browser regressions passed, followed by two additional browser runs asserting control geometry and transparent title/progress styling. Type/lint, format and production build passed. Inspected full editor screenshots at 320px in light/dark themes with secondary queue actions open. English UI and Chinese input remain independent.
+
+## Follow-up: reduce visual weight
+
+User confirmed that nested cards and outlined controls consume too much space. Follow the flat document/workspace direction: reserve a single input boundary, present requests and suggestions as unboxed rows, use typography and section spacing for hierarchy, and preserve a single emphasized apply action. Keep safety review, accessible focus and explicit secondary disclosures.
+
+- [x] Add browser assertions for transparent queue, draft and review surfaces; confirm existing cards fail.
+- [x] Remove outer/nested preview surfaces, queue tray, boxed welcome actions and secondary control borders. Keep useful content width and comfortable touch targets.
+- [x] Inspect real-editor light/dark, empty, queued, restored draft and review screenshots, including long content and narrow widths.
+- [ ] Run relevant browser/unit/type/format checks and append a commit to PR #274. Investigate any CI failures in the same PR.
+
+Follow-up verification: eight real-editor visual/interaction tests passed after flattening; 126 preview/chat/task-entry unit tests passed. Type/lint, format and build passed. The previously failing CI open-retry case passed in two independent local runs; retain its strict assertions and verify the next CI run. Also corrected welcome-action selector specificity and replaced separated focus rings with one contiguous input boundary.

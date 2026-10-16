@@ -75,6 +75,8 @@ for (const ext of ['docx', 'pptx'] as const) {
       await expect(input).toHaveValue('');
       await expect(input).toBeFocused();
       await page.getByRole('separator', { name: 'Resize AI panel' }).press('Home');
+      await expect(page.locator('.agent-request-queue')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+      await expect(page.locator('.agent-request-queue')).toHaveCSS('border-top-width', '0px');
       const stop = page.locator('.cui-send-stop');
       const sendSize = await send.boundingBox();
       const stopSize = await stop.boundingBox();
