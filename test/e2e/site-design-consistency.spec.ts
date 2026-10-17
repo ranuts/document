@@ -85,6 +85,7 @@ for (const scheme of ['light', 'dark'] as const) {
         expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThan(2);
         if (route === '/404.html') {
           const diagram = page.locator('.nf-win');
+          await expect(page.locator('.nf-bar i + i').first()).toHaveCSS('margin-left', '-6px');
           expect(await diagram.evaluate((el) => getComputedStyle(el).borderTopWidth)).toBe('1px');
           expect(await diagram.evaluate((el) => getComputedStyle(el).fontFamily)).toContain('Geist Mono');
           expect(await page.locator('.nf-net i').evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe(

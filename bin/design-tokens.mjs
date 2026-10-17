@@ -101,3 +101,10 @@ export function semanticLiterals(source) {
     .filter((match) => [...match[2].matchAll(/(-?\d+(?:\.\d+)?)px/g)].some((value) => Math.abs(Number(value[1])) > 1))
     .map((match) => `${match[1]}: ${match[2].trim()}`);
 }
+
+/** CSS functions cannot take a prefixed unary sign: negate their numeric value
+ * inside calc(), e.g. calc(-1 * var(--space)), instead of -var(--space).
+ */
+export function invalidTokenArithmetic(source) {
+  return [...clean(source).matchAll(/[+-](?:var|calc|clamp|min|max|env)\(/g)].map((match) => match[0]);
+}

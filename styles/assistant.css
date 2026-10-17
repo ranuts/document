@@ -1178,7 +1178,7 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text);
 }
 .agent-panel-settings > .agent-panel-note {
-  margin: -var(--ran-space-2) 0 0;
+  margin: calc(-1 * var(--ran-space-2)) 0 0;
 }
 
 /* Compact model settings: one source and one active configuration. */
