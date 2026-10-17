@@ -1,5 +1,5 @@
 import { clearActiveSource } from './active-document-source';
-import { stopAutosaveSession } from './history/autosave';
+import { clearDocumentSession } from './history/autosave';
 import { beginDocumentOpen, commitDocumentOpen, isMountedDocumentOpen } from './document-open';
 import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 import { handleDocumentOperation, loadEditorApi } from './converter';
@@ -134,7 +134,6 @@ async function openFile(file: File, readonly = false): Promise<void> {
   setDocmentObj({
     fileName: file.name,
     file,
-    url: URL.createObjectURL(file),
   });
   await handleDocumentOperation({
     fileName: file.name,
@@ -144,7 +143,7 @@ async function openFile(file: File, readonly = false): Promise<void> {
     isCurrent: opening.isCurrent,
   });
   if (!commitDocumentOpen(opening.id)) throw new DOMException('Document open superseded', 'AbortError');
-  stopAutosaveSession();
+  clearDocumentSession();
   await clearActiveSource();
   if (!isMountedDocumentOpen(opening.id)) throw new DOMException('Document open superseded', 'AbortError');
 }

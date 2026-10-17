@@ -43,3 +43,5 @@ export function startDocumentSession(input: { title: string; origin: HistoryOrig
   void beginAutosaveSession({ docId, title: input.title, origin: input.origin });
   return docId;
 }
+
+export { clearDocumentSession, getActiveDocumentId } from './autosave';

@@ -2,7 +2,8 @@ import 'fake-indexeddb/auto';
 import { IDBFactory } from 'fake-indexeddb';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 vi.mock('../../lib/history/autosave', () => ({
-  getAutosaveDocId: () => 'save-document',
+  getActiveDocumentId: () => 'save-document',
+  clearDocumentSession: vi.fn(),
   beginAutosaveSession: vi.fn(),
   isAutosaveEnabled: () => true,
   setAutosaveEnabled: vi.fn(),

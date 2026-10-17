@@ -94,7 +94,7 @@ describe('local open retains its reload source', () => {
     window.history.replaceState(null, '', '/editor?saved=old');
     convert.mockRejectedValueOnce(new Error('conversion failed'));
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    await openLocalFile(new File(['other'], 'Other.docx'));
+    await expect(openLocalFile(new File(['other'], 'Other.docx'))).rejects.toThrow('conversion failed');
     expect(await (await readActiveSource('old'))?.text()).toBe('original bytes');
     expect(new URL(location.href).searchParams.get('saved')).toBe('old');
   });
@@ -112,7 +112,7 @@ describe('local open retains its reload source', () => {
     await vi.waitFor(() => expect(read).toHaveBeenCalled());
     convert.mockRejectedValueOnce(new Error('conversion failed'));
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    await openLocalFile(new File(['failed'], 'Failed.docx'));
+    await expect(openLocalFile(new File(['failed'], 'Failed.docx'))).rejects.toThrow('conversion failed');
     finish(new Uint8Array([4, 5]).buffer);
     await first;
     const id = new URL(location.href).searchParams.get('saved');
@@ -150,7 +150,7 @@ describe('local open retains its reload source', () => {
         ),
       );
       finish(new TextEncoder().encode('original bytes').buffer);
-      await first;
+      await expect(first).rejects.toMatchObject({ name: 'AbortError' });
       expect(sessionStorage.getItem('document-active-source')).toBeNull();
     } finally {
       for (const [type, listener, options] of listeners.mock.calls) window.removeEventListener(type, listener, options);
@@ -172,7 +172,7 @@ describe('local open retains its reload source', () => {
     await openLocalFile(new File(['newer'], 'Newer.docx'));
     const currentId = new URL(location.href).searchParams.get('saved')!;
     finish(new TextEncoder().encode('original bytes').buffer);
-    await first;
+    await expect(first).rejects.toMatchObject({ name: 'AbortError' });
     expect(new URL(location.href).searchParams.get('saved')).toBe(currentId);
     expect(await (await readActiveSource(currentId))?.text()).toBe('newer');
   });

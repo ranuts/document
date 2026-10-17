@@ -167,7 +167,12 @@ void (async () => {
   // would produce, and it is the copy nobody else has.
   if (savedParam && !isEmbedded) {
     const { restoreSavedDocument } = await import('./lib/history/recovery');
-    if (await restoreSavedDocument(savedParam, { readonly: isReadonly })) return;
+    try {
+      if (await restoreSavedDocument(savedParam, { readonly: isReadonly })) return;
+    } catch {
+      // Opening already reported failure, or another entry replaced it.
+      return;
+    }
     // No snapshot yet (nothing was edited before the reload) or it expired:
     // fall through and open the same document again under the same id.
   }
@@ -206,7 +211,7 @@ void (async () => {
     cleaned.searchParams.delete('open');
     window.history.replaceState(null, '', cleaned);
     if (file) {
-      await openLocalFile(file, { historyId: savedParam || undefined });
+      await openLocalFile(file, { historyId: savedParam || undefined }).catch(() => {});
       return;
     }
     // Stale deep link (reload, bookmarked URL): nothing pending -- back to the landing.
