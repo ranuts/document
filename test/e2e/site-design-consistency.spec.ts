@@ -69,7 +69,9 @@ function contrast(foreground: string, background: string) {
 }
 
 for (const scheme of ['light', 'dark'] as const) {
-  test(`all page families keep a visible home destination and token density in ${scheme}`, async ({ page }) => {
+  test(`all page families keep a visible home destination and token density in ${scheme}`, async ({
+    page,
+  }, testInfo) => {
     test.setTimeout(90000);
     await page.emulateMedia({ colorScheme: scheme });
     for (const width of [1280, 390, 320]) {
@@ -80,7 +82,15 @@ for (const scheme of ['light', 'dark'] as const) {
         await expect(brand).toBeVisible();
         expect((await brand.boundingBox())!.width).toBeGreaterThan(20);
         await expect(brand).toHaveAttribute('href', '/');
+        if (route.startsWith('/history')) {
+          const empty = await page.locator('.history-empty').boundingBox();
+          const action = await page.locator('.history-empty-action').boundingBox();
+          expect(Math.abs(action!.x + action!.width / 2 - (empty!.x + empty!.width / 2))).toBeLessThanOrEqual(1);
+        }
         const header = page.locator('header.bar');
+        expect((await header.boundingBox())!.height).toBeLessThanOrEqual(width <= 390 ? 112 : 80);
+        if (route === '/embed-demo' && width === 320)
+          await header.screenshot({ path: testInfo.outputPath(`embed-header-${scheme}-320.png`) });
         expect(await header.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
         expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThan(2);
         if (route === '/404.html') {
@@ -109,6 +119,7 @@ test('all seven localized generated headers keep their localized accessible home
       expect((await brand.boundingBox())!.width).toBeGreaterThan(20);
       await expect(brand).toHaveAttribute('href', prefix ? `${prefix}/` : '/');
       expect(await page.locator('header.bar').evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
+      expect((await page.locator('header.bar').boundingBox())!.height).toBeLessThanOrEqual(112);
     }
   }
 });
@@ -182,6 +193,11 @@ test.describe('coarse pointers', () => {
             ? (await page.locator(selector).boundingBox())!.height
             : (await part(page, selector)).height;
         expect(height).toBeGreaterThanOrEqual(44);
+      }
+      if (route.startsWith('/history')) {
+        const empty = await page.locator('.history-empty').boundingBox();
+        const action = await page.locator('.history-empty-action').boundingBox();
+        expect(Math.abs(action!.x + action!.width / 2 - (empty!.x + empty!.width / 2))).toBeLessThanOrEqual(1);
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThan(2);
     }

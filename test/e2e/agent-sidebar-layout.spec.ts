@@ -7,6 +7,19 @@ for (const width of [320, 1280]) {
     await page.goto('/editor?new=docx&locale=en');
     await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
     await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+    const switchGeometry = await page.locator('.agent-onboarding .agent-enable-switch').evaluate((el) => {
+      const track = getComputedStyle(el);
+      const knob = getComputedStyle(el, '::before');
+      return {
+        height: el.getBoundingClientRect().height,
+        top: Number.parseFloat(track.paddingTop),
+        bottom: Number.parseFloat(track.paddingBottom),
+        knob: Number.parseFloat(knob.height),
+      };
+    });
+    expect(switchGeometry.top).toBe(3);
+    expect(switchGeometry.top).toBe(switchGeometry.bottom);
+    expect(switchGeometry.top + switchGeometry.knob + switchGeometry.bottom).toBe(switchGeometry.height);
     await page.locator('.agent-onboarding .agent-enable-switch').click();
     const panel = page.locator('.agent-runtime-panel');
     await expect(panel).toHaveAttribute('data-view', 'settings');

@@ -256,7 +256,7 @@ body {
   #landing-hero .brand {
     min-width: 0;
     flex: 0 0 auto;
-    max-width: 10ch;
+    max-width: 8ch;
   }
   #landing-hero .wordmark {
     overflow: hidden;
@@ -264,9 +264,13 @@ body {
     white-space: nowrap;
   }
   #landing-hero nav {
+    row-gap: calc(var(--ran-space-1) / 2);
     min-width: 0;
     flex-wrap: wrap;
     justify-content: flex-end;
+  }
+  #landing-hero nav a {
+    padding-inline: var(--ran-space-2);
   }
 }
 

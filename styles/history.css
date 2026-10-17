@@ -436,6 +436,7 @@
   font-size: var(--ran-text-copy-2);
 }
 .history-empty-action {
+  --ran-btn-align-self: center;
   margin-top: var(--ran-space-2);
 }
 .history-pager {
@@ -503,9 +504,9 @@
   .history-row-facts .fact-size {
     display: none;
   }
-  /* r-button's own padding indents a text button away from the column edge. */
-  .history-header-actions r-button::part(content),
-  .history-empty-action::part(content) {
+  /* Only the header's text action aligns to the column edge; empty-state
+     primary actions retain balanced horizontal padding. */
+  .history-header-actions r-button::part(content) {
     min-height: max(var(--app-control-page), var(--app-control-height));
     box-sizing: border-box;
     padding-left: 0;
