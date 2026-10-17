@@ -235,7 +235,8 @@ export function createModelCacheSettings(options: {
     }
   };
   cacheList.addEventListener('toggle', () => {
-    if (cacheList.open) void refreshCache();
+    // Native toggle events are queued and may settle after this panel is removed.
+    if (cacheList.isConnected && cacheList.open) void refreshCache();
   });
   const release = ranButton(t('agentReleaseMemory'), 'agent-release-memory');
   release.hidden = true;

@@ -13,6 +13,7 @@ import { readReceipt } from './read-receipt';
 import type { ReviewOutcome } from '../review-outcome';
 import { generateReadAnswer } from '../document-read-answer';
 import type { DocumentAgentToolOptions } from '../document-agent-tools';
+import { prepareAssistantOffline } from '../../assistant-offline';
 import { mountSpeechInput } from './speech-input';
 /**
  * Assistant sidebar product orchestration over {@link AgentChatController}.
@@ -22,8 +23,9 @@ import { mountSpeechInput } from './speech-input';
  * main panel is a clean chat; a toolbar (review-mode toggle + quote + clear); and
  * the reusable @ranuts/chat-ui ChatView. Form controls are ranui Web Components
  * built with the ranui `builder` (View/Div/... fluent factories). Context, model-cache settings and review controls have dedicated lifecycle
- * owners. This module coordinates request routes and delegates execution to
- * the controller, document-task modules and provider factory. Loaded after an explicit product opt-in.
+ * owners. Model configuration, destination policy, deterministic commands and
+ * workspace presentation each have a concrete owner. This module binds request
+ * lifetimes, review and conversation state to those owners. Loaded after an explicit product opt-in.
  */
 import 'ranui/button';
 import 'ranui/input';
@@ -31,9 +33,8 @@ import 'ranui/select';
 import 'ranui/checkbox';
 import { ButtonBuilder, Div, Label, Span, View, createEffect, signal } from 'ranui/builder';
 import { localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
-import { getLanguage, type I18nMessages, t } from '@ranuts/shared/i18n';
+import { getLanguage, t } from '@ranuts/shared/i18n';
 import { getReadonlyMode } from '../../onlyoffice/readonly';
-import { getEditorApi } from '../editor-bridge';
 import { mountReviewSettings } from './review-settings';
 import { createModelCacheSettings } from './model-cache-settings';
 import { mountPanelContext, syncPanelContext } from './panel-context';
@@ -45,27 +46,18 @@ import { agentTools } from '../tools';
 import { parseDirectDocumentIntent } from '../direct-intent';
 import { captureDocumentContext, resolveContextCommand } from '../document-context';
 import type { LLMMessage } from '@ranuts/agent-core/llm/types';
-import type { ProviderId } from '@ranuts/agent-core/llm/factory';
 import { DEFAULT_CPU_MODEL_URL, LocalInferenceProvider } from '@ranuts/agent-core/llm/local';
-import { DEFAULT_WEBLLM_MODEL, isModelCached, WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
+import { isModelCached, WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
 import type { LocalLLMProvider } from '@ranuts/agent-core/llm/types';
-import { resolveModelArtifactUrl } from '@ranuts/agent-core/llm/model-source';
 import { resolveTaskModel, type ModelTask } from '@ranuts/agent-core/llm/task-model';
-import { resolveWritingRoute, type WritingRoute } from '@ranuts/agent-core/llm/writing-route';
-import {
-  DEFAULT_LOOPBACK_ENDPOINT,
-  createEndpointProvider,
-  type WritingEndpointKind,
-} from '@ranuts/agent-core/llm/endpoint';
-import { clearEndpointKey, getEndpointKey, setEndpointKey } from '@ranuts/agent-core/llm/keys';
-import { readTaskModelPreferences } from './task-model-preferences';
+import type { WritingRoute } from '@ranuts/agent-core/llm/writing-route';
+import { DEFAULT_LOOPBACK_ENDPOINT, createEndpointProvider } from '@ranuts/agent-core/llm/endpoint';
+import { getEndpointKey } from '@ranuts/agent-core/llm/keys';
 import {
   ENDPOINT_SETTINGS_KEY,
   configuredEndpoint,
   isCloudEndpointKind,
   readEndpointSettings,
-  writeEndpointSettings,
-  type EndpointSettings,
 } from './endpoint-settings';
 import { WllamaProvider } from '@ranuts/agent-core/llm/wllama';
 import {
@@ -109,21 +101,13 @@ import { captureRequestContext, serializeRequestContext } from './request-contex
 import { classifyRequest, resolveRequestIntent, safeChatIntent } from './request-intent';
 import { createDocumentControllerBindings, createNativeDocumentRequest } from './controller-bindings';
 import { EndpointConnection } from './endpoint-lifecycle';
+import { createModelConfigurationForm, rememberedModelUrl } from './model-configuration-form';
+import { prepareDirectDocumentRequest } from './direct-document-request';
+import { createRequestRouting } from './request-routing';
+import { createPanelWorkspace, type PanelWorkspaceView } from './panel-workspace';
 import { createPanelSettingsView } from './settings-view';
 import { generateDocumentDraft } from './document-draft';
 import { listCachedGGUF, rememberModelSource } from '@ranuts/agent-core/llm/model-cache';
-
-/** ranui custom elements expose a `value` accessor (r-select / r-input). */
-type ValueEl = HTMLElement & { value: string };
-type InputEl = ValueEl & { placeholder: string };
-function rememberedModelUrl(value: string | null): string {
-  if (!value?.trim()) return '';
-  try {
-    return resolveModelArtifactUrl(value.trim());
-  } catch {
-    return '';
-  }
-}
 
 function compactSelect(
   className: string,
@@ -141,46 +125,6 @@ function compactSelect(
   select.value = value;
   return select;
 }
-
-const PROVIDER_LABEL_KEY: Record<ProviderId, keyof I18nMessages> = {
-  anthropic: 'agentProviderClaude',
-  openai: 'agentProviderOpenAI',
-  gemini: 'agentProviderGemini',
-  webllm: 'agentProviderLocal',
-  wllama: 'agentProviderWllama',
-  ollama: 'agentProviderOllama',
-  loopback: 'agentProviderLoopback',
-};
-// The loopback service is not a browser engine: it has its own settings block
-// rather than a slot in the provider dropdown.
-const PROVIDER_IDS: ProviderId[] = ['webllm', 'wllama'];
-
-/** An r-button (ranui builder) with a label and class. */
-const ranButton = (text: string, className: string): HTMLElement =>
-  View('r-button').class(className).text(text).build();
-
-/** Programmatic focus on a ranui host must retain keyboard activation. */
-const focusableAction = (button: HTMLElement): void => {
-  button.tabIndex = -1;
-  button.addEventListener('keydown', (event) => {
-    // The component's inner button already handles ordinary tab navigation.
-    if (event.defaultPrevented || button.hasAttribute('disabled') || !['Enter', ' '].includes(event.key)) return;
-    event.preventDefault();
-    button.click();
-  });
-};
-
-/** An r-select with r-option children and an initial value (ranui builder). */
-const ranSelect = (className: string, options: Array<{ value: string; label: string }>, value: string): ValueEl =>
-  View('r-select')
-    .class(className)
-    .attr('value', value)
-    .children(options.map((o) => View('r-option').attr('value', o.value).text(o.label).build()))
-    .build() as ValueEl;
-
-/** An r-input of the given type (ranui builder). */
-const ranInput = (className: string, type: string): InputEl =>
-  View('r-input').class(className).attr('type', type).build() as InputEl;
 
 /**
  * Singleton handle to the live panel, so external triggers (the AI button
@@ -355,9 +299,6 @@ export function createAgentPanel(
     .aria('label', t('agentSettings'))
     .attr('aria-expanded', 'false')
     .attr('aria-controls', 'agent-settings')
-    .on('click', () => {
-      showView(panel.dataset.view === 'settings' ? 'chat' : 'settings');
-    })
     .build();
   const closeBtn = ButtonBuilder()
     .class('agent-panel-close')
@@ -383,80 +324,58 @@ export function createAgentPanel(
   const header = Div().class('agent-panel-header').children(title, settingsBtn, closeBtn).build();
 
   // ── Settings (collapsed by default; opened via the gear) ──────────────────
-  const providerSelect = ranSelect(
-    'agent-panel-provider',
-    PROVIDER_IDS.map((id) => ({ value: id, label: t(PROVIDER_LABEL_KEY[id]) })),
-    localStorageGetItem('agent-panel-provider') === 'wllama' ? 'wllama' : 'webllm',
-  );
-  providerSelect.setAttribute('aria-label', t('agentProviderLabel'));
-
-  const ggufUrl = ranInput('agent-panel-gguf-url', 'text');
-  ggufUrl.placeholder = 'https://…/model.gguf';
-  ggufUrl.value = rememberedModelUrl(localStorageGetItem('agent-panel-gguf-url'));
-  const ggufFiles = document.createElement('input');
-  ggufFiles.type = 'file';
-  ggufFiles.multiple = true;
-  ggufFiles.accept = '.gguf';
-  ggufFiles.className = 'agent-panel-gguf-files';
-  const ggufChooseText = document.createElement('span');
-  const ggufChoose = document.createElement('label');
-  ggufChoose.className = 'agent-panel-gguf-choose';
-  ggufChoose.append(ggufChooseText, ggufFiles);
-  const ggufNames = document.createElement('span');
-  ggufNames.className = 'agent-panel-gguf-filenames';
-  ggufNames.setAttribute('aria-live', 'polite');
-  const syncFileChoice = () => {
-    ggufChooseText.textContent = t('agentChooseModelFiles');
-    ggufFiles.setAttribute('aria-label', t('agentChooseModelFiles'));
-    ggufNames.textContent = Array.from(ggufFiles.files ?? [])
-      .map((file) => file.name)
-      .join(', ');
-    ggufNames.title = ggufNames.textContent;
-  };
-  syncFileChoice();
-  const ggufLoad = ranButton(t('agentLoadModel'), 'agent-panel-gguf-load');
-  focusableAction(ggufLoad);
-  ggufLoad.addEventListener('click', () => void loadModel());
-  const ggufCpu = document.createElement('input');
-  ggufCpu.type = 'checkbox';
-  ggufCpu.checked = true;
-  ggufCpu.className = 'agent-panel-gguf-cpu';
-  const ggufStop = ranButton(t('agentStop'), 'agent-panel-gguf-stop');
-  ggufStop.setAttribute('type', 'text');
-  focusableAction(ggufStop);
-  ggufStop.hidden = true;
-  ggufStop.addEventListener('click', () => {
-    resetController();
-    note.textContent = t('agentStopped');
-    if (panel.dataset.view === 'settings') ggufLoad.focus();
-    else chat.focus();
-  });
-  const ggufRow = Div().class('agent-panel-gguf-row').children(ggufUrl, ggufChoose, ggufNames, ggufLoad).build();
-
-  // Public artifact URLs and API endpoint preferences; never store a key here.
-  const sourceInput = (className: string, placeholder: string): InputEl => {
-    const input = ranInput(className, 'text');
-    input.placeholder = placeholder;
-    input.setAttribute('aria-label', placeholder);
-    input.value =
-      localStorageGetItem(className) ||
-      (
-        {
-          'agent-local-model-id': import.meta.env.VITE_LOCAL_MODEL_ID,
-          'agent-local-model-url': import.meta.env.VITE_LOCAL_MODEL_URL,
-          'agent-local-model-lib': import.meta.env.VITE_LOCAL_MODEL_LIB_URL,
-        } as Record<string, string | undefined>
-      )[className] ||
-      '';
-    input.addEventListener('change', () => {
-      localStorageSetItem(className, input.value.trim());
+  const initialEndpointSettings = readEndpointSettings(localStorageGetItem(ENDPOINT_SETTINGS_KEY));
+  let selectedSource = configuredEndpoint(initialEndpointSettings) ? 'service' : 'local';
+  let cachedLocalModel = false;
+  const configuration = createModelConfigurationForm({
+    endpointSettings: initialEndpointSettings,
+    load: () => void loadModel(),
+    sourceChanged: () => resetController(),
+    stop: (loadControl) => {
       resetController();
-    });
-    return input;
-  };
-  const localModelId = sourceInput('agent-local-model-id', 'Custom MLC model ID (optional)');
-  const localModelUrl = sourceInput('agent-local-model-url', 'MLC model directory URL (/models/…)');
-  const localModelLib = sourceInput('agent-local-model-lib', 'Compatible model WASM URL (/models/…/model.wasm)');
+      note.textContent = t('agentStopped');
+      if (panel.dataset.view === 'settings') loadControl.focus();
+      else chat.focus();
+    },
+  });
+  const {
+    providerSelect,
+    ggufUrl,
+    ggufFiles,
+    ggufNames,
+    ggufLoad,
+    ggufCpu,
+    ggufStop,
+    ggufRow,
+    localModelId,
+    localModelUrl,
+    localModelLib,
+    modelSelect,
+    taskPreferences,
+    savedPreset,
+    loadBtn,
+    modelRow,
+    modelMemory,
+    loadStop,
+    note,
+    endpointKind,
+    endpointBaseUrl,
+    endpointModel,
+    endpointKey,
+    endpointConnect,
+    endpointStatus,
+    writeDestination,
+    writePreference,
+    localWritingConsent,
+    consentLabel,
+    endpointRow,
+    syncFileChoice,
+    endpointKindValue,
+    endpointKeySlot,
+    rememberEndpoint,
+    loadStoredKeyIntoForm,
+  } = configuration;
+  runtimeRow.append(loadStop, ggufStop, loadProgress);
   const localSource = () =>
     activeTaskModel().source !== 'default'
       ? {}
@@ -466,141 +385,11 @@ export function createAgentPanel(
         };
   const selectedLocalModel = () => activeTaskModel().binding.model;
 
-  // Local: model picker + load button
-  const modelSelect = ranSelect(
-    'agent-panel-model',
-    WEBLLM_MODELS.map((model) => ({
-      value: model.id,
-      label: model.label,
-    })),
-    DEFAULT_WEBLLM_MODEL,
-  );
-  const presetIds = WEBLLM_MODELS.map((model) => model.id);
-  const taskPreferences = readTaskModelPreferences(localStorageGetItem('agent-task-models'), presetIds);
-  const savedPreset = localStorageGetItem('agent-local-preset');
-  if (WEBLLM_MODELS.some((model) => model.id === savedPreset)) modelSelect.value = savedPreset!;
-  else if (savedPreset) localStorageSetItem('agent-local-preset', DEFAULT_WEBLLM_MODEL);
-  modelSelect.setAttribute('aria-label', t('agentModelLabel'));
-  const loadBtn = ranButton(t('agentLoadModel'), 'agent-panel-load');
-  focusableAction(loadBtn);
-  loadBtn.addEventListener('click', () => void loadModel());
-  const modelRow = Div().class('agent-panel-model-row').children(modelSelect, loadBtn).build();
-  const modelMemory = document.createElement('p');
-  modelMemory.className = 'agent-model-memory';
-  modelMemory.id = 'agent-model-memory';
-  modelSelect.setAttribute('aria-describedby', 'agent-model-memory');
-  const syncModelMemory = () => {
-    modelMemory.hidden = providerSelect.value === 'wllama';
-    const model = WEBLLM_MODELS.find((item) => item.id === modelSelect.value);
-    modelMemory.textContent = model ? t('agentModelMemory').replace('{memory}', (model.vramMB / 1000).toFixed(2)) : '';
-  };
-  modelSelect.addEventListener('change', syncModelMemory);
-  providerSelect.addEventListener('change', syncModelMemory);
-  syncModelMemory();
-  const loadStop = ranButton(t('agentStop'), 'agent-panel-load-stop');
-  loadStop.setAttribute('type', 'text');
-  focusableAction(loadStop);
-  loadStop.hidden = true;
-  loadStop.addEventListener('click', () => {
-    resetController();
-    note.textContent = t('agentStopped');
-    if (panel.dataset.view === 'settings') loadBtn.focus();
-    else chat.focus();
-  });
-  runtimeRow.append(loadStop, ggufStop, loadProgress);
-
-  // Detailed cache and download hints remain in settings; the compact runtime
-  // row exposes progress and cancellation in the main conversation view.
-  const note = Div().class('agent-panel-note').build();
-  note.setAttribute('role', 'status');
-
-  // ── Writing destination ──────────────────────────────────────────────────
-  // Writing into a document is high-stakes, and the browser-local engines never
-  // reached seven-language quality acceptance. The user may instead point the
-  // assistant at a model server: a loopback service on this machine (the text
-  // stays on the device) or a cloud endpoint with their own key (the selected
-  // text is sent there). The resolved destination is always shown, because the
-  // two are not equivalent and the choice belongs to the user.
-  let endpointSettings: EndpointSettings = readEndpointSettings(localStorageGetItem(ENDPOINT_SETTINGS_KEY));
-  let selectedSource = configuredEndpoint(endpointSettings) ? 'service' : 'local';
-  let cachedLocalModel = false;
-  const endpointKind = ranSelect(
-    'agent-endpoint-kind',
-    [
-      { value: 'loopback', label: t('agentEndpointLoopback') },
-      { value: 'openai-compatible', label: t('agentEndpointOpenAICompatible') },
-      { value: 'anthropic', label: t('agentEndpointAnthropic') },
-      { value: 'gemini', label: t('agentEndpointGemini') },
-    ],
-    endpointSettings.kind,
-  );
-  endpointKind.setAttribute('aria-label', t('agentEndpointKind'));
-  const endpointBaseUrl = ranInput('agent-panel-endpoint-url', 'text');
-  endpointBaseUrl.value =
-    endpointSettings.baseUrl || (endpointSettings.kind === 'loopback' ? DEFAULT_LOOPBACK_ENDPOINT : '');
-  endpointBaseUrl.placeholder =
-    endpointSettings.kind === 'loopback' ? DEFAULT_LOOPBACK_ENDPOINT : 'https://api.example.com/v1';
-  endpointBaseUrl.setAttribute('aria-label', t('agentEndpointUrl'));
-  const endpointModel = ranInput('agent-panel-endpoint-model', 'text');
-  endpointModel.value = endpointSettings.model;
-  endpointModel.placeholder = 'qwen3:8b';
-  endpointModel.setAttribute('aria-label', t('agentEndpointModel'));
-  const endpointKey = ranInput('agent-panel-endpoint-key', 'password');
-  endpointKey.placeholder = t('agentEndpointKey');
-  endpointKey.setAttribute('aria-label', t('agentEndpointKey'));
-  const endpointConnect = ranButton(t('agentEndpointConnect'), 'agent-panel-endpoint-connect');
-  const endpointStatus = Span()
-    .class('agent-panel-endpoint-status')
-    .attr('role', 'status')
-    .id('agent-endpoint-status')
-    .build();
-  for (const control of [endpointKind, endpointBaseUrl, endpointModel, endpointKey])
-    control.setAttribute('aria-describedby', 'agent-endpoint-status');
-  const writeDestination = Span().class('agent-panel-write-destination').attr('role', 'status').build();
-  const writePreference = ranSelect(
-    'agent-write-preference',
-    [
-      { value: 'device-first', label: t('agentWritePreferDevice') },
-      { value: 'remote-first', label: t('agentWritePreferRemote') },
-    ],
-    endpointSettings.preference,
-  );
-  writePreference.setAttribute('aria-label', t('agentWritePreference'));
-  const localWritingConsent = document.createElement('input');
-  localWritingConsent.type = 'checkbox';
-  localWritingConsent.className = 'agent-panel-local-writing';
-  localWritingConsent.checked = endpointSettings.localWritingConsent;
-  const consentLabel = document.createElement('label');
-  consentLabel.className = 'agent-panel-local-writing-label';
-  consentLabel.append(localWritingConsent, t('agentLocalWritingConsent'));
-  const endpointRow = Div()
-    .class('agent-panel-endpoint')
-    .children(
-      Span().class('agent-panel-endpoint-title').text(t('agentWriteDestinationTitle')).build(),
-      endpointKind,
-      endpointBaseUrl,
-      endpointModel,
-      endpointKey,
-      endpointConnect,
-      endpointStatus,
-      writePreference,
-      writeDestination,
-      consentLabel,
-    )
-    .build();
-
   const settings = Div()
     .class('agent-panel-settings agent-panel-settings-hidden')
     .id('agent-settings')
     .children(providerSelect, modelRow, ggufRow, endpointRow)
     .build();
-  settings.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || event.defaultPrevented || event.isComposing || event.keyCode === 229) return;
-    event.stopPropagation();
-    showView('chat');
-    settingsBtn.focus();
-  });
-
   // ── Compose actions (mounted into ChatView's slot above the input) ────────
   const reviewCheck = View('r-checkbox').build();
   const reviewText = Span().text(t('agentReviewMode')).build();
@@ -694,7 +483,7 @@ export function createAgentPanel(
       if (
         !!webllmProvider?.isReady() ||
         (!!endpointConnection.current?.isReady() &&
-          (endpointSettings.kind === 'loopback' || navigator.onLine !== false))
+          (configuration.endpointSettings.kind === 'loopback' || navigator.onLine !== false))
       )
         return true;
       const context = captureDocumentContext();
@@ -705,7 +494,7 @@ export function createAgentPanel(
     },
     getSendPreparation: () => {
       if (!enabled || runtimeCleanupFailed) return;
-      const endpoint = configuredEndpoint(endpointSettings);
+      const endpoint = configuredEndpoint(configuration.endpointSettings);
       if (
         (selectedSource === 'service' || endpointConnection.current?.isReady()) &&
         endpoint &&
@@ -787,7 +576,7 @@ export function createAgentPanel(
     if (endpointConnection.pending || modelLoading || runtimeCleanup || cacheBusy || !enabled) return;
     if (
       navigator.onLine === false &&
-      ((selectedSource === 'service' && endpointSettings.kind !== 'loopback') ||
+      ((selectedSource === 'service' && configuration.endpointSettings.kind !== 'loopback') ||
         (selectedSource === 'local' &&
           !(currentProvider() === 'webllm' && cachedLocalModel) &&
           !webllmProvider?.isReady() &&
@@ -804,7 +593,7 @@ export function createAgentPanel(
       return;
     }
     if (selectedSource === 'service') {
-      const endpoint = configuredEndpoint(endpointSettings);
+      const endpoint = configuredEndpoint(configuration.endpointSettings);
       if (endpoint && (!isCloudEndpointKind(endpoint.kind) || getEndpointKey(endpointKeySlot(endpoint.kind))))
         void connectEndpoint();
       else showView('settings');
@@ -1187,67 +976,29 @@ export function createAgentPanel(
   // Independent of the browser-local lifecycle: switching or unloading a browser
   // model must not disconnect a writing endpoint the user deliberately connected.
   const endpointConnection = new EndpointConnection(() => syncRuntimeStatus());
-  const endpointKindValue = (): WritingEndpointKind => endpointKind.value as WritingEndpointKind;
-  const endpointKeySlot = (kind: WritingEndpointKind): string =>
-    kind === 'openai-compatible' ? endpointBaseUrl.value.trim() : kind;
-  const rememberEndpoint = (): void => {
-    const next: EndpointSettings = {
-      kind: endpointKindValue(),
-      baseUrl: endpointBaseUrl.value.trim(),
-      model: endpointModel.value.trim(),
-      preference: writePreference.value === 'remote-first' ? 'remote-first' : 'device-first',
-      localWritingConsent: localWritingConsent.checked,
-    };
-    endpointSettings = next;
-    try {
-      localStorageSetItem(ENDPOINT_SETTINGS_KEY, writeEndpointSettings(next));
-    } catch {
-      // An endpoint the route would refuse is never persisted.
-    }
-    if (isCloudEndpointKind(next.kind)) {
-      const slot = endpointKeySlot(next.kind);
-      // No address yet means no slot to address; the key is simply not stored.
-      // Clearing the field removes the stored key: a secret the user cannot
-      // delete is worse than one they have to retype.
-      if (slot) {
-        if (endpointKey.value.trim()) setEndpointKey(slot, endpointKey.value.trim());
-        else clearEndpointKey(slot);
-      }
-    }
-  };
-  const useEndpointForChat = (): boolean => {
-    if (!endpointConnection.current?.isReady() || (endpointSettings.kind !== 'loopback' && navigator.onLine === false))
-      return false;
-    return (
-      endpointSettings.kind === 'loopback' ||
-      endpointSettings.preference === 'remote-first' ||
-      !webllmProvider?.isReady()
-    );
-  };
-  const resolveRoute = (): WritingRoute => {
-    const endpoint = endpointConnection.current?.isReady() ? configuredEndpoint(endpointSettings) : null;
-    return resolveWritingRoute({
-      loopback: endpoint?.kind === 'loopback' ? endpoint : null,
-      remote: endpoint && endpoint.kind !== 'loopback' ? endpoint : null,
-      preference: endpointSettings.preference,
-      // Offline the only workable destinations are on this device, so a cloud
-      // endpoint is dropped here rather than attempted and then failed.
-      offline: navigator.onLine === false,
-      localWritingConsent: localWritingConsent.checked,
-      local: { backend: currentProvider(), model: selectedLocalModel() },
-    });
-  };
+  const routing = createRequestRouting(() => ({
+    settings: configuration.endpointSettings,
+    endpointReady: !!endpointConnection.current?.isReady(),
+    localReady: !!webllmProvider?.isReady(),
+    offline: navigator.onLine === false,
+    localWritingConsent: localWritingConsent.checked,
+    local: { backend: currentProvider(), model: selectedLocalModel() },
+  }));
+  const useEndpointForChat = routing.useEndpointForChat;
+  const resolveRoute = routing.writingRoute;
   const syncWriteDestination = (): void => {
     writeDestination.hidden = false;
     if (writingSelect.value === 'chat' || writingSelect.value === 'tools') {
       const endpoint = useEndpointForChat();
       const ready = endpoint || !!webllmProvider?.isReady();
       const where =
-        endpoint && endpointSettings.kind !== 'loopback'
+        endpoint && configuration.endpointSettings.kind !== 'loopback'
           ? 'agentWriteDestinationRemote'
           : 'agentWriteDestinationDevice';
       const unavailable =
-        endpointConnection.current?.isReady() && endpointSettings.kind !== 'loopback' && navigator.onLine === false;
+        endpointConnection.current?.isReady() &&
+        configuration.endpointSettings.kind !== 'loopback' &&
+        navigator.onLine === false;
       writeDestination.hidden = !ready && !unavailable;
       writeDestination.textContent = `${t('agentWriteDestinationTitle')}: ${t(ready ? where : unavailable ? 'agentWriteDestinationOfflineUnavailable' : 'agentWriteNeedsDestination')}`;
       return;
@@ -1263,7 +1014,9 @@ export function createAgentPanel(
     if (!route || route.kind === 'blocked') {
       // "not configured" would be false when a cloud endpoint is configured but
       // cannot be used right now; say what is actually configured.
-      const configured = endpointConnection.current?.isReady() ? configuredEndpoint(endpointSettings) : null;
+      const configured = endpointConnection.current?.isReady()
+        ? configuredEndpoint(configuration.endpointSettings)
+        : null;
       writeDestination.hidden = !configured;
       if (configured && configured.kind !== 'loopback')
         writeDestination.textContent = `${title}: ${t('agentWriteDestinationOfflineUnavailable')} · ${configured.model}`;
@@ -1272,14 +1025,6 @@ export function createAgentPanel(
     }
     const where = route.dataPath === 'device' ? t('agentWriteDestinationDevice') : t('agentWriteDestinationRemote');
     writeDestination.textContent = `${title}: ${where}${offlineNote}`;
-  };
-  // Filling the key field is a deliberate act (mount, or a different endpoint
-  // kind). Rendering status must not do it: it would overwrite a key the user is
-  // in the middle of typing, before it has been stored.
-  const loadStoredKeyIntoForm = (): void => {
-    const kind = endpointKindValue();
-    const slot = isCloudEndpointKind(kind) ? endpointKeySlot(kind) : '';
-    endpointKey.value = slot ? (getEndpointKey(slot) ?? '') : '';
   };
   const syncEndpointForm = (status = ''): void => {
     const kind = endpointKindValue();
@@ -1334,7 +1079,7 @@ export function createAgentPanel(
     let failure = '';
     try {
       rememberEndpoint();
-      const endpoint = configuredEndpoint(endpointSettings);
+      const endpoint = configuredEndpoint(configuration.endpointSettings);
       if (!endpoint) throw new Error('Incomplete writing endpoint');
       const stored = isCloudEndpointKind(kind) ? getEndpointKey(endpointKeySlot(kind)) : undefined;
       const connected = await endpointConnection.connect(() =>
@@ -1438,7 +1183,7 @@ export function createAgentPanel(
     // The runtime row already announces loading and offers cancellation.
     readiness.hidden = !reason || modelLoading;
     const waiting = modelLoading || !!endpointConnection.pending || !!runtimeCleanup || cacheBusy;
-    const endpoint = configuredEndpoint(endpointSettings);
+    const endpoint = configuredEndpoint(configuration.endpointSettings);
     const canReconnect = !!(
       endpoint &&
       (!offline || endpoint.kind === 'loopback') &&
@@ -1573,7 +1318,7 @@ export function createAgentPanel(
       note.textContent = t('agentModelCleanupFailed');
       return;
     }
-    if (currentProvider() !== 'webllm' || modelLoading) return;
+    if (selectedSource !== 'local' || currentProvider() !== 'webllm' || modelLoading) return;
     if (webllmProvider?.isReady()) {
       note.textContent = t('agentModelLoaded');
       return;
@@ -1701,6 +1446,7 @@ export function createAgentPanel(
         controller?.dispose();
         localProviderKey = 'wllama';
         webllmProvider ??= new WllamaProvider({
+          prepareRuntimeAssets: prepareAssistantOffline,
           generation: generationOptions,
           modelUrl: ggufUrl.value.trim(),
           modelFiles: Array.from(ggufFiles.files ?? []),
@@ -1725,6 +1471,7 @@ export function createAgentPanel(
         if (!webllmProvider || localProviderKey !== kind) {
           localProviderKey = kind;
           webllmProvider = new LocalInferenceProvider({
+            prepareRuntimeAssets: prepareAssistantOffline,
             generation: generationOptions,
             webllm: {
               model: selectedLocalModel(),
@@ -1826,7 +1573,7 @@ export function createAgentPanel(
             ...localSource(),
           });
         syncSidebar();
-        void refreshCache();
+        if (currentProvider() === 'webllm' || cacheList.open) void refreshCache();
       }
     } catch (error) {
       if (generation === controllerGeneration && loading === webllmProvider) {
@@ -2139,85 +1886,16 @@ export function createAgentPanel(
           directAbort = new AbortController();
           planning = directAbort;
 
-          if (!requestTarget?.isCurrent(false)) throw new Error(t('agentPlanExpired'));
-          const readOnly =
-            (intent.kind === 'sum_range' && !intent.target) ||
-            (intent.kind === 'slide' && intent.action === 'navigate');
-          const directTarget = readOnly ? requestTarget : (requestTarget.prepareWrite?.() ?? requestTarget);
-          if (!directTarget.isCurrent(!readOnly)) throw new Error(t('agentPlanExpired'));
-          if (intent.kind === 'write_reply') {
-            if (!answer.trim()) throw new Error('agentNoCompletedAnswer');
-            if (directTarget.context.kind !== 'word') throw new Error(t('agentWordOnly'));
-            if (intent.requireSelection && !directTarget.selectedText.trim()) throw new Error(t('agentNoSelection'));
-          }
-          if (
-            intent.kind === 'align' &&
-            /当前段落|current paragraph/i.test(trimmed) &&
-            getEditorApi()?.pluginMethod_GetSelectedText().trim()
-          )
-            throw new Error('agentParagraphSelectionConflict');
+          const directRequest = prepareDirectDocumentRequest(intent, trimmed, requestTarget, answer);
           if (!accept()) return owned('stopped');
           directAccepted = true;
           appendTurn({ role: 'user', text: trimmed });
-          let name: string;
-          let input: Record<string, unknown>;
-          let result: unknown;
-          if (intent.kind === 'write_reply') {
-            const target = directTarget;
-            name = 'insert_text';
-            input = { text: answer, format: 'markdown' };
-            const action = new DocumentToolAction(target, { tool: 'insert_text', input, readOnly: false });
-            try {
-              result = { outcome: await action.apply(directAbort.signal) };
-            } finally {
-              action.dispose();
-            }
-          } else if (intent.kind === 'sum_range' || intent.kind === 'sort_range' || intent.kind === 'slide') {
-            name = intent.kind === 'slide' ? 'slide_action' : intent.kind;
-            const { kind: _kind, ...parameters } = intent;
-            input = parameters;
-            result = await agentTools[name].execute(input, directAbort.signal);
-          } else {
-            name = intent.kind === 'bold' ? 'set_bold' : 'set_paragraph_alignment';
-            input = intent.kind === 'bold' ? { enabled: intent.enabled } : { alignment: intent.alignment };
-            result = await agentTools[name].execute(input, directAbort.signal);
-          }
-          directAbort.signal.throwIfAborted();
-          if (intent.kind !== 'write_reply' && (result as { verified?: unknown } | undefined)?.verified !== true)
-            throw new Error(t('agentPlanUnverified'));
+          const result = await directRequest.execute(directAbort.signal);
           if (revision !== conversationRevision || directGeneration !== controllerGeneration)
             return owned('superseded');
-          directStatus =
-            intent.kind === 'write_reply'
-              ? (result as { outcome?: string }).outcome === 'verified'
-                ? 'success'
-                : 'failed'
-              : 'success';
-          const id = `direct-${crypto.randomUUID()}`;
-          messages.push(
-            { role: 'assistant', content: [{ type: 'tool_use', id, name, input }] },
-            { role: 'user', content: [{ type: 'tool_result', toolUseId: id, content: JSON.stringify(result) }] },
-          );
-          if (intent.kind === 'sum_range' && !intent.target)
-            messages.push({
-              role: 'assistant',
-              content: `${intent.range}: ${(result as { sum: number }).sum}`,
-              hostGuidance: 'tool',
-            });
-          if (revision === conversationRevision)
-            appendTurn({
-              role: 'tool',
-              text:
-                intent.kind === 'sum_range' && !intent.target
-                  ? `${intent.range}: ${(result as { sum: number }).sum}`
-                  : intent.kind === 'slide' && intent.action === 'navigate'
-                    ? chinese
-                      ? `已切换到第 ${intent.page} 页幻灯片`
-                      : `Opened slide ${intent.page}`
-                    : intent.kind === 'write_reply' && (result as { outcome?: string }).outcome !== 'verified'
-                      ? t('agentPlanApplied')
-                      : t('agentPlanVerified'),
-            });
+          directStatus = result.status;
+          messages.push(...result.messages);
+          if (revision === conversationRevision) appendTurn(result.turn);
         }
       } catch (error) {
         const stopped = error instanceof Error && error.name === 'AbortError';
@@ -2251,19 +1929,10 @@ export function createAgentPanel(
     // serves the writing tasks, the fixed tool phrases need no model at all, and
     // chat or an open-ended tool request still does. Asking this is what keeps a
     // model download from standing in front of work that would never use it.
-    const localModelNeeded = ((): boolean => {
-      if (writingSelect.value === 'tools')
-        return !useEndpointForChat() && !isModelFreeToolRequest(text, captureDocumentContext());
-      if (!proposalMode)
-        return (
-          !endpointConnection.current?.isReady() || (endpointSettings.kind !== 'loopback' && navigator.onLine === false)
-        );
-      try {
-        return resolveRoute().kind === 'local';
-      } catch {
-        return false;
-      }
-    })();
+    const localModelNeeded = routing.needsLocalModel(
+      writingSelect.value as ModelTask,
+      isModelFreeToolRequest(text, captureDocumentContext()),
+    );
     if (
       localModelNeeded &&
       (currentProvider() === 'wllama' || currentProvider() === 'webllm') &&
@@ -3098,24 +2767,10 @@ export function createAgentPanel(
     syncRuntimeStatus();
     settingsBtn.title = t('agentSettings');
     settingsBtn.setAttribute('aria-label', t('agentSettings'));
-    providerSelect.setAttribute('aria-label', t('agentProviderLabel'));
-    modelSelect.setAttribute('aria-label', t('agentModelLabel'));
+    configuration.syncLabels();
     closeBtn.title = t('agentClose');
     closeBtn.setAttribute('aria-label', t('agentClose'));
-    const selected = providerSelect.value;
-    for (const opt of providerSelect.querySelectorAll('r-option')) {
-      opt.textContent = t(PROVIDER_LABEL_KEY[(opt.getAttribute('value') as ProviderId) ?? 'anthropic']);
-    }
-    providerSelect.setAttribute('value', selected); // nudge the closed label to retranslate
-    syncFileChoice();
-    loadStop.textContent = t('agentStop');
-    ggufStop.textContent = t('agentStop');
     loadProgress.setAttribute('aria-label', t('agentPreparing'));
-    for (const opt of modelSelect.querySelectorAll('r-option')) {
-      const model = WEBLLM_MODELS.find((m) => m.id === opt.getAttribute('value'));
-      if (model) opt.textContent = model.label;
-    }
-    syncModelMemory();
     reviewText.textContent = t('agentReviewMode');
     reviewCheck.setAttribute('aria-label', t('agentReviewMode'));
     clearBtn.title = t('agentNewConversation');
@@ -3183,7 +2838,7 @@ export function createAgentPanel(
       runtimeCleanup ||
       cacheBusy ||
       modelLoading ||
-      (selectedSource === 'service' && endpointSettings.kind !== 'loopback' && navigator.onLine === false)
+      (selectedSource === 'service' && configuration.endpointSettings.kind !== 'loopback' && navigator.onLine === false)
         ? undefined
         : selectedSource === 'service'
           ? endpointConnection.current
@@ -3204,7 +2859,6 @@ export function createAgentPanel(
     error: displayError,
   });
   invalidateArtifactWorkflow = () => artifactsView.cancelPending();
-  artifactsBtn.addEventListener('click', () => showView(panel.dataset.view === 'artifacts' ? 'chat' : 'artifacts'));
   window.addEventListener('pagehide', (event) => {
     if (!event.persisted) artifactsView.dispose();
   });
@@ -3229,7 +2883,6 @@ export function createAgentPanel(
       sourcesBtn.textContent = `${t('agentSourcesSources')}${referenceSources.list().length ? ` · ${referenceSources.list().length}` : ''}`;
     },
   });
-  sourcesBtn.addEventListener('click', () => showView(panel.dataset.view === 'sources' ? 'chat' : 'sources'));
   chat.actionsEl.prepend(sourcesBtn);
   chat.contextEl.append(sourceSummary);
   window.addEventListener('pagehide', (event) => {
@@ -3278,6 +2931,10 @@ export function createAgentPanel(
     settingsView.setSource(selectedSource);
     cacheList.hidden = sourcePicker.value !== 'local';
     note.hidden = sourcePicker.value !== 'local';
+    if (selectedSource === 'local') {
+      void updateLocalHint();
+      if (currentProvider() === 'webllm' || cacheList.open) void refreshCache();
+    }
     syncRuntimeStatus();
   };
   sourcePicker.addEventListener('change', syncSource);
@@ -3308,7 +2965,6 @@ export function createAgentPanel(
   const refreshCache = modelCacheSettings.refresh;
   modelActions.append(modelCacheSettings.release);
   syncSource();
-  void refreshCache();
   settings.replaceChildren(settingsHero, sourcePicker, offlineHint, localCard, serviceCard, cacheList, note, advanced);
   const disableRow = document.createElement('div');
   disableRow.className = 'agent-enable-row';
@@ -3353,56 +3009,35 @@ export function createAgentPanel(
   header.insertBefore(clearBtn, settingsBtn);
 
   chat.el.append(writeDestination);
-  function showView(view: 'chat' | 'settings' | 'history' | 'sources' | 'artifacts'): void {
-    speech?.close();
-    if (view !== 'chat') resultActions.cancel();
-    if (view !== 'artifacts') artifactsView.cancelPending();
-    const leavingChat = panel.dataset.view === 'chat' && view !== 'chat';
-    if (leavingChat) navigation.capture(displayedConversationId);
-    if (view === 'history') rememberDraft();
-    viewRevision++;
-    panel.dataset.view = view;
-    if (view === 'settings') modelRow.insertBefore(runtimeRow, modelActions);
-    else panel.insertBefore(runtimeRow, settings);
-    settings.classList.toggle('agent-panel-settings-hidden', view !== 'settings');
-    chat.el.hidden = view !== 'chat';
-    historyView.hidden = view !== 'history';
-    sourceView.el.hidden = view !== 'sources';
-    artifactsView.el.hidden = view !== 'artifacts';
-    artifactsBtn.setAttribute('aria-expanded', String(view === 'artifacts'));
-    if (view === 'artifacts') void artifactsView.refresh();
-    sourcesBtn.setAttribute('aria-expanded', String(view === 'sources'));
-    syncHistoryActivity();
-    settingsBtn.setAttribute('aria-expanded', String(view === 'settings'));
-    syncRuntimeStatus();
-    historyBtn.setAttribute('aria-expanded', String(view === 'history'));
-    if (!open) return;
-    if (view === 'settings') settingsHeading.focus();
-    else if (view === 'history') conversationList?.focus();
-    else if (view === 'sources') sourceView.focus();
-    else if (view === 'artifacts') artifactsBtn.focus();
-    else if (!navigation.restore(displayedConversationId, true)) chat.focus();
-  }
-  for (const [element, trigger] of [
-    [sourceView.el, sourcesBtn],
-    [artifactsView.el, artifactsBtn],
-  ] as const) {
-    element.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && !event.isComposing) {
-        event.stopPropagation();
-        showView('chat');
-        trigger.focus();
-      }
-    });
-  }
-  historyBtn.addEventListener('click', () => showView(panel.dataset.view === 'history' ? 'chat' : 'history'));
-  historyView.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !event.isComposing) {
-      event.stopPropagation();
-      showView('chat');
-      historyBtn.focus();
-    }
+  const workspace = createPanelWorkspace({
+    panel,
+    chat,
+    navigation,
+    conversation: () => displayedConversationId,
+    isOpen: () => open,
+    runtime: { row: runtimeRow, settings, modelRow, modelActions },
+    views: {
+      settings: { el: settings, trigger: settingsBtn, focus: () => settingsHeading.focus() },
+      history: { el: historyView, trigger: historyBtn, focus: () => conversationList?.focus() },
+      sources: { el: sourceView.el, trigger: sourcesBtn, focus: () => sourceView.focus() },
+      artifacts: { el: artifactsView.el, trigger: artifactsBtn, focus: () => artifactsBtn.focus() },
+    },
+    beforeChange: (view) => {
+      speech?.close();
+      if (view !== 'chat') resultActions.cancel();
+      if (view !== 'artifacts') artifactsView.cancelPending();
+      if (view === 'history') rememberDraft();
+      viewRevision++;
+    },
+    changed: (view) => {
+      if (view === 'artifacts') void artifactsView.refresh();
+      syncHistoryActivity();
+      syncRuntimeStatus();
+    },
   });
+  function showView(view: PanelWorkspaceView): void {
+    workspace.show(view);
+  }
   const syncProductLabels = () => {
     settingsView.syncLabels();
     labelViewBack(settingsBack, t('agentBackToChat'));
@@ -3430,7 +3065,7 @@ export function createAgentPanel(
   clearBtn.setAttribute('aria-label', t('agentNewConversation'));
   panel.append(header, runtimeRow, settings, historyView, sourceView.el, artifactsView.el, chat.el);
   document.body.append(panel);
-  const endpoint = configuredEndpoint(endpointSettings);
+  const endpoint = configuredEndpoint(configuration.endpointSettings);
   hasConfiguration =
     !!(endpoint && (!isCloudEndpointKind(endpoint.kind) || getEndpointKey(endpointKeySlot(endpoint.kind)))) ||
     (currentProvider() === 'webllm' ? WEBLLM_MODELS.some((model) => model.id === savedPreset) : !!ggufUrl.value.trim());
@@ -3457,7 +3092,8 @@ export function createAgentPanel(
   // Older default-model loads may have cached files without a saved preset.
   // Check those without warming the engine, and never replace a view the user
   // has deliberately opened while the storage check was pending.
-  if (options.externalEntry && !hasConfiguration) {
+  if (options.externalEntry && !hasConfiguration && selectedSource === 'service') showView('settings');
+  if (options.externalEntry && !hasConfiguration && selectedSource === 'local') {
     const revision = viewRevision;
     const attempt = loadAttempt;
     const route = routeKey();
