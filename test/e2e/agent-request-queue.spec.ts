@@ -49,7 +49,7 @@ for (const ext of ['docx', 'pptx'] as const) {
       const text = String(body.messages.at(-1).content).split('User request:\n').at(-1)!;
       calls.push(text);
       await new Promise<void>((resolve) => releases.set(text, resolve));
-      expect(body.stream).toBe(false);
+      expect(body.stream).toBe(true);
       await route.fulfill({
         json: { done: true, message: { role: 'assistant', content: `Answer to ${text}` } },
       });

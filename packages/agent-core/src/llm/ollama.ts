@@ -9,6 +9,7 @@
  * remote/proxied Ollama deployments that require auth.
  */
 import { type OpenAICompletion, parseOpenAIResponse, toOpenAIMessages, toOpenAITools } from './openai-format';
+import { fetchOpenAIStream } from './openai-stream';
 import { getApiKey } from './keys';
 import { DEFAULT_SYSTEM_PROMPT } from './prompt';
 import { fetchProviderJson, type ProviderHttpOptions } from './provider-http';
@@ -49,6 +50,36 @@ export class OllamaProvider implements LLMProvider {
   /** Local server: ready without a key (the optional key is only for remote auth). */
   isReady(): boolean {
     return true;
+  }
+
+  async chatStream(
+    messages: LLMMessage[],
+    tools: LLMToolDef[],
+    onDelta: (text: string) => void,
+    signal?: AbortSignal,
+  ): Promise<LLMResponse> {
+    if (tools.length) return this.chat(messages, tools, signal);
+    signal?.throwIfAborted();
+    return fetchOpenAIStream(
+      'Ollama',
+      `${this.baseURL}/chat/completions`,
+      {
+        method: 'POST',
+        signal,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(this.apiKey ? { Authorization: `Bearer ${this.apiKey}` } : {}),
+        },
+        body: JSON.stringify({
+          model: this.model,
+          messages: toOpenAIMessages(messages, this.systemPrompt),
+          stream: true,
+          stream_options: { include_usage: true },
+        }),
+      },
+      this.requestOptions,
+      onDelta,
+    );
   }
 
   async chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {

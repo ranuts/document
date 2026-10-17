@@ -8,6 +8,7 @@
  * OpenAI/Anthropic ones — see toGeminiContents for how neutral tool_use ids are
  * mapped back to names. Pure converters are exported for unit testing.
  */
+import { assertStreamRecord, fetchProviderStream } from './provider-stream';
 import { getApiKey } from './keys';
 import { DEFAULT_SYSTEM_PROMPT } from './prompt';
 import { fetchProviderJson, type ProviderHttpOptions } from './provider-http';
@@ -17,6 +18,7 @@ const DEFAULT_MODEL = 'gemini-2.0-flash';
 const DEFAULT_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
 
 interface GeminiPart {
+  thought?: boolean;
   text?: string;
   functionCall?: { name: string; args?: Record<string, unknown> };
   functionResponse?: { name: string; response: Record<string, unknown> };
@@ -108,6 +110,7 @@ export function parseGeminiResponse(response: GeminiResponse): LLMResponse {
   const toolCalls: LLMResponse['toolCalls'] = [];
   const assistant: LLMContent[] = [];
   parts.forEach((part, index) => {
+    if (part.thought) return;
     if (part.text) {
       text += part.text;
       assistant.push({ type: 'text', text: part.text });
@@ -160,7 +163,25 @@ export class GeminiProvider implements LLMProvider {
     return !!this.apiKey;
   }
 
-  async chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
+  chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
+    return this.request(messages, tools, signal);
+  }
+
+  chatStream(
+    messages: LLMMessage[],
+    tools: LLMToolDef[],
+    onDelta: (text: string) => void,
+    signal?: AbortSignal,
+  ): Promise<LLMResponse> {
+    return tools.length ? this.chat(messages, tools, signal) : this.request(messages, tools, signal, onDelta);
+  }
+
+  private async request(
+    messages: LLMMessage[],
+    tools: LLMToolDef[],
+    signal?: AbortSignal,
+    onDelta?: (text: string) => void,
+  ): Promise<LLMResponse> {
     signal?.throwIfAborted();
     if (!this.apiKey) {
       throw new Error('Gemini API key is not configured');
@@ -171,6 +192,49 @@ export class GeminiProvider implements LLMProvider {
     };
     const geminiTools = toGeminiTools(tools);
     if (geminiTools.length > 0) body.tools = geminiTools;
+
+    if (onDelta) {
+      let text = '';
+      let finish: string | undefined;
+      let fallback: LLMResponse | undefined;
+      await fetchProviderStream(
+        'Gemini',
+        `${this.baseURL}/models/${this.model}:streamGenerateContent?alt=sse`,
+        {
+          method: 'POST',
+          signal,
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': this.apiKey },
+          body: JSON.stringify(body),
+        },
+        this.requestOptions,
+        'sse',
+        (value) => {
+          assertStreamRecord('Gemini', value);
+          const candidate = (value as GeminiResponse).candidates?.[0];
+          for (const part of candidate?.content?.parts ?? []) {
+            if (part.functionCall) throw new Error('Unexpected Gemini tool response');
+            if (part.thought || !part.text) continue;
+            if (finish || typeof part.text !== 'string') throw new Error('Invalid Gemini stream');
+            text += part.text;
+            onDelta(part.text);
+            signal?.throwIfAborted();
+          }
+          if (candidate?.finishReason) {
+            finish = candidate.finishReason;
+            return false;
+          }
+        },
+        (value) => {
+          assertStreamRecord('Gemini', value);
+          fallback = parseGeminiResponse(value as GeminiResponse);
+          if (fallback.toolCalls.length) throw new Error('Unexpected Gemini tool response');
+          if (fallback.text) onDelta(fallback.text);
+        },
+      );
+      if (fallback) return fallback;
+      if (!finish) throw new Error('Incomplete Gemini stream');
+      return parseGeminiResponse({ candidates: [{ content: { parts: [{ text }] }, finishReason: finish }] });
+    }
 
     const data = await fetchProviderJson<GeminiResponse>(
       'Gemini',

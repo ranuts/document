@@ -1,3 +1,5 @@
+import { fetchProviderJson, type ProviderHttpOptions } from './provider-http';
+import { assertStreamRecord, fetchProviderStream } from './provider-stream';
 import type { LLMMessage, LLMResponse, LLMToolDef, LocalLLMProvider } from './types';
 
 export function validateLoopbackUrl(value: string): string {
@@ -14,11 +16,9 @@ export function validateLoopbackUrl(value: string): string {
     throw new Error('Invalid loopback service origin');
   return url.origin;
 }
-export interface LoopbackProviderOptions {
+export interface LoopbackProviderOptions extends ProviderHttpOptions {
   model: string;
   baseUrl?: string;
-  timeoutMs?: number;
-  fetchImpl?: (url: string, init: RequestInit) => Promise<Response>;
 }
 /** Explicit opt-in native service. Never downloads models or follows redirects. */
 export class LoopbackProvider implements LocalLLMProvider {
@@ -42,26 +42,24 @@ export class LoopbackProvider implements LocalLLMProvider {
     }));
   }
   private async request(path: string, body?: object, signal?: AbortSignal): Promise<unknown> {
-    const timeout = AbortSignal.timeout(this.options.timeoutMs ?? 300000);
-    const combined = AbortSignal.any([this.lifetime.signal, timeout, ...(signal ? [signal] : [])]);
-    combined.throwIfAborted();
-    const response = await (this.options.fetchImpl ?? fetch)(this.origin + '/api/' + path, {
-      method: body ? 'POST' : 'GET',
-      credentials: 'omit',
-      redirect: 'error',
-      signal: combined,
-      headers: body ? { 'Content-Type': 'application/json' } : undefined,
-      body: body ? JSON.stringify(body) : undefined,
+    return fetchProviderJson(
+      'Local service',
+      this.origin + '/api/' + path,
+      {
+        method: body ? 'POST' : 'GET',
+        credentials: 'omit',
+        redirect: 'error',
+        signal: AbortSignal.any([this.lifetime.signal, ...(signal ? [signal] : [])]),
+        headers: body ? { 'Content-Type': 'application/json' } : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+      },
+      this.options,
+    ).catch((error: unknown) => {
+      if (error instanceof Error && 'status' in error) error.message = 'Local service request failed';
+      throw error;
     });
-    combined.throwIfAborted();
-    if (!response.ok) {
-      await response.body?.cancel();
-      throw Object.assign(new Error('Local service request failed'), { status: response.status });
-    }
-    const result: unknown = await response.json();
-    combined.throwIfAborted();
-    return result;
   }
+
   private async check(): Promise<void> {
     const result = (await this.request('tags')) as { models?: Array<{ name?: string }> } | null;
     if (!Array.isArray(result?.models) || !result.models.some((model) => model?.name === this.options.model))
@@ -77,6 +75,15 @@ export class LoopbackProvider implements LocalLLMProvider {
     if (tools.length) return Promise.reject(new Error('Local service cannot execute editor tools'));
     return this.generate(messages, undefined, signal);
   }
+  chatStream(
+    messages: LLMMessage[],
+    tools: LLMToolDef[],
+    onDelta: (text: string) => void,
+    signal?: AbortSignal,
+  ): Promise<LLMResponse> {
+    if (tools.length) return Promise.reject(new Error('Local service cannot execute editor tools'));
+    return this.generate(messages, undefined, signal, onDelta);
+  }
   generateJSON(messages: LLMMessage[], schema: Record<string, unknown>, signal?: AbortSignal): Promise<LLMResponse> {
     return this.generate(messages, schema, signal);
   }
@@ -84,6 +91,7 @@ export class LoopbackProvider implements LocalLLMProvider {
     messages: LLMMessage[],
     schema?: Record<string, unknown>,
     signal?: AbortSignal,
+    onDelta?: (text: string) => void,
   ): Promise<LLMResponse> {
     if (!this.isReady()) throw new Error('Connect the local model first');
     // Translate completed host tool exchanges to Ollama's documented chat history.
@@ -116,6 +124,54 @@ export class LoopbackProvider implements LocalLLMProvider {
         if (!name) throw new Error('Unmatched local service tool result');
         nativeMessages.push({ role: 'tool', tool_name: name, content: block.content });
       }
+    }
+    if (onDelta) {
+      let text = '';
+      let finish: string | undefined;
+      const record = (value: unknown) => {
+        assertStreamRecord('Local service', value);
+        const data = value as {
+          done?: boolean;
+          done_reason?: string;
+          message?: { content?: string; tool_calls?: unknown[] };
+        };
+        if (data.message?.tool_calls?.length) throw new Error('Unexpected local service tool response');
+        const piece = data.message?.content;
+        if (piece !== undefined && typeof piece !== 'string') throw new Error('Invalid local service stream');
+        if (piece) {
+          text += piece;
+          onDelta(piece);
+        }
+        if (data.done === true) {
+          finish = data.done_reason ?? 'stop';
+          return false;
+        }
+      };
+      await fetchProviderStream(
+        'Local service',
+        this.origin + '/api/chat',
+        {
+          method: 'POST',
+          credentials: 'omit',
+          redirect: 'error',
+          signal: AbortSignal.any([this.lifetime.signal, ...(signal ? [signal] : [])]),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model: this.options.model, messages: nativeMessages, stream: true }),
+        },
+        this.options,
+        'ndjson',
+        record,
+        (value) => {
+          record(value);
+        },
+      );
+      if (!finish) throw new Error('Incomplete local service stream');
+      return {
+        text,
+        toolCalls: [],
+        stopReason: finish === 'length' ? 'max_tokens' : finish,
+        assistant: { role: 'assistant', content: text },
+      };
     }
     const result = (await this.request(
       'chat',

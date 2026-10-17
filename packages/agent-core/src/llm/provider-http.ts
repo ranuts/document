@@ -7,23 +7,22 @@ export interface ProviderHttpOptions {
   fetchImpl?: (url: string, init: RequestInit) => Promise<Response>;
 }
 
-/** Fetch-based providers share cancellation, deadlines and safe HTTP failures. */
-export async function fetchProviderJson<T>(
+/** One lifetime and byte budget for headers, JSON and incremental protocols. */
+export async function fetchProviderResponse<T>(
   provider: string,
   url: string,
   init: RequestInit,
   options: ProviderHttpOptions,
+  consume: (response: Response, chunks: AsyncIterable<string>, signal: AbortSignal) => Promise<T>,
 ): Promise<T> {
   const owner = init.signal;
   owner?.throwIfAborted();
   const timeoutMs = options.timeoutMs ?? 300_000;
   if (!Number.isFinite(timeoutMs) || timeoutMs <= 0 || timeoutMs > 2_147_483_647)
     throw new RangeError('Provider timeout must be a positive timer duration');
-
   const maxResponseBytes = options.maxResponseBytes ?? 8 * 1024 * 1024;
   if (!Number.isSafeInteger(maxResponseBytes) || maxResponseBytes <= 0)
     throw new RangeError('Provider response budget must be a positive safe integer');
-
   const controller = new AbortController();
   const forwardAbort = () => controller.abort(owner?.reason);
   owner?.addEventListener('abort', forwardAbort, { once: true });
@@ -47,6 +46,41 @@ export async function fetchProviderJson<T>(
     controller.signal.addEventListener('abort', onAbort, { once: true });
   });
   const timer = setTimeout(() => controller.abort(new DOMException('AI request timed out', 'TimeoutError')), timeoutMs);
+  async function* readChunks(): AsyncGenerator<string> {
+    let bytes = 0;
+    // A host-only json() response remains supported; native Responses use the
+    // bounded reader, without allocating the full body before checking its size.
+    if (!response!.body) {
+      const text = JSON.stringify(await response!.json());
+      controller.signal.throwIfAborted();
+      if (new TextEncoder().encode(text).byteLength > maxResponseBytes) rejectOversized();
+      yield text;
+      return;
+    }
+    reader = response!.body.getReader();
+    const activeReader = reader;
+    const decoder = new TextDecoder();
+    let complete = false;
+    try {
+      while (true) {
+        const chunk = await activeReader.read();
+        controller.signal.throwIfAborted();
+        if (chunk.done) {
+          complete = true;
+          break;
+        }
+        bytes += chunk.value.byteLength;
+        if (bytes > maxResponseBytes) rejectOversized();
+        yield decoder.decode(chunk.value, { stream: true });
+      }
+      yield decoder.decode();
+    } finally {
+      // Protocol completion and parser/callback failure can stop before EOF.
+      if (!complete) void activeReader.cancel().catch(() => {});
+      activeReader.releaseLock();
+      reader = undefined;
+    }
+  }
   try {
     const request = (async () => {
       const fetcher = options.fetchImpl ?? globalThis.fetch.bind(globalThis);
@@ -54,50 +88,37 @@ export async function fetchProviderJson<T>(
       if (controller.signal.aborted) cancelBody();
       controller.signal.throwIfAborted();
       if (!response.ok) {
-        // Never wait for or retain an upstream error body: it may stall or
-        // contain credentials and private request content.
         cancelBody();
         throw Object.assign(new Error(`${provider} request failed: ${response.status}`), { status: response.status });
       }
-      const declaredSize = Number(response.headers?.get('Content-Length'));
-      if (declaredSize > maxResponseBytes) rejectOversized();
-      let value: T;
-      if (response.body) {
-        // Own the reader so even a host-created Response whose transport ignores
-        // AbortSignal stops consuming bytes when the request is cancelled.
-        reader = response.body.getReader();
-        const activeReader = reader;
-        const decoder = new TextDecoder();
-        let text = '';
-        let bytes = 0;
-        try {
-          while (true) {
-            const chunk = await activeReader.read();
-            controller.signal.throwIfAborted();
-            if (chunk.done) break;
-            bytes += chunk.value.byteLength;
-            if (bytes > maxResponseBytes) rejectOversized();
-            text += decoder.decode(chunk.value, { stream: true });
-          }
-          text += decoder.decode();
-          value = JSON.parse(text) as T;
-        } finally {
-          activeReader.releaseLock();
-          reader = undefined;
-        }
-      } else {
-        value = (await response.json()) as T;
-        // Non-native host mocks may expose only json(); real Responses use the bounded reader above.
-        if (new TextEncoder().encode(JSON.stringify(value)).byteLength > maxResponseBytes) rejectOversized();
-      }
+      if (Number(response.headers?.get('Content-Length')) > maxResponseBytes) rejectOversized();
+      const value = await consume(response, readChunks(), controller.signal);
       controller.signal.throwIfAborted();
       return value;
     })();
-    // The boundary also settles when a host transport/body ignores AbortSignal.
     return await Promise.race([request, aborted]);
+  } catch (error) {
+    cancelBody();
+    throw error;
   } finally {
     clearTimeout(timer);
     owner?.removeEventListener('abort', forwardAbort);
     controller.signal.removeEventListener('abort', onAbort);
   }
+}
+
+export async function readProviderJson<T>(chunks: AsyncIterable<string>): Promise<T> {
+  let text = '';
+  for await (const chunk of chunks) text += chunk;
+  return JSON.parse(text) as T;
+}
+
+/** Fetch-based providers share cancellation, deadlines and safe HTTP failures. */
+export function fetchProviderJson<T>(
+  provider: string,
+  url: string,
+  init: RequestInit,
+  options: ProviderHttpOptions,
+): Promise<T> {
+  return fetchProviderResponse(provider, url, init, options, (_response, chunks) => readProviderJson<T>(chunks));
 }
