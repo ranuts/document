@@ -180,7 +180,7 @@ async function trimRevisions(
  * caller already has: expiry has to be something the browser does on its own,
  * not something that waits for the user to visit a page.
  */
-async function sweepExpired(tx: IDBTransaction, now: number): Promise<string[]> {
+async function sweepExpired(tx: IDBTransaction, now: number, protectedId?: string): Promise<string[]> {
   // A recent snapshot cannot expire, regardless of when it was last opened.
   // Read only old snapshot metadata, then keep the opening-time renewal rule.
   const docs = (await requestToPromise(
@@ -191,7 +191,9 @@ async function sweepExpired(tx: IDBTransaction, now: number): Promise<string[]> 
   )) as HistoryDoc[];
   // The forward index orders timestamp ties by ascending primary key, just
   // like getAll did. A stable sort preserves the returned expiry ID order.
-  const expired = docs.filter((doc) => expiresAt(doc) <= now).sort((a, b) => b.updatedAt - a.updatedAt);
+  const expired = docs
+    .filter((doc) => doc.id !== protectedId && expiresAt(doc) <= now)
+    .sort((a, b) => b.updatedAt - a.updatedAt);
   for (const doc of expired) {
     await deleteDocumentData(tx, doc.id);
   }
@@ -290,7 +292,8 @@ async function writeSnapshot(
 
     // Expiry first: room freed by documents that were due to go anyway is room
     // the budget does not have to take from documents that are still current.
-    await sweepExpired(tx, now);
+    // Its old metadata can be expired while these new bytes are being written.
+    await sweepExpired(tx, now, doc.id);
 
     const trimmed = await trimRevisions(tx, doc.id, budget);
     doc.totalBytes -= trimmed.freed;

@@ -6,6 +6,8 @@ import {
   clearAllHistory,
   deleteDoc,
   getDoc,
+  getLatestSnapshot,
+  historyUsage,
   pruneExpired,
   putSnapshot,
   resetHistoryClockForTests,
@@ -61,4 +63,27 @@ it('also clears targets that have never had a recovery snapshot', async () => {
   await addTarget('saved-without-snapshot');
   await clearAllHistory();
   expect(await targetIds()).toEqual([]);
+});
+
+it('keeps an actively updated expired document and its file target while sweeping other expired documents', async () => {
+  await putSnapshot({ id: 'active', title: 'Active.docx', origin: 'local', bytes: new Uint8Array([1, 2]) });
+  await putSnapshot({ id: 'stale', title: 'Stale.docx', origin: 'local', bytes: new Uint8Array([9]) });
+  await addTarget('active');
+  await addTarget('stale');
+  vi.spyOn(Date, 'now').mockReturnValue(Date.now() + MAX_AGE_MS + 10);
+
+  const updated = await putSnapshot({
+    id: 'active',
+    title: 'Active.docx',
+    origin: 'local',
+    bytes: new Uint8Array([3, 4, 5]),
+  });
+
+  expect(Array.from((await getLatestSnapshot('active'))?.bytes ?? [])).toEqual([3, 4, 5]);
+  expect(updated).toMatchObject({ id: 'active', revCount: 2, totalBytes: 5, nextRev: 2 });
+  expect(await getDoc('active')).toEqual(updated);
+  expect(await historyUsage()).toBe(5);
+  expect(await targetIds()).toEqual(['active']);
+  expect(await getDoc('stale')).toBeNull();
+  expect(await getLatestSnapshot('stale')).toBeNull();
 });
