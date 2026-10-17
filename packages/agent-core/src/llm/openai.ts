@@ -58,8 +58,7 @@ export class OpenAIProvider implements LLMProvider {
         body: JSON.stringify({
           model: this.model,
           messages: toOpenAIMessages(messages, this.systemPrompt),
-          tools: toOpenAITools(tools),
-          tool_choice: 'auto',
+          ...(tools.length ? { tools: toOpenAITools(tools), tool_choice: 'auto' } : {}),
         }),
       },
       this.requestOptions,

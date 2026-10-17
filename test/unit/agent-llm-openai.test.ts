@@ -54,6 +54,19 @@ describe('OpenAIProvider', () => {
     expect(result.text).toBe('hi there');
   });
 
+  it('sends plain chat without tool-only fields to a strict compatible endpoint', async () => {
+    const provider = new OpenAIProvider({
+      apiKey: 'test',
+      fetchImpl: async (_url, init) => {
+        const body = JSON.parse(init.body as string);
+        if ('tools' in body || 'tool_choice' in body) return new Response('Unexpected tool fields', { status: 400 });
+        return okResponse({ choices: [{ message: { content: 'Plain reply' }, finish_reason: 'stop' }] });
+      },
+    });
+
+    expect((await provider.chat([{ role: 'user', content: 'Hello' }], [])).text).toBe('Plain reply');
+  });
+
   it('throws with status detail on a non-ok response', async () => {
     const fetchImpl = vi.fn(
       async () => ({ ok: false, status: 401, text: async () => 'Unauthorized' }) as unknown as Response,
