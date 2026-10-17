@@ -44,7 +44,7 @@ const ASSETS_TO_CACHE = [
   './icons/document-maskable-512.png',
 ];
 const APP_ASSETS_TO_CACHE = []; // BUILD_APP_ASSETS
-const ASSISTANT_ASSETS_TO_CACHE = []; // BUILD_ASSISTANT_ASSETS
+const ASSISTANT_CAPABILITY_ASSETS = {}; // BUILD_ASSISTANT_CAPABILITIES
 const ASSISTANT_PREPARED_KEY = '/__document-assistant-prepared__';
 const EDITOR_BOOTSTRAP_HTML = [
   '/web-apps/apps/documenteditor/main/index.html',
@@ -294,34 +294,46 @@ self.addEventListener('install', (event) => {
   );
 });
 
-function restorePreparedAssistant() {
-  if (assistantPreparation) return assistantPreparation;
-  return Promise.resolve(caches.match?.(ASSISTANT_PREPARED_KEY)).then((prepared) => {
-    if (prepared?.headers?.get('X-Document-Assistant-Prepared') === '1') return prepareAssistantAssets();
-  });
+// Each capability gets an independent marker, so preparing PDF in a newer
+// worker cannot hide CPU preparation in an older still-live worker's cache.
+// This metadata cache is intentionally independent of build retirement.
+const ASSISTANT_STATE_CACHE = 'document-assistant-capabilities';
+const assistantPreparations = new Map();
+const preparedKey = (capability) => `${ASSISTANT_PREPARED_KEY}/${capability}`;
+const isPrepared = (response) => response?.headers?.get('X-Document-Assistant-Prepared') === '1';
+async function restorePreparedAssistant() {
+  const names = (await caches.keys()).filter(
+    (name) => name === ASSISTANT_STATE_CACHE || name.startsWith('document-editor-core-'),
+  );
+  const capabilities = new Set();
+  for (const name of names) {
+    const cache = await caches.open(name);
+    const legacy = isPrepared(await cache.match(ASSISTANT_PREPARED_KEY));
+    for (const capability of Object.keys(ASSISTANT_CAPABILITY_ASSETS))
+      if (legacy || isPrepared(await cache.match(preparedKey(capability)))) capabilities.add(capability);
+  }
+  await Promise.all([...capabilities].map(prepareAssistantAssets));
 }
 
-let assistantPreparation;
-function prepareAssistantAssets() {
-  if (!assistantPreparation) {
-    assistantPreparation = caches
+function prepareAssistantAssets(capability) {
+  if (!Object.prototype.hasOwnProperty.call(ASSISTANT_CAPABILITY_ASSETS, capability))
+    return Promise.reject(new Error('Unknown assistant capability'));
+  if (!assistantPreparations.has(capability)) {
+    const preparation = caches
       .open(CORE_CACHE)
       .then(async (cache) => {
         const missing = [];
-        for (const asset of ASSISTANT_ASSETS_TO_CACHE) {
+        for (const asset of ASSISTANT_CAPABILITY_ASSETS[capability])
           if (!(await cache.match(asset))) missing.push(asset);
-        }
         if (missing.length) await cache.addAll(missing);
-        await cache.put(
-          ASSISTANT_PREPARED_KEY,
-          new Response('1', { headers: { 'X-Document-Assistant-Prepared': '1' } }),
-        );
+        const marker = () => new Response('1', { headers: { 'X-Document-Assistant-Prepared': '1' } });
+        await cache.put(preparedKey(capability), marker());
+        await (await caches.open(ASSISTANT_STATE_CACHE)).put(preparedKey(capability), marker());
       })
-      .finally(() => {
-        assistantPreparation = undefined;
-      });
+      .finally(() => assistantPreparations.delete(capability));
+    assistantPreparations.set(capability, preparation);
   }
-  return assistantPreparation;
+  return assistantPreparations.get(capability);
 }
 
 self.addEventListener('message', (event) => {
@@ -330,7 +342,7 @@ self.addEventListener('message', (event) => {
     if (!port) return;
     // The page cannot supply URLs: only this build's generated allowlist is cached.
     event.waitUntil(
-      prepareAssistantAssets().then(
+      (event.data.capability === undefined ? Promise.resolve() : prepareAssistantAssets(event.data.capability)).then(
         () => port.postMessage({ type: 'ASSISTANT_PREPARED', ok: true }),
         () => port.postMessage({ type: 'ASSISTANT_PREPARED', ok: false }),
       ),
@@ -411,8 +423,8 @@ const holdsCoreAssetsForOpenWindow = (cacheName) =>
 // Activate event: Retire owned app caches from previous versions.
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches
-      .keys()
+    restorePreparedAssistant()
+      .then(() => caches.keys())
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {

@@ -1,3 +1,5 @@
+export type AssistantOfflineCapability = 'webgpu' | 'wllama' | 'wllama-compat' | 'cpu' | 'cpu-compat' | 'pdf';
+
 interface OfflineWorker {
   postMessage(message: unknown, transfer: Transferable[]): void;
 }
@@ -6,8 +8,9 @@ interface OfflineWorkerContainer {
   ready: PromiseLike<{ active: OfflineWorker | null }>;
 }
 
-/** Prepare build-owned AI runtime assets after opt-in; never download model weights. */
+/** Prepare only the activated build-owned capability; never download model weights. */
 export function prepareAssistantOffline(
+  capability: AssistantOfflineCapability,
   container: OfflineWorkerContainer | undefined = typeof navigator === 'undefined'
     ? undefined
     : navigator.serviceWorker,
@@ -34,7 +37,7 @@ export function prepareAssistantOffline(
         channel.port1.onmessage = (event) => {
           if (event.data?.type === 'ASSISTANT_PREPARED') done(event.data.ok === true);
         };
-        worker.postMessage({ type: 'PREPARE_ASSISTANT' }, [channel.port2]);
+        worker.postMessage({ type: 'PREPARE_ASSISTANT', capability }, [channel.port2]);
       } catch {
         done(false);
       }

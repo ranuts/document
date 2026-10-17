@@ -41,8 +41,10 @@ it.each(['javascript:alert(1)', 'data:application/octet-stream;base64,AA==', 'fi
     vi.stubGlobal('navigator', {
       storage: { getDirectory: async () => ({ getDirectoryHandle: async () => ({}) }) },
     });
-    const provider = new WllamaProvider({ cpuOnly: true, modelUrl });
+    const prepareRuntimeAssets = vi.fn();
+    const provider = new WllamaProvider({ cpuOnly: true, modelUrl, prepareRuntimeAssets });
     await expect(provider.preload()).rejects.toThrow('Model artifacts require HTTP or HTTPS');
+    expect(prepareRuntimeAssets).not.toHaveBeenCalled();
     expect(state.loader).not.toHaveBeenCalled();
     expect(state.load).not.toHaveBeenCalled();
     await provider.dispose();

@@ -1,3 +1,4 @@
+import { prepareRuntimeAssets, type RuntimeAssetPreparation } from './runtime-assets';
 import {
   accumulateOpenAIStream,
   parseOpenAIResponse,
@@ -25,6 +26,7 @@ export interface WllamaEngine {
   exit(): Promise<void>;
 }
 export interface WllamaProviderOptions {
+  prepareRuntimeAssets?: RuntimeAssetPreparation;
   generation?: GenerationOptions;
   systemPrompt?: string;
   modelUrl?: string;
@@ -78,9 +80,13 @@ export class WllamaProvider implements LocalLLMProvider {
           !this.options.modelFiles?.length && this.options.modelUrl
             ? resolveModelArtifactUrl(this.options.modelUrl)
             : undefined;
+        prepareRuntimeAssets(
+          this.options.prepareRuntimeAssets,
+          this.options.cpuOnly && !this.options.wasmUrl ? 'cpu' : 'wllama',
+        );
         const cpuRuntime =
           this.options.cpuOnly && !this.options.wasmUrl
-            ? await (await import('./wllama-cpu-runtime')).loadWllamaCPURuntime()
+            ? await (await import('./wllama-cpu-runtime')).loadWllamaCPURuntime(this.options.prepareRuntimeAssets)
             : undefined;
         const wasmUrl =
           this.options.wasmUrl ??
@@ -104,7 +110,12 @@ export class WllamaProvider implements LocalLLMProvider {
         );
         engine = runtime as unknown as WllamaEngine;
         this.loadingEngine = engine;
-        runtime.setCompat(cpuRuntime ? cpuRuntime.compatibility : await getWllamaCompatibility(), 'firefox_safari');
+        runtime.setCompat(
+          cpuRuntime
+            ? cpuRuntime.compatibility
+            : await getWllamaCompatibility(undefined, undefined, this.options.prepareRuntimeAssets),
+          'firefox_safari',
+        );
         this.lifetime.signal.throwIfAborted();
         const params = {
           signal: this.lifetime.signal,

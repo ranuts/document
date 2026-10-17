@@ -1,4 +1,3 @@
-import { prepareAssistantOffline } from './assistant-offline';
 import { t } from '@ranuts/shared/i18n';
 import { isEmbedMode } from './embed-mode';
 import { readAssistantEnabled, saveAssistantEnabled } from './agent-preferences';
@@ -8,8 +7,6 @@ import { mountPanelViewport } from './agent-plugin/ui/panel-viewport';
 /** Keep the discovery and opt-in surface independent of the inference runtime. */
 export function createAgentEntry() {
   let enabled = readAssistantEnabled();
-  // A persisted opt-in prepares this build without importing or starting a model.
-  if (enabled && !isEmbedMode()) void prepareAssistantOffline();
   let open = false;
   let disposed = false;
   let busy = false;
@@ -87,7 +84,6 @@ export function createAgentEntry() {
           },
         });
         await runtime.setAgentPanelEnabled(true);
-        void prepareAssistantOffline();
       } else {
         enabled = false;
         saveAssistantEnabled(false);
@@ -143,10 +139,6 @@ export function createAgentEntry() {
     note.textContent = t('agentStartNote');
   };
   window.addEventListener('languagechange', onLanguage);
-  const onControllerChange = () => {
-    if (enabled && !disposed && !isEmbedMode()) void prepareAssistantOffline();
-  };
-  navigator.serviceWorker?.addEventListener('controllerchange', onControllerChange);
   note.textContent = t('agentStartNote');
   sync();
   const onPageHide = (event: PageTransitionEvent) => {
@@ -155,7 +147,6 @@ export function createAgentEntry() {
     if (!event.persisted) {
       disposed = true;
       window.removeEventListener('languagechange', onLanguage);
-      navigator.serviceWorker?.removeEventListener('controllerchange', onControllerChange);
     }
   };
   // Preserve the shell after a BFCache restore; no model is restarted.
@@ -164,7 +155,6 @@ export function createAgentEntry() {
       sidebar = mountSidebar();
       viewportDispose = mountPanelViewport(shell);
       sync();
-      onControllerChange();
     }
   };
   window.addEventListener('pagehide', onPageHide);

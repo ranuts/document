@@ -1,3 +1,4 @@
+import { prepareRuntimeAssets, type RuntimeAssetPreparation } from './runtime-assets';
 /**
  * WebLLM offline LLM provider.
  *
@@ -92,6 +93,7 @@ export async function isModelCached(modelId: string, source: ModelSource = {}): 
 }
 
 export interface WebLLMProviderOptions extends ModelSource {
+  prepareRuntimeAssets?: RuntimeAssetPreparation;
   /** Notify hosts when an initialized engine becomes unavailable, including while idle. */
   onUnavailable?: () => void;
   generation?: GenerationOptions;
@@ -453,10 +455,11 @@ async function createWorkerEngine(
   model: string,
   onProgress: ((progress: InitProgress) => void) | undefined,
   signal: AbortSignal,
-  source: ModelSource = {},
+  source: WebLLMProviderOptions = {},
 ): Promise<WebLLMEngine> {
   await checkWebGPUSupport(model);
   signal.throwIfAborted();
+  prepareRuntimeAssets(source.prepareRuntimeAssets, 'webgpu');
   const { WebWorkerMLCEngine, prebuiltAppConfig } = await import('@mlc-ai/web-llm');
   signal.throwIfAborted();
   const appConfig = resolveModelConfig(prebuiltAppConfig, model, source);

@@ -1,7 +1,9 @@
+import { prepareAssistantOffline } from '../../assistant-offline';
 import { withReferenceAbort } from './reference-lifetime';
 /** PDF.js runs parsing in its bundled worker; no editor, rendering, fonts or remote URLs. */
 export async function readPdfReference(bytes: Uint8Array, signal?: AbortSignal): Promise<string> {
   signal?.throwIfAborted();
+  void prepareAssistantOffline('pdf');
   const pdfjs = await (signal ? withReferenceAbort(import('pdfjs-dist'), signal) : import('pdfjs-dist'));
   const { default: workerUrl } = await (signal
     ? withReferenceAbort(import('pdfjs-dist/build/pdf.worker.min.mjs?url'), signal)

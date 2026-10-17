@@ -1,3 +1,4 @@
+import type { RuntimeAssetPreparation } from './runtime-assets';
 import type { LLMMessage, LLMResponse, LLMToolDef, LocalLLMProvider } from './types';
 import { WebLLMProvider, type WebLLMProviderOptions } from './webllm';
 import { WllamaProvider, type WllamaProviderOptions } from './wllama';
@@ -25,6 +26,7 @@ export async function detectGPUAdapter(): Promise<boolean> {
 }
 
 export interface LocalInferenceOptions {
+  prepareRuntimeAssets?: RuntimeAssetPreparation;
   generation?: GenerationOptions;
   webllm?: WebLLMProviderOptions;
   wllama?: WllamaProviderOptions;
@@ -101,10 +103,16 @@ export class LocalInferenceProvider implements LocalLLMProvider {
         provider =
           backend === 'webllm'
             ? (this.options.gpu?.() ??
-              new WebLLMProvider({ ...this.options.webllm, generation: this.generation, chatOnly: true }))
+              new WebLLMProvider({
+                ...this.options.webllm,
+                prepareRuntimeAssets: this.options.prepareRuntimeAssets ?? this.options.webllm?.prepareRuntimeAssets,
+                generation: this.generation,
+                chatOnly: true,
+              }))
             : (this.options.cpu?.() ??
               new WllamaProvider({
                 ...this.options.wllama,
+                prepareRuntimeAssets: this.options.prepareRuntimeAssets ?? this.options.wllama?.prepareRuntimeAssets,
                 modelUrl: this.options.wllama?.modelUrl || DEFAULT_CPU_MODEL_URL,
                 cpuOnly: true,
                 generation: this.generation,
