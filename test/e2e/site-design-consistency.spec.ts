@@ -88,6 +88,14 @@ for (const scheme of ['light', 'dark'] as const) {
           expect(Math.abs(action!.x + action!.width / 2 - (empty!.x + empty!.width / 2))).toBeLessThanOrEqual(1);
         }
         const header = page.locator('header.bar');
+        if (route === '/' || route === '/help') {
+          const nav = header.locator('nav');
+          const link = nav.locator('a:visible').first();
+          await expect(link).toHaveCSS('padding-left', width <= 620 ? '8px' : '12px');
+          await expect(link).toHaveCSS('padding-right', width <= 620 ? '8px' : '12px');
+          await expect(nav).toHaveCSS('row-gap', width <= 620 ? '2px' : '4px');
+        }
+
         expect((await header.boundingBox())!.height).toBeLessThanOrEqual(width <= 390 ? 112 : 80);
         if (route === '/embed-demo' && width === 320)
           await header.screenshot({ path: testInfo.outputPath(`embed-header-${scheme}-320.png`) });

@@ -246,34 +246,6 @@ body {
   --ran-dropdown-arrow-display: none;
 }
 
-@media (max-width: 620px) {
-  /* Phone: the trigger keeps the globe and the caret and drops the language
-     name, which is the part that costs width. */
-  #landing-hero .lang-current {
-    display: none;
-  }
-  /* Keep a readable home destination; text can elide before navigation overflows. */
-  #landing-hero .brand {
-    min-width: 0;
-    flex: 0 0 auto;
-    max-width: 8ch;
-  }
-  #landing-hero .wordmark {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  #landing-hero nav {
-    row-gap: calc(var(--ran-space-1) / 2);
-    min-width: 0;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-  #landing-hero nav a {
-    padding-inline: var(--ran-space-2);
-  }
-}
-
 /* ---------- top bar ---------- */
 #landing-hero .bar {
   border-bottom: 1px solid var(--ran-color-border);
@@ -317,6 +289,34 @@ body {
 #landing-hero .bar nav .navlink:hover {
   color: var(--ran-color-text);
   background: var(--ran-color-bg-hover);
+}
+
+@media (max-width: 620px) {
+  /* Phone: the trigger keeps the globe and the caret and drops the language
+     name, which is the part that costs width. */
+  #landing-hero .lang-current {
+    display: none;
+  }
+  /* Keep a readable home destination; text can elide before navigation overflows. */
+  #landing-hero .brand {
+    min-width: 0;
+    flex: 0 0 auto;
+    max-width: 8ch;
+  }
+  #landing-hero .wordmark {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #landing-hero .bar nav {
+    row-gap: calc(var(--ran-space-1) / 2);
+    min-width: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  #landing-hero .bar nav .navlink {
+    padding-inline: var(--ran-space-2);
+  }
 }
 
 /* ---------- hero: copy left, document window right ---------- */
