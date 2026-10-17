@@ -9,6 +9,13 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- A failed recovery snapshot no longer removes an older document when storage
+  remains full after a retry.
+- Unresponsive OpenAI-compatible, Gemini and Ollama requests now time out,
+  including stalled response reads, so another request can be sent.
+- Gemini authentication, rate-limit and service failures now show actionable
+  guidance without exposing the service's response body.
+
 - A failed download started while switching documents no longer leaves the
   editor empty. Closing the editor still cancels an unfinished replacement.
 - A document still loading can recover from a temporary conversion failure
