@@ -149,7 +149,11 @@ export class GeminiProvider implements LLMProvider {
     this.model = options.geminiModel ?? DEFAULT_MODEL;
     this.systemPrompt = options.systemPrompt ?? DEFAULT_SYSTEM_PROMPT;
     this.baseURL = options.geminiBaseURL ?? DEFAULT_BASE_URL;
-    this.requestOptions = { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs };
+    this.requestOptions = {
+      fetchImpl: options.fetchImpl,
+      timeoutMs: options.timeoutMs,
+      maxResponseBytes: options.maxResponseBytes,
+    };
   }
 
   isReady(): boolean {
