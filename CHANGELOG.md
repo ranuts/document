@@ -17,6 +17,8 @@ notes. Entries describe what users experience, not internal refactors.
   including stalled response reads, so another request can be sent.
 - Gemini authentication, rate-limit and service failures now show actionable
   guidance without exposing the service's response body.
+- Plain assistant requests omit unused tool-calling settings for better
+  compatibility with configured AI services.
 
 - A failed download started while switching documents no longer leaves the
   editor empty. Closing the editor still cancels an unfinished replacement.

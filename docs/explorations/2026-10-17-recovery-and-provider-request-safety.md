@@ -68,7 +68,7 @@ the baseline history and cloud-provider implementations: recovery metadata was
 empty after quota failure, and Gemini displayed generic failure instead of
 rate-limit guidance. Source files were not changed for this browser check.
 
-Final assembled verification:
+Initial assembled verification:
 
 - Full unit coverage: 6,223 tests in 233 files pass; 89.38% lines and 82.90%
   branches. All repository coverage gates pass.
@@ -111,3 +111,30 @@ actual-byte check remains. Three regressions first failed because `arrayBuffer`
 was called once; the fix must reduce that count to zero for oversized Blob,
 File and actual autosave inputs while retaining the previous recovery bytes.
 This is an operation-count improvement, not a measured heap-size claim.
+
+## Follow-up: omit unused tool-calling fields
+
+OpenAI-compatible and Ollama requests previously included an empty `tools` array
+and `tool_choice: auto` even for plain chat or writing without tools. They now
+omit both fields when the registry is empty, following the existing Gemini
+adapter's conditional tool declaration. Requests with tools keep the same tool
+definitions and automatic selection. Two strict-endpoint regression fixtures
+reject unused tool fields; both failed with HTTP 400 before the fix and return
+their plain answer afterward. These fixtures validate the adapter contract and
+do not claim a live vendor endpoint was tested.
+
+## Final follow-up verification
+
+Independent review of the two follow-ups found no actionable defects, including
+the autosave cancellation/session boundary and requests with nonempty tools.
+
+- Full unit coverage: 6,228 tests in 233 files pass; 89.40% lines and 82.91%
+  branches. All repository coverage gates pass.
+- The same ten Chromium cases pass on the final production build in 58.9 seconds.
+- Archive integrity, lint, workspace declaration builds, application TypeScript
+  and the production build pass. The existing bundler warnings are unchanged.
+- All five added follow-up regressions were reverse-verified before the fixes:
+  three oversized-input cases and two strict-compatible-endpoint cases.
+
+The verification commands and coverage limits described above also apply to
+this follow-up pass.

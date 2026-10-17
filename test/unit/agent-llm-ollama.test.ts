@@ -42,6 +42,18 @@ describe('OllamaProvider', () => {
     expect((init.headers as Record<string, string>).Authorization).toBe('Bearer proxy-token');
   });
 
+  it('sends plain chat without tool-only fields to a strict compatible endpoint', async () => {
+    const provider = new OllamaProvider({
+      fetchImpl: async (_url, init) => {
+        const body = JSON.parse(init.body as string);
+        if ('tools' in body || 'tool_choice' in body) return new Response('Unexpected tool fields', { status: 400 });
+        return okResponse({ choices: [{ message: { content: 'Plain reply' }, finish_reason: 'stop' }] });
+      },
+    });
+
+    expect((await provider.chat([{ role: 'user', content: 'Hello' }], [])).text).toBe('Plain reply');
+  });
+
   it('respects a custom base URL', async () => {
     const fetchImpl = vi.fn(async (_url: string, _init: RequestInit) =>
       okResponse({ choices: [{ message: { content: 'x' }, finish_reason: 'stop' }] }),
