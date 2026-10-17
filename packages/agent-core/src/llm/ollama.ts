@@ -11,21 +11,18 @@
 import { type OpenAICompletion, parseOpenAIResponse, toOpenAIMessages, toOpenAITools } from './openai-format';
 import { getApiKey } from './keys';
 import { DEFAULT_SYSTEM_PROMPT } from './prompt';
+import { fetchProviderJson, type ProviderHttpOptions } from './provider-http';
 import type { LLMMessage, LLMProvider, LLMResponse, LLMToolDef } from './types';
 
 const DEFAULT_MODEL = 'llama3.2';
 const DEFAULT_BASE_URL = 'http://localhost:11434/v1';
 
-type FetchLike = (input: string, init: RequestInit) => Promise<Response>;
-
-export interface OllamaProviderOptions {
+export interface OllamaProviderOptions extends ProviderHttpOptions {
   /** Optional — only needed for a remote/proxied Ollama that requires auth. */
   ollamaApiKey?: string;
   ollamaModel?: string;
   systemPrompt?: string;
   ollamaBaseURL?: string;
-  /** Inject a fetch implementation (tests). */
-  fetchImpl?: FetchLike;
 }
 
 export class OllamaProvider implements LLMProvider {
@@ -35,14 +32,14 @@ export class OllamaProvider implements LLMProvider {
   private readonly model: string;
   private readonly systemPrompt: string;
   private readonly baseURL: string;
-  private readonly fetchImpl?: FetchLike;
+  private readonly requestOptions: ProviderHttpOptions;
 
   constructor(options: OllamaProviderOptions = {}) {
     this.apiKey = options.ollamaApiKey ?? getApiKey('ollama');
     this.model = options.ollamaModel ?? DEFAULT_MODEL;
     this.systemPrompt = options.systemPrompt ?? DEFAULT_SYSTEM_PROMPT;
     this.baseURL = options.ollamaBaseURL ?? DEFAULT_BASE_URL;
-    this.fetchImpl = options.fetchImpl;
+    this.requestOptions = { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs };
   }
 
   /** Local server: ready without a key (the optional key is only for remote auth). */
@@ -50,27 +47,27 @@ export class OllamaProvider implements LLMProvider {
     return true;
   }
 
-  async chat(messages: LLMMessage[], tools: LLMToolDef[]): Promise<LLMResponse> {
-    const doFetch = this.fetchImpl ?? (globalThis.fetch.bind(globalThis) as FetchLike);
+  async chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     if (this.apiKey) {
       headers.Authorization = `Bearer ${this.apiKey}`;
     }
-    const response = await doFetch(`${this.baseURL}/chat/completions`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        model: this.model,
-        messages: toOpenAIMessages(messages, this.systemPrompt),
-        tools: toOpenAITools(tools),
-        tool_choice: 'auto',
-      }),
-    });
-    if (!response.ok) {
-      const detail = await response.text().catch(() => '');
-      throw new Error(`Ollama request failed: ${response.status} ${detail}`.trim());
-    }
-    const completion = (await response.json()) as OpenAICompletion;
+    const completion = await fetchProviderJson<OpenAICompletion>(
+      'Ollama',
+      `${this.baseURL}/chat/completions`,
+      {
+        method: 'POST',
+        ...(signal ? { signal } : {}),
+        headers,
+        body: JSON.stringify({
+          model: this.model,
+          messages: toOpenAIMessages(messages, this.systemPrompt),
+          tools: toOpenAITools(tools),
+          tool_choice: 'auto',
+        }),
+      },
+      this.requestOptions,
+    );
     return parseOpenAIResponse(completion);
   }
 }
