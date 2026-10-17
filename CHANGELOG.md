@@ -9,6 +9,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- First-visit editor preparation waits for the service worker to control the
+  page, so warmed font resources remain available in its offline cache.
 - A failed recovery snapshot no longer removes an older document when storage
   remains full after a retry.
 - Recovery files that exceed the storage budget are rejected before their
