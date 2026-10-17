@@ -39,6 +39,23 @@ only knows the `LLMProvider` interface and the `AgentTool` registry.
 
 The document product uses a default-off assistant switch. Opening the panel never downloads a model or connects a service. Runtime configuration is reached through the usage settings; generated selection edits require explicit review and confirmation. Browser-agent tools are documented separately in the developer reference.
 
+## Fetch provider request bounds
+
+OpenAI-compatible, Gemini and Ollama providers use a five-minute total deadline
+per `chat` call, covering both the fetch and JSON response read. Set `timeoutMs`
+in their constructor options or `createProvider` options to override it. The
+duration must be positive, finite and at most 2,147,483,647 milliseconds.
+Caller cancellation retains its original reason; deadline expiry rejects with
+`TimeoutError`. Both paths abort the transport and settle the provider call even
+when an injected transport ignores cancellation. A late response cannot become
+a successful result. Timers and caller subscriptions are released on settlement.
+
+HTTP failures carry a numeric `status` and a safe provider/status message.
+Upstream error bodies are cancelled without being read or included in errors.
+Hosts can classify structured errors directly; serialized messages retain the
+same provider/status category. No request is retried automatically. These bounds
+do not alter the Anthropic SDK or browser-local inference lifetimes.
+
 ## Optional timing observations
 
 `runAgent` accepts `onFirstProviderText?: () => void`, called once for the first

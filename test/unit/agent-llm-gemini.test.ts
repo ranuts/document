@@ -126,10 +126,11 @@ describe('GeminiProvider', () => {
 
 it('cancels a pending cloud request when Stop aborts its signal', async () => {
   const abort = new AbortController();
+  let transport: AbortSignal | null | undefined;
   const provider = new GeminiProvider({
     apiKey: 'test',
     fetchImpl: async (_url, init) => {
-      expect(init.signal).toBe(abort.signal);
+      transport = init.signal;
       return new Promise((_resolve, reject) => {
         init.signal!.addEventListener('abort', () => reject(init.signal!.reason), { once: true });
       });
@@ -138,6 +139,8 @@ it('cancels a pending cloud request when Stop aborts its signal', async () => {
   const pending = (provider as import('@ranuts/agent-core/llm/types').LLMProvider).chat([], [], abort.signal);
   abort.abort();
   await expect(pending).rejects.toMatchObject({ name: 'AbortError' });
+  expect(transport?.aborted).toBe(true);
+  expect(transport?.reason).toBe(abort.signal.reason);
 });
 
 it('does not send an already cancelled cloud request', async () => {

@@ -10,6 +10,7 @@
  */
 import { getApiKey } from './keys';
 import { DEFAULT_SYSTEM_PROMPT } from './prompt';
+import { fetchProviderJson, type ProviderHttpOptions } from './provider-http';
 import type { LLMContent, LLMMessage, LLMProvider, LLMResponse, LLMToolDef } from './types';
 
 const DEFAULT_MODEL = 'gemini-2.0-flash';
@@ -27,8 +28,6 @@ interface GeminiContent {
 export interface GeminiResponse {
   candidates?: Array<{ content?: { parts?: GeminiPart[] }; finishReason?: string }>;
 }
-
-type FetchLike = (input: string, init: RequestInit) => Promise<Response>;
 
 /** Convert neutral tool defs to Gemini's `functionDeclarations` shape. */
 export function toGeminiTools(tools: LLMToolDef[]): Record<string, unknown>[] {
@@ -129,13 +128,11 @@ export function parseGeminiResponse(response: GeminiResponse): LLMResponse {
   };
 }
 
-export interface GeminiProviderOptions {
+export interface GeminiProviderOptions extends ProviderHttpOptions {
   apiKey?: string;
   geminiModel?: string;
   systemPrompt?: string;
   geminiBaseURL?: string;
-  /** Inject a fetch implementation (tests). */
-  fetchImpl?: FetchLike;
 }
 
 export class GeminiProvider implements LLMProvider {
@@ -145,14 +142,14 @@ export class GeminiProvider implements LLMProvider {
   private readonly model: string;
   private readonly systemPrompt: string;
   private readonly baseURL: string;
-  private readonly fetchImpl?: FetchLike;
+  private readonly requestOptions: ProviderHttpOptions;
 
   constructor(options: GeminiProviderOptions = {}) {
     this.apiKey = options.apiKey ?? getApiKey('gemini');
     this.model = options.geminiModel ?? DEFAULT_MODEL;
     this.systemPrompt = options.systemPrompt ?? DEFAULT_SYSTEM_PROMPT;
     this.baseURL = options.geminiBaseURL ?? DEFAULT_BASE_URL;
-    this.fetchImpl = options.fetchImpl;
+    this.requestOptions = { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs };
   }
 
   isReady(): boolean {
@@ -164,7 +161,6 @@ export class GeminiProvider implements LLMProvider {
     if (!this.apiKey) {
       throw new Error('Gemini API key is not configured');
     }
-    const doFetch = this.fetchImpl ?? (globalThis.fetch.bind(globalThis) as FetchLike);
     const body: Record<string, unknown> = {
       systemInstruction: { parts: [{ text: this.systemPrompt }] },
       contents: toGeminiContents(messages),
@@ -172,17 +168,17 @@ export class GeminiProvider implements LLMProvider {
     const geminiTools = toGeminiTools(tools);
     if (geminiTools.length > 0) body.tools = geminiTools;
 
-    const response = await doFetch(`${this.baseURL}/models/${this.model}:generateContent`, {
-      method: 'POST',
-      ...(signal ? { signal } : {}),
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': this.apiKey },
-      body: JSON.stringify(body),
-    });
-    if (!response.ok) {
-      const detail = await response.text().catch(() => '');
-      throw new Error(`Gemini request failed: ${response.status} ${detail}`.trim());
-    }
-    const data = (await response.json()) as GeminiResponse;
+    const data = await fetchProviderJson<GeminiResponse>(
+      'Gemini',
+      `${this.baseURL}/models/${this.model}:generateContent`,
+      {
+        method: 'POST',
+        ...(signal ? { signal } : {}),
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': this.apiKey },
+        body: JSON.stringify(body),
+      },
+      this.requestOptions,
+    );
     signal?.throwIfAborted();
     return parseGeminiResponse(data);
   }
