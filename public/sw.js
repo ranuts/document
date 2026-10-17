@@ -315,6 +315,24 @@ async function restorePreparedAssistant() {
   await Promise.all([...capabilities].map(prepareAssistantAssets));
 }
 
+// Only this build's capability allowlist reaches here. An exact same-origin
+// URL identifies reusable bytes; never consult provider/model or vendor caches.
+async function reuseAssistantAsset(cache, asset, earlierCoreNames) {
+  if (new URL(asset, self.location.origin).origin !== self.location.origin) return false;
+  for (const name of earlierCoreNames) {
+    try {
+      const response = await (await caches.open(name)).match(asset);
+      if (response?.status === 200) {
+        await cache.put(asset, response.clone());
+        return true;
+      }
+    } catch {
+      // A retired/unreadable entry is only a missed optimization. Fetch it below.
+    }
+  }
+  return false;
+}
+
 function prepareAssistantAssets(capability) {
   if (!Object.prototype.hasOwnProperty.call(ASSISTANT_CAPABILITY_ASSETS, capability))
     return Promise.reject(new Error('Unknown assistant capability'));
@@ -323,8 +341,15 @@ function prepareAssistantAssets(capability) {
       .open(CORE_CACHE)
       .then(async (cache) => {
         const missing = [];
-        for (const asset of ASSISTANT_CAPABILITY_ASSETS[capability])
-          if (!(await cache.match(asset))) missing.push(asset);
+        let earlierCoreNames;
+        for (const asset of ASSISTANT_CAPABILITY_ASSETS[capability]) {
+          if (await cache.match(asset)) continue;
+          earlierCoreNames ??= await caches
+            .keys()
+            .then((names) => names.filter((name) => name.startsWith('document-editor-core-') && name !== CORE_CACHE))
+            .catch(() => []);
+          if (!(await reuseAssistantAsset(cache, asset, earlierCoreNames))) missing.push(asset);
+        }
         if (missing.length) await cache.addAll(missing);
         const marker = () => new Response('1', { headers: { 'X-Document-Assistant-Prepared': '1' } });
         await cache.put(preparedKey(capability), marker());
