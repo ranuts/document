@@ -213,16 +213,14 @@ export async function takeSnapshot(): Promise<HistoryDoc | null> {
   try {
     const file = await requestSaveDocument(active.ext.toUpperCase());
     if (session !== active || active.stopped) return null;
-    const bytes = await file.arrayBuffer();
-    // A document switch or disabled recovery retires this export. Its late
-    // bytes/failure must not write history or stop the replacement session.
-    if (session !== active || active.stopped) return null;
+    // Let storage check the exported file's size before copying its bytes.
+    // The owner signal also guards budget checks and asynchronous file reads.
     const doc = await putSnapshot(
       {
         id: active.docId,
         title: active.title,
         origin: active.origin,
-        bytes,
+        bytes: file,
       },
       active.storageAbort.signal,
     );

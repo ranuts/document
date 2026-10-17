@@ -138,6 +138,25 @@ describe('autosave session', () => {
     expect(getAutosaveDocId()).toBe(doc!.id);
   });
 
+  it('rejects an over-budget export without reading its file and preserves earlier recovery', async () => {
+    requestSaveDocument.mockResolvedValue(fileOf([7, 8, 9]));
+    await beginAutosaveSession({ docId: 'keep', title: 'Keep.docx', origin: 'local' });
+    await takeSnapshot();
+    stopAutosaveSession();
+    vi.stubGlobal('navigator', { ...navigator, storage: { estimate: async () => ({ quota: 200 }) } });
+    const file = new File([new Uint8Array(120)], 'Large.docx');
+    const read = vi.spyOn(file, 'arrayBuffer');
+    requestSaveDocument.mockResolvedValue(file);
+    await beginAutosaveSession({ docId: 'large', title: 'Large.docx', origin: 'local' });
+
+    expect(await takeSnapshot()).toBeNull();
+
+    expect(read).not.toHaveBeenCalled();
+    expect(isAutosaveSessionActive()).toBe(false);
+    expect(Array.from((await getLatestSnapshot('keep'))!.bytes)).toEqual([7, 8, 9]);
+    expect((await listDocs()).items.map((doc) => doc.id)).toEqual(['keep']);
+  });
+
   it('keeps appending to the same row across snapshots', async () => {
     requestSaveDocument.mockResolvedValue(fileOf([1]));
     await beginAutosaveSession({ docId: 'report', title: 'Report.docx', origin: 'local' });

@@ -11,6 +11,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 - A failed recovery snapshot no longer removes an older document when storage
   remains full after a retry.
+- Recovery files that exceed the storage budget are rejected before their
+  contents are copied into another memory buffer.
 - Unresponsive OpenAI-compatible, Gemini and Ollama requests now time out,
   including stalled response reads, so another request can be sent.
 - Gemini authentication, rate-limit and service failures now show actionable
