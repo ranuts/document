@@ -83,3 +83,20 @@ it('does not borrow application roles when an HTML consumer omits the role style
     ]),
   ).toContainEqual({ file: 'generated/missing-layer.html', missing: ['--app-control-page'] });
 });
+
+it('rejects unary signs prefixed to CSS functions in every authored and generated stylesheet', async () => {
+  const { invalidTokenArithmetic, authoredStyles, designTokenSources } = await import('../../bin/design-tokens.mjs');
+  const { generate } = await import('../../bin/build-pages.mjs');
+  expect(invalidTokenArithmetic('a{margin:-var(--ran-space-2);margin-left:-calc(var(--ran-space-3)/2)}')).toEqual([
+    '-var(',
+    '-calc(',
+  ]);
+  expect(
+    invalidTokenArithmetic('a{margin:calc(-1 * var(--ran-space-2));margin-left:calc(var(--ran-space-3)/-2)}'),
+  ).toEqual([]);
+  for (const file of designTokenSources(process.cwd())) {
+    expect(invalidTokenArithmetic(authoredStyles(file, read(file))), file).toEqual([]);
+  }
+  for (const { rel, html } of generate({ outDir: null }))
+    expect(invalidTokenArithmetic(authoredStyles(rel, html)), rel).toEqual([]);
+});

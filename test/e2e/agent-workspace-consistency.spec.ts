@@ -43,6 +43,7 @@ test('workspace pages share compact token geometry and a keyboard return path', 
           expect((await current.locator('.agent-history-search-row').boundingBox())!.height).toBe(32);
         }
         if (view === '.agent-panel-settings') {
+          await expect(current.locator(':scope > .agent-panel-note')).toHaveCSS('margin-top', '-8px');
           expect((await current.locator('.agent-source-picker').boundingBox())!.height).toBe(32);
           for (const field of await current.locator('r-input:visible, r-select:visible').all()) {
             expect((await field.boundingBox())!.height).toBe(32);
