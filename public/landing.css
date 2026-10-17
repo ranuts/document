@@ -202,6 +202,11 @@ header.bar nav a:hover {
 }
 
 @media (max-width: 620px) {
+  /* Keep the visible brand and all app controls on one 390px row. Narrower
+     viewports can wrap navigation without giving the home destination up. */
+  header.bar {
+    gap: var(--ran-space-1);
+  }
   /* Phone: the trigger keeps the globe and the caret and drops the language
      name, which is the part that costs width. The globe is the international
      sign for this control, and the panel names every language in full anyway.
