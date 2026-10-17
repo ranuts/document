@@ -44,6 +44,10 @@ test('prepares only the requested runtime and keeps it available offline', async
           ]);
         }),
     );
+  // Prepare the editor once online before testing its offline reuse. Home
+  // precaches the shell; editor-specific SDK chunks are cached on first use.
+  await page.goto('/editor?new=docx');
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()), undefined, { timeout: 60_000 });
   expect(await prepare()).toBe(true);
   const unrelated = await page.evaluate(
     async (assets) => Promise.all(assets.map(async (path) => Boolean(await caches.match(path)))),

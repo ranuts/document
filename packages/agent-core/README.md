@@ -41,8 +41,8 @@ The document product uses a default-off assistant switch. Opening the panel neve
 
 ## Fetch provider request bounds
 
-OpenAI-compatible, Gemini and Ollama providers use a five-minute total deadline
-per `chat` call, covering both the fetch and JSON response read. Set `timeoutMs`
+OpenAI-compatible, Gemini, Ollama and Loopback providers use a five-minute total deadline
+per request, covering headers and complete JSON or incremental response reads. Set `timeoutMs`
 in their constructor options or `createProvider` options to override it. The
 duration must be positive, finite and at most 2,147,483,647 milliseconds.
 Caller cancellation retains its original reason; deadline expiry rejects with
@@ -55,6 +55,27 @@ Upstream error bodies are cancelled without being read or included in errors.
 Hosts can classify structured errors directly; serialized messages retain the
 same provider/status category. No request is retried automatically. These bounds
 do not alter the Anthropic SDK or browser-local inference lifetimes.
+
+`maxResponseBytes` bounds actual response bytes, including streaming frames, to
+8 MiB by default. It must be a positive safe integer. Declared oversized bodies
+are rejected before reading; actual bytes are checked even if Content-Length is
+missing or incorrect. Native response readers are cancelled on overflow, Stop,
+timeout or consumer failure. Host transports exposing only `json()` retain a
+post-materialization byte check and the same deadline.
+
+Tool-free `chatStream` uses SSE for OpenAI-compatible/Gemini/Ollama endpoints and
+NDJSON for Loopback. It emits text as it arrives and resolves to the same neutral
+response shape. Compatible endpoints returning complete JSON remain supported.
+A disconnected stream without a terminal finish marker fails; it is never a
+complete answer. Tool-bearing requests use complete JSON, and schema-constrained
+generation remains complete and validated by its caller before document writes.
+
+Browser-local provider hosts may supply `prepareRuntimeAssets(capability)` to
+persist the runtime actually being activated. This advisory callback never
+starts model inference or changes the destination; persistence failures cannot
+block online use. The app stores build-owned capability lists and restores
+previously prepared capabilities across updates. Cloud setup prepares no local
+inference or PDF runtime.
 
 ## Optional timing observations
 
