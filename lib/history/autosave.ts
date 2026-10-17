@@ -146,6 +146,9 @@ interface ActiveSession {
 }
 
 let session: ActiveSession | null = null;
+let sessionGeneration = 0;
+// Editing identity outlives the optional recovery scheduler.
+let activeDocumentId: string | null = null;
 
 function notify(kind: 'warning' | 'error', text: string): void {
   (window as unknown as { message?: Record<string, ((msg: string) => void) | undefined> }).message?.[kind]?.(text);
@@ -287,6 +290,8 @@ function tick(): void {
  */
 export async function beginAutosaveSession(input: AutosaveSessionInput): Promise<void> {
   stopAutosaveSession();
+  activeDocumentId = input.docId;
+  const generation = sessionGeneration;
   if (typeof window === 'undefined' || isEmbedMode() || !isAutosaveEnabled()) return;
 
   const ext = extensionOf(input.title);
@@ -300,6 +305,12 @@ export async function beginAutosaveSession(input: AutosaveSessionInput): Promise
   // holds the write lock is our bookkeeping, not their business. This page
   // simply stops writing snapshots -- the other tab is taking them.
   const { held, release } = await acquireLock(lockName);
+  // Stopping or replacing a document also cancels starts still waiting for a
+  // lock. A late grant must release ownership before installing any resources.
+  if (generation !== sessionGeneration || !isAutosaveEnabled()) {
+    release?.();
+    return;
+  }
 
   const onVisibility = (): void => {
     // The last chance that reliably gets time to run. beforeunload cannot be
@@ -372,6 +383,7 @@ export async function beginAutosaveSession(input: AutosaveSessionInput): Promise
 }
 
 export function stopAutosaveSession(): void {
+  sessionGeneration += 1;
   const active = session;
   session = null;
   if (!active || active.stopped) return;
@@ -393,4 +405,15 @@ export function getAutosaveDocId(): string | null {
 /** Test seam: inspect whether a session is running. */
 export function isAutosaveSessionActive(): boolean {
   return session !== null;
+}
+
+/** The currently opened document, including when recovery is disabled. */
+export function getActiveDocumentId(): string | null {
+  return activeDocumentId;
+}
+
+/** Retire the opened document before closing or replacing its editor. */
+export function clearDocumentSession(): void {
+  stopAutosaveSession();
+  activeDocumentId = null;
 }

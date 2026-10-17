@@ -7,7 +7,7 @@ const { convert, start, clear, remember } = vi.hoisted(() => ({
 }));
 vi.mock('../../lib/converter', () => ({ handleDocumentOperation: convert, loadEditorApi: async () => {} }));
 vi.mock('../../lib/history/session', () => ({ startDocumentSession: start, newDocumentId: () => 'new-id' }));
-vi.mock('../../lib/history/autosave', () => ({ stopAutosaveSession: vi.fn() }));
+vi.mock('../../lib/history/autosave', () => ({ clearDocumentSession: vi.fn() }));
 vi.mock('../../lib/active-document-source', () => ({ clearActiveSource: clear, rememberActiveSource: remember }));
 vi.mock('../../lib/onlyoffice-editor', () => ({ getReadonlyMode: () => false }));
 import { openDocumentFromUrl, openLocalFile, onCreateNew } from '../../lib/document';

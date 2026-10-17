@@ -155,8 +155,7 @@ export function buildTools(): WebMcpTool[] {
         if (!fileName.includes('.')) return fail('fileName must include an extension');
         const bytes = decodeBase64(String(input.base64 || ''));
         if (!bytes.byteLength) return fail('base64 decoded to zero bytes');
-        await openLocalFile(new File([bytes], fileName));
-        if (input.readonly) setReadonlyMode(true);
+        await openLocalFile(new File([bytes], fileName), { readonly: Boolean(input.readonly) });
         return ok({ ok: true, fileName, size: bytes.byteLength, readonly: getReadonlyMode() });
       },
     },

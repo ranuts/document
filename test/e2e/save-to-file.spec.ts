@@ -186,6 +186,23 @@ test.describe('saving into the document own file (real editor)', () => {
     );
   });
 
+  test('disabling recovery still reuses the authorized document file', async ({ page }) => {
+    await page.evaluate(() => localStorage.setItem('document-autosave-enabled', 'false'));
+    await page.goto('/editor?new=docx');
+    await waitForEditorReady(page);
+    expect(new URL(page.url()).searchParams.get('saved')).toBeTruthy();
+    const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.type('First disk version');
+    await page.keyboard.press('Control+s');
+    await waitForWrites(page, 1);
+    await page.keyboard.type(' and newer edits');
+    await page.keyboard.press('Control+s');
+    await waitForWrites(page, 2);
+    expect(await pickerCalls(page)).toBe(1);
+    expect(await savedText(page)).toContain('and newer edits');
+  });
+
   test('another edit after saving rearms the unsaved-changes warning', async ({ page }) => {
     await page.goto('/editor?new=docx');
     await waitForEditorReady(page);

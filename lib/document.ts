@@ -1,7 +1,6 @@
 import { beginDocumentOpen, commitDocumentOpen, isMountedDocumentOpen } from './document-open';
 import { fetchRemoteDocument } from './remote-document';
 import { remoteFileName } from './remote-file-name';
-import { createObjectURL } from 'ranuts/utils';
 import { View } from 'ranui/builder';
 import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 import { t } from '@ranuts/shared/i18n';
@@ -9,7 +8,7 @@ import 'ranui/message';
 import { handleDocumentOperation, loadEditorApi } from './converter';
 import { showLoading } from './loading';
 import { startDocumentSession, newDocumentId } from './history/session';
-import { stopAutosaveSession } from './history/autosave';
+import { clearDocumentSession } from './history/autosave';
 import { rememberActiveSource, clearActiveSource } from './active-document-source';
 
 // Import UI functions with type-only to avoid circular dependency
@@ -58,7 +57,7 @@ export const onCreateNew = async (ext: string, options?: { docId?: string }): Pr
     const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob, isCurrent: opening.isCurrent });
     if (!commitDocumentOpen(operation)) return;
-    stopAutosaveSession();
+    clearDocumentSession();
     await clearActiveSource();
     if (!isMountedDocumentOpen(operation)) return;
     // Recovery points from here on. A blank document is the case with the most
@@ -92,9 +91,10 @@ export const openLocalFile = async (
     if (hideControlPanelFn) {
       hideControlPanelFn();
     }
-    const objectUrl = await createObjectURL(file);
     opening.assertCurrent();
-    setDocmentObj({ fileName: file.name, file, url: objectUrl });
+    // The editor owns the URL it creates from these bytes. This store needs
+    // only the File; a second Blob URL would retain every replaced original.
+    setDocmentObj({ fileName: file.name, file });
     const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({
       file: fileBlob,
@@ -103,21 +103,22 @@ export const openLocalFile = async (
       readonly: options?.readonly,
       isCurrent: opening.isCurrent,
     });
-    if (!commitDocumentOpen(operation)) return;
+    if (!commitDocumentOpen(operation)) throw new DOMException('Document open superseded', 'AbortError');
     // The replacement editor now owns exports; retire the previous identity
     // before asynchronous source storage, while delaying URL stamping until commit.
-    stopAutosaveSession();
+    clearDocumentSession();
     const docId = options?.historyId || newDocumentId();
     await rememberActiveSource(docId, file);
-    if (!isMountedDocumentOpen(operation)) return;
+    if (!isMountedDocumentOpen(operation)) throw new DOMException('Document open superseded', 'AbortError');
     startDocumentSession({ title: file.name, origin: 'local', docId });
   } catch (error) {
-    if (!opening.isCurrent()) return;
+    if (!opening.isCurrent()) throw error;
     console.error('Error opening document:', error);
     // Ensure control panel is shown on error
     if (showControlPanelFn) {
       showControlPanelFn();
     }
+    throw error;
   } finally {
     // Always remove loading, even if there's an error
     removeLoading();
@@ -139,7 +140,9 @@ export const onOpenDocument = (): void => {
     // Only process if a file was actually selected
     // If user cancelled, onchange won't fire, nothing happens
     if (file) {
-      await openLocalFile(file);
+      // The open path already reports failure. A DOM event has no caller to
+      // receive its rejection, unlike tools and recovery operations.
+      await openLocalFile(file).catch(() => {});
       // Clear file selection so the same file can be selected again
       fileInput.value = '';
     }
@@ -209,9 +212,8 @@ export const openDocumentFromUrl = async (
     const file = new File([remote.blob], finalFileName, { type: remote.blob.type });
 
     // Set document object
-    const objectUrl = await createObjectURL(file);
     opening.assertCurrent();
-    setDocmentObj({ fileName: finalFileName, file, url: objectUrl });
+    setDocmentObj({ fileName: finalFileName, file });
 
     // Initialize and open document
     const { fileName: docFileName, file: fileBlob } = getDocmentObj();
@@ -223,7 +225,7 @@ export const openDocumentFromUrl = async (
       isCurrent: opening.isCurrent,
     });
     if (!commitDocumentOpen(operation)) throw new DOMException('Document open superseded', 'AbortError');
-    stopAutosaveSession();
+    clearDocumentSession();
     await clearActiveSource();
     if (!isMountedDocumentOpen(operation)) throw new DOMException('Document open superseded', 'AbortError');
     startDocumentSession({ title: docFileName, origin: 'url', docId: options?.docId });

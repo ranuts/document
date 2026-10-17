@@ -11,7 +11,7 @@ vi.mock('ranuts/utils', async (original) => ({
 }));
 vi.mock('../../lib/converter', () => ({ handleDocumentOperation: convert, loadEditorApi: async () => {} }));
 vi.mock('../../lib/history/session', () => ({ startDocumentSession: start, newDocumentId: () => 'source-id' }));
-vi.mock('../../lib/history/autosave', () => ({ stopAutosaveSession: vi.fn() }));
+vi.mock('../../lib/history/autosave', () => ({ clearDocumentSession: vi.fn() }));
 vi.mock('../../lib/active-document-source', () => ({
   rememberActiveSource: remember,
   clearActiveSource: async () => {},
@@ -63,7 +63,7 @@ describe('open ownership across entry points', () => {
         ),
       );
       finish(true);
-      await local;
+      await expect(local).rejects.toMatchObject({ name: 'AbortError' });
       expect(start).not.toHaveBeenCalled();
     } finally {
       for (const [type, listener, options] of listeners.mock.calls) window.removeEventListener(type, listener, options);
@@ -83,7 +83,7 @@ describe('open ownership across entry points', () => {
     await vi.waitFor(() => expect(remember).toHaveBeenCalled());
     await events.RENDER_OFFICE(chunk);
     finish(true);
-    await local;
+    await expect(local).rejects.toMatchObject({ name: 'AbortError' });
     expect(start).not.toHaveBeenCalled();
   });
   it.each(['open', 'close'])('cancels a remote fetch on desktop %s', async (action) => {

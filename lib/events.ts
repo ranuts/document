@@ -1,7 +1,7 @@
 import { clearActiveSource } from './active-document-source';
 import { beginDocumentOpen, cancelDocumentOpen, commitDocumentOpen } from './document-open';
-import { stopAutosaveSession } from './history/autosave';
-import { MessageCodec, Platform, createObjectURL } from 'ranuts/utils';
+import { clearDocumentSession } from './history/autosave';
+import { MessageCodec, Platform } from 'ranuts/utils';
 import type { MessageHandler } from 'ranuts/utils';
 import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 import { handleDocumentOperation } from './converter';
@@ -47,17 +47,14 @@ export const events: Record<string, MessageHandler<any, unknown>> = {
       try {
         const file = await MessageCodec.decodeFileChunked(chunks);
         opening.assertCurrent();
-        const url = await createObjectURL(file);
-        opening.assertCurrent();
         setDocmentObj({
           fileName: file.name,
           file: file,
-          url,
         });
         const { fileName, file: fileBlob } = getDocmentObj();
         await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob, isCurrent: opening.isCurrent });
         if (commitDocumentOpen(opening.id)) {
-          stopAutosaveSession();
+          clearDocumentSession();
           await clearActiveSource();
         }
       } catch (error) {
@@ -70,7 +67,7 @@ export const events: Record<string, MessageHandler<any, unknown>> = {
   },
   CLOSE_EDITOR: () => {
     cancelDocumentOpen();
-    stopAutosaveSession();
+    clearDocumentSession();
     chunkOpening = null;
     fileChunks = [];
     if (window.editor && typeof window.editor.destroyEditor === 'function') {
