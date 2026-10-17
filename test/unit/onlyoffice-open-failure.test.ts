@@ -8,7 +8,7 @@ import {
   releaseOpenAttemptBytes,
   setOpenRunner,
 } from '../../lib/onlyoffice/open-failure';
-import { resetOpenState } from '../../lib/onlyoffice/open-state';
+import { markDocumentContentReady, resetOpenState } from '../../lib/onlyoffice/open-state';
 
 /**
  * The open-failure state machine, driven through the guard the way the vendor
@@ -45,7 +45,10 @@ const fakeFrame = () => {
     win: win as unknown as Window,
     sent,
     retryInFlightAtError,
-    reject: (message: string) => (handlers.unhandledrejection ?? []).forEach((cb) => cb({ reason: { message } })),
+    reject: (message: string) =>
+      (handlers.unhandledrejection ?? []).forEach((cb) =>
+        cb(Object.assign(new Event('unhandledrejection', { cancelable: true }), { reason: { message } })),
+      ),
   };
 };
 
@@ -162,9 +165,8 @@ describe('a rebuild in flight suppresses the toast diagnostic', () => {
   });
 
   it('is true while the rebuilt editor is asking for its own 283 MB', () => {
-    // The vendor raises its own -82 for the same failure, so the toast can
-    // fire here -- and probeX2tMemory's commit half would then be competing
-    // with the very rebuild it is reporting on.
+    // An independent SDK error can still reach the toast during a rebuild;
+    // probeX2tMemory's commit half must not compete with the retry's heap.
     registerOpenAttempt({ fileName: 'a.xlsx', fileType: 'xlsx' });
     failOnce(fakeFrame());
     expect(isOpenRetryInFlight()).toBe(true);
@@ -200,5 +202,83 @@ describe('a rebuild in flight suppresses the toast diagnostic', () => {
     failOnce(fakeFrame());
     registerOpenAttempt({ fileName: 'b.docx', fileType: 'docx' });
     expect(isOpenRetryInFlight()).toBe(false);
+  });
+});
+
+describe('conversion rejection ownership precedes vendor reporting', () => {
+  beforeEach(() => {
+    resetOpenState();
+    setOpenRunner(() => Promise.resolve());
+    vi.useFakeTimers();
+  });
+
+  function dispatchedFrame(reason: string, beforeDispatch?: () => void, cancelable = true) {
+    const iframe = document.createElement('iframe');
+    document.body.append(iframe);
+    const win = iframe.contentWindow!;
+    const sendEvent = vi.fn();
+    Object.assign(win, { Asc: { editor: { sendEvent } } });
+    // Register first, matching SDK boot. Capture order must still let the
+    // application claim a conversion rejection before the vendor's -82 path.
+    const vendor = vi.fn(() => sendEvent('asc_onError', -82, -1));
+    win.addEventListener('unhandledrejection', vendor);
+    installOpenFailureGuard(win);
+    beforeDispatch?.();
+    const event = new Event('unhandledrejection', { cancelable });
+    Object.defineProperty(event, 'reason', { value: new Error(reason) });
+    win.dispatchEvent(event);
+    iframe.remove();
+    return { event, vendor, sendEvent };
+  }
+
+  it('consumes an owned retriable rejection before a previously installed vendor listener', () => {
+    registerOpenAttempt({ fileName: 'retry.xlsx', fileType: 'xlsx' });
+    const frame = dispatchedFrame("Document conversion failed: Cannot read properties of undefined (reading 'Id')");
+    expect(isOpenRetryInFlight()).toBe(true);
+    expect(frame.vendor).not.toHaveBeenCalled();
+    expect(frame.sendEvent).not.toHaveBeenCalled();
+    expect(frame.event.defaultPrevented).toBe(true);
+  });
+
+  it('reports a final owned conversion failure once through the existing SDK error path', () => {
+    registerOpenAttempt({ fileName: 'broken.xlsx', fileType: 'xlsx' });
+    const frame = dispatchedFrame('Document conversion failed: Conversion failed with code: 88');
+    expect(frame.vendor).not.toHaveBeenCalled();
+    expect(frame.sendEvent).toHaveBeenCalledExactlyOnceWith('asc_onError', -82, -1);
+    expect(frame.event.defaultPrevented).toBe(true);
+  });
+
+  it('preserves SDK reporting for conversions after content has loaded', () => {
+    registerOpenAttempt({ fileName: 'loaded.xlsx', fileType: 'xlsx' });
+    markDocumentContentReady();
+    const frame = dispatchedFrame('Document conversion failed: Conversion failed with code: 88');
+    expect(frame.vendor).toHaveBeenCalledOnce();
+    expect(frame.event.defaultPrevented).toBe(false);
+  });
+
+  it('does not let a replaced frame report its known conversion failure against the current document', () => {
+    registerOpenAttempt({ fileName: 'old.xlsx', fileType: 'xlsx' });
+    const frame = dispatchedFrame('Document conversion failed: Conversion failed with code: 88', () => {
+      registerOpenAttempt({ fileName: 'current.xlsx', fileType: 'xlsx' });
+      markDocumentContentReady();
+    });
+    expect(frame.vendor).not.toHaveBeenCalled();
+    expect(frame.sendEvent).not.toHaveBeenCalled();
+    expect(frame.event.defaultPrevented).toBe(true);
+  });
+
+  it('still owns a synthetic non-cancelable conversion rejection without default suppression', () => {
+    registerOpenAttempt({ fileName: 'retry.xlsx', fileType: 'xlsx' });
+    const frame = dispatchedFrame('X2T module failed to instantiate: Failed to fetch', undefined, false);
+    expect(frame.vendor).not.toHaveBeenCalled();
+    expect(frame.event.defaultPrevented).toBe(false);
+    expect(isOpenRetryInFlight()).toBe(true);
+  });
+
+  it('preserves vendor reporting for unrelated rejections', () => {
+    registerOpenAttempt({ fileName: 'unrelated.xlsx', fileType: 'xlsx' });
+    const frame = dispatchedFrame('Unrelated extension failure');
+    expect(frame.vendor).toHaveBeenCalledOnce();
+    expect(frame.event.defaultPrevented).toBe(false);
   });
 });

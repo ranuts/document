@@ -41,9 +41,9 @@ let currentOpenAttempt: OpenAttempt | null = null;
 // Whether a rebuilt editor is on its way for the attempt that just failed.
 // Read by the error toast, which must not run a diagnostic that competes with
 // the rebuild for the same 283 MB (see probeX2tMemory's `skipCommit`). True
-// from the moment the rebuild is scheduled until that attempt settles: the
-// vendor raises its own -82 for the failure we are already answering, so the
-// toast can fire while the retry is still loading.
+// from the moment the rebuild is scheduled until that attempt settles. Any
+// independent SDK error reported during that interval must not start another
+// heap probe while the retry is still loading.
 let openRetryInFlight = false;
 // Bumped for every editor build (a user-initiated open and its retry alike).
 // Each frame's failure guard captures the generation it was installed for, so
@@ -206,48 +206,66 @@ export function installOpenFailureGuard(win: Window): void {
     if (generation !== openGeneration) return;
     noteFrameError(String(error.message ?? ''), error.filename);
   });
-  win.addEventListener('unhandledrejection', (event) => {
-    const reason = (event as PromiseRejectionEvent).reason as { message?: unknown } | undefined;
-    const message = String(reason && typeof reason === 'object' ? (reason.message ?? reason) : reason);
-    if (generation === openGeneration) noteFrameError(message);
-    if (!isOpenConversionFailure(message)) return;
-    if (isDocumentContentReady()) {
-      // The document is loaded, so this is a failed export (convertFromBin);
-      // the SDK already reports those through asc_onError itself. Just stop
-      // the pending save request from waiting out its timeout.
-      console.error('[OO] save conversion failed:', message);
-      failPendingSaveConversion(message);
-      return;
-    }
-    // The vendor's async loadDocument leaves both the inner conversion
-    // promise and its own promise unhandled, so this fires twice per failure;
-    // act once per editor build, and never for a superseded one.
-    if (generation !== openGeneration || getDocumentOpenError()) return;
-    if (handledFailureGeneration === generation) return;
-    handledFailureGeneration = generation;
-    console.error('[OO] open conversion failed:', message);
-    // An environment-class failure (see classifyOpenFailure) says nothing
-    // about the document, so rebuild the editor once with the same bytes
-    // before telling the user the file cannot be opened. The rebuild starts
-    // the editor -- and its font system, x2t module and image pipeline --
-    // from scratch, which is what turned the failure into a success on a
-    // second, colder browser in GitHub #144.
-    if (retryCurrentOpen(message)) return;
-    // Final: this failure is going to the user, and the full memory probe the
-    // toast wants is safe again now that no rebuild is asking for a heap.
-    openRetryInFlight = false;
-    markDocumentOpenFailed(message);
-    const api = w.Asc?.editor;
-    if (!api || typeof api.sendEvent !== 'function') return;
-    const errorId = w.Asc?.c_oAscError?.ID?.ConvertationOpenError ?? -82;
-    const critical = w.Asc?.c_oAscError?.Level?.Critical ?? -1;
-    api.sendEvent('asc_onError', errorId, critical);
-    const blockInteraction = w.Asc?.c_oAscAsyncActionType?.BlockInteraction;
-    const openAction = w.Asc?.c_oAscAsyncAction?.Open;
-    if (blockInteraction !== undefined && openAction !== undefined) {
-      api.sendEvent('asc_onEndAction', blockInteraction, openAction);
-    }
-  });
+  win.addEventListener(
+    'unhandledrejection',
+    (event) => {
+      const reason = (event as PromiseRejectionEvent).reason as { message?: unknown } | undefined;
+      const message = String(reason && typeof reason === 'object' ? (reason.message ?? reason) : reason);
+      if (generation === openGeneration) noteFrameError(message);
+      if (!isOpenConversionFailure(message)) return;
+      const consume = () => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      };
+      if (generation !== openGeneration) {
+        // A retired frame cannot report its conversion against a replacement.
+        consume();
+        return;
+      }
+      if (isDocumentContentReady()) {
+        // The document is loaded, so this is a failed export (convertFromBin);
+        // the SDK already reports those through asc_onError itself. Just stop
+        // the pending save request from waiting out its timeout.
+        console.error('[OO] save conversion failed:', message);
+        failPendingSaveConversion(message);
+        return;
+      }
+      // We own this open failure: retry or the final SDK error below is the
+      // complete response. Letting the vendor handle the same rejection emits
+      // a misleading -82 even when our retry succeeds. Capture runs before its
+      // property listener regardless of which handler was installed first.
+      consume();
+      // The vendor's async loadDocument leaves both the inner conversion
+      // promise and its own promise unhandled, so this fires twice per failure;
+      // act once per editor build, and never for a superseded one.
+      if (getDocumentOpenError()) return;
+      if (handledFailureGeneration === generation) return;
+      handledFailureGeneration = generation;
+      console.error('[OO] open conversion failed:', message);
+      // An environment-class failure (see classifyOpenFailure) says nothing
+      // about the document, so rebuild the editor once with the same bytes
+      // before telling the user the file cannot be opened. The rebuild starts
+      // the editor -- and its font system, x2t module and image pipeline --
+      // from scratch, which is what turned the failure into a success on a
+      // second, colder browser in GitHub #144.
+      if (retryCurrentOpen(message)) return;
+      // Final: this failure is going to the user, and the full memory probe the
+      // toast wants is safe again now that no rebuild is asking for a heap.
+      openRetryInFlight = false;
+      markDocumentOpenFailed(message);
+      const api = w.Asc?.editor;
+      if (!api || typeof api.sendEvent !== 'function') return;
+      const errorId = w.Asc?.c_oAscError?.ID?.ConvertationOpenError ?? -82;
+      const critical = w.Asc?.c_oAscError?.Level?.Critical ?? -1;
+      api.sendEvent('asc_onError', errorId, critical);
+      const blockInteraction = w.Asc?.c_oAscAsyncActionType?.BlockInteraction;
+      const openAction = w.Asc?.c_oAscAsyncAction?.Open;
+      if (blockInteraction !== undefined && openAction !== undefined) {
+        api.sendEvent('asc_onEndAction', blockInteraction, openAction);
+      }
+    },
+    { capture: true },
+  );
 }
 
 /**

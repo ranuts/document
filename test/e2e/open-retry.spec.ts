@@ -131,6 +131,16 @@ test.describe('open retry after an environment failure (real editor)', () => {
         newerError = String(error);
       }
       if (!newerError.includes('404')) throw new Error(`expected a failed newer download, got: ${newerError}`);
+      // Observe the failing SDK before releasing the fault. Otherwise L0's
+      // 250ms hook poll can miss a vendor -82 emitted during a fast rebuild,
+      // making duplicate user-visible reporting look like a clean recovery.
+      const failingFrame = window.__ooFrames.editor() as (Window & { Asc?: { editor?: object } }) | null;
+      const failingApi = failingFrame?.Asc?.editor;
+      const hookDeadline = Date.now() + 10_000;
+      while (!failingApi || !window.__l0?.hooked.has(failingApi)) {
+        if (Date.now() > hookDeadline) throw new Error('the failing editor was not observed by L0');
+        await new Promise((resolve) => setTimeout(resolve, 20));
+      }
       sessionStorage.setItem('__oo_x2t_open_fault__', 'release');
 
       // The real signal: the rebuilt editor finished loading the document.
