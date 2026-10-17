@@ -19,6 +19,12 @@ notes. Entries describe what users experience, not internal refactors.
   guidance without exposing the service's response body.
 - Plain assistant requests omit unused tool-calling settings for better
   compatibility with configured AI services.
+- Oversized AI responses stop before unbounded data accumulates in memory.
+- OpenAI-compatible, Gemini, Ollama and local-service chat answers appear
+  progressively; interrupted streams are not treated as complete replies.
+- AI offline preparation now downloads only the runtime capabilities actually
+  used. Cloud-only setup avoids local inference downloads, and prepared
+  capabilities remain available after app updates.
 
 - A failed download started while switching documents no longer leaves the
   editor empty. Closing the editor still cancels an unfinished replacement.
