@@ -214,7 +214,7 @@ header.bar nav a:hover {
   header.bar .brand {
     min-width: 0;
     flex: 0 0 auto;
-    max-width: 10ch;
+    max-width: 8ch;
   }
   header.bar .wordmark {
     overflow: hidden;
@@ -222,9 +222,13 @@ header.bar nav a:hover {
     white-space: nowrap;
   }
   header.bar nav {
+    row-gap: calc(var(--ran-space-1) / 2);
     min-width: 0;
     flex-wrap: wrap;
     justify-content: flex-end;
+  }
+  header.bar nav a {
+    padding-inline: var(--ran-space-2);
   }
 }
 

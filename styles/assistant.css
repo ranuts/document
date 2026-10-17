@@ -918,7 +918,7 @@ r-dropdown[role='listbox'] {
   flex: 0 0 auto;
   border: 0;
   border-radius: var(--ran-radius-full);
-  padding: var(--ran-space-1);
+  padding: calc(var(--ran-space-3) / 4);
   background: var(--ran-color-text-disabled);
   cursor: pointer;
 }
