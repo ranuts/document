@@ -52,7 +52,7 @@ export async function stampOfflineAssets(directory) {
   // Vite-only previews retain the stable token URL; production builds may
   // fingerprint it. Both shipped styles must work before any offline reload.
   for (const name of await readdir(directory))
-    if (/^ran-tokens(?:\.[A-Za-z0-9_-]+)?\.css$/.test(name)) core.add(`/${name}`);
+    if (/^(?:ran-tokens(?:\.[A-Za-z0-9_-]+)?|app-tokens)\.css$/.test(name)) core.add(`/${name}`);
   if ((await readdir(join(directory, 'ran-fonts'))).includes('fonts.css')) core.add('/ran-fonts/fonts.css');
   const assets = [...core].sort();
   const assistantAssets = [...optional].filter((asset) => !core.has(asset)).sort();

@@ -210,7 +210,10 @@ describe('success green', () => {
   it('never paints small text with the fill-grade green', () => {
     const small = rules.filter((rule) => {
       const size = /font(?:-size)?:[^;]*?(\d+(?:\.\d+)?)px/.exec(rule.body);
-      return size !== null && Number(size[1]) < 14;
+      const token = /font(?:-size)?:[^;]*?var\((--ran-text-[\w-]+)/.exec(rule.body)?.[1];
+      const foundation = read('public/ran-tokens.css');
+      const resolved = token ? new RegExp(`${token}:\\s*(\\d+(?:\\.\\d+)?)px`).exec(foundation)?.[1] : size?.[1];
+      return resolved !== undefined && Number(resolved) < 14;
     });
     // Sanity: the homepage does have small text, so a parser change that
     // matched nothing could not pass this by finding nothing to check.

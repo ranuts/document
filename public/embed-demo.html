@@ -28,6 +28,7 @@
     <script src="/theme-presentation.js"></script>
     <link rel="stylesheet" href="/ran-fonts/fonts.css" />
     <link rel="stylesheet" href="/ran-tokens.css" />
+    <link rel="stylesheet" href="/app-tokens.css" />
     <link rel="stylesheet" href="/landing.css" />
     <script src="/ranui-iife/button.iife.js" defer></script>
     <script src="/ranui-iife/card.iife.js" defer></script>
@@ -67,13 +68,13 @@
       }
       .panel h1 {
         margin: 0;
-        font-size: 18px;
+        font-size: var(--ran-text-heading-3);
         font-weight: 600;
         letter-spacing: -0.01em;
       }
       .panel .hint {
         margin: var(--ran-space-1) 0 0;
-        font-size: 13px;
+        font-size: var(--ran-text-label-2);
         line-height: 1.6;
         color: var(--ran-color-text-secondary);
       }
@@ -87,7 +88,7 @@
       }
       .group .k {
         font-family: var(--ran-font-mono);
-        font-size: 11px;
+        font-size: var(--ran-text-label-3);
         letter-spacing: 0.06em;
         text-transform: uppercase;
         color: var(--ran-color-text-secondary);
@@ -97,7 +98,7 @@
       input[type='file'] {
         width: 100%;
         font: inherit;
-        font-size: 13px;
+        font-size: var(--ran-text-label-2);
         color: var(--ran-color-text);
         padding: var(--ran-space-2);
         border: 1px solid var(--ran-color-border);
@@ -109,14 +110,28 @@
       }
       input[type='file']::file-selector-button {
         font: inherit;
-        font-size: 13px;
+        font-size: var(--ran-text-label-2);
         margin-right: var(--ran-space-2);
-        padding: 2px var(--ran-space-2);
+        padding: var(--ran-space-1) var(--ran-space-2);
         border: 1px solid var(--ran-color-border);
         border-radius: var(--ran-radius-sm);
         background: var(--ran-color-bg-subtle);
         color: var(--ran-color-text);
         cursor: pointer;
+      }
+      .actions r-button::part(content) {
+        min-height: var(--app-control-height);
+        padding: var(--ran-space-1) var(--ran-space-3);
+        font-size: var(--ran-text-label-1);
+      }
+      @media (pointer: coarse) {
+        r-input {
+          --ran-input-min-height: var(--app-control-touch);
+          --ran-input-content-min-height: var(--app-control-touch);
+        }
+        input[type='file']::file-selector-button {
+          min-height: var(--app-control-touch);
+        }
       }
       r-input {
         width: 100%;
@@ -127,7 +142,7 @@
         gap: var(--ran-space-2);
       }
       r-checkbox {
-        font-size: 14px;
+        font-size: var(--ran-text-label-1);
       }
       .log-card .card-body {
         padding: 0;
@@ -139,7 +154,7 @@
         overflow: auto;
         padding: var(--ran-space-3);
         font-family: var(--ran-font-mono);
-        font-size: 12px;
+        font-size: var(--ran-text-label-3);
         line-height: 1.55;
         white-space: pre-wrap;
         word-break: break-word;
@@ -161,19 +176,19 @@
         justify-content: space-between;
         padding: 0 var(--ran-space-4);
         border-bottom: 1px solid var(--ran-color-border);
-        font-size: 13px;
+        font-size: var(--ran-text-label-2);
         color: var(--ran-color-text-secondary);
       }
       .viewer .strip code {
         font-family: var(--ran-font-mono);
-        font-size: 12px;
+        font-size: var(--ran-text-label-3);
       }
       #status {
         display: inline-flex;
         align-items: center;
         gap: var(--ran-space-2);
         font-family: var(--ran-font-mono);
-        font-size: 12px;
+        font-size: var(--ran-text-label-3);
       }
       #status::before {
         content: '';

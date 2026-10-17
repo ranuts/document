@@ -15,7 +15,7 @@ body {
   background: var(--ran-color-bg);
   color: var(--ran-color-text);
   font-family: var(--ran-font-family);
-  font-size: 16px;
+  font-size: var(--ran-text-copy-1);
   line-height: 1.65;
   /* A run with no break opportunity wider than the column pushes the page
      sideways -- on a phone that is a horizontal scrollbar on a text page.
@@ -47,7 +47,7 @@ header.bar .brand {
   align-items: center;
   gap: var(--ran-space-2);
   font-weight: 700;
-  font-size: 16px;
+  font-size: var(--ran-text-copy-1);
   letter-spacing: -0.01em;
   color: var(--ran-color-text);
   text-decoration: none;
@@ -63,7 +63,7 @@ header.bar nav a {
   gap: var(--ran-space-2);
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
   /* One height for every item in the bar. Without this the links inherit the
      body's prose leading (1.65 -> 23.1px) while the language trigger sets its
      own line-height: the two hover pills came out 39px and 31px, visibly
@@ -88,7 +88,7 @@ header.bar nav a:hover {
      it. Shrink it to its trigger. */
   display: inline-flex;
   /* Panel padding: r-popover reads this off the host and hands it to the panel. */
-  --ran-popover-content-padding: 4px;
+  --ran-popover-content-padding: var(--ran-space-1);
 }
 /* The face of the control. The button itself is the r-popover host (it carries
    the role, the name and the state); this is the row of things inside it. */
@@ -98,7 +98,7 @@ header.bar nav a:hover {
   gap: var(--ran-space-2);
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
   /* Same 22px as the nav links beside it -- see header.bar nav a. On a phone
      the label is hidden and only the two icons are left, so the line box no
      longer sets the height: hold it from below instead, or the pill shrinks to
@@ -119,7 +119,7 @@ header.bar nav a:hover {
   outline: none;
 }
 .lang-menu:focus-visible .lang-trigger {
-  outline: 2px solid var(--ran-color-focus-ring, var(--ran-color-primary));
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 .langmark {
@@ -146,9 +146,9 @@ header.bar nav a:hover {
   display: flex;
   align-items: center;
   gap: var(--ran-space-1);
-  padding: 6px 10px;
+  padding: calc(var(--ran-space-3) / 2) calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
   border-radius: var(--ran-radius-sm);
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
   color: var(--ran-color-text);
   text-decoration: none;
   white-space: nowrap;
@@ -160,7 +160,7 @@ header.bar nav a:hover {
   content: '';
   width: 11px;
   flex: none;
-  font-size: 11px;
+  font-size: var(--ran-text-label-3);
   line-height: 1;
   color: var(--ran-color-text-secondary);
 }
@@ -186,9 +186,8 @@ header.bar nav a:hover {
    Kept byte-identical in home.css and landing.css (the homepage does not load
    landing.css); test/unit/design-contract.test.ts compares the two blocks. */
 :root {
-  /* 10px, not the component's 12: at radius-md the corners eat into the rows
-     inside the panel. */
-  --ran-dropdown-border-radius: 10px;
+  /* The panel uses the same corner role as other elevated surfaces. */
+  --ran-dropdown-border-radius: var(--ran-radius-md);
   --ran-dropdown-box-shadow:
     0 0 0 1px var(--ran-color-border), 0 8px 24px -6px color-mix(in srgb, var(--ran-color-text) 18%, transparent);
 }
@@ -211,15 +210,21 @@ header.bar nav a:hover {
   .lang-current {
     display: none;
   }
-  /* Phone: the bar keeps the mark and drops the wordmark. The two app surfaces
-     (/history, /embed-demo) put a third control in this row -- a theme switch,
-     which every other page keeps in a footer they do not have -- and at 390px
-     brand + links + switch ran 17px and 27px past the viewport: the whole page
-     scrolled sideways and a nav label broke onto two lines. The mark is the
-     same link home and still names the site; 137px of wordmark is what the row
-     could not afford. */
+  /* Keep a readable home destination; text can elide before navigation overflows. */
+  header.bar .brand {
+    min-width: 0;
+    flex: 0 0 auto;
+    max-width: 10ch;
+  }
   header.bar .wordmark {
-    display: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  header.bar nav {
+    min-width: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 }
 
@@ -261,7 +266,7 @@ header.bar nav a:hover {
   margin: var(--ran-space-4) 0 0;
   max-width: 72ch;
   color: var(--ran-color-text-secondary);
-  font-size: 12.5px;
+  font-size: var(--ran-text-label-3);
   line-height: 1.6;
 }
 @media (min-width: 1081px) {
@@ -324,7 +329,7 @@ header.bar nav a:hover {
 .side-note {
   display: block;
   margin-top: var(--ran-space-3);
-  font-size: 12.5px;
+  font-size: var(--ran-text-label-3);
   line-height: 1.5;
   color: var(--ran-color-text-secondary);
 }
@@ -337,15 +342,15 @@ header.bar nav a:hover {
 .side-label {
   display: block;
   margin-bottom: var(--ran-space-2);
-  font: 600 11px/1 var(--ran-font-mono);
+  font: 600 var(--ran-text-label-3)/1 var(--ran-font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ran-color-text-secondary);
 }
 .side-block a {
   display: block;
-  padding: 5px 0;
-  font-size: 14px;
+  padding: var(--ran-space-1) 0;
+  font-size: var(--ran-text-copy-2);
   line-height: 1.45;
   color: var(--ran-color-text-secondary);
   text-decoration: none;
@@ -356,7 +361,7 @@ header.bar nav a:hover {
 }
 .eyebrow {
   margin: var(--ran-space-8) 0 0;
-  font: 600 12px/1 var(--ran-font-mono);
+  font: 600 var(--ran-text-label-3)/1 var(--ran-font-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   /* gray mono label — blue is reserved for links */
@@ -370,7 +375,7 @@ h1 {
   text-wrap: balance;
 }
 h2 {
-  font-size: 21px;
+  font-size: var(--ran-text-heading-3);
   letter-spacing: -0.02em;
   margin: var(--ran-space-10) 0 var(--ran-space-4);
   padding-bottom: var(--ran-space-3);
@@ -380,7 +385,7 @@ p {
   margin: var(--ran-space-3) 0;
 }
 .lead {
-  font-size: 18px;
+  font-size: var(--ran-text-heading-3);
   color: var(--ran-color-text-secondary);
   margin: 0 0 var(--ran-space-4);
 }
@@ -388,7 +393,7 @@ p {
 /* CTA: a real <r-button> wrapped in a link (static pages navigate, not script) */
 .cta {
   display: inline-block;
-  margin: var(--ran-space-4) 0 var(--ran-space-5, 20px);
+  margin: var(--ran-space-4) 0 var(--ran-space-4);
   text-decoration: none;
 }
 /* r-button exports parts "button" (container) and "content" (padding/border/
@@ -406,8 +411,11 @@ p {
 }
 .cta r-button::part(content) {
   border-radius: var(--ran-radius-full);
-  padding: var(--ran-space-3) var(--ran-space-6);
-  font-size: 15.5px;
+  padding: 0 var(--ran-space-6);
+  min-height: max(var(--app-control-page), var(--app-control-height));
+  box-sizing: border-box;
+  line-height: 1.5;
+  font-size: var(--ran-text-copy-2);
   font-weight: 600;
 }
 /* pre-upgrade fallback so the CTA is a styled, clickable button even before
@@ -417,18 +425,20 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--ran-space-3) var(--ran-space-6);
+  padding: 0 var(--ran-space-6);
+  min-height: max(var(--app-control-page), var(--app-control-height));
+  box-sizing: border-box;
+  line-height: 1.5;
   border-radius: var(--ran-radius-full);
   border: 1px solid var(--ran-color-primary);
   background: var(--ran-color-primary);
   color: var(--ran-color-primary-text);
   font-weight: 600;
-  font-size: 15.5px;
-  line-height: 22px; /* matches .ran-btn-content's default line-height */
+  font-size: var(--ran-text-copy-2);
 }
 
 ul {
-  padding-left: 20px;
+  padding-left: calc(var(--ran-space-4) + var(--ran-space-1));
   margin: var(--ran-space-4) 0;
 }
 li {
@@ -446,9 +456,9 @@ li::marker {
    homepage. */
 .oss {
   margin: var(--ran-space-8) 0;
-  padding-left: var(--ran-space-5, 20px);
+  padding-left: var(--ran-space-4);
   border-left: 2px solid var(--ran-color-border);
-  font-size: 15px;
+  font-size: var(--ran-text-copy-2);
   color: var(--ran-color-text-secondary);
 }
 .oss strong {
@@ -460,7 +470,7 @@ li::marker {
 
 /* ---------- faq: hairline per question (mirrors homepage FAQ) ---------- */
 .faq h3 {
-  font-size: 16.5px;
+  font-size: var(--ran-text-copy-1);
   letter-spacing: -0.01em;
   margin: 0;
   padding: var(--ran-space-4) 0 0;
@@ -473,7 +483,7 @@ li::marker {
 .faq p {
   margin: var(--ran-space-1) 0 var(--ran-space-4);
   color: var(--ran-color-text-secondary);
-  font-size: 15px;
+  font-size: var(--ran-text-copy-2);
 }
 h2.faq {
   border-bottom: 1px solid var(--ran-color-border);
@@ -485,7 +495,7 @@ footer {
   padding-top: var(--ran-space-4);
   border-top: 1px solid var(--ran-color-border);
   color: var(--ran-color-text-secondary);
-  font-size: 13.5px;
+  font-size: var(--ran-text-copy-2);
 }
 footer a {
   color: var(--ran-color-text-secondary);
@@ -519,12 +529,12 @@ footer .theme-switch {
    emits that the hand-written pages never did: h3 sections, code, tables,
    quotes, a small table of contents. All values from the token layer. */
 .doc article h3 {
-  font-size: 16.5px;
+  font-size: var(--ran-text-copy-1);
   letter-spacing: -0.01em;
   margin: var(--ran-space-6) 0 var(--ran-space-2);
 }
 .doc article h4 {
-  font-size: 15px;
+  font-size: var(--ran-text-copy-2);
   margin: var(--ran-space-4) 0 var(--ran-space-2);
 }
 .doc article :is(h2, h3, h4) a {
@@ -535,7 +545,7 @@ footer .theme-switch {
 .wrap article code {
   font-family: var(--ran-font-mono);
   font-size: 0.9em;
-  padding: 1px 5px;
+  padding: 1px var(--ran-space-1);
   border-radius: var(--ran-radius-sm);
   background: var(--ran-color-bg-subtle);
   border: 1px solid var(--ran-color-border);
@@ -548,7 +558,7 @@ footer .theme-switch {
   border-radius: var(--ran-radius-md);
   background: var(--ran-color-bg-subtle);
   border: 1px solid var(--ran-color-border);
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   line-height: 1.55;
 }
 .doc pre code,
@@ -563,7 +573,7 @@ footer .theme-switch {
   width: 100%;
   border-collapse: collapse;
   margin: var(--ran-space-4) 0;
-  font-size: 14.5px;
+  font-size: var(--ran-text-copy-2);
   display: block;
   overflow-x: auto;
 }
@@ -580,7 +590,7 @@ footer .theme-switch {
 .wrap article th {
   font-weight: 600;
   color: var(--ran-color-text-secondary);
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   letter-spacing: 0.02em;
 }
 .doc blockquote {
@@ -608,11 +618,11 @@ footer .theme-switch {
   background: var(--ran-color-bg-subtle);
   border: 1px solid var(--ran-color-border);
   color: var(--ran-color-text-secondary);
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
 }
 .doc .source {
   margin-top: var(--ran-space-8);
   font-family: var(--ran-font-mono);
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
 }

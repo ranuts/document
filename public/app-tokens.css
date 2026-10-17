@@ -1,0 +1,18 @@
+/* Application roles absent from the dependency foundation. Physical target sizes
+   are intentional product policy; other values compose real ranui roles. */
+:root {
+  --app-control-inline: var(--ran-size-7);
+  --app-control-page: 42px;
+  --app-control-touch: 44px;
+  --app-control-height: var(--app-control-inline);
+  /* Red 900 with the theme's canvas foreground passes AA in both themes. */
+  --app-danger-fill: var(--ran-red-900);
+  --app-danger-foreground: var(--ran-background-100);
+  --app-danger-hover: color-mix(in srgb, var(--ran-red-900) 92%, var(--ran-color-text));
+  --app-danger-active: color-mix(in srgb, var(--ran-red-900) 84%, var(--ran-color-text));
+}
+@media (pointer: coarse) {
+  :root {
+    --app-control-height: var(--app-control-touch);
+  }
+}

@@ -89,7 +89,7 @@ body.agent-panel-resizing #app iframe {
 .agent-panel-close {
   border: none;
   background: none;
-  font-size: 20px;
+  font-size: var(--ran-text-heading-3);
   line-height: 1;
   cursor: pointer;
   color: var(--ran-color-text-disabled);
@@ -184,7 +184,7 @@ body.agent-panel-resizing #app iframe {
   outline-offset: 2px;
 }
 .agent-panel-key-label {
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
 }
 /* ranui r-input draws its own field — host carries layout only (no border). */
@@ -242,16 +242,16 @@ body.agent-panel-resizing #app iframe {
 .agent-plan-mode {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--ran-space-1);
   color: var(--ran-color-text-secondary);
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
 }
 .agent-writing-task,
 .agent-writing-language {
   min-width: 0;
   max-width: 100%;
   border: 0;
-  padding: 5px 2px;
+  padding: var(--ran-space-1) calc(var(--ran-space-1) / 2);
   background: transparent;
   color: var(--ran-color-text-secondary);
   font: inherit;
@@ -278,7 +278,7 @@ body.agent-panel-resizing #app iframe {
 }
 .agent-plan-target,
 .agent-plan-status {
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
   overflow-wrap: anywhere;
 }
@@ -292,23 +292,23 @@ body.agent-panel-resizing #app iframe {
 .agent-plan-buttons {
   display: flex;
   align-items: center;
-  gap: 4px 8px;
+  gap: var(--ran-space-1) var(--ran-space-2);
   flex-wrap: wrap;
 }
 .agent-plan-buttons r-button {
-  font-size: 12px;
-  --ran-btn-font-size: 12px;
-  --ran-btn-padding: 6px 10px;
-  --ran-btn-font-weight: 500;
+  font-size: var(--ran-text-label-3);
+  --ran-btn-font-size: var(--ran-text-label-3);
+  --ran-btn-padding: var(--ran-space-1) var(--ran-space-2);
+  --ran-btn-font-weight: var(--ran-text-label-weight);
   --ran-btn-box-shadow: none;
 }
 .agent-panel .agent-plan-buttons r-button::part(content) {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  min-height: 32px;
-  padding: 6px 10px;
-  font-size: 12px;
+  min-height: var(--ran-size-7);
+  padding: var(--ran-space-1) var(--ran-space-2);
+  font-size: var(--ran-text-label-3);
   line-height: 1.5;
   font-weight: 500;
 }
@@ -317,7 +317,7 @@ body.agent-panel-resizing #app iframe {
   border: 0;
   border-left: 2px solid var(--ran-color-danger);
   border-radius: 0;
-  padding: 2px 0 2px 12px;
+  padding: calc(var(--ran-space-1) / 2) 0 calc(var(--ran-space-1) / 2) var(--ran-space-3);
   color: var(--ran-color-text-secondary);
 }
 
@@ -389,9 +389,9 @@ r-dropdown[role='listbox'] {
   align-self: flex-start;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 7px 12px;
+  padding: var(--ran-space-2) var(--ran-space-3);
   border: 1px solid var(--ran-color-border, #ddd);
-  border-radius: 6px;
+  border-radius: var(--ran-radius-sm);
   color: var(--ran-color-text);
   cursor: pointer;
 }
@@ -410,7 +410,7 @@ r-dropdown[role='listbox'] {
 .agent-panel-gguf-filenames {
   overflow-wrap: anywhere;
   color: var(--ran-color-text);
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
 }
 .agent-panel-gguf-filenames:empty {
   display: none;
@@ -426,7 +426,7 @@ r-dropdown[role='listbox'] {
   height: 30px;
   padding: 0;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--ran-radius-sm);
   background: transparent;
   color: var(--ran-color-text-secondary);
   cursor: pointer;
@@ -438,10 +438,10 @@ r-dropdown[role='listbox'] {
 }
 .agent-panel-settings-toggle {
   margin-left: auto;
-  margin-right: 8px;
+  margin-right: var(--ran-space-2);
   border: none;
   background: none;
-  font-size: 16px;
+  font-size: var(--ran-text-copy-1);
   line-height: 1;
   cursor: pointer;
   color: var(--ran-color-text-disabled);
@@ -457,13 +457,13 @@ r-dropdown[role='listbox'] {
 .agent-panel-review {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--ran-space-1);
   color: var(--ran-color-text-secondary);
   cursor: pointer;
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
 }
 .agent-panel-note {
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
   white-space: pre-line;
   line-height: 1.6;
@@ -482,7 +482,7 @@ r-dropdown[role='listbox'] {
   font-family: inherit;
 }
 .agent-panel .cui-actions {
-  gap: 8px;
+  gap: var(--ran-space-2);
 }
 .agent-panel-quote {
   width: 28px;
@@ -502,7 +502,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-plan-content,
 .agent-plan-before {
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   line-height: 1.65;
 }
 .agent-plan-content {
@@ -511,7 +511,7 @@ r-dropdown[role='listbox'] {
   border-radius: 0;
 }
 .agent-plan-original {
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
 }
 .agent-plan-original summary,
@@ -536,7 +536,7 @@ r-dropdown[role='listbox'] {
 .agent-plan-original .agent-plan-before {
   max-height: 160px;
   overflow: auto;
-  margin-top: 8px;
+  margin-top: var(--ran-space-2);
 }
 @media (max-width: 760px) {
   body.agent-docked #app iframe {
@@ -552,14 +552,14 @@ r-dropdown[role='listbox'] {
 .agent-model-status {
   overflow-wrap: anywhere;
   color: var(--ran-color-text-secondary);
-  font-size: 11px;
-  margin: 0 20px 12px;
-  padding: 0 0 0 10px;
+  font-size: var(--ran-text-label-3);
+  margin: 0 calc(var(--ran-space-4) + var(--ran-space-1)) var(--ran-space-3);
+  padding: 0 0 0 calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
   border-left: 2px solid var(--ran-color-primary);
   line-height: 1.55;
 }
 .agent-panel .cui-messages {
-  padding: 24px 16px;
+  padding: var(--ran-space-6) var(--ran-space-4);
   gap: var(--ran-space-4);
   line-height: 1.75;
 }
@@ -568,8 +568,8 @@ r-dropdown[role='listbox'] {
   max-width: none;
   margin: auto 0;
   box-sizing: border-box;
-  padding: 20px 0;
-  font-size: 20px;
+  padding: calc(var(--ran-space-4) + var(--ran-space-1)) 0;
+  font-size: var(--ran-text-heading-3);
   font-weight: 500;
   letter-spacing: -0.035em;
   line-height: 1.4;
@@ -578,13 +578,13 @@ r-dropdown[role='listbox'] {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0 12px;
-  margin-top: 10px;
+  gap: 0 var(--ran-space-3);
+  margin-top: calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
 }
 .agent-welcome-hint {
   flex: 0 0 100%;
-  margin: 0 0 20px;
-  font-size: 12px;
+  margin: 0 0 calc(var(--ran-space-4) + var(--ran-space-1));
+  font-size: var(--ran-text-label-3);
   font-weight: 400;
   line-height: 1.65;
   letter-spacing: 0;
@@ -593,14 +593,14 @@ r-dropdown[role='listbox'] {
 .agent-panel .cui-empty-actions .agent-configure {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: calc(var(--ran-space-3) / 2);
   margin-top: 0;
   min-height: 28px;
   padding: 0;
   border: 0;
   background: transparent;
   color: var(--ran-color-text-secondary);
-  font-size: 11px;
+  font-size: var(--ran-text-label-3);
   font-weight: 400;
   text-decoration: none;
 }
@@ -611,11 +611,11 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text);
 }
 .agent-panel .cui-message-actions {
-  gap: 10px;
-  margin-top: 2px;
+  gap: calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
+  margin-top: calc(var(--ran-space-1) / 2);
 }
 .agent-panel .cui-message-actions button {
-  min-height: 32px;
+  min-height: var(--ran-size-7);
 }
 .agent-panel .cui-input {
   min-height: 1.65em;
@@ -631,18 +631,18 @@ r-dropdown[role='listbox'] {
   .agent-panel-header button,
   .agent-panel-quote,
   .agent-panel-clear {
-    width: 44px;
-    height: 44px;
+    width: var(--app-control-touch);
+    height: var(--app-control-touch);
     flex-shrink: 0;
   }
   .agent-panel-clear {
-    flex-basis: 44px;
+    flex-basis: var(--app-control-touch);
   }
   .agent-panel .cui-messages {
-    padding: 24px 16px;
+    padding: var(--ran-space-6) var(--ran-space-4);
   }
   .agent-panel .cui-footer {
-    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    padding-bottom: max(var(--ran-space-4), env(safe-area-inset-bottom));
   }
 }
 
@@ -650,35 +650,35 @@ r-dropdown[role='listbox'] {
 @container agent-panel (max-height: 600px) {
   .agent-panel-header {
     min-height: 48px;
-    padding: 8px 16px;
+    padding: var(--ran-space-2) var(--ran-space-4);
   }
   .agent-model-status {
-    margin-bottom: 6px;
+    margin-bottom: calc(var(--ran-space-3) / 2);
   }
   .agent-panel-settings {
     box-sizing: border-box;
     max-height: min(35%, max(32px, calc(100dvh - 280px)));
-    padding: 8px;
+    padding: var(--ran-space-2);
   }
   .agent-panel .cui-root {
     min-height: 124px;
   }
   .agent-panel .cui-messages {
-    padding: 0 16px;
+    padding: 0 var(--ran-space-4);
   }
   .agent-panel .cui-footer {
-    padding: 8px 16px;
-    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    padding: var(--ran-space-2) var(--ran-space-4);
+    padding-bottom: max(var(--ran-space-2), env(safe-area-inset-bottom));
   }
   .agent-panel .cui-composer {
-    padding: 10px;
+    padding: calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
   }
   .agent-panel .cui-input {
     min-height: 1.65em;
     max-height: 160px;
   }
   .agent-panel .cui-composer-bar {
-    margin-top: 8px;
+    margin-top: var(--ran-space-2);
   }
 }
 
@@ -689,7 +689,7 @@ r-dropdown[role='listbox'] {
   align-items: center;
   flex: 0 0 auto;
   gap: var(--ran-space-2);
-  padding: var(--ran-space-3) 20px;
+  padding: var(--ran-space-3) var(--ran-space-4);
 }
 .agent-runtime-row[hidden],
 .agent-runtime-row [hidden] {
@@ -714,8 +714,8 @@ r-dropdown[role='listbox'] {
   justify-self: end;
 }
 .agent-panel .agent-runtime-row r-button::part(content) {
-  min-height: 32px;
-  padding: 4px 8px;
+  min-height: var(--ran-size-7);
+  padding: var(--ran-space-1) var(--ran-space-2);
   font-size: var(--ran-text-label-2);
 }
 .agent-panel .agent-runtime-row r-button::part(button) {
@@ -726,7 +726,7 @@ r-dropdown[role='listbox'] {
 }
 @media (max-height: 600px) {
   .agent-runtime-row {
-    padding: var(--ran-space-2) 16px;
+    padding: var(--ran-space-2) var(--ran-space-4);
   }
 }
 
@@ -736,9 +736,9 @@ r-dropdown[role='listbox'] {
 }
 .agent-model-sources summary {
   cursor: pointer;
-  padding: 4px 0;
+  padding: var(--ran-space-1) 0;
   color: var(--ran-color-text-secondary);
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
 }
 .agent-model-sources summary:focus-visible {
   outline: 2px solid var(--ran-color-primary);
@@ -746,7 +746,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-model-sources r-input {
   display: block;
-  margin-top: 12px;
+  margin-top: var(--ran-space-3);
 }
 
 /* Product surfaces: each view owns the available space. */
@@ -763,7 +763,7 @@ r-dropdown[role='listbox'] {
   box-sizing: border-box;
   background: var(--ran-color-bg-elevated);
   border-left: 1px solid var(--ran-color-border);
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
   width: min(var(--agent-panel-width, 432px), 100vw);
   box-shadow: none;
 }
@@ -778,8 +778,8 @@ r-dropdown[role='listbox'] {
   box-sizing: border-box;
   min-height: 56px;
   flex: 0 0 auto;
-  padding: 8px 16px;
-  gap: 2px;
+  padding: var(--ran-space-2) var(--ran-space-4);
+  gap: calc(var(--ran-space-1) / 2);
 }
 .agent-panel-header .agent-panel-title {
   flex: 1;
@@ -788,7 +788,7 @@ r-dropdown[role='listbox'] {
   text-align: left;
   font-family: inherit;
   font-weight: var(--ran-text-heading-weight);
-  font-size: 15px;
+  font-size: var(--ran-text-copy-2);
   letter-spacing: -0.02em;
   min-width: 0;
   color: var(--ran-color-text);
@@ -828,22 +828,22 @@ r-dropdown[role='listbox'] {
 }
 .agent-use-card h3,
 .agent-use-card summary {
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
   margin: 0;
   font-weight: 600;
   letter-spacing: -0.015em;
 }
 .agent-use-card p {
   color: var(--ran-color-text-secondary);
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   line-height: 1.65;
-  margin: 12px 0 16px;
+  margin: var(--ran-space-3) 0 var(--ran-space-4);
 }
 .agent-use-card summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--ran-space-3);
   list-style: none;
   cursor: pointer;
 }
@@ -879,7 +879,7 @@ r-dropdown[role='listbox'] {
   font-weight: var(--ran-text-label-weight);
 }
 .agent-preferences > :not(summary) {
-  margin-top: 16px;
+  margin-top: var(--ran-space-4);
 }
 .agent-history-view {
   flex: 1;
@@ -888,37 +888,37 @@ r-dropdown[role='listbox'] {
   padding: var(--ran-space-4);
 }
 .agent-welcome {
-  padding: 40px 28px;
+  padding: var(--ran-space-10) calc(var(--ran-space-6) + var(--ran-space-1));
   overflow: auto;
 }
 .agent-welcome h2 {
   font-size: var(--ran-text-heading-3);
   line-height: 1.4;
   letter-spacing: -0.04em;
-  margin: 0 0 16px;
+  margin: 0 0 var(--ran-space-4);
 }
 .agent-welcome > p {
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   line-height: 1.85;
   color: var(--ran-color-text-secondary);
 }
 .agent-enable-row {
   display: flex;
-  gap: 16px;
+  gap: var(--ran-space-4);
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid var(--ran-color-border);
-  padding: 18px 0 0;
+  padding: calc(var(--ran-space-4) + var(--ran-space-1) / 2) 0 0;
   margin-top: 0;
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
 }
 .agent-enable-switch {
   width: 40px;
   height: 24px;
   flex: 0 0 auto;
   border: 0;
-  border-radius: 20px;
-  padding: 3px;
+  border-radius: var(--ran-radius-full);
+  padding: var(--ran-space-1);
   background: var(--ran-color-text-disabled);
   cursor: pointer;
 }
@@ -948,7 +948,7 @@ r-dropdown[role='listbox'] {
   outline-offset: 4px;
 }
 .agent-entry-note {
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
   line-height: 1.8;
   margin: 0;
@@ -956,9 +956,9 @@ r-dropdown[role='listbox'] {
 .agent-readiness {
   flex: 0 0 auto;
   order: 3;
-  padding: 0 20px 12px;
+  padding: 0 calc(var(--ran-space-4) + var(--ran-space-1)) var(--ran-space-3);
   margin: 0;
-  font-size: 11px;
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
 }
 .agent-readiness[hidden] {
@@ -966,7 +966,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-panel .cui-footer {
   border-top: 0;
-  padding: 12px 16px 16px;
+  padding: var(--ran-space-3) var(--ran-space-4) var(--ran-space-4);
 }
 .agent-panel .cui-composer {
   border-color: var(--ran-color-border);
@@ -975,8 +975,8 @@ r-dropdown[role='listbox'] {
   padding: var(--ran-space-3);
 }
 .agent-panel .cui-msg-user .cui-bubble {
-  padding: 12px 16px;
-  border-radius: 12px 12px 3px 12px;
+  padding: var(--ran-space-3) var(--ran-space-4);
+  border-radius: var(--ran-radius-md) var(--ran-radius-md) calc(var(--ran-radius-sm) / 2) var(--ran-radius-md);
   background: var(--ran-color-bg-muted);
 }
 .agent-panel .cui-send,
@@ -988,8 +988,8 @@ r-dropdown[role='listbox'] {
 @media (pointer: coarse) {
   .agent-panel .cui-send,
   .agent-panel .cui-stop {
-    width: 44px;
-    height: 44px;
+    width: var(--app-control-touch);
+    height: var(--app-control-touch);
   }
 }
 .agent-panel .agent-document-scope {
@@ -1009,7 +1009,7 @@ r-dropdown[role='listbox'] {
 }
 @media (max-width: 480px) {
   .agent-panel-header {
-    padding: 8px 16px;
+    padding: var(--ran-space-2) var(--ran-space-4);
   }
   .agent-panel-header button {
     width: 34px;
@@ -1018,27 +1018,27 @@ r-dropdown[role='listbox'] {
   }
   .agent-panel-settings,
   .agent-history-view {
-    padding: 16px;
+    padding: var(--ran-space-4);
   }
   .agent-panel-header .agent-panel-title {
     flex: 1;
     width: auto;
-    font-size: 14px;
+    font-size: var(--ran-text-copy-2);
   }
   .agent-panel .cui-footer {
-    padding: 12px 16px max(12px, env(safe-area-inset-bottom));
+    padding: var(--ran-space-3) var(--ran-space-4) max(var(--ran-space-3), env(safe-area-inset-bottom));
   }
 }
 @container agent-panel (max-height:600px) {
   .agent-panel-settings {
     max-height: none;
-    padding: 16px;
+    padding: var(--ran-space-4);
   }
   .agent-panel-header {
     min-height: 48px;
   }
   .agent-readiness {
-    padding-bottom: 6px;
+    padding-bottom: calc(var(--ran-space-3) / 2);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1050,8 +1050,8 @@ r-dropdown[role='listbox'] {
 .agent-panel-write-destination {
   flex: 0 0 auto;
   order: 4;
-  padding: 0 20px 12px;
-  font-size: 10px;
+  padding: 0 calc(var(--ran-space-4) + var(--ran-space-1)) var(--ran-space-3);
+  font-size: var(--ran-text-label-3);
   line-height: 1.6;
   color: var(--ran-color-text-secondary);
   overflow-wrap: anywhere;
@@ -1090,7 +1090,7 @@ r-dropdown[role='listbox'] {
 .agent-panel-endpoint {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--ran-space-4);
 }
 .agent-panel-settings r-input,
 .agent-panel-settings r-select {
@@ -1149,11 +1149,11 @@ r-dropdown[role='listbox'] {
   display: none;
 }
 .agent-use-card .agent-model-memory {
-  margin: 12px 0 0;
-  font-size: 11px;
+  margin: var(--ran-space-3) 0 0;
+  font-size: var(--ran-text-label-3);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: calc(var(--ran-space-3) / 2);
 }
 .agent-model-memory:empty {
   display: none;
@@ -1161,16 +1161,16 @@ r-dropdown[role='listbox'] {
 .agent-panel-local-writing-label {
   color: var(--ran-color-text-secondary);
   line-height: 1.75;
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: var(--ran-space-2);
 }
 .agent-panel-local-writing {
   width: 15px;
   height: 15px;
   flex: 0 0 15px;
-  margin: 3px 0 0;
+  margin: var(--ran-space-1) 0 0;
   accent-color: var(--ran-color-primary);
 }
 .agent-panel-header button[aria-expanded='true']:not(.agent-panel-title) {
@@ -1178,7 +1178,7 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text);
 }
 .agent-panel-settings > .agent-panel-note {
-  margin: -8px 0 0;
+  margin: -var(--ran-space-2) 0 0;
 }
 
 /* Compact model settings: one source and one active configuration. */
@@ -1235,7 +1235,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-preferences {
   color: var(--ran-color-text-secondary);
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   border-top: 1px solid var(--ran-color-border);
   padding-top: var(--ran-space-4);
 }
@@ -1243,7 +1243,7 @@ r-dropdown[role='listbox'] {
   display: none;
 }
 .agent-preferences > summary {
-  min-height: 32px;
+  min-height: var(--ran-size-7);
 }
 .agent-preferences[open] > summary {
   margin-bottom: var(--ran-space-4);
@@ -1373,8 +1373,8 @@ r-dropdown[role='listbox'] {
   display: grid;
   flex: 0 0 auto;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: var(--ran-size-7);
+  height: var(--ran-size-7);
   padding: 0;
   border: 0;
   border-radius: var(--ran-radius-sm);
@@ -1382,10 +1382,10 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text-secondary);
   cursor: pointer;
 }
-.agent-speech-mic:hover,
+.agent-speech-mic:hover:enabled,
 .agent-speech-mic[aria-pressed='true'],
-.agent-speech-cancel:hover,
-.agent-speech-privacy button:hover,
+.agent-speech-cancel:hover:enabled,
+.agent-speech-privacy button:hover:enabled,
 .agent-speech-privacy[open] button {
   background: var(--ran-color-bg-muted);
   color: var(--ran-color-text);
@@ -1404,7 +1404,7 @@ r-dropdown[role='listbox'] {
   --ran-select-border: 1px solid transparent;
   --ran-select-hover-border: 1px solid transparent;
   --ran-select-height: var(--ran-size-7);
-  --ran-select-min-height: 32px;
+  --ran-select-min-height: var(--ran-size-7);
   --ran-select-font-size: var(--ran-text-label-3);
   --ran-select-color: var(--ran-color-text-secondary);
   --ran-select-item-hover-color: var(--ran-color-text);
@@ -1415,7 +1415,7 @@ r-dropdown[role='listbox'] {
   flex: 1;
   min-width: 0;
   align-items: center;
-  height: 32px;
+  height: var(--ran-size-7);
   color: var(--ran-color-text-secondary);
   font-size: var(--ran-text-label-3);
   line-height: 1.5;
@@ -1506,17 +1506,17 @@ r-dropdown[role='listbox'] {
   overflow: auto;
   border-radius: 0;
   background: transparent;
-  padding: 4px 0;
+  padding: var(--ran-space-1) 0;
 }
 .agent-plan-comparison table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   line-height: 1.6;
 }
 .agent-plan-comparison caption {
   text-align: start;
-  padding-bottom: 8px;
+  padding-bottom: var(--ran-space-2);
   color: var(--ran-color-text-secondary);
 }
 .agent-plan-comparison th,
@@ -1524,7 +1524,7 @@ r-dropdown[role='listbox'] {
   text-align: start;
   vertical-align: top;
   border-bottom: 1px solid var(--ran-color-border);
-  padding: 6px;
+  padding: calc(var(--ran-space-3) / 2);
   overflow-wrap: anywhere;
 }
 .agent-plan-comparison code {
@@ -1535,7 +1535,7 @@ r-dropdown[role='listbox'] {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   font: inherit;
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   line-height: 1.7;
   margin: 0;
 }
@@ -1559,8 +1559,8 @@ r-dropdown[role='listbox'] {
 }
 .agent-plan-record summary {
   cursor: pointer;
-  padding: 6px 0;
-  font-size: 12px;
+  padding: calc(var(--ran-space-3) / 2) 0;
+  font-size: var(--ran-text-label-3);
 }
 .agent-plan-draft {
   box-sizing: border-box;
@@ -1568,21 +1568,21 @@ r-dropdown[role='listbox'] {
   min-height: 140px;
   resize: vertical;
   border: 1px solid var(--ran-color-border);
-  border-radius: 6px;
+  border-radius: var(--ran-radius-sm);
   background: var(--ran-color-bg-elevated);
   color: var(--ran-color-text);
   font: inherit;
   line-height: 1.6;
-  padding: 10px;
-  margin-bottom: 8px;
+  padding: calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
+  margin-bottom: var(--ran-space-2);
 }
 .agent-refinement-context {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 6px 0;
-  font-size: 12px;
+  gap: var(--ran-space-2);
+  padding: calc(var(--ran-space-3) / 2) 0;
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
 }
 .agent-refinement-context[hidden] {
@@ -1616,7 +1616,7 @@ r-dropdown[role='listbox'] {
   font: inherit;
   text-decoration: underline;
   text-underline-offset: 3px;
-  min-height: 32px;
+  min-height: var(--ran-size-7);
   padding: 0;
   cursor: pointer;
 }
@@ -1812,7 +1812,7 @@ r-dropdown[role='listbox'] {
 /* Contextual document tasks share the transcript and composer's leading edge. */
 .agent-panel .cui-empty {
   margin: auto 0;
-  font-size: 24px;
+  font-size: var(--ran-text-heading-2);
   line-height: 1.25;
   letter-spacing: -0.04em;
 }
@@ -1822,13 +1822,13 @@ r-dropdown[role='listbox'] {
 }
 .agent-welcome-hint {
   margin: 0 0 var(--ran-space-6);
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   line-height: 1.65;
 }
 .agent-task-entry {
   font-weight: 400;
   letter-spacing: 0;
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   width: 100%;
   min-width: 0;
 }
@@ -1843,7 +1843,7 @@ r-dropdown[role='listbox'] {
   background: transparent;
   color: var(--ran-color-text-secondary);
   overflow-wrap: anywhere;
-  font-size: 11px;
+  font-size: var(--ran-text-label-3);
   line-height: 1.5;
 }
 .agent-task-list {
@@ -1883,7 +1883,7 @@ r-dropdown[role='listbox'] {
 .agent-task-help,
 .agent-staged-guidance {
   margin: var(--ran-space-3) 0 0;
-  font-size: 11px;
+  font-size: var(--ran-text-label-3);
   line-height: 1.6;
   color: var(--ran-color-text-secondary);
   overflow-wrap: anywhere;
@@ -1915,8 +1915,10 @@ r-dropdown[role='listbox'] {
 }
 .agent-history-more {
   display: block;
+  min-height: var(--app-control-height);
+  box-sizing: border-box;
   margin: var(--ran-space-4) auto 0;
-  padding: var(--ran-space-2) var(--ran-space-4);
+  padding: var(--ran-space-1) var(--ran-space-3);
   border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-sm);
   background: transparent;
@@ -2002,7 +2004,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-request-queue button {
   max-width: 100%;
-  min-height: 32px;
+  min-height: var(--ran-size-7);
   padding: var(--ran-space-1) var(--ran-space-2);
   border: 1px solid transparent;
   border-radius: var(--ran-radius-sm);
@@ -2012,7 +2014,7 @@ r-dropdown[role='listbox'] {
   cursor: pointer;
   overflow-wrap: anywhere;
 }
-.agent-request-queue button:hover {
+.agent-request-queue button:hover:enabled {
   background: var(--ran-color-bg-hover);
 }
 .agent-request-queue .agent-queue-edit {
@@ -2027,8 +2029,8 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text-secondary);
 }
 .agent-request-queue .agent-queue-more {
-  min-width: 32px;
-  font-size: 20px;
+  min-width: var(--ran-size-7);
+  font-size: var(--ran-text-heading-3);
 }
 .agent-request-queue .agent-queue-resume {
   color: var(--ran-color-text);
@@ -2049,7 +2051,7 @@ r-dropdown[role='listbox'] {
 .agent-queue-actions button {
   color: var(--ran-color-text-secondary);
 }
-.agent-queue-actions button:hover {
+.agent-queue-actions button:hover:enabled {
   color: var(--ran-color-text);
   background: var(--ran-color-bg-hover);
 }
@@ -2069,7 +2071,8 @@ r-dropdown[role='listbox'] {
 }
 @media (pointer: coarse) {
   .agent-request-queue button {
-    min-height: 44px;
+    min-width: var(--app-control-touch);
+    min-height: var(--app-control-touch);
   }
 }
 
@@ -2273,25 +2276,25 @@ r-dropdown[role='listbox'] {
 }
 @media (pointer: coarse) {
   .agent-panel :is(.agent-workspace-view, .agent-artifacts, .agent-history-options, .agent-view-header) button {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: var(--app-control-touch);
+    min-width: var(--app-control-touch);
   }
   .agent-workspace-view input:not([type='checkbox']):not([type='radio']):not([type='file']),
   .agent-artifact-editor > select,
   .agent-artifact-editor > input,
   .agent-artifact-workflow form input,
   .agent-history-search-row {
-    min-height: 44px;
+    min-height: var(--app-control-touch);
   }
   .agent-panel-settings :is(r-input, r-select) {
-    --ran-input-min-height: 44px;
-    --ran-input-content-min-height: 42px;
-    --ran-select-height: 44px;
+    --ran-input-min-height: var(--app-control-touch);
+    --ran-input-content-min-height: calc(var(--app-control-touch) - 2px);
+    --ran-select-height: var(--app-control-touch);
   }
   .agent-panel-settings r-button::part(content),
   .agent-panel .agent-disclosure > summary,
   .agent-history-management > summary {
-    min-height: 44px;
+    min-height: var(--app-control-touch);
   }
 }
 .agent-source-row,
@@ -2569,7 +2572,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-artifact-data-preview th,
 .agent-artifact-data-preview td {
-  padding: 6px 8px;
+  padding: calc(var(--ran-space-3) / 2) var(--ran-space-2);
   border-bottom: 1px solid var(--ran-color-border);
   text-align: start;
   min-width: 80px;
@@ -2584,7 +2587,7 @@ r-dropdown[role='listbox'] {
 .agent-artifact-presentation summary {
   color: var(--ran-color-text-secondary);
   cursor: pointer;
-  padding-block: 8px;
+  padding-block: var(--ran-space-2);
 }
 
 .agent-artifact-editor textarea.agent-artifact-cell {
@@ -2593,7 +2596,7 @@ r-dropdown[role='listbox'] {
   min-height: 2em;
   resize: none;
   max-height: 8em;
-  padding: 2px;
+  padding: calc(var(--ran-space-1) / 2);
   font: inherit;
 }
 .agent-artifact-data-preview > textarea.agent-artifact-cell {
@@ -2601,18 +2604,18 @@ r-dropdown[role='listbox'] {
 }
 .agent-artifact-editor > details > textarea {
   font-family: monospace;
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
 }
 .agent-artifact-editor > details > summary {
   cursor: pointer;
   color: var(--ran-color-text-secondary);
-  padding-block: 8px;
+  padding-block: var(--ran-space-2);
 }
 
 .agent-plan-undo-feedback {
   display: block;
   color: var(--ran-color-text-secondary);
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
@@ -2622,7 +2625,7 @@ r-dropdown[role='listbox'] {
 .agent-task-receipt {
   margin-block: var(--ran-space-2);
   color: var(--ran-color-text-secondary);
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
   line-height: 1.6;
 }
 .agent-task-receipt summary {
@@ -2632,4 +2635,46 @@ r-dropdown[role='listbox'] {
 .agent-task-receipt ul {
   padding-inline-start: var(--ran-space-4);
   margin-block: var(--ran-space-2);
+}
+
+/* Expand actual targets, preserving hidden controls and the flat desktop toolbar. */
+@media (pointer: coarse) {
+  .agent-panel :is(.agent-speech-mic, .agent-speech-cancel, .agent-speech-privacy button) {
+    width: var(--app-control-touch);
+    height: var(--app-control-touch);
+  }
+  .agent-panel .agent-speech-language {
+    --ran-select-height: var(--app-control-touch);
+    --ran-select-min-height: var(--app-control-touch);
+  }
+  .agent-panel .agent-plan-buttons r-button::part(content),
+  .agent-panel :is(.agent-selection-toggle, .agent-history-more),
+  .agent-panel .cui-message-actions button {
+    min-height: var(--app-control-touch);
+  }
+  .agent-panel .cui-message-actions .cui-copy {
+    width: var(--app-control-touch);
+    flex-basis: var(--app-control-touch);
+  }
+}
+
+@media (pointer: coarse) {
+  .agent-panel .agent-panel-header button {
+    min-width: var(--app-control-touch);
+    min-height: var(--app-control-touch);
+    flex-basis: var(--app-control-touch);
+  }
+  .agent-panel .cui-composer .agent-sources-toggle,
+  .agent-panel .cui-empty-actions .agent-configure {
+    min-height: var(--app-control-touch);
+  }
+  .agent-speech-cancel[hidden] {
+    display: none;
+  }
+  .agent-speech[data-feedback='true'] .agent-speech-feedback > [role='status'] {
+    inset-inline-start: calc(var(--app-control-touch) + var(--ran-space-1));
+    inset-inline-end: calc(var(--app-control-touch) * 2 + var(--ran-space-1) * 2);
+    height: var(--app-control-touch);
+    line-height: var(--app-control-touch);
+  }
 }

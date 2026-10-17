@@ -113,16 +113,17 @@ body.landing-active #app {
 /* Style for r-button webcomponent using ::part.
    r-button exports parts "button" (container) and "content" (padding/border/
    typography) — see node_modules/ranui/dist/button-*.js. */
-r-button[type='text']::part(content) {
-  font-size: 18px;
+#control-panel-container r-button[type='text']::part(content) {
+  min-height: max(var(--app-control-page), var(--app-control-height));
+  font-size: var(--ran-text-copy-1);
   font-weight: 500;
   padding: var(--ran-space-3) var(--ran-space-6);
 }
 
 @media (max-width: 480px) {
-  r-button[type='text']::part(content) {
-    font-size: 16px;
-    padding: 8px 16px;
+  #control-panel-container r-button[type='text']::part(content) {
+    font-size: var(--ran-text-copy-1);
+    padding: var(--ran-space-2) var(--ran-space-4);
   }
 }
 
@@ -142,7 +143,7 @@ r-button[type='text']::part(content) {
   /* Monochrome, per ranui's design standard: blue is reserved for links and the focus
      ring; a loading indicator is neither. --ran-color-primary flips with the theme. */
   color: var(--ran-color-primary);
-  font-size: 24px;
+  font-size: var(--ran-text-heading-2);
 }
 
 /* Control Panel */
@@ -165,7 +166,7 @@ r-button[type='text']::part(content) {
 .control-panel-button-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--ran-space-4);
   align-items: center;
   justify-content: center;
   pointer-events: auto;

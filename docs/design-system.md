@@ -171,3 +171,30 @@ The manifest's white startup background is a fallback; the page's browser color
 tracks its effective theme once running. Native launch screens remain subject
 to platform behavior. See [manifest icons](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/icons)
 and [theme colors](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/theme_color).
+
+## Application roles and regression enforcement
+
+`public/ran-tokens.css` remains the dependency-owned foundation. `public/app-tokens.css`
+adds only product roles missing from that foundation: page actions (42px), compact
+controls (the foundation's 32px size), coarse-pointer targets (44px), and destructive
+fill/foreground/state pairs. Every authored entry and generated page loads this layer
+after the foundation and before its page styles. The service worker precaches it and
+revalidates its deploy-coupled URL; shared chat keeps standalone defaults in its own
+`--cui-*` roles rather than depending on an application stylesheet.
+
+Page actions, inline commands and physical touch targets have different jobs. Choose
+by semantic context; do not resize every action to the largest size. Hover and active
+feedback apply only to enabled controls, keyboard focus stays visible, and destructive
+commands retain their colour and readable foreground in every state and theme.
+
+`test/unit/site-token-consistency.test.ts` audits all authored application CSS, the
+shared chat stylesheet, handwritten HTML styles and freshly generated pages. Roles
+resolve against each consumer's own definitions and loaded dependencies; an unknown
+role still fails when a fallback is present. The same contract rejects raw semantic
+spacing, type sizes and corners. Intentional exceptions are fluid viewport/brand
+composition (`clamp()`), breakpoints and fixed page geometry, hairline borders and
+optical 1px offsets, accessible offscreen sentinels, and standalone fallbacks inside
+validated token references. Static icon artwork and vendor assets are separate owners.
+The browser suite verifies real component parts, page families, seven locales, both
+themes, narrow widths and coarse-pointer targets. Token audit success alone does not
+prove component API or interaction correctness.

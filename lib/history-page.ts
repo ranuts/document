@@ -15,7 +15,7 @@ import 'ranui/button';
 import 'ranui/input';
 import 'ranui/icon';
 import 'ranui/message';
-import { Div, View } from 'ranui/builder';
+import { ButtonBuilder, Div, View } from 'ranui/builder';
 import '../styles/history.css';
 import { saveFileToDisk } from 'ranuts/utils';
 import { applyDocumentLanguage, getLanguage, localeHomePath, t, withLocale } from '@ranuts/shared/i18n';
@@ -73,12 +73,13 @@ function readUrl(): void {
 function button(
   label: string,
   onClick: () => void,
-  options: { type?: string; id?: string; class?: string } = {},
+  options: { type?: string; id?: string; class?: string; native?: boolean } = {},
 ): HTMLElement {
-  const builder = View('r-button').text(label).on('click', onClick);
+  // Native destructive triggers can regain usable keyboard focus after the modal.
+  const builder = (options.native ? ButtonBuilder() : View('r-button')).text(label).on('click', onClick);
   if (options.id) builder.id(options.id);
   if (options.class) builder.class(options.class);
-  builder.attr('type', options.type ?? 'default');
+  builder.attr('type', options.native ? 'button' : (options.type ?? 'default'));
   return builder.build();
 }
 
@@ -200,7 +201,7 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
                 danger: true,
               }).then((ok) => (ok ? deleteDoc(doc.id).then(refresh) : undefined));
             },
-            { type: 'text', class: 'history-delete' },
+            { native: true, class: 'history-delete' },
           ),
         )
         .build(),
@@ -434,7 +435,7 @@ async function render(): Promise<void> {
                 danger: true,
               }).then((ok) => (ok ? clearAllHistory().then(refresh) : undefined));
             },
-            { type: 'text', id: 'history-clear-all', class: 'history-clear' },
+            { native: true, id: 'history-clear-all', class: 'history-clear' },
           ),
         )
         .build(),

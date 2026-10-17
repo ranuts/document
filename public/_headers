@@ -27,6 +27,8 @@
 
 # Unhashed, deploy-coupled files: stable filenames whose content changes with
 # deploys — browsers must revalidate so they always match the current HTML.
+/app-tokens.css
+  Cache-Control: no-cache
 /home.css
   Cache-Control: no-cache
 /landing.css

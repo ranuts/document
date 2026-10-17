@@ -131,6 +131,32 @@ for (const ext of ['docx', 'pptx'] as const) {
         .screenshot({ path: testInfo.outputPath(`queue-${ext}-320-composer-light.png`) });
       await page.locator('.agent-queue-toggle').click();
       await page.locator('.agent-queue-more').first().click();
+      // Public disabled state is also used while a queued request prepares.
+      // Keep the real queue DOM and verify its rendered feedback in both themes.
+      for (const scheme of ['light', 'dark']) {
+        await page.evaluate((theme) => document.documentElement.setAttribute('data-ran-theme', theme), scheme);
+        for (const control of [
+          page.locator('.agent-queue-edit').first(),
+          page.locator('.agent-queue-remove').first(),
+        ]) {
+          await control.evaluate((el: HTMLButtonElement) => (el.disabled = true));
+          await page.mouse.move(0, 0);
+          const rest = await control.evaluate((el) => ({
+            background: getComputedStyle(el).backgroundColor,
+            color: getComputedStyle(el).color,
+          }));
+          await control.hover();
+          expect(
+            await control.evaluate((el) => ({
+              background: getComputedStyle(el).backgroundColor,
+              color: getComputedStyle(el).color,
+            })),
+          ).toEqual(rest);
+          await control.evaluate((el: HTMLButtonElement) => (el.disabled = false));
+        }
+      }
+      await page.evaluate(() => document.documentElement.setAttribute('data-ran-theme', 'light'));
+
       await page
         .locator('.agent-runtime-panel')
         .screenshot({ path: testInfo.outputPath(`queue-${ext}-320-light-actions.png`) });

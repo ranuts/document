@@ -59,7 +59,7 @@ body {
   background: var(--ran-color-bg);
   color: var(--ran-color-text);
   font-family: var(--ran-font-family);
-  font-size: 16px;
+  font-size: var(--ran-text-copy-1);
   /* 1.65, the same as every other page (landing.css). The homepage used to sit
      at 1.6 -- invisible on its own, and exactly the kind of drift that adds up
      when each page picks its own numbers. */
@@ -99,8 +99,11 @@ body {
 }
 #landing-hero .cta r-button::part(content) {
   border-radius: var(--ran-radius-full);
-  padding: var(--ran-space-3) var(--ran-space-6);
-  font-size: 15.5px;
+  padding: 0 var(--ran-space-6);
+  min-height: max(var(--app-control-page), var(--app-control-height));
+  box-sizing: border-box;
+  line-height: 1.5;
+  font-size: var(--ran-text-copy-2);
   font-weight: 600;
 }
 
@@ -116,14 +119,16 @@ body {
   align-items: center;
   justify-content: center;
   gap: var(--ran-space-2);
-  padding: var(--ran-space-3) var(--ran-space-6);
+  padding: 0 var(--ran-space-6);
+  min-height: max(var(--app-control-page), var(--app-control-height));
+  box-sizing: border-box;
+  line-height: 1.5;
   border-radius: var(--ran-radius-full);
   border: 1px solid var(--ran-color-border);
   background: var(--ran-color-bg-elevated);
   color: var(--ran-color-text);
   font-weight: 600;
-  font-size: 15.5px;
-  line-height: 22px; /* matches .ran-btn-content's default line-height */
+  font-size: var(--ran-text-copy-2);
 }
 #landing-hero r-button[type='primary']:not(:defined) {
   background: var(--ran-color-primary);
@@ -139,7 +144,7 @@ body {
      it. Shrink it to its trigger. */
   display: inline-flex;
   /* Panel padding: r-popover reads this off the host and hands it to the panel. */
-  --ran-popover-content-padding: 4px;
+  --ran-popover-content-padding: var(--ran-space-1);
 }
 /* The face of the control -- the button itself is the r-popover host. */
 #landing-hero .lang-trigger {
@@ -148,7 +153,7 @@ body {
   gap: var(--ran-space-2);
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
   /* Same 22px as the nav links beside it -- see #landing-hero .bar nav .navlink.
      On a phone the label is hidden and only the two icons are left, so the line
      box no longer sets the height: hold it from below instead. */
@@ -167,7 +172,7 @@ body {
   outline: none;
 }
 #landing-hero .lang-menu:focus-visible .lang-trigger {
-  outline: 2px solid var(--ran-color-focus-ring, var(--ran-color-primary));
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 #landing-hero .langmark {
@@ -193,9 +198,9 @@ body {
   display: flex;
   align-items: center;
   gap: var(--ran-space-1);
-  padding: 6px 10px;
+  padding: calc(var(--ran-space-3) / 2) calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
   border-radius: var(--ran-radius-sm);
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
   color: var(--ran-color-text);
   text-decoration: none;
   white-space: nowrap;
@@ -204,7 +209,7 @@ body {
   content: '';
   width: 11px;
   flex: none;
-  font-size: 11px;
+  font-size: var(--ran-text-label-3);
   line-height: 1;
   color: var(--ran-color-text-secondary);
 }
@@ -226,9 +231,8 @@ body {
    Kept byte-identical in home.css and landing.css (the homepage does not load
    landing.css); test/unit/design-contract.test.ts compares the two blocks. */
 :root {
-  /* 10px, not the component's 12: at radius-md the corners eat into the rows
-     inside the panel. */
-  --ran-dropdown-border-radius: 10px;
+  /* The panel uses the same corner role as other elevated surfaces. */
+  --ran-dropdown-border-radius: var(--ran-radius-md);
   --ran-dropdown-box-shadow:
     0 0 0 1px var(--ran-color-border), 0 8px 24px -6px color-mix(in srgb, var(--ran-color-text) 18%, transparent);
 }
@@ -248,10 +252,21 @@ body {
   #landing-hero .lang-current {
     display: none;
   }
-  /* Phone: the mark stays, the wordmark goes -- see landing.css, which does the
-     same for every other page's copy of this bar. */
+  /* Keep a readable home destination; text can elide before navigation overflows. */
+  #landing-hero .brand {
+    min-width: 0;
+    flex: 0 0 auto;
+    max-width: 10ch;
+  }
   #landing-hero .wordmark {
-    display: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #landing-hero nav {
+    min-width: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 }
 
@@ -272,7 +287,7 @@ body {
   align-items: center;
   gap: var(--ran-space-2);
   font-weight: 700;
-  font-size: 16px;
+  font-size: var(--ran-text-copy-1);
   letter-spacing: -0.01em;
 }
 #landing-hero .bar nav {
@@ -286,7 +301,7 @@ body {
   gap: var(--ran-space-2);
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
   /* One height for every item in the bar. Without this the links inherit the
      body's prose leading (1.65 -> 23.1px) while the language trigger sets its
      own line-height: the two hover pills came out 39px and 31px, visibly
@@ -321,7 +336,7 @@ body {
   border-radius: var(--ran-radius-full);
   /* bordered pill on the plain page bg (Geist badge), no fill */
   background: transparent;
-  font: 500 12px/1.8 var(--ran-font-mono);
+  font: 500 var(--ran-text-label-3)/1.8 var(--ran-font-mono);
   color: var(--ran-color-text-secondary);
   margin-bottom: var(--ran-space-6);
 }
@@ -388,7 +403,7 @@ body {
 }
 #landing-hero .trust {
   margin-top: var(--ran-space-6);
-  font: 500 12.5px/1.6 var(--ran-font-mono);
+  font: 500 var(--ran-text-label-3)/1.6 var(--ran-font-mono);
   color: var(--ran-color-text-secondary);
   display: flex;
   flex-wrap: wrap;
@@ -434,12 +449,12 @@ body {
   padding: var(--ran-space-3) var(--ran-space-4);
   border-bottom: 1px solid var(--ran-color-border);
   background: var(--ran-color-bg-subtle);
-  font-size: 11.5px;
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
 }
 #landing-hero .dw-dots {
   display: inline-flex;
-  gap: 6px;
+  gap: calc(var(--ran-space-3) / 2);
   flex: none;
 }
 #landing-hero .dw-dots i {
@@ -456,20 +471,20 @@ body {
 #landing-hero .dw-badge {
   margin-left: auto;
   flex: none;
-  font-size: 10.5px;
+  font-size: var(--ran-text-label-3);
   font-weight: 600;
   color: var(--success-text);
 }
 #landing-hero .dw-tabs {
   display: flex;
-  gap: 3px;
+  gap: var(--ran-space-1);
   padding: var(--ran-space-2) var(--ran-space-4) 0;
   border-bottom: 1px solid var(--ran-color-border);
   background: var(--ran-color-bg-subtle);
-  font-size: 11px;
+  font-size: var(--ran-text-label-3);
 }
 #landing-hero .dw-tabs span {
-  padding: 6px 12px;
+  padding: calc(var(--ran-space-3) / 2) var(--ran-space-3);
   border: 1px solid transparent;
   border-bottom: none;
   border-radius: var(--ran-radius-sm) var(--ran-radius-sm) 0 0;
@@ -491,20 +506,20 @@ body {
 }
 #landing-hero .dw-sheet {
   display: grid;
-  gap: 12px;
+  gap: var(--ran-space-3);
   align-content: start;
   padding-top: var(--ran-space-1);
 }
 /* skeleton text lines — the surrounding "document" the real line sits in */
 #landing-hero .dw-sheet .dl {
   height: 9px;
-  border-radius: 3px;
+  border-radius: calc(var(--ran-radius-sm) / 2);
   background: var(--ran-color-bg-active);
 }
 #landing-hero .dw-sheet .dl.t {
   height: 15px;
   width: 52%;
-  border-radius: 4px;
+  border-radius: var(--ran-radius-sm);
   background: var(--ran-color-border-hover);
   margin-bottom: var(--ran-space-2);
 }
@@ -533,21 +548,21 @@ body {
 #landing-hero .dw-sheet .dl.t2 {
   height: 12px;
   width: 38%;
-  border-radius: 4px;
+  border-radius: var(--ran-radius-sm);
   background: var(--ran-color-border-hover);
   margin: var(--ran-space-3) 0 var(--ran-space-1);
 }
 /* the one real line: selected text + live caret */
 #landing-hero .dw-text {
-  margin: 2px 0;
-  font-size: 13px;
+  margin: calc(var(--ran-space-1) / 2) 0;
+  font-size: var(--ran-text-label-2);
   line-height: 1.7;
   color: var(--ran-color-text);
 }
 #landing-hero .dw-text mark {
   background: var(--sel);
   color: inherit;
-  padding: 2px 0;
+  padding: calc(var(--ran-space-1) / 2) 0;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
@@ -569,14 +584,14 @@ body {
   border-radius: var(--ran-radius-sm);
   background: var(--ran-color-bg-subtle);
   padding: var(--ran-space-2) var(--ran-space-3);
-  font-size: 10.5px;
+  font-size: var(--ran-text-label-3);
   line-height: 1.6;
   color: var(--ran-color-text-secondary);
 }
 #landing-hero .dw-note b {
   display: block;
-  margin-bottom: 2px;
-  font-size: 10px;
+  margin-bottom: calc(var(--ran-space-1) / 2);
+  font-size: var(--ran-text-label-3);
   font-weight: 600;
   color: var(--success-text);
 }
@@ -588,7 +603,7 @@ body {
   padding: var(--ran-space-2) var(--ran-space-4);
   border-top: 1px solid var(--ran-color-border);
   background: var(--ran-color-bg-subtle);
-  font-size: 11px;
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
 }
 #landing-hero .dw-net .ok {
@@ -611,7 +626,7 @@ body {
 #landing-hero .section-head .eyebrow {
   display: block;
   margin-bottom: var(--ran-space-3);
-  font: 600 12px/1 var(--ran-font-mono);
+  font: 600 var(--ran-text-label-3)/1 var(--ran-font-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   /* gray mono label — blue is reserved for links and the hero selection */
@@ -623,7 +638,7 @@ body {
 #landing-hero .section-head .head-note {
   margin: var(--ran-space-4) 0 0;
   max-width: 34ch;
-  font-size: 14.5px;
+  font-size: var(--ran-text-copy-2);
   color: var(--ran-color-text-secondary);
 }
 #landing-hero .section-head .head-note a {
@@ -672,21 +687,21 @@ body {
 }
 #landing-hero .pillar .k {
   display: block;
-  font: 600 11px/1 var(--ran-font-mono);
+  font: 600 var(--ran-text-label-3)/1 var(--ran-font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ran-color-text-secondary);
 }
 #landing-hero .pillar h3 {
   margin: var(--ran-space-4) 0 var(--ran-space-2);
-  font-size: 17px;
+  font-size: var(--ran-text-copy-1);
   letter-spacing: -0.015em;
   text-wrap: balance;
 }
 #landing-hero .pillar p {
   margin: 0;
   color: var(--ran-color-text-secondary);
-  font-size: 14.5px;
+  font-size: var(--ran-text-copy-2);
   line-height: 1.6;
   max-width: 42ch;
 }
@@ -719,24 +734,24 @@ body {
   background: var(--ran-color-bg-hover);
 }
 #landing-hero .index .ext {
-  font: 600 12.5px/1.5 var(--ran-font-mono);
+  font: 600 var(--ran-text-label-3)/1.5 var(--ran-font-mono);
   letter-spacing: 0.03em;
   color: var(--ran-color-text-secondary);
   white-space: nowrap;
 }
 #landing-hero .index .name {
-  font-size: 16px;
+  font-size: var(--ran-text-copy-1);
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 #landing-hero .index .desc {
   color: var(--ran-color-text-secondary);
-  font-size: 14.5px;
+  font-size: var(--ran-text-copy-2);
   line-height: 1.5;
 }
 #landing-hero .index .go {
   justify-self: end;
-  font: 400 15px/1 var(--ran-font-mono);
+  font: 400 var(--ran-text-copy-2)/1 var(--ran-font-mono);
   color: var(--ran-color-text-secondary);
   transition:
     transform 0.15s ease,
@@ -757,7 +772,7 @@ body {
     gap: var(--ran-space-4);
   }
   #landing-hero .index .desc {
-    font-size: 13.5px;
+    font-size: var(--ran-text-copy-2);
   }
 }
 @media (max-width: 760px) {
@@ -829,24 +844,24 @@ body {
   background: var(--ran-color-text);
 }
 #landing-hero .step .n {
-  font: 700 13px/1 var(--ran-font-mono);
+  font: 700 var(--ran-text-label-2)/1 var(--ran-font-mono);
   color: var(--ran-color-text-secondary);
   letter-spacing: 0.04em;
 }
 #landing-hero .step h3 {
   margin: var(--ran-space-3) 0 var(--ran-space-2);
-  font-size: 17px;
+  font-size: var(--ran-text-copy-1);
   letter-spacing: -0.01em;
 }
 #landing-hero .step p {
   margin: 0;
   color: var(--ran-color-text-secondary);
-  font-size: 14.5px;
+  font-size: var(--ran-text-copy-2);
 }
 #landing-hero .step .loc {
   display: inline-block;
   margin-top: var(--ran-space-4);
-  font: 600 10.5px/1 var(--ran-font-mono);
+  font: 600 var(--ran-text-label-3)/1 var(--ran-font-mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--success-text);
@@ -878,7 +893,7 @@ body {
   list-style: none;
   padding: var(--ran-space-4) 0;
   font-weight: 600;
-  font-size: 16px;
+  font-size: var(--ran-text-copy-1);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -889,7 +904,7 @@ body {
 }
 #landing-hero .qa summary::after {
   content: '+';
-  font: 400 20px/1 var(--ran-font-mono);
+  font: 400 var(--ran-text-heading-3)/1 var(--ran-font-mono);
   color: var(--ran-color-text-secondary);
   transition: transform 0.15s ease;
 }
@@ -900,7 +915,7 @@ body {
   margin: 0;
   padding: 0 0 var(--ran-space-4);
   color: var(--ran-color-text-secondary);
-  font-size: 15px;
+  font-size: var(--ran-text-copy-2);
   line-height: 1.65;
   max-width: 62ch;
 }
@@ -918,7 +933,7 @@ body {
   padding-top: var(--ran-space-8);
   padding-bottom: var(--ran-space-10);
   color: var(--ran-color-text-secondary);
-  font-size: 13.5px;
+  font-size: var(--ran-text-copy-2);
 }
 #landing-hero .foot nav {
   display: flex;
@@ -929,7 +944,7 @@ body {
   color: var(--ran-color-text);
 }
 #landing-hero .foot .lic {
-  font: 500 12px/1 var(--ran-font-mono);
+  font: 500 var(--ran-text-label-3)/1 var(--ran-font-mono);
 }
 /* Same notice as the generated pages carry (see landing.css .page-foot .tm).
    The footer is a space-between flex row, so the notice takes a row of its
@@ -938,7 +953,7 @@ body {
   flex: 1 0 100%;
   margin: 0;
   max-width: 72ch;
-  font-size: 12.5px;
+  font-size: var(--ran-text-label-3);
   line-height: 1.6;
 }
 
@@ -1075,7 +1090,7 @@ body {
      the hero free of filled surfaces. */
   padding-left: var(--ran-space-4);
   border-left: 2px solid var(--ran-color-border);
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
   line-height: 1.6;
   color: var(--ran-color-text-secondary);
 }
@@ -1104,7 +1119,7 @@ body {
 }
 @media (max-width: 560px) {
   #landing-hero .recent {
-    font-size: 13px;
+    font-size: var(--ran-text-label-2);
   }
 }
 
@@ -1116,7 +1131,7 @@ body {
   align-items: center;
 }
 .assistant-feature h2 {
-  margin: 12px 0;
+  margin: var(--ran-space-3) 0;
   font-size: clamp(26px, 3vw, 38px);
   line-height: 1.3;
   letter-spacing: -0.035em;
@@ -1128,25 +1143,25 @@ body {
 }
 .assistant-guide {
   display: inline-block;
-  margin-top: 20px;
+  margin-top: calc(var(--ran-space-4) + var(--ran-space-1));
   color: var(--ran-color-text);
   text-underline-offset: 5px;
 }
 .assistant-feature-example {
   border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-md);
-  padding: 32px;
+  padding: var(--ran-space-8);
   background: var(--ran-color-bg-muted);
 }
 .assistant-feature-example > span {
   color: var(--ran-color-text-secondary);
-  font-size: 12px;
+  font-size: var(--ran-text-label-3);
 }
 .assistant-feature-example blockquote {
-  margin: 24px 0 0;
-  padding-left: 20px;
+  margin: var(--ran-space-6) 0 0;
+  padding-left: calc(var(--ran-space-4) + var(--ran-space-1));
   border-left: 2px solid var(--ran-color-primary);
-  font-size: 20px;
+  font-size: var(--ran-text-heading-3);
   line-height: 1.7;
 }
 @media (max-width: 760px) {
@@ -1154,6 +1169,6 @@ body {
     grid-template-columns: 1fr;
   }
   .assistant-feature-example {
-    padding: 24px;
+    padding: var(--ran-space-6);
   }
 }

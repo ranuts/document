@@ -60,7 +60,7 @@
   border-top: 1px solid var(--ran-color-border);
 }
 .history-rail-label {
-  font: 600 11px/1 var(--ran-font-mono);
+  font: 600 var(--ran-text-label-3)/1 var(--ran-font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ran-color-text-secondary);
@@ -83,7 +83,7 @@
   padding: var(--ran-space-1) var(--ran-space-3);
   border-radius: var(--ran-radius-full);
   box-shadow: 0 0 0 1px var(--ran-color-border);
-  font: 500 12px/1.8 var(--ran-font-mono);
+  font: 500 var(--ran-text-label-3)/1.8 var(--ran-font-mono);
   color: var(--ran-color-text-secondary);
 }
 .history-chip-dot {
@@ -122,7 +122,7 @@
      wide because of the table; the prose must not follow it out there. */
   max-width: 60ch;
   color: var(--ran-color-text-secondary);
-  font-size: 15px;
+  font-size: var(--ran-text-copy-2);
 }
 
 /* Autosave switch: a real control, not a bare checkbox dropped on the page. */
@@ -130,7 +130,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ran-space-2);
-  font-size: 14px;
+  font-size: var(--ran-text-label-1);
   color: var(--ran-color-text-secondary);
   cursor: pointer;
   user-select: none;
@@ -180,14 +180,18 @@
    not read as a stack of calls to action. Same split as the component libraries
    (Ant's `size`, Material's density) -- the point is that it is a rule, not a
    value picked per page. */
-.history-header-actions r-button::part(content) {
+.history-header-actions r-button::part(content),
+.history-empty-action::part(content) {
+  min-height: max(var(--app-control-page), var(--app-control-height));
+  box-sizing: border-box;
   padding: var(--ran-space-2) var(--ran-space-4);
-  font-size: 15px;
+  font-size: var(--ran-text-copy-2);
   font-weight: 600;
 }
 .history-row-actions r-button::part(content) {
+  min-height: var(--app-control-height);
   padding: var(--ran-space-1) var(--ran-space-3);
-  font-size: 14px;
+  font-size: var(--ran-text-label-1);
 }
 
 /* ---- toolbar ---- */
@@ -206,7 +210,7 @@
 }
 .history-usage {
   color: var(--ran-color-text-secondary);
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   font-family: var(--ran-font-mono);
 }
 
@@ -248,7 +252,7 @@
   /* Mono is for stamping, not for reading: a file kind is a machine fact, and
      it is the one thing scanned down the whole column. */
   font-family: var(--ran-font-mono);
-  font-size: 10px;
+  font-size: var(--ran-text-label-3);
   line-height: 14px;
   letter-spacing: 0.06em;
   text-align: center;
@@ -259,7 +263,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: calc(var(--ran-space-1) / 2);
 }
 .history-row-title-line {
   display: flex;
@@ -273,7 +277,7 @@
 .history-row-title {
   color: var(--ran-color-text);
   font-weight: 500;
-  font-size: 15px;
+  font-size: var(--ran-text-copy-2);
   text-decoration: none;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -291,7 +295,7 @@
   flex-wrap: wrap;
   gap: 0 var(--ran-space-2);
   color: var(--ran-color-text-secondary);
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
 }
 .history-row-facts > span:not(:first-child)::before {
   content: '·';
@@ -307,7 +311,7 @@
   gap: var(--ran-space-1);
   flex-shrink: 0;
   color: var(--ran-color-text-disabled);
-  font-size: 11.5px;
+  font-size: var(--ran-text-label-3);
   white-space: nowrap;
 }
 .history-dot {
@@ -339,18 +343,15 @@
 .history-delete:focus-within {
   opacity: 1;
 }
-.history-download::part(content),
-.history-delete::part(content) {
+.history-download::part(content) {
   color: var(--ran-color-text-secondary);
 }
 /* The row's two actions are not equals: getting the bytes out is the one
    people came for, deleting is the one that cannot be undone. Only the
    destructive one takes a colour, and only once the pointer is on the row. */
-.history-row:hover .history-download::part(content) {
+.history-row:hover .history-download::part(content),
+.history-download:focus-within::part(content) {
   color: var(--ran-color-text);
-}
-.history-row:hover .history-delete::part(content) {
-  color: var(--ran-color-danger);
 }
 @media (hover: none) {
   .history-download,
@@ -373,11 +374,11 @@
   background: transparent;
   color: var(--ran-color-text-secondary);
   font-family: inherit;
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   line-height: 1;
   /* The search field beside it is a 32px ranui control; without this the pill
      comes out 31px and the two sit half a pixel apart in the same row. */
-  min-height: 32px;
+  min-height: var(--app-control-height);
   cursor: pointer;
   transition:
     background var(--ran-motion-duration-fast, 120ms) ease,
@@ -425,14 +426,14 @@
   color: var(--ran-color-text-secondary);
 }
 .history-empty-title {
-  font-size: 15px;
+  font-size: var(--ran-text-copy-2);
   font-weight: 600;
   color: var(--ran-color-text);
 }
 .history-empty-body {
   max-width: 44ch;
   color: var(--ran-color-text-secondary);
-  font-size: 13.5px;
+  font-size: var(--ran-text-copy-2);
 }
 .history-empty-action {
   margin-top: var(--ran-space-2);
@@ -445,7 +446,7 @@
 }
 .history-page-info {
   color: var(--ran-color-text-secondary);
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   font-variant-numeric: tabular-nums;
 }
 /* Everything that acts on the whole feature rather than on one document: the
@@ -456,19 +457,8 @@
 .history-note {
   max-width: 72ch;
   color: var(--ran-color-text-secondary);
-  font-size: 13px;
+  font-size: var(--ran-text-label-2);
   line-height: 1.5;
-}
-/* In the rail it sits with the switch it explains, so it starts at the same
-   edge and takes no indent from the button beside it. */
-.history-clear::part(content) {
-  padding: var(--ran-space-1) 0;
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--ran-color-text-secondary);
-}
-.history-clear:hover::part(content) {
-  color: var(--ran-color-danger);
 }
 .history-note-warn {
   color: var(--ran-color-warning);
@@ -504,7 +494,7 @@
     min-width: 0;
   }
   .history-row-facts {
-    font-size: 12px;
+    font-size: var(--ran-text-label-3);
     /* One line, or the leading separator ends up starting the next one. Size is
        the fact worth dropping: nobody looks for a document by how big it is. */
     flex-wrap: nowrap;
@@ -514,7 +504,10 @@
     display: none;
   }
   /* r-button's own padding indents a text button away from the column edge. */
-  .history-header-actions r-button::part(content) {
+  .history-header-actions r-button::part(content),
+  .history-empty-action::part(content) {
+    min-height: max(var(--app-control-page), var(--app-control-height));
+    box-sizing: border-box;
     padding-left: 0;
   }
   .history-header-actions {
@@ -524,7 +517,7 @@
     width: 100%;
   }
   .history-usage {
-    font-size: 12px;
+    font-size: var(--ran-text-label-3);
   }
 }
 
@@ -542,4 +535,53 @@
   .history-switch::after {
     transition-duration: 0.01ms !important;
   }
+}
+
+@media (pointer: coarse) {
+  .history-autosave {
+    min-height: var(--app-control-touch);
+  }
+  .history-search {
+    --ran-input-min-height: var(--app-control-touch);
+    --ran-input-content-min-height: var(--app-control-touch);
+  }
+}
+
+/* Native destructive triggers share density and typography with row/page
+   commands while retaining a real focus target after confirmation closes. */
+button.history-delete,
+button.history-clear {
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--ran-radius-sm);
+  background: transparent;
+  color: var(--ran-color-text-secondary);
+  font: inherit;
+  font-size: var(--ran-text-label-1);
+  line-height: 1.5;
+  cursor: pointer;
+}
+button.history-delete {
+  min-height: var(--app-control-height);
+  padding: var(--ran-space-1) var(--ran-space-3);
+}
+button.history-clear {
+  min-height: max(var(--app-control-page), var(--app-control-height));
+  padding: var(--ran-space-1) 0;
+}
+.history-row:hover button.history-delete:enabled,
+button.history-delete:focus-visible,
+button.history-clear:hover:enabled,
+button.history-clear:focus-visible {
+  color: var(--app-danger-fill);
+}
+button.history-delete:focus-visible,
+button.history-clear:focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: 2px;
+}
+button.history-delete:disabled,
+button.history-clear:disabled {
+  color: var(--ran-color-text-disabled);
+  cursor: default;
 }
