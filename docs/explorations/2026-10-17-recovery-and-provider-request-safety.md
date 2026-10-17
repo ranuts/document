@@ -1,0 +1,100 @@
+# Recovery and provider request safety
+
+Baseline: `ac2dcade`. Scope: failed quota retries, fetch-provider deadlines and
+Gemini service-error guidance. No storage schema, retention budget, model default,
+provider destination, inference runtime or document-write behavior changes.
+
+## Recovery quota retry
+
+Previously, the first quota failure caused an independent transaction to delete
+the coldest recovery document before retrying the new snapshot. If the retry
+also failed, the old recovery was already gone and the new snapshot was absent.
+
+The retry now owns both eviction and replacement in one transaction across
+metadata, snapshot bytes and disk handles. Cancellation or any second write
+failure aborts that transaction. Commit-only save-target cleanup therefore runs
+only after a successful replacement. There is still at most one retry, and the
+current document remains protected from eviction. Successful quota recovery and
+ordinary retention keep their existing behavior. A browser that cannot reclaim
+space within the transaction may still refuse the write; it must retain the
+previous recovery instead of trading it for a failed snapshot.
+
+Unit regressions inject both a repeated quota failure and a different error on
+retry, then check metadata and bytes for the old and current documents. A browser
+regression edits a real document, triggers its departure snapshot and injects
+two quota errors in real IndexedDB. It checks that the old document remains in
+the history page with byte-for-byte identical recovery content.
+
+## AI HTTP request lifetime
+
+OpenAI-compatible, Gemini and Ollama adapters share a small HTTP boundary.
+The default total deadline is five minutes, matching the existing Loopback
+duration; constructor/factory callers may override `timeoutMs`. One timer covers
+headers and body consumption. Cancellation forwards the original caller reason;
+deadline expiry produces `TimeoutError`. The boundary races transport/body work
+with cancellation so a non-cooperative injected transport cannot retain the
+controller indefinitely. The boundary owns the response stream reader and
+cancels it directly on timeout or Stop, then releases the reader lock. Late
+responses are rejected and their unused bodies cancelled. Settlement removes
+timers and caller listeners.
+
+Ollama also accepts the existing neutral provider cancellation argument. The
+Anthropic SDK, Loopback and browser inference adapters are unchanged.
+
+HTTP errors carry `status` and only a safe provider/status message. Error bodies
+are cancelled without reading them, avoiding stalled error streams and private
+upstream details. The UI recognizes Gemini as well as existing provider messages
+when a boundary serializes the error to text. Existing localized guidance is
+reused. A timeout is a failure rather than a user-requested Stop, and no implicit
+resend occurs. A fresh explicit request may run after the previous one settles.
+
+## Verification
+
+The initial history regressions failed against the baseline because the old
+document was absent after the retry. The initial provider regressions failed
+because requests remained pending or HTTP errors lacked structured status.
+An assembled reverse run against the baseline reproduced 22 expected failing
+regressions across history and provider handling.
+
+Independent read-only review identified that native `response.json()` could
+retain a locked body when a host transport ignored cancellation. Three real
+stream regressions failed before replacing it with an owned reader, then passed.
+The reviewer rechecked cleanup, including a stream whose cancellation promise
+never settles, and confirmed equivalent UTF-8/BOM decoding across 59 split-chunk
+probe cases. No actionable findings remain from that review.
+
+The two new Chromium regressions also failed against an isolated build with
+the baseline history and cloud-provider implementations: recovery metadata was
+empty after quota failure, and Gemini displayed generic failure instead of
+rate-limit guidance. Source files were not changed for this browser check.
+
+Final assembled verification:
+
+- Full unit coverage: 6,223 tests in 233 files pass; 89.38% lines and 82.90%
+  branches. All repository coverage gates pass.
+- Ten Chromium cases pass: quota failure with original bytes retained, Gemini
+  and existing service-error recovery, Word/PPT request queues and Stop, actual
+  autosave/reopen/embedded isolation, Word editing/save and Excel create/save.
+- Archive integrity, oxlint, workspace declaration builds and application
+  TypeScript checks pass via `pnpm run lint:ts`.
+- The production build passes. Existing large-chunk and ineffective dynamic
+  import warnings remain outside this change.
+
+Verification commands:
+
+```sh
+pnpm run test:coverage --maxWorkers=4
+pnpm run lint:ts
+pnpm run format:check
+pnpm run build
+E2E_BASE_URL=http://127.0.0.1:4197 E2E_PORT=4197 pnpm exec playwright test \
+  test/e2e/history-quota.spec.ts test/e2e/agent-error-recovery.spec.ts \
+  test/e2e/autosave-recovery.spec.ts test/e2e/main-site.spec.ts \
+  test/e2e/agent-request-queue.spec.ts --workers=1 --reporter=line
+```
+
+The browser commands use the production build served by Vite preview. This pass
+does not claim complete E2E, Firefox/WebKit, Docker, Cloudflare hosting or live
+cloud-provider acceptance. Network failures and full storage are deterministic
+fault injections; real account quotas and physical disk exhaustion are not
+required or exercised.
