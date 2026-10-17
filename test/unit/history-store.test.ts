@@ -230,6 +230,19 @@ describe('history store', () => {
     expect(await historyUsage()).toBe(40);
   });
 
+  it.each(['blob', 'file'])('rejects an oversized %s before materializing its bytes', async (kind) => {
+    mockQuota(200);
+    const keep = await putSnapshot({ title: 'Keep.docx', origin: 'local', bytes: bytes(40, 7) });
+    const payload = kind === 'blob' ? new Blob([new Uint8Array(120)]) : new File([new Uint8Array(120)], 'Large.docx');
+    const read = vi.spyOn(payload, 'arrayBuffer');
+
+    expect(await putSnapshot({ title: 'Large.docx', origin: 'local', bytes: payload })).toBeNull();
+
+    expect(read).not.toHaveBeenCalled();
+    expect(Array.from((await getLatestSnapshot(keep!.id))!.bytes)).toEqual(Array(40).fill(7));
+    expect((await listDocs()).total).toBe(1);
+  });
+
   it('trims its own revisions to the budget before evicting unrelated history', async () => {
     mockQuota(240);
     const keep = await putSnapshot({ title: 'Keep.docx', origin: 'local', bytes: bytes(10, 7) });

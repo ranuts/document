@@ -98,3 +98,16 @@ does not claim complete E2E, Firefox/WebKit, Docker, Cloudflare hosting or live
 cloud-provider acceptance. Network failures and full storage are deterministic
 fault injections; real account quotas and physical disk exhaustion are not
 required or exercised.
+
+## Follow-up: reject oversized exports before reading bytes
+
+The snapshot store previously checked its byte budget after materializing a
+Blob/File. Autosave also eagerly read the exported File before delegating to the
+store. A known oversized export therefore still allocated another full buffer.
+
+The store now checks the known input size before conversion, and autosave passes
+the exported File directly with its existing cancellation signal. The later
+actual-byte check remains. Three regressions first failed because `arrayBuffer`
+was called once; the fix must reduce that count to zero for oversized Blob,
+File and actual autosave inputs while retaining the previous recovery bytes.
+This is an operation-count improvement, not a measured heap-size claim.

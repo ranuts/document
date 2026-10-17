@@ -316,6 +316,10 @@ export async function putSnapshot(input: SnapshotInput, signal?: AbortSignal): P
   if (signal?.aborted) return null;
   const budget = await storageBudget();
   if (signal?.aborted) return null;
+  // File/Blob sizes are available without allocating another full byte buffer.
+  // Reject an impossible snapshot before reading it, retaining existing recovery.
+  const inputSize = 'byteLength' in input.bytes ? input.bytes.byteLength : input.bytes.size;
+  if (inputSize > budget) return null;
   const payload = await toBytes(input.bytes);
   if (signal?.aborted) return null;
   // No eviction can make an individually oversized snapshot fit. Preserve the
