@@ -3,6 +3,7 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { createAgentPanel, setAgentPanelOpen } from '../../lib/agent-plugin/ui/panel';
 import { t } from '@ranuts/shared/i18n';
 import { getEndpointKey } from '@ranuts/agent-core/llm/keys';
+import { WllamaProvider } from '@ranuts/agent-core/llm/wllama';
 import { AgentChatController } from '../../lib/agent-plugin/ui/controller';
 import { createHistoryStorage } from '../../lib/agent-plugin/ui/storage';
 import { ChatView } from '@ranuts/chat-ui';
@@ -30,6 +31,7 @@ const state = vi.hoisted(() => ({
   ready: false,
   nativeEndpoint: false,
   cached: false,
+  cacheChecks: vi.fn(),
   cachedModel: 'Qwen3-4B-q4f16_1-MLC',
   cpuCached: false,
   deleteCache: vi.fn().mockResolvedValue(undefined),
@@ -99,7 +101,10 @@ vi.mock('@ranuts/agent-core/llm/openai', async (original) => {
 vi.mock('@ranuts/agent-core/llm/webllm', async (original) => ({
   ...(await original<typeof import('@ranuts/agent-core/llm/webllm')>()),
   isWebGPUAvailable: () => true,
-  isModelCached: async (id: string) => state.cached && id === state.cachedModel,
+  isModelCached: async (id: string) => {
+    state.cacheChecks(id);
+    return state.cached && id === state.cachedModel;
+  },
   WebLLMProvider: class {
     constructor(options: { onProgress: (value: { text: string }) => void }) {
       state.progress.push(options.onProgress);
@@ -223,6 +228,7 @@ vi.mock('@ranuts/agent-core/llm/local', async (original) => ({
             () => {
               state.ready = false;
               state.cached = false;
+              state.cacheChecks.mockClear();
               state.editorKind = 'word';
               state.deleteCache.mockReset().mockResolvedValue(undefined);
               reject(signal.reason);
@@ -396,6 +402,7 @@ afterEach(() => {
   state.conversationRepository = undefined;
   state.nativeEndpoint = false;
   state.cached = false;
+  state.cacheChecks.mockClear();
   state.cachedModel = 'Qwen3-4B-q4f16_1-MLC';
   state.cpuCached = false;
   state.editorKind = 'word';
@@ -502,6 +509,70 @@ it('opens chat for a configured service without connecting on its own', () => {
   const panel = createAgentPanel({ externalEntry: true });
   expect(panel.dataset.view).toBe('chat');
   expect(panel.querySelector('.agent-panel-endpoint-connect')?.textContent).toBe(t('agentEndpointConnect'));
+});
+it('keeps CPU-only setup free of WebGPU cache inspection until inventory is opened', async () => {
+  localStorage.setItem('agent-panel-provider', 'wllama');
+  const panel = createAgentPanel({ externalEntry: true });
+  await vi.waitFor(() => expect(panel.dataset.view).toBe('settings'));
+  expect(state.cacheChecks).not.toHaveBeenCalled();
+  const inventory = panel.querySelector<HTMLDetailsElement>('.agent-model-cache')!;
+  inventory.open = true;
+  await vi.waitFor(() => expect(state.cacheChecks).toHaveBeenCalled());
+  expect(state.preload).not.toHaveBeenCalled();
+});
+it('keeps a successfully prepared CPU model usable without inspecting WebGPU caches', async () => {
+  localStorage.setItem('agent-panel-provider', 'wllama');
+  localStorage.setItem('agent-panel-gguf-url', 'https://models.example/cpu-model.gguf');
+  let ready = false;
+  const preload = vi.spyOn(WllamaProvider.prototype, 'preload').mockImplementation(async () => {
+    ready = true;
+  });
+  const isReady = vi.spyOn(WllamaProvider.prototype, 'isReady').mockImplementation(() => ready);
+  try {
+    const panel = createAgentPanel();
+    const inventory = panel.querySelector<HTMLDetailsElement>('.agent-model-cache')!;
+    expect(inventory.open).toBe(false);
+    expect(state.cacheChecks).not.toHaveBeenCalled();
+    panel.querySelector<HTMLElement>('.agent-panel-gguf-load')!.click();
+    await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
+    expect(preload).toHaveBeenCalledOnce();
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = 'Hello';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(panel.querySelector('.cui-send')?.hasAttribute('disabled')).toBe(false);
+    expect(state.cacheChecks).not.toHaveBeenCalled();
+    inventory.open = true;
+    await vi.waitFor(() => expect(state.cacheChecks).toHaveBeenCalled());
+  } finally {
+    preload.mockRestore();
+    isReady.mockRestore();
+  }
+});
+it('ignores a native inventory toggle that settles after its panel is removed', async () => {
+  localStorage.setItem('agent-panel-provider', 'wllama');
+  const panel = createAgentPanel();
+  const inventory = panel.querySelector<HTMLDetailsElement>('.agent-model-cache')!;
+  const toggled = new Promise<void>((resolve) => inventory.addEventListener('toggle', () => resolve(), { once: true }));
+  inventory.open = true;
+  panel.remove();
+  await toggled;
+  expect(state.cacheChecks).not.toHaveBeenCalled();
+});
+it('does not inspect browser runtime caches for service setup until the local source is selected', async () => {
+  localStorage.setItem(
+    'agent-writing-endpoint',
+    JSON.stringify({ version: 1, kind: 'openai-compatible', baseUrl: 'https://missing-key.example', model: 'model' }),
+  );
+  const panel = createAgentPanel({ externalEntry: true });
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(panel.dataset.view).toBe('settings');
+  expect(state.cacheChecks).not.toHaveBeenCalled();
+  expect(state.preload).not.toHaveBeenCalled();
+  const source = panel.querySelector<HTMLElement & { value: string }>('.agent-source-picker')!;
+  source.value = 'local';
+  source.dispatchEvent(new Event('change'));
+  await vi.waitFor(() => expect(state.cacheChecks).toHaveBeenCalled());
+  expect(state.preload).not.toHaveBeenCalled();
 });
 it('keeps setup reachable for an incomplete cloud service', async () => {
   localStorage.setItem(
@@ -790,6 +861,7 @@ it('explains a blocked writing route without requiring an unrelated model downlo
   // routed to a browser-local engine that never passed quality acceptance.
   state.ready = false;
   state.cached = false;
+  state.cacheChecks.mockClear();
   state.editorKind = 'word';
   state.deleteCache.mockReset().mockResolvedValue(undefined);
   localStorage.setItem('agent-panel-provider', 'wllama');
@@ -1494,6 +1566,7 @@ it('clears loaded runtime feedback when a failed operation retires its provider'
   state.toolPlan.mockImplementation(async () => {
     state.ready = false;
     state.cached = false;
+    state.cacheChecks.mockClear();
     state.editorKind = 'word';
     state.deleteCache.mockReset().mockResolvedValue(undefined);
     throw new WebAssembly.RuntimeError('Length out of range of buffer');
@@ -1926,6 +1999,7 @@ it('clears loaded feedback when the engine becomes unavailable after chat has fi
   expect(panel.querySelector('.agent-model-status')?.textContent).toContain(t('agentUseDevice'));
   state.ready = false;
   state.cached = false;
+  state.cacheChecks.mockClear();
   state.editorKind = 'word';
   state.deleteCache.mockReset().mockResolvedValue(undefined);
   state.readonly = false;
