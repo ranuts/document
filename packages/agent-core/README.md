@@ -39,9 +39,9 @@ only knows the `LLMProvider` interface and the `AgentTool` registry.
 
 The document product uses a default-off assistant switch. Opening the panel never downloads a model or connects a service. Runtime configuration is reached through the usage settings; generated selection edits require explicit review and confirmation. Browser-agent tools are documented separately in the developer reference.
 
-## Fetch provider request bounds
+## Remote provider request bounds
 
-OpenAI-compatible, Gemini, Ollama and Loopback providers use a five-minute total deadline
+Anthropic, OpenAI-compatible, Gemini, Ollama and Loopback providers use a five-minute total deadline
 per request, covering headers and complete JSON or incremental response reads. Set `timeoutMs`
 in their constructor options or `createProvider` options to override it. The
 duration must be positive, finite and at most 2,147,483,647 milliseconds.
@@ -50,13 +50,17 @@ Caller cancellation retains its original reason; deadline expiry rejects with
 when an injected transport ignores cancellation. A late response cannot become
 a successful result. Timers and caller subscriptions are released on settlement.
 
-HTTP failures carry a numeric `status` and a safe provider/status message.
+Fetch-based HTTP failures carry a numeric `status` and a safe provider/status message.
 Upstream error bodies are cancelled without being read or included in errors.
 Hosts can classify structured errors directly; serialized messages retain the
-same provider/status category. No request is retried automatically. These bounds
-do not alter the Anthropic SDK or browser-local inference lifetimes.
+same provider/status category. Fetch-based providers do not retry requests automatically.
 
-`maxResponseBytes` bounds actual response bytes, including streaming frames, to
+Anthropic retains the official SDK protocol and retry policy; its provider owns the total deadline across SDK requests
+and JSON or streamed message consumption, and stops the SDK stream on cancellation or
+consumer failure. Known SDK timeout and overload failures map to safe product categories.
+Browser-local inference lifetimes are separate.
+
+For fetch-based providers, `maxResponseBytes` bounds actual response bytes, including streaming frames, to
 8 MiB by default. It must be a positive safe integer. Declared oversized bodies
 are rejected before reading; actual bytes are checked even if Content-Length is
 missing or incorrect. Native response readers are cancelled on overflow, Stop,
