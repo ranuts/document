@@ -292,6 +292,10 @@ body {
 }
 
 @media (max-width: 620px) {
+  /* Match satellite chrome without spending the mobile row on an outer gap. */
+  #landing-hero .bar .wrap {
+    gap: var(--ran-space-1);
+  }
   /* Phone: the trigger keeps the globe and the caret and drops the language
      name, which is the part that costs width. */
   #landing-hero .lang-current {
