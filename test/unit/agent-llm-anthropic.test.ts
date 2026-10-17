@@ -155,8 +155,9 @@ it.each(['chat', 'stream', 'fallback'] as const)(
   'cancels a pending Anthropic %s request through the SDK signal',
   async (mode) => {
     const abort = new AbortController();
+    let transportSignal: AbortSignal | undefined;
     const request = (_body: Record<string, unknown>, options?: { signal?: AbortSignal }) => {
-      expect(options?.signal).toBe(abort.signal);
+      transportSignal = options?.signal;
       return new Promise<never>((_resolve, reject) => {
         options!.signal!.addEventListener('abort', () => reject(new APIUserAbortError()), { once: true });
       });
@@ -179,7 +180,10 @@ it.each(['chat', 'stream', 'fallback'] as const)(
     const typed = provider as import('@ranuts/agent-core/llm/types').LLMProvider;
     const pending =
       mode === 'chat' ? typed.chat([], [], abort.signal) : typed.chatStream!([], [], () => {}, abort.signal);
+    expect(transportSignal).toBeInstanceOf(AbortSignal);
+    expect(transportSignal?.aborted).toBe(false);
     abort.abort();
+    expect(transportSignal?.aborted).toBe(true);
     await expect(pending).rejects.toMatchObject({ name: 'AbortError' });
   },
 );
