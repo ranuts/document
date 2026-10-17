@@ -28,6 +28,7 @@
     <script src="/theme-presentation.js"></script>
     <link rel="stylesheet" href="/ran-fonts/fonts.css" />
     <link rel="stylesheet" href="/ran-tokens.css" />
+    <link rel="stylesheet" href="/app-tokens.css" />
     <!-- The site's chrome comes from the same stylesheet every other page uses,
          rather than being re-measured here: this page is a destination people
          reach from the homepage, and losing the header on the way there makes
@@ -119,7 +120,7 @@
     <main id="history-root"></main>
 
     <noscript>
-      <p style="max-width: 720px; margin: 0 auto; padding: 24px; font-family: system-ui, sans-serif">
+      <p style="max-width: 720px; margin: 0 auto; padding: var(--ran-space-6); font-family: var(--ran-font-family)">
         This page needs JavaScript to read the documents stored in your browser.
       </p>
     </noscript>

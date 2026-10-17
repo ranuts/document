@@ -221,6 +221,12 @@ test.describe('local history page', () => {
     // Cancelling deletes nothing, and the dialog gets out of the way.
     await expect(page.locator('r-modal')).toHaveCount(0);
     await expect(titles(page)).toHaveText(['Stays.docx']);
+    await expect(page.locator('.history-delete')).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.confirm-dialog')).toHaveAttribute('open', 'true');
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.history-delete')).toBeFocused();
+    await expect(titles(page)).toHaveText(['Stays.docx']);
   });
 
   test('clears everything at once', async ({ page }) => {

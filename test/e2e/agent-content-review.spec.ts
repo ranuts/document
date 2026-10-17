@@ -250,3 +250,25 @@ test('read progress states its scope and disclosure text shares the marker line 
     }),
   ).toBe('A1');
 });
+
+test.describe('touch review commands', () => {
+  test.use({ hasTouch: true, viewport: { width: 320, height: 900 } });
+  test('review and result commands retain 44px targets in a narrow document panel', async ({ page }) => {
+    test.setTimeout(90000);
+    await open(page, 'docx', [{ name: 'insert_text', input: { text: 'Touch review fixture.' } }]);
+    await page.locator('.cui-input').fill('Insert a short paragraph.');
+    await page.locator('.cui-input').press('Enter');
+    const preview = page.locator('.agent-plan-preview').last();
+    await expect(preview.locator('.agent-plan-buttons r-button:visible').first()).toBeVisible();
+    for (const control of await preview.locator('.agent-plan-buttons r-button:visible').all()) {
+      expect((await control.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    }
+    expect(await preview.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
+    await preview.locator('.agent-plan-apply').click();
+    await expect(page.getByRole('log')).toContainText('Finished the requested task.');
+    const actions = page.locator('.cui-message-actions button:visible');
+    expect(await actions.count()).toBeGreaterThan(0);
+    for (const control of await actions.all()) expect((await control.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect(await page.locator('.cui-root').evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
+  });
+});

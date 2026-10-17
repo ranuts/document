@@ -29,6 +29,7 @@
     <script src="/theme-presentation.js"></script>
     <link rel="stylesheet" href="/ran-fonts/fonts.css" />
     <link rel="stylesheet" href="/ran-tokens.css" />
+    <link rel="stylesheet" href="/app-tokens.css" />
     <link rel="stylesheet" href="/landing.css" />
     <script src="/ranui-iife/button.iife.js" defer></script>
     <script src="/ranui-iife/popover.iife.js" defer></script>
@@ -40,77 +41,77 @@
          reusing the homepage hero's visual language */
       .nf-win {
         max-width: 560px;
-        margin: 0 0 28px;
-        border: 1px solid var(--rule);
+        margin: 0 0 calc(var(--ran-space-6) + var(--ran-space-1));
+        border: 1px solid var(--ran-color-border);
         border-radius: var(--ran-radius-lg);
         background: var(--ran-color-bg-elevated);
         box-shadow: var(--ran-shadow-menu);
         overflow: hidden;
-        font-family: var(--mono);
+        font-family: var(--ran-font-mono);
       }
       .nf-bar {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 10px 16px;
-        border-bottom: 1px solid var(--rule);
+        gap: var(--ran-space-3);
+        padding: calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2) var(--ran-space-4);
+        border-bottom: 1px solid var(--ran-color-border);
         background: var(--ran-color-bg-subtle);
-        font-size: 11.5px;
-        color: var(--ink-2);
+        font-size: var(--ran-text-label-3);
+        color: var(--ran-color-text-secondary);
       }
       .nf-bar i {
         width: 9px;
         height: 9px;
-        border-radius: 999px;
+        border-radius: var(--ran-radius-full);
         background: var(--ran-color-border-hover);
         flex: none;
       }
       .nf-bar i + i {
-        margin-left: -6px;
+        margin-left: -calc(var(--ran-space-3) / 2);
       }
       .nf-code {
-        padding: 36px 24px;
+        padding: calc(var(--ran-space-8) + var(--ran-space-1)) var(--ran-space-6);
         text-align: center;
         font-size: clamp(56px, 10vw, 88px);
         font-weight: 700;
         letter-spacing: 0.04em;
-        color: var(--ink);
+        color: var(--ran-color-text);
         line-height: 1;
       }
       .nf-code small {
         display: block;
-        margin-top: 10px;
-        font-size: 12px;
+        margin-top: calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
+        font-size: var(--ran-text-label-3);
         font-weight: 500;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: var(--muted);
+        color: var(--ran-color-text-secondary);
       }
       .nf-net {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        border-top: 1px solid var(--rule);
+        gap: var(--ran-space-2);
+        padding: var(--ran-space-2) var(--ran-space-4);
+        border-top: 1px solid var(--ran-color-border);
         background: var(--ran-color-bg-subtle);
-        font-size: 11px;
-        color: var(--muted);
+        font-size: var(--ran-text-label-3);
+        color: var(--ran-color-text-secondary);
       }
       .nf-net i {
         width: 7px;
         height: 7px;
-        border-radius: 999px;
-        background: var(--signal);
+        border-radius: var(--ran-radius-full);
+        background: var(--ran-color-success);
         flex: none;
       }
       .nf-zh {
-        color: var(--ink-2);
-        font-size: 15px;
+        color: var(--ran-color-text-secondary);
+        font-size: var(--ran-text-copy-2);
       }
       .nf-actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: var(--ran-space-3);
         align-items: center;
       }
     </style>

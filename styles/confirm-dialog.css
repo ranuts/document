@@ -8,19 +8,50 @@
   max-width: 440px;
 }
 
-/* ranui has no "danger" button type, and it does not need one: the component
-   exposes --ran-btn-* as its customisation hook, so the destructive action is a
-   primary button wearing the danger token. Going through the hook rather than
-   ::part means it keeps the component's own states (hover, focus, disabled). */
+/* Native footer commands participate in r-modal's public keyboard contract. */
+.confirm-actions button {
+  box-sizing: border-box;
+  min-height: var(--app-control-height);
+  padding: var(--ran-space-1) var(--ran-space-3);
+  border: 1px solid transparent;
+  border-radius: var(--ran-radius-sm);
+  background: var(--confirm-fill, transparent);
+  color: var(--confirm-foreground, var(--ran-color-text-secondary));
+  font: inherit;
+  font-size: var(--ran-text-label-1);
+  line-height: 1.5;
+  cursor: pointer;
+}
+.confirm-actions button:hover:enabled {
+  background: var(--confirm-hover, var(--ran-color-bg-hover));
+}
+.confirm-actions button:active:enabled {
+  background: var(--confirm-active, var(--ran-color-bg-active));
+}
+.confirm-actions button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.confirm-actions button:focus-visible {
+  outline: none;
+  box-shadow: var(--ran-focus-ring);
+}
+.confirm-ok {
+  --confirm-fill: var(--ran-color-primary);
+  --confirm-hover: var(--ran-color-primary-hover);
+  --confirm-active: var(--ran-color-primary-active);
+  --confirm-foreground: var(--ran-color-primary-text);
+}
 .confirm-ok-danger {
-  --ran-btn-background: var(--ran-color-danger);
-  --ran-btn-border-color: var(--ran-color-danger);
-  --ran-btn-color: #fff;
+  --confirm-fill: var(--app-danger-fill);
+  --confirm-hover: var(--app-danger-hover);
+  --confirm-active: var(--app-danger-active);
+  --confirm-foreground: var(--app-danger-foreground);
 }
 
 .confirm-body {
   color: var(--ran-color-text-secondary);
-  font-size: 14px;
+  font-size: var(--ran-text-copy-2);
   /* A file name can be long; the sentence around it should still be readable. */
   max-width: 46ch;
 }

@@ -313,6 +313,24 @@ for (const width of [320, 360, 1280]) {
 test.describe('coarse pointer composer', () => {
   test.use({ hasTouch: true });
   test('retains a 44-pixel execution target on touch hardware', async ({ page }) => {
+    test.setTimeout(90000);
+    await page.addInitScript(() => {
+      Object.assign(window, {
+        SpeechRecognition: class {
+          onstart?: () => void;
+          onend?: () => void;
+          start() {
+            queueMicrotask(() => this.onstart?.());
+          }
+          stop() {
+            this.onend?.();
+          }
+          abort() {
+            this.onend?.();
+          }
+        },
+      });
+    });
     await page.setViewportSize({ width: 360, height: 900 });
     await page.addInitScript(() => {
       localStorage.setItem('document-assistant-enabled', 'true');
@@ -326,5 +344,20 @@ test.describe('coarse pointer composer', () => {
     await expect(send).toBeVisible();
     expect((await send.boundingBox())!.width).toBe(44);
     expect((await send.boundingBox())!.height).toBe(44);
+    for (const width of [360, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const selector of ['.agent-speech-mic', '.agent-speech-privacy button', '.agent-sources-toggle']) {
+        expect((await page.locator(selector).boundingBox())!.height).toBeGreaterThanOrEqual(44);
+      }
+      expect(await page.locator('.agent-speech-cancel').boundingBox()).toBeNull();
+      await page.locator('.agent-speech-mic').click();
+      await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'listening');
+      expect((await page.locator('.agent-speech-cancel').boundingBox())!.height).toBe(44);
+      expect(await page.locator('.cui-composer').evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
+      await page.locator('.agent-speech-cancel').click();
+      await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'idle');
+      expect(await page.locator('.agent-speech-cancel').boundingBox()).toBeNull();
+      expect(await page.locator('.cui-composer').evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
+    }
   });
 });

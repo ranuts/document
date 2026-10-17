@@ -140,10 +140,12 @@ it('prepares bundled PDF module workers as optional runtime assets', async () =>
 it('keeps the local token and font stylesheets available after an offline reload', async () => {
   const { dir } = await fixture();
   try {
+    await writeFile(join(dir, 'app-tokens.css'), ':root{--app-control-page:42px}');
     await writeFile(join(dir, 'ran-tokens.css'), ':root{--ran-font-family:system-ui}');
     await writeFile(join(dir, 'ran-fonts', 'fonts.css'), '@font-face{}');
     const assets = await stampOfflineAssets(dir);
     expect(assets).toContain('/ran-tokens.css');
+    expect(assets).toContain('/app-tokens.css');
     expect(assets).toContain('/ran-fonts/fonts.css');
   } finally {
     await rm(dir, { recursive: true, force: true });

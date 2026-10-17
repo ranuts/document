@@ -14,8 +14,7 @@
  * say yes?", so every dismissal is a no.
  */
 import 'ranui/modal';
-import 'ranui/button';
-import { Div, View } from 'ranui/builder';
+import { ButtonBuilder, Div, View } from 'ranui/builder';
 import '../styles/confirm-dialog.css';
 
 export interface ConfirmOptions {
@@ -32,6 +31,7 @@ export function confirmDialog(options: ConfirmOptions): Promise<boolean> {
   if (typeof document === 'undefined') return Promise.resolve(false);
 
   return new Promise<boolean>((resolve) => {
+    const returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
     let settled = false;
     const finish = (confirmed: boolean): void => {
       if (settled) return;
@@ -39,29 +39,30 @@ export function confirmDialog(options: ConfirmOptions): Promise<boolean> {
       resolve(confirmed);
       // Let the close animation run before the element leaves the DOM.
       modal.removeAttribute('open');
+      if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
       window.setTimeout(() => modal.remove(), 300);
     };
 
-    const cancel = View('r-button')
+    // r-modal's public focus trap discovers native buttons. A closed-shadow
+    // r-button without a host tabindex is absent from that list, trapping Tab
+    // on Close. Native footer actions preserve one tab stop per command.
+    const cancel = ButtonBuilder()
       .class('confirm-cancel')
-      .attr('type', 'text')
+      .attr('type', 'button')
       .text(options.cancelLabel)
       .on('click', () => finish(false))
       .build();
 
-    const confirm = View('r-button')
+    const confirm = ButtonBuilder()
       .class(options.danger ? 'confirm-ok confirm-ok-danger' : 'confirm-ok')
-      // ranui ships primary and warning only; "danger" is a primary button
-      // wearing the danger token, applied through the component's --ran-btn-*
-      // hook in styles/history.css.
-      .attr('type', 'primary')
+      .attr('type', 'button')
       .text(options.confirmLabel)
       .on('click', () => finish(true))
       .build();
 
     const modal = View('r-modal')
       .class('confirm-dialog')
-      .attr('title', options.title)
+      .attr('heading', options.title)
       .children(
         Div().class('confirm-body').text(options.body).build(),
         Div().class('confirm-actions').attr('slot', 'footer').children(cancel, confirm).build(),
