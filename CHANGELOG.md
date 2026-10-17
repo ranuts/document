@@ -9,6 +9,19 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Editing a document after more than seven idle days keeps the new recovery
+  bytes instead of leaving an empty history record.
+- Turning off recovery, or stopping it after a storage failure, keeps ordinary
+  saves linked to the document's authorized file.
+- Closing or replacing a document cancels recovery startup still waiting for a
+  browser lock, so late callbacks cannot revive the previous document's session.
+- Anthropic requests now time out even when response data stops after headers;
+  timeouts and service overloads show the corresponding recovery guidance.
+- Browser tools report failed or superseded local opens as failures and apply
+  read-only mode only as part of the document being opened.
+- Repeated document opens no longer retain extra Blob URLs for previous source
+  files. App updates reuse unchanged prepared assistant runtime assets already
+  held in earlier app caches.
 - First-visit editor preparation waits for the service worker to control the
   page, so warmed font resources remain available in its offline cache.
 - A failed recovery snapshot no longer removes an older document when storage
