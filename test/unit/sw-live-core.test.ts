@@ -34,6 +34,12 @@ describe('deploy preserves lazy chunks for live pages', () => {
         if (!stores.has(name)) stores.set(name, new Map());
         const store = stores.get(name)!;
         return {
+          // Real Cache instances support match and resolve relative URLs against
+          // the worker origin, including optional capability metadata lookups.
+          match: async (request: string | { url: string }) => {
+            const url = new URL(typeof request === 'string' ? request : request.url, origin).href;
+            return store.get(url)?.clone();
+          },
           keys: async () => [...store.keys()].map((url) => ({ url })),
           delete: async ({ url }: { url: string }) => store.delete(url),
           put: async (url: string, response: Response) => store.set(url, response),

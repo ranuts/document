@@ -31,13 +31,13 @@ it('enables explicitly, remembers the choice and never prepares a model on its o
   await vi.waitFor(() => expect(runtime.create).toHaveBeenCalledOnce());
   expect(localStorage.getItem('document-assistant-enabled')).toBe('true');
   expect(runtime.enable).toHaveBeenCalledWith(true);
-  expect(prepare).toHaveBeenCalledOnce();
+  expect(prepare).not.toHaveBeenCalled();
 });
-it('a remembered choice prepares offline assets but keeps runtime execution lazy until opening', async () => {
+it('a remembered choice keeps optional runtime resources lazy until capability activation', async () => {
   localStorage.setItem('document-assistant-enabled', 'true');
   const entry = createAgentEntry();
   expect(runtime.create).not.toHaveBeenCalled();
-  expect(prepare).toHaveBeenCalledOnce();
+  expect(prepare).not.toHaveBeenCalled();
   entry.toggle();
   await vi.waitFor(() => expect(runtime.create).toHaveBeenCalledOnce());
 });

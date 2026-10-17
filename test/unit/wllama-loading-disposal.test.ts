@@ -35,13 +35,21 @@ it('owns and releases the worker while SDK initialization is still pending', asy
   const entered = new Promise<void>((resolve) => {
     state.entered = resolve;
   });
-  const provider = new WllamaProvider({ modelUrl: 'https://models.example/model.gguf', wasmUrl: '/local.wasm' });
+  const prepareRuntimeAssets = vi.fn(async () => {
+    throw Error('cache quota');
+  });
+  const provider = new WllamaProvider({
+    modelUrl: 'https://models.example/model.gguf',
+    wasmUrl: '/local.wasm',
+    prepareRuntimeAssets,
+  });
   const loading = provider.preload();
   const outcome = loading.then(
     () => ({ name: 'unexpected success' }),
     (error) => error,
   );
   await entered;
+  expect(prepareRuntimeAssets).toHaveBeenCalledWith('wllama');
   await provider.dispose();
   expect(state.exits).toBe(1);
   expect(await outcome).toMatchObject({ name: 'AbortError' });

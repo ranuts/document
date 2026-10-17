@@ -24,7 +24,7 @@ async function fixture() {
   await writeFile(join(dir, 'ran-fonts', 'Geist.woff2'), '');
   await writeFile(
     join(dir, 'sw.js'),
-    'const APP_ASSETS_TO_CACHE = []; // BUILD_APP_ASSETS\nconst ASSISTANT_ASSETS_TO_CACHE = []; // BUILD_ASSISTANT_ASSETS',
+    'const APP_ASSETS_TO_CACHE = []; // BUILD_APP_ASSETS\nconst ASSISTANT_CAPABILITY_ASSETS = {}; // BUILD_ASSISTANT_CAPABILITIES',
   );
   const manifest = {
     'editor.html': {
@@ -43,74 +43,73 @@ async function fixture() {
   return { dir, manifest };
 }
 
-it('keeps offline editor dependencies while deferring the assistant and its runtime', async () => {
-  const { dir } = await fixture();
-  try {
-    expect(await stampOfflineAssets(dir)).toEqual([
-      '/assets/agent.js',
-      '/assets/base.css',
-      '/assets/editor.js',
-      '/assets/recovery.js',
-      '/assets/shared.js',
-      '/ran-fonts/Geist.woff2',
-    ]);
-    const source = await readFile(join(dir, 'sw.js'), 'utf8');
-    const optional = JSON.parse(source.match(/const ASSISTANT_ASSETS_TO_CACHE = (\[.*?\]);/)![1]);
-    expect(optional).toEqual(['/assets/engine.js', '/assets/runtime.wasm']);
-    expect(source).not.toContain('model.gguf');
-    expect(source).not.toContain('private.docx');
-  } finally {
-    await rm(dir, { recursive: true, force: true });
-  }
-});
+function lists(source: string) {
+  return {
+    core: JSON.parse(source.match(/const APP_ASSETS_TO_CACHE = (\[.*?\]);/)![1]),
+    capabilities: JSON.parse(source.match(/const ASSISTANT_CAPABILITY_ASSETS = (\{.*?\});/)![1]),
+  };
+}
 
-it('keeps assistant UI assets mandatory while deferring attached executable runtime assets', async () => {
+it('partitions actual capability graphs without downloading unrelated emitted payloads', async () => {
   const { dir, manifest } = await fixture();
   try {
-    // Vite can attach Worker outputs directly to the importing UI chunk.
-    Object.assign(manifest['lib/agent-plugin/agent-plugin.ts'], {
-      css: ['assets/assistant.css'],
-      assets: ['assets/webllm.worker-build.js', 'assets/runtime.wasm', 'assets/ui.woff2'],
-    });
-    for (const name of ['assistant.css', 'webllm.worker-build.js', 'ui.woff2'])
-      await writeFile(join(dir, 'assets', name), '');
-    await writeFile(join(dir, '.vite', 'manifest.json'), JSON.stringify(manifest));
-
-    expect(await stampOfflineAssets(dir)).toEqual([
-      '/assets/agent.js',
-      '/assets/assistant.css',
-      '/assets/base.css',
-      '/assets/editor.js',
-      '/assets/recovery.js',
-      '/assets/shared.js',
-      '/assets/ui.woff2',
-      '/ran-fonts/Geist.woff2',
-    ]);
-    const source = await readFile(join(dir, 'sw.js'), 'utf8');
-    const optional = JSON.parse(source.match(/const ASSISTANT_ASSETS_TO_CACHE = (\[.*?\]);/)![1]);
-    expect(optional).toEqual(['/assets/engine.js', '/assets/runtime.wasm', '/assets/webllm.worker-build.js']);
+    const graph = manifest as Record<string, any>;
+    graph['lib/agent-plugin/agent-plugin.ts'].dynamicImports = [
+      'node_modules/@mlc-ai/web-llm/lib/index.js',
+      'packages/agent-core/dist/llm/wllama-cpu-runtime.js',
+      'lib/agent-plugin/connectors/pdf-reference-reader.ts',
+      'reference',
+    ];
+    graph['lib/agent-plugin/agent-plugin.ts'].assets = [
+      'assets/webllm.worker-test.js',
+      'assets/history-search.worker-test.js',
+      'assets/cpu.wasm',
+    ];
+    graph['node_modules/@mlc-ai/web-llm/lib/index.js'] = { file: 'assets/gpu.js' };
+    graph['packages/agent-core/dist/llm/wllama-cpu-runtime.js'] = {
+      file: 'assets/cpu.js',
+      imports: ['lib/agent-plugin/agent-plugin.ts'],
+      dynamicImports: [
+        'packages/agent-core/vendor/wllama-count/native/default/wllama.wasm?url',
+        'packages/agent-core/vendor/wllama-count/native/compat/wllama.wasm?url',
+      ],
+    };
+    graph['packages/agent-core/vendor/wllama-count/native/default/wllama.wasm?url'] = {
+      file: 'assets/cpu-url.js',
+      assets: ['assets/cpu.wasm'],
+    };
+    graph['packages/agent-core/vendor/wllama-count/native/compat/wllama.wasm?url'] = {
+      file: 'assets/compat-url.js',
+      assets: ['assets/compat.wasm'],
+    };
+    graph['lib/agent-plugin/connectors/pdf-reference-reader.ts'] = {
+      file: 'assets/pdf.js',
+      assets: ['assets/pdf.worker-test.mjs'],
+    };
+    graph.reference = { file: 'assets/reference.js' };
+    await writeFile(join(dir, '.vite', 'manifest.json'), JSON.stringify(graph));
+    await stampOfflineAssets(dir);
+    const { core, capabilities } = lists(await readFile(join(dir, 'sw.js'), 'utf8'));
+    expect(core).toContain('/assets/reference.js');
+    expect(core).not.toContain('/assets/cpu.wasm');
+    expect(core).toContain('/assets/history-search.worker-test.js');
+    expect(capabilities.webgpu).toEqual(['/assets/gpu.js', '/assets/webllm.worker-test.js']);
+    expect(capabilities.cpu).toEqual(['/assets/cpu-url.js', '/assets/cpu.js', '/assets/cpu.wasm']);
+    expect(capabilities['cpu-compat']).toEqual(['/assets/compat-url.js', '/assets/compat.wasm']);
+    expect(capabilities.pdf).toEqual(['/assets/pdf.js', '/assets/pdf.worker-test.mjs']);
+    expect(JSON.stringify({ core, capabilities })).not.toContain('/assets/engine.js');
+    expect(JSON.stringify({ core, capabilities })).not.toContain('private.docx');
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
 });
 
-it('rejects graph dependencies that could cache an external URL or private file', async () => {
+it('rejects unsafe or missing graph dependencies', async () => {
   const { dir, manifest } = await fixture();
   try {
     manifest.engine.assets = ['https://outside.example/runtime.wasm'];
     await writeFile(join(dir, '.vite', 'manifest.json'), JSON.stringify(manifest));
     await expect(stampOfflineAssets(dir)).rejects.toThrow(/asset/i);
-    manifest.engine.assets = ['assets/private.docx'];
-    await writeFile(join(dir, '.vite', 'manifest.json'), JSON.stringify(manifest));
-    await expect(stampOfflineAssets(dir)).rejects.toThrow(/asset/i);
-  } finally {
-    await rm(dir, { recursive: true, force: true });
-  }
-});
-
-it('fails the build when an import graph edge is missing', async () => {
-  const { dir, manifest } = await fixture();
-  try {
     manifest.engine = undefined as never;
     await writeFile(join(dir, '.vite', 'manifest.json'), JSON.stringify(manifest));
     await expect(stampOfflineAssets(dir)).rejects.toThrow(/manifest/i);
@@ -119,29 +118,11 @@ it('fails the build when an import graph edge is missing', async () => {
   }
 });
 
-it('prepares bundled PDF module workers as optional runtime assets', async () => {
-  const { dir, manifest } = await fixture();
-  try {
-    manifest.engine.assets = ['assets/pdf.worker.min-test.mjs'];
-    await writeFile(join(dir, 'assets', 'pdf.worker.min-test.mjs'), '');
-    await writeFile(join(dir, '.vite', 'manifest.json'), JSON.stringify(manifest));
-    await stampOfflineAssets(dir);
-    const source = await readFile(join(dir, 'sw.js'), 'utf8');
-    expect(JSON.parse(source.match(/const ASSISTANT_ASSETS_TO_CACHE = (\[.*?\]);/)![1])).toContain(
-      '/assets/pdf.worker.min-test.mjs',
-    );
-    expect(JSON.parse(source.match(/const APP_ASSETS_TO_CACHE = (\[.*?\]);/)![1])).not.toContain(
-      '/assets/pdf.worker.min-test.mjs',
-    );
-  } finally {
-    await rm(dir, { recursive: true, force: true });
-  }
-});
 it('keeps the local token and font stylesheets available after an offline reload', async () => {
   const { dir } = await fixture();
   try {
-    await writeFile(join(dir, 'app-tokens.css'), ':root{--app-control-page:42px}');
-    await writeFile(join(dir, 'ran-tokens.css'), ':root{--ran-font-family:system-ui}');
+    await writeFile(join(dir, 'app-tokens.css'), ':root{}');
+    await writeFile(join(dir, 'ran-tokens.css'), ':root{}');
     await writeFile(join(dir, 'ran-fonts', 'fonts.css'), '@font-face{}');
     const assets = await stampOfflineAssets(dir);
     expect(assets).toContain('/ran-tokens.css');

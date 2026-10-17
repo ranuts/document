@@ -7,17 +7,44 @@ afterEach(() => {
   vi.unstubAllGlobals();
   vi.useRealTimers();
 });
-
-function worker(addAll = vi.fn(async (_assets: string[]) => {})) {
+const capabilities = {
+  webgpu: ['/assets/gpu.js'],
+  cpu: ['/assets/cpu.wasm'],
+  'cpu-compat': ['/assets/compat.wasm'],
+  pdf: ['/assets/pdf.mjs'],
+};
+function worker(initial: Record<string, Map<string, Response>> = {}, fail = false) {
+  const stores = new Map(Object.entries(initial));
   const listeners = new Map<string, (event: any) => void>();
-  const cache = {
-    put: vi.fn(async () => {}),
-    addAll,
-    match: async (url: string) => (url.includes('/assets/') ? undefined : { text: async () => '<html></html>' }),
+  const added: string[] = [];
+  const deleted: string[] = [];
+  const open = async (name: string) => {
+    let store = stores.get(name);
+    if (!store) {
+      store = new Map();
+      stores.set(name, store);
+    }
+    return {
+      match: async (url: string) =>
+        store!.get(url) ??
+        (!url.includes('/assets/') && !url.includes('__document') ? { text: async () => '<html></html>' } : undefined),
+      put: async (url: string, response: Response) => {
+        store!.set(url, response);
+      },
+      addAll: async (urls: string[]) => {
+        if (fail && urls.some((u) => u.startsWith('/assets/'))) throw Error('quota');
+        for (const url of urls) {
+          added.push(url);
+          store!.set(url, new Response('payload'));
+        }
+      },
+      keys: async () => [...store!.keys()].map((url) => new Request(new URL(url, 'https://editor.example'))),
+      delete: async (request: Request) => store!.delete(new URL(request.url).pathname),
+    };
   };
   const source = readFileSync('public/sw.js', 'utf8').replace(
-    'const ASSISTANT_ASSETS_TO_CACHE = [];',
-    'const ASSISTANT_ASSETS_TO_CACHE = ["/assets/agent.js", "/assets/runtime.wasm"];',
+    'const ASSISTANT_CAPABILITY_ASSETS = {};',
+    `const ASSISTANT_CAPABILITY_ASSETS = ${JSON.stringify(capabilities)};`,
   );
   runInNewContext(source, {
     URL,
@@ -25,61 +52,106 @@ function worker(addAll = vi.fn(async (_assets: string[]) => {})) {
     Date,
     Response,
     Set,
+    Map,
     self: {
       location: { origin: 'https://editor.example' },
       addEventListener: (type: string, fn: any) => listeners.set(type, fn),
       skipWaiting: () => {},
+      clients: { matchAll: async () => [], claim: async () => {} },
     },
-    caches: { open: async () => cache, keys: async () => [] },
-  });
-  return { listeners, addAll };
-}
-
-it('does not cache optional runtime during installation and prepares it only on request', async () => {
-  const { listeners, addAll } = worker();
-  let job: Promise<unknown>;
-  listeners.get('install')!({
-    waitUntil: (value: Promise<unknown>) => {
-      job = value;
-    },
-  });
-  await job!;
-  expect(addAll.mock.calls.flat(2)).not.toContain('/assets/runtime.wasm');
-  addAll.mockClear();
-  const reply = vi.fn();
-  listeners.get('message')!({
-    data: { type: 'PREPARE_ASSISTANT' },
-    ports: [{ postMessage: reply }],
-    waitUntil: (value: Promise<unknown>) => {
-      job = value;
+    caches: {
+      open,
+      keys: async () => [...stores.keys()],
+      has: async (name: string) => stores.has(name),
+      delete: async (name: string) => {
+        deleted.push(name);
+        return stores.delete(name);
+      },
+      match: async (url: string) => {
+        for (const store of stores.values()) if (store.has(url)) return store.get(url);
+      },
     },
   });
-  await job!;
-  expect(addAll).toHaveBeenCalledWith(['/assets/agent.js', '/assets/runtime.wasm']);
-  expect(reply).toHaveBeenCalledWith({ type: 'ASSISTANT_PREPARED', ok: true });
-});
-
-it('reports an optional cache failure and permits a later retry', async () => {
-  const addAll = vi.fn(async (_assets: string[]) => {}).mockRejectedValueOnce(new Error('quota'));
-  const { listeners } = worker(addAll);
-  const reply = vi.fn();
-  let job: Promise<unknown>;
-  const event = {
-    data: { type: 'PREPARE_ASSISTANT' },
-    ports: [{ postMessage: reply }],
-    waitUntil: (value: Promise<unknown>) => {
-      job = value;
+  async function event(type: string, data?: unknown) {
+    let job: Promise<unknown> | undefined;
+    const reply = vi.fn();
+    listeners.get(type)!({
+      data,
+      ports: [{ postMessage: reply }],
+      waitUntil: (p: Promise<unknown>) => {
+        job = p;
+      },
+    });
+    await job;
+    return reply;
+  }
+  return {
+    added,
+    stores,
+    event,
+    deleted,
+    setFailure: (value: boolean) => {
+      fail = value;
     },
   };
-  listeners.get('message')!(event);
-  await job!;
-  expect(reply).toHaveBeenLastCalledWith({ type: 'ASSISTANT_PREPARED', ok: false });
-  listeners.get('message')!(event);
-  await job!;
-  expect(reply).toHaveBeenLastCalledWith({ type: 'ASSISTANT_PREPARED', ok: true });
-});
+}
+const marker = (capability: string) => `/__document-assistant-prepared__/${capability}`;
+const prepared = () => new Response('1', { headers: { 'X-Document-Assistant-Prepared': '1' } });
 
-it('bounds a missing worker response and closes message ports', async () => {
+it('installs no local runtime and prepares only the activated capability', async () => {
+  const w = worker();
+  await w.event('install');
+  expect(w.added.filter((a) => a.startsWith('/assets/'))).toEqual([]);
+  const reply = await w.event('message', { type: 'PREPARE_ASSISTANT', capability: 'cpu' });
+  expect(w.added.filter((a) => a.startsWith('/assets/'))).toEqual(['/assets/cpu.wasm']);
+  expect(reply).toHaveBeenCalledWith({ type: 'ASSISTANT_PREPARED', ok: true });
+  await w.event('message', { type: 'PREPARE_ASSISTANT', capability: 'pdf' });
+  expect(w.added).toContain('/assets/pdf.mjs');
+  expect(w.added).not.toContain('/assets/gpu.js');
+  expect(w.added).not.toContain('/assets/compat.wasm');
+});
+it('ignores legacy generic opt-in and rejects arbitrary capability URLs', async () => {
+  const w = worker();
+  await w.event('message', { type: 'PREPARE_ASSISTANT' });
+  const reply = await w.event('message', { type: 'PREPARE_ASSISTANT', capability: 'https://external.example/model' });
+  expect(reply).toHaveBeenCalledWith({ type: 'ASSISTANT_PREPARED', ok: false });
+  expect(w.added).toEqual([]);
+});
+it('retries quota failure without marking a capability as prepared', async () => {
+  const w = worker({}, true);
+  const reply = await w.event('message', { type: 'PREPARE_ASSISTANT', capability: 'cpu' });
+  expect(reply).toHaveBeenCalledWith({ type: 'ASSISTANT_PREPARED', ok: false });
+  expect([...w.stores.values()].some((s) => s.has(marker('cpu')))).toBe(false);
+  w.setFailure(false);
+  const retry = await w.event('message', { type: 'PREPARE_ASSISTANT', capability: 'cpu' });
+  expect(retry).toHaveBeenCalledWith({ type: 'ASSISTANT_PREPARED', ok: true });
+});
+it('restores the union of capabilities across earlier builds before retiring them', async () => {
+  const w = worker({
+    'document-editor-core-old-a': new Map([[marker('cpu'), prepared()]]),
+    'document-editor-core-old-b': new Map([[marker('pdf'), prepared()]]),
+  });
+  await w.event('install');
+  expect(w.added).toContain('/assets/cpu.wasm');
+  expect(w.added).toContain('/assets/pdf.mjs');
+  expect(w.added).not.toContain('/assets/gpu.js');
+  await w.event('activate');
+  expect(w.deleted).toContain('document-editor-core-old-a');
+  expect([...w.stores.values()].some((s) => s.has(marker('cpu')))).toBe(true);
+  expect([...w.stores.values()].some((s) => s.has(marker('pdf')))).toBe(true);
+});
+it('migrates old all-runtime preparation and catches preparation committed after install', async () => {
+  const old = new Map<string, Response>();
+  const w = worker({ 'document-editor-core-old': old });
+  await w.event('install');
+  old.set('/__document-assistant-prepared__', prepared());
+  await w.event('activate');
+  expect(w.added).toContain('/assets/gpu.js');
+  expect(w.added).toContain('/assets/cpu.wasm');
+  expect(w.added).toContain('/assets/compat.wasm');
+  expect(w.added).toContain('/assets/pdf.mjs');
+});
+it('sends the selected capability and bounds missing worker replies', async () => {
   vi.useFakeTimers();
   const close = vi.fn();
   vi.stubGlobal(
@@ -91,140 +163,39 @@ it('bounds a missing worker response and closes message ports', async () => {
   );
   const postMessage = vi.fn();
   const pending = prepareAssistantOffline(
+    'cpu',
     { controller: { postMessage }, ready: Promise.resolve({ active: { postMessage } }) },
     50,
   );
+  expect(postMessage.mock.calls[0][0]).toEqual({ type: 'PREPARE_ASSISTANT', capability: 'cpu' });
   await vi.advanceTimersByTimeAsync(50);
   expect(await pending).toBe(false);
   expect(close).toHaveBeenCalledTimes(2);
 });
-
-it('keeps unsupported or failed offline preparation from disabling online use', async () => {
-  expect(await prepareAssistantOffline(undefined)).toBe(false);
-  expect(await prepareAssistantOffline({ controller: null, ready: Promise.reject(new Error('denied')) }, 50)).toBe(
+it('keeps failed worker readiness from disabling online use', async () => {
+  expect(await prepareAssistantOffline('cpu', { controller: null, ready: Promise.reject(Error('denied')) }, 50)).toBe(
     false,
   );
 });
-
-it('prepares new optional hashes during install when an older build was prepared', async () => {
-  const listeners = new Map<string, (event: any) => void>();
-  const marker = new Response('1', { headers: { 'X-Document-Assistant-Prepared': '1' } });
-  const added: string[] = [];
-  const put = vi.fn(async () => {});
-  const source = readFileSync('public/sw.js', 'utf8').replace(
-    'const ASSISTANT_ASSETS_TO_CACHE = [];',
-    'const ASSISTANT_ASSETS_TO_CACHE = ["/assets/agent-new.js", "/assets/engine-new.wasm"];',
-  );
-  runInNewContext(source, {
-    URL,
-    Promise,
-    Date,
-    Set,
-    Response,
-    self: {
-      location: { origin: 'https://editor.example' },
-      addEventListener: (type: string, fn: any) => listeners.set(type, fn),
-      skipWaiting: () => {},
-    },
-    caches: {
-      keys: async () => [],
-      match: async () => marker,
-      open: async () => ({
-        addAll: async (assets: string[]) => {
-          added.push(...assets);
-        },
-        put,
-        match: async (path: string) => (path.includes('/assets/') ? undefined : { text: async () => '<html></html>' }),
-      }),
-    },
-  });
-  let install: Promise<unknown>;
-  listeners.get('install')!({
-    waitUntil: (value: Promise<unknown>) => {
-      install = value;
-    },
-  });
-  await install!;
-  expect(added).toContain('/assets/agent-new.js');
-  expect(added).toContain('/assets/engine-new.wasm');
-  expect(put).toHaveBeenCalledWith('/__document-assistant-prepared__', expect.any(Response));
-});
-
-it('rechecks preparation committed by the outgoing worker during installation', async () => {
-  const listeners = new Map<string, (event: any) => void>();
-  let marker: Response | undefined;
-  let release!: () => void;
-  const barrier = new Promise<void>((resolve) => {
-    release = resolve;
-  });
-  const added: string[] = [];
-  const source = readFileSync('public/sw.js', 'utf8').replace(
-    'const ASSISTANT_ASSETS_TO_CACHE = [];',
-    'const ASSISTANT_ASSETS_TO_CACHE = ["/assets/new-engine.wasm"];',
-  );
-  runInNewContext(source, {
-    URL,
-    Promise,
-    Date,
-    Set,
-    Response,
-    self: {
-      location: { origin: 'https://editor.example' },
-      addEventListener: (type: string, fn: any) => listeners.set(type, fn),
-      skipWaiting: () => {},
-    },
-    caches: {
-      keys: async () => [],
-      match: async () => marker,
-      open: async () => ({
-        addAll: async (assets: string[]) => {
-          if (assets.includes('./editor')) await barrier;
-          added.push(...assets);
-        },
-        put: async () => {},
-        match: async (path: string) => (path.includes('/assets/') ? undefined : { text: async () => '<html></html>' }),
-      }),
-    },
-  });
-  let install: Promise<unknown>;
-  listeners.get('install')!({
-    waitUntil: (value: Promise<unknown>) => {
-      install = value;
-    },
-  });
-  await new Promise((resolve) => setTimeout(resolve, 0));
-  expect(added).not.toContain('/assets/new-engine.wasm');
-  marker = new Response('1', { headers: { 'X-Document-Assistant-Prepared': '1' } });
-  release();
-  await install!;
-  expect(added).toContain('/assets/new-engine.wasm');
-});
-
-it('migrates a remembered landing-page opt-in without starting a model', async () => {
+it('remembered generic opt-in on Home never prepares local runtimes', async () => {
   const postMessage = vi.fn();
-  const close = vi.fn();
-  let factory: any;
-  const global = {
-    localStorage: { getItem: () => 'true' },
-    setTimeout: vi.fn(() => 1),
-    clearTimeout: vi.fn(),
-  };
+  const global = { localStorage: { getItem: () => 'true' }, setTimeout: vi.fn(() => 1), clearTimeout: vi.fn() };
   runInNewContext(readFileSync('public/sw-register.js', 'utf8'), {
     window: global,
     Promise,
     MessageChannel: class {
-      port1 = { close, onmessage: null };
-      port2 = { close };
+      port1 = { close: vi.fn(), onmessage: null };
+      port2 = { close: vi.fn() };
     },
   });
-  factory = (global as any).__createSwUpdater;
   const registration = {
     installing: { postMessage, state: 'installing', addEventListener: vi.fn() },
     active: null,
     waiting: null,
     addEventListener: vi.fn(),
   };
-  await factory({ serviceWorker: { register: async () => registration, controller: null } }).start();
-  expect(postMessage.mock.calls[0][0]).toEqual({ type: 'PREPARE_ASSISTANT' });
-  expect(postMessage.mock.calls[0][1]).toHaveLength(1);
+  await (global as any)
+    .__createSwUpdater({ serviceWorker: { register: async () => registration, controller: null } })
+    .start();
+  expect(postMessage).not.toHaveBeenCalled();
 });

@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import { getWllamaCompatibility } from '../../packages/agent-core/src/llm/wllama-compat-assets';
 
 const assets = { wasm: '/assets/compat.wasm', worker: { code: 'var Module = {};' } };
@@ -27,4 +27,18 @@ it('propagates local asset failure without silently choosing a CDN', async () =>
       throw new Error('Local asset missing');
     }),
   ).rejects.toThrow('Local asset missing');
+});
+
+it('prepares compatibility resources only for the selected fallback and tolerates host cache failure', async () => {
+  const prepare = vi.fn(() => {
+    throw Error('cache unavailable');
+  });
+  expect(
+    await getWllamaCompatibility({ Suspending: class {}, validate: () => true }, async () => assets, prepare),
+  ).toBeNull();
+  expect(prepare).not.toHaveBeenCalled();
+  expect(await getWllamaCompatibility({ validate: () => false }, async () => assets, prepare, 'cpu-compat')).toEqual(
+    assets,
+  );
+  expect(prepare).toHaveBeenCalledWith('cpu-compat');
 });

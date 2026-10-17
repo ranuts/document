@@ -1,4 +1,6 @@
 import { beforeEach, expect, it, vi } from 'vitest';
+const prepare = vi.hoisted(() => vi.fn().mockResolvedValue(true));
+vi.mock('../../lib/assistant-offline', () => ({ prepareAssistantOffline: prepare }));
 const state = vi.hoisted(() => ({
   pages: 1,
   pending: undefined as Promise<any> | undefined,
@@ -49,6 +51,7 @@ beforeEach(() => {
 });
 it('extracts streamed text and releases parser and worker', async () => {
   expect(await readPdfReference(new Uint8Array([1]))).toBe('PDF text');
+  expect(prepare).toHaveBeenCalledWith('pdf');
   expect(state.destroy).toHaveBeenCalled();
   expect(state.terminate).toHaveBeenCalled();
   expect(state.cleanup).toHaveBeenCalled();

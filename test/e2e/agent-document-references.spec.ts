@@ -79,25 +79,16 @@ test('Office and PDF references attach without replacing the current document, i
   }
   expect(await page.evaluate(() => window.__ooFrames.readyEditor() === (window as any).__referenceEditor)).toBe(true);
   expect(await documentState()).toEqual(before);
+  // Parsing the PDF activates its offline capability; no generic assistant
+  // enable or explicit test-only preparation should be needed for reuse.
+  await expect
+    .poll(() => page.evaluate(async () => Boolean(await caches.match('/__document-assistant-prepared__/pdf'))), {
+      timeout: 60_000,
+    })
+    .toBe(true);
   await page.evaluate(async () => {
-    await navigator.serviceWorker.ready;
-    if (!navigator.serviceWorker.controller)
-      await new Promise<void>((resolve) =>
-        navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true }),
-      );
-    await new Promise<void>((resolve, reject) => {
-      const channel = new MessageChannel();
-      const timer = setTimeout(() => reject(new Error('Preparation timed out')), 60000);
-      channel.port1.onmessage = (event) => {
-        clearTimeout(timer);
-        channel.port1.close();
-        if (event.data.ok) resolve();
-        else reject(new Error('Preparation failed'));
-      };
-      navigator.serviceWorker.controller!.postMessage({ type: 'PREPARE_ASSISTANT' }, [channel.port2]);
-    });
     const source = await (await fetch('/sw.js')).text();
-    const optional: string[] = JSON.parse(/const ASSISTANT_ASSETS_TO_CACHE = (\[.*?\]);/.exec(source)![1]);
+    const optional: string[] = JSON.parse(/const ASSISTANT_CAPABILITY_ASSETS = (\{.*?\});/.exec(source)![1]).pdf;
     const worker = optional.find((path) => /pdf\.worker.*\.mjs$/.test(path));
     if (!worker) throw new Error('PDF worker not prepared');
     const response = await fetch(worker);
