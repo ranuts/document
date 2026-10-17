@@ -201,10 +201,41 @@
    * serves the vendored tree cache-first -- a miss there re-requests the file
    * even when the browser still holds a copy.
    */
+  // ready can resolve before clients.claim() controls this first-visit page.
+  // Fetching in that gap warms only the HTTP cache, then requested[url] would
+  // prevent the controlled retry that actually populates the worker cache.
+  function waitForControl(registration) {
+    var workers = navigator.serviceWorker;
+    if (workers.controller) return Promise.resolve(!leaving && watchRegistration(registration));
+    return new Promise(function (resolve) {
+      var signal = aborter && aborter.signal;
+      var finished = false;
+      function done(allowed) {
+        if (finished) return;
+        finished = true;
+        workers.removeEventListener('controllerchange', changed);
+        if (signal) signal.removeEventListener('abort', cancelled);
+        resolve(allowed);
+      }
+      function cancelled() {
+        done(false);
+      }
+      function changed() {
+        if (leaving || upgrading || (signal && signal.aborted)) done(false);
+        else if (workers.controller) done(watchRegistration(registration));
+      }
+      workers.addEventListener('controllerchange', changed);
+      if (signal) signal.addEventListener('abort', cancelled, { once: true });
+      changed();
+    });
+  }
+
   function warm(url) {
     if (!navigator.serviceWorker) return warmRequest(url);
     return navigator.serviceWorker.ready
-      .then(watchRegistration)
+      .then(function (registration) {
+        return watchRegistration(registration) ? waitForControl(registration) : false;
+      })
       .then(function (allowed) {
         if (allowed) return warmRequest(url);
       })

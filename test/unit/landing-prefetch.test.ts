@@ -116,7 +116,7 @@ describe('landing page warm-up', () => {
 });
 
 describe('landing warm-up during a worker upgrade', () => {
-  function setup(effectiveType?: string) {
+  function setup(effectiveType?: string, controlled = true) {
     const src = readFileSync(resolve(__dirname, '../../public/landing-prefetch.js'), 'utf8');
     const win = Object.assign(new EventTarget(), {
       requestIdleCallback: (callback: () => void) => callback(),
@@ -128,7 +128,10 @@ describe('landing warm-up during a worker upgrade', () => {
       waiting: null as (EventTarget & { state: string; scriptURL?: string }) | null,
       installing: null as (EventTarget & { state: string }) | null,
     });
-    const workers = Object.assign(new EventTarget(), { ready: Promise.resolve(registration) });
+    const workers = Object.assign(new EventTarget(), {
+      ready: Promise.resolve(registration),
+      controller: controlled ? ({} as object | null) : null,
+    });
     const fetchMock = vi.fn((_url: string, _init?: RequestInit) => Promise.resolve(okResponse()));
     new Function('window', 'document', 'navigator', 'fetch', 'AbortController', src)(
       win,
@@ -139,6 +142,39 @@ describe('landing warm-up during a worker upgrade', () => {
     );
     return { win, doc, cta, registration, workers, fetchMock, hook: win.__landingPrefetch! };
   }
+
+  it('waits for actual page control after ready before fetching a cacheable resource', async () => {
+    const { workers, hook, fetchMock } = setup(undefined, false);
+    const cached = new Set<string>();
+    fetchMock.mockImplementation((url) => {
+      if (workers.controller) cached.add(url);
+      return Promise.resolve(okResponse());
+    });
+    const pending = hook.warm('/sdkjs/common/libfont/engine/fonts.js');
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(cached.size).toBe(0);
+
+    workers.controller = {};
+    workers.dispatchEvent(new Event('controllerchange'));
+    await pending;
+    expect(cached.has('/sdkjs/common/libfont/engine/fonts.js')).toBe(true);
+  });
+
+  it('settles a control wait on departure and leaves the URL retryable after returning', async () => {
+    const { workers, win, hook, fetchMock } = setup(undefined, false);
+    const pending = hook.warm('/awaiting-control.js');
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    win.dispatchEvent(new Event('beforeunload'));
+    await pending;
+    workers.controller = {};
+    workers.dispatchEvent(new Event('controllerchange'));
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    win.dispatchEvent(new Event('pointerdown'));
+    await hook.warm('/awaiting-control.js');
+    expect(fetchMock.mock.calls.filter(([url]) => url === '/awaiting-control.js')).toHaveLength(1);
+  });
 
   it('holds a waiting upgrade without poisoning URLs, then warms after controllerchange', async () => {
     const { registration, workers, win, hook, fetchMock } = setup();

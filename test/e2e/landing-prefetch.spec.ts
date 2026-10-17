@@ -68,7 +68,7 @@ test.describe('landing page warm-up', () => {
         return wanted.filter((u) => !held.has(u));
       });
 
-    await expect.poll(async () => (await missing()).length, { timeout: 120_000 }).toBe(0);
+    await expect.poll(missing, { timeout: 120_000, intervals: [1000] }).toEqual([]);
 
     const shape = await page.evaluate(() => {
       const lp = (window as any).__landingPrefetch;
