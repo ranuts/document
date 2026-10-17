@@ -243,6 +243,7 @@ async function writeSnapshot(
   input: SnapshotInput,
   budget: number,
   signal?: AbortSignal,
+  quotaRetry = false,
 ): Promise<HistoryDoc | null> {
   const byteLength = payload.byteLength;
   const now = stamp();
@@ -250,6 +251,9 @@ async function writeSnapshot(
 
   return withStores([DOCS_STORE, BLOBS_STORE, HANDLES_STORE], 'readwrite', async (tx) => {
     if (!watchSnapshotCancellation(tx, signal)) return null;
+    // Reclaim and replace in one transaction: a failed retry must not consume
+    // another document's only recovery point without storing this snapshot.
+    if (quotaRetry && !(await evictColdest(tx, input.id))) return null;
     const docs = tx.objectStore(DOCS_STORE);
     const existing = input.id ? ((await requestToPromise(docs.get(input.id))) as HistoryDoc | undefined) : undefined;
 
@@ -321,34 +325,23 @@ export async function putSnapshot(input: SnapshotInput, signal?: AbortSignal): P
     return await writeSnapshot(payload, input, budget, signal);
   } catch (error) {
     if (signal?.aborted || !isQuotaError(error)) return null;
-    // Out of room: drop the coldest document and try once. Retrying forever
-    // would trade the user's whole library for one snapshot.
-    const evicted = await evictColdest(input.id, signal);
-    if (!evicted || signal?.aborted) return null;
+    // Retry once with transactional eviction. A second failure rolls back the
+    // eviction along with the new snapshot, retaining the previous recovery.
     try {
-      return await writeSnapshot(payload, input, budget, signal);
+      return await writeSnapshot(payload, input, budget, signal, true);
     } catch {
       return null;
     }
   }
 }
 
-/** Delete the least-recently-opened document. Returns false when there is none. */
-async function evictColdest(protectedId?: string, signal?: AbortSignal): Promise<boolean> {
-  try {
-    return (
-      (await withStores([DOCS_STORE, BLOBS_STORE, HANDLES_STORE], 'readwrite', async (tx) => {
-        if (!watchSnapshotCancellation(tx, signal)) return false;
-        const docs = (await readAllDocs(tx)).filter((doc) => doc.id !== protectedId);
-        if (!docs.length) return false;
-        const coldest = docs.sort((a, b) => a.lastOpenedAt - b.lastOpenedAt)[0];
-        await deleteDocumentData(tx, coldest.id);
-        return true;
-      })) ?? false
-    );
-  } catch {
-    return false;
-  }
+/** Delete the coldest document within the caller's replacement transaction. */
+async function evictColdest(tx: IDBTransaction, protectedId?: string): Promise<boolean> {
+  const docs = (await readAllDocs(tx)).filter((doc) => doc.id !== protectedId);
+  if (!docs.length) return false;
+  const coldest = docs.sort((a, b) => a.lastOpenedAt - b.lastOpenedAt)[0];
+  await deleteDocumentData(tx, coldest.id);
+  return true;
 }
 
 /**

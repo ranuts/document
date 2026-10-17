@@ -187,6 +187,40 @@ describe('history store', () => {
     expect((await listDocs()).items.map((row) => row.title)).toEqual(['New.docx']);
   });
 
+  it.each(['QuotaExceededError', 'UnknownError'])(
+    'preserves recovery when the quota retry fails with %s',
+    async (retryError) => {
+      const cold = await putSnapshot({ title: 'Recovery.docx', origin: 'local', bytes: bytes(16, 7) });
+      const current = await putSnapshot({ title: 'Current.docx', origin: 'local', bytes: bytes(16, 9) });
+      const put = IDBObjectStore.prototype.put;
+      let attempts = 0;
+      vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementation(function (this: IDBObjectStore, ...args) {
+        if (this.name === 'blobs') {
+          attempts++;
+          throw Object.assign(new Error('Snapshot write failed'), {
+            name: attempts === 1 ? 'QuotaExceededError' : retryError,
+          });
+        }
+        return put.apply(this, args as Parameters<typeof put>);
+      });
+
+      const result = await putSnapshot({
+        id: current!.id,
+        title: 'Changed.docx',
+        origin: 'local',
+        bytes: bytes(32, 1),
+      });
+
+      expect(result).toBeNull();
+      expect(attempts).toBe(2);
+      expect(await getDoc(cold!.id)).toEqual(cold);
+      expect(Array.from((await getLatestSnapshot(cold!.id))!.bytes)).toEqual(Array(16).fill(7));
+      expect(await getDoc(current!.id)).toEqual(current);
+      expect(Array.from((await getLatestSnapshot(current!.id))!.bytes)).toEqual(Array(16).fill(9));
+      expect((await listDocs()).total).toBe(2);
+    },
+  );
+
   it('rejects an impossible snapshot without evicting existing recovery', async () => {
     mockQuota(200);
     const keep = await putSnapshot({ title: 'Keep.docx', origin: 'local', bytes: bytes(40, 7) });
