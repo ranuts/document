@@ -39,7 +39,11 @@ export class OllamaProvider implements LLMProvider {
     this.model = options.ollamaModel ?? DEFAULT_MODEL;
     this.systemPrompt = options.systemPrompt ?? DEFAULT_SYSTEM_PROMPT;
     this.baseURL = options.ollamaBaseURL ?? DEFAULT_BASE_URL;
-    this.requestOptions = { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs };
+    this.requestOptions = {
+      fetchImpl: options.fetchImpl,
+      timeoutMs: options.timeoutMs,
+      maxResponseBytes: options.maxResponseBytes,
+    };
   }
 
   /** Local server: ready without a key (the optional key is only for remote auth). */

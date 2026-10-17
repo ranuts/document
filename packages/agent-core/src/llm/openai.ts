@@ -36,7 +36,11 @@ export class OpenAIProvider implements LLMProvider {
     this.model = options.model ?? DEFAULT_MODEL;
     this.systemPrompt = options.systemPrompt ?? DEFAULT_SYSTEM_PROMPT;
     this.baseURL = (options.baseURL ?? DEFAULT_BASE_URL).replace(/\/+$/, '');
-    this.requestOptions = { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs };
+    this.requestOptions = {
+      fetchImpl: options.fetchImpl,
+      timeoutMs: options.timeoutMs,
+      maxResponseBytes: options.maxResponseBytes,
+    };
   }
 
   isReady(): boolean {

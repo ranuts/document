@@ -1,6 +1,8 @@
 export interface ProviderHttpOptions {
   /** Total request deadline, including response reads. Defaults to five minutes. */
   timeoutMs?: number;
+  /** Maximum decoded response bytes, including streaming protocol frames. Defaults to 8 MiB. */
+  maxResponseBytes?: number;
   /** Inject a fetch implementation (tests or host transport). */
   fetchImpl?: (url: string, init: RequestInit) => Promise<Response>;
 }
@@ -18,6 +20,10 @@ export async function fetchProviderJson<T>(
   if (!Number.isFinite(timeoutMs) || timeoutMs <= 0 || timeoutMs > 2_147_483_647)
     throw new RangeError('Provider timeout must be a positive timer duration');
 
+  const maxResponseBytes = options.maxResponseBytes ?? 8 * 1024 * 1024;
+  if (!Number.isSafeInteger(maxResponseBytes) || maxResponseBytes <= 0)
+    throw new RangeError('Provider response budget must be a positive safe integer');
+
   const controller = new AbortController();
   const forwardAbort = () => controller.abort(owner?.reason);
   owner?.addEventListener('abort', forwardAbort, { once: true });
@@ -26,6 +32,11 @@ export async function fetchProviderJson<T>(
   const cancelBody = () => {
     if (reader) void reader.cancel().catch(() => {});
     else if (response?.body && !response.body.locked) void response.body.cancel().catch(() => {});
+  };
+  const rejectOversized = () => {
+    const error = new RangeError('AI response exceeds size limit');
+    controller.abort(error);
+    throw error;
   };
   let onAbort: () => void = () => {};
   const aborted = new Promise<never>((_resolve, reject) => {
@@ -48,6 +59,8 @@ export async function fetchProviderJson<T>(
         cancelBody();
         throw Object.assign(new Error(`${provider} request failed: ${response.status}`), { status: response.status });
       }
+      const declaredSize = Number(response.headers?.get('Content-Length'));
+      if (declaredSize > maxResponseBytes) rejectOversized();
       let value: T;
       if (response.body) {
         // Own the reader so even a host-created Response whose transport ignores
@@ -56,11 +69,14 @@ export async function fetchProviderJson<T>(
         const activeReader = reader;
         const decoder = new TextDecoder();
         let text = '';
+        let bytes = 0;
         try {
           while (true) {
             const chunk = await activeReader.read();
             controller.signal.throwIfAborted();
             if (chunk.done) break;
+            bytes += chunk.value.byteLength;
+            if (bytes > maxResponseBytes) rejectOversized();
             text += decoder.decode(chunk.value, { stream: true });
           }
           text += decoder.decode();
@@ -69,7 +85,11 @@ export async function fetchProviderJson<T>(
           activeReader.releaseLock();
           reader = undefined;
         }
-      } else value = (await response.json()) as T;
+      } else {
+        value = (await response.json()) as T;
+        // Non-native host mocks may expose only json(); real Responses use the bounded reader above.
+        if (new TextEncoder().encode(JSON.stringify(value)).byteLength > maxResponseBytes) rejectOversized();
+      }
       controller.signal.throwIfAborted();
       return value;
     })();
