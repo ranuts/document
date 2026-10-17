@@ -394,7 +394,11 @@ describe('onlyoffice-editor', () => {
           },
           Asc: { editor: { sendEvent } },
         } as unknown as Window);
-        reject({ reason: new Error('X2T module failed to instantiate: Failed to fetch') });
+        reject(
+          Object.assign(new Event('unhandledrejection', { cancelable: true }), {
+            reason: new Error('X2T module failed to instantiate: Failed to fetch'),
+          }),
+        );
         await vi.advanceTimersByTimeAsync(1000);
         expect(DocEditor).toHaveBeenCalledTimes(2);
         expect(DocEditor.mock.calls[1][1].document.title).toBe('mounted.docx');
@@ -478,7 +482,9 @@ describe('onlyoffice-editor', () => {
             if (type === 'unhandledrejection') handlers.push(cb);
           },
         } as unknown as Window);
-        handlers.forEach((cb) => cb({ reason: { message } }));
+        handlers.forEach((cb) =>
+          cb(Object.assign(new Event('unhandledrejection', { cancelable: true }), { reason: { message } })),
+        );
       };
 
       it('quotes the heap size the wasm binary declares, not a hardcoded number', async () => {
