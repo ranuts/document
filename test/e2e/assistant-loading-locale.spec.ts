@@ -1,5 +1,6 @@
 import { expect, test } from './lib/l0';
 import { buildDocx } from './lib/ooxml';
+import { mockApi } from './lib/mock-api';
 
 for (const entry of ['docx', 'xlsx', 'pptx', 'open'] as const) {
   test(`English homepage keeps ${entry} and its assistant English after a Chinese preference`, async ({ page }) => {
@@ -66,15 +67,19 @@ for (const width of [360, 640]) {
     const pending = new Promise<void>((resolve) => {
       release = resolve;
     });
-    await page.route('https://huggingface.co/**', async (route) => {
+    let heldRequests = 0;
+    await mockApi(page, 'https://huggingface.co/**', async (route) => {
+      heldRequests++;
       await pending;
-      await route.abort();
+      await route.fulfill({ status: 503 });
     });
     await page.goto('/editor?new=docx&locale=en');
     await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+    await page.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
     await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
     await page.locator('.agent-panel-settings-toggle').click();
     await page.locator('.agent-panel-load').click();
+    await expect.poll(() => heldRequests).toBeGreaterThan(0);
     await expect(page.locator('.agent-panel-load-stop')).toBeVisible();
     await expect(page.locator('.agent-panel-load-stop')).toBeFocused();
     const geometry = () =>
@@ -114,7 +119,9 @@ for (const width of [360, 640]) {
     await page.locator('.agent-panel-load-stop').press('Enter');
     await expect(page.locator('.agent-runtime-row')).toBeHidden();
     await expect(page.locator('.agent-panel-load')).toBeFocused();
+    const beforeRetry = heldRequests;
     await page.locator('.agent-panel-load').press('Enter');
+    await expect.poll(() => heldRequests).toBeGreaterThan(beforeRetry);
     await expect(page.locator('.agent-panel-load-stop')).toBeVisible();
     await page.locator('.agent-panel-settings-toggle').click();
     const chat = await geometry();
