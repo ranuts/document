@@ -1729,10 +1729,13 @@ r-dropdown[role='listbox'] {
   margin-inline: calc(-1 * var(--ran-space-3));
   border-radius: var(--ran-radius-sm);
 }
-.agent-conversation-row:has([aria-current='true']) {
+/* Hover is transient, the current conversation is persistent state. They must
+   not share a fill, and the persistent one has to be the stronger of the two --
+   otherwise "you are here" reads as "the pointer is here" (DESIGN.md §11). */
+.agent-conversation-row:hover {
   background: var(--ran-color-bg-hover);
 }
-.agent-conversation-row:hover {
+.agent-conversation-row:has([aria-current='true']) {
   background: var(--ran-color-bg-active);
 }
 .agent-conversation-open {
