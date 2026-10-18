@@ -57,10 +57,11 @@ const cleanUrls = (publicDirName: string): Plugin => {
 // retain the same policy as their initial 200 response (required by WebKit).
 const localIsolationHeaders = (): Plugin => {
   const middleware = (
-    _req: import('node:http').IncomingMessage,
+    req: import('node:http').IncomingMessage,
     res: import('node:http').ServerResponse,
     next: () => void,
   ): void => {
+    if ((req.url ?? '').split('?')[0] === '/build-identity.json') res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
     res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
     next();

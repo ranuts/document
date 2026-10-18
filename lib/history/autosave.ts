@@ -211,11 +211,12 @@ export async function takeSnapshot(): Promise<HistoryDoc | null> {
   )
     return null;
 
+  const storageAbort = active.storageAbort;
   active.exporting = true;
   const startedAt = Date.now();
   try {
     const file = await requestSaveDocument(active.ext.toUpperCase());
-    if (session !== active || active.stopped) return null;
+    if (session !== active || active.stopped || storageAbort.signal.aborted) return null;
     // Let storage check the exported file's size before copying its bytes.
     // The owner signal also guards budget checks and asynchronous file reads.
     const doc = await putSnapshot(
@@ -225,9 +226,9 @@ export async function takeSnapshot(): Promise<HistoryDoc | null> {
         origin: active.origin,
         bytes: file,
       },
-      active.storageAbort.signal,
+      storageAbort.signal,
     );
-    if (session !== active || active.stopped) return null;
+    if (session !== active || active.stopped || storageAbort.signal.aborted) return null;
     if (!doc) {
       // The store gave up (no room, and eviction did not help). Stopping and
       // saying so beats a silent autosave, which is the most dangerous kind:
@@ -248,7 +249,7 @@ export async function takeSnapshot(): Promise<HistoryDoc | null> {
     active.failures = 0;
     return doc;
   } catch (error) {
-    if (session !== active || active.stopped) return null;
+    if (session !== active || active.stopped || storageAbort.signal.aborted) return null;
     const message = error instanceof Error ? error.message : String(error);
     // A save the user asked for owns the channel; this tick simply waits.
     if (!message.includes('already in progress')) {
@@ -380,6 +381,13 @@ export async function beginAutosaveSession(input: AutosaveSessionInput): Promise
   // No-op until this document has a row; from then on it restarts the
   // seven-day clock every time the document is opened.
   void markOpened(input.docId);
+}
+
+/** A completed disk save supersedes any older recovery export still pending. */
+export function cancelPendingSnapshot(): void {
+  if (!session) return;
+  session.storageAbort.abort();
+  session.storageAbort = new AbortController();
 }
 
 export function stopAutosaveSession(): void {

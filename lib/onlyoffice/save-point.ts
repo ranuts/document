@@ -60,11 +60,8 @@ export function captureSavePoint(): SavePoint | null {
   return { frame, index: history.Index, head, items: Array.isArray(items) ? [...items] : null };
 }
 
-/**
- * Marks the document saved at `point` if the history is still there.
- * Returns true when the SDK now considers the document unmodified.
- */
-export function commitSavePoint(point: SavePoint | null): boolean {
+/** Whether these serialized bytes still match the current editor history. */
+export function isSavePointCurrent(point: SavePoint | null): boolean {
   if (!point) return false;
   try {
     const history = point.frame.AscCommon?.History;
@@ -85,11 +82,21 @@ export function commitSavePoint(point: SavePoint | null): boolean {
     )
       return false;
 
-    history.Reset_SavedIndex(true);
-    api.CheckChangedDocument();
     return true;
   } catch {
     // The frame was torn down (another document took over) -- nothing to mark.
+    return false;
+  }
+}
+
+/** Move the SDK save point only while the serialized document is still current. */
+export function commitSavePoint(point: SavePoint | null): boolean {
+  if (!isSavePointCurrent(point)) return false;
+  try {
+    point!.frame.AscCommon!.History!.Reset_SavedIndex!(true);
+    point!.frame.Asc!.editor!.CheckChangedDocument!();
+    return true;
+  } catch {
     return false;
   }
 }

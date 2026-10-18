@@ -1,6 +1,7 @@
 import { expect, it, vi } from 'vitest';
 import { captureArtifactDraft } from '../../lib/agent-plugin/artifacts/edit-proposal';
 import { createArtifactWorkflow, runArtifactRevision } from '../../lib/agent-plugin/ui/artifact-workflow';
+import { GeminiProvider } from '@ranuts/agent-core/llm/gemini';
 const draft = captureArtifactDraft({
   artifactId: 'a',
   expectedVersion: 1,
@@ -24,6 +25,55 @@ const labels = {
   stopped: 'Stopped',
   accepted: 'Updated draft. Save a version to keep it.',
 };
+it.each([false, true])('accepts Gemini STOP through real %s streaming transport', async (streaming) => {
+  const body = { candidates: [{ content: { parts: [{ text: 'after' }] }, finishReason: 'STOP' }] };
+  const fetchImpl = vi.fn(async () =>
+    streaming
+      ? new Response(`data: ${JSON.stringify(body)}\n\n`, { headers: { 'Content-Type': 'text/event-stream' } })
+      : Response.json(body),
+  );
+  const gemini = new GeminiProvider({ apiKey: 'test', fetchImpl });
+  const provider = streaming
+    ? gemini
+    : { name: gemini.name, isReady: () => gemini.isReady(), chat: gemini.chat.bind(gemini) };
+  const delta = vi.fn();
+  await expect(
+    runArtifactRevision({
+      provider,
+      draft,
+      instruction: 'Shorten',
+      signal: new AbortController().signal,
+      current: () => true,
+      delta,
+    }),
+  ).resolves.toBe('after');
+  expect(fetchImpl).toHaveBeenCalledOnce();
+  if (streaming) expect(delta).toHaveBeenCalledWith('after');
+});
+it.each(['MAX_TOKENS', 'SAFETY', 'RECITATION', 'OTHER', 'incomplete', 'unknown'])(
+  'rejects abnormal artifact completion %s',
+  async (stopReason) => {
+    await expect(
+      runArtifactRevision({
+        provider: {
+          name: 'test',
+          isReady: () => true,
+          chat: async () => ({
+            text: 'after',
+            toolCalls: [],
+            stopReason,
+            assistant: { role: 'assistant', content: 'after' },
+          }),
+        },
+        draft,
+        instruction: 'Shorten',
+        signal: new AbortController().signal,
+        current: () => true,
+        delta: vi.fn(),
+      }),
+    ).rejects.toThrow('incomplete');
+  },
+);
 it('discloses a single instruction and accepts only current completed proposals explicitly', () => {
   let request: any;
   let current = true;

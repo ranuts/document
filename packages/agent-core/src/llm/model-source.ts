@@ -5,6 +5,20 @@ export interface ModelSource {
   modelLibUrl?: string;
 }
 
+/** The requested source captured when a provider is created, independent of editable settings. */
+export interface ModelSelection extends ModelSource {
+  id: string;
+}
+
+/** Include runtime overrides: identical weights can require different compatible libraries. */
+export function modelSourceIdentity(modelId: string, source: ModelSource = {}): string {
+  return JSON.stringify([
+    modelId,
+    source.modelUrl ? resolveModelArtifactUrl(source.modelUrl).replace(/\/$/, '') : '',
+    source.modelLibUrl ? resolveModelArtifactUrl(source.modelLibUrl) : '',
+  ]);
+}
+
 export class ModelSourceError extends Error {
   constructor() {
     super('Model artifacts require HTTP or HTTPS');

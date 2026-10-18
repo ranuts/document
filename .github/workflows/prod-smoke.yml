@@ -37,39 +37,15 @@ jobs:
         with:
           browsers: chromium
 
-      # On push: build the same commit and wait until production serves its
-      # hashed entry asset (Vite hashes are content-derived, so an identical
-      # build here yields the same asset name as the Pages build). Skipped for
-      # schedule/dispatch runs, which smoke whatever is live.
-      #
-      # The asset to watch is the EDITOR's, taken from editor.html. `/` has
-      # shipped no bundle since the route split (2026-08-16), so the old
-      # `assets/index-*.js` grep against `dist/index.html` found nothing --
-      # and an empty expectation matched an empty answer on the first poll,
-      # so this step reported "live after 20s" without waiting for anything.
-      # Every smoke since has run against whatever happened to be deployed;
-      # it only surfaced once a case could tell the builds apart.
-      #
-      # An empty ASSET is now a hard error rather than a vacuous pass: this
-      # gate is worthless if it cannot name what it is waiting for.
+      # The final build stamps its source revision and served-tree digest. This
+      # covers vendor, SW and static-only commits whose editor JS hash is stable.
+      # Missing/stale identities and transport errors exhaust a bounded wait and
+      # fail the job: smoking the previous deployment would be a false green.
       - name: Wait for the deploy of this commit
         if: github.event_name == 'push'
         env:
           PROD_URL: ${{ github.event.inputs.url || 'https://edit.chaxus.com' }}
-        run: |
-          sh ./bin/build.sh >/dev/null 2>&1
-          ASSET=$(grep -o 'assets/editor-[A-Za-z0-9_-]*\.js' dist/editor.html | head -1)
-          if [ -z "$ASSET" ]; then
-            echo "::error::no editor entry asset in dist/editor.html; the deploy gate cannot tell builds apart"
-            exit 1
-          fi
-          echo "expecting $ASSET"
-          for i in $(seq 1 60); do
-            LIVE=$(curl -s "$PROD_URL/editor" | grep -o 'assets/editor-[A-Za-z0-9_-]*\.js' | head -1)
-            if [ "$LIVE" = "$ASSET" ]; then echo "live after $((i*20))s"; exit 0; fi
-            sleep 20
-          done
-          echo "::warning::production still serves $LIVE after 20 min; smoking what is live"
+        run: node bin/wait-for-deploy.mjs "$PROD_URL" "$GITHUB_SHA"
 
       - name: Smoke production
         env:

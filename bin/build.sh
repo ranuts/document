@@ -173,4 +173,8 @@ else
     echo "Warning: $DIST_DIR/sw.js not found, skipping version injection."
 fi
 
+# This must remain the final output transform: identity covers the exact served
+# vendor, static pages and stamped worker, not only the editor entry asset.
+node bin/build-identity.mjs "$DIST_DIR"
+
 echo "Build completed successfully!"

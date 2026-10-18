@@ -50,6 +50,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v7
         with:
+          build-args: BUILD_REVISION=${{ github.sha }}
           context: .
           file: ./Dockerfile
           push: true

@@ -5,9 +5,10 @@
  */
 import { setDiskWriter, setSavedToDiskListener } from '../onlyoffice/save-stream';
 import { saveToDiskFile } from '../save-target';
-import { getActiveDocumentId } from './autosave';
-import { extensionOf, markSavedToDisk, pruneExpired } from './store';
+import { cancelPendingSnapshot, getActiveDocumentId } from './autosave';
+import { extensionOf, markSavedToDisk, pruneExpired, readDocumentRecord } from './store';
 import { getDocmentObj } from '@ranuts/shared/store';
+import { rememberActiveSource } from '../active-document-source';
 
 export function initDocumentHistory(): void {
   // Expiry has to happen on its own, not when someone thinks to visit the
@@ -27,12 +28,26 @@ export function initDocumentHistory(): void {
     });
   });
 
-  setSavedToDiskListener(() => {
-    // The document now exists on disk, so its history row has nothing left to
-    // offer back. Without this the recovery bar would keep flagging a document
-    // the user already saved.
+  setSavedToDiskListener(async (file, ownsExport) => {
     const id = getActiveDocumentId();
-    if (id) void markSavedToDisk(id);
+    if (!id) return;
+    const isCurrent = () => getActiveDocumentId() === id && ownsExport();
+    // An old autosave may still be exporting or reading bytes. It must not
+    // finish after this save and acquire a newer recovery revision.
+    cancelPendingSnapshot();
+    const record = await readDocumentRecord(id);
+    if (!record || !isCurrent()) return;
+    const nextRev = record.doc?.nextRev ?? 0;
+    const historyCreatedAt = record.doc?.createdAt;
+    const retained = await rememberActiveSource(id, file, {
+      savedThroughRevision: nextRev,
+      historyCreatedAt,
+      isCurrent,
+    });
+    if (!retained || !isCurrent()) return;
+    // A snapshot made while retaining the source belongs to later edits;
+    // mark only the history revision actually covered by these saved bytes.
+    await markSavedToDisk(id, { nextRev, createdAt: historyCreatedAt, isCurrent });
   });
 }
 

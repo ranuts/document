@@ -91,6 +91,12 @@ jobs:
         with:
           browsers: chromium
 
+      - name: Verify the deployed preview identity
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs.url }}
+          EXPECTED_REVISION: ${{ github.event.pull_request.head.sha }}
+        run: node bin/wait-for-deploy.mjs "$PREVIEW_URL" "$EXPECTED_REVISION" 120000 2000
+
       - name: Smoke the preview
         env:
           PROD_URL: ${{ steps.preview.outputs.url }}

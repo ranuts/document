@@ -318,11 +318,27 @@ test.describe('saving into the document own file (real editor)', () => {
       await waitForWrites(page, 1);
       expect(await savedText(page)).toContain('Recovery version manual version');
     } finally {
+      const returned = page.waitForEvent('console', {
+        predicate: (message) => message.text().includes('[OO] file stream received:'),
+      });
       await page.evaluate(() => (window as any).__releaseRecovery());
+      await returned;
     }
-    await expect.poll(async () => (await readHistoryDocs(page)).length).toBe(1);
+    // Its serialized bytes predate the manual save. Letting that older export
+    // become the newest revision would undo the disk save on reload.
+    expect(await readHistoryDocs(page)).toHaveLength(0);
+    await expect
+      .poll(() => page.evaluate(() => !window.dispatchEvent(new Event('beforeunload', { cancelable: true }))))
+      .toBe(false);
+    await page.reload();
+    await waitForEditorReady(page);
+    const reopened = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await reopened.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.press('Control+s');
+    await waitForWrites(page, 1);
+    expect(await savedText(page)).toContain('Recovery version manual version');
     expect(await writesCommitted(page)).toBe(1);
-    expect(await pickerCalls(page)).toBe(1);
+    expect(await pickerCalls(page)).toBe(0);
   });
 
   for (const extension of ['xlsx', 'pptx']) {

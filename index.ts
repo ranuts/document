@@ -178,15 +178,9 @@ void (async () => {
   }
 
   if (documentUrl) {
-    let decodedUrl = documentUrl;
-    try {
-      decodedUrl = decodeURIComponent(documentUrl);
-    } catch (error) {
-      console.warn('Failed to decode URL, using original:', error);
-    }
-    // The open path already reports failures to the reader. Only decoding
-    // errors use the original URL; a failed download must not be retried here.
-    await openDocumentFromUrl(decodedUrl, undefined, {
+    // Query parsing already decoded the outer parameter. Encoded delimiters
+    // inside the remote URL belong to that server's path/query and must survive.
+    await openDocumentFromUrl(documentUrl, undefined, {
       readonly: isReadonly,
       docId: savedParam || undefined,
     }).catch(() => {});

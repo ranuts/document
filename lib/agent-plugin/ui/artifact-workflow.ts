@@ -1,5 +1,6 @@
 import { validatePayload, payloadText } from '../artifacts/payload';
 import type { LLMProvider } from '@ranuts/agent-core/llm/types';
+import { isCompletedResponse } from '@ranuts/agent-core/llm/completion';
 import { replaceArtifactRange, type ArtifactDraftBinding } from '../artifacts/edit-proposal';
 import { textDifference } from './change-review';
 export interface ArtifactWorkflowLabels {
@@ -97,7 +98,7 @@ export async function runArtifactRevision(options: {
   if (
     result.toolCalls.length ||
     (Array.isArray(result.assistant.content) && result.assistant.content.some((block) => block.type === 'tool_use')) ||
-    !['end_turn', 'stop', 'eos', 'completed'].includes(result.stopReason)
+    !isCompletedResponse(result)
   )
     throw new ArtifactRevisionError('incomplete');
   if (!result.text.trim()) throw new ArtifactRevisionError('empty');

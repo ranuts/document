@@ -545,6 +545,9 @@ self.addEventListener('fetch', (event) => {
   // 2. Only handle same-origin requests to avoid caching external APIs/documents
   if (url.origin !== self.location.origin) return;
 
+  // Deployment probes must never receive an offline or stale cached marker.
+  if (url.pathname === '/build-identity.json') return;
+
   // API responses are never offline assets.
   if (url.pathname.startsWith('/api/')) return;
 

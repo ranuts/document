@@ -24,9 +24,14 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 # Copy source code
 COPY . .
 
+# .git is excluded from Docker contexts. CI/self-hosted callers can preserve
+# exact source identity with --build-arg BUILD_REVISION=<git SHA>. Archives
+# without a revision get an explicit content:<sha256> marker instead.
+ARG BUILD_REVISION
+
 # Build the workspace packages, encode WASM for plain HTTP, then build the app.
 # Do this before build.sh hashes the vendor tree, so sw.js names the served bytes.
-RUN pnpm -r run prepare && node bin/prepare-docker-wasm.mjs public && pnpm run build
+RUN pnpm -r run prepare && node bin/prepare-docker-wasm.mjs public && BUILD_REVISION="$BUILD_REVISION" pnpm run build
 
 #FROM nginxinc/nginx-unprivileged:stable-alpine
 #COPY --from=builder /app/dist /usr/share/nginx/html

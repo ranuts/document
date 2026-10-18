@@ -14,6 +14,27 @@ afterEach(() => {
 const sample = () =>
   new File(['original bytes'], '测试 résumé.docx', { type: 'application/test', lastModified: 12345 });
 const api = () => import('../../lib/active-document-source');
+
+it('updates repeated saved bytes without deserializing the previous source payload', async () => {
+  const source = await api();
+  await source.rememberActiveSource('doc-a', sample());
+  const read = IDBObjectStore.prototype.get;
+  const guard = vi.spyOn(IDBObjectStore.prototype, 'get').mockImplementation(function (this: IDBObjectStore, key) {
+    if (this.name === 'sources') throw new Error('Previous document bytes must not be cloned during a save');
+    return read.call(this, key);
+  });
+  for (let save = 1; save <= 3; save++) {
+    expect(
+      await source.rememberActiveSource('doc-a', new File([`version ${save}`], 'Report.docx'), {
+        savedThroughRevision: 0,
+      }),
+    ).toBe(true);
+  }
+  guard.mockRestore();
+  expect(await (await source.readActiveSource('doc-a'))?.text()).toBe('version 3');
+  expect(await retainedCount()).toBe(1);
+});
+
 const retainedCount = () =>
   new Promise<number>((done, fail) => {
     const req = indexedDB.open('document-active-sources', 1);
@@ -57,7 +78,7 @@ describe('active tab document source', () => {
     await source.rememberActiveSource('doc-b', new File(['new'], 'B.docx'));
     expect(await source.readActiveSource('doc-a')).toBeNull();
     expect(await (await source.readActiveSource('doc-b'))?.text()).toBe('new');
-    expect(await retainedCount()).toBe(1);
+    expect(await retainedCount()).toBe(2);
   });
 
   it('expires a source after 24 hours without access', async () => {
@@ -305,3 +326,100 @@ describe('active tab document source', () => {
     expect(await retainedCount()).toBe(1);
   });
 });
+
+it.each(['replacement', 'clear'])('preserves the original tab source after a copied tab %s', async (action) => {
+  const source = await api();
+  await source.rememberActiveSource('doc-a', sample());
+  const inheritedPointer = sessionStorage.getItem('document-active-source')!;
+  // A duplicate tab receives the same session pointer, then reopens or leaves
+  // that document. Restore the first tab's independent sessionStorage below.
+  if (action === 'replacement') await source.rememberActiveSource('doc-a', new File(['copy edits'], 'Copy.docx'));
+  else await source.clearActiveSource();
+  sessionStorage.setItem('document-active-source', inheritedPointer);
+  expect(await (await source.readActiveSource('doc-a'))?.text()).toBe('original bytes');
+});
+
+it('reuses this runtime source slot across disk saves without growing retained full-file copies', async () => {
+  const source = await api();
+  await source.rememberActiveSource('doc-a', sample());
+  const initial = sessionStorage.getItem('document-active-source');
+  for (let save = 0; save < 10; save++) {
+    expect(
+      await source.rememberActiveSource('doc-a', new File([`saved ${save}`], 'Report.docx'), {
+        savedThroughRevision: 0,
+      }),
+    ).toBe(true);
+  }
+  expect(await retainedCount()).toBe(1);
+  expect(JSON.parse(sessionStorage.getItem('document-active-source')!).key).toBe(JSON.parse(initial!).key);
+  expect(await (await source.readActiveSource('doc-a'))?.text()).toBe('saved 9');
+});
+
+it.each(['file read', 'quota', 'transaction abort'])(
+  'preserves the previous runtime slot when a disk-save replacement fails at %s',
+  async (failure) => {
+    const source = await api();
+    await source.rememberActiveSource('doc-a', sample());
+    const saved = new File(['saved bytes'], 'Report.docx');
+    if (failure === 'file read') vi.spyOn(saved, 'arrayBuffer').mockRejectedValue(new Error('read failed'));
+    else {
+      const originalPut = IDBObjectStore.prototype.put;
+      vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementation(function (this: IDBObjectStore, value, key) {
+        if (failure === 'quota') throw new DOMException('full', 'QuotaExceededError');
+        const request = originalPut.call(this, value, key);
+        queueMicrotask(() => this.transaction.abort());
+        return request;
+      });
+    }
+    expect(await source.rememberActiveSource('doc-a', saved, { savedThroughRevision: 0 })).toBe(false);
+    vi.restoreAllMocks();
+    expect(await (await source.readActiveSource('doc-a'))?.text()).toBe('original bytes');
+    expect(await retainedCount()).toBe(1);
+  },
+);
+
+it('gives an inherited copied page a separate slot before its own saves', async () => {
+  const parent = await api();
+  await parent.rememberActiveSource('doc-a', sample());
+  const inheritedPointer = sessionStorage.getItem('document-active-source')!;
+  vi.resetModules();
+  const copy = await api();
+  await copy.rememberActiveSource('doc-a', (await copy.readActiveSource('doc-a'))!);
+  const copyPointer = sessionStorage.getItem('document-active-source')!;
+  expect(copyPointer).not.toBe(inheritedPointer);
+  await copy.rememberActiveSource('doc-a', new File(['copy save C'], 'Report.docx'), { savedThroughRevision: 0 });
+  expect(await retainedCount()).toBe(2);
+  sessionStorage.setItem('document-active-source', inheritedPointer);
+  expect(await (await parent.readActiveSource('doc-a'))?.text()).toBe('original bytes');
+  sessionStorage.setItem('document-active-source', copyPointer);
+  expect(await (await copy.readActiveSource('doc-a'))?.text()).toBe('copy save C');
+});
+
+it.each(['expiry', 'explicit deletion'])(
+  'starts a fresh disk-save slot when another runtime removed its previous slot by %s',
+  async (reason) => {
+    const source = await api();
+    const now = vi.spyOn(Date, 'now').mockReturnValue(1000);
+    await source.rememberActiveSource('doc-a', sample());
+    const stalePointer = sessionStorage.getItem('document-active-source')!;
+    vi.resetModules();
+    const otherPage = await api();
+    if (reason === 'expiry') {
+      now.mockReturnValue(1000 + 25 * 60 * 60 * 1000);
+      expect(await otherPage.readActiveSource('doc-a')).toBeNull();
+    } else {
+      await otherPage.deleteDocumentSources('doc-a');
+      // Explicit deletion in another real page cannot modify our sessionStorage.
+      sessionStorage.setItem('document-active-source', stalePointer);
+    }
+    for (let save = 0; save < 2; save++) {
+      expect(
+        await source.rememberActiveSource('doc-a', new File([`new save ${save}`], 'Report.docx'), {
+          savedThroughRevision: 0,
+        }),
+      ).toBe(true);
+    }
+    expect(await retainedCount()).toBe(1);
+    expect(await (await source.readActiveSource('doc-a'))?.text()).toBe('new save 1');
+  },
+);

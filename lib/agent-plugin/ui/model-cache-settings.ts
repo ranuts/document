@@ -2,6 +2,7 @@ import { Div, Span, View } from 'ranui/builder';
 import { t } from '@ranuts/shared/i18n';
 import { LocalInferenceProvider } from '@ranuts/agent-core/llm/local';
 import type { LocalLLMProvider } from '@ranuts/agent-core/llm/types';
+import { modelSourceIdentity, type ModelSelection } from '@ranuts/agent-core/llm/model-source';
 import { isModelCached, WEBLLM_MODELS, RETIRED_WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
 import {
   deleteCachedModel,
@@ -24,7 +25,7 @@ export function createModelCacheSettings(options: {
   localModelLib: ValueEl;
   ggufUrl: ValueEl;
   note: HTMLElement;
-  selectedLocalModel: () => string;
+  getLoadedModel: () => ModelSelection | undefined;
   currentProvider: () => string;
   getProvider: () => LocalLLMProvider | null;
   isBusy: () => boolean;
@@ -43,7 +44,7 @@ export function createModelCacheSettings(options: {
     localModelLib,
     ggufUrl,
     note,
-    selectedLocalModel,
+    getLoadedModel,
     currentProvider,
     getProvider,
     isBusy,
@@ -63,16 +64,22 @@ export function createModelCacheSettings(options: {
   const cacheStatus = Span().attr('role', 'status').build();
   cacheList.append(cacheSummary, cacheRows, cacheStatus);
   let cacheRevision = 0;
+  const identity = (model: ModelSelection) => modelSourceIdentity(model.id, model);
+  const isLoadedSource = (model: ModelSelection) => {
+    const loaded = getLoadedModel();
+    const provider = getProvider();
+    return (
+      !!loaded &&
+      identity(loaded) === identity(model) &&
+      !(provider instanceof LocalInferenceProvider && provider.backend === 'wllama')
+    );
+  };
+  const isActive = (model: ModelSelection) => !!getProvider()?.isReady() && isLoadedSource(model);
   const refreshCache = async () => {
     const revision = ++cacheRevision;
     const sources = [...WEBLLM_MODELS, ...RETIRED_WEBLLM_MODELS, ...rememberedModelSources()];
     const unique = sources.filter(
-      (model, index) =>
-        sources.findIndex(
-          (item) =>
-            item.id === model.id &&
-            ('modelUrl' in item ? item.modelUrl : undefined) === ('modelUrl' in model ? model.modelUrl : undefined),
-        ) === index,
+      (model, index) => sources.findIndex((item) => identity(item) === identity(model)) === index,
     );
     const cached = await Promise.all(
       unique.map(async (model) => ({ model, cached: await isModelCached(model.id, 'modelUrl' in model ? model : {}) })),
@@ -93,21 +100,17 @@ export function createModelCacheSettings(options: {
     for (const { model, cached: exists } of cached) {
       if (!exists) continue;
       const row = Div().class('agent-model-cache-row').attr('role', 'group').build();
-      const provider = getProvider();
-      const active =
-        !!provider?.isReady() &&
-        selectedLocalModel() === model.id &&
-        !(provider instanceof LocalInferenceProvider && provider.backend === 'wllama');
+      const active = isActive(model);
       const name = Span()
         .text(model.label + (active ? ' · ' + t('agentModelInUse') : ''))
         .build();
       const use = ranButton(t(active ? 'agentModelInUse' : 'agentUseModel'), 'agent-cache-use');
       use.toggleAttribute('disabled', active);
       use.addEventListener('click', () => {
-        if (isBusy() || active) return;
+        if (isBusy() || isActive(model)) return;
         providerSelect.value = 'webllm';
         providerSelect.dispatchEvent(new Event('change'));
-        if (WEBLLM_MODELS.some((item) => item.id === model.id)) {
+        if (WEBLLM_MODELS.some((item) => identity(item) === identity(model))) {
           localModelId.value = '';
           localModelUrl.value = '';
           localModelLib.value = '';
@@ -118,7 +121,7 @@ export function createModelCacheSettings(options: {
           localModelId.value = model.id;
           localModelUrl.value = 'modelUrl' in model ? String(model.modelUrl ?? '') : '';
           localModelLib.value = 'modelLibUrl' in model ? String(model.modelLibUrl ?? '') : '';
-          localModelId.dispatchEvent(new Event('change'));
+          for (const input of [localModelId, localModelUrl, localModelLib]) input.dispatchEvent(new Event('change'));
         }
         void loadModel();
       });
@@ -146,7 +149,7 @@ export function createModelCacheSettings(options: {
           setBusy(true);
           chat.refreshSendAvailability();
           try {
-            if (selectedLocalModel() === model.id) {
+            if (isLoadedSource(model)) {
               resetController();
               await cleanup();
               if (cleanupFailed()) throw new Error(t('agentModelCleanupFailed'));
@@ -166,7 +169,7 @@ export function createModelCacheSettings(options: {
       });
       row.setAttribute('aria-label', name.textContent ?? '');
       row.append(name);
-      if (!RETIRED_WEBLLM_MODELS.some((item) => item.id === model.id)) row.append(use);
+      if (!RETIRED_WEBLLM_MODELS.some((item) => identity(item) === identity(model))) row.append(use);
       row.append(remove, cancel);
       cacheRows.append(row);
     }
