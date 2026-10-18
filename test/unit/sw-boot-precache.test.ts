@@ -31,6 +31,7 @@ it.each([
     URL,
     Promise,
     Date,
+    Response,
     self: {
       location: { origin },
       addEventListener: (name: string, listener: (event: any) => void) => listeners.set(name, listener),
@@ -48,7 +49,12 @@ it.each([
     respondWith: (value: Promise<unknown>) => (response = value),
     waitUntil: () => {},
   });
-  expect(await response).toBe(expected ? asset : undefined);
+  const result = await response;
+  if (expected) expect(result).toBe(asset);
+  else {
+    expect(result).toBeInstanceOf(Response);
+    expect(result).toMatchObject({ type: 'error', status: 0 });
+  }
 });
 
 it('caches vendor bootstrap script and style tags without evaluating inline scripts', async () => {

@@ -5,7 +5,7 @@ import { expect, it } from 'vitest';
 async function cachedResponse(
   isolated: boolean,
   path: string,
-  original: Response,
+  original: Response | undefined,
   shell?: Response | Error,
   retryShell?: Response,
 ) {
@@ -188,3 +188,21 @@ it.each(['?new=docx&locale=en', '?file=private%2Fdocument.docx&embed=1'])(
     expect(response.headers.get('location')).toBe('https://editor.example/editor' + query);
   },
 );
+
+it.each([false, true])(
+  'returns a network error for an uncached offline hashed asset: isolation %s',
+  async (isolated) => {
+    const response = await cachedResponse(isolated, '/assets/optional-runtime-missing.js', undefined);
+    expect(response).toBeInstanceOf(Response);
+    expect(response.type).toBe('error');
+    expect(response.status).toBe(0);
+  },
+);
+
+it('keeps an existing hashed asset available when offline revalidation fails', async () => {
+  const original = new Response('cached runtime', { headers: { 'content-type': 'application/javascript' } });
+  const response = await cachedResponse(false, '/assets/prepared-runtime.js', original);
+  expect(response).toBe(original);
+  expect(response.status).toBe(200);
+  expect(await response.text()).toBe('cached runtime');
+});

@@ -713,7 +713,8 @@ self.addEventListener('fetch', (event) => {
               return networkResponse;
             })
             .catch(() => {
-              return cachedResponse;
+              // An offline cache miss still needs a Response for respondWith.
+              return cachedResponse || Response.error();
             });
 
           return cachedResponse || fetchPromise;
