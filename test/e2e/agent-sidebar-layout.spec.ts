@@ -8,18 +8,21 @@ for (const width of [320, 1280]) {
     await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
     await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
     const switchGeometry = await page.locator('.agent-onboarding .agent-enable-switch').evaluate((el) => {
-      const track = getComputedStyle(el);
+      const track = getComputedStyle(el, '::after');
       const knob = getComputedStyle(el, '::before');
       return {
         height: el.getBoundingClientRect().height,
-        top: Number.parseFloat(track.paddingTop),
-        bottom: Number.parseFloat(track.paddingBottom),
+        trackHeight: Number.parseFloat(track.height),
+        trackTop: Number.parseFloat(track.top),
+        knobTop: Number.parseFloat(knob.top),
         knob: Number.parseFloat(knob.height),
       };
     });
-    expect(switchGeometry.top).toBe(3);
-    expect(switchGeometry.top).toBe(switchGeometry.bottom);
-    expect(switchGeometry.top + switchGeometry.knob + switchGeometry.bottom).toBe(switchGeometry.height);
+    expect(switchGeometry.height).toBeGreaterThanOrEqual(32);
+    expect(switchGeometry.trackHeight).toBeLessThanOrEqual(switchGeometry.height);
+    expect(switchGeometry.knob).toBeLessThan(switchGeometry.trackHeight);
+    expect(switchGeometry.trackTop).toBe(switchGeometry.height / 2);
+    expect(switchGeometry.knobTop).toBe(switchGeometry.trackTop);
     await page.locator('.agent-onboarding .agent-enable-switch').click();
     const panel = page.locator('.agent-runtime-panel');
     await expect(panel).toHaveAttribute('data-view', 'settings');
@@ -28,8 +31,8 @@ for (const width of [320, 1280]) {
     await expect(page.locator('.cui-composer')).toBeVisible();
     await expect(page.locator('.cui-empty')).toBeVisible();
     const suggestion = page.locator('.agent-task-action').first();
-    await expect(suggestion).toHaveCSS('border-top-width', '0px');
-    await expect(suggestion).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(suggestion).toHaveCSS('border-top-width', '1px');
+    await expect(suggestion).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`empty-${width}.png`) });
     const alignment = await page.locator('.agent-runtime-panel').evaluate((panel) => {
       const left = (selector: string) => panel.querySelector(selector)!.getBoundingClientRect().left;

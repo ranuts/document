@@ -91,5 +91,15 @@ test.describe('touch controls', () => {
     await toggle.focus();
     await expect(toggle).toBeFocused();
     await expect(toggle).toHaveAttribute('aria-checked', 'true');
+    await toggle.click({ position: { x: box.width / 2, y: 2 } });
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('document-assistant-enabled'))).toBe('false');
+  });
+  test('structured import keeps a full touch target after labeling the title field', async ({ page }) => {
+    await page.locator('.agent-workspace-toggle').click();
+    await page.getByRole('button', { name: 'Import structured result', exact: true }).click();
+    const title = page.getByRole('textbox', { name: 'Title', exact: true });
+    expect((await title.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await title.fill('Touch import');
+    await expect(title).toHaveValue('Touch import');
   });
 });
