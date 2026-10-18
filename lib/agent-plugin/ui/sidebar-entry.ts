@@ -70,6 +70,8 @@ export function createSidebarEntry(toggle: () => void, label: () => string, isAv
         '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/></svg>';
       button.style.cssText =
         'display:flex;align-items:center;justify-content:center;padding:0;color:inherit;cursor:pointer;';
+      // The vendor rail schedules editor focus on mouse presses.
+      button.addEventListener('mousedown', (event) => event.stopPropagation());
       button.addEventListener('click', (event) => {
         event.stopPropagation();
         if (enabled()) toggle();

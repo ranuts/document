@@ -237,3 +237,34 @@ it('rebinds a frame document on load and ignores late callbacks after disabling 
   await flushMutations();
   expect(nextDoc.querySelector('.agent-sidebar-entry')).toBeNull();
 });
+
+it('isolates native entry presses from vendor rail refocus without cancelling default button behavior', async () => {
+  vi.useFakeTimers();
+  const frame = document.createElement('iframe');
+  document.body.append(frame);
+  const doc = frame.contentDocument!;
+  doc.body.innerHTML = '<div id="right-menu"><div class="tool-menu-btns"></div></div><textarea id="editor"></textarea>';
+  const rail = doc.querySelector('.tool-menu-btns')!;
+  const editor = doc.querySelector<HTMLTextAreaElement>('#editor')!;
+  // The vendor rail defers editor focus on mousedown. Letting that handler
+  // see the assistant's entry steals focus after the parent composer opens.
+  rail.addEventListener('mousedown', () => setTimeout(() => editor.focus(), 0));
+  const toggle = vi.fn();
+  const entry = createSidebarEntry(toggle, () => 'AI');
+  try {
+    entry.update(true, false);
+    const button = doc.querySelector<HTMLButtonElement>('.agent-sidebar-entry')!;
+    const composer = document.createElement('textarea');
+    document.body.append(composer);
+    composer.focus();
+    const press = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+    button.dispatchEvent(press);
+    await vi.runOnlyPendingTimersAsync();
+    expect(document.activeElement).toBe(composer);
+    expect(press.defaultPrevented).toBe(false);
+    button.click();
+    expect(toggle).toHaveBeenCalledOnce();
+  } finally {
+    entry.dispose();
+  }
+});
