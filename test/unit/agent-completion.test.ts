@@ -1,5 +1,6 @@
 import { expect, it, vi } from 'vitest';
 import { runAgent, type AgentEvent } from '@ranuts/agent-core/runtime';
+import { parseGeminiResponse } from '@ranuts/agent-core/llm/gemini';
 import { parseOpenAIResponse } from '@ranuts/agent-core/llm/openai-format';
 import type { LLMMessage, LLMProvider } from '@ranuts/agent-core/llm/types';
 import { t } from '@ranuts/shared/i18n';
@@ -8,25 +9,57 @@ import { RequestQueue } from '../../lib/agent-plugin/ui/request-queue';
 import { historyToTurns } from '../../lib/agent-plugin/ui/storage';
 import { ChatView } from '../../packages/chat-ui/src/chat-view';
 
-const cases = ['length', 'max_tokens', 'content_filter'] as const;
+const cases = [
+  'length',
+  'max_tokens',
+  'content_filter',
+  'MAX_TOKENS',
+  'CONTINUATION',
+  'SAFETY',
+  'RECITATION',
+  'BLOCKLIST',
+  'PROHIBITED_CONTENT',
+  'SPII',
+] as const;
+const expectedReason = (reason: string) =>
+  ['length', 'max_tokens', 'MAX_TOKENS', 'CONTINUATION'].includes(reason) ? 'max_tokens' : 'content_filter';
 function provider(stopReason: string, streaming: boolean, tool = false): LLMProvider {
-  const response = parseOpenAIResponse({
-    choices: [
-      {
-        finish_reason: stopReason,
-        message: {
-          content: 'Partial answer ending mid',
-          ...(tool
-            ? {
-                tool_calls: [
-                  { id: 'unfinished', type: 'function' as const, function: { name: 'write', arguments: '{"text":' } },
+  const response =
+    stopReason === stopReason.toUpperCase()
+      ? parseGeminiResponse({
+          candidates: [
+            {
+              finishReason: stopReason,
+              content: {
+                parts: [
+                  { text: 'Partial answer ending mid' },
+                  ...(tool ? [{ functionCall: { name: 'write', args: { text: 'Unfinished request' } } }] : []),
                 ],
-              }
-            : {}),
-        },
-      },
-    ],
-  });
+              },
+            },
+          ],
+        })
+      : parseOpenAIResponse({
+          choices: [
+            {
+              finish_reason: stopReason,
+              message: {
+                content: 'Partial answer ending mid',
+                ...(tool
+                  ? {
+                      tool_calls: [
+                        {
+                          id: 'unfinished',
+                          type: 'function' as const,
+                          function: { name: 'write', arguments: '{"text":' },
+                        },
+                      ],
+                    }
+                  : {}),
+              },
+            },
+          ],
+        });
   return {
     name: 'test',
     isReady: () => true,
@@ -48,7 +81,7 @@ for (const streaming of [false, true]) {
     const result = await runAgent(provider(reason, streaming), 'question', { onEvent: (event) => events.push(event) });
     expect(result).toMatchObject({
       text: 'Partial answer ending mid',
-      incompleteReason: reason === 'length' ? 'max_tokens' : reason,
+      incompleteReason: expectedReason(reason),
       aborted: false,
     });
     expect(result.messages.at(-1)).toMatchObject({ interrupted: true });

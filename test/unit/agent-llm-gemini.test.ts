@@ -179,3 +179,20 @@ it('rejects a token-limited Gemini result before writing it into the document', 
     ),
   ).rejects.toThrow('Incomplete writing response');
 });
+
+it.each([
+  ['MAX_TOKENS', 'max_tokens'],
+  ['CONTINUATION', 'max_tokens'],
+  ['SAFETY', 'content_filter'],
+  ['RECITATION', 'content_filter'],
+  ['BLOCKLIST', 'content_filter'],
+  ['PROHIBITED_CONTENT', 'content_filter'],
+  ['SPII', 'content_filter'],
+])('normalizes Gemini %s into a neutral incomplete termination', (finishReason, stopReason) => {
+  expect(
+    parseGeminiResponse({ candidates: [{ finishReason, content: { parts: [{ text: 'partial' }] } }] }),
+  ).toMatchObject({
+    text: 'partial',
+    stopReason,
+  });
+});
