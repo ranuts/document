@@ -1,3 +1,5 @@
+import { invalidateDocumentLifetime } from './onlyoffice/open-state';
+
 /** Shared ownership for local, new and embedded document opens. */
 let revision = 0;
 let current: AbortController | undefined;
@@ -35,6 +37,7 @@ export function isMountedDocumentOpen(id: number): boolean {
 }
 
 export function cancelDocumentOpen(): void {
+  invalidateDocumentLifetime('Document closed');
   current?.abort(new DOMException('Document closed', 'AbortError'));
   current = undefined;
   mountedRevision = closedRevision = ++revision;

@@ -16,6 +16,16 @@
 // pointless wait.
 let documentContentReady = false;
 let contentReadyWaiters: Array<() => void> = [];
+let documentLifetime = new AbortController();
+
+/** Saves belong to a mounted editor, independently of pending open attempts. */
+export function getDocumentLifetimeSignal(): AbortSignal {
+  return documentLifetime.signal;
+}
+
+export function invalidateDocumentLifetime(reason: string): void {
+  documentLifetime.abort(new DOMException(reason, 'AbortError'));
+}
 // Set when the editor's own open conversion failed for the current document
 // (see installOpenFailureGuard); pending and future saves reject with it
 // instead of waiting out the readiness timeout.
@@ -74,6 +84,8 @@ export function markDocumentContentReady(): void {
 // Called once per document open (v9 only) to drop any stale ready-state from
 // a previously open document before the new one's own readiness is known.
 export function resetOpenState(): void {
+  invalidateDocumentLifetime('Document replaced');
+  documentLifetime = new AbortController();
   documentContentReady = false;
   documentOpenError = null;
   lastFrameError = null;
@@ -92,14 +104,26 @@ export function markDocumentOpenFailed(reason: string): void {
 // Resolves immediately if already ready; otherwise waits for
 // markDocumentContentReady() (or the safety-net timeout) so callers never
 // hang forever.
-export function waitForDocumentContentReady(timeoutMs = 15000): Promise<void> {
+export function waitForDocumentContentReady(timeoutMs = 15000, signal?: AbortSignal): Promise<void> {
+  if (signal?.aborted) return Promise.reject(signal.reason);
   if (documentContentReady) return Promise.resolve();
-  return new Promise((resolve) => {
-    const timer = setTimeout(resolve, timeoutMs);
-    contentReadyWaiters.push(() => {
+  return new Promise((resolve, reject) => {
+    const cleanup = () => {
       clearTimeout(timer);
+      signal?.removeEventListener('abort', abort);
+      contentReadyWaiters = contentReadyWaiters.filter((waiter) => waiter !== ready);
+    };
+    const ready = () => {
+      cleanup();
       resolve();
-    });
+    };
+    const abort = () => {
+      cleanup();
+      reject(signal?.reason);
+    };
+    const timer = setTimeout(ready, timeoutMs);
+    contentReadyWaiters.push(ready);
+    signal?.addEventListener('abort', abort, { once: true });
   });
 }
 

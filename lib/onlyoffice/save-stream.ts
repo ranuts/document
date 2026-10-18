@@ -3,7 +3,7 @@ import { t } from '@ranuts/shared/i18n';
 import { X2TConverter, saveFileToDisk } from '@ranuts/converter';
 import { oAscFileType } from '../file-types';
 import { getFileExtension, getNormalizedFile, getSavedFileMimeType } from './file-helpers';
-import { getDocumentOpenError, waitForDocumentContentReady } from './open-state';
+import { getDocumentLifetimeSignal, getDocumentOpenError, waitForDocumentContentReady } from './open-state';
 import { getReadonlyMode } from './readonly';
 import { isEmbedMode } from '../embed-mode';
 import { markDocumentSaved } from '../unsaved-guard';
@@ -51,9 +51,17 @@ type EmbeddedSaveRequest = {
   timeoutId: number;
   fallbackId: number;
   settled: boolean;
+  claimed: boolean;
+  isCurrent: () => boolean;
+  signal: AbortSignal;
+  onAbort: () => void;
 };
 
 let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
+// The SDK serializes synchronously inside asc_DownloadAs, then converts
+// asynchronously. Only that invocation may claim the programmatic request;
+// later toolbar saves must keep their own disk destination.
+let triggeringSaveRequest: EmbeddedSaveRequest | null = null;
 
 // requestSaveDocument budget. Readiness (onDocumentReady) may take long on a
 // cold, slow link: the editor first downloads and inflates x2t.wasm
@@ -83,6 +91,7 @@ function rejectEmbeddedSaveRequest(request: EmbeddedSaveRequest, error: Error): 
 function cleanupEmbeddedSaveRequest(request: EmbeddedSaveRequest): void {
   window.clearTimeout(request.timeoutId);
   window.clearTimeout(request.fallbackId);
+  request.signal.removeEventListener('abort', request.onAbort);
   if (embeddedSaveRequest === request) {
     embeddedSaveRequest = null;
   }
@@ -116,7 +125,7 @@ interface FileStreamMessage {
 // lib/converter's singleton.
 let sheetJsConverter: X2TConverter | null = null;
 
-function standaloneExportState(win: Window, sequence = 0) {
+function standaloneExportState(win: Window, sequence = 0, request: EmbeddedSaveRequest | null = null) {
   const source = getDocmentObj();
   const editor = window.editor;
   const point = captureSavePoint();
@@ -124,7 +133,7 @@ function standaloneExportState(win: Window, sequence = 0) {
     source,
     sequence,
     point,
-    request: embeddedSaveRequest,
+    request,
     isCurrent: () =>
       getDocmentObj() === source &&
       window.editor === editor &&
@@ -156,7 +165,10 @@ export function installSaveStreamTracking(win: Window): boolean {
     const source = getDocmentObj();
     const sequence = (exportSequences.get(source) ?? 0) + 1;
     exportSequences.set(source, sequence);
-    const state = standaloneExportState(win, sequence);
+    const candidate = triggeringSaveRequest;
+    const request = candidate && !candidate.claimed && candidate.isCurrent() ? candidate : null;
+    if (request) request.claimed = true;
+    const state = standaloneExportState(win, sequence, request);
     return convert.call(this, input).then((result) => {
       if (result?.binary && typeof result.binary === 'object') outputs.set(result.binary, state);
       return result;
@@ -179,6 +191,7 @@ function routeSavedFile(file: File, state: ReturnType<typeof standaloneExportSta
   if (state.request) {
     const request = state.request;
     if (request !== embeddedSaveRequest || request.settled) return;
+    if (!ensureCurrentSaveRequest(request)) return;
     cleanupEmbeddedSaveRequest(request);
     resolveEmbeddedSaveRequest(request, file);
     return;
@@ -295,7 +308,7 @@ if (typeof window !== 'undefined') {
  * trigger the export directly on the same-origin editor iframe's API with the
  * numeric file-type constant. Returns false when no editor frame is ready.
  */
-function triggerPersonalDownloadAs(targetExt: string): boolean {
+function triggerPersonalDownloadAs(targetExt: string, request: EmbeddedSaveRequest): boolean {
   // A CSV export request pops the editor's delimiter-options dialog and stalls
   // a headless save forever; ask the editor for XLSX instead and convert the
   // returned stream to CSV in handleFileStreamMessage.
@@ -316,6 +329,7 @@ function triggerPersonalDownloadAs(targetExt: string): boolean {
             asc_DownloadAs?: (options: unknown) => void;
             isLoadFullApi?: boolean;
             isDocumentLoadComplete?: boolean;
+            isLongAction?: () => boolean;
           }
         | undefined;
       if (api && typeof api.asc_DownloadAs === 'function' && AscNs?.asc_CDownloadOptions) {
@@ -325,8 +339,8 @@ function triggerPersonalDownloadAs(targetExt: string): boolean {
         // of undefined (reading 'forEach')") or is silently dropped. Only
         // fire once the SDK itself reports full readiness -- the caller's
         // retry loop keeps polling until then.
-        if (!api.isLoadFullApi || !api.isDocumentLoadComplete) return false;
-        api.asc_DownloadAs(new AscNs.asc_CDownloadOptions(code));
+        if (!api.isLoadFullApi || !api.isDocumentLoadComplete || api.isLongAction?.()) return false;
+        runRequestedExport(request, () => api.asc_DownloadAs!(new AscNs.asc_CDownloadOptions!(code)));
         return true;
       }
     } catch {
@@ -334,6 +348,24 @@ function triggerPersonalDownloadAs(targetExt: string): boolean {
     }
   }
   return false;
+}
+
+function ensureCurrentSaveRequest(request: EmbeddedSaveRequest): boolean {
+  if (request.settled) return false;
+  if (request.isCurrent()) return true;
+  cleanupEmbeddedSaveRequest(request);
+  rejectEmbeddedSaveRequest(request, new DOMException('Document changed before save completed', 'AbortError'));
+  return false;
+}
+
+function runRequestedExport(request: EmbeddedSaveRequest, action: () => void): void {
+  if (!ensureCurrentSaveRequest(request)) return;
+  triggeringSaveRequest = request;
+  try {
+    action();
+  } finally {
+    triggeringSaveRequest = null;
+  }
 }
 
 export function requestSaveDocument(
@@ -359,19 +391,21 @@ export function requestSaveDocument(
     return Promise.reject(new Error('A save request is already in progress'));
   }
 
+  const source = getDocmentObj();
+  const editor = window.editor;
+  const signal = getDocumentLifetimeSignal();
+  if (signal.aborted) return Promise.reject(signal.reason);
+
   return new Promise<File>((resolve, reject) => {
     const normalizedTargetExt = targetExt.toUpperCase();
 
     const fallbackId = window.setTimeout(() => {
-      if (!embeddedSaveRequest || embeddedSaveRequest.settled) {
-        return;
-      }
+      if (!ensureCurrentSaveRequest(request)) return;
 
-      const { file, fileName } = getDocmentObj() || {};
+      const { file, fileName } = source;
       const originalExt = getFileExtension(fileName || file?.name || '');
 
       if (options.returnOriginalOnTimeout && file && originalExt === normalizedTargetExt) {
-        const request = embeddedSaveRequest;
         cleanupEmbeddedSaveRequest(request);
         resolveEmbeddedSaveRequest(request, getNormalizedFile(file));
       }
@@ -385,26 +419,30 @@ export function requestSaveDocument(
     // open-conversion failure rejects the request immediately
     // (installOpenFailureGuard).
     const timeoutId = window.setTimeout(() => {
-      if (!embeddedSaveRequest) {
-        return;
-      }
-      const request = embeddedSaveRequest;
+      if (!ensureCurrentSaveRequest(request)) return;
       cleanupEmbeddedSaveRequest(request);
       rejectEmbeddedSaveRequest(request, new Error('Save request timed out before receiving edited file data'));
     }, SAVE_REQUEST_TIMEOUT_MS);
 
-    embeddedSaveRequest = {
+    const request: EmbeddedSaveRequest = {
       targetExt: normalizedTargetExt,
       resolve,
       reject,
       timeoutId,
       fallbackId,
       settled: false,
+      claimed: false,
+      signal,
+      isCurrent: () => !signal.aborted && getDocmentObj() === source && window.editor === editor,
+      onAbort: () => {
+        cleanupEmbeddedSaveRequest(request);
+        rejectEmbeddedSaveRequest(request, signal.reason);
+      },
     };
+    embeddedSaveRequest = request;
+    signal.addEventListener('abort', request.onAbort, { once: true });
 
-    const editor = window.editor;
     if (!editor || typeof editor.downloadAs !== 'function') {
-      const request = embeddedSaveRequest;
       cleanupEmbeddedSaveRequest(request);
       rejectEmbeddedSaveRequest(request, new Error('The current editor does not support downloadAs export'));
       return;
@@ -417,13 +455,13 @@ export function requestSaveDocument(
     // editor boot can take a long time (observed in headless CI / first
     // preview visits). onDocumentReady is a dependable signal
     // (createPersonalEditorInstance wires it), so wait for it -- capped
-    // below the request's own 60 s timeout so the trigger still gets a
+    // below the request's own timeout so the trigger still gets a
     // window to fire -- then retry until the SDK reports full readiness
     // (see triggerPersonalDownloadAs) or the request settles.
     const downloadAs = editor.downloadAs.bind(editor);
-    const request = embeddedSaveRequest;
     void (async () => {
-      await waitForDocumentContentReady(SAVE_READY_WAIT_MS);
+      await waitForDocumentContentReady(SAVE_READY_WAIT_MS, signal);
+      if (!ensureCurrentSaveRequest(request)) return;
       const failure = getDocumentOpenError();
       if (failure && request && !request.settled) {
         cleanupEmbeddedSaveRequest(request);
@@ -431,14 +469,17 @@ export function requestSaveDocument(
         return;
       }
       const retryDeadline = Date.now() + SAVE_RETRY_WINDOW_MS;
-      while (!request?.settled && !triggerPersonalDownloadAs(normalizedTargetExt)) {
+      while (ensureCurrentSaveRequest(request) && !triggerPersonalDownloadAs(normalizedTargetExt, request)) {
         if (Date.now() > retryDeadline) {
-          downloadAs(normalizedTargetExt);
+          runRequestedExport(request, () => downloadAs(normalizedTargetExt));
           return;
         }
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
-    })();
+    })().catch((error: Error) => {
+      cleanupEmbeddedSaveRequest(request);
+      rejectEmbeddedSaveRequest(request, error);
+    });
   });
 }
 
