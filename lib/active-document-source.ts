@@ -93,6 +93,11 @@ const get = (key: string) =>
     const request = store.get(key);
     request.onsuccess = () => done(request.result ?? null);
   });
+const hasSource = (key: string) =>
+  transaction<boolean>('readonly', (store, done) => {
+    const request = store.getKey(key);
+    request.onsuccess = () => done(request.result !== undefined);
+  });
 const put = (source: Source) =>
   transaction<boolean>('readwrite', (store, done) => {
     store.put(source);
@@ -104,9 +109,9 @@ const put = (source: Source) =>
 // from recreating it.
 const replace = (source: Source, accepts: () => boolean = () => true) =>
   transaction<boolean>('readwrite', (store, done) => {
-    const request = store.get(source.key);
+    const request = store.getKey(source.key);
     request.onsuccess = () => {
-      if (!request.result || !accepts()) {
+      if (request.result === undefined || !accepts()) {
         done(false);
         return;
       }
@@ -162,9 +167,9 @@ export async function rememberActiveSource(
     // Expiry or explicit deletion by another page can retire an idle slot.
     // Only absence observed before this write starts permits a fresh candidate;
     // deletion while preparing the replacement must still cancel the write.
-    const existingSlot = ownedSlot ? await get(activeSlot!.key) : null;
+    const existingSlot = ownedSlot ? await hasSource(activeSlot!.key) : false;
     if (!isCurrent()) return false;
-    const reuseSlot = !!existingSlot && existingSlot.expiresAt > Date.now();
+    const reuseSlot = existingSlot === true;
     const provenance = options.savedThroughRevision !== undefined ? options : recoveredFiles.get(file);
     const source: Source = {
       docId,

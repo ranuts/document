@@ -14,6 +14,27 @@ afterEach(() => {
 const sample = () =>
   new File(['original bytes'], '测试 résumé.docx', { type: 'application/test', lastModified: 12345 });
 const api = () => import('../../lib/active-document-source');
+
+it('updates repeated saved bytes without deserializing the previous source payload', async () => {
+  const source = await api();
+  await source.rememberActiveSource('doc-a', sample());
+  const read = IDBObjectStore.prototype.get;
+  const guard = vi.spyOn(IDBObjectStore.prototype, 'get').mockImplementation(function (this: IDBObjectStore, key) {
+    if (this.name === 'sources') throw new Error('Previous document bytes must not be cloned during a save');
+    return read.call(this, key);
+  });
+  for (let save = 1; save <= 3; save++) {
+    expect(
+      await source.rememberActiveSource('doc-a', new File([`version ${save}`], 'Report.docx'), {
+        savedThroughRevision: 0,
+      }),
+    ).toBe(true);
+  }
+  guard.mockRestore();
+  expect(await (await source.readActiveSource('doc-a'))?.text()).toBe('version 3');
+  expect(await retainedCount()).toBe(1);
+});
+
 const retainedCount = () =>
   new Promise<number>((done, fail) => {
     const req = indexedDB.open('document-active-sources', 1);
