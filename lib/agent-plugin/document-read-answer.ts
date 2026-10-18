@@ -1,3 +1,4 @@
+import { incompleteResponseReason } from '@ranuts/agent-core/llm/completion';
 import { REFERENCE_CITATION_RULE } from '@ranuts/agent-core/llm/prompt';
 import type { LLMMessage, LLMProvider } from '@ranuts/agent-core/llm/types';
 import type { DocumentContext } from './document-context';
@@ -44,7 +45,7 @@ export async function generateReadAnswer(
         )
       : await provider.chat(messages, [], signal);
   signal.throwIfAborted();
-  if (response.toolCalls.length || ['length', 'max_tokens'].includes(response.stopReason) || !response.text.trim())
+  if (response.toolCalls.length || incompleteResponseReason(response) || !response.text.trim())
     throw new Error('Incomplete document answer');
   return response.text.trim();
 }

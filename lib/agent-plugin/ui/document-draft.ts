@@ -1,3 +1,4 @@
+import { incompleteResponseReason } from '@ranuts/agent-core/llm/completion';
 import { JsonTextStream } from '@ranuts/agent-core/llm/json-text-stream';
 import type { LLMProvider } from '@ranuts/agent-core/llm/types';
 
@@ -49,11 +50,7 @@ export async function generateDocumentDraft(
         ? await provider.generateJSON(messages, schema, signal)
         : await provider.chat(messages, [], signal);
   signal.throwIfAborted();
-  if (
-    response.toolCalls.length ||
-    ['length', 'max_tokens'].includes(response.stopReason) ||
-    response.text.length > 20000
-  )
+  if (response.toolCalls.length || incompleteResponseReason(response) || response.text.length > 20000)
     throw new Error('Incomplete writing response');
   const result: unknown = JSON.parse(response.text.replace(/^\s*<think>\s*<\/think>\s*/, '').trim());
   if (

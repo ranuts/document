@@ -1,3 +1,4 @@
+import { incompleteResponseReason } from '@ranuts/agent-core/llm/completion';
 import { validateToolInput } from '@ranuts/agent-core/runtime';
 import type { LLMProvider } from '@ranuts/agent-core/llm/types';
 import type { AgentTool } from '@ranuts/agent-core/types';
@@ -491,7 +492,7 @@ export async function generateDocumentToolPlan(
     ? await provider.generateJSON(messages, schema, signal)
     : await provider.chat(messages, [], signal);
   signal.throwIfAborted();
-  if (response.toolCalls.length || ['length', 'max_tokens'].includes(response.stopReason))
+  if (response.toolCalls.length || incompleteResponseReason(response))
     throw new Error('Incomplete document operation response');
   const plan = parseDocumentToolPlan(response.text, context);
   if (
