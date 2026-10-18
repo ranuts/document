@@ -7,6 +7,12 @@ notes. Entries describe what users experience, not internal refactors.
 
 ## [Unreleased]
 
+### Removed
+
+- External MCP and Google Drive connections in the AI assistant. Local file
+  references, citations and saved artifacts remain available without account
+  authorization or a connector backend.
+
 ### Fixed
 
 - Editing a document after more than seven idle days keeps the new recovery

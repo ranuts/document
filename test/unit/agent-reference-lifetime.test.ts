@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { withReferenceAbort } from '../../lib/agent-plugin/connectors/reference-lifetime';
+import { withReferenceAbort } from '../../lib/agent-plugin/references/reference-lifetime';
 it('releases a stalled lazy dependency at the deadline and ignores late completion', async () => {
   const deadline = new AbortController();
   let complete!: (value: string) => void;

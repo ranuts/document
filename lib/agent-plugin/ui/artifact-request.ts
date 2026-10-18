@@ -1,7 +1,7 @@
 import type { LLMProvider } from '@ranuts/agent-core/llm/types';
 import type { ArtifactStore } from '../artifacts/store';
 import type { ArtifactDraftBinding } from '../artifacts/edit-proposal';
-import type { ReferenceText } from '../connectors/reference-sources';
+import type { ReferenceText } from '../references/reference-sources';
 import { ArtifactRevisionError, runArtifactRevision, type ArtifactRevisionRequest } from './artifact-workflow';
 import type { QueuedRequest } from './request-queue';
 import type { TurnResult } from './controller';

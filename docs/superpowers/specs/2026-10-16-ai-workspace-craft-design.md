@@ -1,5 +1,7 @@
 # AI workspace craft and workflow completion
 
+> Connector scope superseded on 2026-10-18: external MCP and Google Drive connections were removed. Local file references and artifacts remain. See the [investigation and product decision](../../explorations/2026-10-18-mcp-connectors-and-frontend-boundaries.md). The original plan below is historical.
+
 ## Confirmed direction
 
 The user approved implementing the concrete improvements discussed in this conversation, continuing in PR #274 with multiple commits. The product is a browser-first document AI workspace. Preserve a flat, quiet interface, one composer boundary, document scope, explicit review, local/offline operation and seven complete locales. The user does not want another confirmation round for this approved direction.

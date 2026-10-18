@@ -1,6 +1,6 @@
 import { zip } from '../fixtures/helpers/reference-files';
 import { expect, it, vi } from 'vitest';
-import { readOfficeReference } from '../../lib/agent-plugin/connectors/document-reference-readers';
+import { readOfficeReference } from '../../lib/agent-plugin/references/document-reference-readers';
 
 it('extracts paragraphs and table paragraphs in DOCX document order', async () => {
   const xml =

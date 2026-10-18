@@ -3,7 +3,7 @@ import { getEditorApi } from '../editor-bridge';
 import { readWordBodyText } from '../word-text-read';
 import { readPresentationShapeText } from '../slide-text-read';
 import { captureComposerContext } from './composer-context';
-import { safeSourceUri } from '../connectors/reference-search';
+import { safeSourceUri } from '../references/reference-search';
 import type { DocumentContext } from '../document-context';
 
 interface ReadContent {

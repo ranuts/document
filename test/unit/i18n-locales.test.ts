@@ -57,7 +57,7 @@ const SAME_AS_ENGLISH: Partial<Record<string, Array<keyof I18nMessages>>> = {
 };
 
 /** The product name, which reads the same in every language. */
-const NEVER_TRANSLATED: Array<keyof I18nMessages> = ['webOffice', 'agentSourcesDrive'];
+const NEVER_TRANSLATED: Array<keyof I18nMessages> = ['webOffice'];
 
 const restore = () => {
   setLanguage(LanguageCode.EN);

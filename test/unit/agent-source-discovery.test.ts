@@ -78,7 +78,7 @@ it('restores exact host-owned message annotations, bounded independently from hi
     validSourcePresentation({ id: 'bad', metadata: { evidence: [{ ...evidence[0], text: 'x'.repeat(9000) }] } }),
   ).toBe(false);
 });
-import { sourceExcerpt } from '../../lib/agent-plugin/connectors/reference-search';
+import { sourceExcerpt } from '../../lib/agent-plugin/references/reference-search';
 it('centers a bounded source preview on late literal search hits', () => {
   const result = sourceExcerpt(
     'prefix '.repeat(3000) + 'Budget   forecast' + ' suffix'.repeat(3000),

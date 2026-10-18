@@ -5,7 +5,7 @@ import { createWorkspaceNavigation } from './workspace-navigation';
 import { createArtifactStore, type ArtifactProvenance } from '../artifacts/store';
 import { createArtifactsView } from './artifacts-view';
 import { createArtifactRequestOwner, type ArtifactRequestBinding } from './artifact-request';
-import { ReferenceSources } from '../connectors/reference-sources';
+import { ReferenceSources } from '../references/reference-sources';
 import { createSourcesView } from './sources-view';
 import { sourcesLabels, artifactLabels, artifactWorkflowLabels, resultActionLabels } from './workspace-labels';
 import { runDocumentTask } from '../document-task';

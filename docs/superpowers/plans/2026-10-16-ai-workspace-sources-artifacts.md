@@ -1,5 +1,7 @@
 # AI workspace sources and artifacts
 
+> Connector scope superseded on 2026-10-18: external MCP and Google Drive connections were removed. Local file references and artifacts remain. See the [investigation and product decision](../../explorations/2026-10-18-mcp-connectors-and-frontend-boundaries.md). The original plan below is historical.
+
 ## Confirmed scope
 
 The user approved both connector classes in PR #274, staged commits, and optional Google authorization with a Cloudflare backend. The editor remains usable without an account. Existing uncommitted interaction improvements are retained and verified first.

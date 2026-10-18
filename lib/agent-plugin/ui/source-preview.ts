@@ -1,6 +1,6 @@
 import { renderSearchText } from './search-highlight';
-import { safeSourceUri, sourceExcerpt } from '../connectors/reference-search';
-export { safeSourceUri, sourceMatches } from '../connectors/reference-search';
+import { safeSourceUri, sourceExcerpt } from '../references/reference-search';
+export { safeSourceUri, sourceMatches } from '../references/reference-search';
 export function sourcePreview(
   source: { title: string; text: string; uri?: string; truncated?: boolean },
   label: string,
