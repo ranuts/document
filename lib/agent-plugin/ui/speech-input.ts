@@ -99,12 +99,6 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
   const bindPopup = () => {
     const popup = privacy.popoverContent;
     if (!popup) return;
-    // Keep the disclosure above the whole draft rather than over editable text.
-    const composer = root.closest('.cui-composer');
-    if (composer) {
-      const clearance = privacy.getBoundingClientRect().top - composer.getBoundingClientRect().top;
-      popup.style.translate = `0 ${-Math.max(0, clearance)}px`;
-    }
     if (popup === boundPopup) return;
     boundPopup = popup;
     popup.classList.add('agent-speech-popover');
@@ -132,10 +126,12 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     scheduleDisclosure();
   };
   privacy.addEventListener('show', () => {
+    language.removeAttribute('open');
     privacyToggle.setAttribute('aria-expanded', 'true');
     bindPopup();
     scheduleDisclosure();
   });
+  language.addEventListener('show', () => privacy.removeAttribute('open'));
   privacy.addEventListener('hide', () => {
     privacyToggle.setAttribute('aria-expanded', 'false');
     pauseDisclosure();
