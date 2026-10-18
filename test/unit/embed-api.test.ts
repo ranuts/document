@@ -90,6 +90,49 @@ describe('embed-api', () => {
     delete (window as any).editor;
   });
 
+  it('preserves the mounted metadata when an embedded file fails before replacement', async () => {
+    const store = await import('@ranuts/shared/store');
+    store.setDocmentObj({ fileName: 'Original.docx', file: new File(['original'], 'Original.docx') });
+    const original = store.getDocmentObj();
+    window.history.replaceState(null, '', '/editor?embed=1');
+    const { initEmbedApi } = await import('../../lib/embed-api');
+    initEmbedApi();
+    mockHandleDocumentOperation.mockRejectedValueOnce(new DOMException('Unreadable file', 'NotReadableError'));
+    await dispatchMessage({
+      id: 'failed-metadata',
+      type: 'document:open-file',
+      payload: { file: new File(['bad'], 'Bad.xlsx') },
+    });
+    expectMessagePosted(postMessageSpy, 'document:error', 'failed-metadata');
+    expect(store.getDocmentObj()).toBe(original);
+  });
+
+  it('publishes embedded metadata after a successful mount', async () => {
+    const store = await import('@ranuts/shared/store');
+    store.setDocmentObj({ fileName: 'Original.docx', file: new File(['original'], 'Original.docx') });
+    const original = store.getDocmentObj();
+    window.history.replaceState(null, '', '/editor?embed=1');
+    const { initEmbedApi } = await import('../../lib/embed-api');
+    initEmbedApi();
+    let finish!: () => void;
+    mockHandleDocumentOperation.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finish = resolve;
+        }),
+    );
+    const file = new File(['replacement'], 'Replacement.xlsx');
+    await dispatchMessage({ id: 'pending-metadata', type: 'document:open-file', payload: { file } });
+    try {
+      expect(store.getDocmentObj()).toBe(original);
+    } finally {
+      finish();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+    expectMessagePosted(postMessageSpy, 'document:opened', 'pending-metadata');
+    expect(store.getDocmentObj()).toEqual({ fileName: 'Replacement.xlsx', file });
+  });
+
   describe('detectEmbedMode via URL params', () => {
     it.each([
       ['?embed=', true],

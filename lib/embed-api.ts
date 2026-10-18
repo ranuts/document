@@ -131,10 +131,6 @@ async function openFile(file: File, readonly = false): Promise<void> {
   const opening = beginDocumentOpen();
   await loadEditorApi();
   opening.assertCurrent();
-  setDocmentObj({
-    fileName: file.name,
-    file,
-  });
   await handleDocumentOperation({
     fileName: file.name,
     file,
@@ -143,6 +139,7 @@ async function openFile(file: File, readonly = false): Promise<void> {
     isCurrent: opening.isCurrent,
   });
   if (!commitDocumentOpen(opening.id)) throw new DOMException('Document open superseded', 'AbortError');
+  setDocmentObj({ fileName: file.name, file });
   clearDocumentSession();
   await clearActiveSource();
   if (!isMountedDocumentOpen(opening.id)) throw new DOMException('Document open superseded', 'AbortError');
