@@ -270,7 +270,23 @@ test.describe('saving into the document own file (real editor)', () => {
   test('Ctrl+S reaches disk while a recovery conversion is awaiting delivery', async ({ page }) => {
     await page.goto('/editor?new=docx');
     await waitForEditorReady(page);
-    await typeIntoDocument(page, 'word', 'Recovery version');
+    const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    // This case measures save ownership, so seed its baseline atomically through
+    // the real browser input path rather than racing the SDK's initial key hooks.
+    await page.keyboard.insertText('Recovery version');
+    const documentText = () =>
+      page.evaluate(() => {
+        const win = window.__ooFrames.readyEditor() as any;
+        const logic = (win.Asc?.editor ?? win.editor).WordControl.m_oLogicDocument;
+        const paragraphs: any[] = [];
+        for (const element of logic.Content) element.GetAllParagraphs({ All: true }, paragraphs);
+        return paragraphs
+          .map((paragraph) => paragraph.GetText({ Numbering: false }))
+          .join('')
+          .trim();
+      });
+    await expect.poll(documentText).toBe('Recovery version');
     await page.evaluate(() => {
       const frame = document.querySelector<HTMLIFrameElement>('iframe[name="frameEditor"]')!;
       const converter = (frame.contentWindow as any).AscCommon.x2t;
@@ -297,6 +313,7 @@ test.describe('saving into the document own file (real editor)', () => {
     try {
       await page.keyboard.press('End');
       await page.keyboard.type(' manual version', { delay: 30 });
+      await expect.poll(documentText).toBe('Recovery version manual version');
       await page.keyboard.press('Control+s');
       await waitForWrites(page, 1);
       expect(await savedText(page)).toContain('Recovery version manual version');
