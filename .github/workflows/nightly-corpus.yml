@@ -21,6 +21,10 @@ on:
     - cron: "17 19 * * *" # 03:17 Asia/Shanghai
   workflow_dispatch:
     inputs:
+      skip_corpus:
+        description: "Run cross-browser and budgets without the corpus matrix"
+        type: boolean
+        default: false
       limit:
         description: "Max files to run (CORPUS_LIMIT)"
         default: "300"
@@ -52,6 +56,7 @@ jobs:
         id: decide
         env:
           MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+          SKIP_CORPUS: ${{ github.event_name == 'workflow_dispatch' && inputs.skip_corpus }}
         run: |
           age_hours=$(( ( $(date -u +%s) - $(git log -1 --format=%ct) ) / 3600 ))
           # 1..7 with 7 = Sunday. The cron fires at 19:17 UTC, so this is the
@@ -71,6 +76,10 @@ jobs:
           fi
           if [ "$MANUAL" = "true" ] || { [ "$weekday" -eq 7 ] && [ "$age_hours" -lt 193 ]; }; then
             corpus=true
+          fi
+          # A focused manual browser validation does not need the weekly corpus.
+          if [ "$SKIP_CORPUS" = "true" ]; then
+            corpus=false
           fi
 
           {
@@ -134,7 +143,7 @@ jobs:
           # are narrow on purpose: a bare `crash` would also drop
           # 51921-Word-Crash067.doc, which is a real document from a bug report.
           CORPUS_EXCLUDE: "password|protect|encrypt|corrupt|truncat|broken|invalid|damaged|clusterfuzz|fuzzer|fuzzed|poi-fuzz|crash-[0-9a-f]{6}|\\.xlsm$|\\.xlsb$|\\.docm$|\\.pptm$"
-        run: pnpm exec playwright test test/e2e/corpus.spec.ts --workers=2 --reporter=list
+        run: pnpm exec playwright test test/e2e/corpus.spec.ts --workers=2
 
       - name: Summarize
         if: always()
@@ -169,7 +178,10 @@ jobs:
       # The same PR-time suites (minus the opt-in sweeps) on the two engines
       # the gate does not cover. Same-realm/L0 rules apply unchanged.
       - name: Run E2E on WebKit and Firefox
-        run: pnpm exec playwright test -c playwright.browsers.config.ts --grep-invert "api surface|corpus|@serial" --reporter=list
+        env:
+          E2E_REPORT_DIR: playwright-report-browsers/normal
+          E2E_RESULTS_DIR: test-results-browsers/normal
+        run: pnpm exec playwright test -c playwright.browsers.config.ts --grep-invert "api surface|corpus|@serial"
 
       # The other half of that `--grep-invert`, exactly as ci.yml's e2e job
       # pairs them: an @serial case is one that cannot share the run. Without
@@ -179,14 +191,20 @@ jobs:
       # missing sentinel came from on 2026-08-25. Without the second pass
       # nothing runs them at all and the job stays green regardless.
       - name: Run the cases that cannot share the run
-        run: pnpm exec playwright test -c playwright.browsers.config.ts --grep @serial --workers=1 --reporter=list
+        if: ${{ !cancelled() }}
+        env:
+          E2E_REPORT_DIR: playwright-report-browsers/serial
+          E2E_RESULTS_DIR: test-results-browsers/serial
+        run: pnpm exec playwright test -c playwright.browsers.config.ts --grep @serial --workers=1
 
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-browsers
-          path: playwright-report-browsers/
+          path: |
+            playwright-report-browsers/
+            test-results-browsers/
           retention-days: 14
 
   budgets:
@@ -226,7 +244,7 @@ jobs:
       - name: UI crawl
         env:
           UI_CRAWL: "1"
-        run: pnpm exec playwright test test/e2e/ui-crawl.spec.ts --reporter=list
+        run: pnpm exec playwright test test/e2e/ui-crawl.spec.ts
 
       - name: Upload UI crawl reports
         if: always()
@@ -241,4 +259,4 @@ jobs:
       - name: Throttled-network budget
         env:
           SLOW_NET: "1"
-        run: pnpm exec playwright test test/e2e/slow-network.spec.ts --reporter=list
+        run: pnpm exec playwright test test/e2e/slow-network.spec.ts
