@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { taskProtocol } from './lib/task-protocol';
 import type { Page } from '@playwright/test';
 import { expect, test } from './lib/l0';
@@ -187,7 +188,7 @@ test.describe('agent document writes (real editor)', () => {
       ),
     );
     let refinements = 0;
-    await page.route('http://localhost:11434/api/**', async (route) => {
+    await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
       if (route.request().method() === 'OPTIONS') {
         await route.fulfill({
           status: 204,
@@ -496,7 +497,7 @@ test.describe('agent document writes (real editor)', () => {
         }),
       ),
     );
-    await page.route('http://localhost:11434/api/**', async (route) => {
+    await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
       if (route.request().url().endsWith('/tags')) {
         await route.fulfill({ json: { models: [{ name: 'hitl-test' }] } });
         return;
@@ -565,7 +566,7 @@ test.describe('agent document writes (real editor)', () => {
         }),
       ),
     );
-    await page.route('http://localhost:11434/api/**', async (route) => {
+    await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
       if (route.request().url().endsWith('/tags')) {
         await route.fulfill({ json: { models: [{ name: 'hitl-test' }] } });
         return;
@@ -648,7 +649,7 @@ test.describe('agent document writes (real editor)', () => {
           }),
         ),
       );
-      await page.route('http://localhost:11434/api/**', async (route) => {
+      await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
         if (route.request().url().endsWith('/tags')) {
           await route.fulfill({ json: { models: [{ name: 'receipt-test' }] } });
           return;

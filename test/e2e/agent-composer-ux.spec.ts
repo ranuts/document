@@ -1,3 +1,5 @@
+import { captureClipboard } from './lib/clipboard';
+import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 import { buildDocx, toBase64 } from './lib/ooxml';
 
@@ -40,7 +42,7 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       release = resolve;
     });
     let answers = 0;
-    await page.route('http://localhost:11434/api/**', async (route) => {
+    await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
       if (route.request().method() === 'OPTIONS') {
         await route.fulfill({
           status: 204,
@@ -182,11 +184,12 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       ).toEqual([4, 17, 'backward']);
       await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
       await expect(input).not.toBeFocused();
-      await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+      const copiedText = await captureClipboard(page);
       const copy = page.locator('.cui-copy').first();
       const width = (await copy.boundingBox())!.width;
       await copy.click();
       await expect(copy).toHaveAccessibleName('Copied');
+      expect(await copiedText()).toBe('Completed response');
       await expect(page.locator('.cui-feedback')).toHaveText('Copied');
       expect((await copy.boundingBox())!.width).toBe(width);
       await expect(copy).toHaveAccessibleName('Copy');
@@ -230,7 +233,7 @@ for (const width of [320, 360, 1280]) {
         }),
       );
     });
-    await page.route('http://localhost:11434/api/**', (route) =>
+    await mockApi(page, 'http://localhost:11434/api/**', (route) =>
       route.fulfill({ json: { models: [{ name: 'density-test' }] } }),
     );
     await page.goto('/editor?new=docx&locale=en');
@@ -297,6 +300,7 @@ for (const width of [320, 360, 1280]) {
     await composer.screenshot({ path: testInfo.outputPath(`composer-only-${width}.png`) });
     await page.evaluate(() => document.documentElement.setAttribute('data-ran-theme', 'dark'));
     await expect(composer).toHaveCSS('box-shadow', 'none');
+    await page.keyboard.press('Tab');
     await page.locator('.agent-sources-toggle').focus();
     expect(await page.locator('.agent-sources-toggle').evaluate((el) => getComputedStyle(el).outlineWidth)).toBe('2px');
     await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`composer-dark-${width}.png`) });

@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 
 test('explains Gemini rate limiting and restores the request without exposing its error body', async ({ page }) => {
@@ -18,7 +19,7 @@ test('explains Gemini rate limiting and restores the request without exposing it
     );
   });
   let requests = 0;
-  await page.route('https://generativelanguage.googleapis.com/**', async (route) => {
+  await mockApi(page, 'https://generativelanguage.googleapis.com/**', async (route) => {
     const headers = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'Content-Type,x-goog-api-key',
@@ -71,7 +72,7 @@ test('explains a service failure without private details and restores the origin
     );
   });
   let requests = 0;
-  await page.route('http://localhost:11434/api/**', async (route) => {
+  await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       await route.fulfill({
         status: 204,

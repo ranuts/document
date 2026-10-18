@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 
 test('artifact AI revisions stay in an explicit draft review and preserve newer edits', async ({ page }, testInfo) => {
@@ -45,7 +46,7 @@ test('artifact AI revisions stay in an explicit draft review and preserve newer 
   const requests: Array<Record<string, unknown>> = [];
   let delayed = false,
     release: () => void = () => {};
-  await page.route('http://localhost:11434/api/**', async (route) => {
+  await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       await route.fulfill({
         status: 204,

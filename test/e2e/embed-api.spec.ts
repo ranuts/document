@@ -116,7 +116,10 @@ test.describe('postMessage API', () => {
     expect(after).toBe(true);
   });
 
-  test('embedOrigin param blocks messages from a mismatched origin', async ({ page }) => {
+  test('embedOrigin param blocks messages from a mismatched origin', async ({ page, l0 }) => {
+    l0.allowConsole(
+      /Unable to post message to https:\/\/allowed\.example\.com|target origin.*allowed\.example\.com|target origin.*does not match/i,
+    );
     // page.evaluate postMessage has origin http://127.0.0.1:4173 (same origin),
     // which does NOT match the allowed 'https://allowed.example.com',
     // so the message handler should be skipped and no response received.

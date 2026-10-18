@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 
 for (const ext of ['docx', 'pptx'] as const) {
@@ -23,7 +24,7 @@ for (const ext of ['docx', 'pptx'] as const) {
         release = resolve;
       });
       let answers = 0;
-      await page.route('http://localhost:11434/api/**', async (route) => {
+      await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
         if (route.request().method() === 'OPTIONS') {
           await route.fulfill({
             status: 204,

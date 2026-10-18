@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 import { buildDocx, toBase64 } from './lib/ooxml';
 
@@ -115,7 +116,7 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
     let messages = 0;
     let holdNextAnswer = false;
     let releaseAnswer: (() => void) | undefined;
-    await page.route('http://localhost:11434/api/**', async (route) => {
+    await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
       if (route.request().method() === 'OPTIONS') {
         await route.fulfill({
           status: 204,

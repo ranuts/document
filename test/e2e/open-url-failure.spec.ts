@@ -22,7 +22,9 @@ test.describe('a document link that cannot be fetched', () => {
   test.describe.configure({ timeout: 120_000 });
 
   test('is reported in a toast that says what to do, not in an alert', async ({ page, l0 }) => {
-    l0.allowConsole(/Error opening document from URL|Failed to fetch|Failed to load resource|net::ERR/);
+    l0.allowConsole(
+      /Error opening document from URL|Failed to fetch|Failed to load resource|net::ERR|Cross-Origin Request Blocked:.*cors-refused\.invalid/,
+    );
 
     // An alert would block the page; record any that appear instead of letting
     // Playwright's auto-dismiss hide the regression.
