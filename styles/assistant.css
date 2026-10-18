@@ -66,7 +66,7 @@ body.agent-panel-resizing #app iframe {
   display: none;
 }
 .agent-panel-clear:focus-visible {
-  outline: 2px solid var(--ran-blue-700);
+  outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;
 }
 .agent-panel-clear {
@@ -227,7 +227,7 @@ body.agent-panel-resizing #app iframe {
   color: var(--ran-color-success);
 }
 .agent-panel .cui-message-actions .cui-apply:focus-visible {
-  outline: 2px solid var(--ran-blue-700);
+  outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;
 }
 .agent-panel .cui-msg-tool .cui-bubble,
@@ -1249,7 +1249,7 @@ r-dropdown[role='listbox'] {
   margin-bottom: var(--ran-space-4);
 }
 .agent-panel :is(button, summary, r-select, r-input, r-button):focus-visible {
-  outline: 2px solid var(--ran-color-link, #0070f3);
+  outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;
 }
 .agent-quote-context {
@@ -1470,7 +1470,7 @@ r-dropdown[role='listbox'] {
   opacity: 0.6;
 }
 .agent-speech :is(button, r-select):focus-visible {
-  outline: 2px solid var(--ran-color-link);
+  outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;
 }
 
@@ -1597,7 +1597,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-plan-preview:focus-visible,
 .agent-plan-preview :is(summary, textarea, r-button):focus-visible {
-  outline: 2px solid var(--ran-color-link);
+  outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;
 }
 
@@ -1792,7 +1792,7 @@ r-dropdown[role='listbox'] {
 .agent-conversation-open:focus-visible,
 .agent-conversation-delete:focus-visible,
 .agent-history-management > summary:focus-visible {
-  outline: 2px solid var(--ran-color-link);
+  outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;
 }
 .agent-history-empty {
@@ -1932,7 +1932,7 @@ r-dropdown[role='listbox'] {
   background: var(--ran-color-bg-hover);
 }
 .agent-history-more:focus-visible {
-  outline: 2px solid var(--ran-color-link);
+  outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;
 }
 
@@ -2441,7 +2441,7 @@ r-dropdown[role='listbox'] {
   font-weight: 500;
 }
 .agent-result-choice button:focus-visible {
-  outline: 2px solid var(--ran-color-link, #0070f3);
+  outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;
 }
 
