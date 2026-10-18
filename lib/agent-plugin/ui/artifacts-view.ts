@@ -434,16 +434,22 @@ export function createArtifactsView(options: {
             const data = document.createElement('textarea');
             data.maxLength = 262144;
             const importForm = document.createElement('div');
-            importForm.className = 'agent-artifact-editor';
+            importForm.className = 'agent-artifact-editor agent-artifact-import';
             body.append(importForm);
             data.setAttribute('aria-label', labels.import);
-            data.placeholder = labels.importHint;
+            data.placeholder = labels.import;
             const hint = document.createElement('p');
             hint.textContent = labels.importHint;
             importForm.append(
-              title,
+              View('label')
+                .class('agent-artifact-import-field')
+                .children(View('span').text(labels.titleField), title)
+                .build(),
               hint,
-              data,
+              View('label')
+                .class('agent-artifact-import-field')
+                .children(View('span').text(labels.import), data)
+                .build(),
               button('saveNew', () => {
                 void perform(async () => {
                   let envelope: { schemaVersion?: unknown; payload?: unknown };
