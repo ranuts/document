@@ -609,7 +609,7 @@ footer .theme-switch {
   color: var(--ran-color-text-secondary);
 }
 .doc ol {
-  padding-inline-start: 22px;
+  padding-inline-start: var(--ran-space-6);
   margin: var(--ran-space-4) 0;
 }
 .doc hr {

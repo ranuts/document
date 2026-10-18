@@ -95,7 +95,12 @@ export function semanticLiterals(source) {
   css = removeFunctions(css);
   return [
     ...css.matchAll(
-      /(?<![\w-])(font(?:-size)?|padding(?:-[\w]+)?|margin(?:-[\w]+)?|gap|border-radius)\s*:\s*([^;{}]+)/g,
+      // Logical properties are hyphenated more than once
+      // (`padding-inline-start`, `margin-block-end`). The character class has to
+      // accept every hyphen, not just the first: with `[\w]+` the name matched
+      // only `padding-inline`, the following `:` never arrived, and the whole
+      // declaration went unchecked -- 3 literal insets hid behind that gap.
+      /(?<![\w-])(font(?:-size)?|padding(?:-[\w-]+)?|margin(?:-[\w-]+)?|gap|border-radius)\s*:\s*([^;{}]+)/g,
     ),
   ]
     .filter((match) => [...match[2].matchAll(/(-?\d+(?:\.\d+)?)px/g)].some((value) => Math.abs(Number(value[1])) > 1))

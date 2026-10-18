@@ -64,6 +64,12 @@ it('rejects raw semantic metrics while allowing fluid geometry and real standalo
   const { semanticLiterals, designTokenSources, authoredStyles } = await import('../../bin/design-tokens.mjs');
   expect(semanticLiterals('a{padding:8px 16px;font-size:13px;border-radius:12px}')).toHaveLength(3);
   expect(semanticLiterals('a{padding:var(--ran-space-2,8px);font-size:clamp(24px,4vw,40px);margin:-1px}')).toEqual([]);
+  // Logical properties carry more than one hyphen; the property name has to be
+  // read through all of them or the declaration is never checked at all.
+  expect(semanticLiterals('a{padding-inline-start:12px;margin-block-end:8px}')).toEqual([
+    'padding-inline-start: 12px',
+    'margin-block-end: 8px',
+  ]);
   const { generate } = await import('../../bin/build-pages.mjs');
   for (const file of designTokenSources(process.cwd())) {
     expect(semanticLiterals(authoredStyles(file, read(file))), file).toEqual([]);

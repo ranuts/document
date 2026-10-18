@@ -1871,7 +1871,7 @@ r-dropdown[role='listbox'] {
 .agent-panel .agent-task-action::after {
   content: '↗';
   margin-inline-start: auto;
-  padding-inline-start: 12px;
+  padding-inline-start: var(--ran-space-3);
   color: var(--ran-color-text-secondary);
 }
 .agent-panel .agent-task-action:hover {
@@ -2564,7 +2564,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-artifact-presentation details > button,
 .agent-artifact-data-preview > button {
-  margin-inline-end: 8px;
+  margin-inline-end: var(--ran-space-2);
 }
 .agent-artifact-presentation summary {
   color: var(--ran-color-text-secondary);
