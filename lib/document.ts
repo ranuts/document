@@ -2,7 +2,7 @@ import { beginDocumentOpen, commitDocumentOpen, isMountedDocumentOpen } from './
 import { fetchRemoteDocument } from './remote-document';
 import { remoteFileName } from './remote-file-name';
 import { View } from 'ranui/builder';
-import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
+import { setDocmentObj } from '@ranuts/shared/store';
 import { t } from '@ranuts/shared/i18n';
 import 'ranui/message';
 import { handleDocumentOperation, loadEditorApi } from './converter';
@@ -48,15 +48,12 @@ export const onCreateNew = async (ext: string, options?: { docId?: string }): Pr
     if (hideControlPanelFn) {
       hideControlPanelFn();
     }
-    setDocmentObj({
-      fileName: 'Untitled' + ext,
-      file: undefined,
-    });
+    const fileName = 'Untitled' + ext;
     await loadEditorApi();
     opening.assertCurrent();
-    const { fileName, file: fileBlob } = getDocmentObj();
-    await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob, isCurrent: opening.isCurrent });
+    await handleDocumentOperation({ fileName, isNew: true, isCurrent: opening.isCurrent });
     if (!commitDocumentOpen(operation)) return;
+    setDocmentObj({ fileName, file: undefined });
     clearDocumentSession();
     await clearActiveSource();
     if (!isMountedDocumentOpen(operation)) return;
@@ -92,18 +89,18 @@ export const openLocalFile = async (
       hideControlPanelFn();
     }
     opening.assertCurrent();
-    // The editor owns the URL it creates from these bytes. This store needs
-    // only the File; a second Blob URL would retain every replaced original.
-    setDocmentObj({ fileName: file.name, file });
-    const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({
-      file: fileBlob,
-      fileName,
-      isNew: !fileBlob,
+      file,
+      fileName: file.name,
+      isNew: false,
       readonly: options?.readonly,
       isCurrent: opening.isCurrent,
     });
     if (!commitDocumentOpen(operation)) throw new DOMException('Document open superseded', 'AbortError');
+    // Publish only the mounted file: failed preprocessing leaves the previous
+    // editor and its exact source identity available to pending saves.
+    // The editor owns its Blob URL; the store needs only the original File.
+    setDocmentObj({ fileName: file.name, file });
     // The replacement editor now owns exports; retire the previous identity
     // before asynchronous source storage, while delaying URL stamping until commit.
     clearDocumentSession();
@@ -211,24 +208,20 @@ export const openDocumentFromUrl = async (
     // Get file blob
     const file = new File([remote.blob], finalFileName, { type: remote.blob.type });
 
-    // Set document object
     opening.assertCurrent();
-    setDocmentObj({ fileName: finalFileName, file });
-
-    // Initialize and open document
-    const { fileName: docFileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({
-      file: fileBlob,
-      fileName: docFileName,
-      isNew: !fileBlob,
+      file,
+      fileName: finalFileName,
+      isNew: false,
       readonly: options?.readonly,
       isCurrent: opening.isCurrent,
     });
     if (!commitDocumentOpen(operation)) throw new DOMException('Document open superseded', 'AbortError');
+    setDocmentObj({ fileName: finalFileName, file });
     clearDocumentSession();
     await clearActiveSource();
     if (!isMountedDocumentOpen(operation)) throw new DOMException('Document open superseded', 'AbortError');
-    startDocumentSession({ title: docFileName, origin: 'url', docId: options?.docId });
+    startDocumentSession({ title: finalFileName, origin: 'url', docId: options?.docId });
   } catch (error) {
     if (!opening.isCurrent() || (error as { name?: string })?.name === 'AbortError') throw error;
     console.error('Error opening document from URL:', error);

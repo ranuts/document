@@ -20,6 +20,7 @@ vi.mock('../../lib/onlyoffice-editor', () => ({ getReadonlyMode: () => false }))
 import { openLocalFile, openDocumentFromUrl } from '../../lib/document';
 import { events } from '../../lib/events';
 import { initEmbedApi } from '../../lib/embed-api';
+import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 const chunk = { chunkIndex: 0, data: '', lastModified: 0, name: 'desktop.docx', size: 1, totalChunks: 1, type: '' };
 
 beforeEach(() => {
@@ -96,5 +97,41 @@ describe('open ownership across entry points', () => {
     if (action === 'open') await events.RENDER_OFFICE(chunk);
     else events.CLOSE_EDITOR(undefined);
     await failed;
+  });
+});
+
+describe('desktop mounted metadata', () => {
+  it('preserves the mounted metadata when desktop conversion fails', async () => {
+    setDocmentObj({ fileName: 'Original.docx', file: new File(['original'], 'Original.docx') });
+    const original = getDocmentObj();
+    convert.mockRejectedValueOnce(new DOMException('Unreadable file', 'NotReadableError'));
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      await events.RENDER_OFFICE(chunk);
+      expect(getDocmentObj()).toBe(original);
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+  it('publishes desktop metadata after conversion mounts the document', async () => {
+    setDocmentObj({ fileName: 'Original.docx', file: new File(['original'], 'Original.docx') });
+    const original = getDocmentObj();
+    let finish!: () => void;
+    convert.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finish = resolve;
+        }),
+    );
+    const opening = events.RENDER_OFFICE(chunk);
+    await vi.waitFor(() => expect(convert).toHaveBeenCalled());
+    try {
+      expect(getDocmentObj()).toBe(original);
+    } finally {
+      finish();
+      await opening;
+    }
+    expect(getDocmentObj().fileName).toBe('desktop.docx');
+    expect(getDocmentObj().file?.name).toBe('desktop.docx');
   });
 });
