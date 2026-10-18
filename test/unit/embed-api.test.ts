@@ -117,7 +117,7 @@ describe('embed-api', () => {
     let finish!: () => void;
     mockHandleDocumentOperation.mockImplementationOnce(
       () =>
-        new Promise((resolve) => {
+        new Promise<void>((resolve) => {
           finish = resolve;
         }),
     );

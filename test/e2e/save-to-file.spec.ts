@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Page } from '@playwright/test';
-import { readHistoryKeys } from './lib/history-db';
+import { readHistoryDocs, readHistoryKeys } from './lib/history-db';
 import { buildDocx, ooxmlText, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 import { typeIntoDocument, waitForEditorReady as waitForSdkReady } from './actions/editor';
@@ -265,6 +265,47 @@ test.describe('saving into the document own file (real editor)', () => {
     await page.evaluate(() => (window as any).__releaseWrite());
     await waitForWrites(page, 2);
     expect(await savedText(page)).toMatch(/first version second version/i);
+  });
+
+  test('Ctrl+S reaches disk while a recovery conversion is awaiting delivery', async ({ page }) => {
+    await page.goto('/editor?new=docx');
+    await waitForEditorReady(page);
+    await typeIntoDocument(page, 'word', 'Recovery version');
+    await page.evaluate(() => {
+      const frame = document.querySelector<HTMLIFrameElement>('iframe[name="frameEditor"]')!;
+      const converter = (frame.contentWindow as any).AscCommon.x2t;
+      const convert = converter.convertFromBin.bind(converter);
+      let first = true;
+      converter.convertFromBin = (input: unknown) => {
+        const result = convert(input);
+        if (!first) return result;
+        first = false;
+        // Hold delivery after the real SDK serialization and x2t conversion.
+        // A manual save can now overlap without changing the recovery bytes.
+        return result.then(
+          (output: unknown) =>
+            new Promise((resolve) => {
+              (window as any).__releaseRecovery = () => resolve(output);
+            }),
+        );
+      };
+      Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
+      document.dispatchEvent(new Event('visibilitychange'));
+      Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true });
+    });
+    await page.waitForFunction(() => typeof (window as any).__releaseRecovery === 'function');
+    try {
+      await page.keyboard.press('End');
+      await page.keyboard.type(' manual version', { delay: 30 });
+      await page.keyboard.press('Control+s');
+      await waitForWrites(page, 1);
+      expect(await savedText(page)).toContain('Recovery version manual version');
+    } finally {
+      await page.evaluate(() => (window as any).__releaseRecovery());
+    }
+    await expect.poll(async () => (await readHistoryDocs(page)).length).toBe(1);
+    expect(await writesCommitted(page)).toBe(1);
+    expect(await pickerCalls(page)).toBe(1);
   });
 
   for (const extension of ['xlsx', 'pptx']) {
