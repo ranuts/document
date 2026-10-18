@@ -13,7 +13,8 @@
 import type { AgentTool } from './types';
 import { validateToolInput } from './tool-validation';
 export { validateToolInput } from './tool-validation';
-import { budgetMessages, contextualizeMessages, DEFAULT_CONTEXT_BYTES } from './context-budget';
+import { budgetMessages, contextualizeMessages, DEFAULT_CONTEXT_BYTES, remainingContextBytes } from './context-budget';
+export { fitTextResult } from './context-budget';
 import type { LLMContent, LLMMessage, LLMProvider, LLMResponse, LLMToolDef } from './llm/types';
 
 /** Progress event emitted during a run (for UI: chat bubbles, tool activity). */
@@ -229,9 +230,41 @@ export async function runAgent(
           : tool && repeats > (tool.readOnlyHint ? maxRepeatedCalls : 1)
             ? 'Repeated identical tool call refused; inspect the prior result before continuing'
             : undefined;
+      // Share the remaining serialized payload space across this batch. Reserve
+      // every call/result shell and retain the complete latest turn; optional
+      // reference context can shrink on the next request. Only opted-in reads
+      // may shorten their structured output.
+      const pending = response.toolCalls.slice(results.length);
+      const emptyResults: LLMContent[] = pending.map((call) => ({
+        type: 'tool_result',
+        toolUseId: call.id,
+        content: '',
+        isError: false,
+      }));
+      const payloadBytes = exactBudget
+        ? undefined
+        : Math.max(
+            0,
+            Math.floor(
+              remainingContextBytes(
+                [...messages, { role: 'user', content: [...results, ...emptyResults] }],
+                options.maxContextBytes,
+              ) / pending.length,
+            ),
+          );
+      const fitOutput =
+        tool?.fitResult && payloadBytes !== undefined
+          ? (output: unknown) =>
+              tool.fitResult!(
+                output,
+                (candidate) =>
+                  new TextEncoder().encode(JSON.stringify(JSON.stringify(candidate ?? null))).byteLength - 2 <=
+                  payloadBytes,
+              )
+          : undefined;
       const { content, isError } = policyError
         ? { content: policyError, isError: true }
-        : await executeToolCall(tools, call.name, call.input, options.signal);
+        : await executeToolCall(tools, call.name, call.input, options.signal, fitOutput);
       if (policyError) {
         limited = terminal = true;
         limitReason = toolCallCount > maxToolCalls ? 'tool_budget' : 'repeated_call';
@@ -280,6 +313,7 @@ async function executeToolCall(
   name: string,
   input: Record<string, unknown>,
   signal?: AbortSignal,
+  fitOutput?: (output: unknown) => unknown,
 ): Promise<{ content: string; isError: boolean }> {
   const tool = Object.hasOwn(tools, name) ? tools[name] : undefined;
   if (!tool) {
@@ -289,7 +323,7 @@ async function executeToolCall(
     const invalid = validateToolInput(tool, input);
     if (invalid) return { content: `Invalid tool arguments: ${invalid}`, isError: true };
     const output = await (signal ? tool.execute(input, signal) : tool.execute(input));
-    return { content: JSON.stringify(output ?? null), isError: false };
+    return { content: JSON.stringify((fitOutput ? fitOutput(output) : output) ?? null), isError: false };
   } catch (error) {
     return { content: error instanceof Error ? error.message : String(error), isError: true };
   }

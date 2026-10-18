@@ -7,6 +7,47 @@ const encoder = new TextEncoder();
 const messageBytes = (message: LLMMessage) =>
   encoder.encode(JSON.stringify({ role: message.role, content: message.content })).byteLength + 16;
 
+/** Payload space left after retaining the whole latest user/tool turn. */
+export function remainingContextBytes(messages: LLMMessage[], maxBytes = DEFAULT_CONTEXT_BYTES): number {
+  const start = messages.findLastIndex(
+    (message) =>
+      message.role === 'user' &&
+      (typeof message.content === 'string' || !message.content.some((block) => block.type === 'tool_result')),
+  );
+  return maxBytes - messages.slice(Math.max(0, start)).reduce((sum, message) => sum + messageBytes(message), 0);
+}
+
+/** Opt-in excerpt policy for structured text reads, including host result envelopes.
+ * Preserve all scope/availability metadata and never split a Unicode code point. */
+export function fitTextResult(result: unknown, fits: (candidate: unknown) => boolean): unknown {
+  if (fits(result)) return result;
+  const value = structuredClone(result);
+  const fields: Array<{ parent: Record<string, unknown>; characters: string[] }> = [];
+  const visit = (node: unknown): void => {
+    if (!node || typeof node !== 'object') return;
+    const parent = node as Record<string, unknown>;
+    if (typeof parent.text === 'string') fields.push({ parent, characters: Array.from(parent.text) });
+    for (const child of Object.values(parent)) visit(child);
+  };
+  visit(value);
+  const clipped = (length: number) => {
+    for (const { parent, characters } of fields) {
+      parent.text = characters.slice(0, length).join('');
+      if (length < characters.length) parent.truncated = true;
+    }
+    return value;
+  };
+  if (!fields.length || !fits(clipped(0))) throw new Error('agentContextTooLong');
+  let low = 0,
+    high = Math.max(...fields.map((field) => field.characters.length));
+  while (low < high) {
+    const middle = Math.ceil((low + high) / 2);
+    if (fits(clipped(middle))) low = middle;
+    else high = middle - 1;
+  }
+  return clipped(low);
+}
+
 /** Optional reference data must never crowd out the user's current turn. */
 export function contextualizeMessages(
   messages: LLMMessage[],
