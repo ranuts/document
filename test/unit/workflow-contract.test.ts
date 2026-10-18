@@ -1,5 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
 
 /**
@@ -398,7 +400,84 @@ describe('bin/test-e2e-docker.sh', () => {
  */
 describe('.github/workflows/nightly-corpus.yml', () => {
   const src = readFileSync(resolve(ROOT, '.github/workflows/nightly-corpus.yml'), 'utf8');
+  const jobs = parseJobs(src);
   const exclude = new RegExp(/CORPUS_EXCLUDE: "(.*)"/.exec(src)![1].replace(/\\\\/g, '\\'), 'i');
+
+  it('gives each browser its own runner without increasing per-runner concurrency', () => {
+    const shard = jobs.find(({ name }) => name === 'browsers-shard');
+    expect(shard).toBeDefined();
+    const body = shard!.body;
+    expect(
+      body
+        .match(/^ {8}browser: \[([^\]]+)\]$/m)?.[1]
+        .split(',')
+        .map((name) => name.trim()),
+    ).toEqual(['webkit', 'firefox']);
+    expect(body).toMatch(/^ {6}fail-fast: false$/m);
+    expect(body).toMatch(/^ {10}browsers: \$\{\{ matrix\.browser \}\}$/m);
+    const commands = parseSteps(body).filter(({ run }) => run?.includes('playwright test'));
+    expect(commands).toHaveLength(2);
+    for (const { run } of commands) expect(run).toContain('--project=${{ matrix.browser }}');
+    expect(commands[0].run).toContain('--workers=2');
+    expect(commands[1].run).toContain('--workers=1');
+    expect(body).toMatch(/name: playwright-report-browsers-\$\{\{ matrix\.browser \}\}/);
+    expect(body).toContain('E2E_REPORT_DIR: playwright-report-browsers/normal');
+    expect(body).toContain('E2E_REPORT_DIR: playwright-report-browsers/serial');
+    expect(body).toContain('E2E_RESULTS_DIR: test-results-browsers/normal');
+    expect(body).toContain('E2E_RESULTS_DIR: test-results-browsers/serial');
+    expect(body).toMatch(/name: Run the cases that cannot share the run\n {8}if: \$\{\{ !cancelled\(\) \}\}/);
+  });
+
+  it('keeps the original browser check and propagates every unsuccessful matrix verdict', () => {
+    const summary = jobs.find(({ name }) => name === 'browsers')!;
+    expect(summary.body).toMatch(/^ {4}name: Cross-browser \(WebKit \+ Firefox\)$/m);
+    expect(summary.body).toMatch(/^ {4}needs: \[gate, browsers-shard\]$/m);
+    expect(summary.body).toMatch(/^ {4}if: always\(\) && needs\.gate\.outputs\.browsers == 'true'$/m);
+    const step = parseSteps(summary.body).find(({ env }) => env.RESULT)!;
+    expect(step?.env.RESULT).toBe('${{ needs.browsers-shard.result }}');
+    expect(step?.run).toBeTruthy();
+    for (const result of ['success', 'failure', 'cancelled', 'skipped']) {
+      const verdict = spawnSync('sh', ['-c', step.run!], { env: { ...process.env, RESULT: result } });
+      expect(verdict.status, result).toBe(result === 'success' ? 0 : 1);
+    }
+  });
+
+  it('selects exactly the matrix engine through the real Playwright CLI for both passes', () => {
+    const require = createRequire(resolve(ROOT, 'package.json'));
+    const shard = jobs.find(({ name }) => name === 'browsers-shard');
+    expect(shard).toBeDefined();
+    const commands = parseSteps(shard!.body).filter(({ run }) => run?.includes('playwright test'));
+    for (const browser of ['webkit', 'firefox']) {
+      for (const [index, command] of commands.entries()) {
+        const tokens = command
+          .run!.replaceAll('${{ matrix.browser }}', browser)
+          .match(/"[^"]*"|'[^']*'|\S+/g)!
+          .map((token) => token.replace(/^(["'])(.*)\1$/, '$2'));
+        expect(tokens.slice(0, 4)).toEqual(['pnpm', 'exec', 'playwright', 'test']);
+        expect(tokens).toContain('--project=' + browser);
+        const result = spawnSync(
+          process.execPath,
+          [
+            require.resolve('@playwright/test/cli'),
+            'test',
+            ...tokens.slice(4),
+            index === 0 ? 'test/e2e/network-fixture.spec.ts' : 'test/e2e/sw-silent-update.spec.ts',
+            '--list',
+            '--reporter=json',
+          ],
+          { cwd: ROOT, env: { ...process.env, E2E_SHARD: '' }, encoding: 'utf8' },
+        );
+        expect(result.status, result.stderr + result.stdout).toBe(0);
+        const collect = (suite: { specs?: { tests: { projectName: string }[] }[]; suites?: unknown[] }): string[] => [
+          ...(suite.specs || []).flatMap((spec) => spec.tests.map((test) => test.projectName)),
+          ...(suite.suites || []).flatMap((child) => collect(child as typeof suite)),
+        ];
+        const projects = collect(JSON.parse(result.stdout));
+        expect(projects.length).toBeGreaterThan(0);
+        expect([...new Set(projects)]).toEqual([browser]);
+      }
+    }
+  }, 20_000);
 
   it('skips a device-emulating spec by project, not by browser name', () => {
     // `devices['Pixel 5']` carries `defaultBrowserType: 'chromium'`, which wins
@@ -430,7 +509,8 @@ describe('.github/workflows/nightly-corpus.yml', () => {
     // on the origin -- sw-warm read a vendor stamp that belonged to it, and
     // the cache-first probe lost the entry it had just planted.
     expect(src).toMatch(/--grep-invert "api surface\|corpus\|@serial"/);
-    expect(src).toMatch(/-c playwright\.browsers\.config\.ts --grep @serial --workers=1/);
+    const commands = parseSteps(jobs.find(({ name }) => name === 'browsers-shard')?.body || '').map(({ run }) => run);
+    expect(commands.some((run) => run?.includes('--grep @serial') && run.includes('--workers=1'))).toBe(true);
   });
 
   it('runs each half of the night only when it has something to say', () => {
@@ -439,7 +519,7 @@ describe('.github/workflows/nightly-corpus.yml', () => {
     // one cheap gate job so a quiet night still leaves a run explaining itself.
     const jobs = parseJobs(src);
     expect(jobs.map(({ name }) => name)).toContain('gate');
-    for (const name of ['browsers', 'budgets']) {
+    for (const name of ['browsers-shard', 'budgets']) {
       const job = jobs.find((candidate) => candidate.name === name);
       expect(job, name).toBeDefined();
       expect(job!.body, name).toMatch(/^ {4}if: needs\.gate\.outputs\.browsers == 'true'$/m);
