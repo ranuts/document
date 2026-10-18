@@ -1,3 +1,5 @@
+import { ciTestMatch } from './bin/ci-shards.mjs';
+import { playwrightArtifacts } from './bin/ci-artifacts.mjs';
 import { defineConfig, devices } from '@playwright/test';
 
 // Runs the SAME e2e suite (test/e2e) against the production Docker image
@@ -26,7 +28,8 @@ export default defineConfig({
     timeout: 10_000,
   },
   fullyParallel: true,
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report-docker', open: 'never' }]],
+  ...playwrightArtifacts('playwright-report-docker', 'test-results-docker'),
+  ...ciTestMatch('preview'),
   use: {
     baseURL: 'http://127.0.0.1:8090',
     // Exercise an untrustworthy HTTP origin too: localhost would conceal

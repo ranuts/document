@@ -27,8 +27,8 @@ permissions:
 # (playwright.pages.config.ts explains why workerd dies under concurrent
 # aborts). Shards keep every suite's own concurrency semantics untouched.
 #
-# Changing the shard count means editing both the matrix and the /N in the
-# --shard argument of that job.
+# Partitions use measured suite durations (bin/ci-shard-timings.json). Change
+# the shard count in both the matrix and E2E_SHARD for that job.
 
 jobs:
   lint:
@@ -91,14 +91,18 @@ jobs:
         # assert wall-clock budgets, and four WASM editors sharing four cores
         # push them past their bound (the font-system wait measured 3.4 s
         # against a 2 s budget). See the e2e-serial job and CLAUDE.md.
-        run: pnpm exec playwright test --shard=${{ matrix.shard }}/3 --grep-invert @serial
+        env:
+          E2E_SHARD: ${{ matrix.shard }}/3
+        run: pnpm exec playwright test --grep-invert @serial
 
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-${{ matrix.shard }}
-          path: playwright-report/
+          path: |
+            playwright-report/
+            test-results/
           retention-days: 7
 
   # Timing budgets need an idle VM, but do not need to run once per shard.
@@ -123,7 +127,9 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-serial
-          path: playwright-report/
+          path: |
+            playwright-report/
+            test-results/
           retention-days: 7
 
   # Summary jobs. Branch protection matches required checks by name, so the
@@ -152,7 +158,7 @@ jobs:
   e2e-pages-shard:
     name: E2E (Cloudflare Pages semantics) shard ${{ matrix.shard }}
     runs-on: ubuntu-latest
-    # Five shards: distribute individual tests while serving wrangler with a
+    # Five shards: balance measured suite durations while serving wrangler with a
     # single worker on purpose (see playwright.pages.config.ts). Keep the
     # runner count unchanged while improving the distribution; installing and
     # starting a server in more jobs also adds overhead.
@@ -174,14 +180,18 @@ jobs:
       - name: Run E2E against wrangler pages dev
         # `@serial` is excluded by playwright.pages.config.ts itself, so a local
         # run of that config measures exactly what this job does.
-        run: pnpm exec playwright test -c playwright.pages.config.ts --shard=${{ matrix.shard }}/5
+        env:
+          E2E_SHARD: ${{ matrix.shard }}/5
+        run: pnpm exec playwright test -c playwright.pages.config.ts
 
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-pages-${{ matrix.shard }}
-          path: playwright-report-pages/
+          path: |
+            playwright-report-pages/
+            test-results-pages/
           retention-days: 7
 
   e2e-pages:
@@ -223,18 +233,21 @@ jobs:
           browsers: chromium
 
       - name: Run E2E tests against the Docker image
-        # Called directly, not through `pnpm run`: pnpm swallows the extra
-        # arguments, which would silently run the whole suite in every shard.
+        # The explicit E2E_SHARD selects the duration-balanced partition.
         # `@serial` is excluded by playwright.docker.config.ts itself, so a
         # local `pnpm run test:e2e:docker` measures the same set.
-        run: sh ./bin/test-e2e-docker.sh --shard=${{ matrix.shard }}/3
+        env:
+          E2E_SHARD: ${{ matrix.shard }}/3
+        run: sh ./bin/test-e2e-docker.sh
 
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-docker-${{ matrix.shard }}
-          path: playwright-report-docker/
+          path: |
+            playwright-report-docker/
+            test-results-docker/
           retention-days: 7
 
   e2e-docker:
