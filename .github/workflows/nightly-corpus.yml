@@ -160,11 +160,52 @@ jobs:
           retention-days: 14
 
   browsers-shard:
-    name: Cross-browser (${{ matrix.browser }})
+    name: Cross-browser (${{ matrix.browser }}, shard ${{ matrix.shard }}/3)
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
     needs: gate
     if: needs.gate.outputs.browsers == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [webkit, firefox]
+        shard: [1, 2, 3]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up the toolchain
+        uses: ./.github/actions/setup
+        with:
+          browsers: ${{ matrix.browser }}
+
+      # Per-engine measured file weights, assigned with LPT; unknown specs use
+      # that engine's median. Keep two workers and the existing retry budget.
+      - name: Run ordinary E2E on ${{ matrix.browser }}
+        env:
+          E2E_SHARD: ${{ matrix.shard }}/3
+          E2E_BROWSER: ${{ matrix.browser }}
+          E2E_REPORT_DIR: playwright-report-browsers/${{ matrix.browser }}-${{ matrix.shard }}-normal
+          E2E_RESULTS_DIR: test-results-browsers/${{ matrix.browser }}-${{ matrix.shard }}-normal
+        run: pnpm exec playwright test -c playwright.browsers.config.ts --project=${{ matrix.browser }} --grep-invert "api surface|corpus|@serial" --workers=2
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-browsers-${{ matrix.browser }}-shard-${{ matrix.shard }}-normal
+          path: |
+            playwright-report-browsers/
+            test-results-browsers/
+          retention-days: 14
+
+  browsers-serial:
+    name: Cross-browser (${{ matrix.browser }}, serial)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [gate, browsers-shard]
+    if: ${{ !cancelled() && needs.gate.outputs.browsers == 'true' }}
     strategy:
       fail-fast: false
       matrix:
@@ -179,33 +220,19 @@ jobs:
         with:
           browsers: ${{ matrix.browser }}
 
-      # The same PR-time suites (minus the opt-in sweeps) on the two engines
-      # the gate does not cover. Same-realm/L0 rules apply unchanged.
-      - name: Run E2E on ${{ matrix.browser }}
-        env:
-          E2E_REPORT_DIR: playwright-report-browsers/normal
-          E2E_RESULTS_DIR: test-results-browsers/normal
-        run: pnpm exec playwright test -c playwright.browsers.config.ts --project=${{ matrix.browser }} --grep-invert "api surface|corpus|@serial" --workers=2
-
-      # The other half of that `--grep-invert`, exactly as ci.yml's e2e job
-      # pairs them: an @serial case is one that cannot share the run. Without
-      # this split sw-silent-update.spec.ts rewrites the served sw.js while
-      # other specs are being served from it, replacing THEIR worker mid-test
-      # -- which is where sw-warm's "runtime-e2e-next" and cache-first's
-      # missing sentinel came from on 2026-08-25. Without the second pass
-      # nothing runs them at all and the job stays green regardless.
+      # Exactly once per engine, on its own runner, even after ordinary failures.
+      # sw-silent-update rewrites the served SW; budgets also need exclusive CPU.
       - name: Run the cases that cannot share the run
-        if: ${{ !cancelled() }}
         env:
-          E2E_REPORT_DIR: playwright-report-browsers/serial
-          E2E_RESULTS_DIR: test-results-browsers/serial
+          E2E_REPORT_DIR: playwright-report-browsers/${{ matrix.browser }}-serial
+          E2E_RESULTS_DIR: test-results-browsers/${{ matrix.browser }}-serial
         run: pnpm exec playwright test -c playwright.browsers.config.ts --project=${{ matrix.browser }} --grep @serial --workers=1
 
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report-browsers-${{ matrix.browser }}
+          name: playwright-report-browsers-${{ matrix.browser }}-serial
           path: |
             playwright-report-browsers/
             test-results-browsers/
@@ -215,13 +242,14 @@ jobs:
     name: Cross-browser (WebKit + Firefox)
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [gate, browsers-shard]
+    needs: [gate, browsers-shard, browsers-serial]
     if: always() && needs.gate.outputs.browsers == 'true'
     steps:
       - name: Report the browser matrix verdict
         env:
           RESULT: ${{ needs.browsers-shard.result }}
-        run: test "$RESULT" = "success"
+          SERIAL_RESULT: ${{ needs.browsers-serial.result }}
+        run: test "$RESULT" = "success" && test "$SERIAL_RESULT" = "success"
 
   budgets:
     name: Slow-network budgets

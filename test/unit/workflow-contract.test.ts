@@ -293,34 +293,17 @@ describe('.github/workflows/ci.yml', () => {
 
 describe('.github/workflows/prod-smoke.yml', () => {
   const src = readFileSync(resolve(WORKFLOW_DIR, 'prod-smoke.yml'), 'utf8');
-  const editorHtml = readFileSync(resolve(ROOT, 'editor.html'), 'utf8');
-  const landingHtml = readFileSync(resolve(ROOT, 'index.html'), 'utf8');
-
-  /**
-   * The deploy gate has to watch a file that CARRIES the build.
-   *
-   * It used to grep `assets/index-*.js` out of `dist/index.html` and poll `/`
-   * for the same name. `/` has shipped no bundle since the route split
-   * (2026-08-16), so the expectation was the empty string -- which matched the
-   * equally empty answer on the first poll. The step printed "live after 20s"
-   * and every production smoke since ran against whatever was already
-   * deployed. Nothing noticed until a case could tell two builds apart, and
-   * then it read as "the new code is broken in production".
-   */
-  it('waits on the entry asset of the page that actually has one', () => {
-    expect(src).toContain("grep -o 'assets/editor-[A-Za-z0-9_-]*\\.js' dist/editor.html");
-    expect(src).toContain('curl -s "$PROD_URL/editor"');
-    // The premise of the two lines above: the editor page is the one that
-    // loads a bundle, and the landing page is the one that does not.
-    expect(editorHtml).toMatch(/<script[^>]+type="module"/);
-    expect(landingHtml).not.toMatch(/<script[^>]+type="module"/);
-  });
-
-  it('fails loudly when it cannot name what it is waiting for', () => {
-    // An empty expectation is what made the gate vacuous; it must never again
-    // be allowed to pass for free.
-    expect(src).toMatch(/if \[ -z "\$ASSET" \]; then/);
-    expect(src).toMatch(/::error::[^\n]*deploy gate/);
+  it('waits for the exact checkout revision through the executable identity gate and never smokes stale bytes', () => {
+    const job = parseJobs(src)[0];
+    expect(src).toContain('node bin/wait-for-deploy.mjs "$PROD_URL" "$GITHUB_SHA"');
+    expect(src).not.toMatch(/assets\/editor-|::warning::production/);
+    expect(job.body.indexOf('bin/wait-for-deploy.mjs')).toBeLessThan(job.body.indexOf('name: Smoke production'));
+    expect(src).toContain("if: github.event_name == 'push'");
+    expect(readFileSync(resolve(ROOT, 'bin/build.sh'), 'utf8')).toContain('node bin/build-identity.mjs "$DIST_DIR"');
+    expect(readFileSync(resolve(ROOT, 'Dockerfile'), 'utf8')).toContain('ARG BUILD_REVISION');
+    expect(readFileSync(resolve(ROOT, '.github/workflows/docker.yml'), 'utf8')).toContain(
+      'BUILD_REVISION=${{ github.sha }}',
+    );
   });
 });
 
@@ -388,81 +371,96 @@ describe('.github/workflows/nightly-corpus.yml', () => {
   const jobs = parseJobs(src);
   const exclude = new RegExp(/CORPUS_EXCLUDE: "(.*)"/.exec(src)![1].replace(/\\\\/g, '\\'), 'i');
 
-  it('gives each browser its own runner without increasing per-runner concurrency', () => {
-    const shard = jobs.find(({ name }) => name === 'browsers-shard');
-    expect(shard).toBeDefined();
-    const body = shard!.body;
-    expect(
-      body
-        .match(/^ {8}browser: \[([^\]]+)\]$/m)?.[1]
-        .split(',')
-        .map((name) => name.trim()),
-    ).toEqual(['webkit', 'firefox']);
-    expect(body).toMatch(/^ {6}fail-fast: false$/m);
-    expect(body).toMatch(/^ {10}browsers: \$\{\{ matrix\.browser \}\}$/m);
-    const commands = parseSteps(body).filter(({ run }) => run?.includes('playwright test'));
-    expect(commands).toHaveLength(2);
-    for (const { run } of commands) expect(run).toContain('--project=${{ matrix.browser }}');
-    expect(commands[0].run).toContain('--workers=2');
-    expect(commands[1].run).toContain('--workers=1');
-    expect(body).toMatch(/name: playwright-report-browsers-\$\{\{ matrix\.browser \}\}/);
-    expect(body).toContain('E2E_REPORT_DIR: playwright-report-browsers/normal');
-    expect(body).toContain('E2E_REPORT_DIR: playwright-report-browsers/serial');
-    expect(body).toContain('E2E_RESULTS_DIR: test-results-browsers/normal');
-    expect(body).toContain('E2E_RESULTS_DIR: test-results-browsers/serial');
-    expect(body).toMatch(/name: Run the cases that cannot share the run\n {8}if: \$\{\{ !cancelled\(\) \}\}/);
+  it('runs three ordinary shards per engine with exclusive serial runners and distinct artifacts', () => {
+    const normal = jobs.find(({ name }) => name === 'browsers-shard')!.body;
+    const serial = jobs.find(({ name }) => name === 'browsers-serial')!.body;
+    expect(normal).toMatch(/shard: \[1, 2, 3\]/);
+    expect(normal).toContain('E2E_SHARD: ${{ matrix.shard }}/3');
+    expect(normal).toContain('E2E_BROWSER: ${{ matrix.browser }}');
+    expect(normal).toContain('browser: [webkit, firefox]');
+    expect(normal).toContain('fail-fast: false');
+    expect(serial).toContain('browser: [webkit, firefox]');
+    expect(serial).not.toMatch(/E2E_SHARD|shard: \[/);
+    expect(serial).toContain('needs: [gate, browsers-shard]');
+    expect(serial).toContain("if: ${{ !cancelled() && needs.gate.outputs.browsers == 'true' }}");
+    expect(normal).toContain('name: playwright-report-browsers-${{ matrix.browser }}-shard-${{ matrix.shard }}-normal');
+    expect(serial).toContain('name: playwright-report-browsers-${{ matrix.browser }}-serial');
+    for (const [body, workers] of [
+      [normal, 2],
+      [serial, 1],
+    ] as const) {
+      const commands = parseSteps(body).filter(({ run }) => run?.includes('playwright test'));
+      expect(commands).toHaveLength(1);
+      expect(commands[0].run).toContain('--project=${{ matrix.browser }}');
+      expect(commands[0].run).toContain('--workers=' + workers);
+    }
+    expect(serial).toContain('--grep @serial');
   });
 
-  it('keeps the original browser check and propagates every unsuccessful matrix verdict', () => {
+  it('keeps the existing browser check and rejects every unsuccessful ordinary or serial verdict', () => {
     const summary = jobs.find(({ name }) => name === 'browsers')!;
     expect(summary.body).toMatch(/^ {4}name: Cross-browser \(WebKit \+ Firefox\)$/m);
-    expect(summary.body).toMatch(/^ {4}needs: \[gate, browsers-shard\]$/m);
-    expect(summary.body).toMatch(/^ {4}if: always\(\) && needs\.gate\.outputs\.browsers == 'true'$/m);
+    expect(summary.body).toContain('needs: [gate, browsers-shard, browsers-serial]');
+    expect(summary.body).toContain("if: always() && needs.gate.outputs.browsers == 'true'");
     const step = parseSteps(summary.body).find(({ env }) => env.RESULT)!;
-    expect(step?.env.RESULT).toBe('${{ needs.browsers-shard.result }}');
-    expect(step?.run).toBeTruthy();
+    expect(step.env.RESULT).toBe('${{ needs.browsers-shard.result }}');
+    expect(step.env.SERIAL_RESULT).toBe('${{ needs.browsers-serial.result }}');
     for (const result of ['success', 'failure', 'cancelled', 'skipped']) {
-      const verdict = spawnSync('sh', ['-c', step.run!], { env: { ...process.env, RESULT: result } });
-      expect(verdict.status, result).toBe(result === 'success' ? 0 : 1);
+      for (const serial of ['success', 'failure', 'cancelled', 'skipped']) {
+        const verdict = spawnSync('sh', ['-c', step.run!], {
+          env: { ...process.env, RESULT: result, SERIAL_RESULT: serial },
+        });
+        expect(verdict.status, result + '/' + serial).toBe(result === 'success' && serial === 'success' ? 0 : 1);
+      }
     }
   });
 
-  it('selects exactly the matrix engine through the real Playwright CLI for both passes', () => {
+  it('selects all ordinary tests once per engine through the actual workflow CLI; serial runs once outside shards', () => {
     const require = createRequire(resolve(ROOT, 'package.json'));
-    const shard = jobs.find(({ name }) => name === 'browsers-shard');
-    expect(shard).toBeDefined();
-    const commands = parseSteps(shard!.body).filter(({ run }) => run?.includes('playwright test'));
+    const normal = parseSteps(jobs.find(({ name }) => name === 'browsers-shard')!.body).find(({ run }) =>
+      run?.includes('playwright test'),
+    )!;
+    const serial = parseSteps(jobs.find(({ name }) => name === 'browsers-serial')!.body).find(({ run }) =>
+      run?.includes('playwright test'),
+    )!;
+    const collect = (suite: {
+      specs?: { id: string; tests: { projectName: string }[] }[];
+      suites?: unknown[];
+    }): string[] => [
+      ...(suite.specs || []).flatMap((spec) => spec.tests.map((test) => test.projectName + ':' + spec.id)),
+      ...(suite.suites || []).flatMap((child) => collect(child as typeof suite)),
+    ];
     for (const browser of ['webkit', 'firefox']) {
-      for (const [index, command] of commands.entries()) {
-        const tokens = command
+      const list = (step: typeof normal, shard = '') => {
+        const tokens = step
           .run!.replaceAll('${{ matrix.browser }}', browser)
           .match(/"[^"]*"|'[^']*'|\S+/g)!
           .map((token) => token.replace(/^(["'])(.*)\1$/, '$2'));
-        expect(tokens.slice(0, 4)).toEqual(['pnpm', 'exec', 'playwright', 'test']);
-        expect(tokens).toContain('--project=' + browser);
         const result = spawnSync(
           process.execPath,
-          [
-            require.resolve('@playwright/test/cli'),
-            'test',
-            ...tokens.slice(4),
-            index === 0 ? 'test/e2e/network-fixture.spec.ts' : 'test/e2e/sw-silent-update.spec.ts',
-            '--list',
-            '--reporter=json',
-          ],
-          { cwd: ROOT, env: { ...process.env, E2E_SHARD: '' }, encoding: 'utf8' },
+          [require.resolve('@playwright/test/cli'), 'test', ...tokens.slice(4), '--list', '--reporter=json'],
+          {
+            cwd: ROOT,
+            env: { ...process.env, E2E_SHARD: shard, E2E_BROWSER: browser },
+            encoding: 'utf8',
+            maxBuffer: 20 * 1024 * 1024,
+          },
         );
         expect(result.status, result.stderr + result.stdout).toBe(0);
-        const collect = (suite: { specs?: { tests: { projectName: string }[] }[]; suites?: unknown[] }): string[] => [
-          ...(suite.specs || []).flatMap((spec) => spec.tests.map((test) => test.projectName)),
-          ...(suite.suites || []).flatMap((child) => collect(child as typeof suite)),
-        ];
-        const projects = collect(JSON.parse(result.stdout));
-        expect(projects.length).toBeGreaterThan(0);
-        expect([...new Set(projects)]).toEqual([browser]);
-      }
+        return collect(JSON.parse(result.stdout));
+      };
+      const expected = list(normal);
+      const selected = ['1/3', '2/3', '3/3'].flatMap((shard) => list(normal, shard));
+      expect(selected.length).toBeGreaterThan(100);
+      expect(selected.every((id) => id.startsWith(browser + ':'))).toBe(true);
+      expect(new Set(selected).size).toBe(selected.length);
+      expect(selected.sort()).toEqual(expected.sort());
+      const serialTests = list(serial);
+      expect(serialTests.length).toBeGreaterThan(0);
+      expect(serialTests.every((id) => id.startsWith(browser + ':'))).toBe(true);
+      expect(serialTests.some((id) => selected.includes(id))).toBe(false);
     }
-  }, 20_000);
+  }, 40_000);
 
   it('skips a device-emulating spec by project, not by browser name', () => {
     // `devices['Pixel 5']` carries `defaultBrowserType: 'chromium'`, which wins
@@ -494,7 +492,7 @@ describe('.github/workflows/nightly-corpus.yml', () => {
     // on the origin -- sw-warm read a vendor stamp that belonged to it, and
     // the cache-first probe lost the entry it had just planted.
     expect(src).toMatch(/--grep-invert "api surface\|corpus\|@serial"/);
-    const commands = parseSteps(jobs.find(({ name }) => name === 'browsers-shard')?.body || '').map(({ run }) => run);
+    const commands = parseSteps(jobs.find(({ name }) => name === 'browsers-serial')?.body || '').map(({ run }) => run);
     expect(commands.some((run) => run?.includes('--grep @serial') && run.includes('--workers=1'))).toBe(true);
   });
 

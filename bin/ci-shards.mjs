@@ -34,6 +34,10 @@ export function ciTestMatch(suite) {
   const files = readdirSync(new URL('../test/e2e/', import.meta.url), { recursive: true })
     .filter((file) => file.endsWith('.spec.ts'))
     .map((file) => file.replaceAll('\\', '/'));
+  if (suite === 'browsers') {
+    suite = process.env.E2E_BROWSER;
+    if (!['webkit', 'firefox'].includes(suite)) throw new Error('Browser shards require E2E_BROWSER=webkit or firefox');
+  }
   const timings = JSON.parse(readFileSync(new URL('./ci-shard-timings.json', import.meta.url), 'utf8'));
   return {
     testMatch: selectShard(balanceTestFiles(files, timings[suite], total), shard).map((file) => `**/test/e2e/${file}`),
