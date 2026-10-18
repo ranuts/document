@@ -16,6 +16,7 @@ import { installHintFallbackGuard } from './guards/hint-fallback';
 import { installAboutSourceNotice } from './guards/about-source';
 import { installBadImageUrlGuard } from './guards/bad-image-url';
 import { installX2tWorkerProxy } from './guards/x2t-worker';
+import { installAssistantFocusGuard } from './guards/assistant-focus';
 
 /**
  * Same-origin preparation of the editor iframe, applied from onAppReady and
@@ -29,8 +30,8 @@ import { installX2tWorkerProxy } from './guards/x2t-worker';
  * production bug that reached users.
  *
  * Returns true once every guard whose absence would still be felt later has
- * landed on some frame, so the caller can stop re-applying: the five that must
- * be in place before a document can be opened and saved, plus the wasm binary
+ * landed on some frame, so the caller can stop re-applying: the guards required
+ * before a document can be opened and saved, focus ownership, and the wasm binary
  * release, which reports "in place" once it is watching for x2t rather than
  * once it has released -- x2t can load long after this timer is gone (see
  * ./guards/wasm-binary-release).
@@ -45,6 +46,7 @@ export function prepareEditorIframe(): boolean {
 
       installOpenFailureGuard(win);
       injectLocalChromeCss(doc);
+      const assistantFocusGuarded = installAssistantFocusGuard(win);
 
       const sharedWorkerShadowed = shadowSharedWorker(win);
       const fetchFontsGuarded = installFetchFontsGuard(win);
@@ -72,7 +74,8 @@ export function prepareEditorIframe(): boolean {
         saveSemanticsInstalled &&
         longActionGuarded &&
         x2tWorkerProxied &&
-        wasmBinaryHandled
+        wasmBinaryHandled &&
+        assistantFocusGuarded
       ) {
         fullyApplied = true;
       }

@@ -35,6 +35,7 @@ import { ButtonBuilder, Div, Label, Span, View, createEffect, signal } from 'ran
 import { localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
 import { getLanguage, t } from '@ranuts/shared/i18n';
 import { getReadonlyMode } from '../../onlyoffice/readonly';
+import { claimAssistantFocus, ownsAssistantFocus } from '../../onlyoffice/guards/assistant-focus';
 import { mountReviewSettings } from './review-settings';
 import { createModelCacheSettings } from './model-cache-settings';
 import { mountPanelContext, syncPanelContext } from './panel-context';
@@ -259,6 +260,7 @@ export function createAgentPanel(
     if (next)
       queueMicrotask(() => {
         if (open) {
+          claimAssistantFocus(panel);
           if (panel.dataset.view === 'settings') settingsHeading.focus();
           else if (panel.dataset.view === 'history') conversationList?.focus();
           else if (!navigation.restore(displayedConversationId, true)) {
@@ -276,6 +278,7 @@ export function createAgentPanel(
                   panel.isConnected &&
                   panel.dataset.view === view &&
                   viewRevision === revision &&
+                  ownsAssistantFocus(panel) &&
                   document.activeElement === owner
                 )
                   target.focus();

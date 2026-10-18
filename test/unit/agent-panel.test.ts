@@ -358,7 +358,7 @@ it('syncs native tracking changes without writing settings and detaches on pageh
   expect(callbacks.size).toBe(0);
 });
 
-it.each(['recover', 'external', 'close', 'settings'] as const)(
+it.each(['recover', 'external', 'editor', 'close', 'settings'] as const)(
   'handles an iframe rejecting the initial panel focus without overriding %s intent',
   async (intent) => {
     vi.useFakeTimers();
@@ -386,6 +386,9 @@ it.each(['recover', 'external', 'close', 'settings'] as const)(
         document.body.append(button);
         button.focus();
         expected = button;
+      } else if (intent === 'editor') {
+        frame.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+        expected = frame;
       } else if (intent === 'close') {
         setAgentPanelOpen(false);
         expected = document.activeElement!;
