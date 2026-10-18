@@ -42,6 +42,35 @@ function parseJobs(src: string): Array<{ name: string; body: string }> {
   return jobs;
 }
 
+/** Read the step-level command/environment contract without depending on a flag's placement. */
+function parseSteps(body: string): Array<{ name: string; run?: string; env: Record<string, string> }> {
+  const steps: Array<{ name: string; run?: string; env: Record<string, string> }> = [];
+  let inEnv = false;
+  for (const line of body.split('\n')) {
+    const header = line.match(/^ {6}- name: (.+)$/);
+    if (header) {
+      steps.push({ name: header[1], env: {} });
+      inEnv = false;
+      continue;
+    }
+    const step = steps.at(-1);
+    if (!step) continue;
+    if (/^ {8}env:/.test(line)) {
+      inEnv = true;
+      continue;
+    }
+    const variable = inEnv && line.match(/^ {10}([A-Z_][A-Z0-9_]*): (.+)$/);
+    if (variable) {
+      step.env[variable[1]] = variable[2];
+      continue;
+    }
+    if (/^ {8}\S/.test(line)) inEnv = false;
+    const run = line.match(/^ {8}run: (.+)$/);
+    if (run) step.run = run[1];
+  }
+  return steps;
+}
+
 it('finds every workflow (a bad glob would make the checks below vacuous)', () => {
   expect(workflows.length).toBeGreaterThanOrEqual(8);
   expect(workflows.every(({ src }) => parseJobs(src).length > 0)).toBe(true);
@@ -189,21 +218,24 @@ describe('.github/workflows/ci.yml', () => {
     expect(ci).toMatch(/cancel-in-progress: \$\{\{ github\.event_name == 'pull_request' \}\}/);
   });
 
-  const sharded = ciJobs.filter(({ body }) => body.includes('--shard='));
+  const sharded = ciJobs.filter(({ body }) => parseSteps(body).some((step) => step.env.E2E_SHARD));
 
   it('shards every E2E suite (the three of them are the whole cost of the run)', () => {
     expect(sharded.map(({ name }) => name)).toEqual(['e2e-shard', 'e2e-pages-shard', 'e2e-docker-shard']);
   });
 
   it.each(sharded)('job $name splits into exactly as many shards as it declares', ({ body }) => {
-    // A matrix of three against `--shard=N/4` silently drops a quarter of the
-    // suite and still reports green -- the failure mode is invisible, so the
-    // two numbers are pinned to each other here.
+    // Missing an index or using the wrong denominator silently drops tests.
+    // The selector belongs to the executing step, so it reaches the CLI/config.
     const matrix = body.match(/shard: \[([^\]]+)\]/);
-    const denominator = body.match(/--shard=\$\{\{ matrix\.shard \}\}\/(\d+)/);
+    const execution = parseSteps(body).filter((step) => step.env.E2E_SHARD);
     expect(matrix).not.toBeNull();
+    expect(execution).toHaveLength(1);
+    const denominator = execution[0].env.E2E_SHARD.match(/^\$\{\{\s*matrix\.shard\s*\}\}\/(\d+)$/);
     expect(denominator).not.toBeNull();
-    expect(matrix![1].split(',').length).toBe(Number(denominator![1]));
+    const count = Number(denominator![1]);
+    expect(matrix![1].split(',').map(Number)).toEqual(Array.from({ length: count }, (_, index) => index + 1));
+    expect(execution[0].run).toBeTruthy();
   });
 
   it.each([
@@ -231,7 +263,11 @@ describe('.github/workflows/ci.yml', () => {
     // while a whole class of assertion stops running.
     const e2e = ciJobs.find(({ name }) => name === 'e2e-shard');
     expect(e2e).toBeDefined();
-    expect(e2e!.body).toMatch(/--shard=\$\{\{ matrix\.shard \}\}\/3 --grep-invert @serial/);
+    const parallel = parseSteps(e2e!.body).find((step) => step.env.E2E_SHARD)!;
+    const command = parallel.run!.split(/\s+/);
+    expect(command.slice(0, 4)).toEqual(['pnpm', 'exec', 'playwright', 'test']);
+    expect(command[command.indexOf('--grep-invert') + 1]).toBe('@serial');
+    expect(command).not.toContain('--grep');
     const serial = ciJobs.find(({ name }) => name === 'e2e-serial');
     expect(serial?.body).toMatch(/playwright test --grep @serial --workers=1/);
     expect(e2e!.body).not.toMatch(/playwright test --grep @serial/);
@@ -258,8 +294,13 @@ describe('.github/workflows/ci.yml', () => {
     // floor: every shard then runs the whole suite, three times over, and the
     // run stays green while the sharding does nothing at all. Measured, not
     // assumed -- see docs/explorations/2026-08-19-ci-e2e-sharding.md.
-    expect(ci).toMatch(/run: sh \.\/bin\/test-e2e-docker\.sh --shard=/);
-    expect(ci).not.toMatch(/pnpm run test:e2e:docker.*--shard/);
+    const docker = ciJobs.find(({ name }) => name === 'e2e-docker-shard')!;
+    const execution = parseSteps(docker.body).find((step) => step.env.E2E_SHARD)!;
+    expect(execution.run!.split(/\s+/)).toEqual(['sh', './bin/test-e2e-docker.sh']);
+    expect(execution.env.E2E_SHARD).toMatch(/^\$\{\{\s*matrix\.shard\s*\}\}\/3$/);
+    expect(parseSteps(docker.body).some((step) => /^pnpm run test:e2e:docker(?:\s|$)/.test(step.run || ''))).toBe(
+      false,
+    );
   });
 });
 
