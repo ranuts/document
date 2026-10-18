@@ -31,12 +31,40 @@ test.describe('standalone site (real editor)', () => {
     );
 
   test('open a local docx from the hero button, type, Ctrl+S downloads the edited file', async ({ page }) => {
+    const fileName = '主站打开 (1).docx';
+    await page.addInitScript(() => {
+      const root = window.top as Window & { __mainSiteDownloadNames?: string[] };
+      root.__mainSiteDownloadNames ??= [];
+      const click = HTMLAnchorElement.prototype.click;
+      HTMLAnchorElement.prototype.click = function () {
+        if (this.download && this.href.startsWith('blob:')) root.__mainSiteDownloadNames!.push(this.download);
+        return click.call(this);
+      };
+    });
     const dir = join('test-results', 'main-site');
     mkdirSync(dir, { recursive: true });
-    const path = join(dir, '主站打开 (1).docx');
+    const path = join(dir, fileName);
     writeFileSync(path, buildDocx('main site paragraph'));
 
     await page.goto('/');
+    // Compare against this browser's own filename policy, independently of the
+    // app. The app's exact requested anchor name is asserted below as well.
+    const nativeDownloadPromise = page.waitForEvent('download');
+    await page.evaluate((name) => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(
+        new Blob(['filename probe'], {
+          type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        }),
+      );
+      link.download = name;
+      document.body.append(link);
+      link.click();
+      link.remove();
+    }, fileName);
+    const nativeDownload = await nativeDownloadPromise;
+    const nativeSuggestedName = nativeDownload.suggestedFilename();
+    await nativeDownload.delete();
     const chooserPromise = page.waitForEvent('filechooser');
     await page.locator('#hero-open').click();
     const chooser = await chooserPromise;
@@ -52,7 +80,10 @@ test.describe('standalone site (real editor)', () => {
     const downloadPromise = page.waitForEvent('download', { timeout: 60_000 });
     await page.keyboard.press('Control+s');
     const download = await downloadPromise;
-    expect(download.suggestedFilename()).toBe('主站打开 (1).docx');
+    expect(
+      await page.evaluate(() => (window as Window & { __mainSiteDownloadNames?: string[] }).__mainSiteDownloadNames),
+    ).toEqual([fileName]);
+    expect(download.suggestedFilename()).toBe(nativeSuggestedName);
     const saved = await download.path();
     const bytes = new Uint8Array(readFileSync(saved));
     expect(bytes[0]).toBe(0x50);
