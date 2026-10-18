@@ -324,12 +324,15 @@ test('keeps the first validating request in its original chat while startup hist
     db.close();
   });
   await page.addInitScript(() => {
-    const open = indexedDB.open.bind(indexedDB);
+    // WebKit drops an override stored on the indexedDB instance during
+    // editor startup. Patch its stable prototype so the first history open
+    // is actually held until this test releases it.
+    const open = IDBFactory.prototype.open;
     const success = Object.getOwnPropertyDescriptor(IDBRequest.prototype, 'onsuccess')!;
     const host = window as unknown as { releaseAssistantHistory?: () => void };
     let delayed = false;
-    indexedDB.open = (...args: Parameters<IDBFactory['open']>) => {
-      const request = open(...args);
+    IDBFactory.prototype.open = function (...args: Parameters<IDBFactory['open']>) {
+      const request = open.apply(this, args);
       if (args[0] === 'document-ai-conversations' && !delayed) {
         delayed = true;
         Object.defineProperty(request, 'onsuccess', {
@@ -379,6 +382,12 @@ test('keeps the first validating request in its original chat while startup hist
     await page.goto('/editor?new=docx&locale=en');
     await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
     await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+    await page.waitForFunction(
+      () =>
+        typeof (window as unknown as { releaseAssistantHistory?: () => void }).releaseAssistantHistory === 'function',
+    );
+    await expect(page.locator('.agent-history-status')).toHaveText('Updating chat history…');
+    await expect(page.locator('.cui-msg-user')).toHaveCount(0);
     const input = page.locator('.cui-input');
     await input.fill('Tell me a brief story');
     await page.locator('.cui-send').click();
@@ -393,10 +402,6 @@ test('keeps the first validating request in its original chat while startup hist
     for (const action of ['edit', 'remove', 'send-now'])
       await expect(page.locator(`.agent-queue-${action}`)).toBeDisabled();
     await expect(page.locator('.cui-stop')).toBeEnabled();
-    await page.waitForFunction(
-      () =>
-        typeof (window as unknown as { releaseAssistantHistory?: () => void }).releaseAssistantHistory === 'function',
-    );
     await page.evaluate(() => (window as unknown as { releaseAssistantHistory(): void }).releaseAssistantHistory());
     await expect(page.locator('.agent-history-status')).toContainText('saving is enabled');
     await expect(page.locator('.agent-queue-text')).toHaveText('Tell me a brief story');

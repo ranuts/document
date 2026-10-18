@@ -98,3 +98,14 @@ The user-authorized CI partition optimization also applies to the remaining nigh
 - Acceptance: actual project selection covers each engine exactly once; workflow regressions prove both passes use the selected project, artifacts cannot collide and the summary rejects any failed matrix result; focused tests and formatting pass, then the complete split workflow passes on the pushed PR head.
 
 The engine partition is implemented and independently reviewed without actionable findings. Focused workflow regressions passed 69 tests after the expected RED run. Independent real CLI discovery proved complete, disjoint sets: normal 688 cases = 344 WebKit + 344 Firefox, serial 4 cases = 2 + 2. The final runtime acceptance is the split workflow on the next pushed head.
+
+### Full nightly fixture acceptance
+
+The first complete split run (`39096982286`) passed Firefox but exposed five deterministic WebKit fixture failures. Both engine artifacts retained normal and serial HTML reports; WebKit's failed normal pass still ran and passed its two serial cases, confirming failure-report retention in the actual workflow.
+
+- Two remaining URL-open fixtures still used page routes. Instrumented original tests recorded zero route interceptions while the embed host was worker-controlled. Both now use the existing HTTP fixture, assert exactly one handler request, and retain precise 404, successful replacement, retry and saved-byte assertions.
+- Native WebKit exposes the save button as `Save (⌘+S)`. The formatted-content round trip now accepts the exact native Ctrl/Command labels while retaining saved-content and Undo checks.
+- GTK WebKit normalizes spaces in downloaded filenames. Structured CSV export independently measures native filename policy, asserts the application's exact `Release table.csv` anchor name, and verifies all 26 rows, edited content and escaped formula bytes.
+- WebKit discarded the history fixture's instance-level `indexedDB.open` override during startup. An exact local reproduction found the init probe present but untouched, the method restored to native and saved history already rendered. Patching `IDBFactory.prototype.open` preserves the receiver and arguments. Early held-history/status/empty-transcript preconditions now prove the intended startup ownership race actually runs before request submission.
+
+These follow-ups change only test boundaries and assertions. All five affected scenarios passed on Chromium, WebKit and Firefox (15 cases total, no retries). Fresh focused reviews found no actionable issues; final remote acceptance remains attached to PR #281 on its latest pushed head.
