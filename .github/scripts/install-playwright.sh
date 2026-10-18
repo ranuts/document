@@ -17,43 +17,34 @@ if [ ${#browsers[@]} -eq 0 ]; then
   browsers=(chromium)
 fi
 
-# On a cache hit, skip apt entirely.
-#
-# What `install-deps` actually does on a hosted runner, read off a healthy run:
-# every library Chromium needs -- libnss3, libgbm1, libasound2t64, libcairo2,
-# the lot -- reports "is already the newest version". The runner image ships
-# them. The only thing apt installs is 21.1 MB of fonts (fonts-wqy-zenhei,
-# fonts-ipafont-gothic, fonts-unifont, fonts-freefont-ttf, fonts-tlwg-loma-otf,
-# xfonts-encodings), for rendering scripts a screenshot might contain.
-#
-# This suite does not render through them. The editor draws with its own
-# vendored XOR font catalog (public/fonts/), PDF export injects
-# PDF_FONT_MANIFEST, and the landing pages load vendored Geist woff2 -- system
-# fonts reach nothing but DOM fallback text. The visual specs compare two
-# renders from the same browser (original against saved-and-reopened), so a
-# missing glyph would be missing identically on both sides.
-#
-# So each job was making a network call to Ubuntu's mirrors, on a fresh VM,
-# for fonts nothing reads. Eleven jobs, eleven rolls of the dice per run -- and
-# the dice are loaded: the runner's preferred azure.archive.ubuntu.com comes
-# back `Ign:`, apt falls through to the public archive, and that stalls dead
-# with no bytes moving. Four jobs were killed at GitHub's six-hour limit this
-# week before the attempts were bounded; two more burned 17 minutes each on a
-# single pull request after that.
-#
-# A cold cache still installs, deps and all: there are no browsers to run
-# without it, and that path downloads from Playwright's CDN anyway.
-if [ "${BROWSERS_CACHED:-}" = "true" ]; then
-  if [ "${PLAYWRIGHT_INSTALL_DEPS:-}" != "true" ]; then
-    echo "Browsers restored from the cache; skipping the apt font install."
-    exit 0
+# Browser binaries are cached; system libraries live only on the current runner.
+# Chromium's libraries ship on the hosted image, so retain its font-only fast
+# path. WebKit/Firefox need additional libraries (for example libevent for WPE)
+# and must install them even when their browser binaries came from the cache.
+needs_system_deps=false
+for browser in "${browsers[@]}"; do
+  if [ "$browser" != "chromium" ]; then
+    needs_system_deps=true
   fi
-  # Escape hatch: PLAYWRIGHT_INSTALL_DEPS=true puts apt back, bounded and
-  # advisory, for the day a runner image stops shipping one of the libraries.
-  command=(install-deps "${browsers[@]}")
-  deps_are_advisory=true
-  default_attempts=1
-  default_timeout=120
+done
+
+if [ "${BROWSERS_CACHED:-}" = "true" ]; then
+  if [ "$needs_system_deps" = "true" ]; then
+    command=(install-deps "${browsers[@]}")
+    deps_are_advisory=false
+    default_attempts=3
+    default_timeout=300
+  else
+    if [ "${PLAYWRIGHT_INSTALL_DEPS:-}" != "true" ]; then
+      echo "Browsers restored from the cache; skipping the apt font install."
+      exit 0
+    fi
+    # Preserve the opt-in Chromium refresh without stalling the hot path.
+    command=(install-deps "${browsers[@]}")
+    deps_are_advisory=true
+    default_attempts=1
+    default_timeout=120
+  fi
 else
   command=(install --with-deps "${browsers[@]}")
   deps_are_advisory=false
@@ -98,18 +89,9 @@ for attempt in $(seq 1 "$attempts"); do
   sleep 10
 done
 
-# With the binaries already restored from the cache, the only thing apt could
-# still be adding is system libraries -- and the hosted runner image ships
-# chromium's. Failing the job here means a stalled Ubuntu mirror is a red pull
-# request, which is what actually happened: `noble-security InRelease` followed
-# by four and a half minutes of total silence, three attempts in a row, twice on
-# the same run. Sharding multiplied the number of jobs exposed to it.
-#
-# So on a cache hit the suite runs anyway. If a library really is missing,
-# Playwright says so in as many words when it launches the browser, and the
-# test step fails with that message instead of this one -- the information is
-# not lost, it just no longer costs a run. A cold cache still has to succeed:
-# there are no browsers to run without it.
+# Only Chromium's explicit dependency refresh is advisory. Missing WebKit or
+# Firefox libraries must fail here instead of producing hundreds of launch
+# failures during the suite. A cold browser installation must also succeed.
 if [ "$deps_are_advisory" = "true" ]; then
   echo "::warning::playwright ${command[*]} failed after ${attempts} attempts; continuing on the cached browsers"
   exit 0
