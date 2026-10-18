@@ -10,8 +10,8 @@ set -e
 docker build -t document:e2e .
 docker rm -f document-e2e-docker >/dev/null 2>&1 || true
 
-# Extra arguments are forwarded to Playwright, which is how CI passes
-# --shard=N/M so the suite can be split across runners.
+# Extra arguments are forwarded to Playwright. CI sets E2E_SHARD=N/M;
+# playwright.docker.config.ts selects its duration-balanced partition.
 set +e
 E2E_DOCKER=1 ./node_modules/.bin/playwright test --config playwright.docker.config.ts "$@"
 status=$?

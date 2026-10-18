@@ -1,3 +1,5 @@
+import { ciTestMatch } from './bin/ci-shards.mjs';
+import { playwrightArtifacts } from './bin/ci-artifacts.mjs';
 import { defineConfig, devices } from '@playwright/test';
 
 // Override when several E2E runs share a machine (parallel sessions each
@@ -21,8 +23,8 @@ export default defineConfig({
     timeout: 5_000,
   },
   fullyParallel: true,
-  outputDir: RESULTS_DIR,
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]],
+  ...playwrightArtifacts('playwright-report', RESULTS_DIR),
+  ...ciTestMatch('preview'),
   use: {
     baseURL: REMOTE || `http://127.0.0.1:${PORT}`,
     trace: 'retain-on-failure',

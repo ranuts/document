@@ -1,3 +1,5 @@
+import { ciTestMatch } from './bin/ci-shards.mjs';
+import { playwrightArtifacts } from './bin/ci-artifacts.mjs';
 import { defineConfig } from '@playwright/test';
 import base from './playwright.config';
 
@@ -35,10 +37,10 @@ export default defineConfig({
   // Declared here rather than on the CI command line so a local run of this
   // config means the same thing CI's does.
   grepInvert: /@serial/,
-  outputDir: 'test-results-pages',
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report-pages', open: 'never' }]],
-  // Test-level sharding avoids assigning a whole large spec to one runner.
-  // workers: 1 still executes one test at a time against workerd.
+  ...playwrightArtifacts('playwright-report-pages', 'test-results-pages'),
+  ...ciTestMatch('pages'),
+  // CI assigns files by measured total durations. fullyParallel keeps the
+  // same execution semantics; workers: 1 still runs one test at a time.
   fullyParallel: true,
   workers: 1,
   retries: 1,
