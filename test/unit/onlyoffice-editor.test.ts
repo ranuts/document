@@ -198,6 +198,9 @@ describe('onlyoffice-editor', () => {
         },
         asc_CDownloadOptions: FakeDownloadOptions,
       };
+      win.AscCommon = {
+        x2t: { convertFromBin: async () => ({ binary: new Uint8Array([1]) }), downloadFile: vi.fn() },
+      };
       return { iframe, requestedFileTypes };
     }
 
