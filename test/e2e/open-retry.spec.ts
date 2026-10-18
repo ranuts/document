@@ -1,5 +1,6 @@
 import { FONT_SYSTEM_WAIT_MS } from '../../lib/onlyoffice/font-system';
 import { expect, test } from './lib/l0';
+import { mockApi } from './lib/mock-api';
 
 /**
  * Environment-class open failures must be retried, not reported (GitHub #144:
@@ -29,9 +30,11 @@ test.describe('open retry after an environment failure (real editor)', () => {
     l0.allowFrameError(/Document conversion failed/);
     l0.allowConsole(/Document conversion failed|open conversion failed|retrying the open|fetchFonts called before/);
     l0.allowConsole(/^Error opening document from URL:/);
-    await page.route('https://files.example.invalid/missing-retry.docx', (route) =>
-      route.fulfill({ status: 404, body: 'missing', headers: { 'Access-Control-Allow-Origin': '*' } }),
-    );
+    let missingRequests = 0;
+    await mockApi(page, 'https://files.example.invalid/missing-retry.docx', (route) => {
+      missingRequests++;
+      return route.fulfill({ status: 404, body: 'missing' });
+    });
 
     await page.addInitScript(
       ([key]) => {
@@ -171,6 +174,7 @@ test.describe('open retry after an environment failure (real editor)', () => {
 
     // The fault really fired (a test that silently stopped injecting would
     // otherwise pass forever) and the retry opened the document anyway.
+    expect(missingRequests).toBe(1);
     expect(result.fault).toBe('fired');
     expect(result.loaded).toBe(true);
     expect(appLog.some((line) => /open conversion failed/.test(line))).toBe(true);

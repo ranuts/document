@@ -1,13 +1,16 @@
 import { expect, test } from './lib/l0';
 import { waitForEditorReady } from './actions/editor';
 import { buildDocx, toBase64 } from './lib/ooxml';
+import { mockApi } from './lib/mock-api';
 
 test('a failed newer download leaves an in-progress replacement usable', async ({ page, l0 }) => {
   test.setTimeout(120_000);
   l0.allowConsole(/^Error opening document from URL:/);
-  await page.route('https://files.example.invalid/missing-replacement.docx', (route) =>
-    route.fulfill({ status: 404, body: 'missing', headers: { 'Access-Control-Allow-Origin': '*' } }),
-  );
+  let missingRequests = 0;
+  await mockApi(page, 'https://files.example.invalid/missing-replacement.docx', (route) => {
+    missingRequests++;
+    return route.fulfill({ status: 404, body: 'missing' });
+  });
   await page.goto('/embed-demo.html');
   await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
   const base64 = toBase64(buildDocx('A replacement remains available after a failed download.'));
@@ -40,6 +43,7 @@ test('a failed newer download leaves an in-progress replacement usable', async (
       return String(error);
     }
   });
+  expect(missingRequests).toBe(1);
   expect(failed).toContain('404');
   expect(await page.evaluate(() => (window as any).replacementResult)).toBe('opened');
   await waitForEditorReady(page);
