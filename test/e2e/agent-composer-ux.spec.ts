@@ -203,11 +203,12 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       await expect.poll(() => log.evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight)).toBeLessThan(3);
       const code = page.locator('.cui-msg-agent pre');
       await code.focus();
-      await code.press('ArrowRight');
+      // Native WebKit scrolling needs a key hold spanning an animation frame.
+      await code.press('ArrowRight', { delay: 100 });
       await expect.poll(() => code.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
       const table = page.locator('.cui-msg-agent .cui-table');
       await table.focus();
-      await table.press('ArrowRight');
+      await table.press('ArrowRight', { delay: 100 });
       await expect.poll(() => table.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
       await page.screenshot({ path: testInfo.outputPath('chat-details.png') });
     } finally {

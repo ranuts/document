@@ -100,7 +100,11 @@ test('restored drafts retain clear identity, readable narrow content and source-
   await draft.scrollIntoViewIfNeeded();
   await expect.poll(() => draft.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
   await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('results-narrow.png') });
-  await draft.locator('pre').focus();
-  await page.keyboard.press('ArrowRight');
-  await expect.poll(() => draft.locator('pre').evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+  const code = draft.locator('pre');
+  await code.focus();
+  await expect(code).toBeFocused();
+  // WebKit can cancel native scroll before its first animation frame when
+  // keydown/keyup share a tick. Exercise a physical key press instead.
+  await code.press('ArrowRight', { delay: 100 });
+  await expect.poll(() => code.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
 });
