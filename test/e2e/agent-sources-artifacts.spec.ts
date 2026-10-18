@@ -1,4 +1,5 @@
 import { mockApi, originalApiUrl } from './lib/mock-api';
+import { readFile } from 'node:fs/promises';
 import { expect, test } from './lib/l0';
 
 test('local sources and versioned artifacts remain explicit, compact and reviewed', async ({ page }, testInfo) => {
@@ -530,6 +531,29 @@ test('structured results validate explicitly, preview compactly and export witho
 }, testInfo) => {
   test.setTimeout(90000);
   await page.goto('/');
+  // Measure the engine/platform's native filename policy separately from the
+  // exact filename requested by the application (GTK WebKit replaces spaces).
+  const nativeDownload = page.waitForEvent('download');
+  await page.evaluate(() => {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob(['filename probe'], { type: 'text/csv;charset=utf-8' }));
+    link.download = 'Release table.csv';
+    document.body.append(link);
+    link.click();
+    link.remove();
+  });
+  const nativeFile = await nativeDownload;
+  const nativeFilename = nativeFile.suggestedFilename();
+  await nativeFile.delete();
+  await page.addInitScript(() => {
+    const host = window.top as Window & { __artifactDownloadNames?: string[] };
+    host.__artifactDownloadNames ??= [];
+    const click = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function () {
+      if (this.download && this.href.startsWith('blob:')) host.__artifactDownloadNames!.push(this.download);
+      return click.call(this);
+    };
+  });
   await page.evaluate(() => {
     localStorage.setItem('document-assistant-enabled', 'true');
     localStorage.setItem(
@@ -621,7 +645,16 @@ test('structured results validate explicitly, preview compactly and export witho
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'CSV', exact: true }).click();
   const file = await download;
-  expect(file.suggestedFilename()).toBe('Release table.csv');
+  expect(
+    await page.evaluate(() => (window as Window & { __artifactDownloadNames?: string[] }).__artifactDownloadNames),
+  ).toEqual(['Release table.csv']);
+  expect(file.suggestedFilename()).toBe(nativeFilename);
+  const exported = await readFile((await file.path())!, 'utf8');
+  const rows = exported.split('\r\n');
+  expect(rows).toHaveLength(26);
+  expect(rows[0]).toBe('"Name","Value"');
+  expect(rows[1]).toBe('"AI row","\'=1+1"');
+  expect(rows.at(-1)).toBe('"row 24","value"');
   for (const theme of ['light', 'dark'] as const) {
     await page.setViewportSize({ width: 360, height: 760 });
     await page.emulateMedia({ colorScheme: theme });

@@ -128,7 +128,7 @@ test('formatted Word content retains native headings and lists with safe readbac
   });
   await page
     .frameLocator('iframe[name="frameEditor"]')
-    .getByRole('button', { name: 'Save (Ctrl+S)', exact: true })
+    .getByRole('button', { name: /^Save \((?:Ctrl|⌘)\+S\)$/ })
     .click();
   const download = await downloadPromise;
   const saved = await download.path();
