@@ -36,7 +36,7 @@ vi.mock('pdfjs-dist', () => ({
     };
   },
 }));
-import { readPdfReference } from '../../lib/agent-plugin/connectors/pdf-reference-reader';
+import { readPdfReference } from '../../lib/agent-plugin/references/pdf-reference-reader';
 beforeEach(() => {
   state.pending = undefined;
   state.pages = 1;

@@ -48,7 +48,7 @@ function swShouldHandle(method: string, urlStr: string): boolean {
   if (method !== 'GET') return false;
   const url = new URL(urlStr);
   if (url.origin !== ORIGIN) return false;
-  if (url.pathname.startsWith('/api/connectors/')) return false;
+  if (url.pathname.startsWith('/api/')) return false;
   if (url.searchParams.has('file') || url.searchParams.has('src')) return false;
   if (FONT_REGEX.test(url.pathname)) return false;
   if (url.pathname.includes('/sdkjs/common/spell/')) return false;

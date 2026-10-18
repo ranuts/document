@@ -1,5 +1,7 @@
 # Assistant interaction polish
 
+> Connector scope superseded on 2026-10-18: external MCP and Google Drive connections were removed. Local file references and artifacts remain. See the [investigation and product decision](../../explorations/2026-10-18-mcp-connectors-and-frontend-boundaries.md). The original plan below is historical.
+
 Goal: fix repeated setup failures shown in the user screenshots, make pending requests compact and actionable, and highlight literal query matches in conversation titles/snippets. English UI with Chinese requests is expected and must remain supported.
 
 Design: follow existing ranui tokens and component owners. A compact queue above the composer shows count/state, one visible resume action, a primary edit affordance and secondary per-request actions in an accessible menu. Setup requirements are state guidance, not repeatedly appended conversation errors. Never grant writing consent automatically or start inference/service connections without a deliberate user action. Search highlighting uses DOM text nodes and marks, never HTML injection or regular-expression interpretation of the query.

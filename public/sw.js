@@ -548,8 +548,8 @@ self.addEventListener('fetch', (event) => {
   // Deployment probes must never receive an offline or stale cached marker.
   if (url.pathname === '/build-identity.json') return;
 
-  // Optional authenticated connector APIs and OAuth callbacks are never offline assets.
-  if (url.pathname.startsWith('/api/connectors/')) return;
+  // API responses are never offline assets.
+  if (url.pathname.startsWith('/api/')) return;
 
   // Match Pages' canonical route offline too. Otherwise the cached root shell
   // would resolve its relative assets under /editor/ and render a blank page.

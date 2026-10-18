@@ -1,5 +1,7 @@
 # AI Workspace Craft Implementation Plan
 
+> Connector scope superseded on 2026-10-18: external MCP and Google Drive connections were removed. Local file references and artifacts remain. See the [investigation and product decision](../../explorations/2026-10-18-mcp-connectors-and-frontend-boundaries.md). The original plan below is historical.
+
 > **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development. Steps use checkbox syntax for tracking. Implement one task at a time; reviewers may work read-only.
 
 **Goal:** Deliver the approved document AI interaction improvements and bounded workspace capabilities in PR #274.

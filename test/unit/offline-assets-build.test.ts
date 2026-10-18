@@ -57,7 +57,7 @@ it('partitions actual capability graphs without downloading unrelated emitted pa
     graph['lib/agent-plugin/agent-plugin.ts'].dynamicImports = [
       'node_modules/@mlc-ai/web-llm/lib/index.js',
       'packages/agent-core/dist/llm/wllama-cpu-runtime.js',
-      'lib/agent-plugin/connectors/pdf-reference-reader.ts',
+      'lib/agent-plugin/references/pdf-reference-reader.ts',
       'reference',
     ];
     graph['lib/agent-plugin/agent-plugin.ts'].assets = [
@@ -82,7 +82,7 @@ it('partitions actual capability graphs without downloading unrelated emitted pa
       file: 'assets/compat-url.js',
       assets: ['assets/compat.wasm'],
     };
-    graph['lib/agent-plugin/connectors/pdf-reference-reader.ts'] = {
+    graph['lib/agent-plugin/references/pdf-reference-reader.ts'] = {
       file: 'assets/pdf.js',
       assets: ['assets/pdf.worker-test.mjs'],
     };
