@@ -49,6 +49,11 @@ test('local sources and versioned artifacts remain explicit, compact and reviewe
   await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
   await expect(page.locator('.cui-save')).toHaveCount(1);
   await page.locator('.agent-sources-toggle').click();
+  await expect(
+    page.locator('.agent-sources-view input[type=url], .agent-sources-view input[type=password]'),
+  ).toHaveCount(0);
+  await expect(page.locator('.agent-sources-view')).not.toContainText('Google Drive');
+  await expect(page.locator('.agent-sources-view')).not.toContainText('MCP resources');
   await page
     .locator('.agent-sources-view input[type=file]')
     .setInputFiles({ name: 'notes.md', mimeType: 'text/markdown', buffer: Buffer.from('Project reference') });
@@ -244,7 +249,7 @@ test('cloud model settings exclude browser runtime configuration and cache hints
   await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('cloud-settings.png') });
 });
 
-test('offline workspace hides cloud discovery and download controls while retaining local work without automatic reconnect', async ({
+test('offline workspace keeps local sources and hides download controls without automatic reconnect', async ({
   page,
   context,
   l0,
@@ -318,9 +323,10 @@ test('offline workspace hides cloud discovery and download controls while retain
   });
   await context.setOffline(true);
   await page.locator('.agent-sources-toggle').click();
-  await expect(page.locator('.agent-cloud-sources')).toBeHidden();
+  await expect(
+    page.locator('.agent-sources-view input[type=url], .agent-sources-view input[type=password]'),
+  ).toHaveCount(0);
   await expect(page.locator('.agent-sources-view .agent-offline-hint')).toBeVisible();
-  await expect(page.locator('.agent-source-settings')).toBeVisible();
   await page.locator('.agent-sources-view input[type=file]').setInputFiles({
     name: 'offline.txt',
     mimeType: 'text/plain',
@@ -350,7 +356,9 @@ test('offline workspace hides cloud discovery and download controls while retain
   offline = false;
   await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
   await page.locator('.agent-sources-toggle').click();
-  await expect(page.locator('.agent-cloud-sources')).toBeVisible();
+  await expect(
+    page.locator('.agent-sources-view input[type=url], .agent-sources-view input[type=password]'),
+  ).toHaveCount(0);
   await expect(page.locator('.agent-source-row')).toContainText('offline.txt');
   expect(connectorRequests).toEqual([]);
   await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
@@ -369,18 +377,11 @@ test('offline workspace hides cloud discovery and download controls while retain
   }
 });
 
-test('expired Drive authorization and attachment limits expose usable recovery actions', async ({ page }) => {
+test('local attachment limits expose usable recovery actions', async ({ page }) => {
   test.setTimeout(90000);
   await page.addInitScript(() => {
     localStorage.setItem('document-assistant-enabled', 'true');
     localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
-  });
-  let reads = 0;
-  await mockApi(page, '**/api/connectors/google/**', async (route) => {
-    if (route.request().url().includes('/read')) {
-      reads++;
-      await route.fulfill({ status: 401, json: { error: 'reconnect_required' } });
-    } else await route.fulfill({ json: { files: [{ id: 'policy', name: 'Policy' }], nextPageToken: 'next' } });
   });
   await page.goto('/editor?new=docx&locale=en');
   await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
@@ -403,17 +404,6 @@ test('expired Drive authorization and attachment limits expose usable recovery a
   await input.setInputFiles({ name: 'sixth.txt', mimeType: 'text/plain', buffer: Buffer.from('Sixth reference') });
   await expect(page.locator('.agent-source-row')).toHaveCount(5);
   await expect(page.locator('.agent-sources-attached')).toContainText('sixth.txt');
-  const cloud = page.locator('.agent-cloud-sources');
-  const connect = cloud.getByRole('button', { name: 'Connect', exact: true });
-  await cloud.getByRole('button', { name: 'Browse files', exact: true }).click();
-  await expect(connect).toBeHidden();
-  await cloud.getByRole('button', { name: 'Policy', exact: true }).click();
-  await expect(page.locator('.agent-sources-status')).toContainText('Connect again');
-  await expect(connect).toBeVisible();
-  await expect(cloud.getByRole('button', { name: 'Policy', exact: true })).toHaveCount(0);
-  await expect(cloud.getByRole('button', { name: 'Load more', exact: true })).toBeHidden();
-  await expect(page.locator('.agent-source-row')).toHaveCount(5);
-  expect(reads).toBe(1);
 });
 
 test('discard restores artifact titles and a full version history can continue as a new artifact', async ({
@@ -490,36 +480,38 @@ test('switching conversations releases a pending source read without attaching i
     localStorage.setItem('document-assistant-enabled', 'true');
     localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
   });
-  let release!: () => void;
-  let reading = false;
-  const waitForRelease = new Promise<void>((resolve) => {
-    release = resolve;
-  });
-  await mockApi(page, '**/api/connectors/google/**', async (route) => {
-    if (route.request().url().includes('/read')) {
-      reading = true;
-      await waitForRelease;
-      await route.fulfill({ json: { text: 'Old conversation private data' } });
-    } else await route.fulfill({ json: { files: [{ id: 'old', name: 'Old policy' }] } });
-  });
   await page.goto('/editor?new=docx&locale=en');
   await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
   await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
   await page.locator('.agent-sources-toggle').click();
-  await page.getByRole('button', { name: 'Browse files', exact: true }).click();
-  await page.getByRole('button', { name: 'Old policy', exact: true }).click();
-  await expect.poll(() => reading).toBe(true);
+  await page.evaluate(() => {
+    const original = File.prototype.text;
+    const host = window as Window & { releaseOldReference?: () => void };
+    File.prototype.text = function () {
+      if (this.name !== 'old.txt') return original.call(this);
+      return new Promise<string>((resolve) => {
+        host.releaseOldReference = () => {
+          File.prototype.text = original;
+          resolve('Old conversation private data');
+        };
+      });
+    };
+  });
+  await page.locator('.agent-sources-view input[type=file]').setInputFiles({
+    name: 'old.txt',
+    mimeType: 'text/plain',
+    buffer: Buffer.from('Old conversation private data'),
+  });
+  await page.waitForFunction(
+    () => typeof (window as Window & { releaseOldReference?: () => void }).releaseOldReference === 'function',
+  );
   await page.locator('.agent-panel-clear').click();
   await page.locator('.agent-sources-toggle').click();
   await page
     .locator('.agent-sources-view input[type=file]')
     .setInputFiles({ name: 'fresh.txt', mimeType: 'text/plain', buffer: Buffer.from('New conversation data') });
   await expect(page.locator('.agent-source-row')).toHaveText('fresh.txtRemove');
-  const completed = page.waitForResponse(
-    (response) => new URL(originalApiUrl(page, response.url())).pathname === '/api/connectors/google/read',
-  );
-  release();
-  await completed;
+  await page.evaluate(() => (window as Window & { releaseOldReference?: () => void }).releaseOldReference!());
   await expect(page.locator('.agent-source-row')).toHaveText('fresh.txtRemove');
   await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
   await expect(page.locator('.agent-sources-summary')).toHaveText('fresh.txt');

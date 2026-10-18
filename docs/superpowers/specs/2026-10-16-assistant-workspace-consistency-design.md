@@ -1,5 +1,7 @@
 # Assistant workspace consistency
 
+> Connector scope superseded on 2026-10-18: external MCP and Google Drive connections were removed. Local file references and artifacts remain. See the [investigation and product decision](../../explorations/2026-10-18-mcp-connectors-and-frontend-boundaries.md). The original plan below is historical.
+
 ## Scope and evidence
 
 The owner requested uniform buttons, spacing and interactions across the AI workspace, explicitly using design-system tokens. PR #276 is already merged; this increment starts from `origin/main` (`2427b27`) and requires a follow-up PR. Prior approval for compact, flat UI and continued implementation remains in force.

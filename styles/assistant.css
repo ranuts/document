@@ -2399,25 +2399,6 @@ r-dropdown[role='listbox'] {
 .agent-sources-view [role='status']:empty {
   display: none;
 }
-.agent-source-settings {
-  margin-block: var(--ran-space-4);
-}
-.agent-source-settings summary {
-  cursor: pointer;
-  padding-block: var(--ran-space-1);
-}
-.agent-source-settings summary h3 {
-  display: inline;
-  margin: 0;
-}
-.agent-source-options {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-.agent-source-options button {
-  overflow-wrap: anywhere;
-}
 .agent-model-choice[hidden],
 .agent-offline-hint[hidden] {
   display: none;
