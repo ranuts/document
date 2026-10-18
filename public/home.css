@@ -161,7 +161,6 @@ body {
   min-height: calc(22px + var(--ran-space-2) * 2);
   color: var(--ran-color-text-secondary);
   cursor: pointer;
-  transition: 0.15s ease;
 }
 #landing-hero .lang-menu:hover .lang-trigger,
 #landing-hero .lang-menu[open] .lang-trigger {
@@ -284,7 +283,6 @@ body {
      different boxes in one row. 22px matches the theme switch beside them. */
   line-height: 22px;
   color: var(--ran-color-text-secondary);
-  transition: 0.15s ease;
 }
 #landing-hero .bar nav .navlink:hover {
   color: var(--ran-color-text);
@@ -734,9 +732,6 @@ body {
   border-bottom: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-sm);
   color: inherit;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease;
 }
 #landing-hero .index .row:hover {
   background: var(--ran-color-bg-hover);
@@ -761,9 +756,7 @@ body {
   justify-self: end;
   font: 400 var(--ran-text-copy-2)/1 var(--ran-font-mono);
   color: var(--ran-color-text-secondary);
-  transition:
-    transform 0.15s ease,
-    color 0.15s ease;
+  transition: transform 0.15s ease;
 }
 #landing-hero .index .row:hover .go {
   transform: translateX(3px);

@@ -145,9 +145,10 @@
   border: 1px solid var(--ran-color-border);
   position: relative;
   cursor: pointer;
-  transition:
-    background var(--ran-motion-duration-fast, 120ms) ease,
-    border-color var(--ran-motion-duration-fast, 120ms) ease;
+  /* The track's fill is a palette property, so it snaps on a theme flip; the
+     knob's transform still animates (DESIGN.md §5). */
+  --history-switch-transition: none;
+  transition: var(--history-switch-transition);
 }
 .history-switch::after {
   content: '';
@@ -234,7 +235,6 @@
   margin: 0 calc(-1 * var(--ran-space-3));
   border-bottom: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-sm);
-  transition: background var(--ran-motion-duration-fast, 120ms) ease;
 }
 .history-row:hover {
   background: var(--ran-color-bg-hover);
@@ -380,10 +380,6 @@
      comes out 31px and the two sit half a pixel apart in the same row. */
   min-height: var(--app-control-height);
   cursor: pointer;
-  transition:
-    background var(--ran-motion-duration-fast, 120ms) ease,
-    color var(--ran-motion-duration-fast, 120ms) ease,
-    border-color var(--ran-motion-duration-fast, 120ms) ease;
 }
 .history-filter:hover {
   color: var(--ran-color-text);

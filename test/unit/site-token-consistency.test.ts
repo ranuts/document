@@ -78,6 +78,27 @@ it('rejects raw semantic metrics while allowing fluid geometry and real standalo
     expect(semanticLiterals(authoredStyles(rel, html)), rel).toEqual([]);
   }
 });
+it('never transitions a palette property, so a theme flip is instant', async () => {
+  // CSS cannot tell why a colour changed, so a palette property in a transition
+  // also fades when the theme flips its token — each surface at its own
+  // duration while the page around it snaps. DESIGN.md §5 bans the default.
+  const { paletteTransitions, designTokenSources, authoredStyles } = await import('../../bin/design-tokens.mjs');
+  expect(paletteTransitions('a{transition:0.15s ease}')).toHaveLength(1);
+  expect(paletteTransitions('a{transition:all .2s}')).toHaveLength(1);
+  expect(paletteTransitions('a{transition:background .15s, color .15s}')).toHaveLength(1);
+  expect(paletteTransitions('a{transition:transform .15s, color .15s}')).toHaveLength(1);
+  expect(paletteTransitions('a{transition:transform .15s, opacity .2s}')).toEqual([]);
+  expect(paletteTransitions('a{transition:none}')).toEqual([]);
+  // The documented opt-in hook is the consumer's value, not ours to judge.
+  expect(paletteTransitions('a{transition:var(--ran-input-transition, none)}')).toEqual([]);
+  const { generate } = await import('../../bin/build-pages.mjs');
+  for (const file of designTokenSources(process.cwd())) {
+    expect(paletteTransitions(authoredStyles(file, read(file))), file).toEqual([]);
+  }
+  for (const { rel, html } of generate({ outDir: null })) {
+    expect(paletteTransitions(authoredStyles(rel, html)), rel).toEqual([]);
+  }
+});
 it('does not borrow application roles when an HTML consumer omits the role stylesheet', async () => {
   const { auditDesignTokens } = await import('../../bin/design-tokens.mjs');
   expect(

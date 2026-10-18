@@ -7,4 +7,5 @@ export function designTokenSources(root: string): string[];
 export function authoredStyles(file: string, source: string): string;
 export function auditDesignTokens(root: string, generated?: Array<{ rel: string; html: string }>): TokenAuditError[];
 export function semanticLiterals(source: string): string[];
+export function paletteTransitions(source: string): string[];
 export function invalidTokenArithmetic(source: string): string[];

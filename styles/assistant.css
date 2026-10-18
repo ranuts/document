@@ -1864,9 +1864,12 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text);
   font: inherit;
   cursor: pointer;
-  transition:
-    background-color 120ms,
-    border-color 120ms;
+  /* Palette properties must not transition: they also fade when the theme
+     flips, each surface at its own duration while the page snaps (DESIGN.md §5).
+     A repeated hover does not need motion, so the default is none; the hook
+     stays for a host that wants one. */
+  --agent-task-action-transition: none;
+  transition: var(--agent-task-action-transition);
 }
 .agent-panel .agent-task-action::after {
   content: '↗';
@@ -1891,11 +1894,6 @@ r-dropdown[role='listbox'] {
 }
 .agent-staged-guidance {
   margin: 0;
-}
-@media (prefers-reduced-motion: reduce) {
-  .agent-panel .agent-task-action {
-    transition: none;
-  }
 }
 
 .agent-conversation-snippet {

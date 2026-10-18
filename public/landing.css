@@ -71,7 +71,6 @@ header.bar nav a {
   line-height: 22px;
   color: var(--ran-color-text-secondary);
   text-decoration: none;
-  transition: 0.15s ease;
 }
 header.bar nav a:hover {
   color: var(--ran-color-text);
@@ -107,7 +106,6 @@ header.bar nav a:hover {
   min-height: calc(22px + var(--ran-space-2) * 2);
   color: var(--ran-color-text-secondary);
   cursor: pointer;
-  transition: 0.15s ease;
 }
 .lang-menu:hover .lang-trigger,
 .lang-menu[open] .lang-trigger {
@@ -363,7 +361,6 @@ header.bar nav a:hover {
   line-height: 1.45;
   color: var(--ran-color-text-secondary);
   text-decoration: none;
-  transition: color 0.15s ease;
 }
 .side-block a:hover {
   color: var(--ran-color-text);

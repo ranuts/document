@@ -107,6 +107,38 @@ export function semanticLiterals(source) {
     .map((match) => `${match[1]}: ${match[2].trim()}`);
 }
 
+/**
+ * A palette property in a `transition` also animates when the *theme* flips its
+ * token, because CSS cannot tell why a value changed. Every surface then fades at
+ * its own duration while the page around it snaps -- see DESIGN.md §5. Motion
+ * properties (`transform`, `opacity`, box geometry) do not follow the theme and
+ * are fine. `all` and bare durations mean `all`, so they include palette props.
+ *
+ * Each comma-separated transition is judged by its *first* token: a timing value
+ * there means the property was omitted, i.e. `all`. A lone `var(--…-transition)`
+ * is the documented opt-in hook and is skipped -- its value is the consumer's.
+ */
+export function paletteTransitions(source) {
+  const palette =
+    /^(?:all|background|background-color|color|border|border-color|border-[\w-]*color|box-shadow|fill|stroke|outline-color|text-decoration-color)$/;
+  const timing =
+    /^(?:[\d.]+m?s|ease|linear|ease-in|ease-out|ease-in-out|step-start|step-end|cubic-bezier\(.*\)|steps\(.*\))$/;
+  const found = [];
+  for (const match of clean(source).matchAll(/(?:^|[;{])\s*transition(?:-property)?\s*:\s*([^;}]+)/g)) {
+    const value = match[1].replace(/var\([^()]*\)/g, 'VAR').trim();
+    if (value === 'VAR') continue;
+    const offends = value.split(',').some((part) => {
+      const first = part.trim().split(/\s+/)[0];
+      if (!first) return false;
+      // A hook variable in first position is indistinguishable from a duration;
+      // only a named property or a literal timing value is decidable.
+      return first !== 'VAR' && (timing.test(first) || palette.test(first));
+    });
+    if (offends) found.push(`transition: ${value.replace(/\s+/g, ' ')}`);
+  }
+  return found;
+}
+
 /** CSS functions cannot take a prefixed unary sign: negate their numeric value
  * inside calc(), e.g. calc(-1 * var(--space)), instead of -var(--space).
  */
