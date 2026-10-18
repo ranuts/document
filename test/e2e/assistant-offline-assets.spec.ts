@@ -14,7 +14,12 @@ async function assetLists(page: import('@playwright/test').Page) {
   });
 }
 
-test('prepares only the requested runtime and keeps it available offline', async ({ page, context }) => {
+test('prepares only the requested runtime and keeps it available offline', async ({
+  page,
+  context,
+  l0,
+  projectName,
+}) => {
   test.setTimeout(120_000);
   await page.goto('/');
   const lists = await assetLists(page);
@@ -63,9 +68,29 @@ test('prepares only the requested runtime and keeps it available offline', async
   expect(available.every(Boolean)).toBe(true);
   await page.goto('/editor?new=docx');
   await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()), undefined, { timeout: 60_000 });
+  // Only unprepared optional SDK discovery may fail here. WebKit reports
+  // caught dynamic-import failures through pageerror as well as fetch rejection.
+  const optionalScripts = new Set(
+    [...lists.capabilities.webgpu, ...(lists.capabilities.wllama || []), ...lists.capabilities['cpu-compat']].filter(
+      (path) => path.endsWith('.js'),
+    ),
+  );
+  const failed = new Set<string>();
+  page.on('requestfailed', (request) => failed.add(new URL(request.url()).pathname));
   await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
   await page.locator('.agent-onboarding .agent-enable-switch').click();
   await expect(page.locator('.agent-runtime-panel')).toBeVisible();
+  if (projectName === 'webkit') {
+    await expect.poll(() => [...failed].filter((path) => optionalScripts.has(path)).length).toBeGreaterThan(0);
+  }
+  expect([...failed].filter((path) => lists.core.includes(path) || lists.capabilities.cpu.includes(path))).toEqual([]);
+  expect([...failed].filter((path) => path.startsWith('/assets/') && !optionalScripts.has(path))).toEqual([]);
+  const loaderDiagnostics = /^(?:Response served by service worker is an error|Cannot load \.)$/;
+  const diagnostics = l0.pageErrors.filter((message) => loaderDiagnostics.test(message));
+  expect(diagnostics.length).toBeLessThanOrEqual(2 * [...failed].filter((path) => optionalScripts.has(path)).length);
+  // The allowance is conditional on real, independently observed failures of
+  // exact unprepared module URLs; prepared CPU/core failures remain failures.
+  l0.allowFrameError(loaderDiagnostics);
 });
 
 test('a remembered opt-in on Home and a cloud-only panel download no local inference or PDF assets', async ({
@@ -109,19 +134,26 @@ test('a new deployment restores the union of prepared capabilities from older wo
   context,
 }) => {
   test.setTimeout(120_000);
-  // Seed persisted outgoing-worker metadata before this browser registers the new build.
-  await page.goto('/manifest.json');
-  await page.evaluate(async () => {
-    for (const [build, capability] of [
-      ['old-a', 'cpu'],
-      ['old-b', 'pdf'],
-    ]) {
-      const cache = await caches.open(`document-editor-core-${build}`);
-      await cache.put(
-        `/__document-assistant-prepared__/${capability}`,
-        new Response('1', { headers: { 'X-Document-Assistant-Prepared': '1' } }),
-      );
-    }
+  // WebKit can drop page-written CacheStorage bodies when navigation swaps
+  // renderer processes. Seed in this document, immediately before the app's
+  // real registration, so the new production worker sees the outgoing markers.
+  await page.addInitScript(() => {
+    const register = navigator.serviceWorker.register.bind(navigator.serviceWorker);
+    navigator.serviceWorker.register = async (...args) => {
+      for (const [build, capability] of [
+        ['old-a', 'cpu'],
+        ['old-b', 'pdf'],
+      ]) {
+        const cache = await caches.open(`document-editor-core-${build}`);
+        await cache.put(
+          `/__document-assistant-prepared__/${capability}`,
+          new Response('1', {
+            headers: { 'X-Document-Assistant-Prepared': '1' },
+          }),
+        );
+      }
+      return register(...args);
+    };
   });
   await page.goto('/');
   const lists = await assetLists(page);

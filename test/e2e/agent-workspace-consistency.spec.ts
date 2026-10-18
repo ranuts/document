@@ -181,18 +181,23 @@ test('cached-model delete keeps its danger role through confirmation and pending
         return { color: style.color, background: style.backgroundColor };
       },
     });
-    const remove = FileSystemDirectoryHandle.prototype.removeEntry;
+    // This case checks the UI's pending deletion state. Use the real Cache API
+    // fallback on every engine: Linux WebKit exposes OPFS methods but rejects
+    // writable creation, so method presence cannot seed a portable fixture.
+    Object.defineProperty(navigator.storage, 'getDirectory', { configurable: true, value: undefined });
+    const remove = Cache.prototype.delete;
     let release: () => void = () => {};
     const hold = new Promise<void>((resolve) => (release = resolve));
-    FileSystemDirectoryHandle.prototype.removeEntry = async function (name, options) {
-      if (name.includes('command-fixture.gguf')) await hold;
-      return remove.call(this, name, options);
+    Cache.prototype.delete = async function (request, options) {
+      const url = typeof request === 'string' ? request : request instanceof Request ? request.url : String(request);
+      if (url.includes('command-fixture.gguf')) await hold;
+      return remove.call(this, request, options);
     };
     Object.assign(window, { releaseCommandDeletion: release });
   });
   await page.goto('/');
   await page.evaluate(async () => {
-    const cache = await (await navigator.storage.getDirectory()).getDirectoryHandle('cache', { create: true });
+    const cache = await caches.open('local-ai-wllama-models-v1');
     for (const [name, value] of [
       ['command-fixture.gguf', 'x'],
       [
@@ -200,9 +205,7 @@ test('cached-model delete keeps its danger role through confirmation and pending
         JSON.stringify({ originalURL: 'https://example.invalid/command-fixture.gguf', originalSize: 1, etag: '' }),
       ],
     ]) {
-      const writable = await (await cache.getFileHandle(name, { create: true })).createWritable();
-      await writable.write(value);
-      await writable.close();
+      await cache.put(`/__local_ai_model_cache__/entry-${encodeURIComponent(name)}`, new Response(value));
     }
   });
   await page.goto('/editor?new=docx&locale=en');

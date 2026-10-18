@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 
 test('restores a long saved conversation and switches sessions with completed answer actions', async ({ page }) => {
@@ -348,7 +349,7 @@ test('keeps the first validating request in its original chat while startup hist
     };
   });
   let releaseRouting: (() => void) | undefined;
-  await page.route('http://localhost:11434/api/**', async (route) => {
+  await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       await route.fulfill({
         status: 204,
@@ -478,7 +479,7 @@ test('deleting an inactive saved chat preserves a held reply and the next draft 
     release = resolve;
   });
   let answers = 0;
-  await page.route('http://localhost:11434/api/**', async (route) => {
+  await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       await route.fulfill({
         status: 204,

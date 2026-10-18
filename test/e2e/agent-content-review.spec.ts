@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { readFile } from 'node:fs/promises';
 import type { Page } from '@playwright/test';
 import { expect, test } from './lib/l0';
@@ -23,7 +24,7 @@ async function open(
     );
   }, endpoint);
   let requested = 0;
-  await page.route(`${endpoint}/chat/completions`, async (route) => {
+  await mockApi(page, `${endpoint}/chat/completions`, async (route) => {
     const call = calls[requested++];
     await route.fulfill({
       json: {

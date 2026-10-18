@@ -3,9 +3,11 @@ import { expect, test } from './lib/l0';
 for (const system of ['light', 'dark'] as const) {
   for (const choice of ['system', 'light', 'dark'] as const) {
     test(`${system} system with ${choice} choice keeps theme metadata and icons consistent`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: system });
       await page.addInitScript((theme) => localStorage.setItem('ran-theme', theme), choice);
       await page.goto('/');
+      // Firefox's emulation can reset on the first navigation. Apply it to
+      // this document, then assert the real media-query/theme change.
+      await page.emulateMedia({ colorScheme: system });
       const expected = choice === 'system' ? system : choice;
       await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute(
         'href',

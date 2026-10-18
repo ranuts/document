@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 import { taskProtocol } from './lib/task-protocol';
 
@@ -24,7 +25,7 @@ for (const native of [false, true])
       }, native);
       let nativeCalls = 0;
       if (native)
-        await page.route('https://assistant.example.invalid/v1/chat/completions', async (route) => {
+        await mockApi(page, 'https://assistant.example.invalid/v1/chat/completions', async (route) => {
           const request = route.request().postDataJSON();
           expect(request.tools.some((tool: any) => tool.function.name === 'create_slide')).toBe(true);
           nativeCalls++;
@@ -57,7 +58,7 @@ for (const native of [false, true])
             },
           });
         });
-      await page.route('http://localhost:11434/api/**', async (route) => {
+      await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
         if (route.request().url().endsWith('/tags'))
           return route.fulfill({ json: { models: [{ name: 'task-test' }] } });
         const request = route.request().postDataJSON();
@@ -148,7 +149,7 @@ for (const cancel of [false, true]) {
       ),
     );
     let decisions = 0;
-    await page.route('http://localhost:11434/api/**', async (route) => {
+    await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
       if (route.request().url().endsWith('/tags')) {
         await route.fulfill({ json: { models: [{ name: 'task-test' }] } });
         return;

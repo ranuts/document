@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { taskProtocol } from './lib/task-protocol';
 import { expect, test } from './lib/l0';
 import { buildOdf, ODF_FIXTURES } from './lib/odf';
@@ -65,7 +66,7 @@ for (const fixture of fixtures) {
     let readContinuation = false;
     let editing = false;
     let replacing = false;
-    await page.route('http://localhost:11434/api/**', async (route) => {
+    await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
       if (route.request().method() === 'OPTIONS') {
         await route.fulfill({
           status: 204,

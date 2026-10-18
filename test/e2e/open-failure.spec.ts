@@ -11,9 +11,9 @@ import { expect, test } from './lib/l0';
  * no asc_onError fired, no dialog, and document:save waited out its 60 s
  * timeout. Corpus campaign defect #3.
  *
- * This is also the L0 fixture's self-test: it proves the fixture observes
- * asc_onError and frame rejections (a silently broken hook would make every
- * other suite look cleaner than it is).
+ * These cases verify the SDK error channel. A separate controlled frame
+ * rejection below checks L0 without depending on engine-specific vendor
+ * rejection delivery.
  *
  * Four shapes of unusable input, because they fail in different places.
  * Garbage bytes are rejected before anything is unpacked. A truncated file --
@@ -118,10 +118,36 @@ test.describe('open failure surfacing (real editor)', () => {
       expect(save.error).toMatch(/failed to open/i);
       expect(save.ms).toBeLessThan(10_000);
 
-      // The fixture saw the SDK error, and the frame rejection where the app
-      // produces one.
+      // All engines must expose the public SDK failure. Vendor promise
+      // rejection delivery differs between engines and is not this contract.
       expect((await l0.ascErrors()).map((e) => e.id)).toContain('-82');
-      expect((await l0.frameErrors()).some((e) => /Document conversion failed/.test(e.message))).toBe(frameRejection);
     });
   }
+});
+
+// A controlled rejection proves the collector works on every engine even when
+// that engine handles the vendor's failed-conversion promise internally.
+test('L0 observes an unhandled rejection raised inside a same-origin iframe', async ({ page, l0 }) => {
+  l0.allowFrameError(/l0-frame-rejection-selftest/);
+  await page.goto('/');
+  await page.evaluate(() => {
+    const frame = document.createElement('iframe');
+    frame.srcdoc = '<!doctype html><body>L0 self-test</body>';
+    document.body.append(frame);
+  });
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('body')).toHaveText('L0 self-test');
+  await frame.locator('body').evaluate(() => {
+    setTimeout(() => {
+      void Promise.reject(new Error('l0-frame-rejection-selftest'));
+    }, 0);
+  });
+  await expect
+    .poll(
+      async () =>
+        (await l0.frameErrors()).filter(
+          (error) => error.kind === 'unhandledrejection' && error.message === 'l0-frame-rejection-selftest',
+        ).length,
+    )
+    .toBe(1);
 });

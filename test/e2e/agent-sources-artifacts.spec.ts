@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 
 test('local sources and versioned artifacts remain explicit, compact and reviewed', async ({ page }, testInfo) => {
@@ -98,7 +99,7 @@ test('attached reference excerpts reach only the explicitly selected AI service'
     );
   });
   const bodies: string[] = [];
-  await page.route('http://localhost:11434/api/**', async (route) => {
+  await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       await route.fulfill({
         status: 204,
@@ -333,7 +334,7 @@ test('expired Drive authorization and attachment limits expose usable recovery a
     localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
   });
   let reads = 0;
-  await page.route('**/api/connectors/google/**', async (route) => {
+  await mockApi(page, '**/api/connectors/google/**', async (route) => {
     if (route.request().url().includes('/read')) {
       reads++;
       await route.fulfill({ status: 401, json: { error: 'reconnect_required' } });
@@ -452,7 +453,7 @@ test('switching conversations releases a pending source read without attaching i
   const waitForRelease = new Promise<void>((resolve) => {
     release = resolve;
   });
-  await page.route('**/api/connectors/google/**', async (route) => {
+  await mockApi(page, '**/api/connectors/google/**', async (route) => {
     if (route.request().url().includes('/read')) {
       reading = true;
       await waitForRelease;
@@ -502,7 +503,7 @@ test('structured results validate explicitly, preview compactly and export witho
   });
   let calls = 0;
   const requests: Record<string, unknown>[] = [];
-  await page.route('http://localhost:11434/api/**', async (route) => {
+  await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       await route.fulfill({
         status: 204,

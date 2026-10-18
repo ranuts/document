@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 import type { Page } from '@playwright/test';
 
@@ -38,7 +39,7 @@ test('selected Word task stages without calls, skips classification, reviews and
   test.setTimeout(120_000);
   let classification = 0,
     writing = 0;
-  await page.route('http://localhost:11434/api/**', async (route) => {
+  await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       await route.fulfill({
         status: 204,
@@ -136,7 +137,7 @@ test('selected Word task stages without calls, skips classification, reviews and
 test('stale selected task retains draft and requests reselection before any model call', async ({ page }) => {
   test.setTimeout(120_000);
   let calls = 0;
-  await page.route('http://localhost:11434/api/**', async (route) => {
+  await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
     if (route.request().url().endsWith('/tags')) {
       await route.fulfill({ json: { models: [{ name: 'workspace-test' }] } });
       return;
@@ -192,7 +193,7 @@ test('native provider still routes staged polish through writing and review', as
   test.setTimeout(120_000);
   let classifications = 0,
     writing = 0;
-  await page.route('https://assistant.example.invalid/v1/chat/completions', async (route) => {
+  await mockApi(page, 'https://assistant.example.invalid/v1/chat/completions', async (route) => {
     const body = route.request().postDataJSON();
     const routing = !!body.response_format?.json_schema?.schema?.properties?.task;
     if (routing) classifications++;

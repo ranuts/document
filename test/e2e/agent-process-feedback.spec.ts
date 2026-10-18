@@ -1,3 +1,4 @@
+import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 
 test('a held request shows actual classification and generation, then clears waiting on completion and Stop', async ({
@@ -25,7 +26,7 @@ test('a held request shows actual classification and generation, then clears wai
   const stoppedGate = new Promise<void>((resolve) => (releaseStopped = resolve));
   let classifications = 0;
   let answers = 0;
-  await page.route('http://localhost:11434/api/**', async (route) => {
+  await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       await route.fulfill({
         status: 204,
@@ -142,7 +143,7 @@ test('Chinese waiting feedback remains localized and stable in a narrow real edi
   let release!: () => void;
   const gate = new Promise<void>((resolve) => (release = resolve));
   let classifications = 0;
-  await page.route('http://localhost:11434/api/**', async (route) => {
+  await mockApi(page, 'http://localhost:11434/api/**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       await route.fulfill({
         status: 204,
