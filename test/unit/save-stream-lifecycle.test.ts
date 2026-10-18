@@ -1,6 +1,8 @@
 import 'fake-indexeddb/auto';
-import { IDBFactory } from 'fake-indexeddb';
+import { IDBFactory, IDBObjectStore } from 'fake-indexeddb';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+const { opened } = vi.hoisted(() => ({ opened: vi.fn(async (_file: File, _options?: unknown) => {}) }));
+vi.mock('../../lib/document', () => ({ openLocalFile: opened }));
 vi.mock('../../lib/history/autosave', () => ({
   getActiveDocumentId: () => 'save-document',
   clearDocumentSession: vi.fn(),
@@ -8,9 +10,12 @@ vi.mock('../../lib/history/autosave', () => ({
   isAutosaveEnabled: () => true,
   setAutosaveEnabled: vi.fn(),
   stopAutosaveSession: vi.fn(),
+  cancelPendingSnapshot: vi.fn(),
 }));
+import { rememberActiveSource, readActiveSource } from '../../lib/active-document-source';
+import { restoreSavedDocument } from '../../lib/history/recovery';
 import { initDocumentHistory } from '../../lib/history/index';
-import { getDoc, putSnapshot } from '../../lib/history/store';
+import { getDoc, putSnapshot, deleteDoc } from '../../lib/history/store';
 import { resetHistoryDbForTests } from '../../lib/history/db';
 import { resetSaveTargetsForTests } from '../../lib/save-target';
 import { markDocumentDirty, hasUnsavedChanges, resetUnsavedGuardForTests } from '../../lib/unsaved-guard';
@@ -21,6 +26,8 @@ let frame: HTMLIFrameElement;
 let history: { Index: number; Points: Array<{ Items: object[] }>; Reset_SavedIndex: ReturnType<typeof vi.fn> };
 let conversions: Array<Promise<{ binary: Uint8Array }>>;
 beforeEach(async () => {
+  sessionStorage.clear();
+  opened.mockClear();
   resetHistoryDbForTests();
   resetSaveTargetsForTests();
   resetUnsavedGuardForTests();
@@ -158,7 +165,7 @@ it('a cancelled or failed export does not prevent a later successful save', asyn
   startExport();
   sendFile(false);
   await new Promise((resolve) => setTimeout(resolve, 10));
-  expect(hasUnsavedChanges()).toBe(false);
+  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
   expect(history.Reset_SavedIndex).toHaveBeenCalledOnce();
 });
 
@@ -169,7 +176,7 @@ it('a busy SDK ignoring another request preserves the accepted export save point
   startExport();
   sendFile(false);
   await new Promise((resolve) => setTimeout(resolve, 10));
-  expect(hasUnsavedChanges()).toBe(false);
+  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
   expect(history.Reset_SavedIndex).toHaveBeenCalledOnce();
 });
 
@@ -249,4 +256,183 @@ it.each([
   await vi.waitFor(() => expect(names).toHaveLength(1));
   await sendFile(false, 0, earlier);
   await vi.waitFor(() => expect(names).toEqual([`Report.${later}`, `Report.${earlier}`]));
+});
+
+// The bytes cross the real stream, source database and history database before
+// recovery opens them. An assertion on savedToDiskAt alone missed this loss.
+it.each(['older snapshot', 'no snapshot'])('reloads the actual disk save with %s', async (prior) => {
+  if (prior === 'no snapshot') await deleteDoc('save-document');
+  await rememberActiveSource('save-document', new File(['original O'], 'Report.docx'));
+  setDiskWriter(async () => 'written');
+  await sendFile();
+  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
+  await vi.waitFor(async () => {
+    opened.mockClear();
+    expect(await restoreSavedDocument('save-document')).toBe(true);
+    expect(new Uint8Array(await opened.mock.calls[0][0].arrayBuffer())).toEqual(new Uint8Array([1, 2, 3]));
+  });
+  // Reopening calls rememberActiveSource again, so repeated reloads retain the
+  // saved source's precedence over the older recovery revision as well.
+  await rememberActiveSource('save-document', opened.mock.calls[0][0]);
+  opened.mockClear();
+  expect(await restoreSavedDocument('save-document')).toBe(true);
+  expect(new Uint8Array(await opened.mock.calls[0][0].arrayBuffer())).toEqual(new Uint8Array([1, 2, 3]));
+});
+
+it('restores a later unsaved snapshot ahead of the disk save', async () => {
+  await rememberActiveSource('save-document', new File(['original O'], 'Report.docx'));
+  setDiskWriter(async () => 'written');
+  await sendFile();
+  await vi.waitFor(async () => expect((await getDoc('save-document'))?.savedToDiskAt).toBeTypeOf('number'));
+  await putSnapshot({ id: 'save-document', title: 'Report.docx', origin: 'local', bytes: new Uint8Array([67]) });
+  expect(await restoreSavedDocument('save-document')).toBe(true);
+  expect(await opened.mock.calls[0][0].text()).toBe('C');
+});
+
+it('keeps a prior recovery point when saving the reload source fails', async () => {
+  await rememberActiveSource('save-document', new File(['original O'], 'Report.docx'));
+  const put = IDBObjectStore.prototype.put;
+  vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementation(function (this: IDBObjectStore, value, key) {
+    if (this.name === 'sources') throw new DOMException('full', 'QuotaExceededError');
+    return put.call(this, value, key);
+  });
+  setDiskWriter(async () => 'written');
+  await sendFile();
+  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  expect((await getDoc('save-document'))?.savedToDiskAt).toBeUndefined();
+  expect(await restoreSavedDocument('save-document')).toBe(true);
+  expect(new Uint8Array(await opened.mock.calls[0][0].arrayBuffer())).toEqual(new Uint8Array([1]));
+});
+
+it('keeps the editable source after saving an export in another format', async () => {
+  await rememberActiveSource('save-document', new File(['editable source'], 'Report.docx'));
+  setDiskWriter(async () => 'written');
+  await sendFile(true, 0, 'pdf');
+  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  expect(await (await readActiveSource('save-document'))?.text()).toBe('editable source');
+  expect((await getDoc('save-document'))?.savedToDiskAt).toBeUndefined();
+});
+
+it('publishes save completion only after the saved reload bytes are durable', async () => {
+  await rememberActiveSource('save-document', new File(['original O'], 'Report.docx'));
+  const read = File.prototype.arrayBuffer;
+  let finish!: (value: ArrayBuffer) => void;
+  const reading = vi.fn();
+  vi.spyOn(File.prototype, 'arrayBuffer').mockImplementation(function (this: File) {
+    if (this.size !== 3 || reading.mock.calls.length) return read.call(this);
+    reading();
+    return new Promise((resolve) => {
+      finish = resolve;
+    });
+  });
+  setDiskWriter(async () => 'written');
+  await sendFile();
+  await vi.waitFor(() => expect(reading).toHaveBeenCalled());
+  expect(hasUnsavedChanges()).toBe(true);
+  expect(history.Reset_SavedIndex).not.toHaveBeenCalled();
+  finish(new Uint8Array([1, 2, 3]).buffer);
+  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
+  expect(await restoreSavedDocument('save-document')).toBe(true);
+  expect(new Uint8Array(await opened.mock.calls[0][0].arrayBuffer())).toEqual(new Uint8Array([1, 2, 3]));
+});
+
+it.each([
+  ['doc', 'docx'],
+  ['xls', 'xlsx'],
+  ['ppt', 'pptx'],
+])('retains the editable %s save normalized by the editor as %s', async (originalExt, savedExt) => {
+  await deleteDoc('save-document');
+  setDocmentObj({ fileName: `Report.${originalExt}` });
+  await rememberActiveSource('save-document', new File(['legacy original O'], `Report.${originalExt}`));
+  setDiskWriter(async () => 'written');
+  await sendFile(true, 0, savedExt);
+  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
+  expect(await restoreSavedDocument('save-document')).toBe(true);
+  expect(opened.mock.calls[0][0].name).toBe(`Report.${savedExt}`);
+  expect(new Uint8Array(await opened.mock.calls[0][0].arrayBuffer())).toEqual(new Uint8Array([1, 2, 3]));
+});
+
+it('preserves newer C recovery when older disk B finishes after further editing', async () => {
+  let finish!: (outcome: 'written') => void;
+  setDiskWriter(
+    () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+  );
+  await sendFile();
+  await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+  history.Points.push({ Items: [{}] });
+  history.Index++;
+  markDocumentDirty();
+  await putSnapshot({ id: 'save-document', title: 'Report.docx', origin: 'local', bytes: new Uint8Array([67]) });
+  finish('written');
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  expect(hasUnsavedChanges()).toBe(true);
+  expect((await getDoc('save-document'))?.savedToDiskAt).toBeUndefined();
+  expect(await restoreSavedDocument('save-document')).toBe(true);
+  expect(await opened.mock.calls[0][0].text()).toBe('C');
+});
+
+it('restores a newer snapshot after quota eviction recreated its history row', async () => {
+  await rememberActiveSource('save-document', new File(['original O'], 'Report.docx'));
+  setDiskWriter(async () => 'written');
+  await sendFile();
+  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
+  vi.stubGlobal('navigator', { storage: { estimate: async () => ({ quota: 6 }) } });
+  await putSnapshot({ id: 'other', title: 'Other.docx', origin: 'local', bytes: new Uint8Array([8, 8, 8]) });
+  expect(await getDoc('save-document')).toBeNull();
+  await putSnapshot({ id: 'save-document', title: 'Report.docx', origin: 'local', bytes: new Uint8Array([67]) });
+  expect(await restoreSavedDocument('save-document')).toBe(true);
+  expect(await opened.mock.calls[0][0].text()).toBe('C');
+});
+
+it('keeps saved B bytes when C is typed while the reload source is still being stored', async () => {
+  await rememberActiveSource('save-document', new File(['original O'], 'Report.docx'));
+  const originalRead = File.prototype.arrayBuffer;
+  let finish!: (value: ArrayBuffer) => void;
+  const reading = vi.fn();
+  vi.spyOn(File.prototype, 'arrayBuffer').mockImplementation(function (this: File) {
+    if (this.size !== 3 || reading.mock.calls.length) return originalRead.call(this);
+    reading();
+    return new Promise((resolve) => {
+      finish = resolve;
+    });
+  });
+  setDiskWriter(async () => 'written');
+  await sendFile();
+  await vi.waitFor(() => expect(reading).toHaveBeenCalled());
+  history.Points.push({ Items: [{}] });
+  history.Index++;
+  markDocumentDirty();
+  finish(new Uint8Array([1, 2, 3]).buffer);
+  await vi.waitFor(async () => {
+    expect(new Uint8Array(await (await readActiveSource('save-document'))!.arrayBuffer())).toEqual(
+      new Uint8Array([1, 2, 3]),
+    );
+  });
+  expect(hasUnsavedChanges()).toBe(true);
+  expect(history.Reset_SavedIndex).not.toHaveBeenCalled();
+  expect(await restoreSavedDocument('save-document')).toBe(true);
+  expect(new Uint8Array(await opened.mock.calls[0][0].arrayBuffer())).toEqual(new Uint8Array([1, 2, 3]));
+});
+
+it('keeps saved source provenance across two reloads from a stale inherited pointer', async () => {
+  await rememberActiveSource('save-document', new File(['original O'], 'Report.docx'));
+  const inheritedPointer = sessionStorage.getItem('document-active-source')!;
+  setDiskWriter(async () => 'written');
+  await sendFile();
+  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
+  // A dormant duplicate still has the old pointer metadata after the parent
+  // updates the shared source slot in place with saved B.
+  sessionStorage.setItem('document-active-source', inheritedPointer);
+  for (let reload = 0; reload < 2; reload++) {
+    opened.mockClear();
+    expect(await restoreSavedDocument('save-document')).toBe(true);
+    const recovered = opened.mock.calls[0][0];
+    expect(new Uint8Array(await recovered.arrayBuffer())).toEqual(new Uint8Array([1, 2, 3]));
+    await rememberActiveSource('save-document', recovered);
+  }
 });

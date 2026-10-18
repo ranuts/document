@@ -462,13 +462,17 @@ export async function clearAllHistory(): Promise<boolean> {
   }
 }
 
-async function patchDoc(id: string, patch: Partial<HistoryDoc>): Promise<HistoryDoc | null> {
+async function patchDoc(
+  id: string,
+  patch: Partial<HistoryDoc>,
+  accepts: (doc: HistoryDoc) => boolean = () => true,
+): Promise<HistoryDoc | null> {
   try {
     return (
       (await withStores([DOCS_STORE], 'readwrite', async (tx) => {
         const store = tx.objectStore(DOCS_STORE);
         const doc = (await requestToPromise(store.get(id))) as HistoryDoc | undefined;
-        if (!doc) return null;
+        if (!doc || !accepts(doc)) return null;
         const next = { ...doc, ...patch };
         store.put(next);
         return next;
@@ -485,8 +489,18 @@ export function markOpened(id: string): Promise<HistoryDoc | null> {
 }
 
 /** Bytes reached the user's disk, so this document has nothing left to recover. */
-export function markSavedToDisk(id: string): Promise<HistoryDoc | null> {
-  return patchDoc(id, { savedToDiskAt: stamp() });
+export function markSavedToDisk(
+  id: string,
+  options: { nextRev?: number; createdAt?: number; isCurrent?: () => boolean } = {},
+): Promise<HistoryDoc | null> {
+  return patchDoc(
+    id,
+    { savedToDiskAt: stamp() },
+    (doc) =>
+      (options.nextRev === undefined || doc.nextRev === options.nextRev) &&
+      (options.createdAt === undefined || doc.createdAt === options.createdAt) &&
+      options.isCurrent?.() !== false,
+  );
 }
 
 /**

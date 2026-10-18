@@ -8,7 +8,7 @@ import { getReadonlyMode } from './readonly';
 import { isEmbedMode } from '../embed-mode';
 import { markDocumentSaved } from '../unsaved-guard';
 import type { SaveOutcome } from '../save-target';
-import { captureSavePoint, commitSavePoint } from './save-point';
+import { captureSavePoint, commitSavePoint, isSavePointCurrent } from './save-point';
 
 /**
  * Notified when bytes actually reach the user's disk.
@@ -17,9 +17,10 @@ import { captureSavePoint, commitSavePoint } from './save-point';
  * module, so importing it back would close a cycle. Same shape as
  * setConverterCallbacks elsewhere in the app.
  */
-let savedToDiskListener: (() => void) | null = null;
+type SavedToDiskListener = (file: File, isCurrent: () => boolean) => void | Promise<void>;
+let savedToDiskListener: SavedToDiskListener | null = null;
 
-export function setSavedToDiskListener(listener: (() => void) | null): void {
+export function setSavedToDiskListener(listener: SavedToDiskListener | null): void {
   savedToDiskListener = listener;
 }
 
@@ -226,17 +227,21 @@ function routeSavedFile(file: File, state: ReturnType<typeof standaloneExportSta
 
   // Only ordinary saves reuse the linked document destination. Other formats
   // use independent export pickers and must not suppress each other's output.
-  const regularSave = getFileExtension(file.name) === getFileExtension(state.source.fileName);
+  const sourceExt = getFileExtension(state.source.fileName);
+  const savedExt = getFileExtension(file.name);
+  const normalizedExt = ({ DOC: 'DOCX', XLS: 'XLSX', PPT: 'PPTX' } as Record<string, string>)[sourceExt];
+  const regularSave = savedExt === sourceExt || savedExt === normalizedExt;
 
-  const reachedDisk = (): void => {
+  const reachedDisk = async (): Promise<void> => {
     // Reaching the user's disk is the only thing that clears the unsaved-changes
     // warning: an autosave snapshot lives in this browser, a saved file does not.
     if (regularSave)
       writtenSequences.set(state.source, Math.max(writtenSequences.get(state.source) ?? 0, state.sequence));
-    if (state.isCurrent() && commitSavePoint(state.point)) {
-      markDocumentSaved();
-      savedToDiskListener?.();
-    }
+    const isCurrent = () => state.isCurrent() && writtenSequences.get(state.source) === state.sequence;
+    if (regularSave && isCurrent() && isSavePointCurrent(state.point)) await savedToDiskListener?.(file, isCurrent);
+    // Clearing dirty also makes reload look safe. Retain the saved bytes before
+    // publishing completion, then recheck for edits made while storage waited.
+    if (state.isCurrent() && commitSavePoint(state.point)) markDocumentSaved();
   };
 
   // Write back to the document's own file where that is possible, and download
@@ -252,10 +257,10 @@ function routeSavedFile(file: File, state: ReturnType<typeof standaloneExportSta
       const outcome = await diskWriter?.(file);
       if (outcome === 'cancelled') return;
       if (outcome === 'written') {
-        reachedDisk();
+        await reachedDisk();
         return;
       }
-      if (await saveFileToDisk(file, file.name)) reachedDisk();
+      if (await saveFileToDisk(file, file.name)) await reachedDisk();
     } catch (error) {
       notifyOperationFailed(error);
     }

@@ -5,17 +5,19 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 const stream = vi.hoisted(() => ({
   requestSaveDocument: vi.fn(),
   diskWriter: null as null | ((file: File) => Promise<string>),
-  saved: null as null | (() => void),
+  saved: null as null | ((file: File, isCurrent: () => boolean) => void),
 }));
 vi.mock('../../lib/onlyoffice/save-stream', () => ({
   requestSaveDocument: stream.requestSaveDocument,
   setDiskWriter: (writer: (file: File) => Promise<string>) => {
     stream.diskWriter = writer;
   },
-  setSavedToDiskListener: (listener: () => void) => {
+  setSavedToDiskListener: (listener: (file: File, isCurrent: () => boolean) => void) => {
     stream.saved = listener;
   },
 }));
+const { opened } = vi.hoisted(() => ({ opened: vi.fn(async (_file: File, _options?: unknown) => {}) }));
+vi.mock('../../lib/document', () => ({ openLocalFile: opened }));
 vi.mock('../../lib/onlyoffice/readonly', () => ({ getReadonlyMode: () => false }));
 
 import {
@@ -29,13 +31,18 @@ import {
 } from '../../lib/history/autosave';
 import { initDocumentHistory } from '../../lib/history';
 import { resetHistoryDbForTests } from '../../lib/history/db';
-import { getDoc, putSnapshot, resetHistoryClockForTests } from '../../lib/history/store';
+import { getDoc, getLatestSnapshot, putSnapshot, resetHistoryClockForTests } from '../../lib/history/store';
 import { resetSaveTargetsForTests, saveToDiskFile } from '../../lib/save-target';
 import { startDocumentSession } from '../../lib/history/session';
+
+import { rememberActiveSource, readActiveSource } from '../../lib/active-document-source';
+import { restoreSavedDocument } from '../../lib/history/recovery';
 
 const file = () => new File([new Uint8Array([1, 2, 3])], 'Report.docx');
 
 beforeEach(() => {
+  sessionStorage.clear();
+  opened.mockClear();
   clearDocumentSession();
   resetHistoryDbForTests();
   resetHistoryClockForTests();
@@ -107,7 +114,7 @@ it('marks the active recovery row saved after autosave is stopped', async () => 
   await beginAutosaveSession({ docId: 'active', title: 'Report.docx', origin: 'local' });
   await putSnapshot({ id: 'active', title: 'Report.docx', origin: 'local', bytes: new Uint8Array([1]) });
   setAutosaveEnabled(false);
-  stream.saved!();
+  stream.saved!(file(), () => true);
   await vi.waitFor(async () => expect((await getDoc('active'))?.savedToDiskAt).toEqual(expect.any(Number)));
 });
 
@@ -131,4 +138,88 @@ it('does not authorize disk routing from an unvalidated saved URL', async () => 
   const writes = await authorizeTarget('untrusted');
   expect(await stream.diskWriter!(file())).toBe('unavailable');
   expect(writes).toHaveLength(1);
+});
+
+it.each(['export', 'storage'])('discards an older autosave held in %s after disk save B commits', async (phase) => {
+  await beginAutosaveSession({ docId: 'active', title: 'Report.docx', origin: 'local' });
+  await rememberActiveSource('active', new File(['original O'], 'Report.docx'));
+  let finish!: (value: ArrayBuffer | File) => void;
+  const older = new File(['old autosave A'], 'Report.docx');
+  const waiting = vi.fn(
+    () =>
+      new Promise<ArrayBuffer | File>((resolve) => {
+        finish = resolve;
+      }),
+  );
+  if (phase === 'storage') {
+    vi.spyOn(older, 'arrayBuffer').mockImplementation(waiting as () => Promise<ArrayBuffer>);
+    stream.requestSaveDocument.mockResolvedValue(older);
+  } else stream.requestSaveDocument.mockImplementation(waiting);
+  const pending = takeSnapshot();
+  await vi.waitFor(() => expect(waiting).toHaveBeenCalled());
+  const saved = new File(['disk save B'], 'Report.docx');
+  stream.saved!(saved, () => true);
+  await vi.waitFor(async () => expect(await (await readActiveSource('active'))?.text()).toBe('disk save B'));
+  finish(phase === 'storage' ? new Uint8Array([65]).buffer : older);
+  expect(await pending).toBeNull();
+  expect(await getLatestSnapshot('active')).toBeNull();
+  expect(await restoreSavedDocument('active')).toBe(true);
+  expect(await opened.mock.calls[0][0].text()).toBe('disk save B');
+  // Cancelling the older export does not stop future recovery of new edits.
+  stream.requestSaveDocument.mockResolvedValue(new File(['new unsaved C'], 'Report.docx'));
+  await takeSnapshot();
+  opened.mockClear();
+  expect(await restoreSavedDocument('active')).toBe(true);
+  expect(await opened.mock.calls[0][0].text()).toBe('new unsaved C');
+});
+
+it('does not promote an unsaved snapshot made while retaining saved source bytes', async () => {
+  await beginAutosaveSession({ docId: 'active', title: 'Report.docx', origin: 'local' });
+  await rememberActiveSource('active', new File(['original O'], 'Report.docx'));
+  await putSnapshot({ id: 'active', title: 'Report.docx', origin: 'local', bytes: new Uint8Array([65]) });
+  const saved = new File(['disk save B'], 'Report.docx');
+  let finish!: (bytes: ArrayBuffer) => void;
+  const reading = vi.spyOn(saved, 'arrayBuffer').mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+  );
+  stream.saved!(saved, () => true);
+  await vi.waitFor(() => expect(reading).toHaveBeenCalled());
+  await putSnapshot({ id: 'active', title: 'Report.docx', origin: 'local', bytes: new Uint8Array([67]) });
+  finish(new Uint8Array([66]).buffer);
+  await vi.waitFor(async () => expect(await (await readActiveSource('active'))?.text()).toBe('B'));
+  expect((await getDoc('active'))?.savedToDiskAt).toBeUndefined();
+  expect(await restoreSavedDocument('active')).toBe(true);
+  expect(await opened.mock.calls[0][0].text()).toBe('C');
+});
+
+it.each(['document switch', 'newer save'])('does not publish a late source write after %s', async (mode) => {
+  await beginAutosaveSession({ docId: 'active', title: 'Report.docx', origin: 'local' });
+  await rememberActiveSource('active', new File(['original O'], 'Report.docx'));
+  const saved = new File(['old save B'], 'Report.docx');
+  let finish!: (bytes: ArrayBuffer) => void;
+  const reading = vi.spyOn(saved, 'arrayBuffer').mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+  );
+  let current = true;
+  stream.saved!(saved, () => current);
+  await vi.waitFor(() => expect(reading).toHaveBeenCalled());
+  current = false;
+  const docId = mode === 'document switch' ? 'replacement' : 'active';
+  if (mode === 'document switch') {
+    await beginAutosaveSession({ docId, title: 'New.docx', origin: 'local' });
+    await rememberActiveSource(docId, new File(['new source C'], 'New.docx'));
+  } else {
+    stream.saved!(new File(['new source C'], 'Report.docx'), () => true);
+    await vi.waitFor(async () => expect(await (await readActiveSource(docId))?.text()).toBe('new source C'));
+  }
+  finish(new Uint8Array([66]).buffer);
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  expect(await (await readActiveSource(docId))?.text()).toBe('new source C');
+  expect(await getDoc('active')).toBeNull();
 });

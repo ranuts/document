@@ -1,10 +1,17 @@
-/** Original local bytes for this tab's reload, separate from document history. */
+/** Reload bytes for this tab, separate from document history. */
 const DB = 'document-active-sources';
 const STORE = 'sources';
 const POINTER = 'document-active-source';
 const LIFETIME = 24 * 60 * 60 * 1000;
 let revision = 0;
-type Pointer = { docId: string; key: string };
+type Pointer = { docId: string; key: string; savedThroughRevision?: number; historyCreatedAt?: number };
+// Heap ownership is never inherited by a duplicate tab. Each open takes a new
+// slot; only subsequent disk saves in this runtime may replace that slot.
+let activeSlot: Pointer | null = null;
+type SourceProvenance = Pick<Pointer, 'savedThroughRevision' | 'historyCreatedAt'>;
+// Recovery hands this exact File to the ordinary open path. Its provenance
+// comes from the stored bytes, never from a copied tab's stale pointer fields.
+const recoveredFiles = new WeakMap<File, SourceProvenance>();
 type Source = Pointer & {
   expiresAt: number;
   name: string;
@@ -95,11 +102,11 @@ const put = (source: Source) =>
 // Candidates are registered before reading bytes, then updated in place.
 // Deletion by another tab removes that candidate and prevents late writes
 // from recreating it.
-const replace = (source: Source) =>
+const replace = (source: Source, accepts: () => boolean = () => true) =>
   transaction<boolean>('readwrite', (store, done) => {
     const request = store.get(source.key);
     request.onsuccess = () => {
-      if (!request.result) {
+      if (!request.result || !accepts()) {
         done(false);
         return;
       }
@@ -136,51 +143,88 @@ function fileOf(source: Source): File | null {
   return new File([bytes], source.name, { type: source.type, lastModified: source.lastModified });
 }
 
-export async function rememberActiveSource(docId: string, file: File): Promise<boolean> {
+export async function rememberActiveSource(
+  docId: string,
+  file: File,
+  options: { savedThroughRevision?: number; historyCreatedAt?: number; isCurrent?: () => boolean } = {},
+): Promise<boolean> {
   const attempt = ++revision;
-  if (!docId) return false;
+  if (!docId || options.isCurrent?.() === false) return false;
   let candidateKey: string | undefined;
   try {
     // Storage denial must be discovered before persisting orphaned bytes.
     const previous = pointer();
     const before = sessionStorage.getItem(POINTER);
     sessionStorage.setItem(POINTER, before || 'null');
+    const isCurrent = () => attempt === revision && options.isCurrent?.() !== false;
+    const ownedSlot =
+      options.savedThroughRevision !== undefined && activeSlot?.docId === docId && activeSlot.key === previous?.key;
+    // Expiry or explicit deletion by another page can retire an idle slot.
+    // Only absence observed before this write starts permits a fresh candidate;
+    // deletion while preparing the replacement must still cancel the write.
+    const existingSlot = ownedSlot ? await get(activeSlot!.key) : null;
+    if (!isCurrent()) return false;
+    const reuseSlot = !!existingSlot && existingSlot.expiresAt > Date.now();
+    const provenance = options.savedThroughRevision !== undefined ? options : recoveredFiles.get(file);
     const source: Source = {
       docId,
-      key: crypto.randomUUID(),
+      key: reuseSlot ? activeSlot!.key : crypto.randomUUID(),
       expiresAt: Date.now() + LIFETIME,
       name: file.name,
       type: file.type,
       lastModified: file.lastModified,
       file,
+      savedThroughRevision: provenance?.savedThroughRevision,
+      historyCreatedAt: provenance?.historyCreatedAt,
     };
-    candidateKey = source.key;
-    const candidate = { ...source };
-    delete candidate.file;
-    if (!(await put(candidate))) return false;
-    // Register before cleanup yields: a deletion during that cleanup must
-    // remove our candidate too, rather than precede its later creation.
-    await prune();
-    const reference = (await replace(source)) ? await get(source.key) : null;
-    if (!(reference?.file instanceof File)) {
+    if (reuseSlot) {
+      // Prepare the complete replacement before opening a write transaction.
+      // A failed file read or transaction leaves the previous usable bytes
+      // intact, and deleting the slot while reading still prevents resurrection.
       delete source.file;
       source.bytes = new Uint8Array(await file.arrayBuffer());
-      if (!(await replace(source))) {
-        await remove(source.key);
-        return false;
+      if (!isCurrent() || !(await replace(source, isCurrent))) return false;
+      await prune();
+    } else {
+      candidateKey = source.key;
+      const candidate = { ...source };
+      delete candidate.file;
+      if (!(await put(candidate))) return false;
+      // Register before cleanup yields: a deletion during that cleanup must
+      // remove our candidate too, rather than precede its later creation.
+      await prune();
+      const reference = (await replace(source)) ? await get(source.key) : null;
+      if (!(reference?.file instanceof File)) {
+        delete source.file;
+        source.bytes = new Uint8Array(await file.arrayBuffer());
+        if (!(await replace(source, isCurrent))) {
+          await remove(source.key);
+          return false;
+        }
       }
     }
-    if (attempt !== revision) {
-      await remove(source.key);
+    if (!isCurrent()) {
+      if (candidateKey) await remove(candidateKey);
       return false;
     }
     try {
-      sessionStorage.setItem(POINTER, JSON.stringify({ docId, key: source.key }));
+      sessionStorage.setItem(
+        POINTER,
+        JSON.stringify({
+          docId,
+          key: source.key,
+          savedThroughRevision: source.savedThroughRevision,
+          historyCreatedAt: source.historyCreatedAt,
+        }),
+      );
     } catch {
-      await remove(source.key);
+      if (candidateKey) await remove(candidateKey);
       return false;
     }
-    if (previous && previous.key !== source.key) await remove(previous.key);
+    activeSlot = { docId, key: source.key };
+    // Duplicate tabs inherit sessionStorage, including the previous key.
+    // Detach this pointer only; expiry and explicit history deletion collect
+    // records after every tab has had the chance to keep using its own copy.
     return true;
   } catch {
     if (candidateKey) await remove(candidateKey);
@@ -188,7 +232,9 @@ export async function rememberActiveSource(docId: string, file: File): Promise<b
   }
 }
 
-export async function readActiveSource(docId: string): Promise<File | null> {
+export async function readActiveSourceRecord(
+  docId: string,
+): Promise<{ file: File; savedThroughRevision?: number; historyCreatedAt?: number } | null> {
   const attempt = revision;
   try {
     await prune();
@@ -218,27 +264,34 @@ export async function readActiveSource(docId: string): Promise<File | null> {
       };
     });
     if (alive === false || revision !== attempt || pointer()?.key !== owned.key) return null;
-    return file;
+    const provenance = { savedThroughRevision: source.savedThroughRevision, historyCreatedAt: source.historyCreatedAt };
+    recoveredFiles.set(file, provenance);
+    return { file, ...provenance };
   } catch {
     return null;
   }
 }
 
+export async function readActiveSource(docId: string): Promise<File | null> {
+  return (await readActiveSourceRecord(docId))?.file ?? null;
+}
+
 export async function clearActiveSource(): Promise<void> {
   revision++;
-  const owned = pointer();
+  activeSlot = null;
   try {
     sessionStorage.removeItem(POINTER);
   } catch {
     /* best effort */
   }
-  if (owned) await remove(owned.key);
+  // Another tab may still own the inherited pointer.
   await prune();
 }
 
 /** Explicit history deletion also forgets temporary originals in other tabs. */
 export async function deleteDocumentSources(docId?: string): Promise<boolean> {
   revision++;
+  if (docId === undefined || activeSlot?.docId === docId) activeSlot = null;
   const owned = pointer();
   if (docId === undefined || owned?.docId === docId) {
     try {
