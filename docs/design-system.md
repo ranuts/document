@@ -198,3 +198,14 @@ validated token references. Static icon artwork and vendor assets are separate o
 The browser suite verifies real component parts, page families, seven locales, both
 themes, narrow widths and coarse-pointer targets. Token audit success alone does not
 prove component API or interaction correctness.
+
+Two rules are mechanical because both fail silently in review:
+
+- **Logical properties count as spacing.** The property pattern has to read through
+  every hyphen (`padding-inline-start`, not just `padding-inline`); when it stopped at
+  the first one, three literal insets were invisible to the contract.
+- **A palette property never appears in a `transition`.** CSS cannot tell why a colour
+  changed, so `background`, `color`, `border-*-color`, `box-shadow`, `fill` and `stroke`
+  in a transition also fade on a theme flip — each surface at its own duration while the
+  page snaps. Bare durations (`transition: 0.15s`) mean `all` and fail the same way. The
+  documented `var(--…-transition)` hook is the opt-in escape hatch and is not judged.
