@@ -86,13 +86,12 @@ body.agent-panel-resizing #app iframe {
   background: var(--ran-color-bg-hover);
   color: var(--ran-color-text);
 }
+/* Box, border, background, colour and cursor come from the shared
+   `.agent-panel-header button` rule, which outranks this class; only the glyph
+   sizing belongs here. */
 .agent-panel-close {
-  border: none;
-  background: none;
   font-size: var(--ran-text-heading-3);
   line-height: 1;
-  cursor: pointer;
-  color: var(--ran-color-text-disabled);
 }
 .agent-panel-close:hover {
   color: var(--ran-color-text);
@@ -417,13 +416,17 @@ r-dropdown[role='listbox'] {
 }
 
 /* Document assistant: conversation, configuration and review are distinct surfaces. */
+/* Every icon-only control in the header shares one target box. They sit in a
+   single row, so unequal boxes read as misalignment rather than as hierarchy
+   (DESIGN.md §11, "Alignment is structure"). Coarse pointers grow them
+   together via --app-control-touch. */
 .agent-panel-header button,
 .agent-panel-quote {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: var(--ran-size-7);
+  height: var(--ran-size-7);
   padding: 0;
   border: 0;
   border-radius: var(--ran-radius-sm);
@@ -437,14 +440,13 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text);
 }
 .agent-panel-settings-toggle {
-  margin-left: auto;
-  margin-right: var(--ran-space-2);
+  /* The title owns flex:1, so the gear already sits against the trailing
+     controls; a margin here would fight the close button beside it. */
   border: none;
   background: none;
   font-size: var(--ran-text-copy-1);
   line-height: 1;
   cursor: pointer;
-  color: var(--ran-color-text-disabled);
   margin: 0;
 }
 .agent-panel-header button:focus-visible,
@@ -485,8 +487,6 @@ r-dropdown[role='listbox'] {
   gap: var(--ran-space-2);
 }
 .agent-panel-quote {
-  width: 28px;
-  height: 28px;
   margin-left: auto;
 }
 .agent-plan-heading {
@@ -1012,11 +1012,10 @@ r-dropdown[role='listbox'] {
   .agent-panel-header {
     padding: var(--ran-space-2) var(--ran-space-4);
   }
-  .agent-panel-header button {
-    width: 34px;
-    height: 40px;
-    flex: 0 0 34px;
-  }
+  /* No per-width button geometry: the shared 32px target stays, and the
+     coarse-pointer block grows every header control to --app-control-touch
+     together. A 34x40 box here made the row ragged against the 44px clear
+     button beside it. */
   .agent-panel-settings,
   .agent-history-view {
     padding: var(--ran-space-4);
