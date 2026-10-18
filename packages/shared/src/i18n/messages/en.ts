@@ -391,6 +391,7 @@ export const en: I18nMessages = {
   agentModelLoadFailed: 'Model loading failed. Retry or choose another model.',
   agentModelQuota: 'Browser model storage is full. Free site storage or choose a smaller model, then retry.',
   agentStopped: 'Stopped.',
+  agentResponseIncomplete: 'The response is incomplete. Any partial text is kept; queued requests are paused.',
   agentMaxSteps: 'Reached the maximum number of steps; stopped.',
   agentTaskPartialFailed:
     'Approved changes applied: {count}. The remaining work could not be completed. Check the result and request only the unfinished work; completed changes can be undone.',

@@ -385,6 +385,7 @@ export const ko: Partial<I18nMessages> = {
   agentModelQuota:
     '브라우저 모델 저장 공간이 부족합니다. 사이트 저장 공간을 확보하거나 더 작은 모델을 선택한 후 다시 시도하세요.',
   agentStopped: '중지했습니다.',
+  agentResponseIncomplete: '응답이 완료되지 않았습니다. 일부 내용을 보존하고 대기 중인 요청을 일시 중지했습니다.',
   agentMaxSteps: '최대 단계 수에 도달하여 중지했습니다.',
   agentTaskPartialFailed:
     '확인한 변경 {count}개를 적용했습니다. 나머지 작업은 완료하지 못했습니다. 결과를 확인한 뒤 미완료 작업만 요청하세요. 적용한 변경은 실행 취소할 수 있습니다.',

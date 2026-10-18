@@ -396,6 +396,7 @@ export const ja: Partial<I18nMessages> = {
   agentModelQuota:
     'ブラウザーのモデル保存領域が不足しています。サイトの保存領域を空けるか小さいモデルを選び、再試行してください。',
   agentStopped: '停止しました。',
+  agentResponseIncomplete: '応答が完了していません。途中の内容を保持し、待機中のリクエストを一時停止しました。',
   agentMaxSteps: '最大ステップ数に達したため停止しました。',
   agentTaskPartialFailed:
     '確認済みの変更を {count} 件適用しました。残りの作業は完了できませんでした。結果を確認し、未完了の作業だけを依頼してください。適用済みの変更は元に戻せます。',

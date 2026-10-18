@@ -370,6 +370,7 @@ export const zhCN: I18nMessages = {
   agentModelLoadFailed: '模型加载失败。请重试或选择其他模型。',
   agentModelQuota: '浏览器模型存储空间不足。请释放站点存储或选择更小的模型后重试。',
   agentStopped: '已停止。',
+  agentResponseIncomplete: '回复未完成。已保留部分内容，后续排队请求已暂停。',
   agentMaxSteps: '已达到最大执行步数，已停止。',
   agentTaskPartialFailed:
     '已应用 {count} 项确认的修改。后续任务未能完成。请先检查结果，再提出尚未完成的要求；已完成的修改可以撤销。',

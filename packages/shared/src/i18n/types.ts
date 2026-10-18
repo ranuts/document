@@ -381,6 +381,7 @@ export interface I18nMessages {
   agentModelSourceInvalid: string;
   agentModelQuota: string;
   agentStopped: string;
+  agentResponseIncomplete: string;
   agentMaxSteps: string;
   agentTaskPartialFailed: string;
   agentTaskRepeatStopped: string;
