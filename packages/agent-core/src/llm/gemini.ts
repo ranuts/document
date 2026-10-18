@@ -123,10 +123,19 @@ export function parseGeminiResponse(response: GeminiResponse): LLMResponse {
       assistant.push({ type: 'tool_use', id, name: part.functionCall.name, input });
     }
   });
+  const finishReason = candidate?.finishReason;
+  // CONTINUATION exhausts the current generation budget and requires another
+  // request. Filtered candidates and their tool calls are incomplete as well.
+  const stopReason =
+    finishReason === 'MAX_TOKENS' || finishReason === 'CONTINUATION'
+      ? 'max_tokens'
+      : ['SAFETY', 'RECITATION', 'BLOCKLIST', 'PROHIBITED_CONTENT', 'SPII'].includes(finishReason ?? '')
+        ? 'content_filter'
+        : (finishReason ?? 'stop');
   return {
     text,
     toolCalls,
-    stopReason: candidate?.finishReason === 'MAX_TOKENS' ? 'max_tokens' : (candidate?.finishReason ?? 'stop'),
+    stopReason,
     assistant: { role: 'assistant', content: assistant },
   };
 }
