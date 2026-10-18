@@ -7,7 +7,7 @@
 # documented in CLAUDE.md for preview servers).
 set -e
 
-docker build -t document:e2e .
+docker build --build-arg BUILD_REVISION="$(git rev-parse HEAD)" -t document:e2e .
 docker rm -f document-e2e-docker >/dev/null 2>&1 || true
 
 # Extra arguments are forwarded to Playwright. CI sets E2E_SHARD=N/M;

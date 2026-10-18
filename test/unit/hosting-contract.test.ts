@@ -69,6 +69,12 @@ describe('public/_headers', () => {
     }
   });
 
+  it('never caches the deployment identity on Pages or the local production preview', () => {
+    expect(cc('/build-identity.json')).toBe('no-store');
+    expect(read('vite.config.ts')).toContain("'/build-identity.json'");
+    expect(read('vite.config.ts')).toContain("res.setHeader('Cache-Control', 'no-store')");
+  });
+
   it('declares the x2t wasm pre-encoded, which is the only thing that makes it loadable', () => {
     // The file under that name holds brotli bytes (6.6 MB, against 42.1 MB
     // raw and 9.0 MB for the best gzip). The browser decoding it at the
@@ -160,6 +166,10 @@ describe('sws.toml (self-hosted Docker)', () => {
     expect(cc('**')).toBe('no-cache');
   });
 
+  it('never caches the deployment identity in Docker', () => {
+    expect(cc('/build-identity.json')).toBe('no-store');
+  });
+
   it('declares gzip for x2t so ordinary HTTP self-hosting can decode it', () => {
     // Chrome only decodes Brotli on trustworthy origins. Docker must serve
     // gzip for http://<server-ip>, while HTTPS Pages keeps its Brotli payload.
@@ -191,7 +201,9 @@ describe('sws.toml (self-hosted Docker)', () => {
     expect(dockerfile).toMatch(/COPY sws\.toml \/sws\.toml/);
     expect(dockerfile).toMatch(/ENV SERVER_CONFIG_FILE=\/sws\.toml/);
     // Re-encode before the build hashes the served vendor tree for sw.js.
-    expect(dockerfile).toMatch(/node bin\/prepare-docker-wasm\.mjs public\s*&&\s*pnpm run build/);
+    expect(dockerfile).toMatch(
+      /node bin\/prepare-docker-wasm\.mjs public\s*&&\s*BUILD_REVISION="\$BUILD_REVISION" pnpm run build/,
+    );
   });
 });
 

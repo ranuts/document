@@ -94,3 +94,9 @@ Content-Security-Policy = "default-src 'none'; script-src 'self' 'wasm-unsafe-ev
 source = "/assets/pdf.worker.min-*.mjs"
 [advanced.headers.headers]
 Content-Type = "text/javascript; charset=utf-8"
+
+# Final served-tree deployment probe (same rule as Pages).
+[[advanced.headers]]
+source = "/build-identity.json"
+[advanced.headers.headers]
+Cache-Control = "no-store"

@@ -136,3 +136,7 @@
 # PDF extraction module worker must remain executable under strict MIME checks.
 /assets/pdf.worker.min-*.mjs
   Content-Type: text/javascript; charset=utf-8
+
+# Final build identity is a deploy probe, never an offline asset.
+/build-identity.json
+  Cache-Control: no-store
