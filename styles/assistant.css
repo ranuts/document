@@ -509,6 +509,8 @@ r-dropdown[role='listbox'] {
   padding: var(--ran-space-1) 0;
   background: transparent;
   border-radius: 0;
+  max-height: 240px;
+  overflow: auto;
 }
 .agent-plan-original {
   font-size: var(--ran-text-label-3);
@@ -553,8 +555,8 @@ r-dropdown[role='listbox'] {
   overflow-wrap: anywhere;
   color: var(--ran-color-text-secondary);
   font-size: var(--ran-text-label-3);
-  margin: 0 calc(var(--ran-space-4) + var(--ran-space-1)) var(--ran-space-3);
-  padding: 0 0 0 calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
+  margin: 0 var(--agent-composer-inset) var(--ran-space-3);
+  padding: 0 0 0 calc(var(--agent-composer-inset) / 2);
   border-left: 2px solid var(--ran-color-primary);
   line-height: 1.55;
 }
@@ -563,28 +565,28 @@ r-dropdown[role='listbox'] {
   gap: var(--ran-space-4);
   line-height: 1.75;
 }
+/* One block per element: the welcome surface used to declare these twice, and
+   the later copy silently won -- the earlier font-size and the flex row were
+   dead code that still read as intent. */
 .agent-panel .cui-empty {
   width: 100%;
   max-width: none;
   margin: auto 0;
   box-sizing: border-box;
-  padding: calc(var(--ran-space-4) + var(--ran-space-1)) 0;
-  font-size: var(--ran-text-heading-3);
+  padding: var(--ran-space-6) 0;
+  font-size: var(--ran-text-heading-2);
   font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 1.4;
+  letter-spacing: -0.04em;
+  line-height: 1.25;
 }
 .agent-panel .cui-empty-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0 var(--ran-space-3);
-  margin-top: calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
+  display: block;
+  margin-top: var(--ran-space-3);
 }
 .agent-welcome-hint {
-  flex: 0 0 100%;
-  margin: 0 0 calc(var(--ran-space-4) + var(--ran-space-1));
-  font-size: var(--ran-text-label-3);
+  /* The actions row is a block, so a flex-basis here would be inert. */
+  margin: 0 0 var(--ran-space-6);
+  font-size: var(--ran-text-label-2);
   font-weight: 400;
   line-height: 1.65;
   letter-spacing: 0;
@@ -752,6 +754,12 @@ r-dropdown[role='listbox'] {
 
 /* Product surfaces: each view owns the available space. */
 .agent-panel {
+  /* Status lines beside the composer (model state, readiness, write
+     destination) line up with the composer's *text*, not its edge: footer
+     padding plus the composer's own padding. Three rules must agree, so the
+     sum is named once here instead of repeated as arithmetic (DESIGN.md §11,
+     "When a value must equal another value, name it"). */
+  --agent-composer-inset: calc(var(--ran-space-4) + var(--ran-space-1));
   position: fixed;
   top: 0;
   right: 0;
@@ -955,11 +963,16 @@ r-dropdown[role='listbox'] {
   margin: 0;
 }
 .agent-readiness {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
   flex: 0 0 auto;
   order: 3;
-  padding: 0 calc(var(--ran-space-4) + var(--ran-space-1)) var(--ran-space-3);
+  gap: var(--ran-space-2);
+  padding: 0 var(--agent-composer-inset) var(--ran-space-3);
   margin: 0;
   font-size: var(--ran-text-label-3);
+  line-height: 1.6;
   color: var(--ran-color-text-secondary);
 }
 .agent-readiness[hidden] {
@@ -1050,7 +1063,7 @@ r-dropdown[role='listbox'] {
 .agent-panel-write-destination {
   flex: 0 0 auto;
   order: 4;
-  padding: 0 calc(var(--ran-space-4) + var(--ran-space-1)) var(--ran-space-3);
+  padding: 0 var(--agent-composer-inset) var(--ran-space-3);
   font-size: var(--ran-text-label-3);
   line-height: 1.6;
   color: var(--ran-color-text-secondary);
@@ -1397,9 +1410,13 @@ r-dropdown[role='listbox'] {
 .agent-speech-mic[aria-pressed='true'] svg:last-child {
   display: block;
 }
+/* One lane for the language label: it yields before it can cover Stop/Send,
+   so it is declared once, with the select's public hooks. */
 .agent-speech-language {
-  flex: 0 0 96px;
-  width: 96px;
+  flex: 1 1 96px;
+  width: auto;
+  min-width: 0;
+  max-width: 96px;
   --ran-select-background-color: transparent;
   --ran-select-border: 1px solid transparent;
   --ran-select-hover-border: 1px solid transparent;
@@ -1448,8 +1465,6 @@ r-dropdown[role='listbox'] {
 }
 .agent-speech-privacy {
   flex: 0 0 auto;
-}
-.agent-speech-privacy {
   --ran-popover-host-display: block;
   --ran-popover-content-padding: var(--ran-space-3);
 }
@@ -1496,10 +1511,6 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text-secondary);
   font-size: var(--ran-text-label-3);
   line-height: 1.6;
-}
-.agent-plan-content {
-  max-height: 240px;
-  overflow: auto;
 }
 .agent-plan-comparison {
   max-height: 280px;
@@ -1601,14 +1612,6 @@ r-dropdown[role='listbox'] {
   outline-offset: 2px;
 }
 
-.agent-readiness {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--ran-space-2);
-  font-size: var(--ran-text-label-3);
-  line-height: 1.6;
-}
 .agent-prepare-action {
   border: 0;
   background: transparent;
@@ -1813,21 +1816,6 @@ r-dropdown[role='listbox'] {
 }
 
 /* Contextual document tasks share the transcript and composer's leading edge. */
-.agent-panel .cui-empty {
-  margin: auto 0;
-  font-size: var(--ran-text-heading-2);
-  line-height: 1.25;
-  letter-spacing: -0.04em;
-}
-.agent-panel .cui-empty-actions {
-  display: block;
-  margin-top: var(--ran-space-3);
-}
-.agent-welcome-hint {
-  margin: 0 0 var(--ran-space-6);
-  font-size: var(--ran-text-label-2);
-  line-height: 1.65;
-}
 .agent-task-entry {
   font-weight: 400;
   letter-spacing: 0;
@@ -2328,8 +2316,6 @@ r-dropdown[role='listbox'] {
 .agent-artifacts-list {
   display: flex;
   flex-direction: column;
-}
-.agent-artifacts-list {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -2368,13 +2354,6 @@ r-dropdown[role='listbox'] {
   font-weight: 600;
 }
 
-/* The language picker yields space before it can cover Stop/Send. */
-.agent-speech-language {
-  flex: 1 1 96px;
-  width: auto;
-  min-width: 0;
-  max-width: 96px;
-}
 /* A narrow toolbar keeps a real language label when Stop joins Send.
    Use the select's public spacing hooks rather than losing its text lane. */
 @container agent-panel (max-width: 360px) {
