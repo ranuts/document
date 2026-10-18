@@ -990,7 +990,9 @@ r-dropdown[role='listbox'] {
 }
 .agent-panel .cui-msg-user .cui-bubble {
   padding: var(--ran-space-3) var(--ran-space-4);
-  border-radius: var(--ran-radius-md) var(--ran-radius-md) calc(var(--ran-radius-sm) / 2) var(--ran-radius-md);
+  /* Radius comes from the ladder; 3px (radius-sm/2) was a fifth step that
+     existed nowhere else in the product (DESIGN.md §4). */
+  border-radius: var(--ran-radius-md) var(--ran-radius-md) var(--ran-radius-sm) var(--ran-radius-md);
   background: var(--ran-color-bg-muted);
 }
 .agent-panel .cui-send,
@@ -1846,7 +1848,7 @@ r-dropdown[role='listbox'] {
   display: flex;
   align-items: center;
   text-align: start;
-  min-height: 40px;
+  min-height: var(--ran-size-7);
   padding: var(--ran-space-2) 0;
   border: 0;
   border-radius: var(--ran-radius-sm);
@@ -2440,15 +2442,19 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text-secondary);
   max-height: 16rem;
   overflow: auto;
-  margin: 0.5rem 0;
+  margin: var(--ran-space-2) 0;
 }
 .agent-source-preview small {
   color: var(--ran-color-text-secondary);
 }
+/* An inline citation marker is superscript-scale, not a button inset: its
+   optical padding has to scale with the glyph, so it is one named local token
+   rather than a spacing step (DESIGN.md §11, optical corrections). */
 .agent-source-citation {
+  --agent-citation-inset: 0.15em;
   display: inline;
   border: 0;
-  padding: 0 0.15em;
+  padding: 0 var(--agent-citation-inset);
   background: none;
   color: var(--ran-color-primary);
   font: inherit;
