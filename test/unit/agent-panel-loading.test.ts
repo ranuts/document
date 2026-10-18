@@ -8,6 +8,7 @@ import { AgentChatController } from '../../lib/agent-plugin/ui/controller';
 import { createHistoryStorage } from '../../lib/agent-plugin/ui/storage';
 import { ChatView } from '@ranuts/chat-ui';
 import { RequestQueue } from '../../lib/agent-plugin/ui/request-queue';
+import { rememberModelSource } from '@ranuts/agent-core/llm/model-cache';
 HTMLElement.prototype.scrollTo = vi.fn();
 // Runtime tests explicitly prepare, as a user must now do from settings.
 function createPreparedPanel() {
@@ -29,6 +30,7 @@ const state = vi.hoisted(() => ({
   progress: [] as Array<(value: { text: string; progress?: number }) => void>,
   unavailable: undefined as undefined | (() => void),
   ready: false,
+  loadedSources: [] as Array<{ model?: string; modelUrl?: string; modelLibUrl?: string }>,
   nativeEndpoint: false,
   cached: false,
   cacheChecks: vi.fn(),
@@ -118,15 +120,14 @@ vi.mock('@ranuts/agent-core/llm/webllm', async (original) => ({
   },
 }));
 vi.mock('../../lib/onlyoffice/readonly', () => ({ getReadonlyMode: () => state.readonly }));
-vi.mock('@ranuts/agent-core/llm/model-cache', () => ({
+vi.mock('@ranuts/agent-core/llm/model-cache', async (original) => ({
+  ...(await original<typeof import('@ranuts/agent-core/llm/model-cache')>()),
   deleteCachedModel: state.deleteCache,
   listCachedGGUF: async () =>
     state.cpuCached
       ? [{ name: 'cpu-model.gguf', url: 'https://models.example/cpu-model.gguf', size: 100, complete: true }]
       : [],
   deleteCachedGGUF: state.deleteCache,
-  rememberedModelSources: () => [],
-  rememberModelSource: () => {},
 }));
 vi.mock('../../lib/agent-plugin/editor-bridge', () => ({
   getEditorApi: () =>
@@ -185,10 +186,17 @@ vi.mock('@ranuts/agent-core/llm/local', async (original) => ({
       return state.activeBackend;
     }
     constructor(options: {
-      webllm: { onProgress: (value: { text: string }) => void; onUnavailable?: () => void };
+      webllm: {
+        model?: string;
+        modelUrl?: string;
+        modelLibUrl?: string;
+        onProgress: (value: { text: string }) => void;
+        onUnavailable?: () => void;
+      };
       onBackend?: (backend: 'webllm' | 'wllama') => void;
       wllama?: { onProgress: (value: { loaded: number; total: number }) => void };
     }) {
+      state.loadedSources.push(options.webllm);
       state.progress.push(options.webllm.onProgress);
       state.unavailable = options.webllm.onUnavailable;
       state.backend = options.onBackend;
@@ -389,6 +397,9 @@ vi.mock('../../lib/agent-plugin/document-tool-action', () => {
 afterEach(() => {
   localStorage.removeItem('agent-panel-provider');
   localStorage.removeItem('agent-local-preset');
+  localStorage.removeItem('agent-local-model-id');
+  localStorage.removeItem('agent-local-model-url');
+  localStorage.removeItem('agent-local-model-lib');
   localStorage.removeItem('agent-panel-gguf-url');
   localStorage.removeItem('agent-writing-endpoint');
   localStorage.removeItem('agent_conversation_saving_v2');
@@ -400,6 +411,8 @@ afterEach(() => {
   state.actionDispose.mockClear();
   state.progress.length = 0;
   state.ready = false;
+  state.loadedSources.length = 0;
+  localStorage.removeItem('agent-model-cache-catalog-v1');
   state.conversations = undefined;
   state.conversationRepository = undefined;
   state.nativeEndpoint = false;
@@ -2176,6 +2189,52 @@ it.each(['word', 'cell', 'slide'] as const)(
     await vi.waitFor(() => expect(state.apply).toHaveBeenCalledOnce());
   },
 );
+it('loads a remembered mirror from real settings and keeps same-id official cache deletion independent', async () => {
+  const mirror = {
+    id: state.cachedModel,
+    label: 'Saved mirror source',
+    modelUrl: '/models/mirror/',
+    modelLibUrl: '/models/mirror.wasm',
+  };
+  rememberModelSource(mirror);
+  state.cached = true;
+  state.ready = true;
+  const panel = createAgentPanel();
+  const inventory = panel.querySelector<HTMLDetailsElement>('.agent-model-cache')!;
+  inventory.open = true;
+  inventory.dispatchEvent(new Event('toggle'));
+  const row = (label: string) =>
+    [...inventory.querySelectorAll<HTMLElement>('.agent-model-cache-row')].find((item) =>
+      item.textContent?.startsWith(label),
+    );
+  await vi.waitFor(() => expect(row(mirror.label)).toBeDefined());
+  row(mirror.label)!.querySelector<HTMLElement>('.agent-cache-use')!.click();
+  await vi.waitFor(() => expect(state.preload).toHaveBeenCalledOnce());
+  expect(state.loadedSources.at(-1)).toMatchObject({
+    model: mirror.id,
+    modelUrl: mirror.modelUrl,
+    modelLibUrl: mirror.modelLibUrl,
+  });
+  expect(localStorage.getItem('agent-local-model-url')).toBe(mirror.modelUrl);
+  expect(localStorage.getItem('agent-local-model-lib')).toBe(mirror.modelLibUrl);
+  await vi.waitFor(() =>
+    expect(row(mirror.label)?.querySelector('.agent-cache-use')?.hasAttribute('disabled')).toBe(true),
+  );
+  const official = row('Qwen3 · 4B')!;
+  expect(official.querySelector('.agent-cache-use')?.hasAttribute('disabled')).toBe(false);
+  const disposals = state.dispose.mock.calls.length;
+  const remove = official.querySelector<HTMLElement>('.agent-cache-delete')!;
+  remove.click();
+  remove.click();
+  await vi.waitFor(() => expect(state.deleteCache).toHaveBeenCalledWith(mirror.id, {}));
+  expect(state.dispose.mock.calls).toHaveLength(disposals);
+  expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded'));
+  await vi.waitFor(() => expect(inventory.contains(official)).toBe(false));
+  row('Qwen3 · 4B')!.querySelector<HTMLElement>('.agent-cache-use')!.click();
+  await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(2));
+  expect(state.loadedSources.at(-1)).toMatchObject({ model: mirror.id, modelUrl: undefined, modelLibUrl: undefined });
+  expect(state.dispose.mock.calls.length).toBeGreaterThan(disposals);
+});
 it('requires confirmation and completed unload before deleting the running cached model', async () => {
   state.ready = true;
   state.cached = true;

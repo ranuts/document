@@ -1,4 +1,4 @@
-import { resolveModelArtifactUrl, resolveModelConfig, type ModelSource } from './model-source';
+import { modelSourceIdentity, resolveModelArtifactUrl, resolveModelConfig, type ModelSource } from './model-source';
 /** Delete model weights/config only. WASM may be shared by other cached models. */
 export async function deleteCachedModel(modelId: string, source: ModelSource = {}): Promise<void> {
   const { deleteModelInCache, deleteChatConfigInCache, prebuiltAppConfig } = await import('@mlc-ai/web-llm');
@@ -90,7 +90,8 @@ export function rememberedModelSources(): CachedModelSource[] {
 }
 export function rememberModelSource(entry: CachedModelSource): void {
   try {
-    const entries = rememberedModelSources().filter((item) => item.id !== entry.id || item.modelUrl !== entry.modelUrl);
+    const identity = modelSourceIdentity(entry.id, entry);
+    const entries = rememberedModelSources().filter((item) => modelSourceIdentity(item.id, item) !== identity);
     localStorage.setItem(CATALOG_KEY, JSON.stringify([...entries, entry].slice(-32)));
   } catch {
     /* Cache remains usable when preference storage is unavailable. */

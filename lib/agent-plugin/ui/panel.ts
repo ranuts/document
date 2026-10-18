@@ -50,6 +50,7 @@ import type { LLMMessage } from '@ranuts/agent-core/llm/types';
 import { DEFAULT_CPU_MODEL_URL, LocalInferenceProvider } from '@ranuts/agent-core/llm/local';
 import { isModelCached, WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
 import type { LocalLLMProvider } from '@ranuts/agent-core/llm/types';
+import { modelSourceIdentity, type ModelSelection } from '@ranuts/agent-core/llm/model-source';
 import { resolveTaskModel, type ModelTask } from '@ranuts/agent-core/llm/task-model';
 import type { WritingRoute } from '@ranuts/agent-core/llm/writing-route';
 import { DEFAULT_LOOPBACK_ENDPOINT, createEndpointProvider } from '@ranuts/agent-core/llm/endpoint';
@@ -108,7 +109,7 @@ import { createRequestRouting } from './request-routing';
 import { createPanelWorkspace, type PanelWorkspaceView } from './panel-workspace';
 import { createPanelSettingsView } from './settings-view';
 import { generateDocumentDraft } from './document-draft';
-import { listCachedGGUF, rememberModelSource } from '@ranuts/agent-core/llm/model-cache';
+import { listCachedGGUF, rememberModelSource, rememberedModelSources } from '@ranuts/agent-core/llm/model-cache';
 
 function compactSelect(
   className: string,
@@ -992,6 +993,7 @@ export function createAgentPanel(
   let controller: AgentChatController | null = null;
   let controllerKind = '';
   let localProviderKey = '';
+  let localProviderModel: ModelSelection | undefined;
   let controllerGeneration = 0;
   let conversationRevision = 0;
   let loadAttempt = 0;
@@ -1293,6 +1295,7 @@ export function createAgentPanel(
     const previous = webllmProvider;
     webllmProvider = null;
     localProviderKey = '';
+    localProviderModel = undefined;
     if (previous) {
       const cleanup = previous.dispose();
       runtimeCleanup = cleanup;
@@ -1486,19 +1489,22 @@ export function createAgentPanel(
       return controller;
     }
     if (id === 'webllm') {
-      const kind = `webllm:${selectedLocalModel()}`;
+      const model = { id: selectedLocalModel(), ...localSource() };
+      const kind = `webllm:${modelSourceIdentity(model.id, model)}`;
       if (!controller || controllerKind !== kind) {
         // Local writing candidates use text generation; the app owns any future
         // preview/apply workflow instead of exposing native model tools.
         controller?.dispose();
         if (!webllmProvider || localProviderKey !== kind) {
           localProviderKey = kind;
+          localProviderModel = model;
           webllmProvider = new LocalInferenceProvider({
             prepareRuntimeAssets: prepareAssistantOffline,
             generation: generationOptions,
             webllm: {
-              model: selectedLocalModel(),
-              ...localSource(),
+              model: model.id,
+              modelUrl: model.modelUrl,
+              modelLibUrl: model.modelLibUrl,
               chatOnly: true,
               onUnavailable: () => {
                 if (generation !== controllerGeneration || modelLoading) return;
@@ -1589,12 +1595,16 @@ export function createAgentPanel(
         hasConfiguration = true;
         if (currentProvider() === 'webllm' && !localModelId.value.trim())
           localStorageSetItem('agent-local-preset', modelSelect.value);
-        if (currentProvider() === 'webllm')
+        if (currentProvider() === 'webllm' && localProviderModel) {
+          const model = localProviderModel;
+          const remembered = rememberedModelSources().find(
+            (item) => modelSourceIdentity(item.id, item) === modelSourceIdentity(model.id, model),
+          );
           rememberModelSource({
-            id: selectedLocalModel(),
-            label: WEBLLM_MODELS.find((item) => item.id === selectedLocalModel())?.label ?? selectedLocalModel(),
-            ...localSource(),
+            ...model,
+            label: remembered?.label ?? WEBLLM_MODELS.find((item) => item.id === model.id)?.label ?? model.id,
           });
+        }
         syncSidebar();
         if (currentProvider() === 'webllm' || cacheList.open) void refreshCache();
       }
@@ -2979,7 +2989,7 @@ export function createAgentPanel(
     localModelLib,
     ggufUrl,
     note,
-    selectedLocalModel,
+    getLoadedModel: () => localProviderModel,
     currentProvider,
     getProvider: () => webllmProvider,
     isBusy: () => cacheBusy,
