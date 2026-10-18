@@ -1,3 +1,4 @@
+import { incompleteResponseReason } from './completion';
 import { validateWritingCurrency } from './writing-currency';
 import type { LLMMessage, LLMProvider, LLMResponse } from './types';
 
@@ -60,8 +61,7 @@ export function buildWritingMessages(request: WritingRequest): LLMMessage[] {
 }
 
 function parseWritingBody(response: LLMResponse): { text: string } {
-  if (response.toolCalls.length || ['max_tokens', 'length'].includes(response.stopReason))
-    throw new Error('Incomplete writing response');
+  if (response.toolCalls.length || incompleteResponseReason(response)) throw new Error('Incomplete writing response');
   if (response.text.length > 20000) throw new Error('Writing response is too large');
   const output: unknown = JSON.parse(response.text.replace(/^\s*<think>\s*<\/think>\s*/, '').trim());
   if (

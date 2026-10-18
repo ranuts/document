@@ -1,3 +1,4 @@
+import { incompleteResponseReason } from '@ranuts/agent-core/llm/completion';
 import type { WritingLanguage } from '@ranuts/agent-core/llm/writing-task';
 import { WRITING_LANGUAGES } from '@ranuts/agent-core/llm/writing-task';
 import type { LLMProvider } from '@ranuts/agent-core/llm/types';
@@ -114,11 +115,7 @@ export async function resolveRequestIntent(
     ? await provider.generateJSON(messages, schema, signal)
     : await provider.chat(messages, [], signal);
   signal.throwIfAborted();
-  if (
-    response.toolCalls.length ||
-    ['length', 'max_tokens'].includes(response.stopReason) ||
-    response.text.length > 1000
-  )
+  if (response.toolCalls.length || incompleteResponseReason(response) || response.text.length > 1000)
     throw new Error('Incomplete task routing response');
   const output: unknown = JSON.parse(response.text.replace(/^\s*<think>\s*<\/think>\s*/, '').trim());
   if (

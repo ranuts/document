@@ -1,3 +1,4 @@
+import { incompleteResponseReason } from './completion';
 import type { LLMProvider } from './types';
 
 export type ActionEditor = 'word' | 'cell';
@@ -118,7 +119,7 @@ export async function generateActionPlan(
     ? await provider.generateJSON(messages, schema, signal)
     : await provider.chat(messages, [], signal);
   signal.throwIfAborted();
-  if (response.toolCalls?.length || response.stopReason === 'max_tokens' || response.stopReason === 'length')
+  if (response.toolCalls?.length || incompleteResponseReason(response))
     throw new Error('Incomplete or unexpected action response');
   const output: unknown = JSON.parse(response.text.replace(/^\s*<think>\s*<\/think>\s*/, '').trim());
   if (!exactKeys(output, ['status', 'content']) || typeof output.content !== 'string')
