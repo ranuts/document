@@ -184,7 +184,10 @@ test('cached-model delete keeps its danger role through confirmation and pending
     // This case checks the UI's pending deletion state. Use the real Cache API
     // fallback on every engine: Linux WebKit exposes OPFS methods but rejects
     // writable creation, so method presence cannot seed a portable fixture.
-    Object.defineProperty(navigator.storage, 'getDirectory', { configurable: true, value: undefined });
+    Object.defineProperty(Object.getPrototypeOf(navigator.storage), 'getDirectory', {
+      configurable: true,
+      value: undefined,
+    });
     const remove = Cache.prototype.delete;
     let release: () => void = () => {};
     const hold = new Promise<void>((resolve) => (release = resolve));
@@ -195,8 +198,10 @@ test('cached-model delete keeps its danger role through confirmation and pending
     };
     Object.assign(window, { releaseCommandDeletion: release });
   });
-  await page.goto('/');
-  await page.evaluate(async () => {
+  await page.goto('/editor?new=docx&locale=en');
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  expect(await page.evaluate(() => typeof navigator.storage.getDirectory)).toBe('undefined');
+  const seeded = await page.evaluate(async () => {
     const cache = await caches.open('local-ai-wllama-models-v1');
     for (const [name, value] of [
       ['command-fixture.gguf', 'x'],
@@ -207,9 +212,9 @@ test('cached-model delete keeps its danger role through confirmation and pending
     ]) {
       await cache.put(`/__local_ai_model_cache__/entry-${encodeURIComponent(name)}`, new Response(value));
     }
+    return (await cache.keys()).length;
   });
-  await page.goto('/editor?new=docx&locale=en');
-  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  expect(seeded).toBe(2);
   await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
   await page.locator('.agent-panel-settings-toggle').click();
   await expect(page.locator('.agent-model-cache > summary')).toContainText('(1)');
