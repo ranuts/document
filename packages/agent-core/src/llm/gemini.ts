@@ -125,13 +125,29 @@ export function parseGeminiResponse(response: GeminiResponse): LLMResponse {
   });
   const finishReason = candidate?.finishReason;
   // CONTINUATION exhausts the current generation budget and requires another
-  // request. Filtered candidates and their tool calls are incomplete as well.
+  // request. Only explicit STOP completes a candidate. Keep missing reasons
+  // compatible with intermediate streaming chunks; other explicit terminations
+  // are incomplete and cannot authorize a tool call.
   const stopReason =
     finishReason === 'MAX_TOKENS' || finishReason === 'CONTINUATION'
       ? 'max_tokens'
-      : ['SAFETY', 'RECITATION', 'BLOCKLIST', 'PROHIBITED_CONTENT', 'SPII'].includes(finishReason ?? '')
+      : [
+            'SAFETY',
+            'RECITATION',
+            'BLOCKLIST',
+            'PROHIBITED_CONTENT',
+            'SPII',
+            'LANGUAGE',
+            'IMAGE_SAFETY',
+            'IMAGE_PROHIBITED_CONTENT',
+            'IMAGE_RECITATION',
+            'ESCALATION',
+            'PUP_LIMITED_DISABLED',
+          ].includes(finishReason ?? '')
         ? 'content_filter'
-        : (finishReason ?? 'stop');
+        : finishReason === 'STOP' || finishReason === undefined
+          ? (finishReason ?? 'stop')
+          : 'incomplete';
   return {
     text,
     toolCalls,

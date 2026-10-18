@@ -73,7 +73,7 @@ export interface LLMResponse {
   text: string;
   /** Tool calls the model wants executed (empty when none). */
   toolCalls: LLMToolCall[];
-  /** Why generation stopped, e.g. "end_turn" | "tool_use" | "max_tokens". */
+  /** Why generation stopped, e.g. "end_turn" | "tool_use" | "max_tokens" | "content_filter" | "incomplete". */
   stopReason: string;
   /** The assistant message to append to history before the next turn. */
   assistant: LLMMessage;

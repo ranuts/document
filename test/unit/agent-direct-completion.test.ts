@@ -9,7 +9,17 @@ import { generateDocumentToolPlan } from '../../lib/agent-plugin/document-tool-p
 import { generateDocumentDraft } from '../../lib/agent-plugin/ui/document-draft';
 import { resolveRequestIntent } from '../../lib/agent-plugin/ui/request-intent';
 
-const reasons = ['content_filter', 'length', 'max_tokens', 'SAFETY', 'CONTINUATION', 'MAX_TOKENS'] as const;
+const reasons = [
+  'content_filter',
+  'length',
+  'max_tokens',
+  'SAFETY',
+  'CONTINUATION',
+  'MAX_TOKENS',
+  'incomplete',
+  'OTHER',
+  'MALFORMED_FUNCTION_CALL',
+] as const;
 function parsed(text: string, reason: string): LLMResponse {
   return reason === reason.toUpperCase()
     ? parseGeminiResponse({ candidates: [{ finishReason: reason, content: { parts: [{ text }] } }] })

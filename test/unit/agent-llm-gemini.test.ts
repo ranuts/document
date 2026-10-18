@@ -196,3 +196,32 @@ it.each([
     stopReason,
   });
 });
+
+it.each([
+  ['LANGUAGE', 'content_filter'],
+  ['IMAGE_SAFETY', 'content_filter'],
+  ['IMAGE_PROHIBITED_CONTENT', 'content_filter'],
+  ['IMAGE_RECITATION', 'content_filter'],
+  ['ESCALATION', 'content_filter'],
+  ['PUP_LIMITED_DISABLED', 'content_filter'],
+  ['MALFORMED_FUNCTION_CALL', 'incomplete'],
+  ['UNEXPECTED_TOOL_CALL', 'incomplete'],
+  ['TOO_MANY_TOOL_CALLS', 'incomplete'],
+  ['MISSING_THOUGHT_SIGNATURE', 'incomplete'],
+  ['MALFORMED_RESPONSE', 'incomplete'],
+  ['OTHER', 'incomplete'],
+  ['IMAGE_OTHER', 'incomplete'],
+  ['NO_IMAGE', 'incomplete'],
+  ['FINISH_REASON_UNSPECIFIED', 'incomplete'],
+  ['FUTURE_TERMINATION', 'incomplete'],
+])('rejects Gemini abnormal termination %s as incomplete', (finishReason, stopReason) => {
+  expect(
+    parseGeminiResponse({ candidates: [{ finishReason, content: { parts: [{ text: 'partial' }] } }] }),
+  ).toMatchObject({ text: 'partial', stopReason });
+});
+it('keeps absent Gemini finish reasons usable for intermediate stream chunks', () => {
+  expect(parseGeminiResponse({ candidates: [{ content: { parts: [{ text: 'delta' }] } }] })).toMatchObject({
+    text: 'delta',
+    stopReason: 'stop',
+  });
+});
