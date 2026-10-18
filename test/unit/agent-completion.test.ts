@@ -20,9 +20,42 @@ const cases = [
   'BLOCKLIST',
   'PROHIBITED_CONTENT',
   'SPII',
+  'LANGUAGE',
+  'IMAGE_SAFETY',
+  'IMAGE_PROHIBITED_CONTENT',
+  'IMAGE_RECITATION',
+  'ESCALATION',
+  'PUP_LIMITED_DISABLED',
+  'MALFORMED_FUNCTION_CALL',
+  'UNEXPECTED_TOOL_CALL',
+  'TOO_MANY_TOOL_CALLS',
+  'MISSING_THOUGHT_SIGNATURE',
+  'MALFORMED_RESPONSE',
+  'OTHER',
+  'IMAGE_OTHER',
+  'NO_IMAGE',
+  'FINISH_REASON_UNSPECIFIED',
+  'FUTURE_TERMINATION',
 ] as const;
 const expectedReason = (reason: string) =>
-  ['length', 'max_tokens', 'MAX_TOKENS', 'CONTINUATION'].includes(reason) ? 'max_tokens' : 'content_filter';
+  ['length', 'max_tokens', 'MAX_TOKENS', 'CONTINUATION'].includes(reason)
+    ? 'max_tokens'
+    : [
+          'content_filter',
+          'SAFETY',
+          'RECITATION',
+          'BLOCKLIST',
+          'PROHIBITED_CONTENT',
+          'SPII',
+          'LANGUAGE',
+          'IMAGE_SAFETY',
+          'IMAGE_PROHIBITED_CONTENT',
+          'IMAGE_RECITATION',
+          'ESCALATION',
+          'PUP_LIMITED_DISABLED',
+        ].includes(reason)
+      ? 'content_filter'
+      : 'provider';
 function provider(stopReason: string, streaming: boolean, tool = false): LLMProvider {
   const response =
     stopReason === stopReason.toUpperCase()
