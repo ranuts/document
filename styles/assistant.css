@@ -389,13 +389,13 @@ r-dropdown[role='listbox'] {
   max-width: 100%;
   box-sizing: border-box;
   padding: var(--ran-space-2) var(--ran-space-3);
-  border: 1px solid var(--ran-color-border, #ddd);
+  border: 1px solid var(--ran-color-border, var(--ran-gray-400));
   border-radius: var(--ran-radius-sm);
   color: var(--ran-color-text);
   cursor: pointer;
 }
 .agent-panel-gguf-choose:focus-within {
-  outline: 2px solid var(--ran-color-primary, #2563eb);
+  outline: 2px solid var(--ran-color-primary, var(--ran-gray-1000));
   outline-offset: 2px;
 }
 .agent-panel-gguf-files {
