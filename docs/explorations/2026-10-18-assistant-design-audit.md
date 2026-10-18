@@ -102,3 +102,47 @@ stronger fill.
   announcing streamed tokens would break INTERACTION §3's "do not announce every streamed
   character". Adding one needs a design decision about what a polite announcement says when
   the answer is still being written.
+
+## Screenshot follow-up: text insets, disclosures and action affordances
+
+The screenshot review exposed five remaining usability defects. This follow-up starts
+from document `d8ce247e` and ran `d7e324cc`; each repository carries its own PR and
+retains separate implementation and regression-test commits.
+
+| Reported symptom                                    | Reproduced cause                                                                                                  | Change and owner                                                                                               |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Header title touches its hover background           | The text button has no inline padding                                                                             | document: an 8px inline inset with ellipsis for long titles                                                    |
+| Suggested task text touches both edges              | Task rows use vertical padding only                                                                               | document: 12px inline padding, an explicit border and surface fill                                             |
+| Speech privacy disclosure is too far above the icon | Application code adds a second upward translation after ranui positions the popup; the measured gap is about 52px | document: remove the extra translation and use the component's 8px anchor gap                                  |
+| Language menu and privacy disclosure overlap        | Both controls can retain `open`; bubble-phase outside listeners also miss propagation-stopping clicks             | document: mutually exclusive public `show`/`open` handling; ran: shared capture-based outside dismissal        |
+| Artifact import looks like ordinary text            | The action has no border or fill; its form inherits the borderless artifact editor treatment                      | document: distinguish workspace actions and give the import form visible field labels, borders and text insets |
+
+The same review covered adjacent workspace actions, model settings, sources, artifacts,
+composer controls, focus rings and touch geometry. The assistant enable switch keeps its
+compact 40×24px track inside a 48×32px button, growing to at least 44px tall for coarse
+pointers. The structured-import title field also retains a 44px touch target after being
+wrapped in a visible label. Existing native labels, accessible names and disabled states
+remain in use.
+
+The ran fix belongs to the shared floating controller rather than an application-specific
+position override. Outside clicks dismiss sibling Select/Popover controls in either order;
+clicks inside a nested portaled menu preserve its ancestor. A node-owned `Symbol.for`
+records logical ownership across independently loaded component bundles. Local shadow-root
+capture classifies events hidden by a closed root, while a document fallback handles clicks
+outside that root. Listener teardown and pending fallback decisions are guarded against
+disconnection and newer open/close transitions.
+
+Verification for the application follow-up:
+
+- Full unit suite: 252 files, 6,799 tests passed.
+- Focused browser regression: 30 tests passed, including the new screenshot cases plus
+  sidebar layout, workspace consistency, sources/artifacts and composer behavior.
+- Rendered checks include 360px/1280px, light/dark, keyboard activation/Escape/focus return,
+  touch hit targets, import validation and popup anchor distance.
+- Type checking and the repository archive/format checks are part of the PR validation.
+
+The application still uses its pinned `ranui@0.5.0-alpha.6`: its disclosure coordination
+uses existing public APIs and works independently of a future ranui release. The component
+PR does not publish an npm version or change document's dependency lockfile. This follow-up
+changes presentation and local floating interaction; model requests, persistence formats
+and account-free frontend operation are unaffected.
