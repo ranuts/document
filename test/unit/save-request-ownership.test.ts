@@ -124,3 +124,20 @@ it('does not let an expired conversion satisfy a later programmatic request', as
   expect(await next).toMatchObject({ name: 'A.docx', size: 2 });
   expect(writes).toHaveLength(0);
 });
+
+it('waits for stream tracking before starting a cold editor export', async () => {
+  const common = (frame.contentWindow as any).AscCommon;
+  const converter = common.x2t;
+  delete common.x2t;
+  markDocumentContentReady();
+  const snapshot = requestSaveDocument('DOCX').catch((error: Error) => error);
+  await vi.advanceTimersByTimeAsync(0);
+  expect(conversions).toHaveLength(0);
+  common.x2t = converter;
+  await vi.advanceTimersByTimeAsync(500);
+  expect(conversions).toHaveLength(1);
+  conversions[0].finish({ binary: new Uint8Array([1]) });
+  await vi.advanceTimersByTimeAsync(0);
+  expect(await snapshot).toMatchObject({ name: 'A.docx', size: 1 });
+  expect(writes).toHaveLength(0);
+});

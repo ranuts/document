@@ -340,6 +340,9 @@ function triggerPersonalDownloadAs(targetExt: string, request: EmbeddedSaveReque
         // fire once the SDK itself reports full readiness -- the caller's
         // retry loop keeps polling until then.
         if (!api.isLoadFullApi || !api.isDocumentLoadComplete || api.isLongAction?.()) return false;
+        // The readiness callback and guard-install retry can race on a cold
+        // load. Never start an export whose conversion cannot carry its owner.
+        if (!installSaveStreamTracking(window.frames[i])) return false;
         runRequestedExport(request, () => api.asc_DownloadAs!(new AscNs.asc_CDownloadOptions!(code)));
         return true;
       }
