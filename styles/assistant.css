@@ -791,6 +791,7 @@ r-dropdown[role='listbox'] {
   gap: calc(var(--ran-space-1) / 2);
 }
 .agent-panel-header .agent-panel-title {
+  display: block;
   flex: 1;
   width: auto;
   justify-content: flex-start;
@@ -800,6 +801,10 @@ r-dropdown[role='listbox'] {
   font-size: var(--ran-text-copy-2);
   letter-spacing: -0.02em;
   min-width: 0;
+  padding-inline: var(--ran-space-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ran-color-text);
   background: transparent;
 }
@@ -922,29 +927,52 @@ r-dropdown[role='listbox'] {
   font-size: var(--ran-text-label-3);
 }
 .agent-enable-switch {
-  width: 40px;
-  height: 24px;
+  --agent-switch-track-width: calc(var(--ran-size-3) * 2);
+  --agent-switch-track-height: var(--ran-size-4);
+  --agent-switch-thumb-size: var(--ran-size-2);
+  --agent-switch-inset: calc((var(--agent-switch-track-height) - var(--agent-switch-thumb-size)) / 2);
+  position: relative;
+  width: calc(var(--ran-size-7) + var(--ran-size-1));
+  height: var(--ran-size-7);
   flex: 0 0 auto;
   border: 0;
   border-radius: var(--ran-radius-full);
-  padding: calc(var(--ran-space-3) / 4);
-  background: var(--ran-color-text-disabled);
+  padding: 0;
+  background: transparent;
   cursor: pointer;
 }
 .agent-enable-switch::before {
   content: '';
   display: block;
-  width: 18px;
-  height: 18px;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  inset-inline-start: calc((100% - var(--agent-switch-track-width)) / 2 + var(--agent-switch-inset));
+  translate: 0 -50%;
+  width: var(--agent-switch-thumb-size);
+  height: var(--agent-switch-thumb-size);
   border-radius: 50%;
   background: var(--ran-color-bg-elevated);
   transition: transform var(--ran-motion-duration-base);
 }
-.agent-enable-switch[aria-checked='true'] {
+.agent-enable-switch::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+  width: var(--agent-switch-track-width);
+  height: var(--agent-switch-track-height);
+  border-radius: inherit;
+  background: var(--ran-color-text-disabled);
+}
+.agent-enable-switch[aria-checked='true']::after {
   background: var(--ran-color-primary);
 }
 .agent-enable-switch[aria-checked='true']::before {
-  transform: translateX(16px);
+  transform: translateX(
+    calc(var(--agent-switch-track-width) - var(--agent-switch-thumb-size) - var(--agent-switch-inset) * 2)
+  );
 }
 .agent-enable-switch:disabled {
   opacity: 0.5;
@@ -1849,10 +1877,10 @@ r-dropdown[role='listbox'] {
   align-items: center;
   text-align: start;
   min-height: var(--ran-size-7);
-  padding: var(--ran-space-2) 0;
-  border: 0;
+  padding: var(--ran-space-2) var(--ran-space-3);
+  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-sm);
-  background: transparent;
+  background: var(--ran-color-bg-elevated);
   color: var(--ran-color-text);
   font: inherit;
   cursor: pointer;
@@ -1862,12 +1890,6 @@ r-dropdown[role='listbox'] {
      stays for a host that wants one. */
   --agent-task-action-transition: none;
   transition: var(--agent-task-action-transition);
-}
-.agent-panel .agent-task-action::after {
-  content: '↗';
-  margin-inline-start: auto;
-  padding-inline-start: var(--ran-space-3);
-  color: var(--ran-color-text-secondary);
 }
 .agent-panel .agent-task-action:hover {
   background: var(--ran-color-bg-muted);
@@ -2168,6 +2190,11 @@ r-dropdown[role='listbox'] {
   cursor: pointer;
   text-align: start;
 }
+.agent-workspace-view button,
+.agent-artifacts button {
+  border: 1px solid var(--ran-color-border);
+  background: var(--ran-color-bg-elevated);
+}
 .agent-panel .cui-composer .agent-sources-toggle {
   min-height: var(--ran-size-7);
   padding: var(--ran-space-1) var(--ran-space-2);
@@ -2243,14 +2270,17 @@ r-dropdown[role='listbox'] {
 }
 .agent-artifacts button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):enabled {
   background: var(--ran-color-primary);
+  border-color: var(--ran-color-primary);
   color: var(--ran-color-primary-text);
 }
 .agent-artifacts button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):hover:enabled {
   background: var(--ran-color-primary-hover);
+  border-color: var(--ran-color-primary-hover);
 }
 .agent-artifacts
   button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):active:enabled {
   background: var(--ran-color-primary-active);
+  border-color: var(--ran-color-primary-active);
 }
 .agent-history-options
   button:is(.agent-history-delete-current, .agent-history-delete-all, .agent-history-confirm):enabled,
@@ -2266,6 +2296,10 @@ r-dropdown[role='listbox'] {
   font-size: var(--ran-text-label-2);
 }
 @media (pointer: coarse) {
+  .agent-enable-switch {
+    min-width: var(--app-control-touch);
+    min-height: var(--app-control-touch);
+  }
   .agent-panel :is(.agent-workspace-view, .agent-artifacts, .agent-history-options, .agent-view-header) button {
     min-height: var(--app-control-touch);
     min-width: var(--app-control-touch);
@@ -2350,6 +2384,20 @@ r-dropdown[role='listbox'] {
 .agent-artifact-editor > textarea:focus-visible {
   outline: 2px solid var(--ran-color-primary);
   outline-offset: 3px;
+}
+.agent-artifact-import-field {
+  display: grid;
+  gap: var(--ran-space-2);
+  margin-block: var(--ran-space-3);
+  font-size: var(--ran-text-label-3);
+}
+.agent-artifact-import-field textarea {
+  min-height: 8em;
+  max-height: 40vh;
+}
+.agent-artifact-import-field :is(input, textarea):focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
 }
 .agent-artifact-actions button[data-action='apply'] {
   color: var(--ran-color-primary);
