@@ -159,12 +159,16 @@ jobs:
             playwright-report/
           retention-days: 14
 
-  browsers:
-    name: Cross-browser (WebKit + Firefox)
+  browsers-shard:
+    name: Cross-browser (${{ matrix.browser }})
     runs-on: ubuntu-latest
     timeout-minutes: 90
     needs: gate
     if: needs.gate.outputs.browsers == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [webkit, firefox]
 
     steps:
       - name: Checkout code
@@ -173,15 +177,15 @@ jobs:
       - name: Set up the toolchain
         uses: ./.github/actions/setup
         with:
-          browsers: webkit firefox
+          browsers: ${{ matrix.browser }}
 
       # The same PR-time suites (minus the opt-in sweeps) on the two engines
       # the gate does not cover. Same-realm/L0 rules apply unchanged.
-      - name: Run E2E on WebKit and Firefox
+      - name: Run E2E on ${{ matrix.browser }}
         env:
           E2E_REPORT_DIR: playwright-report-browsers/normal
           E2E_RESULTS_DIR: test-results-browsers/normal
-        run: pnpm exec playwright test -c playwright.browsers.config.ts --grep-invert "api surface|corpus|@serial"
+        run: pnpm exec playwright test -c playwright.browsers.config.ts --project=${{ matrix.browser }} --grep-invert "api surface|corpus|@serial" --workers=2
 
       # The other half of that `--grep-invert`, exactly as ci.yml's e2e job
       # pairs them: an @serial case is one that cannot share the run. Without
@@ -195,17 +199,29 @@ jobs:
         env:
           E2E_REPORT_DIR: playwright-report-browsers/serial
           E2E_RESULTS_DIR: test-results-browsers/serial
-        run: pnpm exec playwright test -c playwright.browsers.config.ts --grep @serial --workers=1
+        run: pnpm exec playwright test -c playwright.browsers.config.ts --project=${{ matrix.browser }} --grep @serial --workers=1
 
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report-browsers
+          name: playwright-report-browsers-${{ matrix.browser }}
           path: |
             playwright-report-browsers/
             test-results-browsers/
           retention-days: 14
+
+  browsers:
+    name: Cross-browser (WebKit + Firefox)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [gate, browsers-shard]
+    if: always() && needs.gate.outputs.browsers == 'true'
+    steps:
+      - name: Report the browser matrix verdict
+        env:
+          RESULT: ${{ needs.browsers-shard.result }}
+        run: test "$RESULT" = "success"
 
   budgets:
     name: Slow-network budgets
