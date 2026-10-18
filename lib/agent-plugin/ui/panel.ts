@@ -2233,6 +2233,16 @@ export function createAgentPanel(
           if (generation !== controllerGeneration || conversation !== conversationRevision)
             throw new Error(t('agentPlanExpired'));
           if (result.aborted) return measured('stopped');
+          if (result.incompleteReason) {
+            taskDisplay.finish();
+            if (!partialTaskAnswer && result.text)
+              appendTurn({ role: 'agent', text: assistantPresentation(result.text), interrupted: true });
+            const text = t('agentResponseIncomplete');
+            operationHistory.push({ role: 'assistant', content: text, hostGuidance: 'status' });
+            appendTurn({ role: 'status', text });
+            partialTaskAnswer = '';
+            return measured('incomplete');
+          }
           if (result.stoppedOnLimit) {
             const text = documentTaskStopText(result.limitReason, verifiedTaskChanges);
             operationHistory.push({ role: 'assistant', content: text, hostGuidance: 'tool' });

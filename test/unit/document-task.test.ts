@@ -327,3 +327,48 @@ it.each([
     }
   },
 );
+
+it.each(['length', 'max_tokens', 'content_filter'])(
+  'never converts a %s schema tool response into an executable native call',
+  async (stopReason) => {
+    const execute = vi.fn(async () => ({ changed: true }));
+    const result = await runAgent(
+      createSchemaTaskProvider(
+        {
+          name: 'local',
+          isReady: () => true,
+          chat: vi.fn(),
+          generateJSON: async () => ({ ...response({ kind: 'tool', tool: 'write', input: {} }), stopReason }),
+        },
+        () => ({ kind: 'word' }),
+      ),
+      'write',
+      {
+        tools: { write: { name: 'write', description: 'write', inputSchema: {}, readOnlyHint: false, execute } },
+      },
+    );
+    expect(result.incompleteReason).toBe(stopReason === 'length' ? 'max_tokens' : stopReason);
+    expect(execute).not.toHaveBeenCalled();
+    expect(result.messages).toEqual([{ role: 'user', content: 'write' }]);
+  },
+);
+it('retains only the decoded answer preview after a schema stream reaches its token limit', async () => {
+  const partial = '{"kind":"answer","text":"Partial decoded answer';
+  const result = await runAgent(
+    createSchemaTaskProvider(
+      {
+        name: 'local',
+        isReady: () => true,
+        chat: vi.fn(),
+        generateJSONStream: async (_messages, _schema, delta) => {
+          delta(partial);
+          return { ...response(null), text: partial, stopReason: 'max_tokens' };
+        },
+      },
+      () => ({ kind: 'word' }),
+    ),
+    'question',
+  );
+  expect(result).toMatchObject({ incompleteReason: 'max_tokens', text: 'Partial decoded answer' });
+  expect(result.messages.at(-1)).toEqual({ role: 'assistant', content: 'Partial decoded answer', interrupted: true });
+});

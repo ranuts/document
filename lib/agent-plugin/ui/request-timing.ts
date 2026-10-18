@@ -1,6 +1,7 @@
 import type { LLMResponse } from '@ranuts/agent-core/llm/types';
 
-export type TimingStatus = 'success' | 'stopped' | 'failed' | 'limited' | 'review-pending' | 'superseded';
+export type TimingStatus =
+  'success' | 'stopped' | 'failed' | 'limited' | 'incomplete' | 'review-pending' | 'superseded';
 export interface RequestTimingRecord {
   status?: TimingStatus;
   durationMs?: number;

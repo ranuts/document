@@ -414,6 +414,8 @@ export const de: Partial<I18nMessages> = {
   agentModelQuota:
     'Browserspeicher für Modelle ist voll. Website-Speicher freigeben oder kleineres Modell wählen und erneut versuchen.',
   agentStopped: 'Angehalten.',
+  agentResponseIncomplete:
+    'Die Antwort ist unvollständig. Der bisherige Text bleibt erhalten; wartende Anfragen sind pausiert.',
   agentMaxSteps: 'Maximale Anzahl an Schritten erreicht; angehalten.',
   agentTaskPartialFailed:
     'Bestätigte Änderungen angewendet: {count}. Die übrigen Aufgaben konnten nicht abgeschlossen werden. Prüfen Sie das Ergebnis und fragen Sie nur nach den offenen Aufgaben. Angewendete Änderungen können rückgängig gemacht werden.',

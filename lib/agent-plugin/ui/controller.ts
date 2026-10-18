@@ -65,7 +65,7 @@ export interface TurnRequest {
 
 export interface TurnResult {
   turnId: string;
-  status: 'success' | 'stopped' | 'failed' | 'limited' | 'review-pending' | 'superseded';
+  status: 'success' | 'stopped' | 'failed' | 'limited' | 'incomplete' | 'review-pending' | 'superseded';
 }
 
 interface ActiveRun {
@@ -252,13 +252,13 @@ export class AgentChatController {
             if (event.streamed && this.options.onAgentDelta) {
               displayStream.finish();
               if (!live()) return;
-              this.options.onAgentStreamEnd?.();
+              if (!event.interrupted) this.options.onAgentStreamEnd?.();
             } else if (event.text) {
               const text = assistantPresentation(event.text);
               if (text) {
                 run.timing?.filteredText();
                 visibleAnswer = true;
-                emitTurn({ role: 'agent', text });
+                emitTurn({ role: 'agent', text, ...(event.interrupted ? { interrupted: true as const } : {}) });
               }
             }
             resetSegment();
@@ -273,6 +273,12 @@ export class AgentChatController {
       if (result.aborted || run.abort.signal.aborted) {
         saveStoppedTurn();
         return outcome('stopped');
+      } else if (result.incompleteReason) {
+        const text = t('agentResponseIncomplete');
+        this.history.push({ role: 'assistant', content: text, hostGuidance: 'status' } as LLMMessage);
+        saveHistory();
+        emitTurn({ role: 'status', text });
+        return outcome('incomplete');
       } else if (result.stoppedOnLimit) {
         const text = documentTaskStopText(result.limitReason, verifiedChanges);
         const receipt = { role: 'assistant' as const, content: text, hostGuidance: 'tool' as const };

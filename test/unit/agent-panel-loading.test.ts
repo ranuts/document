@@ -53,6 +53,7 @@ const state = vi.hoisted(() => ({
   source: '',
   readText: undefined as string | undefined,
   readAnswer: vi.fn().mockResolvedValue('120'),
+  actualDocumentTask: false,
   directTaskAnswer: undefined as undefined | ((delta?: (text: string) => void) => Promise<string>),
   editorReady: false,
   backend: undefined as undefined | ((backend: 'webllm' | 'wllama') => void),
@@ -339,7 +340,8 @@ vi.mock('../../lib/agent-plugin/document-task', async (original) => {
       request: string,
       options: Parameters<typeof import('../../lib/agent-plugin/document-task').runDocumentTask>[2],
     ) => {
-      if (options.target.context.kind === 'pdf') return actual.runDocumentTask(provider, request, options);
+      if (options.target.context.kind === 'pdf' || state.actualDocumentTask)
+        return actual.runDocumentTask(provider, request, options);
       options.beforeRun?.();
       return runAgent(
         createSchemaTaskProvider(provider, () => options.target.context),
@@ -416,6 +418,7 @@ afterEach(() => {
   state.toolPlan.mockReset();
   state.readAnswer.mockReset().mockResolvedValue('120');
   state.directTaskAnswer = undefined;
+  state.actualDocumentTask = false;
   state.toolContext = 'slide';
   state.apply.mockClear();
   state.routing.mockReset();
@@ -5384,3 +5387,89 @@ it.each(['error', 'expired', 'abort'] as const)(
     }
   },
 );
+
+it.each(['length', 'max_tokens', 'content_filter'])(
+  'retains incomplete native document prose and pauses the queue on %s',
+  async (reason) => {
+    state.nativeEndpoint = true;
+    state.editorReady = true;
+    state.editorKind = 'slide';
+    state.toolContext = 'slide';
+    let finish!: () => void;
+    let nativeCalls = 0;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (_url: string, init: RequestInit) => {
+        const body = JSON.parse(String(init.body));
+        if (body.tools?.length) {
+          nativeCalls++;
+          await new Promise<void>((resolve) => {
+            finish = resolve;
+          });
+        }
+        return new Response(
+          JSON.stringify({
+            choices: [
+              {
+                message: { content: body.tools?.length ? 'Partial document explanation' : 'connected' },
+                finish_reason: body.tools?.length ? reason : 'stop',
+              },
+            ],
+          }),
+        );
+      }),
+    );
+    try {
+      const panel = createAgentPanel();
+      document.body.append(panel);
+      const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+      kind.value = 'openai-compatible';
+      kind.dispatchEvent(new Event('change'));
+      for (const [selector, value] of [
+        ['.agent-panel-endpoint-url', 'https://api.example.com/v1'],
+        ['.agent-panel-endpoint-model', 'tool-model'],
+        ['.agent-panel-endpoint-key', 'sk-test'],
+      ]) {
+        const field = panel.querySelector<HTMLInputElement>(selector)!;
+        field.value = value;
+        field.dispatchEvent(new Event('change'));
+      }
+      const connect = panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!;
+      connect.click();
+      await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+      const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+      task.value = 'tools';
+      task.dispatchEvent(new Event('change'));
+      enterQueueDraft(panel, 'Read this slide and explain its content');
+      await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
+      enterQueueDraft(panel, 'Hello');
+      finish();
+      await vi.waitFor(() => expect(panel.textContent).toContain(t('agentResponseIncomplete')));
+      expect(panel.querySelector('[data-interrupted]')?.textContent).toContain('Partial document explanation');
+      expect(panel.querySelector('.agent-queue-resume')).not.toBeNull();
+      expect(panel.querySelector('.agent-queue-text')?.textContent).toBe('Hello');
+      expect(nativeCalls).toBe(1);
+      expect(state.apply).not.toHaveBeenCalled();
+    } finally {
+      finish?.();
+      vi.unstubAllGlobals();
+    }
+  },
+);
+
+it('retains incomplete schema document-task prose without finalizing its live answer', async () => {
+  state.ready = true;
+  state.actualDocumentTask = true;
+  state.semanticResponse = '{"task":"tools","language":"en"}';
+  state.structuredStream = async (_messages, _schema, delta) => {
+    const text = '{"kind":"answer","text":"Partial schema explanation';
+    delta(text);
+    return { text, assistant: { role: 'assistant', content: text }, toolCalls: [], stopReason: 'max_tokens' };
+  };
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  enterQueueDraft(panel, 'Explain what should happen next in this presentation.');
+  await vi.waitFor(() => expect(panel.textContent).toContain(t('agentResponseIncomplete')));
+  expect(panel.querySelector('[data-interrupted]')?.textContent).toContain('Partial schema explanation');
+  expect(state.apply).not.toHaveBeenCalled();
+});

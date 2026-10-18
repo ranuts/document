@@ -34,7 +34,7 @@ export interface LLMMessage {
   /** Opaque host presentation, stripped at runtime provider boundary. Never model context. */
   hostPresentation?: { id: string; metadata: Readonly<Record<string, unknown>> };
   content: string | LLMContent[];
-  /** Visible partial prose preserved after cancellation; never a complete answer. */
+  /** Visible partial prose preserved after cancellation or incomplete generation; never a complete answer. */
   interrupted?: true;
   /** Host-created document body; never inferred from generic assistant prose. */
   documentArtifact?: true;

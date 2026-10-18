@@ -19,7 +19,7 @@ import type { LLMContent, LLMMessage, LLMProvider, LLMResponse, LLMToolDef } fro
 /** Progress event emitted during a run (for UI: chat bubbles, tool activity). */
 export type AgentEvent =
   | { type: 'usage'; usage: NonNullable<LLMResponse['usage']> }
-  | { type: 'assistant'; text: string; streamed: boolean }
+  | { type: 'assistant'; text: string; streamed: boolean; interrupted?: true }
   | { type: 'assistant_delta'; text: string }
   | { type: 'tool_call'; name: string; input: Record<string, unknown> }
   | {
@@ -72,12 +72,23 @@ export interface AgentRunResult {
   toolCallCount: number;
   /** A host tool explicitly ended the turn; this alone does not imply success. */
   completedByTool?: true;
+  /** Generation ended before a complete answer or tool request was produced. */
+  incompleteReason?: 'max_tokens' | 'content_filter';
   /** True if the run stopped because it hit `maxIterations`. */
   stoppedOnLimit: boolean;
   /** Identifies a guard stop without interpreting internal error prose in the UI. */
   limitReason?: 'repeated_call' | 'tool_budget' | 'iterations';
   /** True if the run was aborted via `options.signal`. */
   aborted: boolean;
+}
+
+/** Normalise provider termination without exposing backend error prose to the host UI. */
+export function incompleteResponseReason(
+  response: Pick<LLMResponse, 'stopReason'>,
+): AgentRunResult['incompleteReason'] {
+  if (response.stopReason === 'length' || response.stopReason === 'max_tokens') return 'max_tokens';
+  if (response.stopReason === 'content_filter') return 'content_filter';
+  return undefined;
 }
 
 /** Convert an AgentTool registry into the LLM-facing tool definitions. */
@@ -166,6 +177,20 @@ export async function runAgent(
       options.onContextTrimmed?.();
     }
     if (response.usage) options.onEvent?.({ type: 'usage', usage: response.usage });
+    const incompleteReason = incompleteResponseReason(response);
+    if (incompleteReason) {
+      // A truncated tool request can contain a valid-looking partial argument
+      // object. Retain only its prose: no call is executable or left unmatched
+      // in the next provider request.
+      if (deferredDeltas.length) options.onEvent?.({ type: 'assistant_delta', text: deferredDeltas.join('') });
+      if (response.text) {
+        options.onEvent?.({ type: 'assistant', text: response.text, streamed, interrupted: true });
+        const assistant: LLMMessage = { role: 'assistant', content: response.text, interrupted: true };
+        const presentation = options.annotateAssistant?.(assistant);
+        messages.push(presentation ? { ...assistant, hostPresentation: presentation } : assistant);
+      }
+      return { text: response.text, messages, toolCallCount, stoppedOnLimit: false, aborted: false, incompleteReason };
+    }
     if (!response.toolCalls.length) {
       if (deferredDeltas.length) options.onEvent?.({ type: 'assistant_delta', text: deferredDeltas.join('') });
       if (response.text) options.onEvent?.({ type: 'assistant', text: response.text, streamed });

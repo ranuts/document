@@ -398,6 +398,8 @@ export const pt: Partial<I18nMessages> = {
   agentModelQuota:
     'O armazenamento do navegador está cheio. Libere o armazenamento do site ou escolha um modelo menor e tente novamente.',
   agentStopped: 'Parado.',
+  agentResponseIncomplete:
+    'A resposta está incompleta. O texto parcial foi mantido e os pedidos na fila foram pausados.',
   agentMaxSteps: 'Foi atingido o número máximo de passos; processo parado.',
   agentTaskPartialFailed:
     'Alterações aprovadas aplicadas: {count}. Não foi possível concluir o trabalho restante. Confira o resultado e solicite apenas o que falta; as alterações aplicadas podem ser desfeitas.',

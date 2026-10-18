@@ -2,7 +2,13 @@ import { JsonTextStream } from '@ranuts/agent-core/llm/json-text-stream';
 import type { LLMMessage, LLMProvider, LLMToolDef, LLMResponse } from '@ranuts/agent-core/llm/types';
 import type { AgentTool } from '@ranuts/agent-core/types';
 import type { DocumentContext } from './document-context';
-import { runAgent, validateToolInput, type AgentRunOptions, type AgentRunResult } from '@ranuts/agent-core/runtime';
+import {
+  runAgent,
+  incompleteResponseReason,
+  validateToolInput,
+  type AgentRunOptions,
+  type AgentRunResult,
+} from '@ranuts/agent-core/runtime';
 import { createDocumentAgentTools, type DocumentAgentToolOptions } from './document-agent-tools';
 import { t } from '@ranuts/shared/i18n';
 
@@ -36,11 +42,7 @@ async function pdfEffect(provider: LLMProvider, request: string, signal?: AbortS
     ? await provider.generateJSON(messages, schema, signal)
     : await provider.chat(messages, [], signal);
   signal?.throwIfAborted();
-  if (
-    response.toolCalls.length ||
-    ['length', 'max_tokens'].includes(response.stopReason) ||
-    response.text.length > 1000
-  )
+  if (response.toolCalls.length || incompleteResponseReason(response) || response.text.length > 1000)
     throw new Error('Incomplete document task response');
   const value = JSON.parse(response.text.replace(/^\s*<think>\s*<\/think>\s*/, '').trim());
   if (
@@ -197,9 +199,17 @@ export function createSchemaTaskProvider(provider: LLMProvider, context: () => D
       `Conversation and actual results: ${JSON.stringify(messages)}`,
     ].join('\n');
     const request = [{ role: 'user' as const, content: prompt }];
-    const display = onDelta ? new JsonTextStream(onDelta, { answerOnly: true }) : undefined;
+    let partialAnswer = '';
+    const display = new JsonTextStream(
+      (delta) => {
+        partialAnswer += delta;
+        onDelta?.(delta);
+      },
+      { answerOnly: true },
+    );
+    const streaming = onDelta && provider.generateJSONStream;
     const response =
-      display && provider.generateJSONStream
+      streaming && provider.generateJSONStream
         ? await provider.generateJSONStream(
             request,
             schema,
@@ -212,12 +222,17 @@ export function createSchemaTaskProvider(provider: LLMProvider, context: () => D
           ? await provider.generateJSON(request, schema, signal)
           : await provider.chat(request, [], signal);
     signal?.throwIfAborted();
-    if (
-      response.toolCalls.length ||
-      ['length', 'max_tokens'].includes(response.stopReason) ||
-      response.text.length > 20000
-    )
-      throw new Error('Incomplete document task response');
+    if (incompleteResponseReason(response)) {
+      // Decode answer prose only; a partial JSON tool envelope is never executable.
+      if (!streaming) display.push(response.text);
+      return {
+        ...response,
+        text: partialAnswer,
+        toolCalls: [],
+        assistant: { role: 'assistant', content: partialAnswer },
+      };
+    }
+    if (response.toolCalls.length || response.text.length > 20000) throw new Error('Incomplete document task response');
     const output: unknown = JSON.parse(response.text.trim().replace(/^\s*<think>\s*<\/think>\s*/, ''));
     if (!output || typeof output !== 'object' || Array.isArray(output))
       throw new Error('Invalid document task response');
@@ -247,7 +262,7 @@ export function createSchemaTaskProvider(provider: LLMProvider, context: () => D
       !['answered', 'partial', 'unsupported'].includes(String(value.disposition))
     )
       throw new Error('Invalid document task answer');
-    display?.finish(value.text);
+    if (streaming) display.finish(value.text);
     return {
       ...response,
       text: value.text,
