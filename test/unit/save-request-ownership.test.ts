@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { setDocmentObj } from '@ranuts/shared/store';
 import { cancelDocumentOpen } from '../../lib/document-open';
 import { installServerlessSaveSemantics } from '../../lib/onlyoffice/guards/serverless-save';
@@ -25,12 +26,12 @@ beforeEach(() => {
   const win = frame.contentWindow!;
   const converter = {
     convertFromBin: () => new Promise<{ binary: Uint8Array }>((finish) => conversions.push({ finish })),
-    downloadFile: (binary: Uint8Array) => {
+    downloadFile: (binary: Uint8Array, fileName = 'A.docx') => {
       window.dispatchEvent(
         new MessageEvent('message', {
           source: win,
           origin: location.origin,
-          data: { type: 'onlyoffice-file-stream', fileType: 'docx', buffer: binary.buffer },
+          data: { type: 'onlyoffice-file-stream', fileType: fileName.split('.').pop(), buffer: binary.buffer },
         }),
       );
     },
@@ -46,7 +47,12 @@ beforeEach(() => {
     AscCommon: { x2t: converter },
     Asc: {
       editor: { ...api, documentFormatSave: 65, isLoadFullApi: true, isDocumentLoadComplete: true },
-      asc_CDownloadOptions: class {},
+      asc_CDownloadOptions: class {
+        fileType: number;
+        constructor(fileType: number) {
+          this.fileType = fileType;
+        }
+      },
     },
   });
   api = (win as any).Asc.editor;
@@ -140,4 +146,44 @@ it('waits for stream tracking before starting a cold editor export', async () =>
   await vi.advanceTimersByTimeAsync(0);
   expect(await snapshot).toMatchObject({ name: 'A.docx', size: 1 });
   expect(writes).toHaveLength(0);
+});
+
+it('keeps a PDF request attached to native CheckPrint resumption while manual saves remain independent', async () => {
+  const source = readFileSync('public/sdkjs/word/sdk-all.js', 'utf8');
+  const body = /this\.CheckPrint=(function[\s\S]*?);this\.ToRenderer2=/.exec(source)![1];
+  const checkPrint = new Function('Asc', `return (${body});`)({ c_oAscAsyncActionType: { BlockInteraction: 1 } });
+  const native = api as any;
+  const drawing: any = {
+    m_oWordControl: { m_oLogicDocument: {}, ReaderModeCurrent: 0, m_oApi: native },
+    m_bIsDocumentCalculating: true,
+  };
+  native.sync_StartAction = vi.fn();
+  native.sync_EndAction = vi.fn();
+  const converter = (frame.contentWindow as any).AscCommon.x2t;
+  native.downloadAs = (action: number, options: { fileType: number }) => {
+    if (options.fileType === 513 && checkPrint.call(drawing, [action, options])) return;
+    void converter.convertFromBin().then(({ binary }: { binary: Uint8Array }) => {
+      converter.downloadFile(binary, options.fileType === 513 ? 'A.pdf' : 'A.docx');
+    });
+  };
+  native.asc_DownloadAs = (options: { fileType: number }) => native.downloadAs(0, options);
+  markDocumentContentReady();
+  let outcome: File | Error | undefined;
+  void requestSaveDocument('PDF').then(
+    (file) => (outcome = file),
+    (error: Error) => (outcome = error),
+  );
+  await vi.advanceTimersByTimeAsync(0);
+  expect(conversions).toHaveLength(0);
+  expect(drawing.m_arPrintingWaitEndRecalculate).toHaveLength(2);
+  native.asc_Save(false);
+  conversions[0].finish({ binary: new Uint8Array([2, 2]) });
+  await vi.advanceTimersByTimeAsync(0);
+  drawing.m_bIsDocumentCalculating = false;
+  // This is the SDK's OnEndRecalculate resumption with its preserved options.
+  native.downloadAs.apply(native, drawing.m_arPrintingWaitEndRecalculate);
+  conversions[1].finish({ binary: new Uint8Array([1]) });
+  await vi.advanceTimersByTimeAsync(0);
+  expect(outcome).toMatchObject({ name: 'A.pdf', size: 1 });
+  expect(writes.map((file) => [file.name, file.size])).toEqual([['A.docx', 2]]);
 });

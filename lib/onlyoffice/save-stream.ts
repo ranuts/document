@@ -51,17 +51,39 @@ type EmbeddedSaveRequest = {
   timeoutId: number;
   fallbackId: number;
   settled: boolean;
-  claimed: boolean;
   isCurrent: () => boolean;
   signal: AbortSignal;
   onAbort: () => void;
 };
 
 let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
-// The SDK serializes synchronously inside asc_DownloadAs, then converts
-// asynchronously. Only that invocation may claim the programmatic request;
-// later toolbar saves must keep their own disk destination.
+// Carry ownership through SDK serialization, including options retained while
+// pagination defers a download. Later toolbar saves keep their own destination.
 let triggeringSaveRequest: EmbeddedSaveRequest | null = null;
+const nativeExportRequests = new WeakMap<object, EmbeddedSaveRequest>();
+type NativeExportMethod = (this: Record<string, unknown>, ...args: unknown[]) => unknown;
+const trackedNativeMethods = new WeakSet<NativeExportMethod>();
+
+function installNativeExportOwnership(win: Window): void {
+  const api = (win as Window & { Asc?: { editor?: Record<string, unknown> } }).Asc?.editor;
+  if (!api) return;
+  for (const name of ['downloadAs', '_downloadAsFromLocal']) {
+    const method = api[name] as NativeExportMethod | undefined;
+    if (typeof method !== 'function' || trackedNativeMethods.has(method)) continue;
+    const tracked: NativeExportMethod = function (...args) {
+      const request = args
+        .filter((arg): arg is object => !!arg && typeof arg === 'object')
+        .map((arg) => nativeExportRequests.get(arg))
+        .find((request) => request !== undefined);
+      // CheckPrint retains these exact options across pagination/reader-mode
+      // work and resumes via downloadAs after the initial call has returned.
+      if (request) return runRequestedExport(request, () => method.apply(this, args));
+      return method.apply(this, args);
+    };
+    trackedNativeMethods.add(tracked);
+    api[name] = tracked;
+  }
+}
 
 // requestSaveDocument budget. Readiness (onDocumentReady) may take long on a
 // cold, slow link: the editor first downloads and inflates x2t.wasm
@@ -147,6 +169,7 @@ const writtenSequences = new WeakMap<object, number>();
 
 /** Bind serialized bytes to their conversion, then queue them in actual stream order. */
 export function installSaveStreamTracking(win: Window): boolean {
+  installNativeExportOwnership(win);
   type Result = { binary: object };
   type Converter = {
     convertFromBin(request: unknown): Promise<Result>;
@@ -166,8 +189,7 @@ export function installSaveStreamTracking(win: Window): boolean {
     const sequence = (exportSequences.get(source) ?? 0) + 1;
     exportSequences.set(source, sequence);
     const candidate = triggeringSaveRequest;
-    const request = candidate && !candidate.claimed && candidate.isCurrent() ? candidate : null;
-    if (request) request.claimed = true;
+    const request = candidate?.isCurrent() ? candidate : null;
     const state = standaloneExportState(win, sequence, request);
     return convert.call(this, input).then((result) => {
       if (result?.binary && typeof result.binary === 'object') outputs.set(result.binary, state);
@@ -343,7 +365,9 @@ function triggerPersonalDownloadAs(targetExt: string, request: EmbeddedSaveReque
         // The readiness callback and guard-install retry can race on a cold
         // load. Never start an export whose conversion cannot carry its owner.
         if (!installSaveStreamTracking(window.frames[i])) return false;
-        runRequestedExport(request, () => api.asc_DownloadAs!(new AscNs.asc_CDownloadOptions!(code)));
+        const options = new AscNs.asc_CDownloadOptions!(code) as object;
+        nativeExportRequests.set(options, request);
+        runRequestedExport(request, () => api.asc_DownloadAs!(options));
         return true;
       }
     } catch {
@@ -361,13 +385,14 @@ function ensureCurrentSaveRequest(request: EmbeddedSaveRequest): boolean {
   return false;
 }
 
-function runRequestedExport(request: EmbeddedSaveRequest, action: () => void): void {
+function runRequestedExport<T>(request: EmbeddedSaveRequest, action: () => T): T | undefined {
   if (!ensureCurrentSaveRequest(request)) return;
+  const previous = triggeringSaveRequest;
   triggeringSaveRequest = request;
   try {
-    action();
+    return action();
   } finally {
-    triggeringSaveRequest = null;
+    triggeringSaveRequest = previous;
   }
 }
 
@@ -434,7 +459,6 @@ export function requestSaveDocument(
       timeoutId,
       fallbackId,
       settled: false,
-      claimed: false,
       signal,
       isCurrent: () => !signal.aborted && getDocmentObj() === source && window.editor === editor,
       onAbort: () => {
