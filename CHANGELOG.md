@@ -9,6 +9,16 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Reloading after a completed save restores the saved document instead of an
+  older recovery snapshot or the original file.
+- Opening a copied editor tab no longer removes the original tab's reload
+  source.
+- Document links preserve encoded path and query characters, including signed
+  URLs with encoded delimiters.
+- Gemini artifact revisions accept normally completed responses while retaining
+  incomplete-response protection.
+- Using a downloaded model from a custom mirror preserves its source and runtime
+  settings; deleting another source of the same model keeps the active one loaded.
 - Editing a document after more than seven idle days keeps the new recovery
   bytes instead of leaving an empty history record.
 - Turning off recovery, or stopping it after a storage failure, keeps ordinary
