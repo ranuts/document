@@ -261,7 +261,27 @@ export function createAgentPanel(
         if (open) {
           if (panel.dataset.view === 'settings') settingsHeading.focus();
           else if (panel.dataset.view === 'history') conversationList?.focus();
-          else if (!navigation.restore(displayedConversationId, true)) chat.focus();
+          else if (!navigation.restore(displayedConversationId, true)) {
+            const target = chat.el.querySelector<HTMLTextAreaElement>('.cui-input');
+            const owner = document.activeElement;
+            const view = panel.dataset.view;
+            const revision = viewRevision;
+            chat.focus();
+            // An iframe can retain focus while the dock layout settles. Retry
+            // the fallback composer once without replaying historical state.
+            if (target && document.activeElement === owner && !panel.contains(owner)) {
+              requestAnimationFrame(() => {
+                if (
+                  open &&
+                  panel.isConnected &&
+                  panel.dataset.view === view &&
+                  viewRevision === revision &&
+                  document.activeElement === owner
+                )
+                  target.focus();
+              });
+            }
+          }
         }
       });
   };

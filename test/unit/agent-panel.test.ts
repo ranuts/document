@@ -358,6 +358,51 @@ it('syncs native tracking changes without writing settings and detaches on pageh
   expect(callbacks.size).toBe(0);
 });
 
+it.each(['recover', 'external', 'close', 'settings'] as const)(
+  'handles an iframe rejecting the initial panel focus without overriding %s intent',
+  async (intent) => {
+    vi.useFakeTimers();
+    const previousPreset = localStorage.getItem('agent-local-preset');
+    localStorage.setItem('agent-local-preset', 'Qwen3-4B-q4f16_1-MLC');
+    const app = document.createElement('div');
+    app.id = 'app';
+    const frame = document.createElement('iframe');
+    app.append(frame);
+    document.body.append(app);
+    const panel = createAgentPanel({ background: true });
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    // Native cross-frame focus can reject the first attempt during docking.
+    // Keep the real focus implementation available for a later retry.
+    const focus = vi.spyOn(input, 'focus').mockImplementationOnce(() => {});
+    try {
+      frame.focus();
+      setAgentPanelOpen(true);
+      await Promise.resolve();
+      expect(focus).toHaveBeenCalled();
+      expect(document.activeElement).toBe(frame);
+      let expected: Element = input;
+      if (intent === 'external') {
+        const button = document.createElement('button');
+        document.body.append(button);
+        button.focus();
+        expected = button;
+      } else if (intent === 'close') {
+        setAgentPanelOpen(false);
+        expected = document.activeElement!;
+      } else if (intent === 'settings') {
+        panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+        expected = document.activeElement!;
+      }
+      await vi.advanceTimersByTimeAsync(40);
+      expect(document.activeElement).toBe(expected);
+    } finally {
+      focus.mockRestore();
+      if (previousPreset === null) localStorage.removeItem('agent-local-preset');
+      else localStorage.setItem('agent-local-preset', previousPreset);
+    }
+  },
+);
+
 it('returns keyboard focus to the document rail when closing a focused panel', async () => {
   const app = document.createElement('div');
   app.id = 'app';
