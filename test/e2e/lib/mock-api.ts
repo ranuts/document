@@ -9,6 +9,20 @@ const servers = new WeakMap<
   { server: Server; origin: string; handlers: Array<{ match: RegExp; handler: Handler }> }
 >();
 
+/** Resolve the logical API URL when inspecting browser network events. */
+export function originalApiUrl(page: Page, url: string): string {
+  const state = servers.get(page);
+  if (!state) return url;
+  try {
+    const request = new URL(url);
+    if (request.origin !== state.origin || request.pathname !== '/') return url;
+    const original = request.searchParams.get('url');
+    return original && state.handlers.some(({ match }) => match.test(original)) ? original : url;
+  } catch {
+    return url;
+  }
+}
+
 /**
  * Serve fake API responses over real HTTP. WebKit does not deliver SW-controlled
  * fetches to page.route, even when the SW lets the cross-origin request through.

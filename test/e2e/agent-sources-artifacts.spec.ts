@@ -1,4 +1,4 @@
-import { mockApi } from './lib/mock-api';
+import { mockApi, originalApiUrl } from './lib/mock-api';
 import { expect, test } from './lib/l0';
 
 test('local sources and versioned artifacts remain explicit, compact and reviewed', async ({ page }, testInfo) => {
@@ -246,6 +246,7 @@ test('cloud model settings exclude browser runtime configuration and cache hints
 test('offline workspace hides cloud discovery and download controls while retaining local work without automatic reconnect', async ({
   page,
   context,
+  l0,
 }, testInfo) => {
   test.setTimeout(90000);
   await page.addInitScript(() => {
@@ -254,7 +255,8 @@ test('offline workspace hides cloud discovery and download controls while retain
   });
   const connectorRequests: string[] = [];
   page.on('request', (request) => {
-    if (request.url().includes('/api/connectors/')) connectorRequests.push(request.url());
+    const url = originalApiUrl(page, request.url());
+    if (new URL(url).pathname.startsWith('/api/connectors/')) connectorRequests.push(url);
   });
   await page.goto('/editor?new=docx&locale=en');
   await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
@@ -287,6 +289,32 @@ test('offline workspace hides cloud discovery and download controls while retain
     });
     db.close();
   });
+  // Cache inventory may probe an unprepared SDK while offline. WebKit emits
+  // pageerror for these caught import rejections; correlate only exact optional
+  // module failures, keeping prepared core and unrelated module failures fatal.
+  const manifest = await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+    const source = await (await fetch('/sw.js', { cache: 'no-store' })).text();
+    return {
+      core: JSON.parse(/const APP_ASSETS_TO_CACHE = (\[.*?\]);/.exec(source)![1]) as string[],
+      capabilities: JSON.parse(/const ASSISTANT_CAPABILITY_ASSETS = (\{.*?\});/.exec(source)![1]) as Record<
+        string,
+        string[]
+      >,
+    };
+  });
+  const absolute = (path: string) => new URL(path, page.url()).href;
+  const core = new Set(manifest.core.map(absolute));
+  const optionalScripts = new Set(
+    [...manifest.capabilities.webgpu, ...(manifest.capabilities.wllama || [])]
+      .filter((path) => path.endsWith('.js'))
+      .map(absolute),
+  );
+  const failedWhileOffline = new Set<string>();
+  let offline = true;
+  page.on('requestfailed', (request) => {
+    if (offline) failedWhileOffline.add(originalApiUrl(page, request.url()));
+  });
   await context.setOffline(true);
   await page.locator('.agent-sources-toggle').click();
   await expect(page.locator('.agent-cloud-sources')).toBeHidden();
@@ -318,6 +346,7 @@ test('offline workspace hides cloud discovery and download controls while retain
   await expect(page.locator('.agent-artifact-editor select option')).toHaveCount(2);
   await expect(page.locator('.agent-artifact-status')).toHaveText('Saved on this device');
   await context.setOffline(false);
+  offline = false;
   await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
   await page.locator('.agent-sources-toggle').click();
   await expect(page.locator('.agent-cloud-sources')).toBeVisible();
@@ -325,6 +354,18 @@ test('offline workspace hides cloud discovery and download controls while retain
   expect(connectorRequests).toEqual([]);
   await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
   await expect(page.locator('.cui-input')).toHaveValue('Keep this draft offline');
+  expect([...failedWhileOffline].filter((url) => core.has(url))).toEqual([]);
+  expect(
+    [...failedWhileOffline].filter((url) => new URL(url).pathname.startsWith('/assets/') && !optionalScripts.has(url)),
+  ).toEqual([]);
+  const loaderDiagnostics = /^(?:Response served by service worker is an error|Cannot load \.)$/;
+  const diagnostics = l0.pageErrors.filter((message) => loaderDiagnostics.test(message));
+  if (diagnostics.length) {
+    const optionalFailures = [...failedWhileOffline].filter((url) => optionalScripts.has(url));
+    expect(optionalFailures.length).toBeGreaterThan(0);
+    expect(diagnostics.length).toBeLessThanOrEqual(2 * optionalFailures.length);
+    l0.allowFrameError(loaderDiagnostics);
+  }
 });
 
 test('expired Drive authorization and attachment limits expose usable recovery actions', async ({ page }) => {
@@ -473,7 +514,9 @@ test('switching conversations releases a pending source read without attaching i
     .locator('.agent-sources-view input[type=file]')
     .setInputFiles({ name: 'fresh.txt', mimeType: 'text/plain', buffer: Buffer.from('New conversation data') });
   await expect(page.locator('.agent-source-row')).toHaveText('fresh.txtRemove');
-  const completed = page.waitForResponse((response) => response.url().includes('/api/connectors/google/read'));
+  const completed = page.waitForResponse(
+    (response) => new URL(originalApiUrl(page, response.url())).pathname === '/api/connectors/google/read',
+  );
   release();
   await completed;
   await expect(page.locator('.agent-source-row')).toHaveText('fresh.txtRemove');
