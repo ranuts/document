@@ -11,10 +11,18 @@
  * with a scripted provider and mock tools.
  */
 import type { AgentTool } from './types';
+import { incompleteResponseReason, type IncompleteResponseReason } from './llm/completion';
+export { incompleteResponseReason } from './llm/completion';
 import { validateToolInput } from './tool-validation';
 export { validateToolInput } from './tool-validation';
-import { budgetMessages, contextualizeMessages, DEFAULT_CONTEXT_BYTES, remainingContextBytes } from './context-budget';
-export { fitTextResult } from './context-budget';
+import {
+  budgetMessages,
+  contextualizeMessages,
+  DEFAULT_CONTEXT_BYTES,
+  budgetToolResults,
+  type BudgetedToolResult,
+} from './context-budget';
+export { fitTextResult, minimumTextResult } from './context-budget';
 import type { LLMContent, LLMMessage, LLMProvider, LLMResponse, LLMToolDef } from './llm/types';
 
 /** Progress event emitted during a run (for UI: chat bubbles, tool activity). */
@@ -74,22 +82,13 @@ export interface AgentRunResult {
   /** A host tool explicitly ended the turn; this alone does not imply success. */
   completedByTool?: true;
   /** Generation ended before a complete answer or tool request was produced. */
-  incompleteReason?: 'max_tokens' | 'content_filter';
+  incompleteReason?: IncompleteResponseReason;
   /** True if the run stopped because it hit `maxIterations`. */
   stoppedOnLimit: boolean;
   /** Identifies a guard stop without interpreting internal error prose in the UI. */
   limitReason?: 'repeated_call' | 'tool_budget' | 'iterations';
   /** True if the run was aborted via `options.signal`. */
   aborted: boolean;
-}
-
-/** Normalise provider termination without exposing backend error prose to the host UI. */
-export function incompleteResponseReason(
-  response: Pick<LLMResponse, 'stopReason'>,
-): AgentRunResult['incompleteReason'] {
-  if (response.stopReason === 'length' || response.stopReason === 'max_tokens') return 'max_tokens';
-  if (response.stopReason === 'content_filter') return 'content_filter';
-  return undefined;
 }
 
 /** Convert an AgentTool registry into the LLM-facing tool definitions. */
@@ -120,6 +119,7 @@ export async function runAgent(
   if (![maxIterations, maxToolCalls, maxRepeatedCalls].every((n) => Number.isSafeInteger(n) && n > 0))
     throw new Error('Agent limits must be positive integers');
   const seenCalls = new Map<string, number>();
+  const resultBudgets: BudgetedToolResult[] = [];
   let contextNoticeSent = false;
   let firstProviderText = false;
 
@@ -149,7 +149,11 @@ export async function runAgent(
     const budgetedMessages = exactBudget
       ? [...contextualMessages]
       : budgetMessages(contextualMessages, options.maxContextBytes);
-    const requestMessages = budgetedMessages.map(({ hostPresentation: _presentation, ...message }) => message);
+    // Later exchanges may refit earlier read excerpts. Keep each provider's
+    // already-sent request independent from those archival updates.
+    const requestMessages = structuredClone(
+      budgetedMessages.map(({ hostPresentation: _presentation, ...message }) => message),
+    );
     if ((contextual.trimmed || requestMessages.length < messages.length) && !contextNoticeSent) {
       contextNoticeSent = true;
       options.onContextTrimmed?.();
@@ -204,18 +208,30 @@ export async function runAgent(
       return { text: response.text, messages, toolCallCount, stoppedOnLimit: false, aborted: false };
     }
 
-    const results: LLMContent[] = [];
+    const results: LLMContent[] = response.toolCalls.map((call) => ({
+      type: 'tool_result',
+      toolUseId: call.id,
+      content: '',
+      isError: false,
+    }));
+    messages.push({ role: 'user', content: results });
+    const refitResults = () => {
+      if (!exactBudget) budgetToolResults(messages, resultBudgets, options.maxContextBytes);
+    };
+    // Refit earlier reads around the actual new shells. An oversized terminal
+    // exchange needs no inference; only provider-bound requests must fit.
+    refitResults();
     let terminal = false;
     let limited = false;
     let limitReason: Exclude<AgentRunResult['limitReason'], 'iterations'>;
-    for (const call of response.toolCalls) {
+    for (const [index, call] of response.toolCalls.entries()) {
       if (options.signal?.aborted || terminal) {
-        results.push({
+        results[index] = {
           type: 'tool_result',
           toolUseId: call.id,
           content: options.signal?.aborted ? 'Cancelled before execution' : 'Turn concluded before execution',
           isError: true,
-        });
+        };
         continue;
       }
       toolCallCount++;
@@ -230,44 +246,24 @@ export async function runAgent(
           : tool && repeats > (tool.readOnlyHint ? maxRepeatedCalls : 1)
             ? 'Repeated identical tool call refused; inspect the prior result before continuing'
             : undefined;
-      // Share the remaining serialized payload space across this batch. Reserve
-      // every call/result shell and retain the complete latest turn; optional
-      // reference context can shrink on the next request. Only opted-in reads
-      // may shorten their structured output.
-      const pending = response.toolCalls.slice(results.length);
-      const emptyResults: LLMContent[] = pending.map((call) => ({
+      let { content, isError } = policyError
+        ? { content: policyError, isError: true }
+        : await executeToolCall(tools, call.name, call.input, options.signal);
+      const result: Extract<LLMContent, { type: 'tool_result' }> = {
         type: 'tool_result',
         toolUseId: call.id,
-        content: '',
-        isError: false,
-      }));
-      const payloadBytes = exactBudget
-        ? undefined
-        : Math.max(
-            0,
-            Math.floor(
-              remainingContextBytes(
-                [...messages, { role: 'user', content: [...results, ...emptyResults] }],
-                options.maxContextBytes,
-              ) / pending.length,
-            ),
-          );
-      const fitOutput =
-        tool?.fitResult && payloadBytes !== undefined
-          ? (output: unknown) =>
-              tool.fitResult!(
-                output,
-                (candidate) =>
-                  new TextEncoder().encode(JSON.stringify(JSON.stringify(candidate ?? null))).byteLength - 2 <=
-                  payloadBytes,
-              )
-          : undefined;
-      const { content, isError } = policyError
-        ? { content: policyError, isError: true }
-        : await executeToolCall(tools, call.name, call.input, options.signal, fitOutput);
+        content,
+        isError,
+      };
+      results[index] = result;
+      if (!isError && tool?.fitResult)
+        resultBudgets.push({ result, output: JSON.parse(content), policy: tool.fitResult });
+      refitResults();
+      content = result.content;
       if (policyError) {
         limited = terminal = true;
         limitReason = toolCallCount > maxToolCalls ? 'tool_budget' : 'repeated_call';
+        result.guardReason = limitReason;
       }
       if (
         typeof tool?.concludesTurn === 'function'
@@ -283,15 +279,8 @@ export async function runAgent(
         ...(tool ? { readOnlyHint: tool.readOnlyHint } : {}),
         ...(policyError ? { limitReason } : {}),
       });
-      results.push({
-        type: 'tool_result',
-        toolUseId: call.id,
-        content,
-        isError,
-        ...(policyError ? { guardReason: limitReason } : {}),
-      });
     }
-    messages.push({ role: 'user', content: results });
+    refitResults();
     options.onToolExchange?.(structuredClone(messages));
     if (terminal && !options.signal?.aborted)
       return {
@@ -313,7 +302,6 @@ async function executeToolCall(
   name: string,
   input: Record<string, unknown>,
   signal?: AbortSignal,
-  fitOutput?: (output: unknown) => unknown,
 ): Promise<{ content: string; isError: boolean }> {
   const tool = Object.hasOwn(tools, name) ? tools[name] : undefined;
   if (!tool) {
@@ -323,7 +311,7 @@ async function executeToolCall(
     const invalid = validateToolInput(tool, input);
     if (invalid) return { content: `Invalid tool arguments: ${invalid}`, isError: true };
     const output = await (signal ? tool.execute(input, signal) : tool.execute(input));
-    return { content: JSON.stringify((fitOutput ? fitOutput(output) : output) ?? null), isError: false };
+    return { content: JSON.stringify(output ?? null), isError: false };
   } catch (error) {
     return { content: error instanceof Error ? error.message : String(error), isError: true };
   }
