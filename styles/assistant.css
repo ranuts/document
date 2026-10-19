@@ -144,11 +144,21 @@ body.agent-panel-resizing #app iframe {
   color: var(--ran-color-text-secondary);
   overflow-wrap: anywhere;
 }
-.agent-history-actions,
+.agent-history-transfer-actions,
+.agent-history-danger-actions,
 .agent-history-confirmation {
   display: flex;
   flex-wrap: wrap;
   gap: var(--ran-space-2);
+}
+.agent-history-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-4);
+}
+.agent-history-danger-actions {
+  border-block-start: 1px solid var(--ran-color-border);
+  padding-block-start: var(--ran-space-4);
 }
 .agent-history-confirmation {
   margin-top: var(--ran-space-3);
@@ -160,21 +170,54 @@ body.agent-panel-resizing #app iframe {
   flex-basis: 100%;
 }
 .agent-history-options button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
   min-height: var(--ran-size-7);
+  min-width: 0;
   max-width: 100%;
-  padding: var(--ran-space-1) var(--ran-space-2);
-  border: 0;
+  padding: var(--ran-space-1) var(--ran-space-3);
+  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-sm);
-  background: transparent;
+  background: var(--ran-color-bg-elevated);
   color: var(--ran-color-text);
   font: inherit;
-  font-size: var(--ran-text-label-3);
+  font-size: var(--ran-text-button-size);
+  font-weight: var(--ran-text-button-weight);
+  line-height: var(--ran-line-height);
   overflow-wrap: anywhere;
   cursor: pointer;
 }
+.agent-history-options button:enabled:hover {
+  border-color: var(--ran-color-border-hover);
+  background: var(--ran-color-bg-hover);
+}
+.agent-history-options button:enabled:active {
+  border-color: var(--ran-color-border-active);
+  background: var(--ran-color-bg-active);
+}
+.agent-history-options button:is(.agent-history-delete-current, .agent-history-delete-all):enabled {
+  color: var(--app-danger-fill);
+  border-color: var(--app-danger-fill);
+}
+.agent-history-options .agent-history-confirm:enabled {
+  color: var(--app-danger-foreground);
+  border-color: var(--app-danger-fill);
+  background: var(--app-danger-fill);
+}
+.agent-history-options .agent-history-confirm:enabled:hover {
+  border-color: var(--app-danger-hover);
+  background: var(--app-danger-hover);
+}
+.agent-history-options .agent-history-confirm:enabled:active {
+  border-color: var(--app-danger-active);
+  background: var(--app-danger-active);
+}
 .agent-history-options button:disabled {
   color: var(--ran-color-text-disabled);
+  border-color: var(--ran-color-border);
+  background: var(--ran-color-bg-muted);
   cursor: default;
 }
 .agent-history-options button:focus-visible,
@@ -1837,14 +1880,6 @@ r-dropdown[role='listbox'] {
 .agent-history-empty[hidden] {
   display: none;
 }
-.agent-history-options .agent-history-delete-all,
-.agent-history-options .agent-history-confirm {
-  color: var(--ran-color-danger);
-}
-.agent-history-options button:hover:not(:disabled) {
-  background: var(--ran-color-bg-hover);
-}
-
 /* Contextual document tasks share the transcript and composer's leading edge. */
 .agent-task-entry {
   font-weight: 400;
@@ -2202,7 +2237,6 @@ r-dropdown[role='listbox'] {
 }
 .agent-workspace-view button:hover:enabled,
 .agent-artifacts button:hover:enabled,
-.agent-history-options button:hover:enabled,
 .agent-view-back:hover:enabled,
 .agent-sources-toggle:hover:enabled,
 .agent-workspace-toggle:hover:enabled {
@@ -2259,11 +2293,10 @@ r-dropdown[role='listbox'] {
 }
 .agent-workspace-view button:active:enabled,
 .agent-artifacts button:active:enabled,
-.agent-history-options button:active:enabled,
 .agent-view-back:active:enabled {
   background: var(--ran-color-bg-active);
 }
-.agent-panel :is(.agent-workspace-view, .agent-artifacts, .agent-history-options, .agent-view-header) button:disabled {
+.agent-panel :is(.agent-workspace-view, .agent-artifacts, .agent-view-header) button:disabled {
   color: var(--ran-color-text-disabled);
   cursor: default;
   background: transparent;
@@ -2282,8 +2315,6 @@ r-dropdown[role='listbox'] {
   background: var(--ran-color-primary-active);
   border-color: var(--ran-color-primary-active);
 }
-.agent-history-options
-  button:is(.agent-history-delete-current, .agent-history-delete-all, .agent-history-confirm):enabled,
 .agent-artifacts button:is([data-action='delete'], [data-action='confirmDelete']):enabled {
   color: var(--ran-color-danger);
 }

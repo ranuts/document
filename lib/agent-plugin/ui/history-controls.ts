@@ -1,4 +1,5 @@
 import { localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
+import { Div } from 'ranui/builder';
 import { t, type I18nMessages } from '@ranuts/shared/i18n';
 import type { createConversationStore } from './sessions';
 
@@ -49,7 +50,10 @@ export function createHistoryControls(options: HistoryControlsOptions) {
   const exported = button('agent-history-export');
   const remove = button('agent-history-delete-current');
   const clear = button('agent-history-delete-all');
-  actions.append(restore, legacy, exported, remove, clear);
+  actions.append(
+    Div().class('agent-history-transfer-actions').children(restore, legacy, exported).build(),
+    Div().class('agent-history-danger-actions').children(remove, clear).build(),
+  );
   const confirmation = document.createElement('div');
   confirmation.className = 'agent-history-confirmation';
   confirmation.hidden = true;
