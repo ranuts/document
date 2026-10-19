@@ -154,3 +154,36 @@ The published libraries require Node 24+, so the application engine requirement 
 builder move to Node 24 as well. This is a build-toolchain requirement; the application
 continues to run in the browser. Model requests, persistence formats and account-free
 frontend operation are unaffected.
+
+## History-action affordances (2026-10-19)
+
+Rechecked against ran main `66a00775755dae6c11bcb59eb227af76e986c7f3`, especially
+DESIGN sections 1, 3, 7 and 11 and INTERACTION section 2. The remaining history commands
+had transparent, borderless resting surfaces. Hover styling and a pointer cursor did not
+make them discoverable before interaction, and red text alone did not give deletion a
+clear control boundary.
+
+Restore/import/export now have visible secondary button surfaces. Deletion commands live
+in a separate group with danger outlines; only explicit confirmation receives a solid
+danger fill. All states use the existing ran foundation and application danger roles,
+including AA text contrast in both themes. Disabled controls keep their geometry and
+remain quiet on hover. Native buttons, the existing confirmation flow, storage operations
+and focus-restoration ownership remain intact. The wrappers use the installed ranui builder.
+
+Rendered regressions first caught the missing resting border, then a general hover rule
+overriding the danger border. The final cascade owns history states together instead of
+leaving later shared rules to override them. Browser checks cover English and Portuguese
+at 1280/360/320px, light/dark, hover/press/disabled, Enter/Escape, real JSON download,
+focus return and 44px coarse-pointer targets. Safari's native Option-Tab route is tested
+with actual focus assertions; pointer activation is not assumed to focus a native button.
+See [Apple's keyboard navigation reference](https://support.apple.com/guide/safari/cpsh003/mac).
+
+Verification on document base `b4c29f64` plus this working-tree change:
+
+- Full unit suite: **252 files / 6,799 tests passed**. Two non-fatal
+  `PromiseRejectionHandledWarning` messages were printed by the suite.
+- **17 distinct browser cases passed without retries**: 11 Chromium history/workspace
+  cases and six WebKit/Firefox history-action cases. After correcting the cross-browser
+  keyboard assumptions, the three Chromium history-action cases were rechecked too.
+- Production Vite builds, lint/TypeScript, formatting, all 1,511 immutable evaluation
+  artifacts and diff checks passed. No library update or persistence change was needed.
