@@ -201,6 +201,12 @@ body.agent-panel-resizing #app iframe {
   color: var(--app-danger-fill);
   border-color: var(--app-danger-fill);
 }
+.agent-history-options button:is(.agent-history-delete-current, .agent-history-delete-all):enabled:hover {
+  color: var(--app-danger-hover);
+}
+.agent-history-options button:is(.agent-history-delete-current, .agent-history-delete-all):enabled:active {
+  color: var(--app-danger-active);
+}
 .agent-history-options .agent-history-confirm:enabled {
   color: var(--app-danger-foreground);
   border-color: var(--app-danger-fill);
