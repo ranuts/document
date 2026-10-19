@@ -29,7 +29,7 @@
     "test:archive": "node bin/evaluation-archive.mjs"
   },
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=24.0.0"
   },
   "keywords": [
     "onlyoffice",
@@ -81,7 +81,7 @@
     "@ranuts/converter": "workspace:*",
     "@ranuts/shared": "workspace:*",
     "pdfjs-dist": "5.4.624",
-    "ranui": "0.5.0-alpha.6",
-    "ranuts": "0.4.1-alpha.2"
+    "ranui": "0.5.0",
+    "ranuts": "0.5.0"
   }
 }
