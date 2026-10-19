@@ -187,3 +187,9 @@ Verification on document base `b4c29f64` plus this working-tree change:
   keyboard assumptions, the three Chromium history-action cases were rechecked too.
 - Production Vite builds, lint/TypeScript, formatting, all 1,511 immutable evaluation
   artifacts and diff checks passed. No library update or persistence change was needed.
+
+Pre-PR review additionally reproduced insufficient light-theme outline-delete text
+contrast against the neutral hover/pressed fills (4.48:1 / 4.28:1). Those foregrounds
+now use the existing danger hover/active roles, while the outline retains its danger
+identity. The browser regression checks both commands' actual hover and pressed
+contrast rather than requiring an unchanged text colour.

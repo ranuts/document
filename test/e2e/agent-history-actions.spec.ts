@@ -112,8 +112,17 @@ for (const scheme of ['light', 'dark'] as const) {
         await page.mouse.move(0, 0);
         const restingDanger = await surface(danger);
         await danger.hover();
-        expect((await surface(danger)).color).toBe(restingDanger.color);
-        expect((await surface(danger)).border).toBe(restingDanger.border);
+        const dangerHover = await surface(danger);
+        expect(dangerHover.color).not.toBe(hovering.color);
+        expect(dangerHover.border).toBe(restingDanger.border);
+        expect(contrast(dangerHover.color, dangerHover.background)).toBeGreaterThanOrEqual(4.5);
+        await page.mouse.down();
+        const dangerActive = await surface(danger);
+        expect(dangerActive.color).not.toBe(hovering.color);
+        expect(dangerActive.border).toBe(restingDanger.border);
+        expect(contrast(dangerActive.color, dangerActive.background)).toBeGreaterThanOrEqual(4.5);
+        await page.mouse.move(0, 0);
+        await page.mouse.up();
       }
 
       const remove = options.locator('.agent-history-delete-current');
