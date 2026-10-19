@@ -33,6 +33,9 @@ it('does not offer cancellation after confirmed deletion has started', async () 
   await vi.waitFor(() => expect(finish).toBeDefined());
   const cancel = controls.el.querySelector<HTMLButtonElement>('.agent-history-cancel')!;
   expect(cancel.disabled).toBe(true);
+  for (const action of controls.el.querySelectorAll<HTMLButtonElement>('.agent-history-actions button')) {
+    expect(action.disabled).toBe(true);
+  }
   cancel.click();
   expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(false);
   finish();
@@ -40,6 +43,9 @@ it('does not offer cancellation after confirmed deletion has started', async () 
     expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true),
   );
   expect(cancel.disabled).toBe(false);
+  for (const action of controls.el.querySelectorAll<HTMLButtonElement>('.agent-history-actions button')) {
+    expect(action.disabled).toBe(false);
+  }
 });
 
 it('requires explicit opt-in to save and restores after a previously enabled preference', async () => {
