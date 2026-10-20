@@ -1243,6 +1243,8 @@ r-dropdown[role='listbox'] {
 }
 .agent-panel-settings r-button {
   --ran-btn-padding: 0;
+  --ran-btn-box-shadow: none;
+  --ran-btn-surface-background: transparent;
 }
 .agent-panel-settings r-button::part(content) {
   box-sizing: border-box;
@@ -1332,8 +1334,7 @@ r-dropdown[role='listbox'] {
   width: 100%;
 }
 .agent-model-cache {
-  border-top: 1px solid var(--ran-color-border);
-  padding-top: var(--ran-space-4);
+  min-width: 0;
 }
 .agent-model-cache > summary {
   cursor: pointer;
@@ -1353,8 +1354,7 @@ r-dropdown[role='listbox'] {
   align-items: center;
   flex-wrap: wrap;
   gap: var(--ran-space-2);
-  padding-block: var(--ran-space-3);
-  border-bottom: 1px solid var(--ran-color-border);
+  padding-block: var(--ran-space-2);
 }
 .agent-model-cache-row > span {
   flex: 1 1 140px;
@@ -1363,7 +1363,7 @@ r-dropdown[role='listbox'] {
   font-size: var(--ran-text-label-2);
 }
 .agent-cache-delete {
-  --ran-btn-color: var(--ran-color-danger);
+  --ran-btn-color: var(--app-danger-fill);
 }
 .agent-release-memory {
   align-self: flex-start;
@@ -1372,8 +1372,6 @@ r-dropdown[role='listbox'] {
 .agent-preferences {
   color: var(--ran-color-text-secondary);
   font-size: var(--ran-text-label-3);
-  border-top: 1px solid var(--ran-color-border);
-  padding-top: var(--ran-space-4);
 }
 .agent-preferences .agent-settings-icon {
   display: none;
@@ -2275,11 +2273,6 @@ r-dropdown[role='listbox'] {
   cursor: pointer;
   text-align: start;
 }
-.agent-workspace-view button,
-.agent-artifacts button {
-  border: 1px solid var(--ran-color-border);
-  background: var(--ran-color-bg-elevated);
-}
 .agent-panel .cui-composer .agent-sources-toggle {
   min-height: var(--ran-size-7);
   padding: var(--ran-space-1) var(--ran-space-2);
@@ -2356,22 +2349,61 @@ r-dropdown[role='listbox'] {
   cursor: default;
   background: transparent;
 }
-.agent-artifacts button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):enabled {
+.agent-sources-view .agent-source-attach:enabled,
+.agent-artifacts
+  button:is(
+    [data-action='import'],
+    [data-action='saveVersion'],
+    [data-action='saveNew'],
+    [data-action='accept']
+  ):enabled {
   background: var(--ran-color-primary);
   border-color: var(--ran-color-primary);
   color: var(--ran-color-primary-text);
 }
-.agent-artifacts button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):hover:enabled {
+.agent-sources-view .agent-source-attach:hover:enabled,
+.agent-artifacts
+  button:is(
+    [data-action='import'],
+    [data-action='saveVersion'],
+    [data-action='saveNew'],
+    [data-action='accept']
+  ):hover:enabled {
   background: var(--ran-color-primary-hover);
   border-color: var(--ran-color-primary-hover);
 }
 .agent-artifacts
-  button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):active:enabled {
+  button:is(
+    [data-action='import'],
+    [data-action='saveVersion'],
+    [data-action='saveNew'],
+    [data-action='accept']
+  ):active:enabled,
+.agent-sources-view .agent-source-attach:active:enabled {
   background: var(--ran-color-primary-active);
   border-color: var(--ran-color-primary-active);
 }
-.agent-artifacts button:is([data-action='delete'], [data-action='confirmDelete']):enabled {
-  color: var(--ran-color-danger);
+.agent-source-remove:enabled,
+.agent-artifacts button[data-action='delete']:enabled {
+  color: var(--app-danger-fill);
+}
+.agent-source-remove:hover:enabled,
+.agent-artifacts button[data-action='delete']:hover:enabled {
+  color: var(--app-danger-hover);
+}
+.agent-source-remove:active:enabled,
+.agent-artifacts button[data-action='delete']:active:enabled {
+  color: var(--app-danger-active);
+}
+.agent-artifacts button[data-action='confirmDelete']:enabled {
+  color: var(--app-danger-foreground);
+  background: var(--app-danger-fill);
+}
+.agent-artifacts button[data-action='confirmDelete']:hover:enabled {
+  background: var(--app-danger-hover);
+}
+.agent-artifacts button[data-action='confirmDelete']:active:enabled {
+  background: var(--app-danger-active);
 }
 .agent-artifacts > div > p {
   margin: 0 0 var(--ran-space-4);
@@ -2380,6 +2412,7 @@ r-dropdown[role='listbox'] {
   line-height: 1.6;
 }
 .agent-artifacts-list button {
+  width: 100%;
   font-size: var(--ran-text-label-2);
 }
 @media (pointer: coarse) {
@@ -2421,6 +2454,18 @@ r-dropdown[role='listbox'] {
   flex: 1;
   min-width: 0;
   overflow-wrap: anywhere;
+}
+.agent-source-row {
+  align-items: flex-start;
+  padding-block: var(--ran-space-2);
+}
+.agent-sources-attached:not(:empty) {
+  margin-block-start: var(--ran-space-4);
+}
+.agent-sources-view .agent-source-preview > summary {
+  box-sizing: border-box;
+  min-height: var(--app-control-height);
+  padding-block: var(--ran-space-1);
 }
 .agent-sources-attached:empty {
   display: none;

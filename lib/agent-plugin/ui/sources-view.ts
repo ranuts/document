@@ -75,6 +75,7 @@ export function createSourcesView(options: {
     return { wrapper, text };
   };
   const attachFile = button(() => local.click());
+  attachFile.className = 'agent-source-attach';
   const localField = label(local, '');
   localField.wrapper.hidden = true;
   el.append(
@@ -139,6 +140,7 @@ export function createSourcesView(options: {
         options.sources.remove(source.id);
         update();
       });
+      remove.className = 'agent-source-remove';
       remove.textContent = labels.remove;
       remove.setAttribute('aria-label', `${labels.remove}: ${source.title}`);
       row.append(text, remove);
