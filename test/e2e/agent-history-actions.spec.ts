@@ -59,9 +59,13 @@ for (const scheme of ['light', 'dark'] as const) {
   }, info) => {
     test.setTimeout(120_000);
     await page.emulateMedia({ colorScheme: scheme });
+    // Exercise the product's persisted theme choice as well as media emulation;
+    // a screenshot named "dark" must not silently accept a light token canvas.
+    await page.addInitScript((theme) => localStorage.setItem('ran-theme', theme), scheme);
     for (const locale of ['en', 'pt']) {
       await page.setViewportSize({ width: 1280, height: 900 });
       await openHistory(page, locale);
+      await expect(page.locator('html')).toHaveAttribute('data-ran-theme', scheme);
       const options = page.locator('.agent-history-options');
       for (const width of [1280, 360, 320]) {
         await page.setViewportSize({ width, height: 900 });

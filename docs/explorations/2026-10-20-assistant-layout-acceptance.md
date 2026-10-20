@@ -83,21 +83,23 @@ Persistence, model loading, document writes and dependency versions are unchange
 
 ## Follow-up: grouped history commands
 
-History & data now uses flat native command rows inside the established settings pane.
-Restore/Import/Export share icon/label columns and full-width targets, with a 16px gap
-before the destructive commands. There is no inner group outline, group fill, row rule,
-deletion divider or transparent border retaining an obsolete card inset. Hover/press,
-keyboard focus, disabled states and the explicit danger confirmation remain distinct.
+History & data uses content-sized native command buttons in one column. Restore/Import/Export
+share the checkbox's icon/control and text columns, with 8px between buttons and a 16px gap
+before destructive commands. Each button owns a quiet resting surface and functional stroke;
+there is no inner group outline, group fill, row rule or deletion divider. Hover/press,
+keyboard focus, disabled states and explicit danger confirmation remain distinct.
 
-An earlier framed group, followed by inset separators, still repeated the pane's existing
-boundary. The final revision removes that enclosure instead of making its lines more subtle.
-Acceptance measures full-row geometry, contrast and interactions without requiring a
-decorative group frame, and records the complete pane as well as the command region.
+Earlier framed groups and inset separators repeated the pane's existing boundary. Removing
+those enclosures was appropriate, but the subsequent all-flat treatment also erased resting
+affordance. It measured alignment only within the command list, missing adjacent checkbox
+columns. The current revision retains the simplified grouping while restoring each native
+button's own functional shape. Acceptance records the complete pane as well as the command
+region, with the pointer away, and checks shared visible columns rather than equal row widths.
 
 The runtime baseline after adding icon/label rows passed all 252 unit files / 6,801 tests
 (including 274 focused history/panel/write tests), lint/typecheck and the production build.
-Two existing non-fatal `PromiseRejectionHandledWarning` messages were printed. The final
-flat-composition revision changes CSS, browser acceptance and prose; runtime logic is unchanged.
+Two existing non-fatal `PromiseRejectionHandledWarning` messages were printed. The subsequent
+composition and affordance revisions change CSS, browser acceptance and prose; runtime logic is unchanged.
 The coverage percentages above belong to the earlier layout-only coverage run.
 
 ## Revision scope: remove redundant command enclosures
@@ -122,8 +124,10 @@ history/state/storage code and unrelated site layouts.
 
 Compatibility red lines: keep the panel boundary, field borders, keyboard focus outlines,
 44px targets, icon/label columns, accessible names, destructive confirmation and draft/focus
-return behavior. The simplest composition is a flat command list with one 16px gap before
-destructive actions. It needs no replacement card, muted group fill, shadow or new abstraction.
+return behavior. The composition uses a single command column with one 16px gap before
+destructive actions. It needs no replacement card, muted group fill, raised shadow or new
+abstraction. Native buttons may own a functional surface; removing group wrappers must not
+remove the cue that an individual control is clickable.
 
 Acceptance: inspect the whole pane and its command region in both themes and at desktop,
 360px and 320px widths; use the existing English/Portuguese, pointer/keyboard, disabled,
@@ -132,26 +136,66 @@ gates in ran. The review must explain the purpose of each remaining stable bound
 
 ## Remaining boundary review
 
-| Surface                | Boundary retained                                              | Distinct purpose                                                            |
-| ---------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Assistant/editor       | Panel edge                                                     | Independent sidebar and resize boundary                                     |
-| Models and Sources     | Picker/search/input frames                                     | Values that can be edited or selected                                       |
-| Conversations          | Search field and one History & data section rule               | Search input and a major change from conversation browsing to data settings |
-| History command groups | None at rest                                                   | Title, icon/label columns and proximity already express grouping            |
-| Command focus          | Keyboard outline                                               | Transient focus state, not decorative containment                           |
-| History deletion       | Solid confirmation button                                      | Explicit destructive commitment after the existing confirmation step        |
-| Artifacts              | Form/control boundaries and task-specific save/apply hierarchy | Editable values and explicit document/result operations                     |
+| Surface                | Boundary retained                                              | Distinct purpose                                                                   |
+| ---------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Assistant/editor       | Panel edge                                                     | Independent sidebar and resize boundary                                            |
+| Models and Sources     | Picker/search/input frames                                     | Values that can be edited or selected                                              |
+| Conversations          | Search field and one History & data section rule               | Search input and a major change from conversation browsing to data settings        |
+| History command groups | No group enclosure; individual secondary button surfaces       | Type/proximity express grouping; each button shape identifies an actionable target |
+| Command focus          | Keyboard outline                                               | Transient focus state, not decorative containment                                  |
+| History deletion       | Solid confirmation button                                      | Explicit destructive commitment after the existing confirmation step               |
+| Artifacts              | Form/control boundaries and task-specific save/apply hierarchy | Editable values and explicit document/result operations                            |
 
-![Complete Conversations pane with flat commands](../media/assistant-layout/2026-10-20-history-pane-light.png)
+![Complete Conversations pane with visible command buttons](../media/assistant-layout/2026-10-20-history-pane-light.png)
 
-![Flat history commands in light mode](../media/assistant-layout/2026-10-20-history-commands-light.png)
+![History command buttons in light mode](../media/assistant-layout/2026-10-20-history-commands-light.png)
 
-![Flat history commands in dark mode](../media/assistant-layout/2026-10-20-history-commands-dark.png)
+![History command buttons in dark mode](../media/assistant-layout/2026-10-20-history-commands-dark.png)
 
-![Portuguese flat commands at 320px](../media/assistant-layout/2026-10-20-history-commands-320-dark.png)
+![Portuguese command buttons at 320px](../media/assistant-layout/2026-10-20-history-commands-320-dark.png)
 
-Final flat-composition verification: the history/layout Chromium suite passed all 10 cases;
+Earlier flat-composition verification (before the affordance correction below): the history/layout Chromium suite passed all 10 cases;
 the Firefox/WebKit history-action suite passed all six cases. Retries were disabled.
 The updated row-edge acceptance first failed on the old enclosure's 2px reduction in
 available target width, then passed after the redundant frame/insets were removed.
 Ran documentation/link/eight-locale checks and changed-file formatting passed.
+
+## Resting affordance and shared control columns
+
+User review exposed two acceptance gaps in document `9f3c5a4c` / ran `320a91da6`.
+Real Chromium measurements relative to History & data found the checkbox at 0px with its
+label at 24px, while command icons started at 12px and command labels at 42px. The five
+commands aligned with each other, but not with the adjacent control. Their resting background
+also equalled the panel canvas, so icons and verbs could read as static content.
+
+The correction keeps the existing allowed file scope and runtime compatibility red lines.
+It replaces the universal flat-row prescription in ran with context-dependent control affordance:
+remove redundant wrappers, retain an individual standalone button's recognizable resting shape.
+Document now uses 16px SVG viewports, 8px icon gaps and padding, and an explicit 8px inline-start
+target extension into the owned gutter. Measured checkbox/icon edges are 16px from the panel
+origin; all related text starts at 40px. The extension stays inside the pane and does not cause
+horizontal scrolling. Content-sized buttons avoid a large empty full-row target.
+
+The new browser acceptance failed on the old geometry before implementation. Its first run
+against the new surfaces caught light-mode danger text contrast of 4.475:1 and an 8px scroll
+extension. Using the existing darker danger foreground role and limiting the extension to
+inline-start corrects those actual failures. Surface differences are an automated guard,
+not evidence that user discoverability has been measured; screenshots still require visual review.
+
+Final persisted-theme affordance verification: Chromium History 3 passed; Firefox/WebKit History 6 passed;
+Chromium shared layout 7 passed, all without retries. The History cases cover both themes,
+English/Portuguese at desktop, 360px and 320px, shared checkbox/icon/text columns, resting
+surface distinction, readable danger states, disabled/hover/press, keyboard focus, Enter/Escape,
+focus return, real export downloads and 44px touch targets. The renders above are current
+Firefox browser captures, including the full pane. Visual review found no remaining
+implementation issue; its stale-contract wording finding was corrected in this record and
+the application design guide. Lint/typecheck, changed-file formatting, production preview
+build, ran docs/eight-locale/link checks and whitespace checks passed. Runtime logic remains
+unchanged; the prior 6,801-test runtime baseline was not rerun for this CSS/docs-only correction.
+
+Screenshot inspection also caught a theme-coverage gap: the media-emulated Firefox run
+produced light renders under dark filenames. Its initial passing result did not establish
+dark-mode coverage. The final History matrix selects the product's persisted `ran-theme`
+choice at boot and asserts `data-ran-theme` before recording either theme. Final screenshots
+replace those incorrect evidence files. This checks the rendered saved-theme setting; it does
+not establish the cause of the Firefox system-media discrepancy.
