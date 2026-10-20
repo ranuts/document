@@ -36,7 +36,9 @@ for (const width of [320, 1280]) {
     await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`empty-${width}.png`) });
     const alignment = await page.locator('.agent-runtime-panel').evaluate((panel) => {
       const left = (selector: string) => panel.querySelector(selector)!.getBoundingClientRect().left;
-      return [left('.agent-panel-title'), left('.cui-empty'), left('.cui-composer')];
+      const range = document.createRange();
+      range.selectNodeContents(panel.querySelector('.agent-panel-title')!);
+      return [range.getBoundingClientRect().left, left('.cui-empty'), left('.cui-composer')];
     });
     expect(Math.max(...alignment) - Math.min(...alignment)).toBeLessThanOrEqual(1);
     await page.locator('.agent-panel-settings-toggle').click();
