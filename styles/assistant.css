@@ -229,6 +229,7 @@ body.agent-panel-resizing #app iframe {
   font-weight: var(--ran-text-label-weight);
 }
 .agent-history-transfer-actions button {
+  position: relative;
   border-radius: 0;
 }
 .agent-history-transfer-actions button:first-child {
@@ -239,8 +240,15 @@ body.agent-panel-resizing #app iframe {
   border-end-start-radius: calc(var(--ran-radius-md) - 1px);
   border-end-end-radius: calc(var(--ran-radius-md) - 1px);
 }
-.agent-history-transfer-actions button + button {
+.agent-history-transfer-actions button + button::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  /* Match the label column: row padding + icon viewport + icon/label gap. */
+  inset-inline-start: calc(var(--ran-space-3) + var(--ran-size-2) + var(--ran-space-3));
+  inset-inline-end: var(--ran-space-3);
   border-block-start: 1px solid var(--ran-color-border-secondary);
+  pointer-events: none;
 }
 .agent-history-actions button svg {
   flex: 0 0 var(--ran-size-2);
