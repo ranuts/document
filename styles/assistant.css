@@ -139,13 +139,18 @@ body.agent-panel-resizing #app iframe {
   align-items: flex-start;
   gap: var(--ran-space-2);
 }
+.agent-history-save {
+  flex: 0 0 var(--ran-size-1);
+  width: var(--ran-size-1);
+  height: var(--ran-size-1);
+  margin: var(--ran-space-1) 0 0;
+  accent-color: var(--ran-color-primary);
+}
 .agent-history-status {
-  margin: var(--ran-space-2) 0;
+  margin: var(--ran-space-2) 0 var(--ran-space-4);
   color: var(--ran-color-text-secondary);
   overflow-wrap: anywhere;
 }
-.agent-history-transfer-actions,
-.agent-history-danger-actions,
 .agent-history-confirmation {
   display: flex;
   flex-wrap: wrap;
@@ -156,9 +161,21 @@ body.agent-panel-resizing #app iframe {
   flex-direction: column;
   gap: var(--ran-space-4);
 }
+.agent-history-transfer-actions,
 .agent-history-danger-actions {
-  border-block-start: 1px solid var(--ran-color-border);
-  padding-block-start: var(--ran-space-4);
+  display: grid;
+  min-width: 0;
+}
+.agent-history-transfer-actions {
+  border: 1px solid var(--ran-color-border-secondary);
+  border-radius: var(--ran-radius-md);
+  background: var(--ran-color-bg-elevated);
+}
+.agent-history-danger-actions {
+  border-block-start: 1px solid var(--ran-color-border-secondary);
+  /* Reserve the same frame inset as the transfer group without drawing another box. */
+  border-inline: 1px solid transparent;
+  padding-block-start: var(--ran-space-3);
 }
 .agent-history-confirmation {
   margin-top: var(--ran-space-3);
@@ -197,9 +214,49 @@ body.agent-panel-resizing #app iframe {
   border-color: var(--ran-color-border-active);
   background: var(--ran-color-bg-active);
 }
+/* Settings commands form rows in one surface, rather than independently sized
+   outlined CTAs. Each complete row is a target, including its icon and label. */
+.agent-history-actions button {
+  width: 100%;
+  min-height: var(--app-control-touch);
+  justify-content: flex-start;
+  gap: var(--ran-space-3);
+  padding: var(--ran-space-3);
+  border: 0;
+  border-radius: var(--ran-radius-sm);
+  text-align: start;
+  font-size: var(--ran-text-label-1);
+  font-weight: var(--ran-text-label-weight);
+}
+.agent-history-transfer-actions button {
+  border-radius: 0;
+}
+.agent-history-transfer-actions button:first-child {
+  border-start-start-radius: calc(var(--ran-radius-md) - 1px);
+  border-start-end-radius: calc(var(--ran-radius-md) - 1px);
+}
+.agent-history-transfer-actions button:last-child {
+  border-end-start-radius: calc(var(--ran-radius-md) - 1px);
+  border-end-end-radius: calc(var(--ran-radius-md) - 1px);
+}
+.agent-history-transfer-actions button + button {
+  border-block-start: 1px solid var(--ran-color-border-secondary);
+}
+.agent-history-actions button svg {
+  flex: 0 0 var(--ran-size-2);
+  color: var(--ran-color-text-secondary);
+}
+.agent-history-action-label {
+  min-width: 0;
+}
+.agent-history-actions button:disabled svg {
+  color: inherit;
+}
 .agent-history-options button:is(.agent-history-delete-current, .agent-history-delete-all):enabled {
   color: var(--app-danger-fill);
-  border-color: var(--app-danger-fill);
+}
+.agent-history-danger-actions button svg {
+  color: inherit;
 }
 .agent-history-options button:is(.agent-history-delete-current, .agent-history-delete-all):enabled:hover {
   color: var(--app-danger-hover);
@@ -230,6 +287,9 @@ body.agent-panel-resizing #app iframe {
 .agent-history-options input:focus-visible {
   outline: 2px solid var(--ran-color-primary);
   outline-offset: 2px;
+}
+.agent-history-actions button:focus-visible {
+  outline-offset: -2px;
 }
 .agent-panel-key-label {
   font-size: var(--ran-text-label-3);

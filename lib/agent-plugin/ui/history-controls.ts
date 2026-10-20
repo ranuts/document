@@ -39,17 +39,39 @@ export function createHistoryControls(options: HistoryControlsOptions) {
   status.setAttribute('role', 'status');
   const actions = document.createElement('div');
   actions.className = 'agent-history-actions';
-  const button = (className: string): HTMLButtonElement => {
+  const actionLabels = new Map<HTMLButtonElement, HTMLSpanElement>();
+  const button = (className: string, path?: string): HTMLButtonElement => {
     const item = document.createElement('button');
     item.type = 'button';
     item.className = className;
+    if (path) {
+      const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      icon.setAttribute('viewBox', '0 0 24 24');
+      icon.setAttribute('width', '18');
+      icon.setAttribute('height', '18');
+      icon.setAttribute('fill', 'none');
+      icon.setAttribute('stroke', 'currentColor');
+      icon.setAttribute('stroke-width', '1.6');
+      icon.setAttribute('stroke-linecap', 'round');
+      icon.setAttribute('stroke-linejoin', 'round');
+      icon.setAttribute('aria-hidden', 'true');
+      icon.setAttribute('focusable', 'false');
+      icon.innerHTML = `<path d="${path}"/>`;
+      const text = document.createElement('span');
+      text.className = 'agent-history-action-label';
+      item.append(icon, text);
+      actionLabels.set(item, text);
+    }
     return item;
   };
-  const restore = button('agent-history-restore');
-  const legacy = button('agent-history-import');
-  const exported = button('agent-history-export');
-  const remove = button('agent-history-delete-current');
-  const clear = button('agent-history-delete-all');
+  const restore = button('agent-history-restore', 'M3 11a9 9 0 1 1 3 8M3 5v6h6M12 7v5l3 2');
+  const legacy = button('agent-history-import', 'M12 3v12m-4-4 4 4 4-4M4 15v5h16v-5');
+  const exported = button('agent-history-export', 'M12 15V3m-4 4 4-4 4 4M4 15v5h16v-5');
+  const remove = button('agent-history-delete-current', 'M9 8l6 6m0-6-6 6M20 11a8 8 0 0 1-8 8H4v-8a8 8 0 0 1 16 0Z');
+  const clear = button('agent-history-delete-all', 'M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7');
+  const labelAction = (item: HTMLButtonElement, key: keyof I18nMessages) => {
+    actionLabels.get(item)!.textContent = t(key);
+  };
   actions.append(
     Div().class('agent-history-transfer-actions').children(restore, legacy, exported).build(),
     Div().class('agent-history-danger-actions').children(remove, clear).build(),
@@ -77,11 +99,11 @@ export function createHistoryControls(options: HistoryControlsOptions) {
     cancel.disabled = busy > 0;
     legend.textContent = t('agentHistoryDataControls');
     saveText.textContent = t('agentSaveHistory');
-    restore.textContent = t('agentRestoreHistory');
-    legacy.textContent = t('agentImportHistory');
-    exported.textContent = t('agentExportHistory');
-    remove.textContent = t('agentDeleteConversation');
-    clear.textContent = t('agentDeleteHistory');
+    labelAction(restore, 'agentRestoreHistory');
+    labelAction(legacy, 'agentImportHistory');
+    labelAction(exported, 'agentExportHistory');
+    labelAction(remove, 'agentDeleteConversation');
+    labelAction(clear, 'agentDeleteHistory');
     const target = store.list().find((item) => item.id === deletion);
     question.textContent = t(deletion === 'all' ? 'agentDeleteHistoryConfirm' : 'agentDeleteConversationConfirm');
     if (target) question.textContent += ` ${target.title || t('agentNewConversation')}`;

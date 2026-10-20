@@ -51,7 +51,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 for (const scheme of ['light', 'dark'] as const) {
-  test(`history commands have visible resting surfaces and safe deletion states in ${scheme}`, async ({
+  test(`history command rows stay aligned and retain safe deletion states in ${scheme}`, async ({
     page,
     browserName,
   }, info) => {
@@ -67,15 +67,28 @@ for (const scheme of ['light', 'dark'] as const) {
         await options.screenshot({ path: info.outputPath(`history-actions-${locale}-${width}-${scheme}.png`) });
         const transfer = options.locator('.agent-history-restore, .agent-history-import, .agent-history-export');
         const danger = options.locator('.agent-history-delete-current, .agent-history-delete-all');
+        const group = options.locator('.agent-history-transfer-actions');
+        const groupSurface = await surface(group);
+        // One visible group owns the affordance; labels cannot form a ragged
+        // wrapping button cloud as translations or the panel width change.
+        expect(groupSurface.borderWidth).toBe(1);
+        expect(groupSurface.border).not.toBe(groupSurface.background);
+        const groupBox = (await group.boundingBox())!;
+        let previousBottom = 0;
         for (const button of await transfer.or(danger).all()) {
           const css = await surface(button);
-          // A borderless transparent command recreates the reported plain-text affordance.
-          expect(css.borderWidth).toBeGreaterThanOrEqual(1);
-          expect(css.borderStyle).toBe('solid');
-          expect(css.border).not.toBe(css.background);
           expect(css.background).not.toBe('rgba(0, 0, 0, 0)');
           expect(contrast(css.color, css.background)).toBeGreaterThanOrEqual(4.5);
-          expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(32);
+          const box = (await button.boundingBox())!;
+          expect(box.height).toBeGreaterThanOrEqual(44);
+          expect(box.width).toBeGreaterThanOrEqual(groupBox.width - 2);
+          expect(box.x).toBeCloseTo(groupBox.x + 1, 1);
+          expect(box.y).toBeGreaterThanOrEqual(previousBottom);
+          previousBottom = box.y + box.height;
+          const icon = button.locator('svg[aria-hidden="true"]');
+          await expect(icon).toBeVisible();
+          const label = button.locator('.agent-history-action-label');
+          await expect(button).toHaveAccessibleName((await label.innerText()).trim());
           expect(await button.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
         }
         const transferBottom = Math.max(
@@ -93,7 +106,7 @@ for (const scheme of ['light', 'dark'] as const) {
       const resting = await surface(restore);
       await restore.hover();
       const hovering = await surface(restore);
-      expect(hovering.border).not.toBe(resting.border);
+      expect(hovering.background).not.toBe(resting.background);
       await page.mouse.down();
       expect((await surface(restore)).background).not.toBe(hovering.background);
       await page.mouse.move(0, 0);
@@ -114,12 +127,13 @@ for (const scheme of ['light', 'dark'] as const) {
         await danger.hover();
         const dangerHover = await surface(danger);
         expect(dangerHover.color).not.toBe(hovering.color);
-        expect(dangerHover.border).toBe(restingDanger.border);
+        expect(restingDanger.borderWidth).toBe(0);
+        expect(dangerHover.borderWidth).toBe(0);
         expect(contrast(dangerHover.color, dangerHover.background)).toBeGreaterThanOrEqual(4.5);
         await page.mouse.down();
         const dangerActive = await surface(danger);
         expect(dangerActive.color).not.toBe(hovering.color);
-        expect(dangerActive.border).toBe(restingDanger.border);
+        expect(dangerActive.borderWidth).toBe(0);
         expect(contrast(dangerActive.color, dangerActive.background)).toBeGreaterThanOrEqual(4.5);
         await page.mouse.move(0, 0);
         await page.mouse.up();
