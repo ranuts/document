@@ -39,6 +39,11 @@ not a claim that the heading and body text have equal coordinates. The full targ
 inside the panel, including coarse input. The same composition applies to every subpage
 and nested artifact state, with no per-page horizontal corrections.
 
+Rendered follow-up: panels at or below 360px place the title above the action row, retaining
+its content-sized hover area and readable translated label. Coarse header icon sizing must
+exclude the title's flex basis. Back focus rings use zero outline offset to stay within the
+scrollport. Sources intro/search and populated artifacts/import are distinct 16px groups.
+
 Vertical relationships use 8px internal, 16px group and 24px section spacing. Empty status
 paragraphs do not reserve anonymous margins. Artifact explanatory copy starts at the same
 post-header group boundary as other subpage content; nested forms do not accumulate inset.

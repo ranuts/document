@@ -1,8 +1,9 @@
 # 页面版式规范（业界基准与本站取值）
 
 日期：2026-08-22
-适用：所有用户可见页面（落地页、生成页、`/history`、demo、404）。编辑器本身（`/editor`）
-是全屏应用，不在此列。
+适用：所有用户可见页面（落地页、生成页、`/history`、demo、404），以及 `/editor` 的应用壳与
+AI 工作区。下述站点列宽不套用到全屏编辑器；AI 工作区的布局与验收见本文末尾的应用布局契约。
+OnlyOffice 内部界面由 vendor 持有。
 
 审计脚本：`node bin/design-audit.mjs <baseUrl>`——渲染每个页面，打印下面这些数字；
 加 `--all` 则把每种页型在**七种语言**下各量一遍（默认只量英文，那是本规范写作时的基准）。
@@ -209,3 +210,46 @@ Two rules are mechanical because both fail silently in review:
   in a transition also fade on a theme flip — each surface at its own duration while the
   page snaps. Bare durations (`transition: 0.15s`) mean `all` and fail the same way. The
   documented `var(--…-transition)` hook is the opt-in escape hatch and is not judged.
+
+## Assistant application layout contract
+
+The canonical composition rules are owned by
+[ranui DESIGN section 11](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#11-composition--the-page-not-the-component).
+This section supplies the application's geometry and browser acceptance; the site's marketing
+column widths do not apply inside the assistant. `styles/assistant.css` owns the shared values.
+
+| Geometry        | Product contract                                                                                                   | Acceptance subject                                                                         |
+| --------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| Content rail    | 16px from the panel's inside edge                                                                                  | Header title text, onboarding copy, unframed copy, section labels, field/list outer frames |
+| Header title    | Text-sized target with 8px inline padding; leading hit area extends into the gutter                                | DOM Range text left, actual button width, hover/focus area and neighboring actions         |
+| Back navigation | Center a 16px SVG viewport in the 32px fine / 44px coarse pointer target; the viewport returns to the content rail | SVG viewport and full target bounds, not painted path bounds                               |
+| Subpage heading | An explicit navigation column followed by an 8px gap; shared by every subpage and nested artifact state            | Repeated title rail: 48px fine / 54px coarse, relative to the panel's inside edge          |
+| Framed fields   | Outer frame follows the content rail; internal text retains its control inset                                      | Native frame and real ranui shadow parts are separate subjects                             |
+| Vertical groups | 8px internal, 16px group and 24px section spacing                                                                  | Actual related-region edges; empty status paragraphs reserve no anonymous margins          |
+
+The title's flexible trailing filler is layout space, not a clickable/hovering title surface.
+At panel widths up to 360px, the runtime header gives the readable title its own row above
+the five action slots. Coarse input retains 44px targets without constraining the title to
+an icon's flex basis. Back focus outlines use zero offset so their full 2px ring remains
+inside the scrolling view. Populated result lists keep a 16px boundary before Import.
+Back navigation is a declared hierarchy, not an unexplained extra body inset. Centered empty
+states remain centered within their content frame. Frame, text, icon viewport and hit area
+must not be substituted for each other during review. CSS token compliance alone cannot prove
+these relationships. Do not nudge individual pages or SVG paths to compensate for a shared
+layout error.
+
+Apply this contract to onboarding/chat, Models, Conversations, Sources and Artifacts, including
+list/import/editor, empty/populated states, statuses and disclosures. Layout owners retain
+callbacks, focus return, busy guards and drafts. New sibling views must join the same checks.
+
+`test/e2e/agent-layout-rails.spec.ts` and `test/e2e/lib/layout-geometry.ts` read actual text
+Ranges and layout frames after fonts and async view content settle. They cover 432px desktop
+panels, 360px/320px windows, English/Portuguese, both themes and coarse input, with nested
+artifact import/editor/return paths. The existing sidebar test also measures title text rather
+than its padded button rectangle. Relevant focus, navigation, workspace and source/artifact
+suites remain required alongside the geometry assertions.
+
+Acceptance must reject a text-only 8px drift even when the outer frame stays fixed, a title
+target expanded into free toolbar space, and a sibling view shifted off its content rail.
+Review screenshots with these measured relationships; a stored screenshot without assertions
+or inspection is not acceptance evidence.
