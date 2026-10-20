@@ -261,6 +261,10 @@ is a full-width native button row with an 18px decorative icon, a 14px label and
 44px target. The frame stays on the content rail; icons and labels align within it, including
 the separate deletion group. Long translations wrap inside their row rather than changing
 the number of columns. Existing monochrome roles also style the save-history checkbox.
+The 1px outer frame defines the group. Internal separators begin at the label column
+(row padding + icon viewport + gap) and end at the trailing row inset; they do not cut
+through the icon column or divide the surface into fully boxed cells. Separators are
+decorative and never intercept pointer input or alter the full-row target.
 
 Deletion commands use quiet danger text and icons on the panel background, separated from
 transfer actions by space and a rule. Only the explicit confirmation has a solid danger fill.

@@ -123,3 +123,11 @@ Follow-up verification:
   code review found no actionable issues; light/dark and narrow screenshots were inspected.
 - The companion ran guidance now explicitly supports grouped command affordances and
   separates destructive intent from destructive confirmation without changing library defaults.
+
+Border refinement after visual feedback keeps the 1px rounded outer frame and starts
+internal separators at the label column, leaving the icon column uninterrupted. Lines
+end at the trailing row inset and use the existing secondary border role. Decorative
+pseudo-elements do not intercept input, change the row target or add another button box.
+Light/dark and narrow renders were inspected and the three Chromium history-action
+cases passed again without retries, including translated labels, touch targets, keyboard
+focus, hover/press/disabled states and confirmation/cancellation. No runtime logic changed.
