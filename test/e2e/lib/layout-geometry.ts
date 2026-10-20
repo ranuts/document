@@ -1,4 +1,4 @@
-import type { Locator } from '@playwright/test';
+import { expect, type Locator } from '@playwright/test';
 
 /** Read text independently of its control's padding and flexible layout frame. */
 export async function textGeometry(locator: Locator) {
@@ -31,6 +31,14 @@ export async function textGeometry(locator: Locator) {
   });
 }
 
+/** The same acceptance guard is exercised against deliberate live CSS regressions. */
+export async function assertTitleRail(title: Locator) {
+  const geometry = await textGeometry(title);
+  expect(geometry.textLeft).toBeCloseTo(16, 1);
+  expect(geometry.width).toBeLessThanOrEqual(geometry.textWidth + 17);
+  return geometry;
+}
+
 export async function contentGeometry(view: Locator) {
   return view.evaluate((element) => {
     const panel = element.closest('.agent-panel')!;
@@ -61,5 +69,24 @@ export async function frameLeft(locator: Locator) {
       panel.getBoundingClientRect().left -
       Number.parseFloat(getComputedStyle(panel).borderLeftWidth)
     );
+  });
+}
+
+/** ranui/testing's documented closed-root seam; inspect the real public part. */
+export async function selectionGeometry(control: Locator) {
+  return control.evaluate((element) => {
+    const root = (element as HTMLElement & { _shadowDom: ShadowRoot })._shadowDom;
+    const label = root?.querySelector('[part~="selection-item"]');
+    if (!label?.textContent?.trim()) throw new Error('The ranui selection has not rendered');
+    const frame = element.getBoundingClientRect();
+    const part = label.getBoundingClientRect();
+    const range = document.createRange();
+    range.selectNodeContents(label);
+    const text = range.getBoundingClientRect();
+    return {
+      inset: text.left - frame.left,
+      clipped: text.right > part.right + 1,
+      partInside: part.left >= frame.left && part.right <= frame.right,
+    };
   });
 }
