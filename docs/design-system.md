@@ -275,3 +275,19 @@ would repeat those relationships. Models picker frames, Sources search/attachmen
 and Artifacts form fields keep their functional control boundaries. Do not remove every
 border globally, add transparent borders to preserve obsolete card insets, or require a
 decorative group outline in acceptance.
+
+### Models, Sources and Artifacts
+
+Apply the same boundary review to each complete view and its expanded states:
+
+| Surface   | Flat composition                                                                                                                                 | Functional boundaries retained                                                                                                                                |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Models    | Device/service containers, cached entries and preferences use headings and the existing group gap; no extra disclosure/row rules                 | Model/source pickers, endpoint/custom fields, focus and explicit load/connect/delete states                                                                   |
+| Sources   | Separate the attached list from search by 16px; keep removal beside the title while the excerpt expands; no result card or remove-button outline | Search input, native disclosure and bounded excerpt scrolling; Attach file is the primary entry action                                                        |
+| Artifacts | Full-width saved-result rows; quiet ordinary review/export/page/revision controls; no blanket button outlines                                    | Import/Save/Use in draft primary roles, editable fields, structured table row relationships, revision input/diff, focus and explicit destructive confirmation |
+
+Use application danger foreground roles for quiet destructive labels and their hover/active
+states. Disabled commands keep their own disabled role and do not inherit an enabled fill.
+Do not infer that every control is a secondary outlined button from its ancestor view class.
+Role-specific styling belongs to the actual action. The full state inventory, renders and
+verification are recorded in [the workspace boundary audit](explorations/2026-10-20-workspace-boundary-audit.md).
