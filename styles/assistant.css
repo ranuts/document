@@ -803,6 +803,11 @@ r-dropdown[role='listbox'] {
 
 /* Product surfaces: each view owns the available space. */
 .agent-panel {
+  /* Content, text and navigation have different boxes but named shared rails. */
+  --agent-content-inset: var(--ran-space-4);
+  --agent-title-inset: var(--ran-space-2);
+  --agent-navigation-size: var(--app-control-height);
+  --agent-navigation-inset: calc((var(--agent-navigation-size) - var(--ran-size-1)) / 2);
   /* Status lines beside the composer (model state, readiness, write
      destination) line up with the composer's *text*, not its edge: footer
      padding plus the composer's own padding. Three rules must agree, so the
@@ -836,12 +841,12 @@ r-dropdown[role='listbox'] {
   box-sizing: border-box;
   min-height: 56px;
   flex: 0 0 auto;
-  padding: var(--ran-space-2) var(--ran-space-4);
+  padding: var(--ran-space-2) var(--agent-content-inset);
   gap: calc(var(--ran-space-1) / 2);
 }
 .agent-panel-header .agent-panel-title {
   display: block;
-  flex: 1;
+  flex: 0 1 auto;
   width: auto;
   justify-content: flex-start;
   text-align: left;
@@ -850,7 +855,11 @@ r-dropdown[role='listbox'] {
   font-size: var(--ran-text-copy-2);
   letter-spacing: -0.02em;
   min-width: 0;
-  padding-inline: var(--ran-space-2);
+  /* Extend the hit area into the gutter; text stays on the content rail.
+     Trailing free space belongs to layout, never to the title's hover fill. */
+  padding-inline: var(--agent-title-inset);
+  margin-inline-start: calc(-1 * var(--agent-title-inset));
+  margin-inline-end: auto;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -864,7 +873,7 @@ r-dropdown[role='listbox'] {
   overflow: auto;
   flex: 1 1 auto;
   max-height: none;
-  padding: var(--ran-space-4);
+  padding: var(--agent-content-inset);
   gap: var(--ran-space-4);
   border-bottom: 0;
   scrollbar-width: thin;
@@ -948,10 +957,10 @@ r-dropdown[role='listbox'] {
   flex: 1;
   min-height: 0;
   overflow: auto;
-  padding: var(--ran-space-4);
+  padding: var(--agent-content-inset);
 }
 .agent-welcome {
-  padding: var(--ran-space-10) calc(var(--ran-space-6) + var(--ran-space-1));
+  padding: var(--ran-space-6) var(--agent-content-inset);
   overflow: auto;
 }
 .agent-welcome h2 {
@@ -1113,7 +1122,7 @@ r-dropdown[role='listbox'] {
     padding: var(--ran-space-4);
   }
   .agent-panel-header .agent-panel-title {
-    flex: 1;
+    flex: 0 1 auto;
     width: auto;
     font-size: var(--ran-text-copy-2);
   }
@@ -2168,7 +2177,7 @@ r-dropdown[role='listbox'] {
   flex: 1;
   min-height: 0;
   overflow: auto;
-  padding: var(--ran-space-4);
+  padding: var(--agent-content-inset);
 }
 .agent-workspace-view[hidden],
 .agent-artifacts[hidden] {
@@ -2264,6 +2273,9 @@ r-dropdown[role='listbox'] {
   align-items: center;
   gap: var(--ran-space-2);
   margin-block-end: var(--ran-space-4);
+  /* The icon viewport returns to the content rail. Its centered hit target
+     occupies a separate leading navigation column, including coarse input. */
+  margin-inline-start: calc(-1 * var(--agent-navigation-inset));
   min-width: 0;
 }
 .agent-panel .agent-view-header h2 {
@@ -2284,8 +2296,10 @@ r-dropdown[role='listbox'] {
   justify-content: center;
   box-sizing: border-box;
   flex: 0 0 auto;
-  min-width: var(--ran-size-7);
-  min-height: var(--ran-size-7);
+  width: var(--agent-navigation-size);
+  height: var(--agent-navigation-size);
+  min-width: var(--agent-navigation-size);
+  min-height: var(--agent-navigation-size);
   padding: var(--ran-space-2);
   border: 0;
   border-radius: var(--ran-radius-sm);
@@ -2295,7 +2309,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-panel .agent-view-back:focus-visible {
   outline: 2px solid var(--ran-color-primary);
-  outline-offset: 2px;
+  outline-offset: 0;
 }
 .agent-workspace-view button:active:enabled,
 .agent-artifacts button:active:enabled,
@@ -2325,6 +2339,7 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-danger);
 }
 .agent-artifacts > div > p {
+  margin: 0 0 var(--ran-space-4);
   font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
   line-height: 1.6;
@@ -2375,6 +2390,10 @@ r-dropdown[role='listbox'] {
 .agent-sources-attached:empty {
   display: none;
 }
+.agent-sources-view > .agent-entry-note,
+.agent-sources-status {
+  margin: 0 0 var(--ran-space-4);
+}
 .agent-sources-summary {
   white-space: nowrap;
   overflow: hidden;
@@ -2387,12 +2406,19 @@ r-dropdown[role='listbox'] {
   font-size: 0.875em;
   overflow-wrap: anywhere;
 }
+.agent-sources-status:empty,
+.agent-artifact-status:empty {
+  display: none;
+}
 .agent-artifacts-list {
   display: flex;
   flex-direction: column;
   list-style: none;
   padding: 0;
   margin: 0;
+}
+.agent-artifacts-list:not(:empty) {
+  margin-block-end: var(--ran-space-4);
 }
 .agent-artifact-editor > input {
   border: 0;
@@ -2445,6 +2471,19 @@ r-dropdown[role='listbox'] {
 /* A narrow toolbar keeps a real language label when Stop joins Send.
    Use the select's public spacing hooks rather than losing its text lane. */
 @container agent-panel (max-width: 360px) {
+  /* Keep the title readable when five touch targets no longer fit beside it.
+     A separate row preserves both a text-sized hover area and full targets. */
+  .agent-runtime-panel .agent-panel-header {
+    display: grid;
+    grid-template-columns: repeat(5, var(--app-control-touch));
+    justify-content: space-between;
+  }
+  .agent-runtime-panel .agent-panel-header .agent-panel-title {
+    grid-column: 1 / -1;
+    justify-self: start;
+    max-width: calc(100% + var(--agent-title-inset));
+    margin-inline-end: 0;
+  }
   .agent-panel .cui-composer-bar,
   .agent-panel .cui-actions {
     gap: var(--ran-space-1);
@@ -2715,6 +2754,8 @@ r-dropdown[role='listbox'] {
   .agent-panel .agent-panel-header button {
     min-width: var(--app-control-touch);
     min-height: var(--app-control-touch);
+  }
+  .agent-panel .agent-panel-header button:not(.agent-panel-title) {
     flex-basis: var(--app-control-touch);
   }
   .agent-panel .cui-composer .agent-sources-toggle,
