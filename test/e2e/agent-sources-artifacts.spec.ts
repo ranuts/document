@@ -58,6 +58,8 @@ test('local sources and versioned artifacts remain explicit, compact and reviewe
     .locator('.agent-sources-view input[type=file]')
     .setInputFiles({ name: 'notes.md', mimeType: 'text/markdown', buffer: Buffer.from('Project reference') });
   await expect(page.locator('.agent-source-row')).toContainText('notes.md');
+  await page.locator('.agent-source-row summary').click();
+  await expect(page.locator('.agent-source-preview pre')).toHaveText('Project reference');
   await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('sources.png') });
   await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
   await expect(page.locator('.agent-sources-summary')).toHaveText('notes.md');
@@ -73,6 +75,7 @@ test('local sources and versioned artifacts remain explicit, compact and reviewe
   await expect(text).toHaveValue(source);
   await page.getByRole('button', { name: 'Save version', exact: true }).click();
   await expect(page.locator('.agent-artifact-editor select option')).toHaveCount(3);
+  await page.locator('.agent-artifact-presentation > details > summary').click();
   await page.setViewportSize({ width: 360, height: 700 });
   for (const theme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: theme });
@@ -81,6 +84,11 @@ test('local sources and versioned artifacts remain explicit, compact and reviewe
       .toBeLessThan(2);
     await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`artifacts-${theme}.png`) });
   }
+  await page.locator('.agent-artifacts [data-action=delete]').click();
+  await expect(page.locator('.agent-artifacts [data-action=confirmDelete]')).toBeVisible();
+  await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('artifact-delete-confirm.png') });
+  await page.locator('.agent-artifacts [data-action=cancel]').click();
+  await expect(text).toHaveValue(source);
   await page.getByRole('button', { name: 'Review in document', exact: true }).click();
   await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
   await expect(page.locator('.agent-plan-preview')).toBeVisible();
