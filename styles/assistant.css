@@ -166,17 +166,6 @@ body.agent-panel-resizing #app iframe {
   display: grid;
   min-width: 0;
 }
-.agent-history-transfer-actions {
-  border: 1px solid var(--ran-color-border-secondary);
-  border-radius: var(--ran-radius-md);
-  background: var(--ran-color-bg-elevated);
-}
-.agent-history-danger-actions {
-  border-block-start: 1px solid var(--ran-color-border-secondary);
-  /* Reserve the same frame inset as the transfer group without drawing another box. */
-  border-inline: 1px solid transparent;
-  padding-block-start: var(--ran-space-3);
-}
 .agent-history-confirmation {
   margin-top: var(--ran-space-3);
 }
@@ -214,8 +203,8 @@ body.agent-panel-resizing #app iframe {
   border-color: var(--ran-color-border-active);
   background: var(--ran-color-bg-active);
 }
-/* Settings commands form rows in one surface, rather than independently sized
-   outlined CTAs. Each complete row is a target, including its icon and label. */
+/* The settings pane already establishes the region. Flat command rows use
+   spacing for grouping and retain their complete icon/label hit target. */
 .agent-history-actions button {
   width: 100%;
   min-height: var(--app-control-touch);
@@ -227,28 +216,6 @@ body.agent-panel-resizing #app iframe {
   text-align: start;
   font-size: var(--ran-text-label-1);
   font-weight: var(--ran-text-label-weight);
-}
-.agent-history-transfer-actions button {
-  position: relative;
-  border-radius: 0;
-}
-.agent-history-transfer-actions button:first-child {
-  border-start-start-radius: calc(var(--ran-radius-md) - 1px);
-  border-start-end-radius: calc(var(--ran-radius-md) - 1px);
-}
-.agent-history-transfer-actions button:last-child {
-  border-end-start-radius: calc(var(--ran-radius-md) - 1px);
-  border-end-end-radius: calc(var(--ran-radius-md) - 1px);
-}
-.agent-history-transfer-actions button + button::before {
-  content: '';
-  position: absolute;
-  inset-block-start: 0;
-  /* Match the label column: row padding + icon viewport + icon/label gap. */
-  inset-inline-start: calc(var(--ran-space-3) + var(--ran-size-2) + var(--ran-space-3));
-  inset-inline-end: var(--ran-space-3);
-  border-block-start: 1px solid var(--ran-color-border-secondary);
-  pointer-events: none;
 }
 .agent-history-actions button svg {
   flex: 0 0 var(--ran-size-2);

@@ -256,19 +256,22 @@ or inspection is not acceptance evidence.
 
 ### Settings command groups
 
-History & data uses a single framed surface for Restore, Import and Export. Each command
-is a full-width native button row with an 18px decorative icon, a 14px label and a minimum
-44px target. The frame stays on the content rail; icons and labels align within it, including
-the separate deletion group. Long translations wrap inside their row rather than changing
-the number of columns. Existing monochrome roles also style the save-history checkbox.
-The 1px outer frame defines the group. Internal separators begin at the label column
-(row padding + icon viewport + gap) and end at the trailing row inset; they do not cut
-through the icon column or divide the surface into fully boxed cells. Separators are
-decorative and never intercept pointer input or alter the full-row target.
+History & data is already a named section inside the assistant pane. Restore, Import and
+Export therefore use flat native button rows: no inner group frame, added group fill,
+shadow or row separators. Each row has an 18px decorative icon, a 14px label and a minimum
+44px target. Row frames return to the content rail; shared internal padding keeps icons
+and labels aligned across routine and destructive commands. Long translations wrap inside
+their row rather than changing columns. The save-history checkbox uses the monochrome primary role.
 
-Deletion commands use quiet danger text and icons on the panel background, separated from
-transfer actions by space and a rule. Only the explicit confirmation has a solid danger fill.
-The shared frame and full-row hover/focus feedback supply the affordance; acceptance must
-not require an individual outline on every command. Draft, confirmation, busy and focus-return
-behavior remain owned by the existing controls. Contextual source and artifact form actions
-keep their existing task-specific button hierarchy rather than inheriting this settings layout.
+Deletion commands use quiet danger text/icons and a 16px group gap without another divider.
+Explicit verbs, aligned icons, repeated full-row targets and hover/press/focus feedback provide
+the command affordance. Only explicit confirmation has a solid danger fill. Draft, confirmation,
+busy and focus-return behavior remain owned by the existing controls.
+
+Review boundaries in the full pane. The panel/editor edge owns the independent sidebar;
+the search/input frames identify editable values; the single History & data section divider
+separates task regions; keyboard outlines identify focus. An inner card or more row rules
+would repeat those relationships. Models picker frames, Sources search/attachment controls
+and Artifacts form fields keep their functional control boundaries. Do not remove every
+border globally, add transparent borders to preserve obsolete card insets, or require a
+decorative group outline in acceptance.
