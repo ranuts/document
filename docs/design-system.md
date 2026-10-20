@@ -257,20 +257,29 @@ or inspection is not acceptance evidence.
 ### Settings command groups
 
 History & data is already a named section inside the assistant pane. Restore, Import and
-Export therefore use flat native button rows: no inner group frame, added group fill,
-shadow or row separators. Each row has an 18px decorative icon, a 14px label and a minimum
-44px target. Row frames return to the content rail; shared internal padding keeps icons
-and labels aligned across routine and destructive commands. Long translations wrap inside
-their row rather than changing columns. The save-history checkbox uses the monochrome primary role.
+Export use content-sized native secondary buttons in one column: each button has a restrained
+resting surface and functional inset stroke, with no enclosing group frame, group fill,
+raised shadow or row separators. Keep 8px between buttons and 16px before deletion commands.
+A recognizable button shape must be visible before hover in both themes and on touch screens;
+verb labels and hover feedback alone do not establish initial discoverability.
 
-Deletion commands use quiet danger text/icons and a 16px group gap without another divider.
-Explicit verbs, aligned icons, repeated full-row targets and hover/press/focus feedback provide
-the command affordance. Only explicit confirmation has a solid danger fill. Draft, confirmation,
-busy and focus-return behavior remain owned by the existing controls.
+The declared columns are 16px from the panel’s inner edge for both checkbox and 16px icon
+viewports, and 40px for checkbox/action text Ranges. Each command target extends 8px into the
+owned inline-start gutter, with 8px inline padding and icon/label gap; target frames need not
+match visible columns. Keep targets inside the pane, at least 44px high, and non-overlapping.
+Long translations wrap without shifting the columns or overflowing the pane. The save-history
+checkbox uses the monochrome primary role.
+
+Deletion commands share the secondary control shape with readable danger text/icons; only
+explicit confirmation has a solid danger fill. Hover, press, disabled and keyboard focus
+remain distinct. Draft, confirmation, busy and focus-return behavior remain owned by the
+existing controls. Acceptance checks actual renders as well as shared checkbox/icon/text
+geometry, resting surface difference from the canvas, text contrast and real interactions.
 
 Review boundaries in the full pane. The panel/editor edge owns the independent sidebar;
 the search/input frames identify editable values; the single History & data section divider
-separates task regions; keyboard outlines identify focus. An inner card or more row rules
+separates task regions; button surfaces identify action targets; keyboard outlines identify focus.
+An inner card or more row rules
 would repeat those relationships. Models picker frames, Sources search/attachment controls
 and Artifacts form fields keep their functional control boundaries. Do not remove every
 border globally, add transparent borders to preserve obsolete card insets, or require a
