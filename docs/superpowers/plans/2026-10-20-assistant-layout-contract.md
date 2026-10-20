@@ -19,16 +19,21 @@ alter foundation tokens, vendor code or dependencies. Keep multiple commits per 
 
 ## Tasks
 
-- [ ] Add browser geometry helpers and failing coverage for title text/hover and all subpage
+- [x] Add browser geometry helpers and failing coverage for title text/hover and all subpage
       rails, including nested artifact states. Run against the unchanged CSS and retain failures.
-- [ ] Correct shared header/navigation/content CSS and inherited paragraph spacing. Apply
+- [x] Correct shared header/navigation/content CSS and inherited paragraph spacing. Apply
       the same owner rules to every inspected surface; run focused tests until green.
-- [ ] Validate narrow, themed, translated, coarse-pointer and long-text states. Run explicit
+- [x] Validate narrow, themed, translated, coarse-pointer and long-text states. Run explicit
       reverse checks for text-only inset, expanded title hover and sibling rail regressions.
-- [ ] Update the main design entry with the assistant contract and record the inspected
+- [x] Update the main design entry with the assistant contract and record the inspected
       surface matrix, measurements, screenshots and actual verification outcomes.
-- [ ] Run complete unit, lint/type, format/token and production build checks. Review both
-      branches, address findings, push, create cross-linked PRs and attach them to this chat.
+- [x] Run complete unit, lint/type, format/token and production build checks. Review both
+      branches and address findings.
+
+Verification and the inspected matrix are recorded in
+`docs/explorations/2026-10-20-assistant-layout-acceptance.md`.
+Delivery uses separate, cross-linked PRs for the two repositories, preserving multiple
+commits and attaching both PRs to the chat.
 
 ## Review focus
 
