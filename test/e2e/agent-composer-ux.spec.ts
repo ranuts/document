@@ -144,9 +144,31 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       await expect.poll(() => input.evaluate((el) => el.clientHeight)).toBeLessThan(narrowHeight);
       await expect(input).toHaveValue(draft);
       await expect.poll(() => log.evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight)).toBeLessThan(3);
-      await log.evaluate((el) => {
-        el.scrollTop = 0;
-      });
+      if (ext === 'docx') {
+        // Inject delayed native scroll delivery so the readiness gate is exercised
+        // deterministically. This schedules a browser fault, not a readiness wait.
+        await log.evaluate((el) => {
+          let scheduled = false;
+          const holdScroll = (event: Event) => {
+            event.stopImmediatePropagation();
+            if (el.scrollTop !== 0 || scheduled) return;
+            scheduled = true;
+            setTimeout(() => {
+              el.removeEventListener('scroll', holdScroll, true);
+              el.dispatchEvent(new Event('scroll'));
+            }, 500);
+          };
+          el.addEventListener('scroll', holdScroll, true);
+        });
+      }
+      const scrollLatest = page.getByRole('button', { name: 'Scroll to latest' });
+      await expect(scrollLatest).toBeHidden();
+      await log.focus();
+      await log.press('Home');
+      // The offset can change before the native scroll event detaches the reader.
+      // Wait for its visible result before a resize can change transcript geometry.
+      await expect(scrollLatest).toBeVisible();
+      await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
       await resize.press('Home');
       await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
       await input.fill(draft + draft);
