@@ -160,10 +160,15 @@ body.agent-panel-resizing #app iframe {
   display: flex;
   flex-direction: column;
   gap: var(--ran-space-4);
+  /* Own 8px of the panel gutter so the visible icon/label columns stay
+     aligned with the checkbox while each button keeps inline padding. */
+  margin-inline-start: calc(-1 * var(--ran-space-2));
 }
 .agent-history-transfer-actions,
 .agent-history-danger-actions {
   display: grid;
+  justify-items: start;
+  gap: var(--ran-space-2);
   min-width: 0;
 }
 .agent-history-confirmation {
@@ -203,22 +208,32 @@ body.agent-panel-resizing #app iframe {
   border-color: var(--ran-color-border-active);
   background: var(--ran-color-bg-active);
 }
-/* The settings pane already establishes the region. Flat command rows use
-   spacing for grouping and retain their complete icon/label hit target. */
+/* The pane establishes the region; only each native button owns a surface.
+   A resting control shape must remain visible without pointer discovery. */
 .agent-history-actions button {
-  width: 100%;
+  width: fit-content;
   min-height: var(--app-control-touch);
   justify-content: flex-start;
-  gap: var(--ran-space-3);
-  padding: var(--ran-space-3);
+  gap: var(--ran-space-2);
+  padding: var(--ran-space-3) var(--ran-space-2);
   border: 0;
   border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg-hover);
+  box-shadow: inset 0 0 0 1px var(--ran-color-border);
   text-align: start;
   font-size: var(--ran-text-label-1);
   font-weight: var(--ran-text-label-weight);
 }
+.agent-history-actions button:enabled:hover {
+  background: var(--ran-color-bg-active);
+}
+.agent-history-actions button:enabled:active {
+  background: color-mix(in srgb, var(--ran-color-bg-active) 96%, var(--ran-color-text));
+}
 .agent-history-actions button svg {
-  flex: 0 0 var(--ran-size-2);
+  flex: 0 0 var(--ran-size-1);
+  width: var(--ran-size-1);
+  height: var(--ran-size-1);
   color: var(--ran-color-text-secondary);
 }
 .agent-history-action-label {
@@ -228,13 +243,13 @@ body.agent-panel-resizing #app iframe {
   color: inherit;
 }
 .agent-history-options button:is(.agent-history-delete-current, .agent-history-delete-all):enabled {
-  color: var(--app-danger-fill);
+  color: var(--app-danger-hover);
 }
 .agent-history-danger-actions button svg {
   color: inherit;
 }
 .agent-history-options button:is(.agent-history-delete-current, .agent-history-delete-all):enabled:hover {
-  color: var(--app-danger-hover);
+  color: var(--app-danger-active);
 }
 .agent-history-options button:is(.agent-history-delete-current, .agent-history-delete-all):enabled:active {
   color: var(--app-danger-active);
