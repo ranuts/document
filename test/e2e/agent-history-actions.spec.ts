@@ -64,16 +64,19 @@ for (const scheme of ['light', 'dark'] as const) {
       for (const width of [1280, 360, 320]) {
         await page.setViewportSize({ width, height: 900 });
         await page.mouse.move(0, 0);
+        await page.locator('.agent-runtime-panel').screenshot({
+          path: info.outputPath(`history-pane-${locale}-${width}-${scheme}.png`),
+        });
         await options.screenshot({ path: info.outputPath(`history-actions-${locale}-${width}-${scheme}.png`) });
         const transfer = options.locator('.agent-history-restore, .agent-history-import, .agent-history-export');
         const danger = options.locator('.agent-history-delete-current, .agent-history-delete-all');
         const group = options.locator('.agent-history-transfer-actions');
-        const groupSurface = await surface(group);
-        // One visible group owns the affordance; labels cannot form a ragged
-        // wrapping button cloud as translations or the panel width change.
-        expect(groupSurface.borderWidth).toBe(1);
-        expect(groupSurface.border).not.toBe(groupSurface.background);
+        // Grouping belongs to the pane's typography/spacing. Verify real row
+        // targets and shared edges rather than mandating a decorative frame.
         const groupBox = (await group.boundingBox())!;
+        const optionsBox = (await options.boundingBox())!;
+        expect(groupBox.x).toBeCloseTo(optionsBox.x, 1);
+        expect(groupBox.width).toBeCloseTo(optionsBox.width, 1);
         let previousBottom = 0;
         for (const button of await transfer.or(danger).all()) {
           const css = await surface(button);
@@ -81,8 +84,8 @@ for (const scheme of ['light', 'dark'] as const) {
           expect(contrast(css.color, css.background)).toBeGreaterThanOrEqual(4.5);
           const box = (await button.boundingBox())!;
           expect(box.height).toBeGreaterThanOrEqual(44);
-          expect(box.width).toBeGreaterThanOrEqual(groupBox.width - 2);
-          expect(box.x).toBeCloseTo(groupBox.x + 1, 1);
+          expect(box.width).toBeCloseTo(groupBox.width, 1);
+          expect(box.x).toBeCloseTo(groupBox.x, 1);
           expect(box.y).toBeGreaterThanOrEqual(previousBottom);
           previousBottom = box.y + box.height;
           const icon = button.locator('svg[aria-hidden="true"]');

@@ -83,51 +83,75 @@ Persistence, model loading, document writes and dependency versions are unchange
 
 ## Follow-up: grouped history commands
 
-User review found that five independently outlined buttons still made History & data
-look crowded, especially when translated labels changed the wrapping pattern. The
-three transfer commands now share one quiet framed surface with aligned icon/label
-rows. Each complete row remains a native button. Deletion commands occupy a separate
-group with danger text and icons; a solid danger fill is reserved for confirmation.
-The save-history checkbox uses the existing monochrome primary role.
+History & data now uses flat native command rows inside the established settings pane.
+Restore/Import/Export share icon/label columns and full-width targets, with a 16px gap
+before the destructive commands. There is no inner group outline, group fill, row rule,
+deletion divider or transparent border retaining an obsolete card inset. Hover/press,
+keyboard focus, disabled states and the explicit danger confirmation remain distinct.
 
-The resting frame, full-row hover/press feedback, keyboard outline and decorative icons
-make these commands discoverable without a border around every label. Group frames
-remain on the 16px content rail; row frames, icons and labels align across both groups.
-Long labels wrap within their row. Busy states retain geometry, localized labels survive
-sync without removing icons, and the existing confirmation/cancellation/focus owner is
-unchanged. Source attachment/removal and artifact save/apply/confirmation actions were
-also inspected: they are contextual form actions and retain their existing hierarchy.
+An earlier framed group, followed by inset separators, still repeated the pane's existing
+boundary. The final revision removes that enclosure instead of making its lines more subtle.
+Acceptance measures full-row geometry, contrast and interactions without requiring a
+decorative group frame, and records the complete pane as well as the command region.
 
-The history-action acceptance now measures group affordance, full-width non-overlapping
-rows, minimum 44px targets, accessible names and actual contrast, rather than requiring
-an individual outline on every command. English/Portuguese, 432px desktop panels,
-360px/320px windows and both themes are inspected in Chromium, WebKit and Firefox,
-including hover/press/disabled states, Enter/Escape, real export download and focus return.
+The runtime baseline after adding icon/label rows passed all 252 unit files / 6,801 tests
+(including 274 focused history/panel/write tests), lint/typecheck and the production build.
+Two existing non-fatal `PromiseRejectionHandledWarning` messages were printed. The final
+flat-composition revision changes CSS, browser acceptance and prose; runtime logic is unchanged.
+The coverage percentages above belong to the earlier layout-only coverage run.
 
-![Grouped history commands in light mode](../media/assistant-layout/2026-10-20-history-commands-light.png)
+## Revision scope: remove redundant command enclosures
 
-![Grouped history commands in dark mode](../media/assistant-layout/2026-10-20-history-commands-dark.png)
+The user rejected the remaining nested-box appearance. This revision applies ran's existing
+composition rules (avoid redundant nested containers; establish hierarchy with type and spacing)
+to the complete settings pane rather than refining a cropped card in isolation.
+The starting evidence below refers to document `515e7ba6` and ran `911ee0853`.
 
-![Portuguese history commands in a 320px dark window](../media/assistant-layout/2026-10-20-history-commands-320-dark.png)
+| Assumption                                                                             | Evidence                                                                                | Decision                                                                         |
+| -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Existing guidance already discourages decorative nested frames                         | Code fact: ran `packages/ranui/docs/DESIGN.md`, composition and spacing sections        | Clarify how this wins over the optional framed-command example                   |
+| History has a section divider, a transfer frame, row separators and a deletion divider | Code fact: `styles/assistant.css`, history options/transfer/danger rules; renders above | Retain the major section boundary; remove the three redundant command treatments |
+| Group framing is currently required by acceptance                                      | Code fact: `test/e2e/agent-history-actions.spec.ts`, resting group assertions           | Verify full-row geometry and interactions without mandating an enclosure         |
+| Native controls own persistence, confirmation and focus                                | Code fact: `lib/agent-plugin/ui/history-controls.ts`                                    | Leave runtime code unchanged                                                     |
 
-Follow-up verification:
+Allowed changes: ran's `DESIGN.md`, `INTERFACE_GUIDE.md`, English/Chinese design-guide
+entry points; document's assistant CSS, existing history-action browser acceptance,
+design contract, this acceptance record and history command/full-pane screenshots.
+Forbidden changes: tokens, component defaults/APIs, dependency versions, vendor files,
+history/state/storage code and unrelated site layouts.
 
-- The new group acceptance failed against the independent-button layout before implementation.
-- Final production build: three Chromium and six Firefox/WebKit history-action cases
-  passed without retries. The broader layout/history run also passed all 10 cases.
-- Focused history controls, panel lifecycle and write-reply unit suites: 274 passed.
-- Final `pnpm test`: all 252 files and 6,801 tests passed. The suite printed the same
-  two non-fatal `PromiseRejectionHandledWarning` messages seen before this change.
-  The coverage percentages above belong to the earlier layout-only coverage run.
-- Lint/typecheck, formatting, production build and diff checks passed. Independent
-  code review found no actionable issues; light/dark and narrow screenshots were inspected.
-- The companion ran guidance now explicitly supports grouped command affordances and
-  separates destructive intent from destructive confirmation without changing library defaults.
+Compatibility red lines: keep the panel boundary, field borders, keyboard focus outlines,
+44px targets, icon/label columns, accessible names, destructive confirmation and draft/focus
+return behavior. The simplest composition is a flat command list with one 16px gap before
+destructive actions. It needs no replacement card, muted group fill, shadow or new abstraction.
 
-Border refinement after visual feedback keeps the 1px rounded outer frame and starts
-internal separators at the label column, leaving the icon column uninterrupted. Lines
-end at the trailing row inset and use the existing secondary border role. Decorative
-pseudo-elements do not intercept input, change the row target or add another button box.
-Light/dark and narrow renders were inspected and the three Chromium history-action
-cases passed again without retries, including translated labels, touch targets, keyboard
-focus, hover/press/disabled states and confirmation/cancellation. No runtime logic changed.
+Acceptance: inspect the whole pane and its command region in both themes and at desktop,
+360px and 320px widths; use the existing English/Portuguese, pointer/keyboard, disabled,
+contrast, download, touch and confirmation checks. Verify the documentation and formatting
+gates in ran. The review must explain the purpose of each remaining stable boundary.
+
+## Remaining boundary review
+
+| Surface                | Boundary retained                                              | Distinct purpose                                                            |
+| ---------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Assistant/editor       | Panel edge                                                     | Independent sidebar and resize boundary                                     |
+| Models and Sources     | Picker/search/input frames                                     | Values that can be edited or selected                                       |
+| Conversations          | Search field and one History & data section rule               | Search input and a major change from conversation browsing to data settings |
+| History command groups | None at rest                                                   | Title, icon/label columns and proximity already express grouping            |
+| Command focus          | Keyboard outline                                               | Transient focus state, not decorative containment                           |
+| History deletion       | Solid confirmation button                                      | Explicit destructive commitment after the existing confirmation step        |
+| Artifacts              | Form/control boundaries and task-specific save/apply hierarchy | Editable values and explicit document/result operations                     |
+
+![Complete Conversations pane with flat commands](../media/assistant-layout/2026-10-20-history-pane-light.png)
+
+![Flat history commands in light mode](../media/assistant-layout/2026-10-20-history-commands-light.png)
+
+![Flat history commands in dark mode](../media/assistant-layout/2026-10-20-history-commands-dark.png)
+
+![Portuguese flat commands at 320px](../media/assistant-layout/2026-10-20-history-commands-320-dark.png)
+
+Final flat-composition verification: the history/layout Chromium suite passed all 10 cases;
+the Firefox/WebKit history-action suite passed all six cases. Retries were disabled.
+The updated row-edge acceptance first failed on the old enclosure's 2px reduction in
+available target width, then passed after the redundant frame/insets were removed.
+Ran documentation/link/eight-locale checks and changed-file formatting passed.
