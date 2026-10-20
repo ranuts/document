@@ -157,6 +157,11 @@ frontend operation are unaffected.
 
 ## History-action affordances (2026-10-19)
 
+The independent outline treatment described below was refined on 2026-10-20 into
+[grouped command rows](2026-10-20-assistant-layout-acceptance.md#follow-up-grouped-history-commands).
+The earlier checks document the original affordance fix; individual command borders are
+not the current acceptance requirement.
+
 Rechecked against ran main `66a00775755dae6c11bcb59eb227af76e986c7f3`, especially
 DESIGN sections 1, 3, 7 and 11 and INTERACTION section 2. The remaining history commands
 had transparent, borderless resting surfaces. Hover styling and a pointer cursor did not

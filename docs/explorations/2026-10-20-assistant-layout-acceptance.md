@@ -80,3 +80,46 @@ fixture made that case pass without a production logic change.
 These checks cover assistant composition and related interactions. Native browser
 zoom and the full repository browser/Docker suite are outside this focused run.
 Persistence, model loading, document writes and dependency versions are unchanged.
+
+## Follow-up: grouped history commands
+
+User review found that five independently outlined buttons still made History & data
+look crowded, especially when translated labels changed the wrapping pattern. The
+three transfer commands now share one quiet framed surface with aligned icon/label
+rows. Each complete row remains a native button. Deletion commands occupy a separate
+group with danger text and icons; a solid danger fill is reserved for confirmation.
+The save-history checkbox uses the existing monochrome primary role.
+
+The resting frame, full-row hover/press feedback, keyboard outline and decorative icons
+make these commands discoverable without a border around every label. Group frames
+remain on the 16px content rail; row frames, icons and labels align across both groups.
+Long labels wrap within their row. Busy states retain geometry, localized labels survive
+sync without removing icons, and the existing confirmation/cancellation/focus owner is
+unchanged. Source attachment/removal and artifact save/apply/confirmation actions were
+also inspected: they are contextual form actions and retain their existing hierarchy.
+
+The history-action acceptance now measures group affordance, full-width non-overlapping
+rows, minimum 44px targets, accessible names and actual contrast, rather than requiring
+an individual outline on every command. English/Portuguese, 432px desktop panels,
+360px/320px windows and both themes are inspected in Chromium, WebKit and Firefox,
+including hover/press/disabled states, Enter/Escape, real export download and focus return.
+
+![Grouped history commands in light mode](../media/assistant-layout/2026-10-20-history-commands-light.png)
+
+![Grouped history commands in dark mode](../media/assistant-layout/2026-10-20-history-commands-dark.png)
+
+![Portuguese history commands in a 320px dark window](../media/assistant-layout/2026-10-20-history-commands-320-dark.png)
+
+Follow-up verification:
+
+- The new group acceptance failed against the independent-button layout before implementation.
+- Final production build: three Chromium and six Firefox/WebKit history-action cases
+  passed without retries. The broader layout/history run also passed all 10 cases.
+- Focused history controls, panel lifecycle and write-reply unit suites: 274 passed.
+- Final `pnpm test`: all 252 files and 6,801 tests passed. The suite printed the same
+  two non-fatal `PromiseRejectionHandledWarning` messages seen before this change.
+  The coverage percentages above belong to the earlier layout-only coverage run.
+- Lint/typecheck, formatting, production build and diff checks passed. Independent
+  code review found no actionable issues; light/dark and narrow screenshots were inspected.
+- The companion ran guidance now explicitly supports grouped command affordances and
+  separates destructive intent from destructive confirmation without changing library defaults.

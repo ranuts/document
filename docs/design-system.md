@@ -253,3 +253,18 @@ Acceptance must reject a text-only 8px drift even when the outer frame stays fix
 target expanded into free toolbar space, and a sibling view shifted off its content rail.
 Review screenshots with these measured relationships; a stored screenshot without assertions
 or inspection is not acceptance evidence.
+
+### Settings command groups
+
+History & data uses a single framed surface for Restore, Import and Export. Each command
+is a full-width native button row with an 18px decorative icon, a 14px label and a minimum
+44px target. The frame stays on the content rail; icons and labels align within it, including
+the separate deletion group. Long translations wrap inside their row rather than changing
+the number of columns. Existing monochrome roles also style the save-history checkbox.
+
+Deletion commands use quiet danger text and icons on the panel background, separated from
+transfer actions by space and a rule. Only the explicit confirmation has a solid danger fill.
+The shared frame and full-row hover/focus feedback supply the affordance; acceptance must
+not require an individual outline on every command. Draft, confirmation, busy and focus-return
+behavior remain owned by the existing controls. Contextual source and artifact form actions
+keep their existing task-specific button hierarchy rather than inheriting this settings layout.
