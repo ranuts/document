@@ -92,6 +92,36 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   await page.addInitScript(() => {
     localStorage.setItem('document-assistant-enabled', 'true');
     localStorage.setItem('agent_conversation_saving_v2', 'true');
+    // Hold startup hydration until a source has been attached and searched.
+    // A normal reload below must restore the captured citation without a gate.
+    if (!sessionStorage.getItem('source-test-history-released')) {
+      const open = IDBFactory.prototype.open;
+      const success = Object.getOwnPropertyDescriptor(IDBRequest.prototype, 'onsuccess')!;
+      const host = window as unknown as { releaseSourceHistory?: () => void };
+      let delayed = false;
+      IDBFactory.prototype.open = function (...args: Parameters<IDBFactory['open']>) {
+        const request = open.apply(this, args);
+        if (args[0] === 'document-ai-conversations' && !delayed) {
+          delayed = true;
+          Object.defineProperty(request, 'onsuccess', {
+            set(callback: ((this: IDBRequest, event: Event) => void) | null) {
+              success.set!.call(
+                request,
+                callback &&
+                  function (event: Event) {
+                    host.releaseSourceHistory = () => {
+                      sessionStorage.setItem('source-test-history-released', 'true');
+                      callback.call(request, event);
+                    };
+                  },
+              );
+            },
+            get: () => success.get!.call(request),
+          });
+        }
+        return request;
+      };
+    }
     localStorage.setItem(
       'agent-writing-endpoint',
       JSON.stringify({
@@ -133,6 +163,12 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   await expect(page.locator('.agent-source-row')).toContainText('notes.txt');
   const sourceSearch = page.getByRole('searchbox', { name: 'Search sources', exact: true });
   await sourceSearch.fill('only this');
+  await page.waitForFunction(
+    () => typeof (window as unknown as { releaseSourceHistory?: unknown }).releaseSourceHistory === 'function',
+  );
+  await page.evaluate(() => (window as unknown as { releaseSourceHistory: () => void }).releaseSourceHistory());
+  await expect(page.locator('.agent-history-status')).toHaveText('Chat history saving is enabled on this device.');
+  await expect(page.locator('.agent-source-row')).toContainText('notes.txt');
   await page.locator('.agent-source-row summary').click();
   await expect(page.locator('.agent-source-preview mark')).toHaveText('Only this');
   await page.locator('.agent-source-row summary').click();

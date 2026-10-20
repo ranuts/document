@@ -42,6 +42,26 @@ it('forgets deleted conversation attachments and invalidates their snapshots', (
   expect(current.isCurrent()).toBe(false);
   expect(sources.list()).toEqual([]);
 });
+it.each(['all', 'selected'] as const)('keeps new attachments owned after forgetting %s references', (scope) => {
+  const sources = new ReferenceSources();
+  sources.select('current');
+  sources.add({ id: 'old', connector: 'local', title: 'Old notes', text: 'private' });
+  const obsolete = sources.capture();
+  sources.forget(scope === 'all' ? undefined : 'current');
+  expect(sources.list()).toEqual([]);
+  expect(obsolete.isCurrent()).toBe(false);
+  sources.add({ id: 'new', connector: 'local', title: 'New notes', text: 'attached during restoration' });
+  const fresh = sources.capture();
+  sources.select('current');
+  expect(sources.list().map((source) => source.title)).toEqual(['New notes']);
+  expect(fresh.isCurrent()).toBe(true);
+  sources.select('other');
+  expect(sources.list()).toEqual([]);
+  sources.forget('other');
+  sources.select('current');
+  expect(sources.list().map((source) => source.title)).toEqual(['New notes']);
+  expect(fresh.isCurrent()).toBe(true);
+});
 it('releases canceled file reads and ignores their late completion', async () => {
   let complete!: (value: string) => void;
   const file = {
