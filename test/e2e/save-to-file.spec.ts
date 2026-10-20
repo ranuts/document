@@ -133,6 +133,32 @@ const waitForEditorReady = (page: Page) =>
     { timeout: 90_000 },
   );
 
+/** A canvas click can precede Firefox's deferred keyboard-capture focus task. */
+const focusDocumentInput = async (page: Page) => {
+  const input = page.frameLocator('iframe[name="frameEditor"]').locator('#area_id');
+  await input.focus();
+  await expect(input).toBeFocused();
+  await expect(input).toBeEditable();
+};
+
+/** Seed save scenarios through trusted input after the canvas has selected a caret. */
+const insertDocumentText = async (page: Page, text: string) => {
+  await focusDocumentInput(page);
+  await page.keyboard.insertText(text);
+};
+
+const documentText = (page: Page) =>
+  page.evaluate(() => {
+    const win = window.__ooFrames.readyEditor() as any;
+    const logic = (win.Asc?.editor ?? win.editor).WordControl.m_oLogicDocument;
+    const paragraphs: any[] = [];
+    for (const element of logic.Content) element.GetAllParagraphs({ All: true }, paragraphs);
+    return paragraphs
+      .map((paragraph) => paragraph.GetText({ Numbering: false }))
+      .join('')
+      .trim();
+  });
+
 test.describe('saving into the document own file (real editor)', () => {
   test.describe.configure({ timeout: 240_000 });
 
@@ -267,26 +293,56 @@ test.describe('saving into the document own file (real editor)', () => {
     expect(await savedText(page)).toMatch(/first version second version/i);
   });
 
+  test('save scenario input reaches the document before deferred Firefox focus runs', async ({ page, browserName }) => {
+    test.skip(browserName !== 'firefox', 'the SDK defers keyboard-capture focus only in Firefox');
+    await page.goto('/editor?new=docx');
+    await waitForEditorReady(page);
+    const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await expect(page.frameLocator('iframe[name="frameEditor"]').locator('#area_id')).toBeFocused();
+    await page.evaluate(() => {
+      const win = window.__ooFrames.readyEditor() as any;
+      // Ensure the canvas focus below produces a real focus event every time.
+      win.document.getElementById('area_id').focus();
+      const nativeTimeout = win.setTimeout.bind(win);
+      const deferred: (() => void)[] = [];
+      // Firefox's SDK focus handler redirects canvas focus in a zero-delay task.
+      // Hold that task so input sent before keyboard-capture focus is lost reliably.
+      win.setTimeout = (callback: TimerHandler, delay?: number, ...args: unknown[]) => {
+        if (delay === 0 && typeof callback === 'function') {
+          deferred.push(() => callback(...args));
+          return 0;
+        }
+        return nativeTimeout(callback, delay, ...args);
+      };
+      (window as any).__releaseInputFocus = () => {
+        for (const callback of deferred) callback();
+      };
+      // Intercept only tasks scheduled synchronously by this real focus event.
+      try {
+        win.document.getElementById('editor_sdk').focus();
+      } finally {
+        win.setTimeout = nativeTimeout;
+      }
+      (window as any).__deferredInputFocus = deferred.length;
+    });
+    try {
+      expect(await page.evaluate(() => (window as any).__deferredInputFocus)).toBeGreaterThan(0);
+      await expect(sdk).toBeFocused();
+      await insertDocumentText(page, 'Recovery version');
+      await expect.poll(() => documentText(page)).toBe('Recovery version');
+    } finally {
+      await page.evaluate(() => (window as any).__releaseInputFocus());
+    }
+  });
+
   test('Ctrl+S reaches disk while a recovery conversion is awaiting delivery', async ({ page }) => {
     await page.goto('/editor?new=docx');
     await waitForEditorReady(page);
     const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
     await sdk.click({ position: { x: 300, y: 200 } });
-    // This case measures save ownership, so seed its baseline atomically through
-    // the real browser input path rather than racing the SDK's initial key hooks.
-    await page.keyboard.insertText('Recovery version');
-    const documentText = () =>
-      page.evaluate(() => {
-        const win = window.__ooFrames.readyEditor() as any;
-        const logic = (win.Asc?.editor ?? win.editor).WordControl.m_oLogicDocument;
-        const paragraphs: any[] = [];
-        for (const element of logic.Content) element.GetAllParagraphs({ All: true }, paragraphs);
-        return paragraphs
-          .map((paragraph) => paragraph.GetText({ Numbering: false }))
-          .join('')
-          .trim();
-      });
-    await expect.poll(documentText).toBe('Recovery version');
+    await insertDocumentText(page, 'Recovery version');
+    await expect.poll(() => documentText(page)).toBe('Recovery version');
     await page.evaluate(() => {
       const frame = document.querySelector<HTMLIFrameElement>('iframe[name="frameEditor"]')!;
       const converter = (frame.contentWindow as any).AscCommon.x2t;
@@ -311,9 +367,10 @@ test.describe('saving into the document own file (real editor)', () => {
     });
     await page.waitForFunction(() => typeof (window as any).__releaseRecovery === 'function');
     try {
+      await focusDocumentInput(page);
       await page.keyboard.press('End');
       await page.keyboard.type(' manual version', { delay: 30 });
-      await expect.poll(documentText).toBe('Recovery version manual version');
+      await expect.poll(() => documentText(page)).toBe('Recovery version manual version');
       await page.keyboard.press('Control+s');
       await waitForWrites(page, 1);
       expect(await savedText(page)).toContain('Recovery version manual version');
