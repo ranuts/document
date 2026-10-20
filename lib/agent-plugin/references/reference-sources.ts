@@ -40,12 +40,14 @@ export class ReferenceSources {
     if (id !== undefined) {
       const entries = this.conversations.get(id);
       entries?.clear();
-      this.conversations.delete(id);
-      if (entries === this.entries) this.entries = new Map();
+      if (entries !== this.entries) this.conversations.delete(id);
     } else {
       this.entries.clear();
-      for (const entries of this.conversations.values()) entries.clear();
-      this.conversations.clear();
+      for (const [conversation, entries] of this.conversations) {
+        entries.clear();
+        // A source attached while history restores still belongs to the selected conversation.
+        if (entries !== this.entries) this.conversations.delete(conversation);
+      }
     }
   }
   capture() {

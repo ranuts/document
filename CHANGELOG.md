@@ -15,6 +15,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Local references attached while saved chat history is loading remain attached
+  when the conversation finishes restoring.
 - Reloading after a completed save restores the saved document instead of an
   older recovery snapshot or the original file.
 - Opening a copied editor tab no longer removes the original tab's reload
