@@ -199,3 +199,42 @@
     animation: none;
   }
 }
+
+/* Multiline suggestions are two readable texts; short changes remain inline. */
+.agent-artifact-workbench .agent-artifact-diff[data-layout='blocks'] {
+  display: grid;
+  gap: var(--ran-space-4);
+  max-height: none;
+  overflow: visible;
+  white-space: normal;
+}
+.agent-artifact-diff-block {
+  min-width: 0;
+}
+.agent-artifact-diff-block > .agent-artifact-diff-label {
+  margin: 0 0 var(--ran-space-2);
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+  font-weight: var(--ran-text-heading-weight);
+  line-height: 1.4;
+}
+.agent-artifact-diff-text {
+  max-height: 16em;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: var(--ran-text-label-2);
+  line-height: 1.65;
+}
+.agent-artifact-diff-block[data-artifact-diff-side='before'] .agent-artifact-diff-text {
+  color: var(--ran-color-text-secondary);
+}
+.agent-artifact-diff-block[data-artifact-diff-side='after'] .agent-artifact-diff-text {
+  padding-inline-start: var(--ran-space-3);
+  border-inline-start: 2px solid var(--ran-color-border);
+}
+
+.agent-artifact-diff-text:focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: 2px;
+}

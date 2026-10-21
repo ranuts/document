@@ -2056,7 +2056,12 @@ r-dropdown[role='listbox'] {
   font-weight: 400;
   letter-spacing: 0;
   font-size: var(--ran-text-label-2);
-  width: 100%;
+  /* Own the padded command hit areas, so their shared gutter does not become
+     overflow inside this contextual task region. Visible text stays on its rail. */
+  box-sizing: border-box;
+  width: calc(100% + var(--ran-space-2) * 2);
+  margin-inline: calc(-1 * var(--ran-space-2));
+  padding-inline: var(--ran-space-2);
   min-width: 0;
 }
 .agent-task-scope {

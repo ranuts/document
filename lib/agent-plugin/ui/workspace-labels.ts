@@ -84,6 +84,8 @@ export function resultActionLabels(): ResultActionLabels {
 import type { ArtifactWorkflowLabels } from './artifact-workflow';
 export function artifactWorkflowLabels(): ArtifactWorkflowLabels {
   return {
+    before: t('agentPlanBefore'),
+    after: t('agentPlanAfter'),
     entire: t('agentArtifactRevisionEntire'),
     selected: t('agentSelectionContext'),
     recovered: t('agentArtifactRevisionRecovered'),

@@ -303,3 +303,80 @@ it('requires a valid same-kind whole structured AI result and tells the provider
   });
   expect(await runArtifactRevision(options)).toContain('two');
 });
+
+it('separates multiline Original and Proposed text exactly before acceptance', async () => {
+  const before = 'Confirm the pilot.\nAsk owners before Friday.\n<script>literal</script>';
+  const after =
+    'Confirm pilot owners before Friday.\nShare the rollout checklist.\n<img src="https://remote.test/track">';
+  const bound = captureArtifactDraft({ ...draft, text: before, start: 0, end: 0 });
+  let request!: import('../../lib/agent-plugin/ui/artifact-workflow').ArtifactRevisionRequest;
+  const accept = vi.fn().mockResolvedValue(true);
+  const flow = createArtifactWorkflow({
+    labels,
+    capture: () => bound,
+    isCurrent: () => true,
+    accept,
+    submit: (r) => {
+      request = r;
+    },
+    stop: vi.fn(),
+  });
+  document.body.append(flow.el);
+  flow.el.querySelector<HTMLButtonElement>('[data-action=refine]')!.click();
+  flow.el.querySelector('input')!.value = 'Clarify actions';
+  flow.el.querySelector('form')!.dispatchEvent(new Event('submit', { cancelable: true }));
+  request.complete(after);
+  expect(flow.el.querySelector('[data-artifact-diff-side=before] .agent-artifact-diff-text')?.textContent).toBe(before);
+  expect(flow.el.querySelector('[data-artifact-diff-side=after] .agent-artifact-diff-text')?.textContent).toBe(after);
+  expect(flow.el.querySelector('[data-artifact-diff-label=before]')?.textContent).toBe('Original');
+  expect(flow.el.querySelector('[data-artifact-diff-label=after]')?.textContent).toBe('Proposed');
+  expect(
+    flow.el.querySelectorAll(
+      '.agent-artifact-diff del,.agent-artifact-diff ins,.agent-artifact-diff img,.agent-artifact-diff script',
+    ),
+  ).toHaveLength(0);
+  expect(accept).not.toHaveBeenCalled();
+  flow.el.querySelector<HTMLButtonElement>('[data-action=accept]')!.click();
+  await vi.waitFor(() => expect(accept).toHaveBeenCalledWith(bound, after, expect.any(Function)));
+  flow.dispose();
+});
+
+it('bounds multiline excerpts and localizes expanded captions without losing content or focus', () => {
+  const before = 'Original\n' + 'x'.repeat(10000),
+    after = 'Proposed\n' + 'y'.repeat(9000);
+  const bound = captureArtifactDraft({ ...draft, text: before, start: 0, end: 0 });
+  let request!: import('../../lib/agent-plugin/ui/artifact-workflow').ArtifactRevisionRequest;
+  const flow = createArtifactWorkflow({
+    labels: { ...labels, partial: 'Partial preview', showFull: 'Show full' },
+    capture: () => bound,
+    isCurrent: () => true,
+    accept: vi.fn(),
+    submit: (r) => {
+      request = r;
+    },
+    stop: vi.fn(),
+  });
+  document.body.append(flow.el);
+  flow.el.querySelector<HTMLButtonElement>('[data-action=refine]')!.click();
+  const input = flow.el.querySelector('input')!;
+  input.value = 'Clarify';
+  flow.el.querySelector('form')!.dispatchEvent(new Event('submit', { cancelable: true }));
+  request.complete(after);
+  expect(flow.el.querySelector('.agent-artifact-diff')!.textContent!.length).toBeLessThan(8000);
+  const showFull = flow.el.querySelector<HTMLButtonElement>('[data-action=showFull]')!;
+  expect(showFull.hidden).toBe(false);
+  showFull.click();
+  const original = flow.el.querySelector('[data-artifact-diff-side=before] .agent-artifact-diff-text')!;
+  const proposed = flow.el.querySelector('[data-artifact-diff-side=after] .agent-artifact-diff-text')!;
+  expect(original?.textContent).toBe(before);
+  expect(proposed?.textContent).toBe(after);
+  input.focus();
+  flow.setLabels({ ...labels, before: '原文', after: '建议修改', partial: '部分预览', showFull: '显示全文' });
+  expect(flow.el.querySelector('[data-artifact-diff-label=before]')?.textContent).toBe('原文');
+  expect(flow.el.querySelector('[data-artifact-diff-label=after]')?.textContent).toBe('建议修改');
+  expect(flow.el.querySelector('[data-artifact-diff-side=before] .agent-artifact-diff-text')).toBe(original);
+  expect(flow.el.querySelector('[data-artifact-diff-side=after] .agent-artifact-diff-text')).toBe(proposed);
+  expect(showFull.hidden).toBe(true);
+  expect(document.activeElement).toBe(input);
+  flow.dispose();
+});

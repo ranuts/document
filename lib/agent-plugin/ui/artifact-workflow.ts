@@ -21,6 +21,8 @@ export interface ArtifactWorkflowLabels {
   selected?: string;
   entire?: string;
   recovered?: string;
+  before?: string;
+  after?: string;
 }
 /** A request snapshot. The host queues this before resolving a prepared provider. */
 export interface ArtifactRevisionRequest {
@@ -171,7 +173,7 @@ export function createArtifactWorkflow(options: {
   const preview = document.createElement('div');
   preview.className = 'agent-artifact-revision';
   preview.hidden = true;
-  const diff = document.createElement('p');
+  const diff = document.createElement('div');
   diff.className = 'agent-artifact-diff';
   const accept = makeButton('accept', () => {
     void (async () => {
@@ -202,19 +204,44 @@ export function createArtifactWorkflow(options: {
   });
   showFull.hidden = true;
   preview.append(diff, partial, showFull, accept, reject);
+  function comparisonLabel(side: 'before' | 'after') {
+    return labels[side] ?? (side === 'before' ? 'Original' : 'Proposed');
+  }
   function renderDiff(before: string, after: string, full = false) {
-    const change = textDifference(before, after);
     const clipped = !full && before.length + after.length > 8000;
-    const removed = document.createElement('del');
-    removed.textContent = clipped ? change.removed.slice(0, 2400) : change.removed;
-    const added = document.createElement('ins');
-    added.textContent = clipped ? change.added.slice(0, 2400) : change.added;
-    diff.replaceChildren(
-      clipped ? change.prefix.slice(-1200) : change.prefix,
-      removed,
-      added,
-      clipped ? change.suffix.slice(0, 1200) : change.suffix,
-    );
+    if (before.includes('\n') || after.includes('\n')) {
+      diff.dataset.layout = 'blocks';
+      const blocks = (['before', 'after'] as const).map((side) => {
+        const block = document.createElement('section');
+        block.className = 'agent-artifact-diff-block';
+        block.dataset.artifactDiffSide = side;
+        const caption = document.createElement('h4');
+        caption.className = 'agent-artifact-diff-label';
+        caption.dataset.artifactDiffLabel = side;
+        caption.textContent = comparisonLabel(side);
+        const content = document.createElement('div');
+        content.className = 'agent-artifact-diff-text';
+        content.tabIndex = 0;
+        const value = side === 'before' ? before : after;
+        content.textContent = clipped ? value.slice(0, 3600) : value;
+        block.append(caption, content);
+        return block;
+      });
+      diff.replaceChildren(...blocks);
+    } else {
+      diff.dataset.layout = 'inline';
+      const change = textDifference(before, after);
+      const removed = document.createElement('del');
+      removed.textContent = clipped ? change.removed.slice(0, 2400) : change.removed;
+      const added = document.createElement('ins');
+      added.textContent = clipped ? change.added.slice(0, 2400) : change.added;
+      diff.replaceChildren(
+        clipped ? change.prefix.slice(-1200) : change.prefix,
+        removed,
+        added,
+        clipped ? change.suffix.slice(0, 1200) : change.suffix,
+      );
+    }
     partial.textContent = labels.partial ?? '';
     partial.hidden = !clipped;
     showFull.hidden = !clipped;
@@ -293,6 +320,7 @@ export function createArtifactWorkflow(options: {
       },
       delta(text) {
         if (current()) {
+          diff.dataset.layout = 'inline';
           diff.textContent = text.slice(0, 8000);
           partial.textContent = labels.partial ?? '';
           partial.hidden = text.length <= 8000;
@@ -375,6 +403,9 @@ export function createArtifactWorkflow(options: {
         button.textContent = labels[button.dataset.action as keyof ArtifactWorkflowLabels] ?? '';
       input.placeholder = labels.instruction;
       input.setAttribute('aria-label', labels.instruction);
+      for (const caption of diff.querySelectorAll<HTMLElement>('[data-artifact-diff-label]'))
+        caption.textContent = comparisonLabel(caption.dataset.artifactDiffLabel as 'before' | 'after');
+      partial.textContent = labels.partial ?? '';
       refreshScope();
     },
     dispose() {
