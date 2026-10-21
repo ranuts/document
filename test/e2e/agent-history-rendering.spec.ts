@@ -1,5 +1,6 @@
 import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
+import { assertTitleRail, contentGeometry, textGeometry } from './lib/layout-geometry';
 
 test('restores a long saved conversation and switches sessions with completed answer actions', async ({ page }) => {
   test.setTimeout(90_000);
@@ -137,15 +138,16 @@ test('restores a long saved conversation and switches sessions with completed an
   await expect(viewHeader.locator('.agent-history-heading')).toHaveCount(1);
   const back = viewHeader.getByRole('button', { name: 'Back to conversation', exact: true });
   await expect(back).toHaveCount(1);
-  const viewHeaderBox = await viewHeader.boundingBox();
-  const titleBox = await viewHeader.locator('.agent-history-heading').boundingBox();
-  const backBox = await back.boundingBox();
-  const headerBox = await page.locator('.agent-runtime-panel .agent-panel-title').boundingBox();
-  expect(Math.abs(viewHeaderBox!.x - headerBox!.x)).toBeLessThanOrEqual(1);
-  const rowBox = await history.locator('.agent-conversation-title').first().boundingBox();
-  expect(Math.abs(viewHeaderBox!.x - rowBox!.x)).toBeLessThanOrEqual(1);
+  await page.evaluate(() => document.fonts.ready);
+  await assertTitleRail(page.locator('.agent-runtime-panel .agent-panel-title'));
+  const geometry = await contentGeometry(history);
+  const row = await textGeometry(history.locator('.agent-conversation-title').first());
+  // The Back hit area extends into the gutter; its SVG and row text share the content rail.
+  expect(geometry.contentLeft).toBeCloseTo(16, 1);
+  expect(geometry.iconLeft).toBeCloseTo(geometry.contentLeft, 1);
+  expect(row.textLeft).toBeCloseTo(geometry.contentLeft, 1);
   // The owned title follows the compact Back target and the shared 8px gap.
-  expect(Math.abs(titleBox!.x - (backBox!.x + backBox!.width + 8))).toBeLessThanOrEqual(1);
+  expect(Math.abs(geometry.headingLeft - (geometry.backLeft + geometry.backWidth + 8))).toBeLessThanOrEqual(1);
   await page.locator('.agent-runtime-panel').screenshot({ path: test.info().outputPath('history-light.png') });
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.locator('.agent-runtime-panel').screenshot({ path: test.info().outputPath('history-dark.png') });
