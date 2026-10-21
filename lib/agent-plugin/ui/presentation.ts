@@ -235,6 +235,8 @@ export function displayError(error: unknown): string {
     'agentWritingCurrencyChanged',
     'agentToolNotChosen',
     'agentWordOnly',
+    'agentWordFormatUnsupported',
+    'agentWordFormattingReviewUnsupported',
     'agentContextTooLong',
     'agentSlideNoRoom',
     'agentDocumentActionTimeout',

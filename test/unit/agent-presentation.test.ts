@@ -232,7 +232,12 @@ it.each(SHELL_LOCALES)(
   (language) => {
     try {
       setLanguage(language);
-      for (const key of ['agentNoCompletedAnswer', 'agentParagraphSelectionConflict'] as const) {
+      for (const key of [
+        'agentNoCompletedAnswer',
+        'agentParagraphSelectionConflict',
+        'agentWordFormatUnsupported',
+        'agentWordFormattingReviewUnsupported',
+      ] as const) {
         const localized = t(key);
         expect(displayError(new Error(key))).toBe(localized);
         expect(displayError(displayError(key))).toBe(localized);
