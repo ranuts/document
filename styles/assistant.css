@@ -144,6 +144,7 @@ body.agent-panel-resizing #app iframe {
   align-items: center;
   gap: var(--ran-space-2);
   padding: var(--ran-space-2);
+  margin-inline: calc(-1 * var(--ran-space-2));
   margin-block-start: var(--ran-space-2);
   font-size: var(--ran-text-label-2);
 }
@@ -156,7 +157,7 @@ body.agent-panel-resizing #app iframe {
 }
 .agent-history-status {
   margin: 0 0 var(--ran-space-4);
-  padding-inline-start: var(--ran-space-8);
+  padding-inline-start: var(--ran-space-6);
   font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
   overflow-wrap: anywhere;
@@ -170,8 +171,9 @@ body.agent-panel-resizing #app iframe {
   display: flex;
   flex-direction: column;
   gap: var(--ran-space-4);
-  /* Frames share the content inset; the checkbox and command internals share
-     their own icon (24px) and label (48px) columns inside that frame. */
+  /* Hit surfaces use the existing gutter. Visible leading icons stay at 16px,
+     with labels and their status at 40px, including the checkbox row above. */
+  margin-inline: calc(-1 * var(--ran-space-2));
 }
 .agent-history-transfer-actions,
 .agent-history-danger-actions {
@@ -217,8 +219,8 @@ body.agent-panel-resizing #app iframe {
   border-color: var(--ran-color-border-active);
   background: var(--ran-color-bg-active);
 }
-/* Compact secondary commands retain a quiet, recognizable resting stroke.
-   Equal frames keep the complete settings column calm and scannable. */
+/* A named command group supplies context; resting rows need no repeated frame.
+   Hover/focus targets include 8px of the owned gutter without shifting content. */
 .agent-history-actions button {
   width: 100%;
   min-height: var(--app-control-height);
@@ -227,11 +229,14 @@ body.agent-panel-resizing #app iframe {
   padding: var(--ran-space-1) var(--ran-space-2);
   border: 0;
   border-radius: var(--ran-radius-sm);
-  background: var(--ran-color-bg-elevated);
-  box-shadow: inset 0 0 0 1px var(--ran-color-border);
+  background: transparent;
+  box-shadow: none;
   text-align: start;
   font-size: var(--ran-text-label-2);
   font-weight: var(--ran-text-copy-weight);
+}
+.agent-history-options .agent-history-actions button:disabled {
+  background: transparent;
 }
 .agent-history-actions button:enabled:hover {
   background: var(--ran-color-bg-hover);
@@ -895,9 +900,9 @@ r-dropdown[role='listbox'] {
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  min-height: 56px;
+  min-height: calc(var(--app-control-height) + var(--ran-space-2));
   flex: 0 0 auto;
-  padding: var(--ran-space-2) var(--agent-content-inset);
+  padding: var(--ran-space-1) var(--agent-content-inset);
   gap: calc(var(--ran-space-1) / 2);
 }
 .agent-workspace-nav {
@@ -906,7 +911,7 @@ r-dropdown[role='listbox'] {
   align-items: center;
   gap: var(--ran-space-1);
   min-width: 0;
-  padding: 0 var(--ran-space-2) var(--ran-space-2);
+  padding: 0 var(--ran-space-2) var(--ran-space-1);
   border-bottom: 1px solid var(--ran-color-border);
   overflow-x: auto;
   overscroll-behavior-inline: contain;
@@ -929,8 +934,8 @@ r-dropdown[role='listbox'] {
   background: transparent;
   color: var(--ran-color-text-secondary);
   font: inherit;
-  font-size: var(--ran-text-label-2);
-  font-weight: var(--ran-text-label-weight);
+  font-size: var(--ran-text-label-3);
+  font-weight: var(--ran-text-copy-weight);
   line-height: var(--ran-line-height);
   white-space: nowrap;
   cursor: pointer;
@@ -940,9 +945,9 @@ r-dropdown[role='listbox'] {
   background: var(--ran-color-bg-hover);
 }
 .agent-workspace-nav button[aria-current='page'] {
+  font-weight: var(--ran-text-label-weight);
   color: var(--ran-color-text);
-  background: var(--ran-color-bg-muted);
-  box-shadow: inset 0 -2px var(--ran-color-primary);
+  background: var(--ran-color-bg-hover);
 }
 .agent-workspace-nav button:active {
   background: var(--ran-color-bg-active);
@@ -958,9 +963,9 @@ r-dropdown[role='listbox'] {
   justify-content: flex-start;
   text-align: left;
   font-family: inherit;
-  font-weight: var(--ran-text-heading-weight);
-  font-size: var(--ran-text-copy-2);
-  letter-spacing: -0.02em;
+  font-weight: var(--ran-text-label-weight);
+  font-size: var(--ran-text-label-2);
+  letter-spacing: normal;
   min-width: 0;
   /* Extend the hit area into the gutter; text stays on the content rail.
      Trailing free space belongs to layout, never to the title's hover fill. */
@@ -1216,9 +1221,6 @@ r-dropdown[role='listbox'] {
   }
 }
 @media (max-width: 480px) {
-  .agent-panel-header {
-    padding: var(--ran-space-2) var(--ran-space-4);
-  }
   /* No per-width button geometry: the shared 32px target stays, and the
      coarse-pointer block grows every header control to --app-control-touch
      together. A 34x40 box here made the row ragged against the 44px clear
@@ -1226,11 +1228,6 @@ r-dropdown[role='listbox'] {
   .agent-panel-settings,
   .agent-history-view {
     padding: var(--ran-space-4);
-  }
-  .agent-panel-header .agent-panel-title {
-    flex: 0 1 auto;
-    width: auto;
-    font-size: var(--ran-text-copy-2);
   }
   .agent-panel .cui-footer {
     padding: var(--ran-space-3) var(--ran-space-4) max(var(--ran-space-3), env(safe-area-inset-bottom));
@@ -1240,9 +1237,6 @@ r-dropdown[role='listbox'] {
   .agent-panel-settings {
     max-height: none;
     padding: var(--ran-space-4);
-  }
-  .agent-panel-header {
-    min-height: 48px;
   }
   .agent-readiness {
     padding-bottom: calc(var(--ran-space-3) / 2);

@@ -257,41 +257,42 @@ target expanded into free toolbar space, and a sibling view shifted off its cont
 Review screenshots with these measured relationships; a stored screenshot without assertions
 or inspection is not acceptance evidence.
 
-### Settings command groups
+### Assistant header and settings commands
 
-History & data is already a named section inside the assistant pane. Restore, Import and
-Export use equal-width native secondary buttons in one compact column: each button has a
-neutral resting surface and functional inset stroke, with no enclosing group frame, group fill,
-raised shadow or row separators. Keep 8px between buttons and 16px before deletion commands.
-A recognizable button shape must be visible before hover in both themes and on touch screens;
-verb labels and hover feedback alone do not establish initial discoverability.
+The fine-input title row is 40px: 32px targets with 4px above and below. Coarse input retains
+44px targets and a 52px row. Keep the assistant identity at the 13px label role and medium
+weight; navigation uses 12px regular labels with a medium selected label and quiet selected
+fill. Five named destinations remain reachable; the navigation can scroll in narrow panes.
+There is no inset underline or raised shadow. Keep keyboard focus separate from selection.
 
-The outer command frames follow the 16px content rail. Their 8px inline padding places
-checkbox and 16px icon viewports at 24px; the following 8px gap places label text at 48px.
-The saving-status text follows its associated label at 48px. No command frame protrudes
-into the content gutter. Use 32px minimum fine-input targets and 44px coarse-input targets;
-keep them inside the pane and non-overlapping.
-Long translations wrap without shifting the columns or overflowing the pane. The save-history
-checkbox uses the monochrome primary role.
+History & data is a named command-list context. Restore, Import, Export and deletion commands
+use equal-width native button rows with visible verb labels and leading icons. The resting
+rows use the pane's canvas, without repeated frames, fills or separators. Hover/pressed states
+supply restrained feedback; focus remains visible on keyboard input. This composition is specific
+to a recognizable command group, not a rule to strip affordance from standalone commands.
+Keep 8px between commands and 16px before deletion commands.
 
-Deletion commands share the secondary control shape with readable danger text/icons; only
-explicit confirmation has a solid danger fill. Hover, press, disabled and keyboard focus
-remain distinct. Draft, confirmation, busy and focus-return behavior remain owned by the
-existing controls. Acceptance checks actual renders as well as shared checkbox/icon/text
-geometry, a visible resting control stroke or surface, text contrast and real interactions.
+Header/page/section text, saving checkbox and command icon viewports share the 16px leading
+content spine. A 16px leading glyph and 8px gap put the command label at 40px; saving text and
+its status use the same label column. Each row's 8px padding extends the invisible hit surface
+into the existing gutter, while content stays on the declared spine. Targets remain equal width,
+32px for fine input or 44px for coarse input, inside the pane and non-overlapping. Long labels
+wrap naturally. Do not align only the button frames and leave visible leading content inset.
 
-Import and Attach open a workflow and use secondary command affordance. Primary fill is
+Deletion commands use readable danger text/icons; only explicit confirmation has a solid danger
+fill. Preserve draft, confirmation, busy and focus-return behavior. Acceptance checks text/icon
+coordinates against the independently declared page spine, not just sibling equality. For
+transparent resting rows, measure text contrast against the actual pane canvas; hover/press
+contrast uses the painted control surface. Verify complete pane screenshots, resizing and input density.
+
+Import and Attach open a workflow and retain secondary command affordance. Primary fill is
 reserved for committing a form or accepting a reviewed result. A brief opacity-only heading
 entry can mark navigation with the existing fast motion token; it must not delay focus,
 move hit targets or animate overlay ancestors. Reduced motion disables this cue.
 
-The owner rejected the earlier gutter-extended, content-sized command composition and
-48/54px heading rail. The October 21 navigation/density acceptance record supersedes those
-parts of the October 20 exploratory captures; passing the earlier assertions is not design approval.
-
 Review boundaries in the full pane. The panel/editor edge owns the independent sidebar;
 the search/input frames identify editable values; the single History & data section divider
-separates task regions; button surfaces identify action targets; keyboard outlines identify focus.
+separates task regions; named command rows identify history actions; standalone button surfaces identify workflow actions; keyboard outlines identify focus.
 An inner card or more row rules
 would repeat those relationships. Models picker frames, Sources search/attachment controls
 and Artifacts form fields keep their functional control boundaries. Do not remove every

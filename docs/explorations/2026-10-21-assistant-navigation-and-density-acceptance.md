@@ -2,6 +2,11 @@
 
 Date: 2026-10-21
 
+> Historical acceptance for the initial navigation revision (4743fbf). The current header,
+> selected-tab treatment and history leading-content geometry are documented in the
+> [header and alignment refinement](./2026-10-21-assistant-header-and-alignment.md).
+> Screenshots and numeric contracts below describe the earlier build.
+
 ## Decision and scope
 
 Owner review rejected the previous History & data button cloud and the artificial

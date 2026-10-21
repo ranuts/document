@@ -83,35 +83,39 @@ for (const scheme of ['light', 'dark'] as const) {
         const transfer = options.locator('.agent-history-restore, .agent-history-import, .agent-history-export');
         const danger = options.locator('.agent-history-delete-current, .agent-history-delete-all');
         const group = options.locator('.agent-history-transfer-actions');
-        // Equal secondary frames share the content rail, with stable internal
-        // icon/checkbox and label columns across the complete settings section.
+        // Compare leading content across regions, not just equal frames inside the group.
+        // The target can use the gutter while icons and the checkbox share the heading's spine.
         const groupBox = (await group.boundingBox())!;
-        const optionsBox = (await options.boundingBox())!;
-        expect(groupBox.x).toBeCloseTo(optionsBox.x, 1);
-        expect(await frameLeft(options.locator('.agent-history-save'))).toBeCloseTo(24, 1);
-        expect((await textGeometry(options.locator('label > span'))).textLeft).toBeCloseTo(48, 1);
+        const panel = page.locator('.agent-runtime-panel');
+        const panelBox = (await panel.boundingBox())!;
+        const contentSpine = (await textGeometry(page.locator('.agent-history-view h2'))).textLeft;
+        expect(contentSpine).toBeCloseTo(16, 1);
+        expect(await frameLeft(group)).toBeCloseTo(contentSpine - 8, 1);
+        expect(await frameLeft(options.locator('.agent-history-save'))).toBeCloseTo(contentSpine, 1);
+        expect((await textGeometry(options.locator('label > span'))).textLeft).toBeCloseTo(contentSpine + 24, 1);
         const canvas = await page
           .locator('.agent-runtime-panel')
           .evaluate((el) => getComputedStyle(el).backgroundColor);
         let previousBottom = 0;
         for (const button of await transfer.or(danger).all()) {
           const css = await surface(button);
-          expect(css.background).not.toBe('rgba(0, 0, 0, 0)');
-          expect(css.background !== canvas || css.shadow !== 'none', 'resting command needs a visible shape').toBe(
-            true,
-          );
-          expect(contrast(css.color, css.background)).toBeGreaterThanOrEqual(4.5);
+          expect(css.background).toBe('rgba(0, 0, 0, 0)');
+          expect(css.shadow).toBe('none');
+          // Transparent rows paint on the actual panel canvas; transparent black is not a background.
+          expect(contrast(css.color, canvas)).toBeGreaterThanOrEqual(4.5);
           const box = (await button.boundingBox())!;
           expect(box.height).toBeGreaterThanOrEqual(32);
           expect(box.x).toBeCloseTo(groupBox.x, 1);
+          expect(box.x).toBeGreaterThanOrEqual(panelBox.x);
+          expect(box.x + box.width).toBeLessThanOrEqual(panelBox.x + panelBox.width);
           expect(box.y).toBeGreaterThanOrEqual(previousBottom);
           previousBottom = box.y + box.height;
           const icon = button.locator('svg[aria-hidden="true"]');
           await expect(icon).toBeVisible();
-          expect(await frameLeft(icon)).toBeCloseTo(24, 1);
+          expect(await frameLeft(icon)).toBeCloseTo(contentSpine, 1);
           const label = button.locator('.agent-history-action-label');
           const text = await textGeometry(label);
-          expect(text.textLeft).toBeCloseTo(48, 1);
+          expect(text.textLeft).toBeCloseTo(contentSpine + 24, 1);
           expect(box.width).toBeCloseTo(groupBox.width, 1);
           await expect(button).toHaveAccessibleName((await label.innerText()).trim());
           expect(await button.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
@@ -123,7 +127,7 @@ for (const scheme of ['light', 'dark'] as const) {
           ...(await danger.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().top))),
         );
         expect(dangerTop - transferBottom).toBeGreaterThanOrEqual(16);
-        expect(await options.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+        expect(await panel.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
       }
       await page.setViewportSize({ width: 1280, height: 900 });
       const restore = options.locator('.agent-history-restore');

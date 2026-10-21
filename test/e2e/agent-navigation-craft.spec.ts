@@ -25,6 +25,11 @@ for (const variant of variants) {
       await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
       const panel = page.locator('.agent-runtime-panel');
       await expect(page.locator('html')).toHaveAttribute('data-ran-theme', variant.theme);
+      const header = panel.locator('.agent-panel-header');
+      expect((await header.boundingBox())!.height, 'compact header preserves input target density').toBe(
+        variant.coarse ? 52 : 40,
+      );
+      await expect(header.locator('.agent-panel-title')).toHaveCSS('font-size', '13px');
       await page.locator('.agent-history-toggle').click();
       const history = page.locator('.agent-history-view');
       await history.locator('.agent-history-management > summary').click();
@@ -32,20 +37,32 @@ for (const variant of variants) {
       const options = history.locator('.agent-history-options');
       const buttons = options.locator('.agent-history-actions button');
       const widths: number[] = [];
+      const contentSpine = (await textGeometry(history.locator('.agent-view-header h2'))).textLeft;
+      expect(contentSpine).toBeCloseTo(16, 1);
+      expect((await textGeometry(history.locator('.agent-history-management > summary'))).textLeft).toBeCloseTo(
+        contentSpine,
+        1,
+      );
       for (const button of await buttons.all()) {
-        // Resting button frames belong to the content spine, not a second gutter.
-        expect(await frameLeft(button)).toBeCloseTo(16, 1);
+        expect(await frameLeft(button.locator('svg')), 'command icon shares the heading spine').toBeCloseTo(
+          contentSpine,
+          1,
+        );
+        // The quiet command's hit area extends into the owned gutter; visible icons stay on the page spine.
+        expect(await frameLeft(button)).toBeCloseTo(contentSpine - 8, 1);
         const box = (await button.boundingBox())!;
         widths.push(box.width);
         expect(box.height).toBeGreaterThanOrEqual(variant.coarse ? 44 : 32);
         if (!variant.coarse) expect(box.height).toBe(32);
-        expect(await frameLeft(button.locator('svg'))).toBeCloseTo(24, 1);
-        expect((await textGeometry(button.locator('span'))).textLeft).toBeCloseTo(48, 1);
+        expect((await textGeometry(button.locator('span'))).textLeft).toBeCloseTo(contentSpine + 24, 1);
       }
       expect(Math.max(...widths) - Math.min(...widths)).toBeLessThanOrEqual(0.5);
-      expect(await frameLeft(options.locator('.agent-history-save'))).toBeCloseTo(24, 1);
-      expect((await textGeometry(options.locator('label > span'))).textLeft).toBeCloseTo(48, 1);
-      expect((await textGeometry(options.locator('.agent-history-status'))).textLeft).toBeCloseTo(48, 1);
+      expect(await frameLeft(options.locator('.agent-history-save')), 'checkbox shares the heading spine').toBeCloseTo(
+        contentSpine,
+        1,
+      );
+      expect((await textGeometry(options.locator('label > span'))).textLeft).toBeCloseTo(contentSpine + 24, 1);
+      expect((await textGeometry(options.locator('.agent-history-status'))).textLeft).toBeCloseTo(contentSpine + 24, 1);
       await page.mouse.move(0, 0);
       await panel.screenshot({ path: info.outputPath('history-full-pane.png') });
 
@@ -71,6 +88,16 @@ for (const variant of variants) {
         const button = nav.locator(trigger);
         await button.click();
         await expect(button).toHaveAttribute('aria-current', 'page');
+        // Pointer hover must not supply the selected fill we are trying to verify.
+        await page.mouse.move(0, 0);
+        await expect(button).toHaveCSS('font-weight', '500');
+        await expect(nav.locator('.agent-chat-toggle')).toHaveCSS('font-weight', '400');
+        await expect(button).toHaveCSS('box-shadow', 'none');
+        await expect(button).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+        await expect(button).not.toHaveCSS(
+          'background-color',
+          await panel.evaluate((el) => getComputedStyle(el).backgroundColor),
+        );
         const current = panel.locator(view);
         await expect(current).toBeVisible();
         await expect(current.locator('.agent-view-back')).toHaveCount(0);
