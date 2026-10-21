@@ -6,6 +6,7 @@ interface WorkspaceSurface {
   el: HTMLElement;
   trigger: HTMLElement;
   focus: () => void;
+  returnToParent?: () => boolean;
 }
 
 /** Presentation navigation only. Request/session invalidation remains with the panel's lifecycle owners. */
@@ -57,12 +58,17 @@ export function createPanelWorkspace(options: {
   options.chatTrigger?.addEventListener('click', () => show('chat'));
   for (const [name, surface] of Object.entries(views)) {
     surface.trigger.addEventListener('click', () => show(name as PanelWorkspaceView));
-    surface.el.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape' || event.isComposing || event.defaultPrevented || event.keyCode === 229) return;
-      event.stopPropagation();
-      show('chat');
-      surface.trigger.focus();
-    });
   }
+  panel.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || event.isComposing || event.defaultPrevented || event.keyCode === 229) return;
+    const view = panel.dataset.view as PanelWorkspaceView | undefined;
+    if (!view || view === 'chat') return;
+    const surface = views[view];
+    event.stopPropagation();
+    event.preventDefault();
+    if (surface.returnToParent?.()) return;
+    show('chat');
+    surface.trigger.focus();
+  });
   return { show };
 }

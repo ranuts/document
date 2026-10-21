@@ -158,6 +158,9 @@ it('coordinates workspace visibility, capture, focus, runtime placement and Esca
   const navigation = { capture: vi.fn(), restore: vi.fn(() => false) };
   const changed = vi.fn();
   const beforeChange = vi.fn();
+  const returnToParent = vi.fn(() => true);
+  const peerHeader = document.createElement('button');
+  panel.append(peerHeader);
   const workspace = createPanelWorkspace({
     panel,
     chat,
@@ -166,7 +169,7 @@ it('coordinates workspace visibility, capture, focus, runtime placement and Esca
     isOpen: () => true,
     runtime: { row, settings, modelRow, modelActions },
     views: {
-      settings: { el: settings, trigger, focus },
+      settings: { el: settings, trigger, focus, returnToParent },
       history: { el: document.createElement('div'), trigger: document.createElement('button'), focus: vi.fn() },
       sources: { el: document.createElement('div'), trigger: document.createElement('button'), focus: vi.fn() },
       artifacts: { el: document.createElement('div'), trigger: document.createElement('button'), focus: vi.fn() },
@@ -182,6 +185,22 @@ it('coordinates workspace visibility, capture, focus, runtime placement and Esca
   expect(trigger.getAttribute('aria-expanded')).toBe('true');
   expect(row.parentElement).toBe(modelRow);
   expect(focus).toHaveBeenCalledOnce();
+  const nestedEscape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+  peerHeader.focus();
+  peerHeader.dispatchEvent(nestedEscape);
+  expect(nestedEscape.defaultPrevented).toBe(true);
+  expect(returnToParent).toHaveBeenCalledOnce();
+  expect(chat.el.hidden).toBe(true);
+  for (const event of [
+    new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true, isComposing: true }),
+    new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true, keyCode: 229 }),
+    new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }),
+  ]) {
+    if (!event.isComposing && event.keyCode !== 229) event.preventDefault();
+    peerHeader.dispatchEvent(event);
+  }
+  expect(returnToParent).toHaveBeenCalledOnce();
+  returnToParent.mockReturnValue(false);
   settings.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
   expect(chat.el.hidden).toBe(false);
   expect(row.parentElement).toBe(panel);

@@ -47,6 +47,8 @@ export function createArtifactsView(options: {
   labels: ArtifactsLabels;
   onApply(text: string): Promise<unknown> | unknown;
   onClose?(): void;
+  /** Compose the existing guarded Back control into the shell's single return slot. */
+  onBackChange?(back?: HTMLButtonElement): void;
   conversation?(): string;
   refinement?: {
     labels: ArtifactWorkflowLabels;
@@ -59,6 +61,7 @@ export function createArtifactsView(options: {
   heading.tabIndex = -1;
   const header = createViewHeader(heading);
   let backDestination: 'conversation' | 'list' = 'conversation';
+  let backButton: HTMLButtonElement | undefined;
   const body = Div().build();
   const status = View('p').class('agent-artifact-status').attr('role', 'status').build();
   el.append(header, body, status);
@@ -109,12 +112,21 @@ export function createArtifactsView(options: {
     return b;
   }
   function setBack(back: HTMLButtonElement, destination: 'conversation' | 'list'): void {
+    backButton = back;
     backDestination = destination;
     labelViewBack(
       back,
       (destination === 'conversation' ? labels.backToConversation : labels.backToList) ?? labels.back,
     );
-    header.prepend(back);
+    if (options.onBackChange) {
+      header.hidden = true;
+      options.onBackChange(back);
+    } else header.prepend(back);
+  }
+  function requestBack(): boolean {
+    if (!backButton) return false;
+    if (!backButton.disabled && !status.querySelector('[data-action=discardChanges]')) backButton.click();
+    return true;
   }
   function draftContent(text: string) {
     const version = current?.versions.find(
@@ -200,6 +212,9 @@ export function createArtifactsView(options: {
     cancelConfirmation?.();
     cancelConfirmation = undefined;
     buttons.clear();
+    backButton = undefined;
+    options.onBackChange?.();
+    header.hidden = false;
     header.replaceChildren(heading);
     body.replaceChildren();
     status.textContent = '';
@@ -212,6 +227,7 @@ export function createArtifactsView(options: {
       cancelConfirmation = undefined;
       return next();
     }
+    const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
     status.replaceChildren(
       document.createTextNode(labels.discardChanges + ' '),
       button('discardChanges', () => {
@@ -224,8 +240,11 @@ export function createArtifactsView(options: {
         cancelConfirmation?.();
         cancelConfirmation = undefined;
         status.textContent = '';
+        if (trigger?.isConnected) trigger.focus();
+        else backButton?.focus();
       }),
     );
+    status.querySelector<HTMLButtonElement>('[data-action=cancel]')?.focus();
   }
   function editor(a: Artifact): void {
     if (disposed) return;
@@ -600,6 +619,11 @@ export function createArtifactsView(options: {
   }
   return {
     el,
+    focus(): void {
+      (backButton ?? heading).focus();
+    },
+    /** A disabled or pending nested return consumes Escape; it never falls through to Chat. */
+    requestBack,
     refresh: () => refresh(),
     save(text: string, origin?: ArtifactProvenance): Promise<MessageSaveOutcome> {
       if (disposed || busy) return Promise.resolve('cancelled');
@@ -723,6 +747,8 @@ export function createArtifactsView(options: {
       for (const settle of pendingSaves) settle('cancelled');
       ++generation;
       buttons.clear();
+      backButton = undefined;
+      options.onBackChange?.();
       header.replaceChildren(heading);
       el.remove();
     },

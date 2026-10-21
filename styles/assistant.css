@@ -928,7 +928,7 @@ r-dropdown[role='listbox'] {
   white-space: nowrap;
   cursor: pointer;
 }
-.agent-workspace-nav button:hover {
+.agent-workspace-nav button:hover:enabled {
   color: var(--ran-color-text);
   background: var(--ran-color-bg-hover);
 }
@@ -937,14 +937,14 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text);
   background: var(--ran-color-bg-active);
 }
-.agent-workspace-nav button:active {
+.agent-workspace-nav button:active:enabled {
   background: var(--ran-color-bg-active);
 }
 .agent-panel .agent-workspace-nav button:focus-visible {
   outline: 2px solid var(--ran-color-link);
   outline-offset: -2px;
 }
-.agent-panel-header .agent-panel-title {
+.agent-panel-header :is(.agent-panel-title, .agent-panel-return.agent-view-back) {
   display: inline-flex;
   flex: 0 1 auto;
   width: auto;
@@ -974,8 +974,16 @@ r-dropdown[role='listbox'] {
 .agent-panel-header .agent-panel-title[aria-current='page'] {
   background: transparent;
 }
-.agent-panel-header .agent-panel-title:hover {
+.agent-panel-header :is(.agent-panel-title, .agent-panel-return):hover:enabled {
   background: var(--ran-color-bg-hover);
+}
+.agent-panel-header .agent-panel-return svg {
+  flex: 0 0 auto;
+}
+.agent-panel-header .agent-panel-return span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .agent-panel-settings {
   display: flex;
@@ -2484,7 +2492,8 @@ r-dropdown[role='listbox'] {
 .agent-view-back:active:enabled {
   background: var(--ran-color-bg-active);
 }
-.agent-panel :is(.agent-workspace-view, .agent-artifacts, .agent-view-header) button:disabled {
+.agent-panel :is(.agent-workspace-view, .agent-artifacts, .agent-view-header) button:disabled,
+.agent-panel .agent-panel-return:disabled {
   color: var(--ran-color-text-disabled);
   cursor: default;
   background: transparent;

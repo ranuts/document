@@ -236,8 +236,11 @@ for (const variant of variants) {
         await expect(input).toBeVisible();
         for (const field of await form.locator('input, textarea, label > span').all())
           expect(await frameLeft(field)).toBeCloseTo(16, 1);
-        expect((await contentGeometry(artifacts)).headingLeft).toBeCloseTo(16, 1);
-        await expect(artifacts.locator('.agent-view-back span')).toBeVisible();
+        await expect(artifacts.locator('.agent-view-header')).toBeHidden();
+        const nestedBack = panel.locator('.agent-panel-header .agent-view-back');
+        await expect(nestedBack.locator('span')).toBeVisible();
+        expect(await frameLeft(nestedBack.locator('svg'))).toBeCloseTo(16, 1);
+        await expect(panel.locator('.agent-chat-toggle')).toBeHidden();
         await input.fill('Layout fixture');
         await form
           .locator('textarea')
@@ -251,9 +254,10 @@ for (const variant of variants) {
         await editor.locator('[data-action=edit]').click();
         await expect(editor.locator('textarea').first()).toBeVisible();
         expect(await frameLeft(editor.locator('input').first())).toBeCloseTo(16, 1);
-        expect((await contentGeometry(artifacts)).headingLeft).toBeCloseTo(16, 1);
+        expect(await frameLeft(editor.locator('.agent-artifact-title'))).toBeCloseTo(16, 1);
+        await expect(artifacts.locator('.agent-view-header')).toBeHidden();
         await panel.screenshot({ path: testInfo.outputPath(`artifact-editor-${theme}.png`) });
-        await artifacts.locator('.agent-view-back').click();
+        await nestedBack.click();
         await expect(artifacts.locator('[data-action="import"]')).toBeVisible();
         await panel.locator('.agent-chat-toggle').click();
       }

@@ -99,7 +99,9 @@ test('artifact commands distinguish disabled, ordinary and explicit save states'
   await page.locator('.agent-workspace-toggle').click();
   await page.locator('.agent-artifacts [data-action=import]').click();
   const artifacts = page.locator('.agent-artifacts');
-  await expect(artifacts.getByRole('button', { name: 'Back to artifacts', exact: true })).toBeVisible();
+  await expect(
+    page.locator('.agent-panel-header').getByRole('button', { name: 'Back to artifacts', exact: true }),
+  ).toBeVisible();
   await artifacts.getByRole('textbox', { name: 'Title', exact: true }).fill('Table');
   await artifacts
     .locator('textarea')
@@ -122,7 +124,7 @@ test('artifact commands distinguish disabled, ordinary and explicit save states'
   await ordinary.hover();
   expect(await ordinary.evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe(idle);
   expect((await ordinary.boundingBox())!.height).toBe(32);
-  const back = artifacts.getByRole('button', { name: 'Back to artifacts', exact: true });
+  const back = page.locator('.agent-panel-header').getByRole('button', { name: 'Back to artifacts', exact: true });
   await back.click();
   await expect(artifacts.locator('[data-action=discardChanges]')).toBeVisible();
   await artifacts.locator('[data-action=cancel]').click();

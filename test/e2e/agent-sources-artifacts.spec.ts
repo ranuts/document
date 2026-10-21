@@ -703,7 +703,7 @@ test('structured results validate explicitly, preview compactly and export witho
       .toBeLessThan(2);
     await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`structured-${theme}.png`) });
   }
-  await page.locator('.agent-artifacts').getByRole('button', { name: 'Back to artifacts', exact: true }).click();
+  await page.locator('.agent-panel-header').getByRole('button', { name: 'Back to artifacts', exact: true }).click();
   await page.getByRole('button', { name: 'Import structured result', exact: true }).click();
   await page.locator('.agent-artifact-editor input').fill('Release slides');
   await page.locator('.agent-artifact-editor textarea').fill(

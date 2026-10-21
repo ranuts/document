@@ -218,15 +218,16 @@ The canonical composition rules are owned by
 This section supplies the application's geometry and browser acceptance; the site's marketing
 column widths do not apply inside the assistant. `styles/assistant.css` owns the shared values.
 
-| Geometry          | Product contract                                                                                                 | Acceptance subject                                                                              |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Content rail      | 16px from the panel's inside edge                                                                                | Header title text, onboarding copy, unframed copy, section labels, field/list outer frames      |
-| Header title      | Text-sized Chat/home target with 8px inline padding; secondary pages add a leading chevron                       | Text/icon rail, actual target width, hover/focus area and neighboring actions                   |
-| Navigation        | One header: Chat/home, Artifacts, Conversations, New and Close; Sources beside composition and Models beneath it | Accessible names/current states, real destination paths, draft/focus return and narrow overflow |
-| Nested navigation | Labeled Back only inside artifact import/editor workflows, preceding the heading                                 | Destination text, target bounds, draft/confirmation behavior                                    |
-| View heading      | All top-level and nested h2 text returns to the 16px content rail, at the 16px heading role                      | Actual heading text Range, including long labels                                                |
-| Framed fields     | Outer frame follows the content rail; internal text retains its control inset                                    | Native frame and real ranui shadow parts are separate subjects                                  |
-| Vertical groups   | 8px internal, 16px group and 24px section spacing                                                                | Actual related-region edges; empty status paragraphs reserve no anonymous margins               |
+| Geometry          | Product contract                                                                                                                     | Acceptance subject                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| Content rail      | 16px from the panel's inside edge                                                                                                    | Header title text, onboarding copy, unframed copy, section labels, field/list outer frames      |
+| Header title      | Text-sized Chat/home target with 8px inline padding; secondary pages add a leading chevron                                           | Text/icon rail, actual target width, hover/focus area and neighboring actions                   |
+| Navigation        | One header: Chat/home, Artifacts, Conversations, New and Close; Sources beside composition and Models beneath it                     | Accessible names/current states, real destination paths, draft/focus return and narrow overflow |
+| Nested navigation | One shell return slot: artifact detail/import returns to its list; root secondary views return to displayed Chat                     | Actual composed return count, destination, Escape, target bounds, dirty/busy guards and focus   |
+| View heading      | Top-level h2 text follows the 16px content rail; nested artifacts show their document title without repeating the collection heading | Actual visible heading/text Range, including long labels                                        |
+| Quiet commands    | Shared command groups extend padded hit frames into the gutter so every wrapped row begins on the content rail                       | Visible text and disclosure marker starts, row wrapping and separator edges measured separately |
+| Framed fields     | Outer frame follows the content rail; internal text retains its control inset                                                        | Native frame and real ranui shadow parts are separate subjects                                  |
+| Vertical groups   | 8px internal, 16px group and 24px section spacing                                                                                    | Actual related-region edges; empty status paragraphs reserve no anonymous margins               |
 
 The title's flexible trailing filler is layout space, not a clickable/hovering title surface.
 Use one compact header rather than another row of destinations. Its Artifacts and Conversations
@@ -238,7 +239,13 @@ retains 44px targets.
 Chat restores the displayed conversation and draft; it must not switch to the latest session
 while returning from a secondary page. Open Chat even without a configured model, preserving
 the draft through explicit preparation/settings. Runtime preparation does not precede unrelated views.
-Top-level views have no Back row. Nested Back focus outlines remain inside their targets.
+Content views have no Back row. The artifact view mounts its existing guarded button in the
+shell return slot and hides the generic Chat return while it is mounted. Its localized label,
+busy registry and dirty confirmation remain owned by the artifact view. Escape uses the same
+return operation, including from the header button, and consumes a disabled or pending return.
+Cancel restores focus to its initiator; discard returns to the list heading. A nested artifact
+does not repeat the generic collection heading above its actual title. Focus outlines remain
+inside their targets.
 Populated result lists keep a 16px boundary before Import. Centered empty
 states remain centered within their content frame. Frame, text, icon viewport and hit area
 must not be substituted for each other during review. CSS token compliance alone cannot prove

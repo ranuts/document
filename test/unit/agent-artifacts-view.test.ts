@@ -820,6 +820,63 @@ it('keeps destination-aware header Back in the busy registry and guards imported
   view.dispose();
 });
 
+it('hosts the owned return with busy protection, Escape, dirty focus restoration and cleanup', async () => {
+  const store = createArtifactStore();
+  const host = document.createElement('nav');
+  let mounted: HTMLButtonElement | undefined;
+  let finishApply!: () => void;
+  const view = createArtifactsView({
+    store,
+    labels: { ...labels, import: 'Import', backToList: 'Back to artifacts' },
+    onApply: () => new Promise<void>((resolve) => (finishApply = resolve)),
+    onBackChange: (back) => {
+      mounted?.remove();
+      mounted = back;
+      if (back) host.append(back);
+    },
+  });
+  document.body.append(host, view.el);
+  await view.save('Original');
+  const back = mounted!;
+  expect(back.parentElement).toBe(host);
+  expect(view.el.querySelector('[data-action=back]')).toBeNull();
+  expect(view.el.querySelector<HTMLElement>('.agent-view-header')!.hidden).toBe(true);
+  view.focus();
+  expect(document.activeElement).toBe(back);
+  const list = vi.spyOn(store, 'list');
+  view.el.querySelector<HTMLButtonElement>('[data-action=apply]')!.click();
+  expect(back.disabled).toBe(true);
+  expect(view.requestBack()).toBe(true);
+  expect(list).not.toHaveBeenCalled();
+  finishApply();
+  await tick();
+  expect(back.disabled).toBe(false);
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')!.click();
+  const text = view.el.querySelector('textarea')!;
+  text.value = 'Keep this draft';
+  text.dispatchEvent(new Event('input'));
+  back.focus();
+  expect(view.requestBack()).toBe(true);
+  const cancel = view.el.querySelector<HTMLButtonElement>('[data-action=cancel]')!;
+  expect(document.activeElement).toBe(cancel);
+  expect(view.requestBack()).toBe(true);
+  expect(view.el.querySelector('[data-action=cancel]')).toBe(cancel);
+  cancel.click();
+  expect(document.activeElement).toBe(back);
+  expect(text.value).toBe('Keep this draft');
+  back.click();
+  view.el.querySelector<HTMLButtonElement>('[data-action=discardChanges]')!.click();
+  await tick();
+  expect(host.children).toHaveLength(0);
+  expect(view.requestBack()).toBe(false);
+  expect(document.activeElement).toBe(view.el.querySelector('h2'));
+  view.el.querySelector<HTMLButtonElement>('[data-action=import]')!.click();
+  // Import has its own return even though current is not a reliable depth marker.
+  expect(mounted).toBeDefined();
+  view.dispose();
+  expect(host.children).toHaveLength(0);
+});
+
 it('preserves a busy import when workspace navigation requests a list refresh', async () => {
   const store = createArtifactStore();
   const view = createArtifactsView({ store, labels: { ...labels, import: 'Import' }, onApply: vi.fn() });

@@ -35,7 +35,7 @@
   max-width: 100%;
   min-height: var(--app-control-height, 32px);
   border: 0;
-  padding-inline-start: 0;
+  padding-inline-start: var(--ran-space-2);
   color: var(--ran-color-text-secondary);
 }
 .agent-artifact-modes {
@@ -50,9 +50,25 @@
   font-size: var(--ran-text-label-3);
 }
 .agent-artifact-workbench > .agent-artifact-actions {
-  margin: 0;
+  position: relative;
   padding-block-end: var(--ran-space-3);
+}
+/* Quiet commands retain their padded targets in a shared gutter. Each flex
+   line starts its visible text on the canvas rail, including wrapped rows. */
+.agent-artifact-workbench :is(.agent-artifact-toolbar, .agent-artifact-actions, .agent-artifact-command-group) {
+  margin-inline: calc(-1 * var(--ran-space-2));
+  min-width: 0;
+}
+.agent-artifact-workbench > .agent-artifact-actions::after {
+  content: '';
+  position: absolute;
+  inset-inline: var(--ran-space-2);
+  bottom: 0;
   border-bottom: 1px solid var(--ran-color-border);
+  pointer-events: none;
+}
+.agent-artifact-actions > .agent-artifact-export > summary {
+  padding-inline: var(--ran-space-2);
 }
 .agent-artifact-workbench > .agent-artifact-actions > button,
 .agent-artifact-workbench .agent-artifact-delete-prompt > button {

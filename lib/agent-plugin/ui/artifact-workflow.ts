@@ -383,7 +383,10 @@ export function createArtifactWorkflow(options: {
     note.textContent = message;
     cancel?.();
   }
-  el.append(refine, form, note, preview);
+  const command = document.createElement('div');
+  command.className = 'agent-artifact-command-group';
+  command.append(refine);
+  el.append(command, form, note, preview);
   return {
     el,
     invalidate,

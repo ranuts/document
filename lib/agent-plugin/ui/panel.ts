@@ -2878,6 +2878,7 @@ export function createAgentPanel(
 
   const artifactsBtn = View<HTMLButtonElement>('button').class('agent-workspace-toggle').attr('type', 'button').build();
   const artifactStore = createArtifactStore();
+  let artifactBack: HTMLButtonElement | undefined;
   const artifactsView = createArtifactsView({
     store: artifactStore,
     refinement: {
@@ -2888,6 +2889,11 @@ export function createAgentPanel(
     labels: artifactLabels(),
     conversation: () => conversations.activeId,
     onClose: () => showView('chat'),
+    onBackChange: (back) => {
+      artifactBack?.remove();
+      artifactBack = back;
+      syncHeaderIdentity();
+    },
     onApply: async (text) => {
       showView('chat');
       try {
@@ -3140,7 +3146,8 @@ export function createAgentPanel(
       artifacts: {
         el: artifactsView.el,
         trigger: artifactsBtn,
-        focus: () => artifactsView.el.querySelector('h2')?.focus(),
+        focus: () => artifactsView.focus(),
+        returnToParent: () => artifactsView.requestBack(),
       },
     },
     beforeChange: (view) => {
@@ -3169,6 +3176,13 @@ export function createAgentPanel(
   };
   function syncHeaderIdentity(): void {
     const inChat = panel.dataset.view === 'chat';
+    const nested = panel.dataset.view === 'artifacts' && !!artifactBack;
+    title.hidden = nested;
+    if (artifactBack) {
+      artifactBack.classList.add('agent-panel-return');
+      artifactBack.hidden = !nested;
+      workspaceNav.prepend(artifactBack);
+    }
     title.textContent = inChat ? t('agentTitle') : t('agentWorkspaceChat');
     if (!inChat) {
       const backIcon = Span().class('agent-header-home-icon').attr('aria-hidden', 'true').build();
