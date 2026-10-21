@@ -277,7 +277,11 @@ export function createArtifactsView(options: {
     dirtyNote.className = 'agent-artifact-unsaved';
     dirtyNote.textContent = label('unsaved');
     dirtyNote.hidden = true;
+    const clearFeedback = () => {
+      if (!status.querySelector('[data-action=discardChanges]')) status.textContent = '';
+    };
     const changed = () => {
+      clearFeedback();
       dirtyNote.hidden = false;
       invalidateDraft();
       dirty = true;
@@ -289,6 +293,7 @@ export function createArtifactsView(options: {
     select.addEventListener('change', () => {
       const value = select.value;
       const load = () => {
+        clearFeedback();
         invalidateDraft();
         selectedVersion = value;
         title.value = a.title;
@@ -462,6 +467,7 @@ export function createArtifactsView(options: {
             }
           }
           text.value = replaceArtifactRange(bound, replacement);
+          clearFeedback();
           setMode(true, false, false);
           presentation.refresh();
           dirty = true;

@@ -46,19 +46,25 @@ export function installConversationFixture() {
       return Response.json({ done: true, message: { content: JSON.stringify({ task: 'chat', language: 'en' }) } });
     if (state.mode === 'failure') return new Response('Fixture service failure', { status: 400 });
     state.completed = false;
-    const steps: Array<{ thinking?: string; content?: string }> = [
-      ...(state.mode === 'answer-only'
-        ? []
+    const steps: Array<{ thinking?: string; content?: string }> =
+      state.mode === 'artifact'
+        ? [
+            { content: '## Project update\n\nThe migration is on track.\n\n' },
+            { content: '- Confirm pilot owners before Friday.\n- Publish the release notes.\n' },
+          ]
         : [
-            { thinking: 'I’m checking the supplied project notes. ' },
-            { thinking: 'I’ll separate progress, risks and the next action.' },
-          ]),
-      { content: '## Project update\n\n' },
-      { content: 'The migration is **on track**. The next milestone is the pilot release.\n\n' },
-      { content: '| Area | Status |\n| --- | --- |\n| Build | Complete |\n| Pilot | In progress |\n\n' },
-      { content: '### Next action\n\n- Confirm the pilot owners.\n- Review the release notes.\n\n' },
-      { content: '```ts\nconst status = "ready";\n```\n' },
-    ];
+            ...(state.mode === 'answer-only'
+              ? []
+              : [
+                  { thinking: 'I’m checking the supplied project notes. ' },
+                  { thinking: 'I’ll separate progress, risks and the next action.' },
+                ]),
+            { content: '## Project update\n\n' },
+            { content: 'The migration is **on track**. The next milestone is the pilot release.\n\n' },
+            { content: '| Area | Status |\n| --- | --- |\n| Build | Complete |\n| Pilot | In progress |\n\n' },
+            { content: '### Next action\n\n- Confirm the pilot owners.\n- Review the release notes.\n\n' },
+            { content: '```ts\nconst status = "ready";\n```\n' },
+          ];
     return new Response(
       new ReadableStream({
         start(controller) {

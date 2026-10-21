@@ -941,6 +941,9 @@ it('refines the whole preview despite stale hidden selection and enters Edit on 
   request.complete('accepted draft');
   view.el.querySelector<HTMLButtonElement>('[data-action=accept]')!.click();
   await vi.waitFor(() => expect(text.value).toBe('accepted draft'));
+  expect(view.el.querySelector('.agent-artifact-status')?.textContent).toBe('');
+  expect(view.el.querySelector<HTMLElement>('.agent-artifact-unsaved')!.hidden).toBe(false);
+  expect(view.el.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled).toBe(false);
   expect(text.hidden).toBe(false);
   expect(document.activeElement).toBe(text);
   expect((await store.get(view.current!.id))!.versions).toHaveLength(1);
@@ -970,5 +973,60 @@ it('localizes the mode group along with its Preview and Edit controls', async ()
   expect(view.el.querySelector('.agent-artifact-modes')?.getAttribute('aria-label')).toBe('预览');
   expect(view.el.querySelector('[data-action=preview]')?.textContent).toBe('预览');
   expect(view.el.querySelector('[data-action=edit]')?.textContent).toBe('编辑');
+  view.dispose();
+});
+
+it.each(['input', 'textarea'] as const)(
+  'clears obsolete save feedback when %s changes or an older version is selected',
+  async (selector) => {
+    const store = createArtifactStore();
+    const view = createArtifactsView({ store, labels, onApply: vi.fn() });
+    await view.save('Saved body');
+    const status = view.el.querySelector<HTMLElement>('[role=status]')!;
+    expect(status.textContent).toBe('saved');
+    view.el.querySelector<HTMLButtonElement>('[data-action=edit]')!.click();
+    const field = view.el.querySelector<HTMLInputElement | HTMLTextAreaElement>(selector)!;
+    field.value = 'Updated draft';
+    field.dispatchEvent(new Event('input'));
+    expect(status.textContent).toBe('');
+    view.el.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.click();
+    await vi.waitFor(() => expect(status.textContent).toBe('saved'));
+    const version = view.el.querySelector<HTMLSelectElement>('select')!;
+    version.value = '1';
+    version.dispatchEvent(new Event('change'));
+    expect(status.textContent).toBe('');
+    expect(view.el.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled).toBe(false);
+    expect((await store.get(view.current!.id))!.versions).toHaveLength(2);
+    view.dispose();
+  },
+);
+
+it('keeps discard prompts usable while typing for Cancel editing and pending result saves', async () => {
+  const store = createArtifactStore();
+  const view = createArtifactsView({ store, labels, onApply: vi.fn() });
+  await view.save('Saved body');
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')!.click();
+  const text = view.el.querySelector<HTMLTextAreaElement>('[data-artifact-source]')!;
+  text.value = 'Unsaved draft';
+  text.dispatchEvent(new Event('input'));
+  view.el.querySelector<HTMLButtonElement>('[data-action=cancelEditing]')!.click();
+  const status = view.el.querySelector<HTMLElement>('[role=status]')!;
+  const discard = status.querySelector<HTMLButtonElement>('[data-action=discardChanges]')!;
+  text.value = 'Continue typing';
+  text.dispatchEvent(new Event('input'));
+  expect(status.querySelector('[data-action=discardChanges]')).toBe(discard);
+  expect(status.textContent).toContain('discardChanges');
+  status.querySelector<HTMLButtonElement>('[data-action=cancel]')!.click();
+  expect(text.value).toBe('Continue typing');
+  expect(text.hidden).toBe(false);
+  const pending = view.save('New result');
+  const pendingDiscard = status.querySelector('[data-action=discardChanges]');
+  text.value = 'Keep typing in pending confirmation';
+  text.dispatchEvent(new Event('input'));
+  expect(status.querySelector('[data-action=discardChanges]')).toBe(pendingDiscard);
+  status.querySelector<HTMLButtonElement>('[data-action=cancel]')!.click();
+  expect(await pending).toBe('cancelled');
+  expect(text.value).toBe('Keep typing in pending confirmation');
+  expect(await store.list()).toHaveLength(1);
   view.dispose();
 });

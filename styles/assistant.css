@@ -2980,3 +2980,26 @@ r-dropdown[role='listbox'] {
     line-height: var(--app-control-touch);
   }
 }
+
+/* On narrow touch panes the voice controls need a real text lane alongside
+   44px targets. Keep execution in a stable second row across idle/running. */
+@media (pointer: coarse) {
+  @container agent-panel (max-width: 360px) {
+    .agent-panel .cui-composer-bar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--app-control-touch) var(--app-control-touch);
+      gap: var(--ran-space-1);
+    }
+    .agent-panel .cui-actions {
+      grid-column: 1 / -1;
+    }
+    .agent-panel .cui-stop {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .agent-panel .cui-send {
+      grid-column: 3;
+      grid-row: 2;
+    }
+  }
+}

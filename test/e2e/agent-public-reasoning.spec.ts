@@ -69,3 +69,47 @@ test('public reasoning is a reader-owned transient phase and never a saved answe
   await expect(reasoning).toHaveCount(2);
   await panel.locator('.cui-stop').click();
 });
+
+test.describe('touch streaming composer', () => {
+  test.use({ hasTouch: true });
+  for (const width of [320, 360]) {
+    test(`keeps voice language readable beside Stop and Send at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript(installConversationFixture);
+      await page.goto('/editor?new=docx&locale=pt');
+      await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+      await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+      await page.locator('.cui-input').fill('Hello');
+      await page.locator('.cui-send').click();
+      await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Ligado');
+      await page.locator('.cui-send').click();
+      await expect(page.locator('.cui-stop')).toBeVisible();
+      const language = await page.locator('.agent-speech-language').evaluate((el) => {
+        const root = el.shadowRoot ?? (el as HTMLElement & { _shadowDom: ShadowRoot })._shadowDom;
+        const label = root.querySelector('[part="selection-item"]')!;
+        const range = document.createRange();
+        range.selectNodeContents(label);
+        return {
+          text: label.textContent,
+          width: label.getBoundingClientRect().width,
+          textWidth: range.getBoundingClientRect().width,
+        };
+      });
+      expect(language.text).toBe('Português');
+      expect(language.width).toBeGreaterThanOrEqual(language.textWidth);
+      for (const control of [
+        '.agent-sources-toggle',
+        '.agent-speech-mic',
+        '.agent-speech-privacy button',
+        '.cui-stop',
+        '.cui-send',
+      ]) {
+        const box = (await page.locator(control).boundingBox())!;
+        expect(box.width).toBeGreaterThanOrEqual(44);
+        expect(box.height).toBeGreaterThanOrEqual(44);
+      }
+      expect(await page.locator('.cui-composer').evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
+      await page.locator('.cui-stop').click();
+    });
+  }
+});

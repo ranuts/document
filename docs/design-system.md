@@ -232,7 +232,9 @@ The title's flexible trailing filler is layout space, not a clickable/hovering t
 Use one compact header rather than another row of destinations. Its Artifacts and Conversations
 icons have accessible names and selected states. Sources and the selected model/settings trigger
 belong beside composition. On narrow panes Sources becomes an icon with the same accessible
-name, keeping room for the voice language, Stop and Send. Coarse input retains 44px targets.
+name, keeping room for the voice language, Stop and Send. At 360px and below, coarse input
+places voice tools and execution in two stable rows so language remains readable. Coarse input
+retains 44px targets.
 Chat restores the displayed conversation and draft; it must not switch to the latest session
 while returning from a secondary page. Open Chat even without a configured model, preserving
 the draft through explicit preparation/settings. Runtime preparation does not precede unrelated views.
