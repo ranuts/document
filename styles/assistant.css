@@ -553,8 +553,6 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text);
 }
 .agent-panel-settings-toggle {
-  /* The title owns flex:1, so the gear already sits against the trailing
-     controls; a margin here would fight the close button beside it. */
   border: none;
   background: none;
   font-size: var(--ran-text-copy-1);
@@ -870,12 +868,9 @@ r-dropdown[role='listbox'] {
   /* Content, text and navigation have different boxes but named shared rails. */
   --agent-content-inset: var(--ran-space-4);
   --agent-title-inset: var(--ran-space-2);
-  /* Status lines beside the composer (model state, readiness, write
-     destination) line up with the composer's *text*, not its edge: footer
-     padding plus the composer's own padding. Three rules must agree, so the
-     sum is named once here instead of repeated as arithmetic (DESIGN.md §11,
-     "When a value must equal another value, name it"). */
-  --agent-composer-inset: calc(var(--ran-space-4) + var(--ran-space-1));
+  /* The quoted selection follows the input text inside the composer border. */
+  --agent-composer-padding: var(--ran-space-3);
+  --agent-composer-inset: calc(var(--agent-content-inset) + var(--agent-composer-padding) + 1px);
   position: fixed;
   top: 0;
   right: 0;
@@ -907,17 +902,10 @@ r-dropdown[role='listbox'] {
 }
 .agent-workspace-nav {
   display: flex;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   align-items: center;
-  gap: var(--ran-space-1);
+  gap: calc(var(--ran-space-1) / 2);
   min-width: 0;
-  padding: 0 var(--ran-space-2) var(--ran-space-1);
-  border-bottom: 1px solid var(--ran-color-border);
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  scrollbar-width: thin;
-  scrollbar-color: var(--ran-color-border-hover) transparent;
-  scroll-padding-inline: var(--ran-space-2);
 }
 .agent-workspace-nav button {
   display: inline-flex;
@@ -925,10 +913,10 @@ r-dropdown[role='listbox'] {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  width: auto;
+  width: var(--app-control-height);
   min-width: var(--app-control-height);
   min-height: var(--app-control-height);
-  padding: var(--ran-space-1) var(--ran-space-2);
+  padding: var(--ran-space-1);
   border: 0;
   border-radius: var(--ran-radius-sm);
   background: transparent;
@@ -947,7 +935,7 @@ r-dropdown[role='listbox'] {
 .agent-workspace-nav button[aria-current='page'] {
   font-weight: var(--ran-text-label-weight);
   color: var(--ran-color-text);
-  background: var(--ran-color-bg-hover);
+  background: var(--ran-color-bg-active);
 }
 .agent-workspace-nav button:active {
   background: var(--ran-color-bg-active);
@@ -957,10 +945,11 @@ r-dropdown[role='listbox'] {
   outline-offset: -2px;
 }
 .agent-panel-header .agent-panel-title {
-  display: block;
+  display: inline-flex;
   flex: 0 1 auto;
   width: auto;
   justify-content: flex-start;
+  gap: var(--ran-space-1);
   text-align: left;
   font-family: inherit;
   font-weight: var(--ran-text-label-weight);
@@ -977,6 +966,16 @@ r-dropdown[role='listbox'] {
   white-space: nowrap;
   color: var(--ran-color-text);
   background: transparent;
+}
+.agent-header-home-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+.agent-panel-header .agent-panel-title[aria-current='page'] {
+  background: transparent;
+}
+.agent-panel-header .agent-panel-title:hover {
+  background: var(--ran-color-bg-hover);
 }
 .agent-panel-settings {
   display: flex;
@@ -1166,7 +1165,7 @@ r-dropdown[role='listbox'] {
   flex: 0 0 auto;
   order: 3;
   gap: var(--ran-space-2);
-  padding: 0 var(--agent-composer-inset) var(--ran-space-3);
+  padding: var(--ran-space-1) 0;
   margin: 0;
   font-size: var(--ran-text-label-3);
   line-height: 1.6;
@@ -1179,11 +1178,51 @@ r-dropdown[role='listbox'] {
   border-top: 0;
   padding: var(--ran-space-3) var(--ran-space-4) var(--ran-space-4);
 }
+.agent-composer-meta {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-block-start: var(--ran-space-1);
+}
+.agent-model-shortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  min-width: 0;
+  max-width: 100%;
+  min-height: var(--app-control-height);
+  padding: var(--ran-space-1);
+  margin-inline-start: calc(-1 * var(--ran-space-1));
+  border: 0;
+  border-radius: var(--ran-radius-sm);
+  background: transparent;
+  color: var(--ran-color-text-secondary);
+  font: inherit;
+  font-size: var(--ran-text-label-3);
+  cursor: pointer;
+}
+.agent-model-shortcut-label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.agent-model-shortcut-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+.agent-model-shortcut:hover {
+  color: var(--ran-color-text);
+  background: var(--ran-color-bg-hover);
+}
+.agent-model-shortcut:focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: 2px;
+}
 .agent-panel .cui-composer {
   border-color: var(--ran-color-border);
   background: var(--ran-color-bg-elevated);
   border-radius: var(--ran-radius-md);
-  padding: var(--ran-space-3);
+  padding: var(--agent-composer-padding);
 }
 .agent-panel .cui-msg-user .cui-bubble {
   padding: var(--ran-space-3) var(--ran-space-4);
@@ -1270,7 +1309,7 @@ r-dropdown[role='listbox'] {
 .agent-panel-write-destination {
   flex: 0 0 auto;
   order: 4;
-  padding: 0 var(--agent-composer-inset) var(--ran-space-3);
+  padding: var(--ran-space-1) 0;
   font-size: var(--ran-text-label-3);
   line-height: 1.6;
   color: var(--ran-color-text-secondary);
@@ -1394,10 +1433,6 @@ r-dropdown[role='listbox'] {
   flex: 0 0 15px;
   margin: var(--ran-space-1) 0 0;
   accent-color: var(--ran-color-primary);
-}
-.agent-panel-header button[aria-expanded='true']:not(.agent-panel-title) {
-  background: var(--ran-color-bg-muted);
-  color: var(--ran-color-text);
 }
 .agent-panel-settings > .agent-panel-note {
   margin: calc(-1 * var(--ran-space-2)) 0 0;
@@ -2041,17 +2076,20 @@ r-dropdown[role='listbox'] {
 .agent-task-list {
   display: grid;
   gap: var(--ran-space-1);
-  margin-top: var(--ran-space-3);
+  margin-top: var(--ran-space-2);
 }
 .agent-panel .agent-task-action {
   display: flex;
   align-items: center;
+  gap: var(--ran-space-3);
   text-align: start;
   min-height: var(--app-control-height);
-  padding: var(--ran-space-2) var(--ran-space-3);
-  border: 1px solid var(--ran-color-border);
+  padding: var(--ran-space-2);
+  margin-inline: calc(-1 * var(--ran-space-2));
+  width: calc(100% + var(--ran-space-2) * 2);
+  border: 0;
   border-radius: var(--ran-radius-sm);
-  background: var(--ran-color-bg-elevated);
+  background: transparent;
   color: var(--ran-color-text);
   font: inherit;
   cursor: pointer;
@@ -2064,6 +2102,13 @@ r-dropdown[role='listbox'] {
 }
 .agent-panel .agent-task-action:hover {
   background: var(--ran-color-bg-muted);
+}
+.agent-task-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 var(--ran-size-1);
+  color: var(--ran-color-text-secondary);
 }
 .agent-panel .agent-task-action:focus-visible {
   outline: 2px solid var(--ran-color-link);
@@ -2362,6 +2407,9 @@ r-dropdown[role='listbox'] {
   text-align: start;
 }
 .agent-panel .cui-composer .agent-sources-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-1);
   min-height: var(--ran-size-7);
   padding: var(--ran-space-1) var(--ran-space-2);
   font-size: var(--ran-text-label-3);
@@ -2514,8 +2562,6 @@ r-dropdown[role='listbox'] {
     min-width: var(--app-control-touch);
   }
   .agent-workspace-view input:not([type='checkbox']):not([type='radio']):not([type='file']),
-  .agent-artifact-editor > select,
-  .agent-artifact-editor > input,
   .agent-artifact-import-field > input,
   .agent-artifact-workflow form input,
   .agent-history-search-row {
@@ -2570,10 +2616,34 @@ r-dropdown[role='listbox'] {
   margin-block-start: var(--ran-space-2);
 }
 .agent-sources-summary {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ran-space-1);
   margin: 0;
+}
+.agent-source-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: var(--app-control-height);
+  padding: var(--ran-space-1) var(--ran-space-2);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  background: transparent;
+  color: var(--ran-color-text-secondary);
+  font: inherit;
+  font-size: var(--ran-text-label-3);
+  text-align: start;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.agent-source-chip:hover {
+  color: var(--ran-color-text);
+  background: var(--ran-color-bg-hover);
+}
+.agent-source-chip:focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: 2px;
 }
 .agent-artifact-provenance,
 .agent-artifact-status {
@@ -2600,35 +2670,6 @@ r-dropdown[role='listbox'] {
 }
 .agent-artifacts-list:not(:empty) {
   margin-block-end: var(--ran-space-4);
-}
-.agent-artifact-editor > input {
-  border: 0;
-  border-radius: 0;
-  font-weight: 600;
-  font-size: 1.125em;
-  padding-inline: 0;
-  margin-block: var(--ran-space-3);
-}
-.agent-artifact-editor > select {
-  border: 0;
-  width: auto;
-  max-width: 100%;
-  padding-inline: 0;
-  color: var(--ran-color-text-secondary);
-  margin-block-end: var(--ran-space-2);
-}
-.agent-artifact-editor > textarea {
-  field-sizing: content;
-  min-height: 6em;
-  max-height: 40vh;
-  border: 0;
-  border-radius: 0;
-  padding-inline: 0;
-}
-.agent-artifact-editor > input:focus-visible,
-.agent-artifact-editor > textarea:focus-visible {
-  outline: 2px solid var(--ran-color-link);
-  outline-offset: 3px;
 }
 .agent-artifact-import-field {
   display: grid;
@@ -2657,7 +2698,12 @@ r-dropdown[role='listbox'] {
     gap: var(--ran-space-1);
   }
   .agent-panel .cui-composer .agent-sources-toggle {
-    padding-inline: var(--ran-space-1);
+    padding-inline: 0;
+    width: var(--app-control-height);
+    min-width: var(--app-control-height);
+  }
+  .agent-sources-label {
+    display: none;
   }
   .agent-speech-language {
     --ran-select-padding: 0 var(--ran-space-1);
@@ -2862,15 +2908,6 @@ r-dropdown[role='listbox'] {
 .agent-artifact-data-preview > textarea.agent-artifact-cell {
   min-height: 3em;
 }
-.agent-artifact-editor > details > textarea {
-  font-family: monospace;
-  font-size: var(--ran-text-label-3);
-}
-.agent-artifact-editor > details > summary {
-  cursor: pointer;
-  color: var(--ran-color-text-secondary);
-  padding-block: var(--ran-space-2);
-}
 
 .agent-plan-undo-feedback {
   display: block;
@@ -2929,6 +2966,9 @@ r-dropdown[role='listbox'] {
   .agent-panel .cui-composer .agent-sources-toggle,
   .agent-panel .cui-empty-actions .agent-configure {
     min-height: var(--app-control-touch);
+  }
+  .agent-panel .cui-composer .agent-sources-toggle {
+    min-width: var(--app-control-touch);
   }
   .agent-speech-cancel[hidden] {
     display: none;

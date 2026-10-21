@@ -1,4 +1,5 @@
 export { ChatView } from './chat-view';
+export { renderMarkdown as renderChatMarkdown } from './markdown';
 export { CHAT_UI_CSS, ensureChatUiStyles } from './styles';
 export type {
   ChatNavigationSnapshot,

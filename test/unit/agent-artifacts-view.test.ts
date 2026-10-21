@@ -42,6 +42,7 @@ it('saves explicitly, preserves a conflicting edit, and applies selected text', 
   document.body.append(view.el);
   await view.save('original');
   const a = (await store.list())[0];
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'my draft';
   text.dispatchEvent(new Event('input'));
@@ -84,6 +85,7 @@ it('keeps an unsaved editor when a new result or back navigation is requested', 
   const view = createArtifactsView({ store, labels, onApply: vi.fn() });
   document.body.append(view.el);
   await view.save('first');
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'edited';
   text.dispatchEvent(new Event('input'));
@@ -106,6 +108,7 @@ it('reports storage failures without discarding edited text', async () => {
   const view = createArtifactsView({ store, labels, onApply: () => Promise.reject(new Error('private')) });
   document.body.append(view.el);
   await view.save('first');
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'draft';
   text.dispatchEvent(new Event('input'));
@@ -134,6 +137,7 @@ it('disables editing during an in-flight save and focuses the new editor on sett
     });
     return original(...args);
   });
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'second';
   text.dispatchEvent(new Event('input'));
@@ -141,7 +145,7 @@ it('disables editing during an in-flight save and focuses the new editor on sett
   expect(text.disabled).toBe(true);
   release();
   await vi.waitFor(() => expect(view.el.querySelector('textarea')?.value).toBe('second'));
-  await vi.waitFor(() => expect(document.activeElement).toBe(view.el.querySelector('textarea')));
+  await vi.waitFor(() => expect(document.activeElement).toBe(view.el.querySelector('[data-artifact-reader]')));
   view.dispose();
 });
 it('keeps provenance human-readable after a language change', async () => {
@@ -170,6 +174,7 @@ it('discards both the edited title and text when returning to the latest version
   const select = view.el.querySelector('select')!;
   select.value = '1';
   select.dispatchEvent(new Event('change'));
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const title = view.el.querySelector('input')!;
   title.value = 'Unsaved title';
   title.dispatchEvent(new Event('input'));
@@ -195,6 +200,7 @@ it('offers a working save-as-new recovery when an artifact reaches twenty versio
   await view.refresh();
   (view.el.querySelector('[data-artifact]') as HTMLButtonElement).click();
   await vi.waitFor(() => expect(view.el.querySelector('textarea')).not.toBeNull());
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'New draft';
   text.dispatchEvent(new Event('input'));
@@ -219,6 +225,7 @@ it.each([
   const view = createArtifactsView({ store, labels, onApply: vi.fn() });
   document.body.append(view.el);
   await view.save('Saved body');
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'Keep this draft';
   text.dispatchEvent(new Event('input'));
@@ -243,6 +250,7 @@ it('canceling a version switch preserves the previously selected version and edi
   const select = view.el.querySelector('select')!;
   select.value = '1';
   select.dispatchEvent(new Event('change'));
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const title = view.el.querySelector('input')!;
   title.value = 'Keep my title';
   title.dispatchEvent(new Event('input'));
@@ -260,6 +268,7 @@ it('reports cancelled save after keeping a dirty draft and settles pending confi
   const view = createArtifactsView({ store, labels, onApply: vi.fn() });
   document.body.append(view.el);
   expect(await view.save('first')).toBe('saved');
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'unsaved';
   text.dispatchEvent(new Event('input'));
@@ -290,6 +299,7 @@ it('settles replaced confirmations and cancels navigation without adopting a lat
   const view = createArtifactsView({ store, labels, onApply: vi.fn() });
   document.body.append(view.el);
   await view.save('first');
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')!.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'draft';
   text.dispatchEvent(new Event('input'));
@@ -300,27 +310,51 @@ it('settles replaced confirmations and cancels navigation without adopting a lat
   expect(await second).toBe('cancelled');
   expect(view.el.querySelector('[data-action=discardChanges]')).toBeNull();
   expect(text.value).toBe('draft');
-  // Return to the list explicitly before testing a delayed successful write.
-  view.el.querySelector<HTMLButtonElement>('[data-action=back]')!.click();
-  view.el.querySelector<HTMLButtonElement>('[data-action=discardChanges]')!.click();
-  await tick();
+  let releaseList!: () => void;
+  const listGate = new Promise<void>((resolve) => {
+    releaseList = resolve;
+  });
+  const list = store.list.bind(store);
+  vi.spyOn(store, 'list').mockImplementationOnce(async () => {
+    await listGate;
+    return list();
+  });
   let release!: () => void;
   const gate = new Promise<void>((resolve) => {
     release = resolve;
   });
-  const create = store.create.bind(store);
-  vi.spyOn(store, 'create').mockImplementation(async (input) => {
-    const a = await create(input);
-    await gate;
-    return a;
-  });
-  const pending = view.save('late result');
-  view.cancelPending();
-  expect(await pending).toBe('cancelled');
-  release();
-  await tick();
-  expect(view.el.querySelector('textarea')).toBeNull();
-  view.dispose();
+  try {
+    view.el.querySelector<HTMLButtonElement>('[data-action=back]')!.click();
+    view.el.querySelector<HTMLButtonElement>('[data-action=discardChanges]')!.click();
+    // A slow list read still owns the old draft until navigation settles.
+    expect(view.el.querySelector('textarea')).toBe(text);
+    expect(text.value).toBe('draft');
+    releaseList();
+    await vi.waitFor(() => expect(view.el.querySelector('[data-artifact]')).not.toBeNull());
+    const row = view.el.querySelector<HTMLButtonElement>('[data-artifact]')!;
+    expect(view.el.querySelector('textarea')).toBeNull();
+    const create = store.create.bind(store);
+    vi.spyOn(store, 'create').mockImplementation(async (input) => {
+      const a = await create(input);
+      await gate;
+      return a;
+    });
+    const pending = view.save('late result');
+    expect(row.disabled).toBe(true);
+    view.cancelPending();
+    expect(await pending).toBe('cancelled');
+    expect(view.el.querySelector('textarea')).toBeNull();
+    release();
+    // Re-enabling this same row proves the cancelled write's perform() has settled.
+    await vi.waitFor(() => expect(row.disabled).toBe(false));
+    expect(view.el.querySelector('[data-artifact]')).toBe(row);
+    expect(view.el.querySelector('textarea')).toBeNull();
+    expect(view.current).toBeUndefined();
+  } finally {
+    releaseList();
+    release();
+    view.dispose();
+  }
 });
 it('accepts a range proposal into an unchanged draft only, without saving automatically', async () => {
   let request: import('../../lib/agent-plugin/ui/artifact-workflow').ArtifactRevisionRequest | undefined;
@@ -353,6 +387,7 @@ it('accepts a range proposal into an unchanged draft only, without saving automa
   });
   document.body.append(view.el);
   await view.save('前😀selected后');
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.setSelectionRange(3, 11);
   (view.el.querySelector('[data-action=refine]') as HTMLButtonElement).click();
@@ -399,6 +434,7 @@ it('invalidates late proposals after manual edits and offers direct keep-as-new 
   (view.el.querySelector('[data-action=refine]') as HTMLButtonElement).click();
   (view.el.querySelector('form input') as HTMLInputElement).value = 'Revise';
   view.el.querySelector('form')!.dispatchEvent(new Event('submit', { cancelable: true }));
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'My new edit';
   text.dispatchEvent(new Event('input'));
@@ -520,6 +556,7 @@ it.each(['draft', 'context'] as const)(
     held = true;
     (view.el.querySelector('[data-action=accept]') as HTMLButtonElement).click();
     await vi.waitFor(() => expect(finish).toBeDefined());
+    view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
     const text = view.el.querySelector('textarea')!;
     if (change === 'draft') {
       text.value = 'My newer draft';
@@ -573,6 +610,7 @@ it('restores selected instructions without old offsets and requires an explicit 
     start: 0,
     end: 8,
   });
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'My newer draft';
   text.dispatchEvent(new Event('input'));
@@ -652,8 +690,10 @@ it('imports a validated structured result, paginates preview, preserves JSON edi
   document.body.append(view.el);
   await view.refresh();
   (view.el.querySelector('[data-action=import]') as HTMLButtonElement).click();
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const title = view.el.querySelector('input')!;
   title.value = 'Table';
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = JSON.stringify({
     schemaVersion: 1,
@@ -671,6 +711,7 @@ it('imports a validated structured result, paginates preview, preserves JSON edi
   ).toBeTruthy();
   expect((view.el.querySelector('[data-action=apply]') as HTMLButtonElement).hidden).toBe(true);
   expect(apply).not.toHaveBeenCalled();
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')!.click();
   const editor = view.el.querySelector<HTMLTextAreaElement>('textarea[data-artifact-source]')!;
   editor.value = 'invalid JSON';
   editor.dispatchEvent(new Event('input'));
@@ -689,6 +730,7 @@ it('keeps a structured cell focused while typing, persists edits and can restore
   await view.refresh();
   (view.el.querySelector('[data-artifact]') as HTMLButtonElement).click();
   await tick();
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')!.click();
   const cell = view.el.querySelector<HTMLTextAreaElement>('td textarea')!;
   cell.focus();
   cell.value = 'two';
@@ -696,13 +738,15 @@ it('keeps a structured cell focused while typing, persists edits and can restore
   cell.dispatchEvent(new Event('input'));
   expect(document.activeElement).toBe(cell);
   expect(cell.selectionStart).toBe(2);
-  expect(view.el.querySelector<HTMLDetailsElement>('.agent-artifact-editor > details')?.open).toBe(false);
+  expect(view.el.querySelector<HTMLDetailsElement>('.agent-artifact-source')?.open).toBe(false);
   (view.el.querySelector('[data-action=saveVersion]') as HTMLButtonElement).click();
   await tick();
   expect((await store.get(a.id))?.versions[1].payload).toEqual({ ...payload, rows: [['two']] });
   const select = view.el.querySelector('select')!;
   select.value = '1';
   select.dispatchEvent(new Event('change'));
+  expect(view.el.querySelector('td')?.textContent).toBe('one');
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')!.click();
   expect(view.el.querySelector<HTMLTextAreaElement>('td textarea')?.value).toBe('one');
   view.dispose();
 });
@@ -715,6 +759,7 @@ it('retains imported text payload envelopes when editing a version', async () =>
   await view.refresh();
   (view.el.querySelector('[data-artifact]') as HTMLButtonElement).click();
   await tick();
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')?.click();
   const text = view.el.querySelector('textarea')!;
   text.value = 'two';
   text.dispatchEvent(new Event('input'));
@@ -810,10 +855,120 @@ it('focuses the safe deletion choice and returns to Delete when cancelled', asyn
   remove.focus();
   remove.click();
   const cancel = view.el.querySelector<HTMLButtonElement>('[data-action=cancel]')!;
+  expect(view.el.querySelector('.agent-artifact-delete-prompt')?.textContent).toContain('confirmDelete');
+  expect(view.el.querySelector('[data-action=confirmDelete]')?.textContent).toBe('delete');
+  expect(view.el.querySelector('[role=status]')?.textContent).toBe('saved');
   expect(document.activeElement).toBe(cancel);
   cancel.click();
   expect(document.activeElement).toBe(remove);
   expect(view.el.querySelector('textarea')?.value).toBe('Keep this draft');
   expect(await store.list()).toHaveLength(1);
+  view.dispose();
+});
+
+it('opens saved text as safe readable preview and keeps the canonical draft across modes', async () => {
+  const store = createArtifactStore();
+  const view = createArtifactsView({ store, labels, onApply: vi.fn() });
+  document.body.append(view.el);
+  await view.save('# Heading\n\n**Readable** <img src="https://remote.test/track">');
+  const text = view.el.querySelector<HTMLTextAreaElement>('[data-artifact-source]')!;
+  const title = view.el.querySelector<HTMLInputElement>('input')!;
+  const reader = view.el.querySelector<HTMLElement>('[data-artifact-reader]')!;
+  expect(reader?.querySelector('h2')?.textContent).toBe('Heading');
+  expect(reader?.querySelector('img')).toBeNull();
+  expect(reader?.textContent).toContain('<img');
+  expect(text.hidden).toBe(true);
+  expect(title.readOnly).toBe(true);
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')!.click();
+  expect(text.hidden).toBe(false);
+  expect(title.readOnly).toBe(false);
+  text.value = '**Unsaved**';
+  text.dispatchEvent(new Event('input'));
+  view.el.querySelector<HTMLButtonElement>('[data-action=preview]')!.click();
+  expect(text.hidden).toBe(true);
+  expect(reader.querySelector('strong')?.textContent).toBe('Unsaved');
+  expect((await store.get(view.current!.id))!.versions).toHaveLength(1);
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')!.click();
+  expect(text.value).toBe('**Unsaved**');
+  view.el.querySelector<HTMLButtonElement>('[data-action=cancelEditing]')!.click();
+  expect(text.value).toBe('**Unsaved**');
+  view.el.querySelector<HTMLButtonElement>('[data-action=cancel]')!.click();
+  expect(text.hidden).toBe(false);
+  view.el.querySelector<HTMLButtonElement>('[data-action=cancelEditing]')!.click();
+  view.el.querySelector<HTMLButtonElement>('[data-action=discardChanges]')!.click();
+  expect(text.value).toContain('# Heading');
+  expect(text.hidden).toBe(true);
+  view.dispose();
+});
+
+it('refines the whole preview despite stale hidden selection and enters Edit on acceptance', async () => {
+  let request!: import('../../lib/agent-plugin/ui/artifact-workflow').ArtifactRevisionRequest;
+  const store = createArtifactStore();
+  const view = createArtifactsView({
+    store,
+    labels,
+    onApply: vi.fn(),
+    refinement: {
+      labels: {
+        refine: 'Refine',
+        instruction: 'Instruction',
+        submit: 'Suggest',
+        stop: 'Stop',
+        accept: 'Accept',
+        reject: 'Reject',
+        waiting: 'Waiting',
+        ready: 'Ready',
+        stale: 'Stale',
+        failed: 'Failed',
+        stopped: 'Stopped',
+        accepted: 'Accepted',
+      },
+      submit: (r) => {
+        request = r;
+      },
+      stop: vi.fn(),
+    },
+  });
+  document.body.append(view.el);
+  await view.save('whole artifact');
+  const text = view.el.querySelector<HTMLTextAreaElement>('[data-artifact-source]')!;
+  text.setSelectionRange(0, 5);
+  view.el.querySelector<HTMLButtonElement>('[data-action=refine]')!.click();
+  view.el.querySelector<HTMLInputElement>('form input')!.value = 'Revise';
+  view.el.querySelector('form')!.dispatchEvent(new Event('submit', { cancelable: true }));
+  expect(request.draft.scope).toBe('artifact');
+  expect(request.draft.selectedText).toBe('whole artifact');
+  request.complete('accepted draft');
+  view.el.querySelector<HTMLButtonElement>('[data-action=accept]')!.click();
+  await vi.waitFor(() => expect(text.value).toBe('accepted draft'));
+  expect(text.hidden).toBe(false);
+  expect(document.activeElement).toBe(text);
+  expect((await store.get(view.current!.id))!.versions).toHaveLength(1);
+  view.dispose();
+});
+
+it('keeps one export toolbar bound to the selected version', async () => {
+  const store = createArtifactStore();
+  const a = await store.create({ title: 'Versions', text: 'one', provenance: {} });
+  await store.update(a.id, 1, { title: 'Versions', text: 'two' });
+  const view = createArtifactsView({ store, labels, onApply: vi.fn() });
+  document.body.append(view.el);
+  await view.refresh();
+  view.el.querySelector<HTMLButtonElement>('[data-artifact]')!.click();
+  await tick();
+  const version = view.el.querySelector('select')!;
+  version.value = '1';
+  version.dispatchEvent(new Event('change'));
+  expect(view.el.querySelectorAll('.agent-artifact-export')).toHaveLength(1);
+  view.dispose();
+});
+
+it('localizes the mode group along with its Preview and Edit controls', async () => {
+  const view = createArtifactsView({ store: createArtifactStore(), labels, onApply: vi.fn() });
+  await view.save('Saved');
+  view.setLabels({ ...labels, preview: '预览', edit: '编辑' });
+  expect(view.el.querySelector('.agent-artifact-modes')?.getAttribute('aria-label')).toBe('预览');
+  expect(view.el.querySelector('[data-action=preview]')?.textContent).toBe('预览');
+  expect(view.el.querySelector('[data-action=edit]')?.textContent).toBe('编辑');
   view.dispose();
 });

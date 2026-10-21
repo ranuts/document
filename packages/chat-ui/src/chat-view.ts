@@ -1,5 +1,6 @@
 import { ButtonBuilder, Div, Span, View } from 'ranui/builder';
 import { throttle } from 'ranuts/utils';
+import { Reasoning } from 'ranui/reasoning';
 import { ensureChatUiStyles } from './styles';
 import { renderMarkdown } from './markdown';
 import { StreamingMarkdown, STREAMING_MARKDOWN_LIMIT } from './streaming-markdown';
@@ -28,6 +29,31 @@ const ICON_DRAFT =
 
 /** Distance (px) from the bottom within which we keep auto-scrolling on new content. */
 const STICK_THRESHOLD = 60;
+const REASONING_BYTE_LIMIT = 64 * 1024;
+
+interface ReasoningPhase {
+  row: HTMLDivElement;
+  element: Reasoning;
+  text: string;
+  dirty: boolean;
+  interrupted: boolean;
+  notice?: HTMLDivElement;
+}
+
+/** A bounded UTF-8 prefix; never split a supplementary Unicode code point. */
+function reasoningPrefix(text: string, remaining: number): { text: string; bytes: number; truncated: boolean } {
+  let bytes = 0;
+  let end = 0;
+  for (const character of text) {
+    const point = character.codePointAt(0)!;
+    const size = point <= 0x7f ? 1 : point <= 0x7ff ? 2 : point <= 0xffff ? 3 : 4;
+    if (bytes + size > remaining)
+      return { text: text.slice(0, end).replace(/[\uD800-\uDFFF]/gu, '\uFFFD'), bytes, truncated: true };
+    bytes += size;
+    end += character.length;
+  }
+  return { text: text.replace(/[\uD800-\uDFFF]/gu, '\uFFFD'), bytes, truncated: false };
+}
 
 // Compact identity for ephemeral presentation snapshots; never persisted or used for authorization.
 function navigationFingerprint(text: string): string {
@@ -64,6 +90,8 @@ export class ChatView {
   private readonly emptyEl: HTMLDivElement;
   private readonly emptyTitle: HTMLDivElement;
   private readonly input: HTMLTextAreaElement;
+  private readonly composerEl: HTMLDivElement;
+  private readonly composerBarEl: HTMLDivElement;
   private readonly sendBtn: HTMLButtonElement;
   private readonly stopBtn: HTMLButtonElement;
   private readonly scrollBtn: HTMLButtonElement;
@@ -108,6 +136,14 @@ export class ChatView {
   private readonly actionLabels = new WeakMap<HTMLButtonElement, () => string>();
   private readonly messageMetadata = new WeakMap<HTMLElement, Readonly<Record<string, unknown>> | undefined>();
   private readonly copyTimers = new Map<HTMLButtonElement, ReturnType<typeof setTimeout>>();
+  /** Volatile reasoning is deliberately separate from message/source records. */
+  private readonly reasoningPhases = new Set<ReasoningPhase>();
+  private liveReasoning?: ReasoningPhase;
+  private lastRunReasoning?: ReasoningPhase;
+  private reasoningBytes = 0;
+  private reasoningTruncated = false;
+  private reasoningInterrupted = false;
+  private reasoningTail = '';
   /** The agent bubble currently receiving streamed deltas, if any. */
   private liveMsg: HTMLDivElement | null = null;
   private liveText = '';
@@ -194,13 +230,15 @@ export class ChatView {
       .build();
     this.scrollBtn.innerHTML = ICON_DOWN;
 
-    // Compose toolbar slot: host-populated controls just above the input.
+    // Compose toolbar slot: host-populated controls beside Send/Stop.
     this.actionsEl = Div().class('cui-actions').build();
 
-    // Composer: rounded container holding the textarea + a circular icon button.
+    // Composer: one accessible boundary for context, draft and stable actions.
     this.input = View<HTMLTextAreaElement>('textarea')
       .class('cui-input')
       .attr('rows', '1')
+      .attr('wrap', 'soft')
+      .attr('enterkeyhint', 'send')
       .on('compositionstart', () => {
         this.composing = true;
       })
@@ -240,18 +278,20 @@ export class ChatView {
     this.stopBtn.innerHTML = ICON_STOP;
     this.stopBtn.hidden = true;
 
-    const composer = Div()
+    this.composerBarEl = Div()
+      .class('cui-composer-bar')
+      .attr('role', 'group')
+      .children(this.actionsEl, this.stopBtn, this.sendBtn)
+      .build();
+    this.composerEl = Div()
       .class('cui-composer')
-      .children(
-        this.contextEl,
-        this.input,
-        Div().class('cui-composer-bar').children(this.actionsEl, this.stopBtn, this.sendBtn).build(),
-      )
+      .attr('role', 'group')
+      .children(this.contextEl, this.input, this.composerBarEl)
       .build();
 
     // Footer hosts the jump-to-latest button (floats just above it), the action
     // slot, and the composer.
-    const footer = Div().class('cui-footer').children(this.scrollBtn, this.pendingEl, composer).build();
+    const footer = Div().class('cui-footer').children(this.scrollBtn, this.pendingEl, this.composerEl).build();
 
     this.el = Div().class('cui-root').children(this.messagesEl, this.progressEl, footer, this.feedbackEl).build();
     if (typeof ResizeObserver !== 'undefined') {
@@ -294,6 +334,7 @@ export class ChatView {
 
   /** Append a finished message and scroll to it. Returns the bubble element. */
   append(message: ChatMessage): HTMLElement {
+    this.endReasoning({ interrupted: message.role === 'error' || message.role === 'status' });
     if ((message.role === 'status' || message.role === 'error') && this.liveMsg) {
       this.interruptStream();
     }
@@ -661,12 +702,120 @@ export class ChatView {
     }
   }
 
+  /** Render only provider-exposed reasoning, outside messages, history and source actions. */
+  appendReasoningDelta(delta: string): void {
+    if (
+      !delta ||
+      !this.running ||
+      this.stopping ||
+      this.disposed ||
+      this.presentationCleared ||
+      this.reasoningInterrupted ||
+      this.reasoningTruncated
+    )
+      return;
+    let text = this.reasoningTail + delta;
+    this.reasoningTail = '';
+    const last = text.charCodeAt(text.length - 1);
+    if (last >= 0xd800 && last <= 0xdbff) {
+      this.reasoningTail = text.slice(-1);
+      text = text.slice(0, -1);
+    }
+    this.appendReasoningText(text);
+  }
+
+  /** Accept a complete scalar sequence, including a normalized tail at phase end. */
+  private appendReasoningText(text: string): void {
+    if (!text || this.reasoningTruncated) return;
+    const prefix = reasoningPrefix(text, REASONING_BYTE_LIMIT - this.reasoningBytes);
+    this.reasoningBytes += prefix.bytes;
+    if (prefix.text && !this.liveReasoning) {
+      const element = new Reasoning();
+      const row = Div().class('cui-reasoning').children(element).build();
+      const phase: ReasoningPhase = { row, element, text: '', dirty: false, interrupted: false };
+      this.liveReasoning = phase;
+      this.lastRunReasoning = phase;
+      this.reasoningPhases.add(phase);
+      element.label = this.labels.reasoning ?? 'Reasoning';
+      // Native reasoning owns automatic disclosure and yields permanently to the reader.
+      // Never write `open` here, including during label updates or completion.
+      element.streaming = true;
+      element.addEventListener('disclosuretoggle', () => {
+        if (this.reasoningPhases.has(phase)) this.scheduleLayout();
+      });
+      this.emptyEl.remove();
+      this.messagesEl.append(row);
+      this.resizeObserver?.observe(row);
+      this.updateActivity();
+    }
+    if (this.liveReasoning && prefix.text) {
+      this.liveReasoning.text += prefix.text;
+      this.liveReasoning.dirty = true;
+    }
+    if (prefix.truncated) {
+      this.reasoningTruncated = true;
+      this.reasoningTail = '';
+      const phase = this.lastRunReasoning;
+      if (phase) {
+        phase.notice = Div()
+          .class('cui-reasoning-notice')
+          .text(this.labels.reasoningTruncated ?? 'Reasoning truncated')
+          .build();
+        phase.row.append(phase.notice);
+      }
+    }
+    this.scheduleLayout();
+  }
+
+  /** End one inference phase; later phases share this user run's UTF-8 budget. */
+  endReasoning(options: { interrupted?: boolean } = {}): void {
+    if (this.disposed) return;
+    if (this.reasoningTail) {
+      this.reasoningTail = '';
+      this.appendReasoningText('\uFFFD');
+    }
+    if (options.interrupted) this.reasoningInterrupted = true;
+    const phase = this.liveReasoning;
+    if (!phase) return;
+    this.flushReasoning();
+    phase.interrupted = !!options.interrupted;
+    phase.element.label = phase.interrupted
+      ? (this.labels.reasoningInterrupted ?? 'Reasoning interrupted')
+      : (this.labels.reasoning ?? 'Reasoning');
+    phase.element.streaming = false;
+    this.liveReasoning = undefined;
+    this.updateActivity();
+    this.scheduleLayout();
+  }
+
+  private flushReasoning(): void {
+    const phase = this.liveReasoning;
+    if (!phase?.dirty) return;
+    phase.element.content = phase.text;
+    phase.dirty = false;
+  }
+
+  private discardReasoning(): void {
+    for (const phase of this.reasoningPhases) {
+      phase.element.streaming = false;
+      phase.element.content = '';
+      phase.text = '';
+      this.resizeObserver?.unobserve(phase.row);
+      phase.row.remove();
+    }
+    this.reasoningPhases.clear();
+    this.liveReasoning = undefined;
+    this.lastRunReasoning = undefined;
+    this.reasoningTail = '';
+  }
+
   /**
    * Append streamed text to a live agent bubble, creating it on the first delta.
    * Call {@link endStream} when the turn completes.
    */
   appendDelta(delta: string, metadata: Pick<ChatMessage, 'documentArtifact' | 'metadata'> = {}): void {
     if (!delta || this.disposed || this.stopping) return;
+    this.endReasoning();
     const firstForPhase = !this.respondingHasText;
     this.respondingHasText = true;
     if (!this.liveMsg) {
@@ -691,6 +840,7 @@ export class ChatView {
   /** Finalise the current streaming bubble (removes the caret). */
   endStream(): void {
     if (this.stopping || this.disposed) return;
+    this.endReasoning();
     const stick = this.following;
     if (this.liveMarkdown) {
       this.liveMarkdown.update(this.liveText, true);
@@ -767,6 +917,7 @@ export class ChatView {
     if (!this.running || this.stopping || this.disposed) return;
     const restoreFocus = document.activeElement === this.sendBtn || document.activeElement === this.stopBtn;
     this.stopping = true;
+    this.endReasoning({ interrupted: true });
     this.messagesEl.setAttribute('aria-busy', 'true');
     this.updateActivity();
     this.updateSendState();
@@ -814,6 +965,7 @@ export class ChatView {
 
   /** Mount a host-owned review card in chronological conversation order. */
   appendContent(content: HTMLElement): void {
+    this.endReasoning();
     this.emptyEl.remove();
     const stick = this.following;
     this.messagesEl.append(content);
@@ -823,11 +975,17 @@ export class ChatView {
 
   /** Update run presentation; optional queue hosts retain an independent Send control. */
   setRunning(running: boolean): void {
+    if (this.disposed) return;
+    if (!running) this.endReasoning({ interrupted: true });
     const restore =
       !running && this.running && (document.activeElement === this.sendBtn || document.activeElement === this.stopBtn);
     if (running && !this.running) {
       this.respondingHasText = false;
       this.presentationCleared = false;
+      this.reasoningBytes = 0;
+      this.reasoningTruncated = false;
+      this.reasoningInterrupted = false;
+      this.lastRunReasoning = undefined;
     }
     this.running = running;
     if (!running) this.stopping = false;
@@ -841,6 +999,7 @@ export class ChatView {
 
   /** Host-reported activity, not inferred model thoughts or estimated progress. */
   setActivity(activity: 'responding' | 'routing' | 'reading' | 'planning' | 'reviewing'): void {
+    if (activity !== 'responding') this.endReasoning();
     if (activity !== this.activity) this.respondingHasText = false;
     this.activity = activity;
     this.messagesEl.setAttribute('aria-busy', String(this.running && (this.stopping || activity !== 'reviewing')));
@@ -854,6 +1013,7 @@ export class ChatView {
       !this.running ||
       this.disposed ||
       this.presentationCleared ||
+      (!!this.liveReasoning && !this.stopping) ||
       (this.respondingHasText && this.activity === 'responding' && !this.stopping)
         ? ''
         : this.stopping
@@ -903,6 +1063,7 @@ export class ChatView {
     this.historyStart = 0;
     this.earlierButton = undefined;
     this.cancelInterruptedRenders();
+    this.discardReasoning();
     // Clear the rendered feedback without claiming that the host's run stopped.
     this.presentationCleared = true;
     this.respondingHasText = false;
@@ -1037,6 +1198,14 @@ export class ChatView {
   /** Update labels (e.g. on a language change) and re-apply them live. */
   setLabels(labels: ChatViewLabels): void {
     this.labels = labels;
+    this.composerEl.setAttribute('aria-label', labels.composer?.trim() || 'Message composer');
+    this.composerBarEl.setAttribute('aria-label', labels.actions?.trim() || 'Message actions');
+    for (const phase of this.reasoningPhases) {
+      phase.element.label = phase.interrupted
+        ? (labels.reasoningInterrupted ?? 'Reasoning interrupted')
+        : (labels.reasoning ?? 'Reasoning');
+      if (phase.notice) phase.notice.textContent = labels.reasoningTruncated ?? 'Reasoning truncated';
+    }
     this.messagesEl.setAttribute('aria-label', labels.conversation?.trim() || 'Conversation');
     this.input.placeholder = labels.placeholder ?? '';
     this.input.setAttribute('aria-label', labels.placeholder ?? 'Message');
@@ -1181,6 +1350,7 @@ export class ChatView {
     this.restoredHistory = [];
     this.earlierButton = undefined;
     this.cancelInterruptedRenders();
+    this.discardReasoning();
     this.running = false;
     this.updateActivity();
     this.messagesEl.setAttribute('aria-busy', 'false');
@@ -1205,6 +1375,7 @@ export class ChatView {
       this.layoutFrame = undefined;
       if (this.disposed) return;
       this.flushStream();
+      this.flushReasoning();
       if (this.inputNeedsResize) {
         this.inputNeedsResize = false;
         this.autoGrow();

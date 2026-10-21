@@ -23,6 +23,7 @@ for (const variant of [
             el.querySelector('.agent-source-attach')!.getBoundingClientRect().bottom,
         );
       expect(helperGap, 'Attach and its explanation form an 8px group').toBe(8);
+      await page.locator('.agent-chat-toggle').click();
       await page.locator('.agent-panel-settings-toggle').click();
       const gaps = await page.locator('.agent-panel-model-row').evaluate((el) => {
         const rect = (selector: string) => el.querySelector(selector)!.getBoundingClientRect();
@@ -89,7 +90,9 @@ test('keyboard source removal and long artifact deletion keep a visible focus de
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(700);
   await page.keyboard.press('Enter');
   await expect(remove).toBeFocused();
-  await expect(page.locator('.agent-artifact-editor > textarea')).toHaveValue('A long draft line\n'.repeat(150));
+  await expect(page.locator('.agent-artifact-editor [data-artifact-source]')).toHaveValue(
+    'A long draft line\n'.repeat(150),
+  );
 });
 
 test.describe('touch starter actions and attached-source labels', () => {

@@ -24,11 +24,22 @@ export interface OpenAITimings {
   predicted_per_second?: number;
 }
 
+export interface OpenAIReasoning {
+  reasoning_content?: string | null;
+  reasoning?: string | null;
+}
+
+/** Compatible APIs expose either alias. Prefer reasoning_content without double emission. */
+export function openAIReasoning(value?: OpenAIReasoning): string | undefined {
+  if (typeof value?.reasoning_content === 'string' && value.reasoning_content) return value.reasoning_content;
+  if (typeof value?.reasoning === 'string' && value.reasoning) return value.reasoning;
+}
+
 export interface OpenAICompletion {
   timings?: OpenAITimings | null;
   usage?: OpenAIUsage | null;
   choices: Array<{
-    message: { content?: string | null; tool_calls?: OpenAIToolCall[] };
+    message: OpenAIReasoning & { content?: string | null; tool_calls?: OpenAIToolCall[] };
     finish_reason?: string;
   }>;
 }
@@ -100,7 +111,7 @@ export interface OpenAIStreamChunk {
   timings?: OpenAITimings | null;
   usage?: OpenAIUsage | null;
   choices?: Array<{
-    delta?: {
+    delta?: OpenAIReasoning & {
       content?: string | null;
       tool_calls?: Array<{ index?: number; id?: string; function?: { name?: string; arguments?: string } }>;
     };

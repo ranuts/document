@@ -108,14 +108,14 @@ for (const ext of ['docx', 'pptx'] as const) {
       const english = await languageMetrics();
       expect(english.text).toBe('English');
       expect(english.width).toBeGreaterThanOrEqual(english.textWidth);
-      // Longer locale names may truncate; the label must retain a readable lane.
+      // Narrow Sources collapses to its icon, leaving both tested locale names readable.
       await language.evaluate((el) => {
         (el as HTMLElement & { value: string }).value = 'pt-BR';
       });
       const longer = await languageMetrics();
       expect(longer.text).toBe('Português');
       expect(longer.width).toBeGreaterThanOrEqual(32);
-      expect(longer.scroll).toBeGreaterThan(longer.client);
+      expect(longer.width).toBeGreaterThanOrEqual(longer.textWidth);
       await language.evaluate((el) => {
         (el as HTMLElement & { value: string }).value = 'en-US';
       });

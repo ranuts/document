@@ -13,6 +13,7 @@ overrides:
 patchedDependencies:
   '@mlc-ai/web-llm@0.2.85': ab39c67b61b734014dc299766a9bffabb2e077b70bed48c7c4dec0af56af0599
   '@wllama/wllama@3.6.1': 5eaac29afca7fbc57011df1f0d69005d9e590da3dd1e5ad74155e4f0525a1702
+  ranui@0.5.0: 41b5bf64a6e3a282cb9b160f94d475fd8b801d0d3ebaa38e7c4ea15a4264b79a
 
 importers:
 
@@ -38,7 +39,7 @@ importers:
         version: 5.4.624
       ranui:
         specifier: 0.5.0
-        version: 0.5.0
+        version: 0.5.0(patch_hash=41b5bf64a6e3a282cb9b160f94d475fd8b801d0d3ebaa38e7c4ea15a4264b79a)
       ranuts:
         specifier: 0.5.0
         version: 0.5.0
@@ -109,7 +110,7 @@ importers:
         version: 16.4.2
       ranui:
         specifier: 0.5.0
-        version: 0.5.0
+        version: 0.5.0(patch_hash=41b5bf64a6e3a282cb9b160f94d475fd8b801d0d3ebaa38e7c4ea15a4264b79a)
       ranuts:
         specifier: 0.5.0
         version: 0.5.0
@@ -125,7 +126,7 @@ importers:
         version: link:../shared
       ranui:
         specifier: 0.5.0
-        version: 0.5.0
+        version: 0.5.0(patch_hash=41b5bf64a6e3a282cb9b160f94d475fd8b801d0d3ebaa38e7c4ea15a4264b79a)
       ranuts:
         specifier: 0.5.0
         version: 0.5.0
@@ -2237,7 +2238,7 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  ranui@0.5.0:
+  ranui@0.5.0(patch_hash=41b5bf64a6e3a282cb9b160f94d475fd8b801d0d3ebaa38e7c4ea15a4264b79a):
     dependencies:
       '@alixex/ranview': 0.2.0
       dompurify: 3.4.16

@@ -11,7 +11,7 @@ const variants = [
 for (const variant of variants) {
   test.describe(`${variant.width}px ${variant.locale} ${variant.theme}`, () => {
     test.use({ viewport: { width: variant.width, height: 1000 }, hasTouch: variant.coarse });
-    test('parallel navigation and settings commands form one coherent pane', async ({ page }, info) => {
+    test('primary navigation and contextual settings form one coherent pane', async ({ page }, info) => {
       test.setTimeout(120_000);
       await page.emulateMedia({ colorScheme: variant.theme, reducedMotion: 'reduce' });
       await page.addInitScript((theme) => {
@@ -67,7 +67,7 @@ for (const variant of variants) {
       await panel.screenshot({ path: info.outputPath('history-full-pane.png') });
 
       const nav = panel.locator('.agent-workspace-nav');
-      await expect(nav.getByRole('button')).toHaveCount(5);
+      await expect(nav.getByRole('button')).toHaveCount(3);
       if (variant.coarse) {
         for (const button of await nav.getByRole('button').all()) {
           const box = (await button.boundingBox())!;
@@ -85,19 +85,20 @@ for (const variant of variants) {
         ['.agent-panel-settings-toggle', '.agent-panel-settings'],
         ['.agent-history-toggle', '.agent-history-view'],
       ]) {
-        const button = nav.locator(trigger);
+        const button = panel.locator(trigger);
         await button.click();
         await expect(button).toHaveAttribute('aria-current', 'page');
-        // Pointer hover must not supply the selected fill we are trying to verify.
-        await page.mouse.move(0, 0);
-        await expect(button).toHaveCSS('font-weight', '500');
-        await expect(nav.locator('.agent-chat-toggle')).toHaveCSS('font-weight', '400');
-        await expect(button).toHaveCSS('box-shadow', 'none');
-        await expect(button).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
-        await expect(button).not.toHaveCSS(
-          'background-color',
-          await panel.evaluate((el) => getComputedStyle(el).backgroundColor),
-        );
+        const primary = trigger === '.agent-workspace-toggle' || trigger === '.agent-history-toggle';
+        if (primary) {
+          // Pointer hover must not supply the selected fill we are verifying.
+          await page.mouse.move(0, 0);
+          await expect(button).toHaveCSS('box-shadow', 'none');
+          await expect(button).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+          await expect(button).not.toHaveCSS(
+            'background-color',
+            await panel.evaluate((el) => getComputedStyle(el).backgroundColor),
+          );
+        }
         const current = panel.locator(view);
         await expect(current).toBeVisible();
         await expect(current.locator('.agent-view-back')).toHaveCount(0);
@@ -105,19 +106,27 @@ for (const variant of variants) {
         expect((await textGeometry(heading)).textLeft).toBeCloseTo(16, 1);
         await expect(heading).toHaveCSS('font-size', '16px');
         await expect(panel.locator(':scope > .agent-runtime-row')).toBeHidden();
-        // Reselecting a destination must not act as Back or invalidate its state.
-        await button.click();
-        await expect(current).toBeVisible();
-        await button.focus();
-        const visible = await button.evaluate((el) => {
-          const box = el.getBoundingClientRect(),
-            parent = el.parentElement!.getBoundingClientRect();
-          return box.left >= parent.left && box.right <= parent.right + 1;
-        });
-        expect(visible).toBe(true);
+        if (primary) {
+          // Reselecting a primary destination preserves its state.
+          await button.click();
+          await expect(current).toBeVisible();
+          await button.focus();
+          const visible = await button.evaluate((el) => {
+            const box = el.getBoundingClientRect(),
+              parent = el.parentElement!.getBoundingClientRect();
+            return box.left >= parent.left && box.right <= parent.right + 1;
+          });
+          expect(visible).toBe(true);
+        }
         expect(await current.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
         await page.mouse.move(0, 0);
         await panel.screenshot({ path: info.outputPath(`${view.slice(1)}-full-pane.png`) });
+        if (primary) await panel.locator('.agent-chat-toggle').click();
+        else {
+          await page.keyboard.press('Escape');
+          await expect(button).toBeFocused();
+        }
+        await expect(panel.locator('.cui-input')).toHaveValue(draft);
       }
       await panel.locator('.agent-chat-toggle').click();
       await expect(panel.locator('.cui-input')).toHaveValue(draft);

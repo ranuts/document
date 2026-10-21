@@ -491,9 +491,11 @@ it('opening the default model leaves preparation to the user', async () => {
   panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledOnce());
 });
-it('opens first-use assistant settings without preparing a model', async () => {
+it('starts in chat and opens first-use settings only on request without preparing a model', async () => {
   const panel = createAgentPanel({ externalEntry: true });
-  await vi.waitFor(() => expect(panel.dataset.view).toBe('settings'));
+  expect(panel.dataset.view).toBe('chat');
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  expect(panel.dataset.view).toBe('settings');
   expect(state.preload).not.toHaveBeenCalled();
 });
 it('opens chat for a remembered model even when its runtime is not loaded', () => {
@@ -529,7 +531,9 @@ it('opens chat for a configured service without connecting on its own', () => {
 it('keeps CPU-only setup free of WebGPU cache inspection until inventory is opened', async () => {
   localStorage.setItem('agent-panel-provider', 'wllama');
   const panel = createAgentPanel({ externalEntry: true });
-  await vi.waitFor(() => expect(panel.dataset.view).toBe('settings'));
+  expect(panel.dataset.view).toBe('chat');
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  expect(panel.dataset.view).toBe('settings');
   expect(state.cacheChecks).not.toHaveBeenCalled();
   const inventory = panel.querySelector<HTMLDetailsElement>('.agent-model-cache')!;
   inventory.open = true;
@@ -581,6 +585,8 @@ it('does not inspect browser runtime caches for service setup until the local so
   );
   const panel = createAgentPanel({ externalEntry: true });
   await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(panel.dataset.view).toBe('chat');
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
   expect(panel.dataset.view).toBe('settings');
   expect(state.cacheChecks).not.toHaveBeenCalled();
   expect(state.preload).not.toHaveBeenCalled();
@@ -596,12 +602,16 @@ it('keeps setup reachable for an incomplete cloud service', async () => {
     JSON.stringify({ version: 1, kind: 'openai-compatible', baseUrl: 'https://missing-key.example', model: 'model' }),
   );
   const panel = createAgentPanel({ externalEntry: true });
-  await vi.waitFor(() => expect(panel.dataset.view).toBe('settings'));
+  expect(panel.dataset.view).toBe('chat');
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  expect(panel.dataset.view).toBe('settings');
 });
 it('keeps setup reachable when the remembered preset is no longer supported', async () => {
   localStorage.setItem('agent-local-preset', 'Qwen3-1.7B-q4f16_1-MLC');
   const panel = createAgentPanel({ externalEntry: true });
-  await vi.waitFor(() => expect(panel.dataset.view).toBe('settings'));
+  expect(panel.dataset.view).toBe('chat');
+  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  expect(panel.dataset.view).toBe('settings');
 });
 it('does not override an explicit view change while checking cached configuration', async () => {
   const panel = createAgentPanel({ externalEntry: true });
@@ -3016,8 +3026,10 @@ it.each(['', 'Hello there'])(
     expect(state.conversations!.history().load()).toEqual([]);
     expect(state.writing).not.toHaveBeenCalled();
     const setup = panel.querySelector<HTMLButtonElement>('.agent-prepare-action')!;
-    expect(setup.hidden).toBe(Boolean(draft));
-    if (!draft) setup.click();
+    expect(setup.hidden).toBe(true);
+    panel.querySelector<HTMLButtonElement>('.agent-chat-toggle')!.click();
+    expect(input.value).toBe(draft);
+    panel.querySelector<HTMLButtonElement>('.agent-model-shortcut')!.click();
     expect(panel.getAttribute('data-view')).toBe('settings');
   },
 );
@@ -3367,9 +3379,12 @@ it('opens the latest meaningful chat from the assistant title without loading op
   expect(title).not.toBeNull();
   expect(title!.type).toBe('button');
   expect(title!.textContent).toBe(t('agentTitle'));
+  const displayed = store.activeId;
   panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
   title!.click();
   expect(panel.dataset.view).toBe('chat');
+  expect(store.activeId).toBe(displayed);
+  title!.click();
   expect(store.activeId).toBe(latest);
   expect(panel.querySelector('.cui-msg-user')?.textContent).toBe('Latest chat');
   expect(restore).not.toHaveBeenCalled();

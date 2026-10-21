@@ -8,7 +8,13 @@
  * configured), and defaults to a small local model. A key is still accepted for
  * remote/proxied Ollama deployments that require auth.
  */
-import { type OpenAICompletion, parseOpenAIResponse, toOpenAIMessages, toOpenAITools } from './openai-format';
+import {
+  type OpenAICompletion,
+  parseOpenAIResponse,
+  openAIReasoning,
+  toOpenAIMessages,
+  toOpenAITools,
+} from './openai-format';
 import { fetchOpenAIStream } from './openai-stream';
 import { getApiKey } from './keys';
 import { DEFAULT_SYSTEM_PROMPT } from './prompt';
@@ -57,8 +63,9 @@ export class OllamaProvider implements LLMProvider {
     tools: LLMToolDef[],
     onDelta: (text: string) => void,
     signal?: AbortSignal,
+    onReasoningDelta?: (text: string) => void,
   ): Promise<LLMResponse> {
-    if (tools.length) return this.chat(messages, tools, signal);
+    if (tools.length) return this.request(messages, tools, signal, onReasoningDelta);
     signal?.throwIfAborted();
     return fetchOpenAIStream(
       'Ollama',
@@ -79,10 +86,20 @@ export class OllamaProvider implements LLMProvider {
       },
       this.requestOptions,
       onDelta,
+      onReasoningDelta,
     );
   }
 
-  async chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
+  chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
+    return this.request(messages, tools, signal);
+  }
+
+  private async request(
+    messages: LLMMessage[],
+    tools: LLMToolDef[],
+    signal?: AbortSignal,
+    onReasoningDelta?: (text: string) => void,
+  ): Promise<LLMResponse> {
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     if (this.apiKey) {
       headers.Authorization = `Bearer ${this.apiKey}`;
@@ -102,6 +119,10 @@ export class OllamaProvider implements LLMProvider {
       },
       this.requestOptions,
     );
+    signal?.throwIfAborted();
+    const reasoning = openAIReasoning(completion.choices?.[0]?.message);
+    if (reasoning) onReasoningDelta?.(reasoning);
+    signal?.throwIfAborted();
     return parseOpenAIResponse(completion);
   }
 }

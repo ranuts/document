@@ -371,6 +371,11 @@ export interface I18nMessages {
   agentCopied: string;
   agentCopyFailed: string;
   agentRestoreRequest: string;
+  agentComposerLabel: string;
+  agentComposerActionsLabel: string;
+  agentReasoning: string;
+  agentReasoningInterrupted: string;
+  agentReasoningTruncated: string;
   agentWaiting: string;
   agentRoutingRequest: string;
   agentWaitElapsed: string;
@@ -491,6 +496,10 @@ export interface I18nMessages {
   agentSourcesSearch: string;
   agentSourcesOpen: string;
   agentSourcesExcerpt: string;
+  agentArtifactEdit: string;
+  agentArtifactCancelEditing: string;
+  agentArtifactSourceData: string;
+  agentArtifactUnsaved: string;
   agentArtifactTitle: string;
   agentArtifactEmpty: string;
   agentArtifactBack: string;

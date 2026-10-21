@@ -1,3 +1,4 @@
+import '../../../styles/assistant-artifacts.css';
 import { createViewHeader, labelViewBack } from './view-header';
 import { createArtifactPresentation, type ArtifactPresentationLabels } from './artifact-presentation';
 import { validatePayload, payloadText } from '../artifacts/payload';
@@ -12,6 +13,10 @@ import type { MessageSaveOutcome } from '@ranuts/chat-ui';
 import { ButtonBuilder, Div, View } from 'ranui/builder';
 import { ArtifactError, type Artifact, type ArtifactProvenance, type ArtifactStore } from '../artifacts/store';
 export interface ArtifactsLabels extends ArtifactPresentationLabels {
+  edit?: string;
+  cancelEditing?: string;
+  sourceData?: string;
+  unsaved?: string;
   title: string;
   empty: string;
   back: string;
@@ -63,6 +68,7 @@ export function createArtifactsView(options: {
   let dirty = false;
   let draftRevision = 0;
   let workflow: ReturnType<typeof createArtifactWorkflow> | undefined;
+  let setEditorMode: ((editing: boolean, focus?: boolean, invalidate?: boolean) => void) | undefined;
   let captureDraft: (() => ArtifactDraftBinding) | undefined;
   const invalidateDraft = () => {
     ++draftRevision;
@@ -74,11 +80,22 @@ export function createArtifactsView(options: {
   const pendingSaves = new Set<(outcome: MessageSaveOutcome) => void>();
   let cancelConfirmation: (() => void) | undefined;
   const buttons = new Set<HTMLButtonElement>();
+  function label(key: keyof ArtifactsLabels): string {
+    return (
+      labels[key] ??
+      (
+        {
+          edit: 'Edit',
+          cancelEditing: 'Cancel editing',
+          sourceData: 'Source data',
+          unsaved: 'Unsaved changes',
+        } as Partial<Record<keyof ArtifactsLabels, string>>
+      )[key] ??
+      ''
+    );
+  }
   function button(key: keyof ArtifactsLabels, run: () => void): HTMLButtonElement {
-    const b = ButtonBuilder()
-      .attr('type', 'button')
-      .text(labels[key] ?? '')
-      .build();
+    const b = ButtonBuilder().attr('type', 'button').text(label(key)).build();
     b.dataset.action = key;
     b.addEventListener('click', () => {
       if (key !== 'discardChanges' && key !== 'cancel' && cancelConfirmation) {
@@ -141,7 +158,7 @@ export function createArtifactsView(options: {
             });
             editor(a);
             status.textContent = labels.saved;
-            body.querySelector<HTMLTextAreaElement>('textarea[data-artifact-source]')?.focus();
+            body.querySelector<HTMLElement>('[data-artifact-reader]')?.focus();
           });
         }),
       );
@@ -179,6 +196,7 @@ export function createArtifactsView(options: {
     workflow?.dispose();
     workflow = undefined;
     captureDraft = undefined;
+    setEditorMode = undefined;
     cancelConfirmation?.();
     cancelConfirmation = undefined;
     buttons.clear();
@@ -226,6 +244,7 @@ export function createArtifactsView(options: {
       .attr('aria-label', labels.titleField)
       .build() as HTMLInputElement;
     title.value = a.title;
+    title.className = 'agent-artifact-title';
     const select = View('select').attr('aria-label', labels.version).build() as HTMLSelectElement;
     for (const v of a.versions) {
       const option = document.createElement('option');
@@ -244,15 +263,22 @@ export function createArtifactsView(options: {
     const presentationHost = document.createElement('div');
     const source = document.createElement('details');
     const sourceSummary = document.createElement('summary');
-    sourceSummary.textContent = labels.textField + ' · JSON';
+    sourceSummary.textContent = label('sourceData') + ' · JSON';
     sourceSummary.dataset.artifactSourceSummary = 'true';
+    source.className = 'agent-artifact-source';
     source.append(sourceSummary, text);
     source.hidden = !(a.versions.at(-1)!.payload && a.versions.at(-1)!.payload!.kind !== 'text');
     if (source.hidden) source.removeChild(text);
     let presentation = createArtifactPresentation(text, labels, a.versions.at(-1)!.payload, () => title.value);
     activePresentation = presentation;
     presentationHost.append(presentation.el);
+    let editing = false;
+    const dirtyNote = document.createElement('span');
+    dirtyNote.className = 'agent-artifact-unsaved';
+    dirtyNote.textContent = label('unsaved');
+    dirtyNote.hidden = true;
     const changed = () => {
+      dirtyNote.hidden = false;
       invalidateDraft();
       dirty = true;
       const save = body.querySelector<HTMLButtonElement>('[data-action="saveVersion"]');
@@ -276,10 +302,11 @@ export function createArtifactsView(options: {
         if (source.hidden) {
           source.open = false;
           if (text.parentElement === source) source.removeChild(text);
-          form.insertBefore(text, presentationHost);
+          content.insertBefore(text, presentationHost);
         } else source.append(text);
-        if (presentation.kind !== 'text') form.insertBefore(actions, presentationHost);
-        else form.insertBefore(actions, workflow?.el ?? null);
+        actions.insertBefore(presentation.exportEl, deleteButton);
+        setMode(false, false);
+        dirtyNote.hidden = value === String(a.versions.at(-1)!.version);
         const apply = body.querySelector<HTMLButtonElement>('[data-action=apply]');
         if (apply) apply.hidden = loaded.payload?.kind !== undefined && loaded.payload.kind !== 'text';
         dirty = value !== String(a.versions.at(-1)!.version);
@@ -307,7 +334,7 @@ export function createArtifactsView(options: {
           });
           editor(updated);
           status.textContent = labels.saved;
-          body.querySelector<HTMLTextAreaElement>('textarea[data-artifact-source]')?.focus();
+          body.querySelector<HTMLElement>('[data-artifact-reader]')?.focus();
         });
       }),
       button('apply', () => {
@@ -316,29 +343,82 @@ export function createArtifactsView(options: {
           await options.onApply(text.value);
         });
       }),
-      button('delete', () => {
-        const cancel = button('cancel', () => {
-          status.textContent = '';
-          actions.querySelector<HTMLButtonElement>('[data-action=delete]')!.focus();
+      presentation.exportEl,
+    );
+    const deletePrompt = document.createElement('div');
+    deletePrompt.className = 'agent-artifact-delete-prompt';
+    deletePrompt.hidden = true;
+    const deleteButton = button('delete', () => {
+      const question = document.createElement('span');
+      question.dataset.artifactDeleteQuestion = 'true';
+      question.textContent = labels.confirmDelete;
+      const confirm = button('confirmDelete', () => {
+        void perform(async () => {
+          await options.store.delete(a.id);
+          dirty = false;
+          await refresh(true);
         });
-        status.replaceChildren(
-          button('confirmDelete', () => {
-            void perform(async () => {
-              await options.store.delete(a.id);
-              dirty = false;
-              await refresh(true);
-            });
-          }),
-          cancel,
-        );
-        cancel.focus();
+      });
+      confirm.textContent = labels.delete;
+      const cancel = button('cancel', () => {
+        deletePrompt.hidden = true;
+        deletePrompt.replaceChildren();
+        deleteButton.focus();
+      });
+      deletePrompt.replaceChildren(question, confirm, cancel);
+      deletePrompt.hidden = false;
+      cancel.focus();
+    });
+    actions.append(deleteButton);
+    const previewButton = button('preview', () => setMode(false));
+    const editButton = button('edit', () => setMode(true));
+    const cancelEdit = button('cancelEditing', () =>
+      discard(() => {
+        title.value = a.title;
+        const loaded = a.versions.find((v) => String(v.version) === selectedVersion)!;
+        text.value = loaded.text;
+        dirty = selectedVersion !== String(a.versions.at(-1)!.version);
+        dirtyNote.hidden = !dirty;
+        actions.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled = !dirty;
+        presentation.refresh();
+        setMode(false);
       }),
     );
-    const form = Div()
-      .class('agent-artifact-editor')
-      .children(title, select, ...(source.hidden ? [text] : []), presentationHost, source, origin, actions)
+    const modes = Div().class('agent-artifact-modes').children(previewButton, editButton, cancelEdit).build();
+    modes.setAttribute('role', 'group');
+    modes.setAttribute('aria-label', labels.preview);
+    const toolbar = Div().class('agent-artifact-toolbar').children(select, modes, dirtyNote).build();
+    const content = Div()
+      .class('agent-artifact-content')
+      .children(...(source.hidden ? [text] : []), presentationHost, source)
       .build();
-    if (presentation.kind !== 'text') form.insertBefore(actions, presentationHost);
+    const form = Div()
+      .class('agent-artifact-editor agent-artifact-workbench')
+      .children(title, toolbar, actions, deletePrompt, content, origin)
+      .build();
+    function setMode(value: boolean, focus = true, invalidate = true): void {
+      if (editing !== value && invalidate) invalidateDraft();
+      editing = value;
+      form.dataset.mode = editing ? 'edit' : 'preview';
+      title.readOnly = !editing;
+      text.hidden = !editing || presentation.kind !== 'text';
+      text.readOnly = !editing;
+      source.hidden = !editing || presentation.kind === 'text';
+      // The canonical source stays mounted; its disclosure is only writable in Edit.
+      if (presentation.kind !== 'text') text.hidden = false;
+      previewButton.setAttribute('aria-pressed', String(!editing));
+      editButton.setAttribute('aria-pressed', String(editing));
+      cancelEdit.hidden = !editing;
+      presentation.setEditing(editing);
+      workflow?.refreshScope();
+      if (focus) {
+        if (!editing) presentationHost.querySelector<HTMLElement>('[data-artifact-reader]')?.focus();
+        else if (presentation.kind === 'text') text.focus();
+        else (presentationHost.querySelector('textarea') ?? title).focus();
+      }
+    }
+    setEditorMode = setMode;
+    setMode(false, false);
     body.append(form);
     const applyButton = actions.querySelector<HTMLButtonElement>('[data-action=apply]')!;
     applyButton.hidden = !!a.versions.at(-1)!.payload && a.versions.at(-1)!.payload!.kind !== 'text';
@@ -350,8 +430,8 @@ export function createArtifactsView(options: {
         title: title.value,
         text: text.value,
         ...(presentation.kind === 'table' || presentation.kind === 'slides' ? { payloadKind: presentation.kind } : {}),
-        start: presentation.kind === 'text' ? text.selectionStart : 0,
-        end: presentation.kind === 'text' ? text.selectionEnd : 0,
+        start: editing && presentation.kind === 'text' ? text.selectionStart : 0,
+        end: editing && presentation.kind === 'text' ? text.selectionEnd : 0,
       });
     if (options.refinement) {
       const isCurrent = (bound: ArtifactDraftBinding) =>
@@ -382,8 +462,10 @@ export function createArtifactsView(options: {
             }
           }
           text.value = replaceArtifactRange(bound, replacement);
+          setMode(true, false, false);
           presentation.refresh();
           dirty = true;
+          dirtyNote.hidden = false;
           ++draftRevision;
           body.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled = false;
           if (bound.payloadKind) presentationHost.querySelector('textarea')?.focus();
@@ -399,7 +481,7 @@ export function createArtifactsView(options: {
         text.addEventListener(event, () => workflow?.refreshScope());
     }
     form.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled = true;
-    title.focus();
+    presentationHost.querySelector<HTMLElement>('[data-artifact-reader]')?.focus();
   }
   async function refresh(ownedOperation = false): Promise<void> {
     if (disposed || dirty || (busy && !ownedOperation)) return;
@@ -553,6 +635,7 @@ export function createArtifactsView(options: {
         const matching = text.value === bound.text;
         // Old offsets are never applied to a newer body. A changed selection
         // request must select afresh or explicitly choose the entire artifact.
+        if (matching && bound.scope === 'selection') setEditorMode?.(true, false);
         text.setSelectionRange(
           matching && bound.scope === 'selection' ? bound.start : 0,
           matching && bound.scope === 'selection' ? bound.end : 0,
@@ -596,8 +679,13 @@ export function createArtifactsView(options: {
       labels = next;
       heading.textContent = labels.title;
       activePresentation?.setLabels(labels);
+      body.querySelector('.agent-artifact-modes')?.setAttribute('aria-label', labels.preview);
       const sourceSummary = body.querySelector('[data-artifact-source-summary]');
-      if (sourceSummary) sourceSummary.textContent = labels.textField + ' · JSON';
+      if (sourceSummary) sourceSummary.textContent = label('sourceData') + ' · JSON';
+      const unsaved = body.querySelector('.agent-artifact-unsaved');
+      if (unsaved) unsaved.textContent = label('unsaved');
+      const question = body.querySelector('[data-artifact-delete-question]');
+      if (question) question.textContent = labels.confirmDelete;
       for (const b of buttons) {
         const key = b.dataset.action as keyof ArtifactsLabels;
         if (key === 'back') {
@@ -605,7 +693,7 @@ export function createArtifactsView(options: {
             b,
             (backDestination === 'conversation' ? labels.backToConversation : labels.backToList) ?? labels.back,
           );
-        } else if (!b.dataset.artifact) b.textContent = labels[key] ?? '';
+        } else if (!b.dataset.artifact) b.textContent = label(key === 'confirmDelete' ? 'delete' : key);
       }
       for (const option of body.querySelectorAll('option')) option.textContent = `${labels.version} ${option.value}`;
       const origin = body.querySelector('.agent-artifact-provenance');

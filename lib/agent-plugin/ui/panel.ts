@@ -315,7 +315,8 @@ export function createAgentPanel(
 
   // ── Header ──────────────────────────────────────────────────────────────
   const title = ButtonBuilder().class('agent-panel-title').attr('type', 'button').text(t('agentTitle')).build();
-  // Model configuration is a parallel workspace destination.
+  title.classList.add('agent-chat-toggle');
+  // Model configuration stays beside composition rather than competing with the conversation.
   const settingsBtn = ButtonBuilder()
     .class('agent-panel-settings-toggle')
     .attr('type', 'button')
@@ -332,8 +333,12 @@ export function createAgentPanel(
       else setOpen(false);
     })
     .build();
-  settingsBtn.innerHTML =
-    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2.5" fill="var(--ran-color-bg-elevated)"/><circle cx="15" cy="17" r="2.5" fill="var(--ran-color-bg-elevated)"/></svg>';
+  settingsBtn.classList.add('agent-model-shortcut');
+  const modelShortcutLabel = Span().class('agent-model-shortcut-label').text(t('agentSettings')).build();
+  const modelShortcutIcon = Span().class('agent-model-shortcut-icon').attr('aria-hidden', 'true').build();
+  modelShortcutIcon.innerHTML =
+    '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2.5" fill="var(--ran-color-bg-elevated)"/><circle cx="15" cy="17" r="2.5" fill="var(--ran-color-bg-elevated)"/></svg>';
+  settingsBtn.append(modelShortcutLabel, modelShortcutIcon);
   closeBtn.innerHTML =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m6 6 12 12M18 6 6 18"/></svg>';
   const loadingStatus = Span().class('agent-model-status').attr('role', 'status').build();
@@ -442,6 +447,8 @@ export function createAgentPanel(
     savedMessage: t('agentResultSaved'),
     saveFailed: t('agentResultSaveFailed'),
     conversation: t('agentTitle'),
+    composer: t('agentComposerLabel'),
+    actions: t('agentComposerActionsLabel'),
     send: t('agentSend'),
     queue: t('agentQueueAction'),
     stop: t('agentStop'),
@@ -457,6 +464,9 @@ export function createAgentPanel(
     loadEarlier: t('agentLoadEarlierMessages'),
     expandMessage: t('agentShowFullMessage'),
     waiting: t('agentWaiting'),
+    reasoning: t('agentReasoning'),
+    reasoningInterrupted: t('agentReasoningInterrupted'),
+    reasoningTruncated: t('agentReasoningTruncated'),
     routing: t('agentRoutingRequest'),
     elapsed: (seconds) => t('agentWaitElapsed', { seconds: new Intl.NumberFormat(getLanguage()).format(seconds) }),
     reading: t('agentReadingContent'),
@@ -978,6 +988,8 @@ export function createAgentPanel(
     },
     tools: agentTools,
     onAgentDelta: (delta: string): void => chat.appendDelta(delta, { metadata: resultMetadata }),
+    onReasoningDelta: (delta: string): void => chat.appendReasoningDelta(delta),
+    onReasoningEnd: (): void => chat.endReasoning(),
     onAgentStreamEnd: (): void => chat.endStream(),
     storage: historyStorage,
   };
@@ -1208,6 +1220,14 @@ export function createAgentPanel(
     readiness.hidden = !reason || modelLoading;
     const waiting = modelLoading || !!endpointConnection.pending || !!runtimeCleanup || cacheBusy;
     const endpoint = configuredEndpoint(configuration.endpointSettings);
+    modelShortcutLabel.textContent =
+      selectedSource === 'service'
+        ? endpoint?.model || t('agentSettings')
+        : currentProvider() === 'webllm'
+          ? WEBLLM_MODELS.find((model) => model.id === modelSelect.value)?.label || t('agentSettings')
+          : t('agentProviderWllama');
+    settingsBtn.title = `${t('agentSettings')} · ${modelShortcutLabel.textContent}`;
+    settingsBtn.setAttribute('aria-label', settingsBtn.title);
     const canReconnect = !!(
       endpoint &&
       (!offline || endpoint.kind === 'loopback') &&
@@ -1235,6 +1255,8 @@ export function createAgentPanel(
       waiting ||
       runtimeCleanupFailed ||
       (!!chat.getInput().trim() && !writingBlocked);
+    // The model entry already opens settings; reserve a second action for actual preparation/reconnection.
+    if (prepareAction.textContent === t('agentSettings')) prepareAction.hidden = true;
     chat.refreshSendAvailability();
     loadingStatus.textContent = modelLoading
       ? [
@@ -2452,6 +2474,19 @@ export function createAgentPanel(
                   display.push(delta);
               },
               sourceReference,
+              {
+                onReasoningDelta: (delta) => chat.appendReasoningDelta(delta),
+                onReasoningEnd: () => chat.endReasoning(),
+                assertCurrent: () => {
+                  abort.signal.throwIfAborted();
+                  if (
+                    generation !== controllerGeneration ||
+                    conversation !== conversationRevision ||
+                    !target.isCurrent(false)
+                  )
+                    throw new Error(t('agentPlanExpired'));
+                },
+              },
             );
             abort.signal.throwIfAborted();
             if (
@@ -2718,6 +2753,11 @@ export function createAgentPanel(
     // Dictation must settle into its original composer before navigation restores another draft.
     speech?.close();
     rememberDraft();
+    // A secondary view returns to its owning conversation, including an unsent draft.
+    if (panel.dataset.view !== 'chat') {
+      showView('chat');
+      return;
+    }
     const sessions = conversations.searchSnapshot();
     const current = sessions.find((item) => item.id === displayedConversationId);
     // An accepted user turn can be visible before its history is persisted.
@@ -2809,8 +2849,6 @@ export function createAgentPanel(
     panel.setAttribute('aria-label', t('agentTitle'));
     welcomeHint.textContent = t('agentWelcomeHint');
     syncRuntimeStatus();
-    settingsBtn.title = t('agentSettings');
-    settingsBtn.setAttribute('aria-label', t('agentSettings'));
     configuration.syncLabels();
     closeBtn.title = t('agentClose');
     closeBtn.setAttribute('aria-label', t('agentClose'));
@@ -2913,7 +2951,7 @@ export function createAgentPanel(
     .attr('aria-controls', 'agent-sources')
     .attr('aria-expanded', 'false')
     .build();
-  const sourceSummary = View('p').class('agent-sources-summary agent-entry-note').build();
+  const sourceSummary = Div().class('agent-sources-summary').build();
   let sourceState = referenceSources.capture();
   const sourceView = createSourcesView({
     sources: referenceSources,
@@ -2924,12 +2962,32 @@ export function createAgentPanel(
       if (!sourceState.isCurrent()) invalidateRequestBindings();
       sourceState = referenceSources.capture();
       sourceSummary.hidden = referenceSources.list().length === 0;
-      sourceSummary.textContent = referenceSources
-        .list()
-        .map((source) => source.title)
-        .join(' · ');
+      sourceSummary.replaceChildren(
+        ...referenceSources.list().map((source) => {
+          const chip = View<HTMLButtonElement>('button')
+            .class('agent-source-chip')
+            .attr('type', 'button')
+            .text(source.title)
+            .build();
+          chip.title = `${t('agentSourcesOpen')}: ${source.title}`;
+          chip.setAttribute('aria-label', chip.title);
+          chip.addEventListener('click', () => {
+            showView('sources');
+            sourceView.openSource(source.id);
+          });
+          return chip;
+        }),
+      );
       sourceSummary.title = t('agentSourcesExcerpt');
-      sourcesBtn.textContent = `${t('agentSourcesSources')}${referenceSources.list().length ? ` · ${referenceSources.list().length}` : ''}`;
+      const sourceLabel = `${t('agentSourcesSources')}${referenceSources.list().length ? ` · ${referenceSources.list().length}` : ''}`;
+      const label = Span().class('agent-sources-label').text(sourceLabel).build();
+      sourcesBtn.replaceChildren(label);
+      sourcesBtn.setAttribute('aria-label', sourceLabel);
+      sourcesBtn.title = sourceLabel;
+      const icon = Span().attr('aria-hidden', 'true').build();
+      icon.innerHTML =
+        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m8 12 6-6a3 3 0 0 1 4 4l-8 8a5 5 0 0 1-7-7l8-8"/></svg>';
+      sourcesBtn.prepend(icon);
     },
   });
   chat.actionsEl.prepend(sourcesBtn);
@@ -3048,12 +3106,11 @@ export function createAgentPanel(
   const historyHeading = conversationList.el.querySelector('h2')!;
   historyView.append(createViewHeader(historyHeading), conversationList.el, historyControls.el);
   header.insertBefore(clearBtn, closeBtn);
-  const chatBtn = View<HTMLButtonElement>('button').class('agent-chat-toggle').attr('type', 'button').build();
-  const sourcesNav = View<HTMLButtonElement>('button').class('agent-sources-nav').attr('type', 'button').build();
-  const workspaceNav = View('nav')
-    .class('agent-workspace-nav')
-    .children(chatBtn, artifactsBtn, historyBtn, sourcesNav, settingsBtn)
-    .build();
+  const chatBtn = title;
+  const sourcesNav = sourcesBtn;
+  sourcesNav.classList.add('agent-sources-nav');
+  const workspaceNav = View('nav').class('agent-workspace-nav').children(chatBtn, artifactsBtn, historyBtn).build();
+  header.prepend(workspaceNav);
   for (const [trigger, id] of [
     [chatBtn, 'agent-chat'],
     [artifactsBtn, 'agent-artifacts'],
@@ -3066,7 +3123,8 @@ export function createAgentPanel(
   historyView.id = 'agent-history';
   sourceView.el.id = 'agent-sources';
 
-  chat.el.append(writeDestination);
+  const composerMeta = Div().class('agent-composer-meta').children(settingsBtn).build();
+  chat.el.querySelector('.cui-footer')!.append(composerMeta, readiness, writeDestination);
   const workspace = createPanelWorkspace({
     panel,
     chat,
@@ -3093,6 +3151,7 @@ export function createAgentPanel(
       viewRevision++;
     },
     changed: (view) => {
+      syncHeaderIdentity();
       sourcesBtn.setAttribute('aria-expanded', String(view === 'sources'));
       if (view === 'artifacts') void artifactsView.refresh();
       syncHistoryActivity();
@@ -3102,14 +3161,28 @@ export function createAgentPanel(
   function showView(view: PanelWorkspaceView): void {
     workspace.show(view);
   }
-  sourcesBtn.addEventListener('click', () => showView(panel.dataset.view === 'sources' ? 'chat' : 'sources'));
+  const headerIcons = {
+    artifacts:
+      '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></svg>',
+    history:
+      '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11a9 9 0 1 1 3 8M3 5v6h6M12 7v6l4 2"/></svg>',
+  };
+  function syncHeaderIdentity(): void {
+    const inChat = panel.dataset.view === 'chat';
+    title.textContent = inChat ? t('agentTitle') : t('agentWorkspaceChat');
+    if (!inChat) {
+      const backIcon = Span().class('agent-header-home-icon').attr('aria-hidden', 'true').build();
+      backIcon.innerHTML =
+        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m14 6-6 6 6 6"/></svg>';
+      title.prepend(backIcon);
+    }
+    title.title = inChat ? t('agentWorkspaceChat') : t('agentBackToChat');
+    title.setAttribute('aria-label', title.title);
+  }
   const labelDestination = (button: HTMLButtonElement, label: string): void => {
     button.title = label;
     button.setAttribute('aria-label', label);
-    const text = document.createElement('span');
-    text.className = 'agent-workspace-label';
-    text.textContent = label;
-    button.replaceChildren(text);
+    button.innerHTML = headerIcons[button === artifactsBtn ? 'artifacts' : 'history'];
   };
   const syncProductLabels = () => {
     settingsView.syncLabels();
@@ -3117,11 +3190,9 @@ export function createAgentPanel(
     artifactsView.setLabels(artifactLabels());
     artifactsView.setRefinementLabels(artifactWorkflowLabels());
     resultActions.refresh();
-    labelDestination(chatBtn, t('agentWorkspaceChat'));
+    syncHeaderIdentity();
     labelDestination(artifactsBtn, t('agentArtifactTitle'));
     labelDestination(historyBtn, t('agentConversations'));
-    labelDestination(sourcesNav, t('agentSourcesSources'));
-    labelDestination(settingsBtn, t('agentSettings'));
     workspaceNav.setAttribute('aria-label', t('agentTitle'));
     refinementLabel.textContent = t('agentRefiningProposal');
     refinementCancel.textContent = t('agentPlanCancel');
@@ -3134,7 +3205,7 @@ export function createAgentPanel(
   clearBtn.addEventListener('click', () => showView('chat'));
   clearBtn.title = t('agentNewConversation');
   clearBtn.setAttribute('aria-label', t('agentNewConversation'));
-  panel.append(header, workspaceNav, runtimeRow, settings, historyView, sourceView.el, artifactsView.el, chat.el);
+  panel.append(header, runtimeRow, settings, historyView, sourceView.el, artifactsView.el, chat.el);
   document.body.append(panel);
   const endpoint = configuredEndpoint(configuration.endpointSettings);
   hasConfiguration =
@@ -3150,11 +3221,9 @@ export function createAgentPanel(
     restoringInitialHistory = false;
   });
   showView('chat');
-  // Cache discovery may choose a default view only until explicit navigation or chat interaction.
-  // Capture clicks because speech controls stop propagation before requesting permission.
+  // Capture interaction revisions for asynchronous focus and navigation guards.
   const keepChatVisible = () => viewRevision++;
   header.addEventListener('click', keepChatVisible, { capture: true });
-  workspaceNav.addEventListener('click', keepChatVisible, { capture: true });
   chat.el.addEventListener('click', keepChatVisible, { capture: true });
   chat.el.addEventListener('input', keepChatVisible);
   // Keep the empty-composer setup link and contextual main action from duplicating.
@@ -3163,11 +3232,8 @@ export function createAgentPanel(
   });
 
   // Older default-model loads may have cached files without a saved preset.
-  // Check those without warming the engine, and never replace a view the user
-  // has deliberately opened while the storage check was pending.
-  if (options.externalEntry && !hasConfiguration && selectedSource === 'service') showView('settings');
+  // Check those without warming the engine or replacing the current view.
   if (options.externalEntry && !hasConfiguration && selectedSource === 'local') {
-    const revision = viewRevision;
     const attempt = loadAttempt;
     const route = routeKey();
     const configured =
@@ -3179,7 +3245,6 @@ export function createAgentPanel(
       .then((cached) => {
         if (hasConfiguration || !panel.isConnected || attempt !== loadAttempt || route !== routeKey()) return;
         hasConfiguration = cached;
-        if (!cached && viewRevision === revision) showView('settings');
       });
   }
 

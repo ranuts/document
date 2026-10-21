@@ -43,14 +43,7 @@ test.describe('agent document writes (real editor)', () => {
     await page.evaluate(() => window.__toggleAgentPanel?.());
     await page.locator('.agent-enable-switch').click();
     await expect(page.locator('.agent-runtime-panel')).not.toHaveClass(/agent-panel-hidden/);
-    const configuredService = await page.evaluate(
-      () => !!JSON.parse(localStorage.getItem('agent-writing-endpoint') ?? '{}').model,
-    );
-    await expect(page.locator('.agent-runtime-panel')).toHaveAttribute(
-      'data-view',
-      configuredService ? 'chat' : 'settings',
-    );
-    if (!configuredService) await page.locator('.agent-chat-toggle').click();
+    // Configuration is an explicit composer action; enabling always starts in Chat.
     await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
   };
 

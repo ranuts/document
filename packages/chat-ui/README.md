@@ -39,6 +39,7 @@ Override the look via the `--cui-*` custom properties on `.cui-root`.
 ## API
 
 - `append({ role, text })` — add a finished message (`user` / `agent` / `tool` / `status` / `error`).
+- `appendReasoningDelta(text)` / `endReasoning({ interrupted?: boolean })` — display and finish ephemeral provider-exposed reasoning.
 - `appendDelta(text)` — stream text into a live agent bubble (auto-created).
 - `endStream()` — finalise the streaming bubble.
 - `setRunning(bool)` — update run controls while keeping the next draft editable; queue acceptance is opt-in.
@@ -47,7 +48,55 @@ Override the look via the `--cui-*` custom properties on `.cui-root`.
 - `clear()` — remove messages and waiting feedback; it does not stop the host's run.
 - `getInput()` / `setInput(text)` / `focus()` — input helpers.
 - `setLabels(labels)` — update labels live (e.g. language change).
-- `actionsEl` — host-populated slot above the input (compose toolbar); collapses when empty.
+- `actionsEl` — host-populated toolbar beside Send/Stop, below the input.
+- `contextEl` — host-populated source context above the input, inside the composer.
+- `pendingEl` — host-populated queue footer outside the composer.
+- `dispose()` — release observers/timers and discard ephemeral reasoning.
+
+`labels.composer` and `labels.actions` name the accessible composer and its
+control row; both update live through `setLabels()`.
+
+## Public reasoning
+
+`appendReasoningDelta(text)` accepts only provider-exposed reasoning during an
+active run. It lazily creates native ranui `r-reasoning`; unsupported providers
+show no reasoning row. `endReasoning({ interrupted?: boolean })` ends one
+inference phase. First answer text, a tool/review/non-answer phase and `endStream()`
+also end it; Stop, error/status and settlement of an unfinished phase mark it
+interrupted. An explicit interruption rejects further reasoning for that run.
+
+```ts
+chat.setRunning(true);
+chat.appendReasoningDelta(publicReasoningDelta); // separate provider callback
+chat.endReasoning(); // inference completed; repeat for later inference phases
+chat.appendDelta(answerDelta); // answer source only
+chat.endStream();
+chat.setRunning(false);
+```
+
+The component coalesces reasoning content with its layout frame and preserves
+reader-owned expansion and scrolling. It never assigns a model duration.
+The shared budget is 64 KiB of UTF-8 per user run, truncated at a code-point
+boundary with one notice. Surrogate pairs split between deltas are buffered;
+orphaned surrogates become U+FFFD at the phase boundary. Extra text is ignored until the next false → true
+`setRunning` transition. Repeated `setRunning(true)` does not reset the budget.
+
+Reasoning is volatile presentation, separate from `ChatMessage`, `data-source`,
+history, answer getters, Copy, Save, Apply and message presentation/provenance
+hooks. Hosts must keep it out of model context and persistence. `clear()`,
+`restoreHistory()` and `dispose()` discard it and reject stale reasoning; clear
+retains the host's run controls until settlement. Hosts still own request-identity
+guards when routing asynchronous callbacks. Localize `reasoning`,
+`reasoningInterrupted`, `reasoningTruncated` (English defaults: “Reasoning”,
+“Reasoning interrupted”, “Reasoning truncated”).
+
+`renderChatMarkdown(target, text)` exports the same completed-answer renderer
+for host previews. It replaces target children with DOM nodes, treats model HTML
+and image syntax as literal text, and permits only explicit `http:`, `https:` and
+`mailto:` links, opened with `noopener noreferrer`. It neither loads remote media
+nor inserts model HTML. The caller owns input bounds and styling; use a
+`cui-bubble` container inside the existing ChatView style scope when sharing the
+conversation typography.
 
 Waiting feedback appears immediately, with a locally measured clock formatted
 by `labels.elapsed(seconds)` and a classification label from `labels.routing`.

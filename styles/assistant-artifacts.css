@@ -1,0 +1,201 @@
+/* Artifact workbench: source owns edits; the reader owns the reading surface. */
+.agent-artifact-workbench {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-3);
+  min-width: 0;
+}
+.agent-artifact-workbench > .agent-artifact-title {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding-inline: 0;
+  min-width: 0;
+  font-size: var(--ran-text-heading-4);
+  font-weight: var(--ran-text-heading-weight);
+  line-height: 1.4;
+  padding-block: var(--ran-space-1);
+}
+.agent-artifact-workbench > .agent-artifact-title[readonly] {
+  cursor: default;
+}
+.agent-artifact-toolbar,
+.agent-artifact-workbench > .agent-artifact-actions,
+.agent-artifact-modes,
+.agent-artifact-delete-prompt,
+.agent-artifact-pagination {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ran-space-2);
+  min-width: 0;
+}
+.agent-artifact-toolbar > select {
+  width: auto;
+  max-width: 100%;
+  min-height: var(--app-control-height, 32px);
+  border: 0;
+  padding-inline-start: 0;
+  color: var(--ran-color-text-secondary);
+}
+.agent-artifact-modes {
+  gap: var(--ran-space-1);
+}
+.agent-artifact-modes > button[aria-pressed='true'] {
+  background: var(--ran-color-bg-muted);
+  font-weight: var(--ran-text-heading-weight);
+}
+.agent-artifact-unsaved {
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+}
+.agent-artifact-workbench > .agent-artifact-actions {
+  margin: 0;
+  padding-block-end: var(--ran-space-3);
+  border-bottom: 1px solid var(--ran-color-border);
+}
+.agent-artifact-workbench > .agent-artifact-actions > button,
+.agent-artifact-workbench .agent-artifact-delete-prompt > button {
+  flex: 0 1 auto;
+  width: auto;
+}
+.agent-artifact-delete-prompt {
+  padding-block: var(--ran-space-2);
+}
+.agent-artifact-delete-prompt > span {
+  flex: 1 1 100%;
+  font-size: var(--ran-text-label-2);
+}
+.agent-artifact-workbench .agent-artifact-content,
+.agent-artifact-workbench .agent-artifact-presentation {
+  min-width: 0;
+}
+.agent-artifact-workbench .agent-artifact-content > textarea,
+.agent-artifact-workbench .agent-artifact-source > textarea {
+  width: 100%;
+  min-height: 18em;
+  line-height: 1.65;
+  resize: vertical;
+  font-family: inherit;
+  font-size: var(--ran-text-label-1);
+}
+.agent-artifact-workbench .agent-artifact-content > textarea {
+  border: 0;
+  border-radius: 0;
+  padding-inline: 0;
+}
+.agent-artifact-workbench .agent-artifact-source > textarea {
+  font-family: var(--ran-font-mono, monospace);
+  margin-block-start: var(--ran-space-2);
+}
+.agent-artifact-reader {
+  color: inherit;
+  font-size: var(--ran-text-label-1);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  overflow-x: auto;
+}
+.agent-artifact-reader > :first-child {
+  margin-block-start: 0;
+}
+.agent-artifact-reader > :last-child {
+  margin-block-end: 0;
+}
+.agent-artifact-reader :is(h2, h3, h4, h5, h6) {
+  margin-block: var(--ran-space-6) var(--ran-space-2);
+  line-height: 1.4;
+  font-weight: var(--ran-text-heading-weight);
+}
+.agent-artifact-reader :is(p, ul, ol, blockquote, pre) {
+  margin-block: var(--ran-space-3);
+}
+.agent-artifact-reader :is(ul, ol) {
+  padding-inline-start: var(--ran-space-6);
+}
+.agent-artifact-reader a {
+  color: var(--ran-color-link);
+  text-decoration: underline;
+}
+.agent-artifact-reader blockquote {
+  margin-inline: 0;
+  padding-inline-start: var(--ran-space-3);
+  border-inline-start: 2px solid var(--ran-color-border);
+  color: var(--ran-color-text-secondary);
+}
+.agent-artifact-reader pre,
+.agent-artifact-reader .cui-table {
+  overflow: auto;
+  max-width: 100%;
+}
+.agent-artifact-reader pre {
+  padding: var(--ran-space-3);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg-muted);
+  font-size: var(--ran-text-label-2);
+  line-height: 1.55;
+}
+.agent-artifact-reader code {
+  font-family: var(--ran-font-mono, monospace);
+}
+.agent-artifact-reader table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--ran-text-label-2);
+}
+.agent-artifact-reader :is(th, td) {
+  text-align: start;
+  vertical-align: top;
+  padding: var(--ran-space-2);
+  border-bottom: 1px solid var(--ran-color-border);
+}
+.agent-artifact-field-value {
+  white-space: pre-wrap;
+}
+.agent-artifact-reader > .agent-artifact-field-value:first-child {
+  font-size: var(--ran-text-heading-4);
+  font-weight: var(--ran-text-heading-weight);
+}
+.agent-artifact-pagination {
+  margin-block-start: var(--ran-space-3);
+  color: var(--ran-color-text-secondary);
+}
+.agent-artifact-export {
+  max-width: 100%;
+}
+.agent-artifact-export > summary,
+.agent-artifact-source > summary {
+  cursor: pointer;
+  font-size: var(--ran-text-label-3);
+  min-height: var(--ran-size-7);
+  align-content: center;
+  border-radius: var(--ran-radius-sm);
+}
+.agent-artifact-workbench :is(.agent-artifact-reader, textarea, summary, select, input):focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: 2px;
+}
+.agent-artifact-workbench [hidden] {
+  display: none;
+}
+.agent-artifact-workbench[data-mode='preview'] .agent-artifact-reader,
+.agent-artifact-workbench[data-mode='edit'] .agent-artifact-content {
+  animation: agent-artifact-reveal var(--ran-motion-duration-fast) ease-out;
+}
+@keyframes agent-artifact-reveal {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (pointer: coarse) {
+  .agent-artifact-workbench :is(button, summary, select) {
+    min-height: var(--app-control-touch, 44px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .agent-artifact-workbench[data-mode] :is(.agent-artifact-reader, .agent-artifact-content) {
+    animation: none;
+  }
+}

@@ -1,6 +1,6 @@
 import { mockApi } from './lib/mock-api';
 import { expect, test } from './lib/l0';
-import { assertTitleRail, contentGeometry, textGeometry } from './lib/layout-geometry';
+import { contentGeometry, frameLeft, textGeometry } from './lib/layout-geometry';
 
 test('restores a long saved conversation and switches sessions with completed answer actions', async ({ page }) => {
   test.setTimeout(90_000);
@@ -138,7 +138,11 @@ test('restores a long saved conversation and switches sessions with completed an
   await expect(viewHeader.locator('.agent-history-heading')).toHaveCount(1);
   await expect(viewHeader.locator('.agent-view-back')).toHaveCount(0);
   await page.evaluate(() => document.fonts.ready);
-  await assertTitleRail(page.locator('.agent-runtime-panel .agent-panel-title'));
+  // On a secondary page the home command owns a leading chevron on the
+  // content spine, followed by its label; the page heading stays on the spine.
+  const home = page.locator('.agent-runtime-panel .agent-panel-title');
+  expect(await frameLeft(home.locator('svg'))).toBeCloseTo(16, 1);
+  expect((await textGeometry(home)).textLeft).toBeCloseTo(36, 1);
   const geometry = await contentGeometry(history);
   const row = await textGeometry(history.locator('.agent-conversation-title').first());
   // A parallel view's heading and list text return to the same content rail.

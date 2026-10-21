@@ -30,6 +30,8 @@ export type AgentEvent =
   | { type: 'usage'; usage: NonNullable<LLMResponse['usage']> }
   | { type: 'assistant'; text: string; streamed: boolean; interrupted?: true }
   | { type: 'assistant_delta'; text: string }
+  | { type: 'reasoning_delta'; text: string }
+  | { type: 'reasoning_end' }
   | { type: 'tool_call'; name: string; input: Record<string, unknown> }
   | {
       type: 'tool_result';
@@ -158,23 +160,55 @@ export async function runAgent(
       contextNoticeSent = true;
       options.onContextTrimmed?.();
     }
-    const response = provider.chatStream
-      ? await provider.chatStream(
-          requestMessages,
-          toolDefs,
-          (delta) => {
-            if (!delta || options.signal?.aborted) return;
-            if (!firstProviderText) {
-              firstProviderText = true;
-              options.onFirstProviderText?.();
-            }
-            streamed = true;
-            if (toolDefs.length && provider.streamingTextMode !== 'answer-only') deferredDeltas.push(delta);
-            else options.onEvent?.({ type: 'assistant_delta', text: delta });
-          },
-          options.signal,
-        )
-      : await provider.chat(requestMessages, toolDefs, options.signal);
+    // Each inference owns its callbacks. A settled provider may retain listeners
+    // while a later inference is still running under the same run/signal.
+    let inferenceActive = true;
+    let reasoningObserved = false;
+    let reasoningClosed = false;
+    const inferenceLive = () => {
+      if (!inferenceActive || options.signal?.aborted) return false;
+      options.assertCurrent?.();
+      return !options.signal?.aborted;
+    };
+    const endReasoning = () => {
+      if (reasoningClosed) return;
+      reasoningClosed = true;
+      if (reasoningObserved && inferenceLive()) options.onEvent?.({ type: 'reasoning_end' });
+    };
+    let response: LLMResponse;
+    try {
+      response = provider.chatStream
+        ? await provider.chatStream(
+            requestMessages,
+            toolDefs,
+            (delta) => {
+              if (!delta || !inferenceLive()) return;
+              endReasoning();
+              if (!inferenceLive()) return;
+              if (!firstProviderText) {
+                firstProviderText = true;
+                options.onFirstProviderText?.();
+              }
+              if (!inferenceLive()) return;
+              streamed = true;
+              if (toolDefs.length && provider.streamingTextMode !== 'answer-only') deferredDeltas.push(delta);
+              else options.onEvent?.({ type: 'assistant_delta', text: delta });
+            },
+            options.signal,
+            (text) => {
+              if (!text || reasoningClosed || !inferenceLive()) return;
+              reasoningObserved = true;
+              options.onEvent?.({ type: 'reasoning_delta', text });
+            },
+          )
+        : await provider.chat(requestMessages, toolDefs, options.signal);
+    } finally {
+      try {
+        endReasoning();
+      } finally {
+        inferenceActive = false;
+      }
+    }
     if (options.signal?.aborted) return { text: '', messages, toolCallCount, stoppedOnLimit: false, aborted: true };
     options.assertCurrent?.();
     if (response.contextTrimmed && !contextNoticeSent) {

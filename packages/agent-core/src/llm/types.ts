@@ -116,6 +116,8 @@ export interface LLMProvider {
     tools: LLMToolDef[],
     onDelta: (textDelta: string) => void,
     signal?: AbortSignal,
+    /** Provider-returned public reasoning only; ephemeral, never part of response/history. */
+    onReasoningDelta?: (text: string) => void,
   ): Promise<LLMResponse>;
 }
 

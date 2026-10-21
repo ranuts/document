@@ -80,9 +80,10 @@ export class LoopbackProvider implements LocalLLMProvider {
     tools: LLMToolDef[],
     onDelta: (text: string) => void,
     signal?: AbortSignal,
+    onReasoningDelta?: (text: string) => void,
   ): Promise<LLMResponse> {
     if (tools.length) return Promise.reject(new Error('Local service cannot execute editor tools'));
-    return this.generate(messages, undefined, signal, onDelta);
+    return this.generate(messages, undefined, signal, onDelta, onReasoningDelta);
   }
   generateJSON(messages: LLMMessage[], schema: Record<string, unknown>, signal?: AbortSignal): Promise<LLMResponse> {
     return this.generate(messages, schema, signal);
@@ -92,6 +93,7 @@ export class LoopbackProvider implements LocalLLMProvider {
     schema?: Record<string, unknown>,
     signal?: AbortSignal,
     onDelta?: (text: string) => void,
+    onReasoningDelta?: (text: string) => void,
   ): Promise<LLMResponse> {
     if (!this.isReady()) throw new Error('Connect the local model first');
     // Translate completed host tool exchanges to Ollama's documented chat history.
@@ -133,9 +135,13 @@ export class LoopbackProvider implements LocalLLMProvider {
         const data = value as {
           done?: boolean;
           done_reason?: string;
-          message?: { content?: string; tool_calls?: unknown[] };
+          message?: { content?: string; thinking?: string; tool_calls?: unknown[] };
         };
         if (data.message?.tool_calls?.length) throw new Error('Unexpected local service tool response');
+        const reasoning = data.message?.thinking;
+        if (typeof reasoning === 'string' && reasoning) onReasoningDelta?.(reasoning);
+        this.lifetime.signal.throwIfAborted();
+        signal?.throwIfAborted();
         const piece = data.message?.content;
         if (piece !== undefined && typeof piece !== 'string') throw new Error('Invalid local service stream');
         if (piece) {
@@ -185,7 +191,7 @@ export class LoopbackProvider implements LocalLLMProvider {
     )) as {
       done?: boolean;
       done_reason?: string;
-      message?: { content?: string; tool_calls?: unknown[] };
+      message?: { content?: string; thinking?: string; tool_calls?: unknown[] };
       error?: unknown;
     } | null;
     if (

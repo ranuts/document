@@ -16,6 +16,10 @@ export interface ChatMessage {
 
 /** Text shown in the UI. Everything is optional so the component works untranslated. */
 export interface ChatViewLabels {
+  /** Accessible name for the draft/context/control boundary. */
+  composer?: string;
+  /** Accessible name for the controls beside Send/Stop. */
+  actions?: string;
   /** Accessible name for the conversation history. */
   conversation?: string;
   /** Send-button label (idle state). */
@@ -42,6 +46,12 @@ export interface ChatViewLabels {
   documentDraft?: string;
   /** Identifies retained output from a response that did not complete. */
   incomplete?: string;
+  /** Provider-exposed, ephemeral reasoning disclosure. */
+  reasoning?: string;
+  /** Reasoning that stopped before its inference phase completed. */
+  reasoningInterrupted?: string;
+  /** One notice when a run exceeds the 64 KiB UTF-8 display budget. */
+  reasoningTruncated?: string;
   waiting?: string;
   /** Actual host request classification, distinct from tool planning. */
   routing?: string;

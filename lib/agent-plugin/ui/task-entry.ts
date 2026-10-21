@@ -42,6 +42,13 @@ interface Task {
   prompt: Parameters<typeof t>[0];
   task: RequestIntent['task'];
 }
+const taskIcons: Record<string, string> = {
+  compose: '<path d="m15 4 5 5M4 20l5-1L20 8a3.5 3.5 0 0 0-5-5L4 14z"/>',
+  read: '<path d="M4 4h6a3 3 0 0 1 3 3v14a4 4 0 0 0-4-2H4zM13 7a3 3 0 0 1 3-3h4v15h-3a4 4 0 0 0-4 2"/>',
+  explain: '<circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 2-3 4M12 16v1"/>',
+  summarize: '<path d="M5 5h14M5 10h14M5 15h9M5 20h6"/>',
+  polish: '<path d="m14 4 6 6-10 10H4v-6zM12 6l6 6M4 4v4M2 6h4"/>',
+};
 const polish: Task = { id: 'polish', label: 'agentEntryPolish', prompt: 'agentEntryPolishPrompt', task: 'rewrite' };
 const summarize: Task = {
   id: 'summarize',
@@ -160,6 +167,9 @@ export function createTaskEntry(options: {
             .class('agent-task-action')
             .text(t(item.label))
             .build();
+          const icon = Span().class('agent-task-icon').attr('aria-hidden', 'true').build();
+          icon.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${taskIcons[item.id] ?? taskIcons.read}</svg>`;
+          button.prepend(icon);
           button.addEventListener('click', () => {
             if (options.getInput().trim()) {
               help.textContent = t('agentEntryDraftPresent');

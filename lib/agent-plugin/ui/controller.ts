@@ -43,6 +43,9 @@ export interface AgentChatControllerOptions {
   maxIterations?: number;
   /** Called with each streamed assistant text delta (live-render the bubble). */
   onAgentDelta?: (delta: string) => void;
+  /** Ephemeral provider-returned public reasoning; never a chat turn or history. */
+  onReasoningDelta?: (delta: string) => void;
+  onReasoningEnd?: () => void;
   /** Called when a streamed assistant turn completes (close the live bubble). */
   onAgentStreamEnd?: () => void;
   /** Persist/restore conversation history across reloads. */
@@ -229,7 +232,13 @@ export class AgentChatController {
         signal: run.abort.signal,
         onEvent: (event) => {
           if (!live()) return;
-          if (event.type === 'usage') {
+          if (event.type === 'reasoning_delta') {
+            assertCurrent?.();
+            if (live()) this.options.onReasoningDelta?.(event.text);
+          } else if (event.type === 'reasoning_end') {
+            assertCurrent?.();
+            if (live()) this.options.onReasoningEnd?.();
+          } else if (event.type === 'usage') {
             run.timing?.usage(event.usage);
             this.options.onUsage?.(event.usage);
           } else if (event.type === 'assistant_delta') {

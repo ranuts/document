@@ -20,6 +20,25 @@ afterEach(() => {
   document.body.replaceChildren();
   vi.unstubAllGlobals();
 });
+it('opens an explicitly chosen composer source even when the source list is filtered', () => {
+  const sources = new ReferenceSources();
+  sources.add({ id: 'one', connector: 'local', title: 'Notes', text: 'Visible only on request' });
+  const view = createSourcesView({ sources, labels, changed: vi.fn(), close: vi.fn() });
+  document.body.append(view.el);
+  const search = view.el.querySelector<HTMLInputElement>('[type=search]')!;
+  search.value = 'no match';
+  search.dispatchEvent(new Event('input'));
+  expect(view.el.querySelector('.agent-source-row')).toBeNull();
+  expect(view.openSource('missing')).toBe(false);
+  expect(search.value).toBe('no match');
+  expect(view.openSource('one')).toBe(true);
+  const detail = view.el.querySelector<HTMLDetailsElement>('details')!;
+  expect(detail.open).toBe(true);
+  expect(document.activeElement).toBe(detail.querySelector('summary'));
+  expect(detail.querySelector('pre')?.textContent).toBe('Visible only on request');
+  view.dispose();
+  expect(view.openSource('one')).toBe(false);
+});
 it('offers local references without remote account or server controls', () => {
   const fetcher = vi.fn();
   vi.stubGlobal('fetch', fetcher);

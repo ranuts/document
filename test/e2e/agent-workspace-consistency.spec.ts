@@ -51,7 +51,7 @@ test('workspace pages share compact token geometry and a keyboard return path', 
           expect((await summary.boundingBox())!.height).toBe(32);
         }
         const back = page.locator('.agent-chat-toggle');
-        expect((await back.boundingBox())!.height).toBe(32);
+        expect((await back.boundingBox())!.height).toBe(width <= 480 ? 44 : 32);
         expect(await current.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
         await page
           .locator('.agent-runtime-panel')
@@ -111,6 +111,9 @@ test('artifact commands distinguish disabled, ordinary and explicit save states'
   const disabled = await save.evaluate((el) => getComputedStyle(el).backgroundColor);
   await save.hover();
   expect(await save.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(disabled);
+  await expect(artifacts.locator('.agent-artifact-workbench')).toHaveAttribute('data-mode', 'preview');
+  await expect(artifacts.getByRole('textbox', { name: 'Title', exact: true })).not.toBeEditable();
+  await artifacts.locator('[data-action=edit]').click();
   await artifacts.getByRole('textbox', { name: 'Title', exact: true }).fill('Renamed table');
   await expect(save).toBeEnabled();
   expect(await save.evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe(disabled);

@@ -27,7 +27,12 @@ interface AnthropicToolUseBlock {
   name: string;
   input: Record<string, unknown>;
 }
-type AnthropicBlock = AnthropicTextBlock | AnthropicToolUseBlock | { type: string };
+type AnthropicBlock =
+  | AnthropicTextBlock
+  | AnthropicToolUseBlock
+  | Anthropic.ThinkingBlock
+  | Anthropic.RedactedThinkingBlock
+  | { type: string };
 
 interface AnthropicResponse {
   content: AnthropicBlock[];
@@ -36,11 +41,11 @@ interface AnthropicResponse {
 
 /** A streaming handle from `messages.stream()` (the bits this provider uses). */
 export interface AnthropicStream {
-  on(event: 'text', listener: (textDelta: string) => void): unknown;
+  on(event: 'text' | 'thinking', listener: (textDelta: string) => void): unknown;
   finalMessage(): Promise<AnthropicResponse>;
   /** Optional SDK lifecycle methods; minimal injected clients need not implement them. */
   abort?(): void;
-  off?(event: 'text', listener: (textDelta: string) => void): unknown;
+  off?(event: 'text' | 'thinking', listener: (textDelta: string) => void): unknown;
 }
 
 /** The slice of the Anthropic client this provider uses (eases test mocking). */
@@ -161,6 +166,7 @@ export class AnthropicProvider implements LLMProvider {
     tools: LLMToolDef[],
     owner?: AbortSignal,
     onDelta?: (textDelta: string) => void,
+    onReasoningDelta?: (text: string) => void,
   ): Promise<LLMResponse> {
     owner?.throwIfAborted();
     if (!Number.isFinite(this.timeoutMs) || this.timeoutMs <= 0 || this.timeoutMs > 2_147_483_647)
@@ -191,6 +197,16 @@ export class AnthropicProvider implements LLMProvider {
       () => controller.abort(new DOMException('AI request timed out', 'TimeoutError')),
       this.timeoutMs,
     );
+    let reasoningObserved = false;
+    const reasoningListener = (delta: string) => {
+      if (!active || controller.signal.aborted || !delta) return;
+      try {
+        reasoningObserved = true;
+        onReasoningDelta?.(delta);
+      } catch (error) {
+        controller.abort(error);
+      }
+    };
     const listener = (delta: string) => {
       if (!active || controller.signal.aborted) return;
       try {
@@ -211,10 +227,19 @@ export class AnthropicProvider implements LLMProvider {
         // Observe rejection before attaching callbacks: minimal host clients may
         // emit synchronously, and callbacks can stop or throw reentrantly.
         const final = stream.finalMessage();
+        if (onReasoningDelta) stream.on('thinking', reasoningListener);
         stream.on('text', listener);
         return final;
       })();
       const response = await Promise.race([pending, aborted]);
+      controller.signal.throwIfAborted();
+      if (!reasoningObserved && onReasoningDelta) {
+        for (const block of response.content ?? []) {
+          if (block.type !== 'thinking') continue;
+          const thinking = (block as { type: string; thinking?: unknown }).thinking;
+          if (typeof thinking === 'string' && thinking) reasoningListener(thinking);
+        }
+      }
       controller.signal.throwIfAborted();
       return parseAnthropicResponse(response);
     } catch (error) {
@@ -227,6 +252,7 @@ export class AnthropicProvider implements LLMProvider {
       controller.signal.removeEventListener('abort', onAbort);
       try {
         stream?.off?.('text', listener);
+        if (onReasoningDelta) stream?.off?.('thinking', reasoningListener);
       } catch {}
     }
   }
@@ -240,7 +266,8 @@ export class AnthropicProvider implements LLMProvider {
     tools: LLMToolDef[],
     onDelta: (textDelta: string) => void,
     signal?: AbortSignal,
+    onReasoningDelta?: (text: string) => void,
   ): Promise<LLMResponse> {
-    return this.request(messages, tools, signal, onDelta);
+    return this.request(messages, tools, signal, onDelta, onReasoningDelta);
   }
 }

@@ -1,3 +1,4 @@
+import { editArtifact } from './lib/artifact-view';
 import { mockApi, originalApiUrl } from './lib/mock-api';
 import { readFile } from 'node:fs/promises';
 import { expect, test } from './lib/l0';
@@ -67,6 +68,7 @@ test('local sources and versioned artifacts remain explicit, compact and reviewe
   await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'artifacts');
   const text = page.locator('.agent-artifact-editor textarea');
   await expect(text).toHaveValue(source);
+  await editArtifact(page);
   await text.fill('Edited release note');
   await page.getByRole('button', { name: 'Save version', exact: true }).click();
   await expect(page.locator('.agent-artifact-status')).toHaveText('Saved on this device');
@@ -75,7 +77,7 @@ test('local sources and versioned artifacts remain explicit, compact and reviewe
   await expect(text).toHaveValue(source);
   await page.getByRole('button', { name: 'Save version', exact: true }).click();
   await expect(page.locator('.agent-artifact-editor select option')).toHaveCount(3);
-  await page.locator('.agent-artifact-presentation > details > summary').click();
+  await page.locator('.agent-artifact-export > summary').click();
   await page.setViewportSize({ width: 360, height: 700 });
   for (const theme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: theme });
@@ -242,6 +244,7 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   expect(bodies).toHaveLength(1);
   await page.locator('.cui-save').click();
   await expect(page.locator('.agent-artifact-provenance')).toContainText('notes.txt');
+  await editArtifact(page);
   await page.locator('.agent-artifact-editor textarea').fill('Keep artifact draft');
   await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.cui-save')).toHaveText('Saved');
@@ -388,16 +391,18 @@ test('offline workspace keeps local sources and hides download controls without 
   await expect(page.locator('.agent-panel-provider')).toBeVisible();
   await expect(page.locator('.agent-custom-sources')).toBeHidden();
   await expect(page.locator('.agent-model-cache')).toBeVisible();
-  await page.locator('.agent-panel-settings-toggle').click();
+  await page.locator('.agent-chat-toggle').click();
   await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
   await expect(page.locator('.agent-artifacts')).toBeVisible();
   await page.getByRole('button', { name: 'Offline draft', exact: true }).click();
+  await editArtifact(page);
   await page.locator('.agent-artifact-editor textarea').fill('Saved without a network');
   await page.getByRole('button', { name: 'Save version', exact: true }).click();
   await expect(page.locator('.agent-artifact-editor select option')).toHaveCount(2);
   await expect(page.locator('.agent-artifact-status')).toHaveText('Saved on this device');
   await context.setOffline(false);
   offline = false;
+  await page.locator('.agent-chat-toggle').click();
   await page.locator('.agent-sources-nav').click();
   await expect(
     page.locator('.agent-sources-view input[type=url], .agent-sources-view input[type=password]'),
@@ -492,12 +497,14 @@ test('discard restores artifact titles and a full version history can continue a
   const text = page.locator('.agent-artifact-editor textarea');
   const versions = page.locator('.agent-artifact-editor select');
   await versions.selectOption('1');
+  await editArtifact(page);
   await title.fill('Unsaved title');
   await versions.selectOption('20');
   await page.locator('[data-action=discardChanges]').click();
   await expect(title).toHaveValue('Saved title');
   await expect(text).toHaveValue('Version 20');
   await expect(page.locator('[data-action=saveVersion]')).toBeDisabled();
+  await editArtifact(page);
   await text.fill('Continue this draft');
   await page.locator('[data-action=saveVersion]').click();
   await expect(page.locator('.agent-artifact-status')).toContainText('20 versions');
@@ -653,7 +660,7 @@ test('structured results validate explicitly, preview compactly and export witho
   await page.getByRole('button', { name: 'Suggest changes', exact: true }).click();
   await expect(page.locator('.agent-artifact-workflow')).toContainText('The revision could not finish');
   await expect(page.getByRole('button', { name: 'Use in draft', exact: true })).toBeHidden();
-  await expect(page.locator('.agent-artifact-data-preview td textarea').first()).toHaveValue('row 0');
+  await expect(page.locator('.agent-artifact-data-preview td').first()).toHaveText('row 0');
   await page.getByRole('button', { name: 'Suggest changes', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Use in draft', exact: true })).toBeVisible();
   expect(JSON.stringify(requests[1])).toContain('10000 cells');
@@ -666,15 +673,13 @@ test('structured results validate explicitly, preview compactly and export witho
   for (const theme of ['light', 'dark'] as const) {
     await page.setViewportSize({ width: 360, height: 760 });
     await page.emulateMedia({ colorScheme: theme });
-    await page.locator('.agent-artifact-editor > input').scrollIntoViewIfNeeded();
+    await page.locator('.agent-artifact-editor .agent-artifact-title').scrollIntoViewIfNeeded();
     await page
       .locator('.agent-runtime-panel')
       .screenshot({ path: testInfo.outputPath(`structured-default-${theme}.png`) });
   }
   await page.getByRole('button', { name: 'Next', exact: true }).click();
-  await expect(
-    page.locator('.agent-artifact-data-preview tbody textarea, .agent-artifact-data-preview tr textarea').nth(2),
-  ).toHaveValue('row 10');
+  await expect(page.locator('.agent-artifact-data-preview td').first()).toHaveText('row 10');
   await context.setOffline(true);
   await page.getByText('Export', { exact: true }).click();
   const download = page.waitForEvent('download');
@@ -714,6 +719,7 @@ test('structured results validate explicitly, preview compactly and export witho
     }),
   );
   await page.getByRole('button', { name: 'Save as new artifact', exact: true }).click();
+  await editArtifact(page);
   const slideBody = page.locator('.agent-artifact-data-preview > textarea').nth(1);
   await slideBody.focus();
   await slideBody.press('End');
@@ -722,7 +728,7 @@ test('structured results validate explicitly, preview compactly and export witho
   await page.getByRole('button', { name: 'Save version', exact: true }).click();
   for (const theme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: theme });
-    await page.locator('.agent-artifact-editor > input').scrollIntoViewIfNeeded();
+    await page.locator('.agent-artifact-editor .agent-artifact-title').scrollIntoViewIfNeeded();
     await expect
       .poll(() => page.locator('.agent-runtime-panel').evaluate((el) => el.scrollWidth - el.clientWidth))
       .toBeLessThan(2);

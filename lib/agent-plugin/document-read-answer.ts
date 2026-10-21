@@ -3,6 +3,12 @@ import { REFERENCE_CITATION_RULE } from '@ranuts/agent-core/llm/prompt';
 import type { LLMMessage, LLMProvider } from '@ranuts/agent-core/llm/types';
 import type { DocumentContext } from './document-context';
 
+export interface ReadAnswerOptions {
+  onReasoningDelta?: (text: string) => void;
+  onReasoningEnd?: () => void;
+  assertCurrent?: () => void;
+}
+
 /** Standard tool-result continuation, with no execution capabilities in the answer step. */
 export async function generateReadAnswer(
   provider: LLMProvider,
@@ -12,6 +18,7 @@ export async function generateReadAnswer(
   signal: AbortSignal,
   onDelta?: (text: string) => void,
   referenceData?: string,
+  options: ReadAnswerOptions = {},
 ): Promise<string> {
   signal.throwIfAborted();
   const messages: LLMMessage[] = [
@@ -33,18 +40,48 @@ export async function generateReadAnswer(
     },
     ...exchange,
   ];
-  const response =
-    onDelta && provider.chatStream
-      ? await provider.chatStream(
-          messages,
-          [],
-          (delta) => {
-            if (!signal.aborted) onDelta(delta);
-          },
-          signal,
-        )
-      : await provider.chat(messages, [], signal);
+  let active = true;
+  let reasoningObserved = false;
+  let reasoningClosed = false;
+  const live = () => {
+    if (!active || signal.aborted) return false;
+    options.assertCurrent?.();
+    return !signal.aborted;
+  };
+  const endReasoning = () => {
+    if (reasoningClosed) return;
+    reasoningClosed = true;
+    if (reasoningObserved && live()) options.onReasoningEnd?.();
+  };
+  let response;
+  try {
+    response =
+      (onDelta || options.onReasoningDelta) && provider.chatStream
+        ? await provider.chatStream(
+            messages,
+            [],
+            (delta) => {
+              if (!delta || !live()) return;
+              endReasoning();
+              if (live()) onDelta?.(delta);
+            },
+            signal,
+            (text) => {
+              if (!text || reasoningClosed || !live()) return;
+              reasoningObserved = true;
+              options.onReasoningDelta?.(text);
+            },
+          )
+        : await provider.chat(messages, [], signal);
+  } finally {
+    try {
+      endReasoning();
+    } finally {
+      active = false;
+    }
+  }
   signal.throwIfAborted();
+  options.assertCurrent?.();
   if (response.toolCalls.length || incompleteResponseReason(response) || !response.text.trim())
     throw new Error('Incomplete document answer');
   return response.text.trim();

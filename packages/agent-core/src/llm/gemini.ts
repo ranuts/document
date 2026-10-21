@@ -197,8 +197,9 @@ export class GeminiProvider implements LLMProvider {
     tools: LLMToolDef[],
     onDelta: (text: string) => void,
     signal?: AbortSignal,
+    onReasoningDelta?: (text: string) => void,
   ): Promise<LLMResponse> {
-    return tools.length ? this.chat(messages, tools, signal) : this.request(messages, tools, signal, onDelta);
+    return this.request(messages, tools, signal, tools.length ? undefined : onDelta, onReasoningDelta);
   }
 
   private async request(
@@ -206,6 +207,7 @@ export class GeminiProvider implements LLMProvider {
     tools: LLMToolDef[],
     signal?: AbortSignal,
     onDelta?: (text: string) => void,
+    onReasoningDelta?: (text: string) => void,
   ): Promise<LLMResponse> {
     signal?.throwIfAborted();
     if (!this.apiKey) {
@@ -238,7 +240,12 @@ export class GeminiProvider implements LLMProvider {
           const candidate = (value as GeminiResponse).candidates?.[0];
           for (const part of candidate?.content?.parts ?? []) {
             if (part.functionCall) throw new Error('Unexpected Gemini tool response');
-            if (part.thought || !part.text) continue;
+            if (part.thought) {
+              if (!finish && typeof part.text === 'string' && part.text) onReasoningDelta?.(part.text);
+              signal?.throwIfAborted();
+              continue;
+            }
+            if (!part.text) continue;
             if (finish || typeof part.text !== 'string') throw new Error('Invalid Gemini stream');
             text += part.text;
             onDelta(part.text);
@@ -253,6 +260,11 @@ export class GeminiProvider implements LLMProvider {
           assertStreamRecord('Gemini', value);
           fallback = parseGeminiResponse(value as GeminiResponse);
           if (fallback.toolCalls.length) throw new Error('Unexpected Gemini tool response');
+          for (const part of (value as GeminiResponse).candidates?.[0]?.content?.parts ?? []) {
+            if (part.thought && typeof part.text === 'string' && part.text) onReasoningDelta?.(part.text);
+            signal?.throwIfAborted();
+          }
+          signal?.throwIfAborted();
           if (fallback.text) onDelta(fallback.text);
         },
       );
@@ -272,6 +284,11 @@ export class GeminiProvider implements LLMProvider {
       },
       this.requestOptions,
     );
+    signal?.throwIfAborted();
+    for (const part of data.candidates?.[0]?.content?.parts ?? []) {
+      if (part.thought && typeof part.text === 'string' && part.text) onReasoningDelta?.(part.text);
+      signal?.throwIfAborted();
+    }
     signal?.throwIfAborted();
     return parseGeminiResponse(data);
   }

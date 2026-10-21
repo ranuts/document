@@ -1,5 +1,6 @@
 import { t, getLanguage, setLanguage, LanguageCode } from '@ranuts/shared/i18n';
 import * as historyList from '../../lib/agent-plugin/ui/history-list';
+import * as sessionOwner from '../../lib/agent-plugin/ui/sessions';
 import { ChatView } from '@ranuts/chat-ui';
 import type { EditorApi } from '../../lib/agent-plugin/editor-bridge';
 import { afterEach, expect, it, vi } from 'vitest';
@@ -708,11 +709,45 @@ it('preserves an expanded selected-text disclosure and its scroller while contex
   expect(trigger.getAttribute('aria-label')).toContain(String(selection.length));
 });
 
-it('offers persistent named destinations with flat page headings and preserves the current composer', async () => {
+it.each(['meaningful', 'blank'])(
+  'returns to the displayed %s conversation instead of a newer conversation',
+  async (kind) => {
+    const store = sessionOwner.createConversationStore();
+    const selected = store.create().id;
+    if (kind === 'meaningful') store.history().save([{ role: 'user', content: 'Older selected conversation' }]);
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    store.create();
+    store.history().save([{ role: 'user', content: 'Newer conversation' }]);
+    store.select(selected);
+    const factory = vi.spyOn(sessionOwner, 'createConversationStore').mockReturnValue(store);
+    try {
+      const panel = createAgentPanel();
+      const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+      input.value = 'A draft belonging to the selected conversation';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      for (const route of [
+        '.agent-sources-nav',
+        '.agent-panel-settings-toggle',
+        '.agent-workspace-toggle',
+        '.agent-history-toggle',
+      ]) {
+        panel.querySelector<HTMLButtonElement>(route)!.click();
+        panel.querySelector<HTMLButtonElement>('.agent-chat-toggle')!.click();
+        expect(store.activeId).toBe(selected);
+        expect(input.value).toBe('A draft belonging to the selected conversation');
+      }
+    } finally {
+      factory.mockRestore();
+    }
+  },
+);
+
+it('keeps primary header routes and contextual composer entries while preserving the current draft', async () => {
   const panel = createAgentPanel();
   const nav = panel.querySelector<HTMLElement>('.agent-workspace-nav')!;
   expect(nav).not.toBeNull();
-  expect(nav.querySelector('svg')).toBeNull();
+  expect(nav.closest('.agent-panel-header')).not.toBeNull();
+  expect(nav.querySelectorAll('button')).toHaveLength(3);
   const destinations = [
     '.agent-chat-toggle',
     '.agent-workspace-toggle',
@@ -720,13 +755,16 @@ it('offers persistent named destinations with flat page headings and preserves t
     '.agent-sources-nav',
     '.agent-panel-settings-toggle',
   ];
-  for (const selector of destinations) expect(nav.querySelector(selector)?.textContent?.trim()).toBeTruthy();
+  for (const selector of destinations) expect(panel.querySelector(selector)?.getAttribute('aria-label')).toBeTruthy();
+  expect(panel.querySelector('.agent-sources-nav')?.closest('.cui-composer')).not.toBeNull();
+  expect(panel.querySelector('.agent-panel-settings-toggle')?.closest('.cui-footer')).not.toBeNull();
   expect(panel.querySelector('.agent-panel-header .agent-panel-settings-toggle')).toBeNull();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Keep this exact conversation draft';
   input.dispatchEvent(new Event('input', { bubbles: true }));
   for (const selector of destinations.slice(1)) {
-    nav.querySelector<HTMLButtonElement>(selector)!.click();
+    nav.querySelector<HTMLButtonElement>('.agent-chat-toggle')!.click();
+    panel.querySelector<HTMLButtonElement>(selector)!.click();
     expect(panel.querySelector('.agent-runtime-row')?.hasAttribute('hidden')).toBe(true);
   }
   expect(panel.querySelector('.agent-panel-settings .agent-view-header button')).toBeNull();
@@ -740,7 +778,9 @@ it('offers persistent named destinations with flat page headings and preserves t
   panel.querySelector<HTMLButtonElement>('.agent-sources-toggle')!.click();
   expect(panel.dataset.view).toBe('sources');
   expect(panel.querySelector('.agent-sources-toggle')?.getAttribute('aria-expanded')).toBe('true');
-  panel.querySelector<HTMLButtonElement>('.agent-sources-toggle')!.click();
+  panel
+    .querySelector<HTMLElement>('.agent-sources-view')!
+    .dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
   expect(panel.dataset.view).toBe('chat');
   expect(panel.querySelector('.agent-sources-toggle')?.getAttribute('aria-expanded')).toBe('false');
 });

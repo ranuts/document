@@ -106,8 +106,10 @@ for (const variant of variants) {
       for (const theme of ['light', 'dark'] as const) {
         await page.emulateMedia({ colorScheme: theme });
         const titleBox = await assertTitleRail(title);
-        if (variant.width <= 360 || variant.coarse)
-          expect(titleBox.width).toBeGreaterThanOrEqual(Math.min(titleBox.textWidth + 16, variant.width - 24));
+        // The single row reserves space for four primary commands; translated
+        // identity text can ellipsize while its actual hit target stays usable.
+        expect(titleBox.width).toBeGreaterThanOrEqual(variant.coarse ? 44 : 32);
+        await expect(title).toHaveAttribute('aria-label', /.+/);
         await title.hover();
         await expect(title).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
         await title.click();
@@ -155,6 +157,7 @@ for (const variant of variants) {
           ['.agent-sources-nav', '.agent-sources-view', 'input[type="search"]'],
           ['.agent-workspace-toggle', '.agent-artifacts', ':scope > div:not(.agent-view-header)'],
         ]) {
+          await panel.locator('.agent-chat-toggle').click();
           await panel.locator(toggle).click();
           const view = panel.locator(selector);
           await expect(view.locator('.agent-view-back')).toHaveCount(0);
@@ -243,6 +246,9 @@ for (const variant of variants) {
           );
         await form.locator('[data-action="saveNew"]').click();
         const editor = artifacts.locator('.agent-artifact-editor:not(.agent-artifact-import)');
+        await expect(editor.locator('[data-artifact-reader]')).toBeVisible();
+        await expect(editor).toHaveAttribute('data-mode', 'preview');
+        await editor.locator('[data-action=edit]').click();
         await expect(editor.locator('textarea').first()).toBeVisible();
         expect(await frameLeft(editor.locator('input').first())).toBeCloseTo(16, 1);
         expect((await contentGeometry(artifacts)).headingLeft).toBeCloseTo(16, 1);

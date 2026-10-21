@@ -51,8 +51,6 @@ test('default off and remembered on never prepare models or connect services on 
   await expect(page.locator('.agent-runtime-panel')).toHaveCount(0);
   await page.locator('.agent-onboarding .agent-enable-switch').click();
   await expect(page.locator('.agent-runtime-panel')).toBeVisible();
-  await expect(page.locator('.agent-panel-settings')).toBeVisible();
-  await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
   await page.locator('.cui-input').fill('My draft');
   await expect(page.locator('.cui-send')).toHaveClass(/cui-send-prepare/);
@@ -93,6 +91,8 @@ for (const width of [1280, 375, 320]) {
     await page.evaluate(() => window.__toggleAgentPanel?.());
     await page.locator('.agent-onboarding .agent-enable-switch').click();
     await expect(page.locator('.agent-runtime-panel')).toBeVisible();
+    await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
+    await page.locator('.agent-panel-settings-toggle').click();
     await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'settings');
     await page.screenshot({ path: testInfo.outputPath('settings.png') });
     await page.locator('.agent-chat-toggle').click();

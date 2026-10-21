@@ -1,3 +1,4 @@
+import * as chatUi from '@ranuts/chat-ui';
 import { expect, it, vi } from 'vitest';
 import { createArtifactPresentation } from '../../lib/agent-plugin/ui/artifact-presentation';
 const labels = {
@@ -40,6 +41,7 @@ it('updates canonical slide fields without replacing the active editor', () => {
   text.value = JSON.stringify(initial);
   const view = createArtifactPresentation(text, labels, initial);
   document.body.append(view.el);
+  view.setEditing(true);
   const field = view.el.querySelector('textarea')!;
   field.focus();
   field.value = 'Updated';
@@ -66,11 +68,64 @@ it('localizes an invalid preserved source safely and clamps pages after shrinkin
   text.value = JSON.stringify({ ...p, rows: [['only']] });
   text.dispatchEvent(new Event('input'));
   expect(view.el.textContent).toContain('1 / 1');
-  expect(view.el.querySelector('td textarea')).not.toBeNull();
+  expect(view.el.querySelector('td')?.textContent).toBe('only');
   text.value = 'broken source';
   text.dispatchEvent(new Event('input'));
   expect(() => view.setLabels({ ...labels, importHint: 'Repair this data' })).not.toThrow();
   expect(view.el.textContent).toContain('Repair this data');
   expect(text.value).toBe('broken source');
   view.dispose();
+});
+
+it('renders structured previews without writable fields until Edit is explicit', () => {
+  const text = document.createElement('textarea');
+  const initial = { kind: 'table' as const, columns: ['Name'], rows: [['one']] };
+  text.value = JSON.stringify(initial);
+  const view = createArtifactPresentation(text, labels, initial);
+  expect(view.el.querySelector('td')?.textContent).toBe('one');
+  expect(view.el.querySelector('textarea')).toBeNull();
+  view.setEditing(true);
+  expect(view.el.querySelector('td textarea')).not.toBeNull();
+  view.setEditing(false);
+  expect(view.el.querySelector('textarea')).toBeNull();
+  expect(text.value).toBe(JSON.stringify(initial));
+  view.dispose();
+});
+
+it('disables exported toolbar controls during a pending save after relocation', () => {
+  const text = document.createElement('textarea');
+  text.value = 'draft';
+  const view = createArtifactPresentation(text, labels);
+  const toolbar = document.createElement('div');
+  toolbar.append(view.exportEl);
+  view.setDisabled(true);
+  expect(Array.from(toolbar.querySelectorAll('button')).every((button) => button.disabled)).toBe(true);
+  view.setDisabled(false);
+  expect(Array.from(toolbar.querySelectorAll('button')).every((button) => !button.disabled)).toBe(true);
+  view.dispose();
+});
+
+it('preserves the hidden reader while typing and renders the latest source only on Preview', () => {
+  const text = document.createElement('textarea');
+  text.value = '**Saved**';
+  const view = createArtifactPresentation(text, labels);
+  const reader = view.el.querySelector<HTMLElement>('[data-artifact-reader]')!;
+  const paragraph = reader.firstElementChild;
+  const render = vi.spyOn(chatUi, 'renderChatMarkdown');
+  view.setEditing(true);
+  expect(reader.hidden).toBe(true);
+  expect(reader.firstElementChild).toBe(paragraph);
+  text.value = '**First edit**';
+  text.dispatchEvent(new Event('input'));
+  text.value = '**Latest edit**';
+  text.dispatchEvent(new Event('input'));
+  expect(render).not.toHaveBeenCalled();
+  expect(reader.firstElementChild).toBe(paragraph);
+  expect(reader.textContent).toBe('Saved');
+  view.setEditing(false);
+  expect(render).toHaveBeenCalledTimes(1);
+  expect(reader.hidden).toBe(false);
+  expect(reader.querySelector('strong')?.textContent).toBe('Latest edit');
+  view.dispose();
+  render.mockRestore();
 });

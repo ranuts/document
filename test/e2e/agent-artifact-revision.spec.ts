@@ -1,4 +1,5 @@
 import { mockApi } from './lib/mock-api';
+import { editArtifact } from './lib/artifact-view';
 import { expect, test } from './lib/l0';
 
 test('artifact AI revisions stay in an explicit draft review and preserve newer edits', async ({ page }, testInfo) => {
@@ -81,7 +82,8 @@ test('artifact AI revisions stay in an explicit draft review and preserve newer 
   await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
   await page.locator('.agent-workspace-toggle').click();
   await page.locator(`[data-artifact="${artifactId}"]`).click();
-  const text = page.locator('.agent-artifact-editor > textarea');
+  await page.locator('.agent-artifact-editor [data-action=edit]').click();
+  const text = page.locator('.agent-artifact-editor [data-artifact-source]');
   await text.evaluate((el: HTMLTextAreaElement) => {
     el.focus();
     el.setSelectionRange(3, 11);
@@ -125,6 +127,7 @@ test('artifact AI revisions stay in an explicit draft review and preserve newer 
   await page.getByRole('button', { name: 'Suggest changes', exact: true }).click();
   await expect.poll(() => requests.length).toBe(2);
   expect(JSON.stringify(requests[1])).toContain('前😀新后');
+  await editArtifact(page);
   await text.fill('My newer draft');
   release();
   await expect(text).toHaveValue('My newer draft');

@@ -218,22 +218,24 @@ The canonical composition rules are owned by
 This section supplies the application's geometry and browser acceptance; the site's marketing
 column widths do not apply inside the assistant. `styles/assistant.css` owns the shared values.
 
-| Geometry            | Product contract                                                                            | Acceptance subject                                                                         |
-| ------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Content rail        | 16px from the panel's inside edge                                                           | Header title text, onboarding copy, unframed copy, section labels, field/list outer frames |
-| Header title        | Text-sized target with 8px inline padding; leading hit area extends into the gutter         | DOM Range text left, actual button width, hover/focus area and neighboring actions         |
-| Parallel navigation | Visible Chat, Artifacts, Conversations, Sources and Models destinations beneath the header  | Native navigation buttons, current state, keyboard focus and narrow overflow               |
-| Nested navigation   | Labeled Back only inside artifact import/editor workflows, preceding the heading            | Destination text, target bounds, draft/confirmation behavior                               |
-| View heading        | All top-level and nested h2 text returns to the 16px content rail, at the 16px heading role | Actual heading text Range, including long labels                                           |
-| Framed fields       | Outer frame follows the content rail; internal text retains its control inset               | Native frame and real ranui shadow parts are separate subjects                             |
-| Vertical groups     | 8px internal, 16px group and 24px section spacing                                           | Actual related-region edges; empty status paragraphs reserve no anonymous margins          |
+| Geometry          | Product contract                                                                                                 | Acceptance subject                                                                              |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Content rail      | 16px from the panel's inside edge                                                                                | Header title text, onboarding copy, unframed copy, section labels, field/list outer frames      |
+| Header title      | Text-sized Chat/home target with 8px inline padding; secondary pages add a leading chevron                       | Text/icon rail, actual target width, hover/focus area and neighboring actions                   |
+| Navigation        | One header: Chat/home, Artifacts, Conversations, New and Close; Sources beside composition and Models beneath it | Accessible names/current states, real destination paths, draft/focus return and narrow overflow |
+| Nested navigation | Labeled Back only inside artifact import/editor workflows, preceding the heading                                 | Destination text, target bounds, draft/confirmation behavior                                    |
+| View heading      | All top-level and nested h2 text returns to the 16px content rail, at the 16px heading role                      | Actual heading text Range, including long labels                                                |
+| Framed fields     | Outer frame follows the content rail; internal text retains its control inset                                    | Native frame and real ranui shadow parts are separate subjects                                  |
+| Vertical groups   | 8px internal, 16px group and 24px section spacing                                                                | Actual related-region edges; empty status paragraphs reserve no anonymous margins               |
 
 The title's flexible trailing filler is layout space, not a clickable/hovering title surface.
-The header contains the title, New conversation and Close. Persistent text destinations
-have current-state treatment distinct from hover, remain reachable when the row scrolls,
-and reveal the selected/focused entry. Coarse input retains 44px targets. Selecting the
-current destination is idempotent; Chat restores the displayed conversation and draft.
-Runtime preparation belongs to Chat or Models and does not precede unrelated views.
+Use one compact header rather than another row of destinations. Its Artifacts and Conversations
+icons have accessible names and selected states. Sources and the selected model/settings trigger
+belong beside composition. On narrow panes Sources becomes an icon with the same accessible
+name, keeping room for the voice language, Stop and Send. Coarse input retains 44px targets.
+Chat restores the displayed conversation and draft; it must not switch to the latest session
+while returning from a secondary page. Open Chat even without a configured model, preserving
+the draft through explicit preparation/settings. Runtime preparation does not precede unrelated views.
 Top-level views have no Back row. Nested Back focus outlines remain inside their targets.
 Populated result lists keep a 16px boundary before Import. Centered empty
 states remain centered within their content frame. Frame, text, icon viewport and hit area
@@ -261,9 +263,11 @@ or inspection is not acceptance evidence.
 
 The fine-input title row is 40px: 32px targets with 4px above and below. Coarse input retains
 44px targets and a 52px row. Keep the assistant identity at the 13px label role and medium
-weight; navigation uses 12px regular labels with a medium selected label and quiet selected
-fill. Five named destinations remain reachable; the navigation can scroll in narrow panes.
-There is no inset underline or raised shadow. Keep keyboard focus separate from selection.
+weight. Header actions remain quiet 32px targets on desktop, expanding to 44px for coarse input;
+a fine-pointer pane at 360px or narrower also gives the home command a 44px target. Five destinations
+remain reachable through their task contexts. There is no tab strip, inset underline or raised
+shadow. Keep keyboard focus separate from selection. The secondary-page home chevron stays on
+the content spine; its label follows after the icon and gap.
 
 History & data is a named command-list context. Restore, Import, Export and deletion commands
 use equal-width native button rows with visible verb labels and leading icons. The resting
@@ -323,3 +327,34 @@ states. Disabled commands keep their own disabled role and do not inherit an ena
 Do not infer that every control is a secondary outlined button from its ancestor view class.
 Role-specific styling belongs to the actual action. The full state inventory, renders and
 verification are recorded in [the workspace boundary audit](explorations/2026-10-20-workspace-boundary-audit.md).
+
+### Conversation, public reasoning and artifact workbench
+
+The composer owns the draft, attachment chips and input actions. Sending clears only the submitted
+draft; the reader may prepare the next draft while generation continues. Stop remains a stable,
+separate action. Preserve IME composition, queue promotion, selection and focus. Never replay
+already received tokens as decoration. Keep answer actions quiet and in a stable reading surface.
+
+Render only public reasoning explicitly returned by the configured provider, using native
+`r-reasoning`. It is separate from answer text, copy, saved history/artifacts, document review and
+subsequent requests. Do not enable extra provider thinking by default. Cap transient reasoning
+at 64KiB UTF-8 per run, preserving Unicode chunk boundaries. A reader's disclosure choice takes
+precedence over later stream updates. Expanded content must not repeat its summary in the header;
+collapsed content may show the latest summary. End reasoning on answer/settlement/Stop, under
+the same generation and conversation lifetime guards as answer delivery.
+
+Artifacts open in Preview. Use the existing bounded safe chat Markdown renderer for text;
+structured content has a readable presentation with source JSON behind a disclosure. Explicit Edit
+reveals the canonical input/textarea. Preview may reflect that unsaved draft but does not save it.
+Saving creates an explicit version and returns to Preview. Keep dirty navigation/version guards,
+late-save cancellation and document review separate. AI refinement produces an editable draft;
+applying it to a document still requires the native review. Deletion asks a nearby question with
+short Delete/Cancel controls and safe focus return. Export is a disclosure of actual export formats.
+
+Use existing ran fast/base motion roles only where they explain a state change. Native reasoning
+height/disclosure motion owns interruption and reversal. Reduced motion removes interpolation;
+focus and content availability never wait for decoration. Do not animate palette properties on
+theme changes or transform ancestors of portaled overlays. Actual screenshots and frame-inspected
+recordings of waiting, streaming, interruption, error, reader disclosure, preview/edit/dirty/save,
+export and document review are required alongside behavioral tests. Fixture streams prove UI
+behavior and isolation, not real-model quality or precise parity with another product.

@@ -6,7 +6,13 @@
  * OpenAI-format converters. Uses fetch (injectable) rather than a vendor SDK to
  * avoid another dependency; the request shape is small and stable.
  */
-import { type OpenAICompletion, parseOpenAIResponse, toOpenAIMessages, toOpenAITools } from './openai-format';
+import {
+  type OpenAICompletion,
+  parseOpenAIResponse,
+  openAIReasoning,
+  toOpenAIMessages,
+  toOpenAITools,
+} from './openai-format';
 import { fetchOpenAIStream } from './openai-stream';
 import { getApiKey } from './keys';
 import { DEFAULT_SYSTEM_PROMPT } from './prompt';
@@ -53,8 +59,9 @@ export class OpenAIProvider implements LLMProvider {
     tools: LLMToolDef[],
     onDelta: (text: string) => void,
     signal?: AbortSignal,
+    onReasoningDelta?: (text: string) => void,
   ): Promise<LLMResponse> {
-    if (tools.length) return this.chat(messages, tools, signal);
+    if (tools.length) return this.request(messages, tools, signal, onReasoningDelta);
     signal?.throwIfAborted();
     if (!this.apiKey) throw new Error('OpenAI API key is not configured');
     return fetchOpenAIStream(
@@ -73,10 +80,20 @@ export class OpenAIProvider implements LLMProvider {
       },
       this.requestOptions,
       onDelta,
+      onReasoningDelta,
     );
   }
 
-  async chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
+  chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
+    return this.request(messages, tools, signal);
+  }
+
+  private async request(
+    messages: LLMMessage[],
+    tools: LLMToolDef[],
+    signal?: AbortSignal,
+    onReasoningDelta?: (text: string) => void,
+  ): Promise<LLMResponse> {
     signal?.throwIfAborted();
     if (!this.apiKey) {
       throw new Error('OpenAI API key is not configured');
@@ -96,6 +113,9 @@ export class OpenAIProvider implements LLMProvider {
       },
       this.requestOptions,
     );
+    signal?.throwIfAborted();
+    const reasoning = openAIReasoning(completion.choices?.[0]?.message);
+    if (reasoning) onReasoningDelta?.(reasoning);
     signal?.throwIfAborted();
     return parseOpenAIResponse(completion);
   }

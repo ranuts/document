@@ -133,6 +133,7 @@ export function createSourcesView(options: {
     attached.replaceChildren();
     for (const source of options.sources.list()) {
       const row = Div().class('agent-source-row').build();
+      row.dataset.sourceId = source.id;
       if (!sourceMatches(source, search.value)) continue;
       const text = sourcePreview(source, labels.openSource ?? labels.excerpt, search.value, labels.previewTruncated);
       const remove = button(() => {
@@ -183,6 +184,21 @@ export function createSourcesView(options: {
     el,
     cancelPending,
     focus: () => heading.focus(),
+    openSource: (id: string): boolean => {
+      if (disposed || !options.sources.list().some((source) => source.id === id)) return false;
+      search.value = '';
+      update();
+      const row = [...attached.querySelectorAll<HTMLElement>('.agent-source-row')].find(
+        (candidate) => candidate.dataset.sourceId === id,
+      );
+      const preview = row?.querySelector<HTMLDetailsElement>('details');
+      if (!preview) return false;
+      preview.open = true;
+      preview.dispatchEvent(new Event('toggle'));
+      preview.querySelector('summary')?.focus();
+      row?.scrollIntoView?.({ block: 'nearest' });
+      return true;
+    },
     setLabels,
     refresh: update,
     dispose: () => {

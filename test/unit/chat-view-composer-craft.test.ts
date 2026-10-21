@@ -1,0 +1,53 @@
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+import { ChatView } from '../../packages/chat-ui/src/chat-view';
+
+let view: ChatView;
+beforeEach(() => {
+  document.body.replaceChildren();
+  HTMLElement.prototype.scrollTo = vi.fn();
+});
+afterEach(() => view.dispose());
+
+it('keeps a named composer boundary and stable action row across draft, IME, queue and Stop states', () => {
+  const send = vi.fn();
+  const queue = vi.fn();
+  const stop = vi.fn();
+  view = new ChatView({ onSend: send, onQueue: queue, onStop: stop });
+  document.body.append(view.el);
+  const composer = view.el.querySelector('[role="group"][aria-label="Message composer"]');
+  expect(composer).not.toBeNull();
+  const toolbar = composer!.querySelector('[role="group"][aria-label="Message actions"]')!;
+  const input = composer!.querySelector('textarea')!;
+  const sendButton = toolbar.querySelector<HTMLButtonElement>('.cui-send')!;
+  const stopButton = toolbar.querySelector<HTMLButtonElement>('.cui-stop')!;
+  const sources = document.createElement('button');
+  sources.textContent = 'Sources';
+  view.actionsEl.append(sources);
+  expect([...toolbar.children]).toEqual(expect.arrayContaining([view.actionsEl, stopButton, sendButton]));
+  expect(view.pendingEl.closest('[role="group"]')).toBeNull();
+  expect(input.getAttribute('wrap')).toBe('soft');
+  expect(input.getAttribute('enterkeyhint')).toBe('send');
+  view.setRunning(true);
+  view.setInput('下一条问题');
+  input.focus();
+  input.dispatchEvent(new CompositionEvent('compositionstart'));
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  expect(queue).not.toHaveBeenCalled();
+  expect(view.getInput()).toBe('下一条问题');
+  input.dispatchEvent(new CompositionEvent('compositionend'));
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true, bubbles: true }));
+  expect(queue).not.toHaveBeenCalled();
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  expect(queue).toHaveBeenCalledWith('下一条问题');
+  expect(document.activeElement).toBe(input);
+  expect(send).not.toHaveBeenCalled();
+  stopButton.click();
+  expect(stop).toHaveBeenCalledOnce();
+  expect(stopButton.disabled).toBe(true);
+  expect(composer!.querySelector('.cui-composer-bar')).toBe(toolbar);
+  expect(toolbar.contains(sources)).toBe(true);
+  expect(toolbar.querySelector('.cui-send')).toBe(sendButton);
+  view.setLabels({ composer: 'Compor mensagem', actions: 'Ações da mensagem' });
+  expect(composer!.getAttribute('aria-label')).toBe('Compor mensagem');
+  expect(toolbar.getAttribute('aria-label')).toBe('Ações da mensagem');
+});

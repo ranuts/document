@@ -1,4 +1,4 @@
-import { type OpenAICompletion, type OpenAIStreamChunk, parseOpenAIResponse } from './openai-format';
+import { type OpenAICompletion, type OpenAIStreamChunk, parseOpenAIResponse, openAIReasoning } from './openai-format';
 import { assertStreamRecord, fetchProviderStream } from './provider-stream';
 import type { ProviderHttpOptions } from './provider-http';
 import type { LLMResponse } from './types';
@@ -10,6 +10,7 @@ export async function fetchOpenAIStream(
   init: RequestInit,
   options: ProviderHttpOptions,
   onDelta: (text: string) => void,
+  onReasoningDelta?: (text: string) => void,
 ): Promise<LLMResponse> {
   let text = '';
   let finish: string | undefined;
@@ -32,6 +33,9 @@ export async function fetchOpenAIStream(
       if (choice?.delta?.tool_calls?.length || choice?.finish_reason === 'tool_calls')
         throw new Error(`Unexpected ${provider} tool response`);
       if (chunk.usage) usage = chunk.usage;
+      const reasoning = openAIReasoning(choice?.delta);
+      if (reasoning && !finish) onReasoningDelta?.(reasoning);
+      init.signal?.throwIfAborted();
       if (choice?.delta?.content) {
         if (finish || typeof choice.delta.content !== 'string') throw new Error(`Invalid ${provider} stream`);
         text += choice.delta.content;
@@ -41,8 +45,12 @@ export async function fetchOpenAIStream(
     },
     (value) => {
       assertStreamRecord(provider, value);
-      fallback = parseOpenAIResponse(value as unknown as OpenAICompletion);
+      const completion = value as unknown as OpenAICompletion;
+      fallback = parseOpenAIResponse(completion);
       if (fallback.toolCalls.length) throw new Error(`Unexpected ${provider} tool response`);
+      const reasoning = openAIReasoning(completion.choices?.[0]?.message);
+      if (reasoning) onReasoningDelta?.(reasoning);
+      init.signal?.throwIfAborted();
       if (fallback.text) onDelta(fallback.text);
     },
   );

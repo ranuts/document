@@ -1,0 +1,13 @@
+diff --git a/dist/reasoning-Bjkl7E3y.js b/dist/reasoning-Bjkl7E3y.js
+index d216365b8755f0054a7ffe5e894a5cd1ca9aa739..1913af7f979330a8f49ed71fb7b7db3dd545214c 100644
+--- a/dist/reasoning-Bjkl7E3y.js
++++ b/dist/reasoning-Bjkl7E3y.js
+@@ -94,7 +94,7 @@ var b = class extends u {
+     const t = this.streaming, e = this.duration;
+     this._row.open = this.open, this._row.busy = t;
+     const r = e === null || e < 1e3 ? "" : `${(e / 1e3).toFixed(1)}s`;
+-    this._row.heading = r === "" ? this.label : `${this.label} · ${r}`, this._row.summary = g(this._content, t);
++    this._row.heading = r === "" ? this.label : `${this.label} · ${r}`, this._row.summary = this.open ? "" : g(this._content, t);
+   }
+ };
+ d("r-reasoning", b);

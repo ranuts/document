@@ -1,3 +1,4 @@
+import { renderChatMarkdown } from '@ranuts/chat-ui';
 import { validatePayload, payloadText, type ArtifactPayload } from '../artifacts/payload';
 import { artifactFilename, exportPayload, type ArtifactExportFormat } from '../artifacts/export';
 export interface ArtifactPresentationLabels {
@@ -11,7 +12,7 @@ export interface ArtifactPresentationLabels {
   previous: string;
   structuredHint: string;
 }
-/** Bounded editable data page. A hidden JSON owner keeps draft capture and AI review lossless. */
+/** Read-only reader and explicit field editor, backed by the canonical source. */
 export function createArtifactPresentation(
   text: HTMLTextAreaElement,
   labels: ArtifactPresentationLabels,
@@ -21,12 +22,15 @@ export function createArtifactPresentation(
   const el = document.createElement('div');
   el.className = 'agent-artifact-presentation';
   const preview = document.createElement('div');
-  preview.className = 'agent-artifact-data-preview';
+  preview.className = 'agent-artifact-data-preview agent-artifact-reader';
+  preview.dataset.artifactReader = 'true';
+  preview.tabIndex = -1;
   const abort = new AbortController();
   const kind = initial?.kind ?? 'text';
   let page = 0;
   let committing = false;
   let disabled = false;
+  let editing = false;
   function payload(): ArtifactPayload {
     const data =
       kind === 'text' ? { kind: 'text' as const, text: text.value } : validatePayload(JSON.parse(text.value));
@@ -34,8 +38,15 @@ export function createArtifactPresentation(
     return data;
   }
   function render() {
+    if (kind === 'text') {
+      preview.hidden = editing;
+      // Editing changes only the canonical source. Rebuild the reader once
+      // when it becomes visible, avoiding Markdown work on each keystroke.
+      if (!editing) renderChatMarkdown(preview, text.value);
+      return;
+    }
     preview.replaceChildren();
-    if (kind === 'text') return;
+    preview.hidden = false;
     const data = payload();
     if (data.kind === 'table') {
       page = Math.min(page, Math.max(0, Math.ceil(data.rows.length / 10) - 1));
@@ -44,7 +55,7 @@ export function createArtifactPresentation(
       for (const [columnIndex, column] of data.columns.entries()) {
         const cell = document.createElement('th');
         cell.append(
-          field(column, `${labels.preview} · ${columnIndex + 1}`, (value) => {
+          valueField(column, `${labels.preview} · ${columnIndex + 1}`, (value) => {
             data.columns[columnIndex] = value;
             commit(data);
           }),
@@ -57,7 +68,7 @@ export function createArtifactPresentation(
         for (const [columnIndex, value] of row.entries()) {
           const td = document.createElement('td');
           td.append(
-            field(value, `${data.columns[columnIndex]} · ${page * 10 + rowIndex + 1}`, (value) => {
+            valueField(value, `${data.columns[columnIndex]} · ${page * 10 + rowIndex + 1}`, (value) => {
               data.rows[page * 10 + rowIndex][columnIndex] = value;
               commit(data);
             }),
@@ -71,11 +82,11 @@ export function createArtifactPresentation(
     } else if (data.kind === 'slides') {
       page = Math.min(page, data.slides.length - 1);
       preview.append(
-        field(data.slides[page].title, `${labels.titleField ?? labels.preview} · ${page + 1}`, (value) => {
+        valueField(data.slides[page].title, `${labels.titleField ?? labels.preview} · ${page + 1}`, (value) => {
           data.slides[page].title = value;
           commit(data);
         }),
-        field(data.slides[page].body, `${labels.textField ?? labels.preview} · ${page + 1}`, (value) => {
+        valueField(data.slides[page].body, `${labels.textField ?? labels.preview} · ${page + 1}`, (value) => {
           data.slides[page].body = value;
           commit(data);
         }),
@@ -92,6 +103,13 @@ export function createArtifactPresentation(
       committing = false;
     }
   }
+  function valueField(value: string, label: string, change: (value: string) => void) {
+    if (editing) return field(value, label, change);
+    const content = document.createElement('div');
+    content.className = 'agent-artifact-field-value';
+    content.textContent = value;
+    return content;
+  }
   function field(value: string, label: string, change: (value: string) => void) {
     const input = document.createElement('textarea');
     input.className = 'agent-artifact-cell';
@@ -104,6 +122,8 @@ export function createArtifactPresentation(
     return input;
   }
   function pages(count: number) {
+    const navigation = document.createElement('div');
+    navigation.className = 'agent-artifact-pagination';
     for (const [label, step] of [
       [labels.previous, -1],
       [labels.next, 1],
@@ -117,12 +137,14 @@ export function createArtifactPresentation(
         page += step;
         render();
       });
-      preview.append(button);
+      navigation.append(button);
     }
-    preview.append(document.createTextNode(` ${page + 1} / ${count}`));
+    navigation.append(document.createTextNode(` ${page + 1} / ${count}`));
+    preview.append(navigation);
   }
   const disclosure = document.createElement('details'),
     summary = document.createElement('summary');
+  disclosure.className = 'agent-artifact-export';
   summary.textContent = labels.export;
   const hint = document.createElement('p');
   hint.textContent = labels.structuredHint;
@@ -179,14 +201,25 @@ export function createArtifactPresentation(
     { signal: abort.signal },
   );
   el.append(preview, disclosure);
-  render();
+  safeRender();
   return {
+    exportEl: disclosure,
+    setEditing(value: boolean) {
+      editing = value;
+      safeRender();
+    },
     setDisabled(value: boolean) {
       disabled = value;
-      for (const input of el.querySelectorAll<HTMLButtonElement | HTMLTextAreaElement>('button,textarea'))
+      for (const input of [
+        ...el.querySelectorAll<HTMLButtonElement | HTMLTextAreaElement>('button,textarea'),
+        ...disclosure.querySelectorAll<HTMLButtonElement>('button'),
+      ])
         input.disabled = value || input.dataset.unavailable === 'true';
     },
-    dispose: () => abort.abort(),
+    dispose() {
+      abort.abort();
+      disclosure.remove();
+    },
     setLabels(next: ArtifactPresentationLabels) {
       labels = next;
       summary.textContent = labels.export;

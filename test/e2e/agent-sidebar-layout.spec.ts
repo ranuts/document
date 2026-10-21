@@ -25,14 +25,15 @@ for (const width of [320, 1280]) {
     expect(switchGeometry.knobTop).toBe(switchGeometry.trackTop);
     await page.locator('.agent-onboarding .agent-enable-switch').click();
     const panel = page.locator('.agent-runtime-panel');
-    await expect(panel).toHaveAttribute('data-view', 'settings');
-    await page.locator('.agent-chat-toggle').click();
     await expect(panel).toHaveAttribute('data-view', 'chat');
     await expect(page.locator('.cui-composer')).toBeVisible();
     await expect(page.locator('.cui-empty')).toBeVisible();
     const suggestion = page.locator('.agent-task-action').first();
-    await expect(suggestion).toHaveCSS('border-top-width', '1px');
-    await expect(suggestion).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(suggestion.locator('.agent-task-icon')).toBeVisible();
+    await suggestion.click();
+    await expect(page.locator('.cui-input')).not.toHaveValue('');
+    await expect(page.locator('.cui-msg-user')).toHaveCount(0);
+    await page.locator('.cui-input').fill('');
     await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`empty-${width}.png`) });
     const alignment = await page.locator('.agent-runtime-panel').evaluate((panel) => {
       const left = (selector: string) => panel.querySelector(selector)!.getBoundingClientRect().left;
@@ -44,8 +45,12 @@ for (const width of [320, 1280]) {
     await page.locator('.agent-panel-settings-toggle').click();
     await expect(page.locator('.agent-panel-settings')).toBeVisible();
     const settingsToggle = page.locator('.agent-panel-settings-toggle');
-    await page.keyboard.press('Tab');
-    await settingsToggle.focus();
+    const size = await page.locator('.agent-panel-load').evaluate((button) => button.getBoundingClientRect().height);
+    expect(size).toBeGreaterThanOrEqual(30);
+    expect(size).toBeLessThanOrEqual(34);
+    const overflow = await page.locator('.agent-panel-settings').evaluate((el) => el.scrollWidth - el.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(1);
+    await page.keyboard.press('Escape');
     await expect(settingsToggle).toBeFocused();
     expect(
       await settingsToggle.evaluate((button) => {
@@ -53,10 +58,5 @@ for (const width of [320, 1280]) {
         return style.outlineStyle !== 'none' && Number.parseFloat(style.outlineWidth) >= 2;
       }),
     ).toBe(true);
-    const size = await page.locator('.agent-panel-load').evaluate((button) => button.getBoundingClientRect().height);
-    expect(size).toBeGreaterThanOrEqual(30);
-    expect(size).toBeLessThanOrEqual(34);
-    const overflow = await page.locator('.agent-panel-settings').evaluate((el) => el.scrollWidth - el.clientWidth);
-    expect(overflow).toBeLessThanOrEqual(1);
   });
 }
