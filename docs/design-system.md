@@ -285,6 +285,15 @@ coordinates against the independently declared page spine, not just sibling equa
 transparent resting rows, measure text contrast against the actual pane canvas; hover/press
 contrast uses the painted control surface. Verify complete pane screenshots, resizing and input density.
 
+Related model/attachment helper copy sits 8px from its control. Separate model actions and
+adjacent custom-model fields use 16px. Block-layout select hosts avoid anonymous inline baseline
+space; verify painted region edges rather than adding declared margins. Source removal moves
+keyboard focus to the next visible Remove action, then the previous one, or Attach when the
+filtered list is empty. Source filenames and Remove use the same label role and first-line text
+center; the expanded excerpt does not move the Remove action. Chat starter actions use the
+adaptive control-height role, including 44px coarse targets. Artifact deletion reveals and focuses
+Cancel; cancellation returns to Delete. Confirmation actions retain an 8px gap, including wrapping.
+
 Import and Attach open a workflow and retain secondary command affordance. Primary fill is
 reserved for committing a form or accepting a reviewed result. A brief opacity-only heading
 entry can mark navigation with the existing fast motion token; it must not delay focus,

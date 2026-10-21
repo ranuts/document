@@ -2,6 +2,10 @@
 
 Date: 2026-10-21
 
+Header/alignment figures below record `681e4f9`. The expanded-workflow follow-up at the end
+records the later spacing, target and focus corrections. These are scoped acceptance records,
+not a claim that overall visual hierarchy or motion has reached a final design.
+
 The previous header gave the assistant identity and every destination substantial visual weight.
 History headings started at 16px, while the saving checkbox and command icons started at 24px.
 Equal button frames therefore did not establish a shared leading-content spine.
@@ -66,7 +70,7 @@ and [before Chat](../media/assistant-refinement/before-chat-en-light-1280.png) a
 [Measured history variants](../media/assistant-refinement/measurements.json) record the actual
 coordinates and header heights, including the effective theme and selected fill.
 
-## Verification
+## Header verification at `681e4f9`
 
 - The independent page spine is 16px. Before the CSS correction, the cross-region assertion
   failed with the command icon at 24px. It no longer accepts equal but separately inset groups.
@@ -85,3 +89,44 @@ One intermediate run timed out while waiting for the native editor to become rea
 concurrent screenshot capture. The subsequent complete serial run passed 14/14 with no retries,
 timeout increases or weakened tolerances. Firefox, native browser zoom and real model downloads
 are not claimed as verified by this focused UI correction.
+
+## Expanded-workflow follow-up
+
+Actual production-browser inspection found attachment helper gap 0, model helper gap 17
+(including inline-host baseline space), helper/action gap 12 and adjacent custom-field gap 0.
+The corrected relationships are 8/8/16/16. Artifact confirmation actions now retain 8px separation.
+Touch Chat starters measured 34.25px and now use the adaptive 44px target role. Source filename
+and Remove text centers differed by 6.58px; their shared label role and density-derived first-line
+padding now align without translating glyphs or changing the expanded excerpt's position.
+
+Keyboard removal moves to the next/previous visible source action or Attach when the filtered
+list is empty. Artifact confirmation focuses Cancel and cancellation returns to Delete, keeping
+the draft. A long artifact case verifies that the safe choice is inside the narrow viewport.
+These owners belong to document; no ran component-internal defect was established.
+
+| Before custom fields                                                                                                                                           | Corrected custom fields                                                                                                                                       |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="../media/assistant-detail-audit/before-models-expanded-bottom-pt-320-touch-light.png" width="280" alt="Custom model fields with no inter-field gap"> | <img src="../media/assistant-detail-audit/models-expanded-bottom-pt-320-touch-light.png" width="280" alt="Custom model fields with sixteen pixel group gaps"> |
+
+[Sources after correction](../media/assistant-detail-audit/source-excerpt-pt-360-touch-dark.png),
+[Models in dark theme](../media/assistant-detail-audit/models-dark.png),
+[touch Chat targets](../media/assistant-detail-audit/chat-pt-320-touch-light.png),
+[artifact confirmation](../media/assistant-detail-audit/artifact-delete-confirmation-pt-320-touch-light.png),
+and [focus return after cancellation](../media/assistant-detail-audit/artifact-delete-cancelled-pt-320-touch-light.png)
+are representative full-pane renders. [Capture measurements](../media/assistant-detail-audit/captures.json)
+list 68 current states across English desktop light/dark and Portuguese 320/360px coarse variants.
+The local report retains 60 before/after pairs and 8 additional keyboard-focus captures.
+
+The new regressions failed before their fixes: two focus unit cases; browser helper/focus cases;
+confirmation gap 0vs8; touch targets 34.25 vs 44 and filename/Remove center drift 6.58 vs 1px tolerance.
+Existing geometry expectations, retries and timeouts were not weakened. Final verification:
+Chromium 31/31; WebKit 4/4 focused detail cases; unit 41/41; production build, TypeScript,
+archive-aware lint, changed-file format and diff checks. See `agent-detail-polish.spec.ts` for
+rendered spacing, physical targets and keyboard continuation; existing workspace/layout/source
+and affordance suites remain in the run.
+
+Overall hierarchy still needs design work: the five persistent destinations give configuration,
+content and history similar prominence, and artifact commands need a tighter relationship to their
+content. Current animation is limited; these static captures disable animation for geometry and
+are not motion acceptance. Native zoom, system text scaling, screen readers and real model
+downloads are outside this focused verification.

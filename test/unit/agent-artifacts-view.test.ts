@@ -800,3 +800,20 @@ it('preserves a busy import when workspace navigation requests a list refresh', 
   await vi.waitFor(() => expect(view.el.querySelector('textarea')?.value).toBe('imported'));
   view.dispose();
 });
+
+it('focuses the safe deletion choice and returns to Delete when cancelled', async () => {
+  const store = createArtifactStore();
+  const view = createArtifactsView({ store, labels, onApply: vi.fn() });
+  document.body.append(view.el);
+  await view.save('Keep this draft');
+  const remove = view.el.querySelector<HTMLButtonElement>('[data-action=delete]')!;
+  remove.focus();
+  remove.click();
+  const cancel = view.el.querySelector<HTMLButtonElement>('[data-action=cancel]')!;
+  expect(document.activeElement).toBe(cancel);
+  cancel.click();
+  expect(document.activeElement).toBe(remove);
+  expect(view.el.querySelector('textarea')?.value).toBe('Keep this draft');
+  expect(await store.list()).toHaveLength(1);
+  view.dispose();
+});

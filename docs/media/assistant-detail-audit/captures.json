@@ -1,0 +1,886 @@
+[
+  {
+    "name": "history",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "history-light.png",
+    "width": 1280
+  },
+  {
+    "name": "history-confirmation",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "history-confirmation-light.png",
+    "width": 1280
+  },
+  {
+    "name": "artifacts",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "artifacts-light.png",
+    "width": 1280
+  },
+  {
+    "name": "artifact-import",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "artifact-import-light.png",
+    "width": 1280
+  },
+  {
+    "name": "artifact-editor",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "artifact-editor-light.png",
+    "width": 1280
+  },
+  {
+    "name": "artifact-delete-confirmation",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": "cancel"
+    },
+    "file": "artifact-delete-confirmation-light.png",
+    "width": 1280
+  },
+  {
+    "name": "artifact-delete-cancelled",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": "delete"
+    },
+    "file": "artifact-delete-cancelled-light.png",
+    "width": 1280
+  },
+  {
+    "name": "artifacts-populated",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "artifacts-populated-light.png",
+    "width": 1280
+  },
+  {
+    "name": "models",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "models-light.png",
+    "width": 1280
+  },
+  {
+    "name": "models-expanded",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "models-expanded-light.png",
+    "width": 1280
+  },
+  {
+    "name": "models-expanded-bottom",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "models-expanded-bottom-light.png",
+    "width": 1280
+  },
+  {
+    "name": "models-service",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "models-service-light.png",
+    "width": 1280
+  },
+  {
+    "name": "chat",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "chat-light.png",
+    "width": 1280
+  },
+  {
+    "name": "sources",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "sources-light.png",
+    "width": 1280
+  },
+  {
+    "name": "sources-populated",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "sources-populated-light.png",
+    "width": 1280
+  },
+  {
+    "name": "source-excerpt",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "source-excerpt-light.png",
+    "width": 1280
+  },
+  {
+    "name": "source-error",
+    "theme": "light",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "source-error-light.png",
+    "width": 1280
+  },
+  {
+    "name": "history",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "history-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "history-confirmation",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "history-confirmation-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "artifacts",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "artifacts-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "artifact-import",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "artifact-import-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "artifact-editor",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "artifact-editor-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "artifact-delete-confirmation",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": "cancel"
+    },
+    "file": "artifact-delete-confirmation-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "artifact-delete-cancelled",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": "delete"
+    },
+    "file": "artifact-delete-cancelled-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "artifacts-populated",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "artifacts-populated-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "models",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "models-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "models-expanded",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "models-expanded-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "models-expanded-bottom",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "models-expanded-bottom-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "models-service",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "models-service-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "chat",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "chat-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "sources",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "sources-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "sources-populated",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "sources-populated-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "source-excerpt",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "source-excerpt-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "source-error",
+    "theme": "dark",
+    "locale": "en",
+    "coarse": false,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 40,
+      "active": null
+    },
+    "file": "source-error-dark.png",
+    "width": 1280
+  },
+  {
+    "name": "history",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "history-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "history-confirmation",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "history-confirmation-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "artifacts",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "artifacts-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "artifact-import",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "artifact-import-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "artifact-editor",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "artifact-editor-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "artifact-delete-confirmation",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": "cancel"
+    },
+    "file": "artifact-delete-confirmation-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "artifact-delete-cancelled",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": "delete"
+    },
+    "file": "artifact-delete-cancelled-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "artifacts-populated",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "artifacts-populated-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "models",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "models-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "models-expanded",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "models-expanded-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "models-expanded-bottom",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "models-expanded-bottom-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "models-service",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "models-service-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "chat",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "chat-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "sources",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "sources-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "sources-populated",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "sources-populated-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "source-excerpt",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "source-excerpt-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "source-error",
+    "theme": "light",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "source-error-pt-320-touch-light.png",
+    "width": 320
+  },
+  {
+    "name": "history",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "history-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "history-confirmation",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "history-confirmation-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "artifacts",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "artifacts-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "artifact-import",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "artifact-import-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "artifact-editor",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "artifact-editor-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "artifact-delete-confirmation",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": "cancel"
+    },
+    "file": "artifact-delete-confirmation-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "artifact-delete-cancelled",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": "delete"
+    },
+    "file": "artifact-delete-cancelled-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "artifacts-populated",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "artifacts-populated-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "models",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "models-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "models-expanded",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "models-expanded-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "models-expanded-bottom",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "models-expanded-bottom-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "models-service",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "models-service-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "chat",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "chat-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "sources",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "sources-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "sources-populated",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "sources-populated-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "source-excerpt",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "source-excerpt-pt-360-touch-dark.png",
+    "width": 360
+  },
+  {
+    "name": "source-error",
+    "theme": "dark",
+    "locale": "pt",
+    "coarse": true,
+    "geometry": {
+      "overflow": 0,
+      "headerHeight": 52,
+      "active": null
+    },
+    "file": "source-error-pt-360-touch-dark.png",
+    "width": 360
+  }
+]

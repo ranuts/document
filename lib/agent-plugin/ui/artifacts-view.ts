@@ -317,6 +317,10 @@ export function createArtifactsView(options: {
         });
       }),
       button('delete', () => {
+        const cancel = button('cancel', () => {
+          status.textContent = '';
+          actions.querySelector<HTMLButtonElement>('[data-action=delete]')!.focus();
+        });
         status.replaceChildren(
           button('confirmDelete', () => {
             void perform(async () => {
@@ -325,10 +329,9 @@ export function createArtifactsView(options: {
               await refresh(true);
             });
           }),
-          button('cancel', () => {
-            status.textContent = '';
-          }),
+          cancel,
         );
+        cancel.focus();
       }),
     );
     const form = Div()

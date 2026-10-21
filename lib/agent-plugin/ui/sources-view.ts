@@ -136,8 +136,11 @@ export function createSourcesView(options: {
       if (!sourceMatches(source, search.value)) continue;
       const text = sourcePreview(source, labels.openSource ?? labels.excerpt, search.value, labels.previewTruncated);
       const remove = button(() => {
+        const index = [...attached.querySelectorAll('.agent-source-remove')].indexOf(remove);
         options.sources.remove(source.id);
         update();
+        const remaining = attached.querySelectorAll<HTMLButtonElement>('.agent-source-remove');
+        (remaining[Math.min(index, remaining.length - 1)] ?? attachFile).focus();
       });
       remove.className = 'agent-source-remove';
       remove.textContent = labels.remove;

@@ -236,3 +236,27 @@ it('retains local attachments across offline and online transitions without a ne
   view.dispose();
   network.mockRestore();
 });
+
+it('keeps removal focus in the filtered source list and falls back to Attach when empty', () => {
+  const sources = new ReferenceSources();
+  for (const id of ['hidden', 'one', 'two', 'three'])
+    sources.add({ id, connector: 'local', title: id === 'hidden' ? 'Other' : `Notes ${id}`, text: id });
+  const view = createSourcesView({ sources, labels, changed: vi.fn(), close: vi.fn() });
+  document.body.append(view.el);
+  const search = view.el.querySelector<HTMLInputElement>('[type=search]')!;
+  search.value = 'Notes';
+  search.dispatchEvent(new Event('input'));
+  const remove = (name: string) => {
+    const control = view.el.querySelector<HTMLButtonElement>(`[aria-label="Remove: Notes ${name}"]`)!;
+    control.focus();
+    control.click();
+  };
+  remove('two');
+  expect(document.activeElement?.getAttribute('aria-label')).toBe('Remove: Notes three');
+  remove('three');
+  expect(document.activeElement?.getAttribute('aria-label')).toBe('Remove: Notes one');
+  remove('one');
+  expect(document.activeElement).toBe(view.el.querySelector('.agent-source-attach'));
+  expect(sources.list().map((source) => source.id)).toEqual(['hidden']);
+  view.dispose();
+});
