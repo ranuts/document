@@ -1,4 +1,4 @@
-import { createViewHeader, labelViewBack } from './view-header';
+import { createViewHeader } from './view-header';
 import { sourcePreview } from './source-preview';
 import { sourceMatches } from '../references/reference-search';
 import { Div, View } from 'ranui/builder';
@@ -67,7 +67,6 @@ export function createSourcesView(options: {
     b.addEventListener('click', action);
     return b;
   };
-  const back = button(options.close);
   const label = (control: HTMLElement, key: string) => {
     const wrapper = View('label').build();
     const text = View('span').text(key).build();
@@ -79,7 +78,7 @@ export function createSourcesView(options: {
   const localField = label(local, '');
   localField.wrapper.hidden = true;
   el.append(
-    createViewHeader(heading, back),
+    createViewHeader(heading),
     excerpt,
     offlineHint,
     status,
@@ -156,7 +155,6 @@ export function createSourcesView(options: {
     offlineHint.textContent = labels.offline;
     syncConnectivity();
     excerpt.textContent = labels.excerpt;
-    labelViewBack(back, labels.close);
     localHeading.textContent = labels.local;
     attachFile.textContent = labels.attach;
     localField.text.textContent = labels.attach;

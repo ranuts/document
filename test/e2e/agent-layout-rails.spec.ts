@@ -152,19 +152,15 @@ for (const variant of variants) {
         for (const [toggle, selector, frame] of [
           ['.agent-panel-settings-toggle', '.agent-panel-settings', '.agent-source-picker'],
           ['.agent-history-toggle', '.agent-history-view', '.agent-history-search-row'],
-          ['.agent-sources-toggle', '.agent-sources-view', 'input[type="search"]'],
+          ['.agent-sources-nav', '.agent-sources-view', 'input[type="search"]'],
           ['.agent-workspace-toggle', '.agent-artifacts', ':scope > div:not(.agent-view-header)'],
         ]) {
           await panel.locator(toggle).click();
           const view = panel.locator(selector);
-          const back = view.locator('.agent-view-back');
-          await expect(back).toBeVisible();
+          await expect(view.locator('.agent-view-back')).toHaveCount(0);
           const geometry = await contentGeometry(view);
           expect(geometry.contentLeft, selector).toBeCloseTo(16, 1);
-          expect(geometry.iconLeft, selector).toBeCloseTo(16, 1);
-          expect(geometry.headingLeft, selector).toBeCloseTo(variant.coarse ? 54 : 48, 1);
-          expect(geometry.backWidth, selector).toBe(variant.coarse ? 44 : 32);
-          expect(geometry.backLeft, selector).toBeGreaterThanOrEqual(0);
+          expect(geometry.headingLeft, selector).toBeCloseTo(16, 1);
           expect(geometry.overflow, selector).toBeLessThanOrEqual(1);
           expect(await frameLeft(view.locator(frame).first()), selector).toBeCloseTo(16, 1);
           const firstContent = view
@@ -201,17 +197,17 @@ for (const variant of variants) {
             expect(gap, 'source intro and search form a separate group').toBe(16);
           }
           await panel.screenshot({ path: testInfo.outputPath(`${selector.slice(1)}-${theme}.png`) });
+          const chatNavigation = panel.locator('.agent-chat-toggle');
           await page.keyboard.press('Tab');
-          await back.focus();
-          expect(await back.evaluate((el) => el.matches(':focus-visible'))).toBe(true);
-          const focus = await back.evaluate((el) => {
+          await chatNavigation.focus();
+          expect(await chatNavigation.evaluate((el) => el.matches(':focus-visible'))).toBe(true);
+          const focus = await chatNavigation.evaluate((el) => {
             const style = getComputedStyle(el);
             return { width: Number.parseFloat(style.outlineWidth), offset: Number.parseFloat(style.outlineOffset) };
           });
-          expect(geometry.backLeft, `${selector} focus ring inside scrollport`).toBeGreaterThanOrEqual(
-            focus.width + focus.offset,
-          );
-          await back.press('Enter');
+          expect(focus.width, `${selector} keyboard navigation outline`).toBeGreaterThanOrEqual(2);
+          expect(focus.offset).toBeLessThanOrEqual(0);
+          await chatNavigation.press('Enter');
           await expect(panel).toHaveAttribute('data-view', 'chat');
           await expect(page.locator('.cui-input')).toHaveValue('Preserve this draft while checking every view');
         }
@@ -237,7 +233,8 @@ for (const variant of variants) {
         await expect(input).toBeVisible();
         for (const field of await form.locator('input, textarea, label > span').all())
           expect(await frameLeft(field)).toBeCloseTo(16, 1);
-        expect((await contentGeometry(artifacts)).iconLeft).toBeCloseTo(16, 1);
+        expect((await contentGeometry(artifacts)).headingLeft).toBeCloseTo(16, 1);
+        await expect(artifacts.locator('.agent-view-back span')).toBeVisible();
         await input.fill('Layout fixture');
         await form
           .locator('textarea')
@@ -248,11 +245,11 @@ for (const variant of variants) {
         const editor = artifacts.locator('.agent-artifact-editor:not(.agent-artifact-import)');
         await expect(editor.locator('textarea').first()).toBeVisible();
         expect(await frameLeft(editor.locator('input').first())).toBeCloseTo(16, 1);
-        expect((await contentGeometry(artifacts)).headingLeft).toBeCloseTo(variant.coarse ? 54 : 48, 1);
+        expect((await contentGeometry(artifacts)).headingLeft).toBeCloseTo(16, 1);
         await panel.screenshot({ path: testInfo.outputPath(`artifact-editor-${theme}.png`) });
         await artifacts.locator('.agent-view-back').click();
         await expect(artifacts.locator('[data-action="import"]')).toBeVisible();
-        await artifacts.locator('.agent-view-back').click();
+        await panel.locator('.agent-chat-toggle').click();
       }
     });
   });

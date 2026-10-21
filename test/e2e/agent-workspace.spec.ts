@@ -78,7 +78,7 @@ test('selected Word task stages without calls, skips classification, reviews and
   await page.locator('.cui-send').click();
   await page.locator('.agent-panel-endpoint-connect').click();
   await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
-  await page.locator('.agent-panel-settings-toggle').click();
+  await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.cui-send')).toHaveAccessibleName('Send');
   await expect(page.locator('.cui-input')).toHaveValue(original);
   await page.locator('.cui-input').fill('');
@@ -149,7 +149,7 @@ test('stale selected task retains draft and requests reselection before any mode
   await page.locator('.agent-panel-settings-toggle').click();
   await page.locator('.agent-panel-endpoint-connect').click();
   await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
-  await page.locator('.agent-panel-settings-toggle').click();
+  await page.locator('.agent-chat-toggle').click();
   await selectWord(page);
   await page.locator('[data-task="polish"]').click();
   const draft = await page.locator('.cui-input').inputValue();
@@ -218,7 +218,7 @@ test('native provider still routes staged polish through writing and review', as
   await page.locator('.agent-panel-settings-toggle').click();
   await page.locator('.agent-panel-endpoint-connect').click();
   await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Configured');
-  await page.locator('.agent-panel-settings-toggle').click();
+  await page.locator('.agent-chat-toggle').click();
   await selectWord(page);
   await page.locator('[data-task="polish"]').click();
   await page.locator('.cui-send').click();

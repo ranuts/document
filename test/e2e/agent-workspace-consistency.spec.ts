@@ -20,15 +20,13 @@ test('workspace pages share compact token geometry and a keyboard return path', 
   expect(
     (await section.boundingBox())!.y - ((await search.boundingBox())!.y + (await search.boundingBox())!.height),
   ).toBeGreaterThanOrEqual(24);
-  expect((await source.getByRole('button', { name: 'Back to conversation', exact: true }).boundingBox())!.height).toBe(
-    32,
-  );
+  await expect(source.locator('.agent-view-back')).toHaveCount(0);
   for (const width of [1280, 360, 320]) {
     await page.setViewportSize({ width, height: 800 });
     for (const scheme of ['light', 'dark'] as const) {
       await page.emulateMedia({ colorScheme: scheme });
       for (const [open, view] of [
-        ['.agent-sources-toggle', '.agent-sources-view'],
+        ['.agent-sources-nav', '.agent-sources-view'],
         ['.agent-panel-settings-toggle', '.agent-panel-settings'],
         ['.agent-history-toggle', '.agent-history-view'],
         ['.agent-workspace-toggle', '.agent-artifacts'],
@@ -37,8 +35,8 @@ test('workspace pages share compact token geometry and a keyboard return path', 
         const current = page.locator(view);
         const header = current.locator('.agent-view-header');
         await expect(header).toBeVisible();
-        expect(await header.locator('h2').evaluate((el) => getComputedStyle(el).fontSize)).toBe('20px');
-        await expect(current.locator('.agent-view-back')).toHaveCount(1);
+        expect(await header.locator('h2').evaluate((el) => getComputedStyle(el).fontSize)).toBe('16px');
+        await expect(current.locator('.agent-view-back')).toHaveCount(0);
         if (view === '.agent-history-view') {
           expect((await current.locator('.agent-history-search-row').boundingBox())!.height).toBe(32);
         }
@@ -52,7 +50,7 @@ test('workspace pages share compact token geometry and a keyboard return path', 
         for (const summary of await current.locator('details > summary:visible').all()) {
           expect((await summary.boundingBox())!.height).toBe(32);
         }
-        const back = header.getByRole('button', { name: 'Back to conversation', exact: true });
+        const back = page.locator('.agent-chat-toggle');
         expect((await back.boundingBox())!.height).toBe(32);
         expect(await current.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
         await page
@@ -79,8 +77,9 @@ test('workspace pages share compact token geometry and a keyboard return path', 
   await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
   await page.locator('.agent-sources-toggle').click();
   const translated = page.locator('.agent-sources-view');
-  await expect(translated.locator('.agent-view-back')).toHaveAttribute('aria-label', /.+/);
-  expect(await translated.locator('.agent-view-back').getAttribute('aria-label')).not.toBe('Back to conversation');
+  const chatNavigation = page.locator('.agent-chat-toggle');
+  await expect(chatNavigation).toHaveAttribute('aria-label', /.+/);
+  expect(await chatNavigation.getAttribute('aria-label')).not.toBe('Chat');
   expect(await translated.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
   for (const button of await translated.locator('button:visible').all()) {
     expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(32);
@@ -140,7 +139,7 @@ test.describe('coarse pointer workspace', () => {
     await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
     await page.locator('.agent-sources-toggle').click();
     const source = page.locator('.agent-sources-view');
-    const back = source.locator('.agent-view-back');
+    const back = page.locator('.agent-chat-toggle');
     expect((await back.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     expect((await back.boundingBox())!.width).toBeGreaterThanOrEqual(44);
     expect(

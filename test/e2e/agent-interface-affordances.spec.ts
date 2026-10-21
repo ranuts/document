@@ -52,12 +52,13 @@ for (const width of [360, 1280]) {
           background = luminance(css.backgroundColor);
         return {
           background: css.backgroundColor,
+          shadow: css.boxShadow,
           canvas: getComputedStyle(el.closest('.agent-panel')!).backgroundColor,
           contrast: (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05),
         };
       });
       expect(surface.background).not.toBe('rgba(0, 0, 0, 0)');
-      expect(surface.background).not.toBe(surface.canvas);
+      expect(surface.background !== surface.canvas || surface.shadow !== 'none').toBe(true);
       expect(surface.contrast).toBeGreaterThanOrEqual(4.5);
       await command.focus();
       await page.keyboard.press('Tab');

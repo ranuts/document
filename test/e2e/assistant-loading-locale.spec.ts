@@ -123,7 +123,7 @@ for (const width of [360, 640]) {
     await page.locator('.agent-panel-load').press('Enter');
     await expect.poll(() => heldRequests).toBeGreaterThan(beforeRetry);
     await expect(page.locator('.agent-panel-load-stop')).toBeVisible();
-    await page.locator('.agent-panel-settings-toggle').click();
+    await page.locator('.agent-chat-toggle').click();
     const chat = await geometry();
     expect(chat).toMatchObject({
       aligned: true,

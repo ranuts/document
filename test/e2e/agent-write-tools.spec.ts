@@ -50,7 +50,7 @@ test.describe('agent document writes (real editor)', () => {
       'data-view',
       configuredService ? 'chat' : 'settings',
     );
-    if (!configuredService) await page.locator('.agent-panel-settings-toggle').click();
+    if (!configuredService) await page.locator('.agent-chat-toggle').click();
     await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
   };
 
@@ -229,7 +229,7 @@ test.describe('agent document writes (real editor)', () => {
     await page.locator('.agent-panel-settings-toggle').click();
     await page.locator('.agent-panel-endpoint-connect').click();
     await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
-    await page.locator('.agent-panel-settings-toggle').click();
+    await page.locator('.agent-chat-toggle').click();
     await send(page, 'Insert exactly this plain text at the cursor: Initial draft');
     const first = page.locator('.agent-plan-preview').first();
     await expect(first.locator('.agent-plan-primary-buttons r-button')).toHaveCount(2);
@@ -514,7 +514,7 @@ test.describe('agent document writes (real editor)', () => {
     await page.locator('.agent-panel-settings-toggle').click();
     await page.locator('.agent-panel-endpoint-connect').click();
     await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
-    await page.locator('.agent-panel-settings-toggle').click();
+    await page.locator('.agent-chat-toggle').click();
     const shapeTexts = () =>
       page.evaluate(() => {
         const win = window.__ooFrames.readyEditor() as unknown as {
@@ -583,7 +583,7 @@ test.describe('agent document writes (real editor)', () => {
     await page.locator('.agent-panel-settings-toggle').click();
     await page.locator('.agent-panel-endpoint-connect').click();
     await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
-    await page.locator('.agent-panel-settings-toggle').click();
+    await page.locator('.agent-chat-toggle').click();
     const before = await countSlides(page);
     await send(page, 'Please create another page in this presentation and let me review the change');
     const review = page.locator('.agent-plan-preview').last();
@@ -670,7 +670,7 @@ test.describe('agent document writes (real editor)', () => {
       await page.locator('.agent-panel-settings-toggle').click();
       await page.locator('.agent-panel-endpoint-connect').click();
       await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
-      await page.locator('.agent-panel-settings-toggle').click();
+      await page.locator('.agent-chat-toggle').click();
       await send(page, 'Insert exactly this plain text at the cursor: Owned paste');
       const review = page.locator('.agent-plan-preview').last();
       await review.locator('.agent-plan-apply').click();

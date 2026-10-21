@@ -23,6 +23,7 @@ async function surface(button: Locator) {
       borderStyle: css.borderTopStyle,
       outline: css.outlineStyle,
       outlineWidth: parseFloat(css.outlineWidth),
+      shadow: css.boxShadow,
     };
   });
 }
@@ -82,13 +83,13 @@ for (const scheme of ['light', 'dark'] as const) {
         const transfer = options.locator('.agent-history-restore, .agent-history-import, .agent-history-export');
         const danger = options.locator('.agent-history-delete-current, .agent-history-delete-all');
         const group = options.locator('.agent-history-transfer-actions');
-        // Native button surfaces signal action before hover. Icon/checkbox and
-        // label columns align independently of the gutter-extended hit target.
+        // Equal secondary frames share the content rail, with stable internal
+        // icon/checkbox and label columns across the complete settings section.
         const groupBox = (await group.boundingBox())!;
         const optionsBox = (await options.boundingBox())!;
-        expect(groupBox.x).toBeCloseTo(optionsBox.x - 8, 1);
-        expect(await frameLeft(options.locator('.agent-history-save'))).toBeCloseTo(16, 1);
-        expect((await textGeometry(options.locator('label > span'))).textLeft).toBeCloseTo(40, 1);
+        expect(groupBox.x).toBeCloseTo(optionsBox.x, 1);
+        expect(await frameLeft(options.locator('.agent-history-save'))).toBeCloseTo(24, 1);
+        expect((await textGeometry(options.locator('label > span'))).textLeft).toBeCloseTo(48, 1);
         const canvas = await page
           .locator('.agent-runtime-panel')
           .evaluate((el) => getComputedStyle(el).backgroundColor);
@@ -96,20 +97,22 @@ for (const scheme of ['light', 'dark'] as const) {
         for (const button of await transfer.or(danger).all()) {
           const css = await surface(button);
           expect(css.background).not.toBe('rgba(0, 0, 0, 0)');
-          expect(css.background, 'resting button must differ from the canvas').not.toBe(canvas);
+          expect(css.background !== canvas || css.shadow !== 'none', 'resting command needs a visible shape').toBe(
+            true,
+          );
           expect(contrast(css.color, css.background)).toBeGreaterThanOrEqual(4.5);
           const box = (await button.boundingBox())!;
-          expect(box.height).toBeGreaterThanOrEqual(44);
+          expect(box.height).toBeGreaterThanOrEqual(32);
           expect(box.x).toBeCloseTo(groupBox.x, 1);
           expect(box.y).toBeGreaterThanOrEqual(previousBottom);
           previousBottom = box.y + box.height;
           const icon = button.locator('svg[aria-hidden="true"]');
           await expect(icon).toBeVisible();
-          expect(await frameLeft(icon)).toBeCloseTo(16, 1);
+          expect(await frameLeft(icon)).toBeCloseTo(24, 1);
           const label = button.locator('.agent-history-action-label');
           const text = await textGeometry(label);
-          expect(text.textLeft).toBeCloseTo(40, 1);
-          expect(box.width).toBeLessThanOrEqual(text.textWidth + 41);
+          expect(text.textLeft).toBeCloseTo(48, 1);
+          expect(box.width).toBeCloseTo(groupBox.width, 1);
           await expect(button).toHaveAccessibleName((await label.innerText()).trim());
           expect(await button.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
         }

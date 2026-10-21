@@ -91,7 +91,7 @@ for (const native of [false, true])
       await page.locator('.agent-panel-settings-toggle').click();
       await page.locator('.agent-panel-endpoint-connect').click();
       await expect(page.locator('.agent-panel-endpoint-status')).toContainText(native ? 'Configured' : 'Connected');
-      await page.locator('.agent-panel-settings-toggle').click();
+      await page.locator('.agent-chat-toggle').click();
       const readSlides = () =>
         page.evaluate(() => {
           const win = window.__ooFrames.readyEditor() as any;
@@ -187,7 +187,7 @@ for (const cancel of [false, true]) {
     await page.locator('.agent-panel-settings-toggle').click();
     await page.locator('.agent-panel-endpoint-connect').click();
     await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
-    await page.locator('.agent-panel-settings-toggle').click();
+    await page.locator('.agent-chat-toggle').click();
     const input = page.locator('.cui-input');
     await input.fill('Create a new slide and add a text box containing Budget 120.');
     await input.press('Enter');

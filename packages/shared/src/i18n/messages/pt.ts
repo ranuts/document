@@ -88,6 +88,7 @@ export const pt: Partial<I18nMessages> = {
   agentUseServiceHint:
     'O texto enviado vai para o serviço escolhido. Seus dados de serviço são necessários; pode haver custos.',
   agentPreferences: 'Mais preferências',
+  agentWorkspaceChat: 'Conversa',
   agentBackToChat: 'Voltar à conversa',
   agentExpand: 'Expandir assistente',
   agentSetupFailed: 'Não foi possível abrir o assistente. Tente novamente. O documento não mudou.',

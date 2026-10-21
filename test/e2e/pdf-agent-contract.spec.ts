@@ -121,7 +121,7 @@ test('native PDF preflight rejects body edits, preserves ordinary chat and permi
   await page.locator('.agent-panel-settings-toggle').click();
   await page.locator('.agent-panel-endpoint-connect').click();
   await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Configured');
-  await page.locator('.agent-panel-settings-toggle').click();
+  await page.locator('.agent-chat-toggle').click();
   const input = page.locator('.cui-input');
   const annotations = () =>
     page.evaluate(() =>
@@ -382,7 +382,7 @@ test('PDF assistant reads scoped content and reviews a page note before a revers
   await page.locator('.agent-panel-settings-toggle').click();
   await page.locator('.agent-panel-endpoint-connect').click();
   await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
-  await page.locator('.agent-panel-settings-toggle').click();
+  await page.locator('.agent-chat-toggle').click();
   const input = page.locator('.cui-input');
   await input.fill('What does the current page say?');
   await input.press('Enter');

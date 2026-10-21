@@ -61,7 +61,7 @@ test('local sources and versioned artifacts remain explicit, compact and reviewe
   await page.locator('.agent-source-row summary').click();
   await expect(page.locator('.agent-source-preview pre')).toHaveText('Project reference');
   await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('sources.png') });
-  await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
+  await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.agent-sources-summary')).toHaveText('notes.md');
   await page.locator('.cui-save').click();
   await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'artifacts');
@@ -185,7 +185,7 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('source-search-preview.png') });
   await sourceSearch.fill('');
   expect(bodies).toEqual([]);
-  await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
+  await page.locator('.agent-chat-toggle').click();
   await page.locator('.cui-input').fill('Hello');
   await page.locator('.cui-send').click();
   await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
@@ -195,7 +195,7 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   expect(bodies[0]).toContain('Only this reference is attached.');
   await page.locator('.agent-sources-toggle').click();
   await page.getByRole('button', { name: 'Remove: notes.txt', exact: true }).click();
-  await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
+  await page.locator('.agent-chat-toggle').click();
   await page.getByRole('button', { name: 'Open source: notes.txt', exact: true }).click();
   await expect(page.locator('.cui-bubble .agent-source-preview pre')).toContainText('Only this reference is attached.');
   await page.locator('.cui-bubble .agent-source-preview summary').click();
@@ -243,13 +243,13 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   await page.locator('.cui-save').click();
   await expect(page.locator('.agent-artifact-provenance')).toContainText('notes.txt');
   await page.locator('.agent-artifact-editor textarea').fill('Keep artifact draft');
-  await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
+  await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.cui-save')).toHaveText('Saved');
   await page.locator('.cui-save').click();
   await expect(page.locator('.agent-artifact-status')).toContainText('Discard unsaved changes');
   await page.getByRole('button', { name: 'Cancel', exact: true }).click();
   await expect(page.locator('.agent-artifact-editor textarea')).toHaveValue('Keep artifact draft');
-  await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
+  await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.cui-save')).toHaveText('Save as artifact');
   await page.setViewportSize({ width: 360, height: 700 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -378,7 +378,7 @@ test('offline workspace keeps local sources and hides download controls without 
   });
   await expect(page.locator('.agent-source-row')).toContainText('offline.txt');
   await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath('sources-offline.png') });
-  await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
+  await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.agent-sources-summary')).toHaveText('offline.txt');
   await page.locator('.agent-panel-settings-toggle').click();
   await expect(page.locator('.agent-panel-settings > .agent-offline-hint')).toBeVisible();
@@ -398,14 +398,13 @@ test('offline workspace keeps local sources and hides download controls without 
   await expect(page.locator('.agent-artifact-status')).toHaveText('Saved on this device');
   await context.setOffline(false);
   offline = false;
-  await page.getByRole('button', { name: 'Artifacts', exact: true }).click();
-  await page.locator('.agent-sources-toggle').click();
+  await page.locator('.agent-sources-nav').click();
   await expect(
     page.locator('.agent-sources-view input[type=url], .agent-sources-view input[type=password]'),
   ).toHaveCount(0);
   await expect(page.locator('.agent-source-row')).toContainText('offline.txt');
   expect(connectorRequests).toEqual([]);
-  await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
+  await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.cui-input')).toHaveValue('Keep this draft offline');
   expect([...failedWhileOffline].filter((url) => core.has(url))).toEqual([]);
   expect(
@@ -557,7 +556,7 @@ test('switching conversations releases a pending source read without attaching i
   await expect(page.locator('.agent-source-row')).toHaveText('fresh.txtRemove');
   await page.evaluate(() => (window as Window & { releaseOldReference?: () => void }).releaseOldReference!());
   await expect(page.locator('.agent-source-row')).toHaveText('fresh.txtRemove');
-  await page.getByRole('button', { name: 'Back to conversation', exact: true }).click();
+  await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.agent-sources-summary')).toHaveText('fresh.txt');
 });
 

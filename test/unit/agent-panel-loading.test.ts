@@ -606,10 +606,39 @@ it('keeps setup reachable when the remembered preset is no longer supported', as
 it('does not override an explicit view change while checking cached configuration', async () => {
   const panel = createAgentPanel({ externalEntry: true });
   panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
-  panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.click();
+  panel.querySelector<HTMLButtonElement>('.agent-chat-toggle')!.click();
   await new Promise((resolve) => setTimeout(resolve, 0));
   expect(panel.dataset.view).toBe('chat');
 });
+it.each(['.agent-chat-toggle', '.agent-panel-title', '.agent-panel-clear'])(
+  'honors explicit %s navigation when a pending initial cache check finds no model',
+  async (selector) => {
+    const webllm = await import('@ranuts/agent-core/llm/webllm');
+    let finishCheck!: (cached: boolean) => void;
+    const checking = new Promise<boolean>((resolve) => (finishCheck = resolve));
+    const cache = vi.spyOn(webllm, 'isModelCached').mockReturnValue(checking);
+    try {
+      const panel = createAgentPanel({ externalEntry: true });
+      expect(cache).toHaveBeenCalled();
+      expect(panel.dataset.view).toBe('chat');
+      const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+      const focus = vi.spyOn(input, 'focus');
+      const previousConversation = activeSession();
+      panel.querySelector<HTMLButtonElement>(selector)!.click();
+      if (selector === '.agent-panel-clear') expect(activeSession()).not.toBe(previousConversation);
+      else {
+        expect(activeSession()).toBe(previousConversation);
+        expect(focus).not.toHaveBeenCalled();
+      }
+      finishCheck(false);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(panel.dataset.view).toBe('chat');
+      expect(state.preload).not.toHaveBeenCalled();
+    } finally {
+      cache.mockRestore();
+    }
+  },
+);
 it.each(['starting', 'listening'])(
   'does not cancel %s dictation when the initial cache check finishes',
   async (phase) => {
@@ -814,7 +843,7 @@ it('keeps loading feedback beside the chosen model across settings and chat', as
   expect(panel.querySelector('.agent-device-section .agent-runtime-row')).not.toBeNull();
   expect(load.hidden).toBe(true);
   expect(panel.querySelector('.agent-model-cache .agent-runtime-row')).toBeNull();
-  toggle.click();
+  panel.querySelector<HTMLButtonElement>('.agent-chat-toggle')!.click();
   expect(stop.closest('.agent-panel-settings')).toBeNull();
   expect(stop.hidden).toBe(false);
   stop.click();

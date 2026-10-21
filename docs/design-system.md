@@ -218,21 +218,24 @@ The canonical composition rules are owned by
 This section supplies the application's geometry and browser acceptance; the site's marketing
 column widths do not apply inside the assistant. `styles/assistant.css` owns the shared values.
 
-| Geometry        | Product contract                                                                                                   | Acceptance subject                                                                         |
-| --------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| Content rail    | 16px from the panel's inside edge                                                                                  | Header title text, onboarding copy, unframed copy, section labels, field/list outer frames |
-| Header title    | Text-sized target with 8px inline padding; leading hit area extends into the gutter                                | DOM Range text left, actual button width, hover/focus area and neighboring actions         |
-| Back navigation | Center a 16px SVG viewport in the 32px fine / 44px coarse pointer target; the viewport returns to the content rail | SVG viewport and full target bounds, not painted path bounds                               |
-| Subpage heading | An explicit navigation column followed by an 8px gap; shared by every subpage and nested artifact state            | Repeated title rail: 48px fine / 54px coarse, relative to the panel's inside edge          |
-| Framed fields   | Outer frame follows the content rail; internal text retains its control inset                                      | Native frame and real ranui shadow parts are separate subjects                             |
-| Vertical groups | 8px internal, 16px group and 24px section spacing                                                                  | Actual related-region edges; empty status paragraphs reserve no anonymous margins          |
+| Geometry            | Product contract                                                                            | Acceptance subject                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Content rail        | 16px from the panel's inside edge                                                           | Header title text, onboarding copy, unframed copy, section labels, field/list outer frames |
+| Header title        | Text-sized target with 8px inline padding; leading hit area extends into the gutter         | DOM Range text left, actual button width, hover/focus area and neighboring actions         |
+| Parallel navigation | Visible Chat, Artifacts, Conversations, Sources and Models destinations beneath the header  | Native navigation buttons, current state, keyboard focus and narrow overflow               |
+| Nested navigation   | Labeled Back only inside artifact import/editor workflows, preceding the heading            | Destination text, target bounds, draft/confirmation behavior                               |
+| View heading        | All top-level and nested h2 text returns to the 16px content rail, at the 16px heading role | Actual heading text Range, including long labels                                           |
+| Framed fields       | Outer frame follows the content rail; internal text retains its control inset               | Native frame and real ranui shadow parts are separate subjects                             |
+| Vertical groups     | 8px internal, 16px group and 24px section spacing                                           | Actual related-region edges; empty status paragraphs reserve no anonymous margins          |
 
 The title's flexible trailing filler is layout space, not a clickable/hovering title surface.
-At panel widths up to 360px, the runtime header gives the readable title its own row above
-the five action slots. Coarse input retains 44px targets without constraining the title to
-an icon's flex basis. Back focus outlines use zero offset so their full 2px ring remains
-inside the scrolling view. Populated result lists keep a 16px boundary before Import.
-Back navigation is a declared hierarchy, not an unexplained extra body inset. Centered empty
+The header contains the title, New conversation and Close. Persistent text destinations
+have current-state treatment distinct from hover, remain reachable when the row scrolls,
+and reveal the selected/focused entry. Coarse input retains 44px targets. Selecting the
+current destination is idempotent; Chat restores the displayed conversation and draft.
+Runtime preparation belongs to Chat or Models and does not precede unrelated views.
+Top-level views have no Back row. Nested Back focus outlines remain inside their targets.
+Populated result lists keep a 16px boundary before Import. Centered empty
 states remain centered within their content frame. Frame, text, icon viewport and hit area
 must not be substituted for each other during review. CSS token compliance alone cannot prove
 these relationships. Do not nudge individual pages or SVG paths to compensate for a shared
@@ -257,16 +260,17 @@ or inspection is not acceptance evidence.
 ### Settings command groups
 
 History & data is already a named section inside the assistant pane. Restore, Import and
-Export use content-sized native secondary buttons in one column: each button has a restrained
-resting surface and functional inset stroke, with no enclosing group frame, group fill,
+Export use equal-width native secondary buttons in one compact column: each button has a
+neutral resting surface and functional inset stroke, with no enclosing group frame, group fill,
 raised shadow or row separators. Keep 8px between buttons and 16px before deletion commands.
 A recognizable button shape must be visible before hover in both themes and on touch screens;
 verb labels and hover feedback alone do not establish initial discoverability.
 
-The declared columns are 16px from the panel’s inner edge for both checkbox and 16px icon
-viewports, and 40px for checkbox/action text Ranges. Each command target extends 8px into the
-owned inline-start gutter, with 8px inline padding and icon/label gap; target frames need not
-match visible columns. Keep targets inside the pane, at least 44px high, and non-overlapping.
+The outer command frames follow the 16px content rail. Their 8px inline padding places
+checkbox and 16px icon viewports at 24px; the following 8px gap places label text at 48px.
+The saving-status text follows its associated label at 48px. No command frame protrudes
+into the content gutter. Use 32px minimum fine-input targets and 44px coarse-input targets;
+keep them inside the pane and non-overlapping.
 Long translations wrap without shifting the columns or overflowing the pane. The save-history
 checkbox uses the monochrome primary role.
 
@@ -274,7 +278,16 @@ Deletion commands share the secondary control shape with readable danger text/ic
 explicit confirmation has a solid danger fill. Hover, press, disabled and keyboard focus
 remain distinct. Draft, confirmation, busy and focus-return behavior remain owned by the
 existing controls. Acceptance checks actual renders as well as shared checkbox/icon/text
-geometry, resting surface difference from the canvas, text contrast and real interactions.
+geometry, a visible resting control stroke or surface, text contrast and real interactions.
+
+Import and Attach open a workflow and use secondary command affordance. Primary fill is
+reserved for committing a form or accepting a reviewed result. A brief opacity-only heading
+entry can mark navigation with the existing fast motion token; it must not delay focus,
+move hit targets or animate overlay ancestors. Reduced motion disables this cue.
+
+The owner rejected the earlier gutter-extended, content-sized command composition and
+48/54px heading rail. The October 21 navigation/density acceptance record supersedes those
+parts of the October 20 exploratory captures; passing the earlier assertions is not design approval.
 
 Review boundaries in the full pane. The panel/editor edge owns the independent sidebar;
 the search/input frames identify editable values; the single History & data section divider
@@ -289,11 +302,11 @@ decorative group outline in acceptance.
 
 Apply the same boundary review to each complete view and its expanded states:
 
-| Surface   | Flat composition                                                                                                                                 | Functional boundaries retained                                                                                                                                |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Models    | Device/service containers, cached entries and preferences use headings and the existing group gap; no extra disclosure/row rules                 | Model/source pickers, endpoint/custom fields, focus and explicit load/connect/delete states                                                                   |
-| Sources   | Separate the attached list from search by 16px; keep removal beside the title while the excerpt expands; no result card or remove-button outline | Search input, native disclosure and bounded excerpt scrolling; Attach file is the primary entry action                                                        |
-| Artifacts | Full-width saved-result rows; quiet ordinary review/export/page/revision controls; no blanket button outlines                                    | Import/Save/Use in draft primary roles, editable fields, structured table row relationships, revision input/diff, focus and explicit destructive confirmation |
+| Surface   | Flat composition                                                                                                                                 | Functional boundaries retained                                                                                                                                       |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Models    | Device/service containers, cached entries and preferences use headings and the existing group gap; no extra disclosure/row rules                 | Model/source pickers, endpoint/custom fields, focus and explicit load/connect/delete states                                                                          |
+| Sources   | Separate the attached list from search by 16px; keep removal beside the title while the excerpt expands; no result card or remove-button outline | Search input, native disclosure and bounded excerpt scrolling; Attach file uses a recognizable secondary command                                                     |
+| Artifacts | Full-width saved-result rows; quiet ordinary review/export/page/revision controls; no blanket button outlines                                    | Secondary Import, primary Save/accept commits, editable fields, structured table row relationships, revision input/diff, focus and explicit destructive confirmation |
 
 Use application danger foreground roles for quiet destructive labels and their hover/active
 states. Disabled commands keep their own disabled role and do not inherit an enabled fill.

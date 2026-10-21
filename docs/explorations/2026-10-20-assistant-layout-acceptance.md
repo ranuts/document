@@ -2,6 +2,10 @@
 
 Date: 2026-10-20
 
+> Historical record. The owner rejected the history density and top-level Back hierarchy.
+> The [October 21 correction and actual rendered acceptance](2026-10-21-assistant-navigation-and-density-acceptance.md)
+> supersede the heading lane, history target extension and command sizing below.
+
 ## Result and scope
 
 The assistant now shares a 16px content rail across its header, onboarding, Models,

@@ -177,7 +177,7 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       await input.evaluate((el: HTMLTextAreaElement) => el.setSelectionRange(4, 17, 'backward'));
       await page.locator('.agent-sources-toggle').click();
       await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'sources');
-      await page.getByRole('button', { name: 'Back to conversation' }).click();
+      await page.locator('.agent-chat-toggle').click();
       await expect(input).toHaveValue(draft + draft);
       expect(
         await input.evaluate((el: HTMLTextAreaElement) => [el.selectionStart, el.selectionEnd, el.selectionDirection]),

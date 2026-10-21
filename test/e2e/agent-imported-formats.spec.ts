@@ -151,7 +151,7 @@ for (const fixture of fixtures) {
     await page.locator('.agent-panel-settings-toggle').click();
     await page.locator('.agent-panel-endpoint-connect').click();
     await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Connected');
-    await page.locator('.agent-panel-settings-toggle').click();
+    await page.locator('.agent-chat-toggle').click();
     const input = page.locator('.cui-input');
     // Imported content enters the request only through an explicit trusted read.
     // The second request below still exercises semantic tools and continuation.

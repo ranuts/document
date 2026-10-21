@@ -189,3 +189,64 @@ it('coordinates workspace visibility, capture, focus, runtime placement and Esca
   expect(beforeChange).toHaveBeenCalledWith('chat');
   expect(changed).toHaveBeenCalledWith('chat');
 });
+
+it('keeps destination selection idempotent and exposes the selected navigation state', () => {
+  const panel = document.createElement('div');
+  panel.dataset.view = 'chat';
+  const chat = { el: document.createElement('div'), focus: vi.fn() };
+  const row = document.createElement('div');
+  const settings = document.createElement('div');
+  const modelRow = document.createElement('div');
+  const modelActions = document.createElement('div');
+  modelRow.append(modelActions);
+  settings.append(modelRow);
+  panel.append(row, settings, chat.el);
+  const chatTrigger = document.createElement('button');
+  chatTrigger.scrollIntoView = vi.fn();
+  const surface = (el = document.createElement('div')) => ({
+    el,
+    trigger: document.createElement('button'),
+    focus: vi.fn(),
+  });
+  const surfaces = {
+    settings: surface(settings),
+    history: surface(),
+    sources: surface(),
+    artifacts: surface(),
+  };
+  const navigation = { capture: vi.fn(), restore: vi.fn(() => false) };
+  const changed = vi.fn();
+  const beforeChange = vi.fn();
+  const workspace = createPanelWorkspace({
+    panel,
+    chat,
+    chatTrigger,
+    navigation,
+    conversation: () => 'current draft',
+    isOpen: () => true,
+    runtime: { row, settings, modelRow, modelActions },
+    views: surfaces,
+    beforeChange,
+    changed,
+  });
+  workspace.show('chat');
+  chatTrigger.click();
+  expect(beforeChange).toHaveBeenCalledTimes(1);
+  expect(chat.focus).toHaveBeenCalledTimes(1);
+  expect(chatTrigger.getAttribute('aria-current')).toBe('page');
+  expect(chatTrigger.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' });
+  vi.mocked(chatTrigger.scrollIntoView).mockClear();
+  chatTrigger.dispatchEvent(new FocusEvent('focus'));
+  expect(chatTrigger.scrollIntoView).toHaveBeenCalledOnce();
+  surfaces.artifacts.trigger.click();
+  expect(surfaces.artifacts.trigger.getAttribute('aria-current')).toBe('page');
+  expect(chatTrigger.hasAttribute('aria-current')).toBe(false);
+  const effects = [beforeChange.mock.calls.length, changed.mock.calls.length];
+  surfaces.artifacts.trigger.click();
+  expect(panel.dataset.view).toBe('artifacts');
+  expect([beforeChange.mock.calls.length, changed.mock.calls.length]).toEqual(effects);
+  expect(surfaces.artifacts.focus).toHaveBeenCalledTimes(1);
+  chatTrigger.click();
+  expect(navigation.restore).toHaveBeenLastCalledWith('current draft', true);
+  expect(chatTrigger.getAttribute('aria-current')).toBe('page');
+});

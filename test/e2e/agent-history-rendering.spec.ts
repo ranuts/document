@@ -136,18 +136,15 @@ test('restores a long saved conversation and switches sessions with completed an
   const history = page.locator('.agent-history-view');
   const viewHeader = history.locator('.agent-view-header');
   await expect(viewHeader.locator('.agent-history-heading')).toHaveCount(1);
-  const back = viewHeader.getByRole('button', { name: 'Back to conversation', exact: true });
-  await expect(back).toHaveCount(1);
+  await expect(viewHeader.locator('.agent-view-back')).toHaveCount(0);
   await page.evaluate(() => document.fonts.ready);
   await assertTitleRail(page.locator('.agent-runtime-panel .agent-panel-title'));
   const geometry = await contentGeometry(history);
   const row = await textGeometry(history.locator('.agent-conversation-title').first());
-  // The Back hit area extends into the gutter; its SVG and row text share the content rail.
+  // A parallel view's heading and list text return to the same content rail.
   expect(geometry.contentLeft).toBeCloseTo(16, 1);
-  expect(geometry.iconLeft).toBeCloseTo(geometry.contentLeft, 1);
+  expect(geometry.headingLeft).toBeCloseTo(geometry.contentLeft, 1);
   expect(row.textLeft).toBeCloseTo(geometry.contentLeft, 1);
-  // The owned title follows the compact Back target and the shared 8px gap.
-  expect(Math.abs(geometry.headingLeft - (geometry.backLeft + geometry.backWidth + 8))).toBeLessThanOrEqual(1);
   await page.locator('.agent-runtime-panel').screenshot({ path: test.info().outputPath('history-light.png') });
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.locator('.agent-runtime-panel').screenshot({ path: test.info().outputPath('history-dark.png') });

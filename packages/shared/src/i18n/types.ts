@@ -111,6 +111,7 @@ export interface I18nMessages {
   agentUseService: string;
   agentUseServiceHint: string;
   agentPreferences: string;
+  agentWorkspaceChat: string;
   agentBackToChat: string;
   agentExpand: string;
   agentSetupFailed: string;

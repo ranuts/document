@@ -88,6 +88,7 @@ export const ja: Partial<I18nMessages> = {
   agentUseServiceHint:
     '送信した文章は選択したサービスで処理します。サービス情報が必要で、料金が発生する場合があります。',
   agentPreferences: 'その他の設定',
+  agentWorkspaceChat: 'チャット',
   agentBackToChat: '会話に戻る',
   agentExpand: 'アシスタントを広げる',
   agentSetupFailed: '開けませんでした。再試行してください。文書は変更されていません。',

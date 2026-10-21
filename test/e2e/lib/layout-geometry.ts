@@ -45,15 +45,15 @@ export async function contentGeometry(view: Locator) {
     const origin = panel.getBoundingClientRect().left + Number.parseFloat(getComputedStyle(panel).borderLeftWidth);
     const left = (node: Element) => node.getBoundingClientRect().left - origin;
     const header = element.querySelector('.agent-view-header')!;
-    const back = header.querySelector<HTMLButtonElement>('.agent-view-back')!;
+    const back = header.querySelector<HTMLButtonElement>('.agent-view-back');
     const heading = header.querySelector('h2')!;
     const style = getComputedStyle(element);
     return {
       contentLeft: left(element) + Number.parseFloat(style.paddingLeft),
       headingLeft: left(heading),
-      iconLeft: left(back.querySelector('svg')!),
-      backLeft: left(back),
-      backWidth: back.getBoundingClientRect().width,
+      iconLeft: back ? left(back.querySelector('svg')!) : undefined,
+      backLeft: back ? left(back) : undefined,
+      backWidth: back?.getBoundingClientRect().width,
       overflow: element.scrollWidth - element.clientWidth,
       headerBottom: header.getBoundingClientRect().bottom,
     };

@@ -92,6 +92,7 @@ export const de: Partial<I18nMessages> = {
   agentUseServiceHint:
     'Gesendeter Text geht an den gewählten Dienst. Eigene Zugangsdaten sind erforderlich; es können Kosten entstehen.',
   agentPreferences: 'Weitere Einstellungen',
+  agentWorkspaceChat: 'Unterhaltung',
   agentBackToChat: 'Zurück zum Gespräch',
   agentExpand: 'Assistent vergrößern',
   agentSetupFailed: 'Assistent konnte nicht geöffnet werden. Bitte erneut versuchen. Das Dokument ist unverändert.',

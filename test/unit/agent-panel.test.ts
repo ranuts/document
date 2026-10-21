@@ -707,3 +707,40 @@ it('preserves an expanded selected-text disclosure and its scroller while contex
   expect(trigger.querySelector('svg')).not.toBeNull();
   expect(trigger.getAttribute('aria-label')).toContain(String(selection.length));
 });
+
+it('offers persistent named destinations with flat page headings and preserves the current composer', async () => {
+  const panel = createAgentPanel();
+  const nav = panel.querySelector<HTMLElement>('.agent-workspace-nav')!;
+  expect(nav).not.toBeNull();
+  expect(nav.querySelector('svg')).toBeNull();
+  const destinations = [
+    '.agent-chat-toggle',
+    '.agent-workspace-toggle',
+    '.agent-history-toggle',
+    '.agent-sources-nav',
+    '.agent-panel-settings-toggle',
+  ];
+  for (const selector of destinations) expect(nav.querySelector(selector)?.textContent?.trim()).toBeTruthy();
+  expect(panel.querySelector('.agent-panel-header .agent-panel-settings-toggle')).toBeNull();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Keep this exact conversation draft';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  for (const selector of destinations.slice(1)) {
+    nav.querySelector<HTMLButtonElement>(selector)!.click();
+    expect(panel.querySelector('.agent-runtime-row')?.hasAttribute('hidden')).toBe(true);
+  }
+  expect(panel.querySelector('.agent-panel-settings .agent-view-header button')).toBeNull();
+  expect(panel.querySelector('.agent-history-view .agent-view-header button')).toBeNull();
+  expect(panel.querySelector('.agent-sources-view .agent-view-header button')).toBeNull();
+  expect(panel.querySelector('.agent-artifacts .agent-view-header button')).toBeNull();
+  nav.querySelector<HTMLButtonElement>('.agent-chat-toggle')!.click();
+  expect(input.value).toBe('Keep this exact conversation draft');
+  expect(panel.dataset.view).toBe('chat');
+  expect(nav.querySelector('[aria-current=page]')?.classList.contains('agent-chat-toggle')).toBe(true);
+  panel.querySelector<HTMLButtonElement>('.agent-sources-toggle')!.click();
+  expect(panel.dataset.view).toBe('sources');
+  expect(panel.querySelector('.agent-sources-toggle')?.getAttribute('aria-expanded')).toBe('true');
+  panel.querySelector<HTMLButtonElement>('.agent-sources-toggle')!.click();
+  expect(panel.dataset.view).toBe('chat');
+  expect(panel.querySelector('.agent-sources-toggle')?.getAttribute('aria-expanded')).toBe('false');
+});

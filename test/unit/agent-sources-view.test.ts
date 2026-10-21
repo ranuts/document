@@ -27,6 +27,7 @@ it('offers local references without remote account or server controls', () => {
   const view = createSourcesView({ sources: new ReferenceSources(), labels, changed: vi.fn(), close: vi.fn() });
   document.body.append(view.el);
   expect(view.el.querySelector('input[type=file]')).toBeTruthy();
+  expect(view.el.querySelector('.agent-view-header button')).toBeNull();
   expect(view.el.querySelectorAll('input[type=url], input[type=password]')).toHaveLength(0);
   expect(
     [...view.el.querySelectorAll('button')].some((button) =>

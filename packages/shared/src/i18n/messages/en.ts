@@ -86,6 +86,7 @@ export const en: I18nMessages = {
   agentUseServiceHint:
     'Text you send goes to the selected service. Your own service details are required; service fees may apply.',
   agentPreferences: 'More settings',
+  agentWorkspaceChat: 'Chat',
   agentBackToChat: 'Back to conversation',
   agentExpand: 'Expand assistant',
   agentSetupFailed: 'Could not open the assistant. Try again; your document is unchanged.',

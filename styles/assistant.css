@@ -66,7 +66,7 @@ body.agent-panel-resizing #app iframe {
   display: none;
 }
 .agent-panel-clear:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 .agent-panel-clear {
@@ -125,29 +125,39 @@ body.agent-panel-resizing #app iframe {
   display: none;
 }
 .agent-history-management > summary::after {
-  content: '+';
-  font-size: var(--ran-text-copy-1);
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin-inline-end: var(--ran-space-1);
+  border-inline-end: 1.5px solid currentColor;
+  border-block-end: 1.5px solid currentColor;
+  transform: rotate(45deg);
 }
 .agent-history-management[open] > summary::after {
-  content: '−';
+  transform: rotate(225deg);
 }
 .agent-history-management label {
   margin-top: var(--ran-space-3);
 }
 .agent-history-options label {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--ran-space-2);
+  padding: var(--ran-space-2);
+  margin-block-start: var(--ran-space-2);
+  font-size: var(--ran-text-label-2);
 }
 .agent-history-save {
   flex: 0 0 var(--ran-size-1);
   width: var(--ran-size-1);
   height: var(--ran-size-1);
-  margin: var(--ran-space-1) 0 0;
+  margin: 0;
   accent-color: var(--ran-color-primary);
 }
 .agent-history-status {
-  margin: var(--ran-space-2) 0 var(--ran-space-4);
+  margin: 0 0 var(--ran-space-4);
+  padding-inline-start: var(--ran-space-8);
+  font-size: var(--ran-text-label-3);
   color: var(--ran-color-text-secondary);
   overflow-wrap: anywhere;
 }
@@ -160,14 +170,13 @@ body.agent-panel-resizing #app iframe {
   display: flex;
   flex-direction: column;
   gap: var(--ran-space-4);
-  /* Own 8px of the panel gutter so the visible icon/label columns stay
-     aligned with the checkbox while each button keeps inline padding. */
-  margin-inline-start: calc(-1 * var(--ran-space-2));
+  /* Frames share the content inset; the checkbox and command internals share
+     their own icon (24px) and label (48px) columns inside that frame. */
 }
 .agent-history-transfer-actions,
 .agent-history-danger-actions {
   display: grid;
-  justify-items: start;
+  justify-items: stretch;
   gap: var(--ran-space-2);
   min-width: 0;
 }
@@ -208,27 +217,27 @@ body.agent-panel-resizing #app iframe {
   border-color: var(--ran-color-border-active);
   background: var(--ran-color-bg-active);
 }
-/* The pane establishes the region; only each native button owns a surface.
-   A resting control shape must remain visible without pointer discovery. */
+/* Compact secondary commands retain a quiet, recognizable resting stroke.
+   Equal frames keep the complete settings column calm and scannable. */
 .agent-history-actions button {
-  width: fit-content;
-  min-height: var(--app-control-touch);
+  width: 100%;
+  min-height: var(--app-control-height);
   justify-content: flex-start;
   gap: var(--ran-space-2);
-  padding: var(--ran-space-3) var(--ran-space-2);
+  padding: var(--ran-space-1) var(--ran-space-2);
   border: 0;
   border-radius: var(--ran-radius-sm);
-  background: var(--ran-color-bg-hover);
+  background: var(--ran-color-bg-elevated);
   box-shadow: inset 0 0 0 1px var(--ran-color-border);
   text-align: start;
-  font-size: var(--ran-text-label-1);
-  font-weight: var(--ran-text-label-weight);
+  font-size: var(--ran-text-label-2);
+  font-weight: var(--ran-text-copy-weight);
 }
 .agent-history-actions button:enabled:hover {
-  background: var(--ran-color-bg-active);
+  background: var(--ran-color-bg-hover);
 }
 .agent-history-actions button:enabled:active {
-  background: color-mix(in srgb, var(--ran-color-bg-active) 96%, var(--ran-color-text));
+  background: var(--ran-color-bg-active);
 }
 .agent-history-actions button svg {
   flex: 0 0 var(--ran-size-1);
@@ -275,7 +284,7 @@ body.agent-panel-resizing #app iframe {
 }
 .agent-history-options button:focus-visible,
 .agent-history-options input:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 .agent-history-actions button:focus-visible {
@@ -326,7 +335,7 @@ body.agent-panel-resizing #app iframe {
   color: var(--ran-color-success);
 }
 .agent-panel .cui-message-actions .cui-apply:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 .agent-panel .cui-msg-tool .cui-bubble,
@@ -552,7 +561,7 @@ r-dropdown[role='listbox'] {
 .agent-panel-quote:focus-visible,
 .agent-writing-task:focus-visible,
 .agent-writing-language:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 .agent-panel-review {
@@ -843,7 +852,7 @@ r-dropdown[role='listbox'] {
   font-size: var(--ran-text-label-3);
 }
 .agent-model-sources summary:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 .agent-model-sources r-input {
@@ -856,8 +865,6 @@ r-dropdown[role='listbox'] {
   /* Content, text and navigation have different boxes but named shared rails. */
   --agent-content-inset: var(--ran-space-4);
   --agent-title-inset: var(--ran-space-2);
-  --agent-navigation-size: var(--app-control-height);
-  --agent-navigation-inset: calc((var(--agent-navigation-size) - var(--ran-size-1)) / 2);
   /* Status lines beside the composer (model state, readiness, write
      destination) line up with the composer's *text*, not its edge: footer
      padding plus the composer's own padding. Three rules must agree, so the
@@ -887,12 +894,62 @@ r-dropdown[role='listbox'] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--ran-color-border);
   box-sizing: border-box;
   min-height: 56px;
   flex: 0 0 auto;
   padding: var(--ran-space-2) var(--agent-content-inset);
   gap: calc(var(--ran-space-1) / 2);
+}
+.agent-workspace-nav {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--ran-space-1);
+  min-width: 0;
+  padding: 0 var(--ran-space-2) var(--ran-space-2);
+  border-bottom: 1px solid var(--ran-color-border);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ran-color-border-hover) transparent;
+  scroll-padding-inline: var(--ran-space-2);
+}
+.agent-workspace-nav button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: auto;
+  min-width: var(--app-control-height);
+  min-height: var(--app-control-height);
+  padding: var(--ran-space-1) var(--ran-space-2);
+  border: 0;
+  border-radius: var(--ran-radius-sm);
+  background: transparent;
+  color: var(--ran-color-text-secondary);
+  font: inherit;
+  font-size: var(--ran-text-label-2);
+  font-weight: var(--ran-text-label-weight);
+  line-height: var(--ran-line-height);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.agent-workspace-nav button:hover {
+  color: var(--ran-color-text);
+  background: var(--ran-color-bg-hover);
+}
+.agent-workspace-nav button[aria-current='page'] {
+  color: var(--ran-color-text);
+  background: var(--ran-color-bg-muted);
+  box-shadow: inset 0 -2px var(--ran-color-primary);
+}
+.agent-workspace-nav button:active {
+  background: var(--ran-color-bg-active);
+}
+.agent-panel .agent-workspace-nav button:focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: -2px;
 }
 .agent-panel-header .agent-panel-title {
   display: block;
@@ -931,13 +988,12 @@ r-dropdown[role='listbox'] {
 .agent-panel-settings-hidden {
   display: none;
 }
-.agent-panel[data-view='settings'] > .agent-runtime-row,
-.agent-panel[data-view='history'] > .agent-runtime-row {
+.agent-panel:not([data-view='chat']) > .agent-runtime-row {
   display: none;
 }
 .agent-panel-settings h2 {
   margin: 0;
-  font-size: var(--ran-text-heading-3);
+  font-size: var(--ran-text-heading-4);
   font-weight: 600;
   letter-spacing: -0.045em;
   line-height: 1.3;
@@ -1089,7 +1145,7 @@ r-dropdown[role='listbox'] {
 .agent-enable-switch:focus-visible,
 .agent-use-card summary:focus-visible,
 .agent-preferences summary:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 4px;
 }
 .agent-entry-note {
@@ -1195,6 +1251,25 @@ r-dropdown[role='listbox'] {
 @media (prefers-reduced-motion: reduce) {
   .agent-enable-switch::before {
     transition: none;
+  }
+}
+
+/* A brief content cue marks a real view change without moving hit targets or
+   creating a transformed ancestor for controls and overlays. */
+@keyframes agent-view-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .agent-panel :is(.agent-view-header, .agent-history-management[open] > .agent-history-actions) {
+    animation: agent-view-enter var(--ran-motion-duration-fast) ease-out;
+  }
+  .agent-history-management > summary::after {
+    transition: transform var(--ran-motion-duration-fast) ease-out;
   }
 }
 
@@ -1398,7 +1473,7 @@ r-dropdown[role='listbox'] {
   margin-bottom: var(--ran-space-4);
 }
 .agent-panel :is(button, summary, r-select, r-input, r-button):focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 .agent-quote-context {
@@ -1621,7 +1696,7 @@ r-dropdown[role='listbox'] {
   opacity: 0.6;
 }
 .agent-speech :is(button, r-select):focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 
@@ -1744,7 +1819,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-plan-preview:focus-visible,
 .agent-plan-preview :is(summary, textarea, r-button):focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 
@@ -1931,11 +2006,11 @@ r-dropdown[role='listbox'] {
 .agent-conversation-open:focus-visible,
 .agent-conversation-delete:focus-visible,
 .agent-history-management > summary:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 .agent-history-empty {
-  margin: var(--ran-space-8) 0;
+  margin: var(--ran-space-6) 0;
   text-align: center;
   color: var(--ran-color-text-secondary);
   font-size: var(--ran-text-label-1);
@@ -1993,7 +2068,7 @@ r-dropdown[role='listbox'] {
   background: var(--ran-color-bg-muted);
 }
 .agent-panel .agent-task-action:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 3px;
 }
 .agent-task-help,
@@ -2042,7 +2117,7 @@ r-dropdown[role='listbox'] {
   background: var(--ran-color-bg-hover);
 }
 .agent-history-more:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 
@@ -2152,7 +2227,7 @@ r-dropdown[role='listbox'] {
   cursor: default;
 }
 .agent-request-queue button:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: -2px;
 }
 .agent-queue-actions {
@@ -2234,7 +2309,7 @@ r-dropdown[role='listbox'] {
 .agent-workspace-view h2,
 .agent-artifacts h2 {
   margin: 0;
-  font-size: var(--ran-text-heading-3);
+  font-size: var(--ran-text-heading-4);
 }
 .agent-workspace-view h3 {
   margin: var(--ran-space-6) 0 var(--ran-space-2);
@@ -2307,24 +2382,22 @@ r-dropdown[role='listbox'] {
 .agent-artifacts button:focus-visible,
 .agent-sources-toggle:focus-visible,
 .agent-workspace-toggle:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 /* View owners keep navigation callbacks; the chrome shares one token rhythm. */
 .agent-panel .agent-view-header {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--ran-space-2);
   margin-block-end: var(--ran-space-4);
-  /* The icon viewport returns to the content rail. Its centered hit target
-     occupies a separate leading navigation column, including coarse input. */
-  margin-inline-start: calc(-1 * var(--agent-navigation-inset));
   min-width: 0;
 }
 .agent-panel .agent-view-header h2 {
   margin: 0;
   min-width: 0;
-  font-size: var(--ran-text-heading-3);
+  font-size: var(--ran-text-heading-4);
   font-weight: var(--ran-text-heading-weight);
   letter-spacing: var(--ran-text-heading-tracking);
   line-height: 1.3;
@@ -2336,22 +2409,23 @@ r-dropdown[role='listbox'] {
 .agent-panel .agent-view-back {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   box-sizing: border-box;
   flex: 0 0 auto;
-  width: var(--agent-navigation-size);
-  height: var(--agent-navigation-size);
-  min-width: var(--agent-navigation-size);
-  min-height: var(--agent-navigation-size);
-  padding: var(--ran-space-2);
+  gap: var(--ran-space-1);
+  width: auto;
+  min-height: var(--app-control-height);
+  padding: var(--ran-space-1) var(--ran-space-2);
   border: 0;
   border-radius: var(--ran-radius-sm);
   color: var(--ran-color-text-secondary);
   background: transparent;
+  font: inherit;
+  font-size: var(--ran-text-label-3);
   cursor: pointer;
 }
 .agent-panel .agent-view-back:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 0;
 }
 .agent-workspace-view button:active:enabled,
@@ -2364,39 +2438,25 @@ r-dropdown[role='listbox'] {
   cursor: default;
   background: transparent;
 }
-.agent-sources-view .agent-source-attach:enabled,
-.agent-artifacts
-  button:is(
-    [data-action='import'],
-    [data-action='saveVersion'],
-    [data-action='saveNew'],
-    [data-action='accept']
-  ):enabled {
+.agent-artifacts button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):enabled {
   background: var(--ran-color-primary);
   border-color: var(--ran-color-primary);
   color: var(--ran-color-primary-text);
 }
-.agent-sources-view .agent-source-attach:hover:enabled,
-.agent-artifacts
-  button:is(
-    [data-action='import'],
-    [data-action='saveVersion'],
-    [data-action='saveNew'],
-    [data-action='accept']
-  ):hover:enabled {
+.agent-artifacts button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):hover:enabled {
   background: var(--ran-color-primary-hover);
   border-color: var(--ran-color-primary-hover);
 }
 .agent-artifacts
-  button:is(
-    [data-action='import'],
-    [data-action='saveVersion'],
-    [data-action='saveNew'],
-    [data-action='accept']
-  ):active:enabled,
-.agent-sources-view .agent-source-attach:active:enabled {
+  button:is([data-action='saveVersion'], [data-action='saveNew'], [data-action='accept']):active:enabled {
   background: var(--ran-color-primary-active);
   border-color: var(--ran-color-primary-active);
+}
+.agent-sources-view .agent-source-attach,
+.agent-artifacts button[data-action='import'] {
+  background: var(--ran-color-bg-elevated);
+  box-shadow: inset 0 0 0 1px var(--ran-color-border);
+  color: var(--ran-color-text);
 }
 .agent-source-remove:enabled,
 .agent-artifacts button[data-action='delete']:enabled {
@@ -2426,11 +2486,27 @@ r-dropdown[role='listbox'] {
   color: var(--ran-color-text-secondary);
   line-height: 1.6;
 }
+.agent-artifact-import > p {
+  margin: 0;
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+  font-weight: var(--ran-text-copy-weight);
+  line-height: var(--ran-line-height);
+  overflow-wrap: anywhere;
+}
 .agent-artifacts-list button {
   width: 100%;
   font-size: var(--ran-text-label-2);
 }
 @media (pointer: coarse) {
+  .agent-workspace-nav button {
+    min-height: var(--app-control-touch);
+    min-width: var(--app-control-touch);
+  }
+  .agent-history-options label {
+    box-sizing: border-box;
+    min-height: var(--app-control-touch);
+  }
   .agent-enable-switch {
     min-width: var(--app-control-touch);
     min-height: var(--app-control-touch);
@@ -2541,7 +2617,7 @@ r-dropdown[role='listbox'] {
 }
 .agent-artifact-editor > input:focus-visible,
 .agent-artifact-editor > textarea:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 3px;
 }
 .agent-artifact-import-field {
@@ -2555,7 +2631,7 @@ r-dropdown[role='listbox'] {
   max-height: 40vh;
 }
 .agent-artifact-import-field :is(input, textarea):focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 .agent-artifact-actions button[data-action='apply'] {
@@ -2566,19 +2642,6 @@ r-dropdown[role='listbox'] {
 /* A narrow toolbar keeps a real language label when Stop joins Send.
    Use the select's public spacing hooks rather than losing its text lane. */
 @container agent-panel (max-width: 360px) {
-  /* Keep the title readable when five touch targets no longer fit beside it.
-     A separate row preserves both a text-sized hover area and full targets. */
-  .agent-runtime-panel .agent-panel-header {
-    display: grid;
-    grid-template-columns: repeat(5, var(--app-control-touch));
-    justify-content: space-between;
-  }
-  .agent-runtime-panel .agent-panel-header .agent-panel-title {
-    grid-column: 1 / -1;
-    justify-self: start;
-    max-width: calc(100% + var(--agent-title-inset));
-    margin-inline-end: 0;
-  }
   .agent-panel .cui-composer-bar,
   .agent-panel .cui-actions {
     gap: var(--ran-space-1);
@@ -2642,7 +2705,7 @@ r-dropdown[role='listbox'] {
   font-weight: 500;
 }
 .agent-result-choice button:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 
@@ -2681,7 +2744,7 @@ r-dropdown[role='listbox'] {
   cursor: pointer;
 }
 .agent-source-citation:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 .cui-bubble .agent-source-preview pre {

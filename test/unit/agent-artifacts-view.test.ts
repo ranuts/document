@@ -87,6 +87,8 @@ it('keeps an unsaved editor when a new result or back navigation is requested', 
   const text = view.el.querySelector('textarea')!;
   text.value = 'edited';
   text.dispatchEvent(new Event('input'));
+  await view.refresh();
+  expect(view.el.querySelector('textarea')).toBe(text);
   const pendingSave = view.save('second');
   expect(await store.list()).toHaveLength(1);
   expect(text.value).toBe('edited');
@@ -740,13 +742,12 @@ it('keeps destination-aware header Back in the busy registry and guards imported
   document.body.append(view.el);
   await view.refresh();
   const back = () => view.el.querySelector<HTMLButtonElement>('.agent-view-header [data-action=back]')!;
-  expect(back().getAttribute('aria-label')).toBe('Back to conversation');
-  expect(view.el.querySelectorAll('[data-action=back]')).toHaveLength(1);
+  expect(back()).toBeNull();
+  expect(view.el.querySelectorAll('[data-action=back]')).toHaveLength(0);
   let resolve!: (value: typeof a) => void;
   vi.spyOn(store, 'get').mockImplementationOnce(() => new Promise((r) => (resolve = r)));
   view.el.querySelector<HTMLButtonElement>('[data-artifact]')!.click();
-  expect(back().disabled).toBe(true);
-  back().click();
+  expect(view.el.querySelector<HTMLButtonElement>('[data-artifact]')!.disabled).toBe(true);
   expect(close).not.toHaveBeenCalled();
   resolve(a);
   await tick();
@@ -770,6 +771,32 @@ it('keeps destination-aware header Back in the busy registry and guards imported
   view.el.querySelector<HTMLButtonElement>('[data-action=discardChanges]')!.click();
   await tick();
   expect(view.el.querySelector('textarea')).toBeNull();
-  expect(view.el.querySelectorAll('[data-action=back]')).toHaveLength(1);
+  expect(view.el.querySelectorAll('[data-action=back]')).toHaveLength(0);
+  view.dispose();
+});
+
+it('preserves a busy import when workspace navigation requests a list refresh', async () => {
+  const store = createArtifactStore();
+  const view = createArtifactsView({ store, labels: { ...labels, import: 'Import' }, onApply: vi.fn() });
+  document.body.append(view.el);
+  await view.refresh();
+  view.el.querySelector<HTMLButtonElement>('[data-action=import]')!.click();
+  const input = view.el.querySelector('textarea')!;
+  view.el.querySelector('input')!.value = 'Imported';
+  input.value = JSON.stringify({ schemaVersion: 1, payload: { kind: 'text', text: 'imported' } });
+  let release!: () => void;
+  const create = store.create.bind(store);
+  vi.spyOn(store, 'create').mockImplementation(async (...args) => {
+    await new Promise<void>((resolve) => (release = resolve));
+    return create(...args);
+  });
+  view.el.querySelector<HTMLButtonElement>('[data-action=saveNew]')!.click();
+  expect(input.disabled).toBe(true);
+  view.cancelPending();
+  await view.refresh();
+  expect(view.el.querySelector('textarea')).toBe(input);
+  expect(input.disabled).toBe(true);
+  release();
+  await vi.waitFor(() => expect(view.el.querySelector('textarea')?.value).toBe('imported'));
   view.dispose();
 });

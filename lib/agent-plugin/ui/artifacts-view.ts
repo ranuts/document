@@ -322,7 +322,7 @@ export function createArtifactsView(options: {
             void perform(async () => {
               await options.store.delete(a.id);
               dirty = false;
-              await refresh();
+              await refresh(true);
             });
           }),
           button('cancel', () => {
@@ -398,12 +398,12 @@ export function createArtifactsView(options: {
     form.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!.disabled = true;
     title.focus();
   }
-  async function refresh(): Promise<void> {
-    if (disposed || dirty) return;
+  async function refresh(ownedOperation = false): Promise<void> {
+    if (disposed || dirty || (busy && !ownedOperation)) return;
     const revision = ++generation;
     try {
       const rows = await options.store.list();
-      if (disposed || revision !== generation || dirty) return;
+      if (disposed || revision !== generation || dirty || (busy && !ownedOperation)) return;
       current = undefined;
       reset();
       const list = View('ul').class('agent-artifacts-list').build();
@@ -416,7 +416,7 @@ export function createArtifactsView(options: {
           void perform(async () => {
             const a = await options.store.get(row.id);
             if (a) editor(a);
-            else await refresh();
+            else await refresh(true);
           });
         });
         open.textContent = row.title;
@@ -502,7 +502,6 @@ export function createArtifactsView(options: {
         ),
       );
 
-      if (options.onClose) setBack(button('back', options.onClose), 'conversation');
       if (el.isConnected) heading.focus();
     } catch (e) {
       if (!disposed) error(e);
@@ -510,7 +509,7 @@ export function createArtifactsView(options: {
   }
   return {
     el,
-    refresh,
+    refresh: () => refresh(),
     save(text: string, origin?: ArtifactProvenance): Promise<MessageSaveOutcome> {
       if (disposed || busy) return Promise.resolve('cancelled');
       return new Promise((resolve) => {

@@ -26,7 +26,7 @@ for (const width of [320, 1280]) {
     await page.locator('.agent-onboarding .agent-enable-switch').click();
     const panel = page.locator('.agent-runtime-panel');
     await expect(panel).toHaveAttribute('data-view', 'settings');
-    await page.locator('.agent-panel-settings-toggle').click();
+    await page.locator('.agent-chat-toggle').click();
     await expect(panel).toHaveAttribute('data-view', 'chat');
     await expect(page.locator('.cui-composer')).toBeVisible();
     await expect(page.locator('.cui-empty')).toBeVisible();

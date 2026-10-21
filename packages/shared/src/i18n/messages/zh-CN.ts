@@ -81,6 +81,7 @@ export const zhCN: I18nMessages = {
   agentUseService: '连接 AI 服务',
   agentUseServiceHint: '支持本机服务和云端 API。请求内容会发送给所选服务；费用以服务商说明为准。',
   agentPreferences: '高级设置',
+  agentWorkspaceChat: '对话',
   agentBackToChat: '返回对话',
   agentExpand: '展开助手',
   agentSetupFailed: '暂时无法开启助手，请重试。你的文档没有改变。',

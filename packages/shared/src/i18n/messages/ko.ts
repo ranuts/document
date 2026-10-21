@@ -87,6 +87,7 @@ export const ko: Partial<I18nMessages> = {
   agentUseServiceHint:
     '보낸 글은 선택한 서비스에서 처리됩니다. 본인의 서비스 정보가 필요하며 요금이 발생할 수 있습니다.',
   agentPreferences: '추가 설정',
+  agentWorkspaceChat: '채팅',
   agentBackToChat: '대화로 돌아가기',
   agentExpand: '도우미 확대',
   agentSetupFailed: '도우미를 열 수 없습니다. 다시 시도하세요. 문서는 바뀌지 않았습니다.',

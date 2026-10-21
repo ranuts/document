@@ -1,4 +1,4 @@
-import { createViewHeader, labelViewBack } from './view-header';
+import { createViewHeader } from './view-header';
 import { createTaskReceipt } from './task-receipt';
 import { createResultActions } from './result-actions';
 import { createWorkspaceNavigation } from './workspace-navigation';
@@ -315,8 +315,7 @@ export function createAgentPanel(
 
   // ── Header ──────────────────────────────────────────────────────────────
   const title = ButtonBuilder().class('agent-panel-title').attr('type', 'button').text(t('agentTitle')).build();
-  // Gear toggles the settings block (provider / key / model), hidden by default
-  // so the main panel stays a clean chat surface.
+  // Model configuration is a parallel workspace destination.
   const settingsBtn = ButtonBuilder()
     .class('agent-panel-settings-toggle')
     .attr('type', 'button')
@@ -345,9 +344,9 @@ export function createAgentPanel(
     .aria('label', t('agentPreparing'))
     .build();
   const runtimeRow = Div().class('agent-runtime-row').attr('hidden', '').children(loadingStatus).build();
-  const header = Div().class('agent-panel-header').children(title, settingsBtn, closeBtn).build();
+  const header = Div().class('agent-panel-header').children(title, closeBtn).build();
 
-  // ── Settings (collapsed by default; opened via the gear) ──────────────────
+  // ── Models workspace settings ────────────────────────────────────────────
   const initialEndpointSettings = readEndpointSettings(localStorageGetItem(ENDPOINT_SETTINGS_KEY));
   let selectedSource = configuredEndpoint(initialEndpointSettings) ? 'service' : 'local';
   let cachedLocalModel = false;
@@ -1249,7 +1248,9 @@ export function createAgentPanel(
         ? t('agentUseDevice')
         : '';
     syncWriteDestination();
-    runtimeRow.hidden = !loadingStatus.textContent || (panel.dataset.view === 'settings' && !modelLoading);
+    runtimeRow.hidden =
+      !loadingStatus.textContent ||
+      (panel.dataset.view !== 'chat' && (panel.dataset.view !== 'settings' || !modelLoading));
     note.hidden =
       selectedSource !== 'local' ||
       (modelLoading && panel.dataset.view === 'settings') ||
@@ -2906,7 +2907,12 @@ export function createAgentPanel(
     if (!event.persisted) artifactsView.dispose();
   });
   referenceSources.select(conversations.activeId);
-  const sourcesBtn = View<HTMLButtonElement>('button').class('agent-sources-toggle').attr('type', 'button').build();
+  const sourcesBtn = View<HTMLButtonElement>('button')
+    .class('agent-sources-toggle')
+    .attr('type', 'button')
+    .attr('aria-controls', 'agent-sources')
+    .attr('aria-expanded', 'false')
+    .build();
   const sourceSummary = View('p').class('agent-sources-summary agent-entry-note').build();
   let sourceState = referenceSources.capture();
   const sourceView = createSourcesView({
@@ -2960,10 +2966,7 @@ export function createAgentPanel(
   });
   const { settingsHeading, modelActions, localCard, serviceCard, advanced, settingsHero, sourcePicker, offlineHint } =
     settingsView;
-  const settingsBack = document.createElement('button');
-  settingsBack.type = 'button';
-  settingsBack.addEventListener('click', () => showView('chat'));
-  settingsHero.replaceChildren(createViewHeader(settingsHeading, settingsBack));
+  settingsHero.replaceChildren(createViewHeader(settingsHeading));
   syncOfflineSettings = () => {
     settingsView.setOnline(navigator.onLine !== false);
     ggufUrl.hidden = navigator.onLine === false;
@@ -3042,19 +3045,32 @@ export function createAgentPanel(
     },
     onDelete: (id, trigger) => historyControls?.requestDelete(id, trigger),
   });
-  const historyBack = document.createElement('button');
-  historyBack.type = 'button';
-  historyBack.addEventListener('click', () => showView('chat'));
   const historyHeading = conversationList.el.querySelector('h2')!;
-  historyView.append(createViewHeader(historyHeading, historyBack), conversationList.el, historyControls.el);
-  header.insertBefore(artifactsBtn, settingsBtn);
-  header.insertBefore(historyBtn, settingsBtn);
-  header.insertBefore(clearBtn, settingsBtn);
+  historyView.append(createViewHeader(historyHeading), conversationList.el, historyControls.el);
+  header.insertBefore(clearBtn, closeBtn);
+  const chatBtn = View<HTMLButtonElement>('button').class('agent-chat-toggle').attr('type', 'button').build();
+  const sourcesNav = View<HTMLButtonElement>('button').class('agent-sources-nav').attr('type', 'button').build();
+  const workspaceNav = View('nav')
+    .class('agent-workspace-nav')
+    .children(chatBtn, artifactsBtn, historyBtn, sourcesNav, settingsBtn)
+    .build();
+  for (const [trigger, id] of [
+    [chatBtn, 'agent-chat'],
+    [artifactsBtn, 'agent-artifacts'],
+    [historyBtn, 'agent-history'],
+    [sourcesNav, 'agent-sources'],
+  ] as const)
+    trigger.setAttribute('aria-controls', id);
+  chat.el.id = 'agent-chat';
+  artifactsView.el.id = 'agent-artifacts';
+  historyView.id = 'agent-history';
+  sourceView.el.id = 'agent-sources';
 
   chat.el.append(writeDestination);
   const workspace = createPanelWorkspace({
     panel,
     chat,
+    chatTrigger: chatBtn,
     navigation,
     conversation: () => displayedConversationId,
     isOpen: () => open,
@@ -3062,8 +3078,12 @@ export function createAgentPanel(
     views: {
       settings: { el: settings, trigger: settingsBtn, focus: () => settingsHeading.focus() },
       history: { el: historyView, trigger: historyBtn, focus: () => conversationList?.focus() },
-      sources: { el: sourceView.el, trigger: sourcesBtn, focus: () => sourceView.focus() },
-      artifacts: { el: artifactsView.el, trigger: artifactsBtn, focus: () => artifactsBtn.focus() },
+      sources: { el: sourceView.el, trigger: sourcesNav, focus: () => sourceView.focus() },
+      artifacts: {
+        el: artifactsView.el,
+        trigger: artifactsBtn,
+        focus: () => artifactsView.el.querySelector('h2')?.focus(),
+      },
     },
     beforeChange: (view) => {
       speech?.close();
@@ -3073,6 +3093,7 @@ export function createAgentPanel(
       viewRevision++;
     },
     changed: (view) => {
+      sourcesBtn.setAttribute('aria-expanded', String(view === 'sources'));
       if (view === 'artifacts') void artifactsView.refresh();
       syncHistoryActivity();
       syncRuntimeStatus();
@@ -3081,32 +3102,39 @@ export function createAgentPanel(
   function showView(view: PanelWorkspaceView): void {
     workspace.show(view);
   }
+  sourcesBtn.addEventListener('click', () => showView(panel.dataset.view === 'sources' ? 'chat' : 'sources'));
+  const labelDestination = (button: HTMLButtonElement, label: string): void => {
+    button.title = label;
+    button.setAttribute('aria-label', label);
+    const text = document.createElement('span');
+    text.className = 'agent-workspace-label';
+    text.textContent = label;
+    button.replaceChildren(text);
+  };
   const syncProductLabels = () => {
     settingsView.syncLabels();
-    labelViewBack(settingsBack, t('agentBackToChat'));
-    labelViewBack(historyBack, t('agentBackToChat'));
     sourceView.setLabels(sourcesLabels());
     artifactsView.setLabels(artifactLabels());
     artifactsView.setRefinementLabels(artifactWorkflowLabels());
     resultActions.refresh();
-    artifactsBtn.title = t('agentArtifactTitle');
-    artifactsBtn.setAttribute('aria-label', t('agentArtifactTitle'));
-    artifactsBtn.innerHTML =
-      '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg>';
+    labelDestination(chatBtn, t('agentWorkspaceChat'));
+    labelDestination(artifactsBtn, t('agentArtifactTitle'));
+    labelDestination(historyBtn, t('agentConversations'));
+    labelDestination(sourcesNav, t('agentSourcesSources'));
+    labelDestination(settingsBtn, t('agentSettings'));
+    workspaceNav.setAttribute('aria-label', t('agentTitle'));
     refinementLabel.textContent = t('agentRefiningProposal');
     refinementCancel.textContent = t('agentPlanCancel');
     disableLabel.textContent = t('agentEnable');
     disableHint.textContent = t('agentOffNote');
     disable.setAttribute('aria-label', t('agentEnable'));
-    historyBtn.title = t('agentConversations');
-    historyBtn.setAttribute('aria-label', t('agentConversations'));
   };
   syncProductLabels();
   window.addEventListener('languagechange', syncProductLabels);
   clearBtn.addEventListener('click', () => showView('chat'));
   clearBtn.title = t('agentNewConversation');
   clearBtn.setAttribute('aria-label', t('agentNewConversation'));
-  panel.append(header, runtimeRow, settings, historyView, sourceView.el, artifactsView.el, chat.el);
+  panel.append(header, workspaceNav, runtimeRow, settings, historyView, sourceView.el, artifactsView.el, chat.el);
   document.body.append(panel);
   const endpoint = configuredEndpoint(configuration.endpointSettings);
   hasConfiguration =
@@ -3122,9 +3150,11 @@ export function createAgentPanel(
     restoringInitialHistory = false;
   });
   showView('chat');
-  // Cache discovery may choose a default view only until chat interaction starts.
+  // Cache discovery may choose a default view only until explicit navigation or chat interaction.
   // Capture clicks because speech controls stop propagation before requesting permission.
   const keepChatVisible = () => viewRevision++;
+  header.addEventListener('click', keepChatVisible, { capture: true });
+  workspaceNav.addEventListener('click', keepChatVisible, { capture: true });
   chat.el.addEventListener('click', keepChatVisible, { capture: true });
   chat.el.addEventListener('input', keepChatVisible);
   // Keep the empty-composer setup link and contextual main action from duplicating.

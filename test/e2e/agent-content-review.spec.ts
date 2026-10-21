@@ -57,7 +57,7 @@ async function open(
   await page.locator('.agent-panel-settings-toggle').click();
   await page.locator('.agent-panel-endpoint-connect').click();
   await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Configured');
-  await page.locator('.agent-panel-settings-toggle').click();
+  await page.locator('.agent-chat-toggle').click();
 }
 const undo = (page: Page) =>
   page.evaluate(() => {
