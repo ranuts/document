@@ -51,9 +51,9 @@ Files: panel.ts, panel-workspace.ts, task-entry.ts, workspace-labels.ts, styles/
 
 ### Task5: Actual walkthrough, motion and upstream ownership
 
-- [ ] Build once and run the affected tests serially against that build. Keep heavy capture and E2E runs sequential.
-- [ ] Capture baseline/current representative panes and deterministic streamed reasoning/answer/artifact workflows in light/dark, English/Portuguese, desktop/touch/narrow states.
-- [ ] Record normal and reduced-motion flows, interruption/reversal, reader scroll, focus return and artifact preview/edit/continue. Inspect actual frames, not only video creation success.
-- [ ] If a ran component defect is reproduced, fix its owner and add library-level failing/passing coverage; verify local consumed package rather than hiding it in host CSS. Do not publish a package without explicit release authorization.
-- [ ] Independent visual/spec and code-quality review; fix findings and repeat only affected checks/captures.
-- [ ] Update the local design contract/report and provide scoped evidence/remaining limits. Commit/push/update PR290 only after actual screenshot/recording acceptance; attach any created upstream PR. Do not merge or publish.
+- [x] Build once and run the affected tests serially against that build. Keep heavy capture and E2E runs sequential.
+- [x] Capture baseline/current representative panes and deterministic streamed reasoning/answer/artifact workflows in light/dark, English/Portuguese, desktop/touch/narrow states.
+- [x] Record normal and reduced-motion flows, interruption/reversal, reader scroll, focus return and artifact preview/edit/continue. Inspect actual frames, not only video creation success.
+- [x] If a ran component defect is reproduced, fix its owner and add library-level failing/passing coverage; verify local consumed package rather than hiding it in host CSS. Do not publish a package without explicit release authorization.
+- [x] Independent visual/spec and code-quality review; fix findings and repeat only affected checks/captures.
+- [x] Update the local design contract/report and provide scoped evidence/remaining limits. Commit/push/update PR290 only after actual screenshot/recording acceptance; attach any created upstream PR. Do not merge or publish.

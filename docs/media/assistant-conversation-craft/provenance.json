@@ -1,0 +1,11 @@
+{
+  "buildIdentity": {
+    "schema": 1,
+    "revision": "d6c0411372e168a5a1c124c82408b7499e7e3cc2",
+    "contentSha256": "23a96f4182123707557f63f43762b563cdfcd91f25f9a9aaccb20561081123b0"
+  },
+  "generatedAt": "2026-10-21T11:24:06.655Z",
+  "fixture": "Public provider NDJSON; deterministic UI acceptance only",
+  "captureScript": "work/capture-conversation-craft.mjs",
+  "states": 108
+}

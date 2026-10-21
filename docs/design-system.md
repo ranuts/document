@@ -349,7 +349,9 @@ Artifacts open in Preview. Use the existing bounded safe chat Markdown renderer 
 structured content has a readable presentation with source JSON behind a disclosure. Explicit Edit
 reveals the canonical input/textarea. Preview may reflect that unsaved draft but does not save it.
 Saving creates an explicit version and returns to Preview. Keep dirty navigation/version guards,
-late-save cancellation and document review separate. AI refinement produces an editable draft;
+late-save cancellation and document review separate. Multiline AI comparisons use separately labeled Original/Proposed blocks with preserved line breaks,
+bounded readable regions and explicit expansion; short changes retain inline differences.
+AI refinement produces an editable draft;
 applying it to a document still requires the native review. Deletion asks a nearby question with
 short Delete/Cancel controls and safe focus return. Export is a disclosure of actual export formats.
 
