@@ -367,6 +367,8 @@ export interface I18nMessages {
   agentParagraphSelectionConflict: string;
   agentNoSelection: string;
   agentQuotePrefix: string;
+  agentCodeBlock: string;
+  agentMarkdownTable: string;
   agentCopy: string;
   agentCopied: string;
   agentCopyFailed: string;

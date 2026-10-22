@@ -377,6 +377,8 @@ export const en: I18nMessages = {
   agentParagraphSelectionConflict: 'Clear the selection to align the current paragraph, or ask to align the selection.',
   agentNoSelection: 'No selection detected — please select text in the document first.',
   agentQuotePrefix: 'Please consider my selected content:',
+  agentCodeBlock: 'Code',
+  agentMarkdownTable: 'Table',
   agentCopy: 'Copy',
   agentCopied: 'Copied',
   agentCopyFailed: 'Could not copy',

@@ -2886,20 +2886,6 @@ r-dropdown[role='listbox'] {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
-.agent-artifact-data-preview table {
-  border-collapse: collapse;
-  width: 100%;
-}
-.agent-artifact-data-preview th,
-.agent-artifact-data-preview td {
-  padding: calc(var(--ran-space-3) / 2) var(--ran-space-2);
-  border-bottom: 1px solid var(--ran-color-border);
-  text-align: start;
-  min-width: 80px;
-  max-width: 220px;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
-}
 .agent-artifact-presentation details > button,
 .agent-artifact-data-preview > button {
   margin-inline-end: var(--ran-space-2);
@@ -2974,7 +2960,7 @@ r-dropdown[role='listbox'] {
     min-width: var(--app-control-touch);
     min-height: var(--app-control-touch);
   }
-  .agent-panel .agent-panel-header button:not(.agent-panel-title) {
+  .agent-panel .agent-panel-header button:not(.agent-panel-title):not(.agent-panel-return) {
     flex-basis: var(--app-control-touch);
   }
   .agent-panel .cui-composer .agent-sources-toggle,

@@ -22,6 +22,15 @@ for (const variant of [
       await panel.locator('[data-action=import]').click();
       const back = panel.locator('.agent-panel-header [data-action=back]');
       await expect(back).toBeVisible();
+      const caption = back.locator('span');
+      await expect(caption).toHaveText(variant.locale === 'pt' ? 'Artefatos' : 'Artifacts');
+      await expect(back).toHaveAccessibleName(new RegExp(await caption.innerText(), 'i'));
+      const readable = await caption.evaluate((el) => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        return range.getBoundingClientRect().width <= el.getBoundingClientRect().width + 1;
+      });
+      expect(readable, 'the parent destination must remain readable in the actual header').toBe(true);
       await expect(panel.locator('.agent-panel-title')).toBeHidden();
       await expect(panel.locator('.agent-artifacts .agent-view-back')).toHaveCount(0);
       await expect(panel.locator('.agent-artifacts > .agent-view-header')).toBeHidden();

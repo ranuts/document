@@ -106,6 +106,7 @@
 }
 .agent-artifact-reader {
   color: inherit;
+  font-weight: var(--ran-text-copy-weight);
   font-size: var(--ran-text-label-1);
   line-height: 1.7;
   overflow-wrap: anywhere;
@@ -138,31 +139,8 @@
   border-inline-start: 2px solid var(--ran-color-border);
   color: var(--ran-color-text-secondary);
 }
-.agent-artifact-reader pre,
-.agent-artifact-reader .cui-table {
-  overflow: auto;
-  max-width: 100%;
-}
-.agent-artifact-reader pre {
-  padding: var(--ran-space-3);
-  border-radius: var(--ran-radius-sm);
-  background: var(--ran-color-bg-muted);
-  font-size: var(--ran-text-label-2);
-  line-height: 1.55;
-}
 .agent-artifact-reader code {
   font-family: var(--ran-font-mono, monospace);
-}
-.agent-artifact-reader table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--ran-text-label-2);
-}
-.agent-artifact-reader :is(th, td) {
-  text-align: start;
-  vertical-align: top;
-  padding: var(--ran-space-2);
-  border-bottom: 1px solid var(--ran-color-border);
 }
 .agent-artifact-field-value {
   white-space: pre-wrap;

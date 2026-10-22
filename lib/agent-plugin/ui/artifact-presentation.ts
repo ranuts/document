@@ -1,7 +1,7 @@
-import { renderChatMarkdown } from '@ranuts/chat-ui';
+import { MarkdownPresentation, renderChatMarkdown, type MarkdownLabels } from '@ranuts/chat-ui';
 import { validatePayload, payloadText, type ArtifactPayload } from '../artifacts/payload';
 import { artifactFilename, exportPayload, type ArtifactExportFormat } from '../artifacts/export';
-export interface ArtifactPresentationLabels {
+export interface ArtifactPresentationLabels extends MarkdownLabels {
   titleField?: string;
   textField?: string;
   export: string;
@@ -22,7 +22,8 @@ export function createArtifactPresentation(
   const el = document.createElement('div');
   el.className = 'agent-artifact-presentation';
   const preview = document.createElement('div');
-  preview.className = 'agent-artifact-data-preview agent-artifact-reader';
+  preview.className = 'agent-artifact-data-preview agent-artifact-reader cui-markdown';
+  const markdown = new MarkdownPresentation(preview, labels);
   preview.dataset.artifactReader = 'true';
   preview.tabIndex = -1;
   const abort = new AbortController();
@@ -42,9 +43,10 @@ export function createArtifactPresentation(
       preview.hidden = editing;
       // Editing changes only the canonical source. Rebuild the reader once
       // when it becomes visible, avoiding Markdown work on each keystroke.
-      if (!editing) renderChatMarkdown(preview, text.value);
+      if (!editing) renderChatMarkdown(preview, text.value, markdown);
       return;
     }
+    markdown.releaseTree(preview);
     preview.replaceChildren();
     preview.hidden = false;
     const data = payload();
@@ -54,6 +56,7 @@ export function createArtifactPresentation(
       const head = document.createElement('tr');
       for (const [columnIndex, column] of data.columns.entries()) {
         const cell = document.createElement('th');
+        cell.scope = 'col';
         cell.append(
           valueField(column, `${labels.preview} · ${columnIndex + 1}`, (value) => {
             data.columns[columnIndex] = value;
@@ -77,7 +80,12 @@ export function createArtifactPresentation(
         }
         table.append(tr);
       }
-      preview.append(table);
+      const wrapper = document.createElement('div');
+      wrapper.className = 'cui-table';
+      wrapper.tabIndex = 0;
+      markdown.table(wrapper);
+      wrapper.append(table);
+      preview.append(wrapper);
       pages(Math.max(1, Math.ceil(data.rows.length / 10)));
     } else if (data.kind === 'slides') {
       page = Math.min(page, data.slides.length - 1);
@@ -215,16 +223,19 @@ export function createArtifactPresentation(
         ...disclosure.querySelectorAll<HTMLButtonElement>('button'),
       ])
         input.disabled = value || input.dataset.unavailable === 'true';
+      markdown.setDisabled(value);
     },
     dispose() {
       abort.abort();
+      markdown.dispose();
       disclosure.remove();
     },
     setLabels(next: ArtifactPresentationLabels) {
       labels = next;
+      markdown.setLabels(next);
       summary.textContent = labels.export;
       hint.textContent = labels.structuredHint;
-      safeRender();
+      if (kind !== 'text') safeRender();
     },
     refresh: safeRender,
     el,

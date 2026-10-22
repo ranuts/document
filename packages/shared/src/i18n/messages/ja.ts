@@ -381,6 +381,8 @@ export const ja: Partial<I18nMessages> = {
   agentParagraphSelectionConflict: '現在の段落を整列するには選択を解除するか、選択範囲の整列を指定してください。',
   agentNoSelection: '選択範囲が見つかりません。先にドキュメント内のテキストを選択してください。',
   agentQuotePrefix: '選択した内容を踏まえてください：',
+  agentCodeBlock: 'コード',
+  agentMarkdownTable: '表',
   agentCopy: 'コピー',
   agentCopied: 'コピーしました',
   agentCopyFailed: 'コピーできませんでした',

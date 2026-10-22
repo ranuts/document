@@ -1,5 +1,6 @@
 import { Lexer, type Token, type TokensList } from 'marked';
-import { renderMarkdownTokens } from './markdown';
+import { completeMarkdownTokens, renderMarkdownTokens } from './markdown';
+import { MarkdownPresentation } from './markdown-presentation';
 
 /** Input bound, not a promise that a synchronous lexer can be preempted. */
 export const STREAMING_MARKDOWN_LIMIT = 8000;
@@ -23,7 +24,12 @@ export class StreamingMarkdown {
   private label = false;
   private bracket = false;
   private escaped = false;
-  constructor(private readonly target: HTMLElement) {}
+  constructor(
+    private readonly target: HTMLElement,
+    private readonly presentation = new MarkdownPresentation(target),
+  ) {
+    target.classList.add('cui-markdown');
+  }
 
   update(source: string, complete = false): void {
     if (source === this.source && !complete) return;
@@ -160,7 +166,12 @@ export class StreamingMarkdown {
       const block = blocks[index];
       const old = previous[index];
       const key = block.tokens ? JSON.stringify(block.tokens) : undefined;
-      if (old?.nodes && old.raw === block.raw && old.key === key && old.provisional === provisional) {
+      if (
+        old?.nodes &&
+        old.raw === block.raw &&
+        old.key === key &&
+        (old.provisional === provisional || (block.tokens && completeMarkdownTokens(block.tokens)))
+      ) {
         block.nodes = old.nodes;
       } else if (!block.tokens && !old?.tokens && old?.nodes && block.raw.startsWith(old.raw)) {
         const text = old.nodes[0].firstChild as Text;
@@ -168,7 +179,7 @@ export class StreamingMarkdown {
         block.nodes = old.nodes;
       } else {
         const fragment = document.createDocumentFragment();
-        if (block.tokens) renderMarkdownTokens(fragment, block.tokens, provisional);
+        if (block.tokens) renderMarkdownTokens(fragment, block.tokens, provisional, this.presentation);
         else {
           const raw = document.createElement('span');
           raw.className = 'cui-stream-raw';
@@ -192,5 +203,6 @@ export class StreamingMarkdown {
     }
     while (this.target.childNodes.length > index) this.target.lastChild!.remove();
     this.blocks = [...prefix, ...blocks];
+    this.presentation.reconcile();
   }
 }

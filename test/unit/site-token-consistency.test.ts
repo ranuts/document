@@ -127,3 +127,7 @@ it('rejects unary signs prefixed to CSS functions in every authored and generate
   for (const { rel, html } of generate({ outDir: null }))
     expect(invalidTokenArithmetic(authoredStyles(rel, html)), rel).toEqual([]);
 });
+it('audits shared Markdown block styles as a standalone component consumer', async () => {
+  const { designTokenSources } = await import('../../bin/design-tokens.mjs');
+  expect(designTokenSources(process.cwd())).toContain('packages/chat-ui/src/markdown-styles.ts');
+});

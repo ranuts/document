@@ -11,3 +11,6 @@ export type {
   ChatViewOptions,
   RestoreHistoryOptions,
 } from './types';
+
+export { MarkdownPresentation } from './markdown-presentation';
+export type { MarkdownLabels } from './markdown-presentation';

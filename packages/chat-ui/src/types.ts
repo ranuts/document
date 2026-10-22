@@ -38,6 +38,9 @@ export interface ChatViewLabels {
   savingMessage?: string;
   savedMessage?: string;
   saveFailed?: string;
+  /** Accessible names for rendered code and horizontally scrollable tables. */
+  codeBlock?: string;
+  table?: string;
   copy?: string;
   copied?: string;
   copyFailed?: string;

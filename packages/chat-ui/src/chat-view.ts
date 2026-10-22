@@ -3,6 +3,7 @@ import { throttle } from 'ranuts/utils';
 import { Reasoning } from 'ranui/reasoning';
 import { ensureChatUiStyles } from './styles';
 import { renderMarkdown } from './markdown';
+import { MarkdownPresentation } from './markdown-presentation';
 import { StreamingMarkdown, STREAMING_MARKDOWN_LIMIT } from './streaming-markdown';
 import type {
   ChatNavigationSnapshot,
@@ -152,6 +153,10 @@ export class ChatView {
   private presentationRevision = 0;
   private livePresentationRevision?: number;
   private liveMarkdown?: StreamingMarkdown;
+  private markdownPresentation?: MarkdownPresentation;
+  private get markdown(): MarkdownPresentation {
+    return (this.markdownPresentation ??= new MarkdownPresentation(this.messagesEl, this.labels));
+  }
   private liveNode: Text | null = null;
   private pendingText = '';
   private actionRunning = false;
@@ -398,12 +403,12 @@ export class ChatView {
         try {
           if (this.options.streamingMarkdown && visibleText.length > STREAMING_MARKDOWN_LIMIT)
             bubble.classList.add('cui-stream-raw');
-          else renderMarkdown(bubble, visibleText);
+          else renderMarkdown(bubble, visibleText, this.markdown);
         } catch {
           bubble.textContent = visibleText;
           if (this.options.streamingMarkdown) bubble.classList.add('cui-stream-raw');
         }
-      } else renderMarkdown(bubble, visibleText);
+      } else renderMarkdown(bubble, visibleText, this.markdown);
     }
     if (message.role === 'agent') this.options.presentMessage?.(bubble, message.metadata);
     const row = Div().class(`cui-msg cui-msg-${message.role}`).attr('data-role', message.role).children(bubble).build();
@@ -609,7 +614,7 @@ export class ChatView {
       const ownedFocus = document.activeElement === expand;
       if (markdown) {
         try {
-          renderMarkdown(bubble, message.text);
+          renderMarkdown(bubble, message.text, this.markdown);
           this.options.presentMessage?.(bubble, message.metadata);
         } catch {
           bubble.textContent = message.text;
@@ -828,7 +833,7 @@ export class ChatView {
       bubble.replaceChildren(this.liveNode);
       if (this.options.streamingMarkdown) {
         bubble.classList.remove('cui-stream-raw');
-        this.liveMarkdown = new StreamingMarkdown(bubble);
+        this.liveMarkdown = new StreamingMarkdown(bubble, this.markdown);
       }
     }
     if (firstForPhase) this.updateActivity();
@@ -848,7 +853,7 @@ export class ChatView {
     } else this.flushStream();
     if (this.liveMsg) this.liveMsg.dataset.source = this.liveText;
     const bubble = this.liveMsg?.querySelector<HTMLElement>('.cui-bubble');
-    if (bubble && !this.liveMarkdown) renderMarkdown(bubble, this.liveText);
+    if (bubble && !this.liveMarkdown) renderMarkdown(bubble, this.liveText, this.markdown);
     if (bubble && this.liveMsg) this.options.presentMessage?.(bubble, this.messageMetadata.get(this.liveMsg));
     if (
       bubble &&
@@ -886,7 +891,7 @@ export class ChatView {
     if (!deferMarkdown) {
       const bubble = row.querySelector<HTMLElement>('.cui-bubble');
       if (markdown) markdown.update(text, true);
-      else if (bubble) renderMarkdown(bubble, text);
+      else if (bubble) renderMarkdown(bubble, text, this.markdown);
       if (bubble) this.options.presentMessage?.(bubble, this.messageMetadata.get(row));
       this.updateActivity();
       if (bubble && this.following) this.finishAppendLayout(true);
@@ -904,7 +909,7 @@ export class ChatView {
         if (this.disposed || !this.messagesEl.contains(row) || row.dataset.source !== text) return;
         const bubble = row.querySelector<HTMLElement>('.cui-bubble');
         if (markdown) markdown.update(text, true);
-        else if (bubble) renderMarkdown(bubble, text);
+        else if (bubble) renderMarkdown(bubble, text, this.markdown);
         if (bubble) this.options.presentMessage?.(bubble, this.messageMetadata.get(row));
         this.scheduleLayout();
       }, 0);
@@ -1075,6 +1080,7 @@ export class ChatView {
     this.liveMarkdown = undefined;
     this.clearCopyFeedback();
     this.resizeObserver?.disconnect();
+    this.markdownPresentation?.releaseTree(this.messagesEl);
     this.messagesEl.replaceChildren(this.emptyEl);
     this.messagesEl.scrollTop = 0;
     this.emptyTitle.textContent = this.labels.empty ?? '';
@@ -1198,6 +1204,7 @@ export class ChatView {
   /** Update labels (e.g. on a language change) and re-apply them live. */
   setLabels(labels: ChatViewLabels): void {
     this.labels = labels;
+    this.markdownPresentation?.setLabels(labels);
     this.composerEl.setAttribute('aria-label', labels.composer?.trim() || 'Message composer');
     this.composerBarEl.setAttribute('aria-label', labels.actions?.trim() || 'Message actions');
     for (const phase of this.reasoningPhases) {
@@ -1361,6 +1368,7 @@ export class ChatView {
     this.liveMarkdown = undefined;
     this.resizeObserver?.disconnect();
     this.clearCopyFeedback();
+    this.markdownPresentation?.dispose();
   }
 
   private observeLayout(): void {

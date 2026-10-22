@@ -455,6 +455,8 @@ export function createAgentPanel(
     stopping: t('agentStopping'),
     placeholder: t(proposalMode && writingSelect.value !== 'tools' ? 'agentWritingHint' : 'agentComposeHint'),
     empty: t('agentWelcome'),
+    codeBlock: t('agentCodeBlock'),
+    table: t('agentMarkdownTable'),
     copy: t('agentCopy'),
     copied: t('agentCopied'),
     copyFailed: t('agentCopyFailed'),
@@ -3180,6 +3182,9 @@ export function createAgentPanel(
     title.hidden = nested;
     if (artifactBack) {
       artifactBack.classList.add('agent-panel-return');
+      // The chevron already expresses Back; keep its parent destination readable.
+      const caption = artifactBack.querySelector('span');
+      if (caption) caption.textContent = t('agentArtifactTitle');
       artifactBack.hidden = !nested;
       workspaceNav.prepend(artifactBack);
     }

@@ -94,9 +94,21 @@ guards when routing asynchronous callbacks. Localize `reasoning`,
 for host previews. It replaces target children with DOM nodes, treats model HTML
 and image syntax as literal text, and permits only explicit `http:`, `https:` and
 `mailto:` links, opened with `noopener noreferrer`. It neither loads remote media
-nor inserts model HTML. The caller owns input bounds and styling; use a
-`cui-bubble` container inside the existing ChatView style scope when sharing the
-conversation typography.
+nor inserts model HTML. The caller owns input bounds. Shared table/code styles are
+injected even for artifact-only previews; prose typography remains host-owned.
+Tables honor declared column alignment and have a named keyboard-scroll region.
+Code blocks preserve literal text in a local scroll frame with a language and
+Copy header. Supported completed fences up to 8000 characters receive lazy
+Shiki token colors; unknown, unfinished and larger fences stay plain. Highlighting
+never replaces an active text selection and theme changes only recolor tokens.
+
+Hosts with a mount/unmount lifecycle should create
+`new MarkdownPresentation(root, labels)`, pass it as the optional third argument
+to `renderChatMarkdown(target, text, presentation)`, call `setLabels(...)` for live
+localization and `dispose()` on unmount. This releases clipboard feedback timers
+and guards late clipboard/highlight results. ChatView already owns this lifecycle.
+Copy uses the displayed code payload; message Copy/Save/Apply still use the original
+answer source. Code blocks have no implied execution or preview action.
 
 Waiting feedback appears immediately, with a locally measured clock formatted
 by `labels.elapsed(seconds)` and a classification label from `labels.routing`.

@@ -32,6 +32,7 @@ export function designTokenSources(root) {
   return [
     ...sources,
     'packages/chat-ui/src/styles.ts',
+    'packages/chat-ui/src/markdown-styles.ts',
     'index.html',
     'editor.html',
     'history.html',
@@ -51,13 +52,15 @@ export function auditDesignTokens(root, generated = []) {
   const foundation = read('public/ran-tokens.css');
   const application = read('public/app-tokens.css');
   const sharedChat = read('packages/chat-ui/src/styles.ts');
+  const markdownStyles = 'packages/chat-ui/src/markdown-styles.ts';
   const errors = [];
   const inspect = (file, source) => {
     // Only CSS in HTML participates: text, SVG artwork, meta colours and script
     // strings are not stylesheet consumers.
     const css = authoredStyles(file, source);
     const dependencies = file.endsWith('.html') ? [] : [foundation];
-    if (!file.endsWith('.html') && file !== 'packages/chat-ui/src/styles.ts') dependencies.push(application);
+    if (!file.endsWith('.html') && file !== 'packages/chat-ui/src/styles.ts' && file !== markdownStyles)
+      dependencies.push(application);
     if (file === 'styles/assistant.css') dependencies.push(sharedChat);
     if (file.endsWith('.html')) {
       for (const [, path] of source.matchAll(/<link[^>]*href="\/([^"?]+\.css)"/g)) {
@@ -67,7 +70,13 @@ export function auditDesignTokens(root, generated = []) {
     }
     // The resizer writes this geometry onto the host at runtime. It is not a
     // colour/spacing role and has a local fallback before the panel mounts.
-    const external = file === 'styles/assistant.css' ? ['--agent-panel-width'] : [];
+    const external =
+      file === 'styles/assistant.css'
+        ? ['--agent-panel-width']
+        : // Shiki token colors are written onto safe spans at render time.
+          file === markdownStyles
+          ? ['--cui-token-light', '--cui-token-dark']
+          : [];
     const missing = unresolvedTokens(css, dependencies, external);
     if (missing.length) errors.push({ file, missing });
   };

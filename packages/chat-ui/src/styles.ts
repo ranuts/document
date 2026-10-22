@@ -45,21 +45,12 @@ export const CHAT_UI_CSS = `
 .cui-bubble li { padding-left:calc(var(--ran-space-1, 4px) / 2); margin:var(--ran-space-1, 4px) 0; }
 .cui-bubble blockquote { margin:var(--ran-space-3, 12px) 0; border-left:2px solid var(--cui-border); padding-left:var(--ran-space-3, 12px); color:var(--cui-muted); }
 .cui-bubble code { font-family:var(--ran-font-mono, ui-monospace, monospace); font-size:.88em; background:var(--cui-user-bg); padding:calc(var(--ran-space-1, 4px) / 2) var(--ran-space-1, 4px); border-radius:var(--ran-radius-sm, 6px); }
-.cui-bubble pre { margin:var(--ran-space-3, 12px) 0; border:1px solid var(--cui-border); background:var(--cui-user-bg); padding:var(--ran-space-3, 12px); border-radius:var(--ran-radius-sm, 6px); overflow:auto; white-space:pre; line-height:1.55; }
-.cui-bubble pre code { padding:0; background:none; font-size:inherit; }
-.cui-bubble pre { font-size:var(--ran-text-label-2, 13px); tab-size:2; text-wrap:nowrap; }
 .cui-bubble > :first-child { margin-top:0; }
 .cui-bubble > :last-child { margin-bottom:0; }
 .cui-bubble li > p { margin:0 0 var(--ran-space-2, 8px); }
 .cui-bubble li > :last-child { margin-bottom:0; }
 .cui-bubble li > :is(ul,ol) { margin-bottom:0; }
-.cui-bubble pre,.cui-table { max-width:100%; box-sizing:border-box; overscroll-behavior-x:contain; }
 .cui-bubble a { color:var(--cui-text); text-underline-offset:3px; }
-.cui-table { overflow:auto; margin:var(--ran-space-3, 12px) 0; border:1px solid var(--cui-border); border-radius:var(--ran-radius-sm, 6px); }
-.cui-table table { border-collapse:collapse; font-size:var(--ran-text-label-2, 13px); line-height:1.55; min-width:100%; overflow-wrap:normal; }
-.cui-table th,.cui-table td { border-bottom:1px solid var(--cui-border); padding:var(--ran-space-2, 8px) var(--ran-space-3, 12px); text-align:left; vertical-align:top; }
-.cui-table th { background:var(--cui-user-bg); font-weight:var(--ran-text-label-weight, 500); font-size:var(--ran-text-label-2, 13px); }
-.cui-table tr:last-child td { border-bottom:0; }
 .cui-message-actions { display:flex; align-items:center; flex-wrap:wrap; gap:var(--ran-space-1, 4px); }
 .cui-message-actions button { border:0; background:transparent; color:var(--cui-muted); cursor:pointer; font:inherit; font-size:var(--ran-text-label-3, 12px); min-height:var(--ran-size-7, 32px); padding:var(--ran-space-1, 4px) var(--ran-space-2, 8px); border-radius:var(--ran-radius-sm, 6px); }
 .cui-message-actions button:hover:not(:disabled) { color:var(--cui-text); background:var(--cui-user-bg); }

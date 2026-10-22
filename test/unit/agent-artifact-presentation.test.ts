@@ -129,3 +129,56 @@ it('preserves the hidden reader while typing and renders the latest source only 
   view.dispose();
   render.mockRestore();
 });
+
+it('owns localized code copy and table styles without a ChatView and preserves the reader on locale changes', async () => {
+  const source = '```unknown\n  literal <img src=x>\n\tend\n```\n\n| Cost |\n| ---: |\n| 1200 |';
+  const text = document.createElement('textarea');
+  text.value = source;
+  const view = createArtifactPresentation(text, { ...labels, copy: 'Copy', table: 'Table' });
+  document.body.append(view.el);
+  expect(document.getElementById('cui-markdown-styles')).not.toBeNull();
+  const code = view.el.querySelector('code')!;
+  const copy = view.el.querySelector<HTMLButtonElement>('.cui-code-copy')!;
+  const writeText = vi.fn().mockResolvedValue(undefined);
+  Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+  copy.click();
+  await Promise.resolve();
+  expect(writeText).toHaveBeenCalledWith('  literal <img src=x>\n\tend');
+  expect(copy.textContent).toContain('Copied');
+  view.setLabels({ ...labels, copy: 'Copiar', copied: 'Copiado', table: 'Tabela' });
+  expect(view.el.querySelector('code')).toBe(code);
+  expect(view.el.querySelector('.cui-code-copy')).toBe(copy);
+  expect(copy.textContent).toContain('Copiado');
+  expect(view.el.querySelector('.cui-table')?.getAttribute('aria-label')).toBe('Tabela');
+  expect(view.el.querySelector('td')?.style.textAlign).toBe('right');
+  expect(view.el.querySelector('img')).toBeNull();
+  expect(text.value).toBe(source);
+  expect(view.payload()).toEqual({ kind: 'text', text: source });
+  view.dispose();
+});
+
+it('keeps a code copy pending while unrelated artifact save controls unlock', async () => {
+  const text = document.createElement('textarea');
+  text.value = '```unknown\ncode\n```';
+  const view = createArtifactPresentation(text, labels);
+  document.body.append(view.el);
+  let resolve!: () => void;
+  Object.defineProperty(navigator, 'clipboard', {
+    configurable: true,
+    value: {
+      writeText: () =>
+        new Promise<void>((r) => {
+          resolve = r;
+        }),
+    },
+  });
+  const copy = view.el.querySelector<HTMLButtonElement>('.cui-code-copy')!;
+  copy.click();
+  view.setDisabled(true);
+  view.setDisabled(false);
+  expect(copy.disabled).toBe(true);
+  resolve();
+  await Promise.resolve();
+  expect(copy.disabled).toBe(false);
+  view.dispose();
+});

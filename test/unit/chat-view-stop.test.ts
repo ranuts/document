@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { ChatView } from '../../packages/chat-ui/src/chat-view';
 import * as markdown from '../../packages/chat-ui/src/markdown';
+import { MarkdownPresentation } from '../../packages/chat-ui/src/markdown-presentation';
 
 let view: ChatView;
 let frames: FrameRequestCallback[];
@@ -66,7 +67,11 @@ it('acknowledges Stop once, freezes 100 KB of source without parsing, and retain
   frames.splice(0).forEach((frame) => frame(16));
   expect(parse).not.toHaveBeenCalled();
   await vi.runOnlyPendingTimersAsync();
-  expect(parse).toHaveBeenCalledExactlyOnceWith(row.querySelector('.cui-bubble'), source);
+  expect(parse).toHaveBeenCalledExactlyOnceWith(
+    row.querySelector('.cui-bubble'),
+    source,
+    expect.any(MarkdownPresentation),
+  );
   view.setRunning(false);
   expect(button.disabled).toBe(false);
   expect(view.getInput()).toBe('My next request');

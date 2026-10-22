@@ -246,12 +246,15 @@ test('attached reference excerpts reach only the explicitly selected AI service'
   await expect(page.locator('.agent-artifact-provenance')).toContainText('notes.txt');
   await editArtifact(page);
   await page.locator('.agent-artifact-editor textarea').fill('Keep artifact draft');
+  // Switch destinations without discarding the mounted artifact draft.
+  await page.locator('.agent-history-toggle').click();
   await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.cui-save')).toHaveText('Saved');
   await page.locator('.cui-save').click();
   await expect(page.locator('.agent-artifact-status')).toContainText('Discard unsaved changes');
   await page.getByRole('button', { name: 'Cancel', exact: true }).click();
   await expect(page.locator('.agent-artifact-editor textarea')).toHaveValue('Keep artifact draft');
+  await page.locator('.agent-history-toggle').click();
   await page.locator('.agent-chat-toggle').click();
   await expect(page.locator('.cui-save')).toHaveText('Save as artifact');
   await page.setViewportSize({ width: 360, height: 700 });
@@ -402,6 +405,7 @@ test('offline workspace keeps local sources and hides download controls without 
   await expect(page.locator('.agent-artifact-status')).toHaveText('Saved on this device');
   await context.setOffline(false);
   offline = false;
+  await page.locator('.agent-runtime-panel .agent-panel-header [data-action=back]').click();
   await page.locator('.agent-chat-toggle').click();
   await page.locator('.agent-sources-nav').click();
   await expect(

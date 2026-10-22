@@ -46,6 +46,7 @@ test('public reasoning is a reader-owned transient phase and never a saved answe
   expect(await panel.locator('[data-artifact-source]').inputValue()).not.toContain(
     'checking the supplied project notes',
   );
+  await panel.locator('.agent-panel-header [data-action=back]').click();
   await panel.locator('.agent-chat-toggle').click();
   await panel.screenshot({ path: info.outputPath('public-reasoning-completed.png') });
   await input.fill('Hi');

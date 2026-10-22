@@ -352,6 +352,15 @@ precedence over later stream updates. Expanded content must not repeat its summa
 collapsed content may show the latest summary. End reasoning on answer/settlement/Stop, under
 the same generation and conversation lifetime guards as answer delivery.
 
+Chat and artifact Markdown share one table/code presentation owner. Tables use a quiet
+header, restrained row separators and tabular numerals; preserve explicit Markdown column
+alignment and keep wide content in a named keyboard-scroll region. Code uses one compact
+language/Copy header and a readable monospace viewport. Copy reports actual clipboard
+success/failure. Only completed supported blocks up to 8000 characters are lazily highlighted;
+unknown or unfinished code stays literal. Token colors may change with the theme, while font
+metrics, selection and scroll stay stable. Release copy timers and late token work on unmount;
+localization updates controls in place. Do not add execution controls without an actual engine.
+
 Artifacts open in Preview. Use the existing bounded safe chat Markdown renderer for text;
 structured content has a readable presentation with source JSON behind a disclosure. Explicit Edit
 reveals the canonical input/textarea. Preview may reflect that unsaved draft but does not save it.

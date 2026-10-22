@@ -356,6 +356,8 @@ export const zhCN: I18nMessages = {
   agentParagraphSelectionConflict: '请取消选区后对齐当前段落，或明确要求对齐选区。',
   agentNoSelection: '没有检测到选中的内容，请先在文档中选择文字。',
   agentQuotePrefix: '请参考我选中的内容：',
+  agentCodeBlock: '代码',
+  agentMarkdownTable: '表格',
   agentCopy: '复制',
   agentCopied: '已复制',
   agentCopyFailed: '复制失败',
