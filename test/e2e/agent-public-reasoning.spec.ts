@@ -74,7 +74,7 @@ test('public reasoning is a reader-owned transient phase and never a saved answe
 test.describe('touch streaming composer', () => {
   test.use({ hasTouch: true });
   for (const width of [320, 360]) {
-    test(`keeps voice language readable beside Stop and Send at ${width}px`, async ({ page }) => {
+    test(`keeps disclosed voice language readable without crowding Stop and Send at ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript(installConversationFixture);
       await page.goto('/editor?new=docx&locale=pt');
@@ -85,6 +85,9 @@ test.describe('touch streaming composer', () => {
       await expect(page.locator('.agent-panel-endpoint-status')).toContainText('Ligado');
       await page.locator('.cui-send').click();
       await expect(page.locator('.cui-stop')).toBeVisible();
+      await expect(page.locator('.agent-speech-language')).toBeHidden();
+      await page.locator('.agent-speech-privacy button').click();
+      await expect(page.locator('.agent-speech-language')).toBeVisible();
       const language = await page.locator('.agent-speech-language').evaluate((el) => {
         const root = el.shadowRoot ?? (el as HTMLElement & { _shadowDom: ShadowRoot })._shadowDom;
         const label = root.querySelector('[part="selection-item"]')!;
@@ -98,6 +101,7 @@ test.describe('touch streaming composer', () => {
       });
       expect(language.text).toBe('Português');
       expect(language.width).toBeGreaterThanOrEqual(language.textWidth);
+      await page.locator('.agent-speech-privacy button').press('Escape');
       for (const control of [
         '.agent-sources-toggle',
         '.agent-speech-mic',

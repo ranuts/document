@@ -42,3 +42,45 @@ it('resizes by keyboard, clamps width, persists and restores the preference', ()
   expect(panel.querySelector('[role="separator"]')).toBeNull();
   mountPanelResize(panel)();
 });
+
+it('temporarily expands without overwriting dock preference and restores it on collapse', () => {
+  const original = window.innerWidth;
+  Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1600 });
+  localStorage.setItem('agent-panel-width', '504');
+  const panel = document.createElement('div');
+  const expand = document.createElement('button');
+  document.body.append(panel, expand);
+  const dispose = mountPanelResize(panel, { expandButton: expand });
+  try {
+    expand.click();
+    expect(expand.getAttribute('aria-expanded')).toBe('true');
+    expect(document.documentElement.style.getPropertyValue('--agent-panel-width')).toBe('1040px');
+    expect(localStorage.getItem('agent-panel-width')).toBe('504');
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1200 });
+    window.dispatchEvent(new Event('resize'));
+    expect(document.documentElement.style.getPropertyValue('--agent-panel-width')).toBe('840px');
+    expand.click();
+    expect(document.documentElement.style.getPropertyValue('--agent-panel-width')).toBe('504px');
+    expect(localStorage.getItem('agent-panel-width')).toBe('504');
+  } finally {
+    dispose();
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: original });
+  }
+});
+
+it.each([1040, 1200])('does not offer expansion that would shrink or retain a %ipx dock', (preferred) => {
+  const original = window.innerWidth;
+  Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1920 });
+  localStorage.setItem('agent-panel-width', String(preferred));
+  const panel = document.createElement('div');
+  const expand = document.createElement('button');
+  document.body.append(panel, expand);
+  const dispose = mountPanelResize(panel, { expandButton: expand });
+  try {
+    expect(expand.hidden).toBe(true);
+    expect(document.documentElement.style.getPropertyValue('--agent-panel-width')).toBe(`${preferred}px`);
+  } finally {
+    dispose();
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: original });
+  }
+});

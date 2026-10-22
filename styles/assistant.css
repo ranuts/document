@@ -1,5 +1,5 @@
 /* ── Document assistant ───────────────────────────── */
-/* Dock mode: the editor gives up 360px so the panel sits beside it instead of
+/* Dock mode: the editor gives up the preferred panel width so it sits beside it instead of
    overlaying the document. DocsAPI REPLACES the #iframe placeholder div with the
    editor <iframe> (name="frameEditor", no id) inside #app, so target that iframe
    directly. Narrowing it makes OnlyOffice reflow its content. */
@@ -7,7 +7,7 @@
   transition: width var(--ran-motion-duration-base) ease;
 }
 body.agent-docked #app iframe {
-  width: calc(100% - var(--agent-panel-width, 432px)) !important;
+  width: calc(100% - var(--agent-panel-width, 480px)) !important;
 }
 .agent-panel-resizer {
   position: absolute;
@@ -89,6 +89,7 @@ body.agent-panel-resizing #app iframe {
 /* Box, border, background, colour and cursor come from the shared
    `.agent-panel-header button` rule, which outranks this class; only the glyph
    sizing belongs here. */
+.agent-panel-expand,
 .agent-panel-close {
   font-size: var(--ran-text-heading-3);
   line-height: 1;
@@ -308,14 +309,6 @@ body.agent-panel-resizing #app iframe {
 /* The conversation list, input box, and message bubbles now live in the
    @ranuts/chat-ui ChatView (it injects its own `cui-*` styles). It must flex to
    fill the panel's remaining height below the header/settings/toolbar. */
-.agent-panel .cui-msg-agent,
-.agent-panel .cui-msg-error,
-.agent-panel .cui-activity {
-  max-width: 72ch;
-}
-.agent-panel .cui-msg-user {
-  max-width: min(88%, 64ch);
-}
 .agent-panel .cui-composer:focus-within {
   border-color: var(--ran-color-text-secondary);
   box-shadow: none;
@@ -594,9 +587,6 @@ r-dropdown[role='listbox'] {
   height: auto;
   font-family: inherit;
 }
-.agent-panel .cui-actions {
-  gap: var(--ran-space-2);
-}
 .agent-panel-quote {
   margin-left: auto;
 }
@@ -671,11 +661,6 @@ r-dropdown[role='listbox'] {
   border-left: 2px solid var(--ran-color-primary);
   line-height: 1.55;
 }
-.agent-panel .cui-messages {
-  padding: var(--ran-space-6) var(--ran-space-4);
-  gap: var(--ran-space-4);
-  line-height: 1.75;
-}
 /* One block per element: the welcome surface used to declare these twice, and
    the later copy silently won -- the earlier font-size and the flex row were
    dead code that still read as intent. */
@@ -693,15 +678,6 @@ r-dropdown[role='listbox'] {
 .agent-panel .cui-empty-actions {
   display: block;
   margin-top: var(--ran-space-3);
-}
-.agent-welcome-hint {
-  /* The actions row is a block, so a flex-basis here would be inert. */
-  margin: 0 0 var(--ran-space-6);
-  font-size: var(--ran-text-label-2);
-  font-weight: 400;
-  line-height: 1.65;
-  letter-spacing: 0;
-  color: var(--ran-color-text-secondary);
 }
 .agent-panel .cui-empty-actions .agent-configure {
   display: inline-flex;
@@ -723,10 +699,6 @@ r-dropdown[role='listbox'] {
 .agent-panel .cui-empty-actions .agent-configure:hover {
   color: var(--ran-color-text);
 }
-.agent-panel .cui-message-actions {
-  gap: calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
-  margin-top: calc(var(--ran-space-1) / 2);
-}
 .agent-panel .cui-message-actions button {
   min-height: var(--ran-size-7);
 }
@@ -736,9 +708,6 @@ r-dropdown[role='listbox'] {
   border-radius: 0;
   box-shadow: none;
   line-height: 1.65;
-}
-.agent-panel .cui-composer-bar {
-  margin-top: var(--ran-space-2);
 }
 @media (max-width: 480px) {
   .agent-panel-header button,
@@ -750,9 +719,6 @@ r-dropdown[role='listbox'] {
   }
   .agent-panel-clear {
     flex-basis: var(--app-control-touch);
-  }
-  .agent-panel .cui-messages {
-    padding: var(--ran-space-6) var(--ran-space-4);
   }
   .agent-panel .cui-footer {
     padding-bottom: max(var(--ran-space-4), env(safe-area-inset-bottom));
@@ -777,11 +743,10 @@ r-dropdown[role='listbox'] {
     min-height: 124px;
   }
   .agent-panel .cui-messages {
-    padding: 0 var(--ran-space-4);
+    padding-block: 0;
   }
   .agent-panel .cui-footer {
-    padding: var(--ran-space-2) var(--ran-space-4);
-    padding-bottom: max(var(--ran-space-2), env(safe-area-inset-bottom));
+    padding-block: var(--ran-space-2) max(var(--ran-space-2), env(safe-area-inset-bottom));
   }
   .agent-panel .cui-composer {
     padding: calc(var(--ran-space-4) / 2 + var(--ran-space-1) / 2);
@@ -866,7 +831,7 @@ r-dropdown[role='listbox'] {
 /* Product surfaces: each view owns the available space. */
 .agent-panel {
   /* Content, text and navigation have different boxes but named shared rails. */
-  --agent-content-inset: var(--ran-space-4);
+  --agent-content-inset: var(--ran-space-6);
   --agent-title-inset: var(--ran-space-2);
   /* The quoted selection follows the input text inside the composer border. */
   --agent-composer-padding: var(--ran-space-3);
@@ -884,8 +849,48 @@ r-dropdown[role='listbox'] {
   background: var(--ran-color-bg-elevated);
   border-left: 1px solid var(--ran-color-border);
   font-size: var(--ran-text-copy-2);
-  width: min(var(--agent-panel-width, 432px), 100vw);
+  width: min(var(--agent-panel-width, 480px), 100vw);
   box-shadow: none;
+}
+.agent-panel[data-split='true'] {
+  display: grid;
+  grid-template-columns: minmax(320px, 2fr) minmax(480px, 3fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+.agent-panel[data-split='true'] > .agent-panel-header {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+.agent-panel[data-split='true'] > .agent-runtime-row {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.agent-panel[data-split='true'] > .cui-root {
+  grid-column: 1;
+  grid-row: 3;
+}
+.agent-panel[data-split='true'] > .agent-artifacts {
+  grid-column: 2;
+  grid-row: 3;
+  border-inline-start: 1px solid var(--ran-color-border);
+}
+.agent-artifact-return-slot {
+  flex: none;
+  padding: var(--ran-space-2) var(--agent-content-inset) 0;
+}
+.agent-artifact-return-slot > .agent-view-back {
+  margin-inline-start: calc(-1 * var(--ran-space-2));
+}
+@container agent-panel (max-width: 380px) {
+  .agent-panel > :not(.agent-panel-resizer) {
+    --agent-content-inset: var(--ran-space-4);
+  }
+}
+@media (pointer: coarse) {
+  .agent-panel .agent-panel-header {
+    min-height: 52px;
+    padding-block: var(--ran-space-1);
+  }
 }
 .agent-panel [hidden] {
   display: none !important;
@@ -895,9 +900,9 @@ r-dropdown[role='listbox'] {
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  min-height: calc(var(--app-control-height) + var(--ran-space-2));
+  min-height: 48px;
   flex: 0 0 auto;
-  padding: var(--ran-space-1) var(--agent-content-inset);
+  padding: var(--ran-space-2) var(--agent-content-inset);
   gap: calc(var(--ran-space-1) / 2);
 }
 .agent-workspace-nav {
@@ -1184,7 +1189,6 @@ r-dropdown[role='listbox'] {
 }
 .agent-panel .cui-footer {
   border-top: 0;
-  padding: var(--ran-space-3) var(--ran-space-4) var(--ran-space-4);
 }
 .agent-composer-meta {
   display: flex;
@@ -1232,13 +1236,6 @@ r-dropdown[role='listbox'] {
   border-radius: var(--ran-radius-md);
   padding: var(--agent-composer-padding);
 }
-.agent-panel .cui-msg-user .cui-bubble {
-  padding: var(--ran-space-3) var(--ran-space-4);
-  /* Radius comes from the ladder; 3px (radius-sm/2) was a fifth step that
-     existed nowhere else in the product (DESIGN.md §4). */
-  border-radius: var(--ran-radius-md) var(--ran-radius-md) var(--ran-radius-sm) var(--ran-radius-md);
-  background: var(--ran-color-bg-muted);
-}
 .agent-panel .cui-send,
 .agent-panel .cui-stop {
   border-radius: var(--ran-radius-sm);
@@ -1277,7 +1274,7 @@ r-dropdown[role='listbox'] {
     padding: var(--ran-space-4);
   }
   .agent-panel .cui-footer {
-    padding: var(--ran-space-3) var(--ran-space-4) max(var(--ran-space-3), env(safe-area-inset-bottom));
+    padding-bottom: max(var(--ran-space-3), env(safe-area-inset-bottom));
   }
 }
 @container agent-panel (max-height:600px) {
@@ -1295,20 +1292,7 @@ r-dropdown[role='listbox'] {
   }
 }
 
-/* A brief content cue marks a real view change without moving hit targets or
-   creating a transformed ancestor for controls and overlays. */
-@keyframes agent-view-enter {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 @media (prefers-reduced-motion: no-preference) {
-  .agent-panel :is(.agent-view-header, .agent-history-management[open] > .agent-history-actions) {
-    animation: agent-view-enter var(--ran-motion-duration-fast) ease-out;
-  }
   .agent-history-management > summary::after {
     transition: transform var(--ran-motion-duration-fast) ease-out;
   }
@@ -1659,23 +1643,6 @@ r-dropdown[role='listbox'] {
 .agent-speech-mic[aria-pressed='true'] svg:last-child {
   display: block;
 }
-/* One lane for the language label: it yields before it can cover Stop/Send,
-   so it is declared once, with the select's public hooks. */
-.agent-speech-language {
-  flex: 1 1 96px;
-  width: auto;
-  min-width: 0;
-  max-width: 96px;
-  --ran-select-background-color: transparent;
-  --ran-select-border: 1px solid transparent;
-  --ran-select-hover-border: 1px solid transparent;
-  --ran-select-height: var(--ran-size-7);
-  --ran-select-min-height: var(--ran-size-7);
-  --ran-select-font-size: var(--ran-text-label-3);
-  --ran-select-color: var(--ran-color-text-secondary);
-  --ran-select-item-hover-color: var(--ran-color-text);
-  --ran-select-search-focus-color: var(--ran-color-text);
-}
 .agent-speech-feedback {
   display: flex;
   flex: 1;
@@ -1691,21 +1658,9 @@ r-dropdown[role='listbox'] {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-/* While dictating, the fixed language lane displays the live state instead.
-   Its disabled selector keeps its bounds, and the trailing controls stay put. */
-/* Give live dictation priority over the secondary source picker. */
+/* Live feedback takes the optional source lane while recording. */
 .agent-panel .cui-actions:has(.agent-speech[data-feedback='true']) .agent-sources-toggle {
   display: none;
-}
-.agent-speech[data-feedback='true'] .agent-speech-language {
-  visibility: hidden;
-}
-.agent-speech[data-feedback='true'] .agent-speech-feedback > [role='status'] {
-  position: absolute;
-  inset-inline-start: calc(var(--ran-size-7) + var(--ran-space-1));
-  inset-inline-end: calc(var(--ran-size-7) * 2 + var(--ran-space-1) * 2);
-  height: var(--ran-size-7);
-  line-height: var(--ran-size-7);
 }
 .agent-speech-feedback[hidden],
 .agent-speech-cancel[hidden] {
@@ -1721,13 +1676,34 @@ r-dropdown[role='listbox'] {
 .agent-speech-popover {
   z-index: 100000;
 }
-.agent-speech-hint {
+.agent-speech-options {
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
-  width: min(256px, calc(100vw - 64px));
+  width: min(272px, calc(100vw - 64px));
+  gap: var(--ran-space-3);
+}
+.agent-speech-popover .agent-speech-language {
+  display: block;
+  width: 100%;
+  --ran-select-height: var(--app-control-height, 32px);
+  --ran-select-min-height: var(--app-control-height, 32px);
+  --ran-select-font-size: var(--ran-text-label-2);
+}
+.agent-speech-hint,
+.agent-speech-notice {
   margin: 0;
   color: var(--ran-color-text-secondary);
   font-size: var(--ran-text-label-3);
   line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.agent-speech-notice[hidden] {
+  display: none;
+}
+.agent-speech-popover :focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: 2px;
 }
 .agent-speech button:disabled {
   cursor: default;
@@ -2126,6 +2102,9 @@ r-dropdown[role='listbox'] {
 .agent-panel .agent-task-action:focus-visible {
   outline: 2px solid var(--ran-color-link);
   outline-offset: 3px;
+}
+.agent-task-help:empty {
+  display: none;
 }
 .agent-task-help,
 .agent-staged-guidance {
@@ -2704,8 +2683,7 @@ r-dropdown[role='listbox'] {
   font-weight: 600;
 }
 
-/* A narrow toolbar keeps a real language label when Stop joins Send.
-   Use the select's public spacing hooks rather than losing its text lane. */
+/* Narrow panes keep Sources reachable by its named icon. */
 @container agent-panel (max-width: 360px) {
   .agent-panel .cui-composer-bar,
   .agent-panel .cui-actions {
@@ -2718,13 +2696,6 @@ r-dropdown[role='listbox'] {
   }
   .agent-sources-label {
     display: none;
-  }
-  .agent-speech-language {
-    --ran-select-padding: 0 var(--ran-space-1);
-    --ran-select-item-left: 0;
-    --ran-select-item-right: var(--ran-size-1);
-    --ran-select-icon-inset-inline-end: 0;
-    --ran-select-font-weight: var(--ran-text-copy-weight);
   }
 }
 .agent-sources-view [hidden] {
@@ -2940,7 +2911,7 @@ r-dropdown[role='listbox'] {
     width: var(--app-control-touch);
     height: var(--app-control-touch);
   }
-  .agent-panel .agent-speech-language {
+  .agent-speech-popover .agent-speech-language {
     --ran-select-height: var(--app-control-touch);
     --ran-select-min-height: var(--app-control-touch);
   }
@@ -2973,33 +2944,7 @@ r-dropdown[role='listbox'] {
   .agent-speech-cancel[hidden] {
     display: none;
   }
-  .agent-speech[data-feedback='true'] .agent-speech-feedback > [role='status'] {
-    inset-inline-start: calc(var(--app-control-touch) + var(--ran-space-1));
-    inset-inline-end: calc(var(--app-control-touch) * 2 + var(--ran-space-1) * 2);
+  .agent-speech-feedback {
     height: var(--app-control-touch);
-    line-height: var(--app-control-touch);
-  }
-}
-
-/* On narrow touch panes the voice controls need a real text lane alongside
-   44px targets. Keep execution in a stable second row across idle/running. */
-@media (pointer: coarse) {
-  @container agent-panel (max-width: 360px) {
-    .agent-panel .cui-composer-bar {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) var(--app-control-touch) var(--app-control-touch);
-      gap: var(--ran-space-1);
-    }
-    .agent-panel .cui-actions {
-      grid-column: 1 / -1;
-    }
-    .agent-panel .cui-stop {
-      grid-column: 2;
-      grid-row: 2;
-    }
-    .agent-panel .cui-send {
-      grid-column: 3;
-      grid-row: 2;
-    }
   }
 }

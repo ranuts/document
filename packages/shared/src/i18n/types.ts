@@ -114,6 +114,8 @@ export interface I18nMessages {
   agentWorkspaceChat: string;
   agentBackToChat: string;
   agentExpand: string;
+  agentCollapse: string;
+  agentVoiceOptions: string;
   agentSetupFailed: string;
   agentOffNote: string;
   agentResumeModel: string;

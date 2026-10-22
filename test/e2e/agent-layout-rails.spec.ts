@@ -15,9 +15,9 @@ test('assistant onboarding copy returns to the same content rail as its header',
   const onboarding = page.locator('.agent-onboarding');
   await expect(onboarding).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
-  expect((await textGeometry(onboarding.locator('header strong'))).textLeft).toBeCloseTo(16, 1);
-  expect((await textGeometry(onboarding.locator('.agent-welcome h2'))).textLeft).toBeCloseTo(16, 1);
-  expect((await textGeometry(onboarding.locator('.agent-welcome > p').first())).textLeft).toBeCloseTo(16, 1);
+  expect((await textGeometry(onboarding.locator('header strong'))).textLeft).toBeCloseTo(24, 1);
+  expect((await textGeometry(onboarding.locator('.agent-welcome h2'))).textLeft).toBeCloseTo(24, 1);
+  expect((await textGeometry(onboarding.locator('.agent-welcome > p').first())).textLeft).toBeCloseTo(24, 1);
 });
 
 test('layout acceptance rejects text-only drift, expanded hover and displaced sibling rails', async ({ page }) => {
@@ -41,11 +41,11 @@ test('layout acceptance rejects text-only drift, expanded hover and displaced si
   const settings = page.locator('.agent-panel-settings');
   if (!(await settings.isVisible())) await page.locator('.agent-panel-settings-toggle').click();
   await expect(settings).toBeVisible();
-  expect((await contentGeometry(settings)).contentLeft).toBe(16);
-  await settings.evaluate((el) => (el.style.paddingInlineStart = '24px'));
-  await expect((async () => expect((await contentGeometry(settings)).contentLeft).toBe(16))()).rejects.toThrow();
+  expect((await contentGeometry(settings)).contentLeft).toBe(24);
+  await settings.evaluate((el) => (el.style.paddingInlineStart = '32px'));
+  await expect((async () => expect((await contentGeometry(settings)).contentLeft).toBe(24))()).rejects.toThrow();
   await settings.evaluate((el) => el.removeAttribute('style'));
-  expect((await contentGeometry(settings)).contentLeft).toBe(16);
+  expect((await contentGeometry(settings)).contentLeft).toBe(24);
 });
 
 test('populated conversation and source disclosures return to the content rail', async ({ page }) => {
@@ -67,8 +67,8 @@ test('populated conversation and source disclosures return to the content rail',
   const row = page.locator('.agent-conversation-title').filter({ hasText: 'Layout conversation' });
   await expect(row).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
-  expect((await textGeometry(row)).textLeft).toBeCloseTo(16, 1);
-  expect(await frameLeft(page.locator('.agent-history-management > summary'))).toBeCloseTo(16, 1);
+  expect((await textGeometry(row)).textLeft).toBeCloseTo(24, 1);
+  expect(await frameLeft(page.locator('.agent-history-management > summary'))).toBeCloseTo(24, 1);
   await page.locator('.agent-panel-title').click();
   await page.locator('.agent-sources-toggle').click();
   const sources = page.locator('.agent-sources-view');
@@ -79,16 +79,17 @@ test('populated conversation and source disclosures return to the content rail',
   });
   const preview = sources.locator('.agent-source-preview');
   await expect(preview).toContainText('layout-notes.txt');
-  expect(await frameLeft(preview)).toBeCloseTo(16, 1);
+  expect(await frameLeft(preview)).toBeCloseTo(24, 1);
   await preview.locator('summary').click();
   await expect(preview.locator('pre')).toHaveText('A local reference excerpt.');
-  expect((await textGeometry(preview.locator('pre'))).textLeft).toBeCloseTo(16, 1);
+  expect((await textGeometry(preview.locator('pre'))).textLeft).toBeCloseTo(24, 1);
   const status = sources.locator('.agent-sources-status');
-  if (await status.isVisible()) expect(await frameLeft(status)).toBeCloseTo(16, 1);
+  if (await status.isVisible()) expect(await frameLeft(status)).toBeCloseTo(24, 1);
 });
 
 for (const variant of variants) {
   test.describe(`${variant.width}px ${variant.locale}`, () => {
+    const rail = variant.width <= 480 ? 16 : 24;
     test.use({ viewport: { width: variant.width, height: 900 }, hasTouch: variant.coarse });
     test('assistant text, navigation and content rails', async ({ page }, testInfo) => {
       test.setTimeout(180_000);
@@ -105,7 +106,7 @@ for (const variant of variants) {
       await page.evaluate(() => document.fonts.ready);
       for (const theme of ['light', 'dark'] as const) {
         await page.emulateMedia({ colorScheme: theme });
-        const titleBox = await assertTitleRail(title);
+        const titleBox = await assertTitleRail(title, rail);
         // The single row reserves space for four primary commands; translated
         // identity text can ellipsize while its actual hit target stays usable.
         expect(titleBox.width).toBeGreaterThanOrEqual(variant.coarse ? 44 : 32);
@@ -116,8 +117,8 @@ for (const variant of variants) {
         await expect(panel).toHaveAttribute('data-view', 'chat');
         const originalTitle = await title.textContent();
         await title.evaluate((el) => (el.textContent = 'A long translated assistant workspace title '.repeat(4)));
-        await assertTitleRail(title);
-        const actions = await panel.locator('.agent-panel-header button').evaluateAll((buttons) => {
+        await assertTitleRail(title, rail);
+        const actions = await panel.locator('.agent-panel-header button:visible').evaluateAll((buttons) => {
           const bounds = buttons[0].closest('.agent-panel')!.getBoundingClientRect();
           return buttons.map((button) => {
             const rect = button.getBoundingClientRect();
@@ -155,23 +156,23 @@ for (const variant of variants) {
           ['.agent-panel-settings-toggle', '.agent-panel-settings', '.agent-source-picker'],
           ['.agent-history-toggle', '.agent-history-view', '.agent-history-search-row'],
           ['.agent-sources-nav', '.agent-sources-view', 'input[type="search"]'],
-          ['.agent-workspace-toggle', '.agent-artifacts', ':scope > div:not(.agent-view-header)'],
+          ['.agent-workspace-toggle', '.agent-artifacts', '.agent-artifacts-body > :is(p, ul)'],
         ]) {
           await panel.locator('.agent-chat-toggle').click();
           await panel.locator(toggle).click();
           const view = panel.locator(selector);
           await expect(view.locator('.agent-view-back')).toHaveCount(0);
           const geometry = await contentGeometry(view);
-          expect(geometry.contentLeft, selector).toBeCloseTo(16, 1);
-          expect(geometry.headingLeft, selector).toBeCloseTo(16, 1);
+          expect(geometry.contentLeft, selector).toBeCloseTo(rail, 1);
+          expect(geometry.headingLeft, selector).toBeCloseTo(rail, 1);
           expect(geometry.overflow, selector).toBeLessThanOrEqual(1);
-          expect(await frameLeft(view.locator(frame).first()), selector).toBeCloseTo(16, 1);
+          expect(await frameLeft(view.locator(frame).first()), selector).toBeCloseTo(rail, 1);
           const firstContent = view
             .locator(
               selector === '.agent-sources-view'
                 ? ':scope > .agent-entry-note'
                 : selector === '.agent-artifacts'
-                  ? ':scope > div:not(.agent-view-header) > :is(p, ul)'
+                  ? '.agent-artifacts-body > :is(p, ul)'
                   : frame,
             )
             .first();
@@ -220,7 +221,7 @@ for (const variant of variants) {
         const artifacts = panel.locator('.agent-artifacts');
         const importing = artifacts.locator('[data-action="import"]');
         await expect(importing).toBeVisible();
-        expect(await frameLeft(importing)).toBeCloseTo(16, 1);
+        expect(await frameLeft(importing)).toBeCloseTo(rail, 1);
         if (await artifacts.locator('.agent-artifacts-list > li').count()) {
           const gap = await importing.evaluate((el) => {
             const list = el.parentElement!.querySelector('.agent-artifacts-list')!;
@@ -228,18 +229,18 @@ for (const variant of variants) {
           });
           expect(gap, 'saved results and the import action form separate groups').toBe(16);
         }
-        const emptyCopy = artifacts.locator(':scope > div:not(.agent-view-header) > p');
-        if (await emptyCopy.count()) expect((await textGeometry(emptyCopy)).textLeft).toBeCloseTo(16, 1);
+        const emptyCopy = artifacts.locator('.agent-artifacts-body > p');
+        if (await emptyCopy.count()) expect((await textGeometry(emptyCopy)).textLeft).toBeCloseTo(rail, 1);
         await importing.click();
         const form = artifacts.locator('.agent-artifact-import');
         const input = form.locator('input');
         await expect(input).toBeVisible();
         for (const field of await form.locator('input, textarea, label > span').all())
-          expect(await frameLeft(field)).toBeCloseTo(16, 1);
+          expect(await frameLeft(field)).toBeCloseTo(rail, 1);
         await expect(artifacts.locator('.agent-view-header')).toBeHidden();
         const nestedBack = panel.locator('.agent-panel-header .agent-view-back');
         await expect(nestedBack.locator('span')).toBeVisible();
-        expect(await frameLeft(nestedBack.locator('svg'))).toBeCloseTo(16, 1);
+        expect(await frameLeft(nestedBack.locator('svg'))).toBeCloseTo(rail, 1);
         await expect(panel.locator('.agent-chat-toggle')).toBeHidden();
         await input.fill('Layout fixture');
         await form
@@ -253,8 +254,8 @@ for (const variant of variants) {
         await expect(editor).toHaveAttribute('data-mode', 'preview');
         await editor.locator('[data-action=edit]').click();
         await expect(editor.locator('textarea').first()).toBeVisible();
-        expect(await frameLeft(editor.locator('input').first())).toBeCloseTo(16, 1);
-        expect(await frameLeft(editor.locator('.agent-artifact-title'))).toBeCloseTo(16, 1);
+        expect(await frameLeft(editor.locator('input').first())).toBeCloseTo(rail, 1);
+        expect(await frameLeft(editor.locator('.agent-artifact-title'))).toBeCloseTo(rail, 1);
         await expect(artifacts.locator('.agent-view-header')).toBeHidden();
         await panel.screenshot({ path: testInfo.outputPath(`artifact-editor-${theme}.png`) });
         await nestedBack.click();

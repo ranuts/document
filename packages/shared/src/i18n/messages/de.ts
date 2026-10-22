@@ -95,6 +95,8 @@ export const de: Partial<I18nMessages> = {
   agentWorkspaceChat: 'Unterhaltung',
   agentBackToChat: 'Zurück zum Gespräch',
   agentExpand: 'Assistent vergrößern',
+  agentCollapse: 'Assistent verkleinern',
+  agentVoiceOptions: 'Sprachoptionen',
   agentSetupFailed: 'Assistent konnte nicht geöffnet werden. Bitte erneut versuchen. Das Dokument ist unverändert.',
   agentOffNote: 'Ausschalten stoppt die aktuelle Aufgabe und behält Dokument und Entwurf.',
   agentResumeModel: 'Heruntergeladenes Modell verwenden',

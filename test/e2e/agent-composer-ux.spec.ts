@@ -283,9 +283,13 @@ for (const width of [320, 360, 1280]) {
     const centers = bounds.map((box) => box!.y + box!.height / 2);
     expect(Math.max(...centers) - Math.min(...centers)).toBeLessThanOrEqual(1);
     await expect(page.locator('.agent-sources-toggle')).toHaveCSS('font-size', '12px');
-    await expect(page.locator('.agent-speech-language')).toHaveCSS('--ran-select-font-size', '12px');
+    await expect(page.locator('.agent-speech-language')).toBeHidden();
+    await page.locator('.agent-speech-privacy button').click();
+    await expect(page.locator('.agent-speech-language')).toBeVisible();
+    await expect(page.locator('.agent-speech-language')).toHaveCSS('--ran-select-font-size', '13px');
+    await page.locator('.agent-speech-privacy button').press('Escape');
     await expect(composer).toHaveCSS('padding', '12px');
-    if (width === 1280) expect((await page.locator('.agent-runtime-panel').boundingBox())!.width).toBe(432);
+    if (width === 1280) expect((await page.locator('.agent-runtime-panel').boundingBox())!.width).toBe(480);
     const empty = (await composer.boundingBox())!.height;
     await page.locator('.agent-runtime-panel').screenshot({ path: testInfo.outputPath(`composer-empty-${width}.png`) });
     expect(empty).toBeLessThan(115);

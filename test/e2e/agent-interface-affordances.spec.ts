@@ -83,15 +83,58 @@ for (const width of [360, 1280]) {
     });
   }
 
-  test(`speech overlays stay anchored and mutually exclusive at ${width}px`, async ({ page }, info) => {
+  test(`Voice options keeps its language control reachable and preserves recovery at ${width}px`, async ({
+    page,
+  }, info) => {
+    test.setTimeout(60_000);
+    // Only speech service events are fixtures; the editor, composer, popover and select are real.
+    await page.addInitScript(() => {
+      const state = window as unknown as {
+        SpeechRecognition: unknown;
+        voiceOptionsRecognition: {
+          lang: string;
+          onerror?: (event: { error: string }) => void;
+        };
+      };
+      state.SpeechRecognition = class {
+        lang = '';
+        onstart?: () => void;
+        onend?: () => void;
+        onerror?: (event: { error: string }) => void;
+        constructor() {
+          state.voiceOptionsRecognition = this;
+        }
+        start() {
+          this.onstart?.();
+        }
+        stop() {
+          this.onend?.();
+        }
+        abort() {}
+      };
+    });
     await page.setViewportSize({ width, height: 900 });
     await openAssistant(page);
+    const input = page.locator('.cui-input');
+    const draft = 'Please revise this paragraph.\nKeep my original words.';
+    await input.fill(draft);
     const privacy = page.locator('.agent-speech-privacy');
-    const toggle = privacy.locator('button');
-    const language = page.locator('.agent-speech-language');
-    const popup = page.locator('.agent-speech-popover');
-    await toggle.click();
+    const toggle = privacy.getByRole('button', { name: 'Voice options', exact: true });
+    const language = page.getByRole('combobox', { name: 'Recognition language', exact: true });
+    const popup = page.getByRole('dialog', { name: 'Voice options', exact: true });
+    const afterShow = () =>
+      privacy.evaluate(
+        (el) => new Promise<void>((resolve) => el.addEventListener('after-show', () => resolve(), { once: true })),
+      );
+    await toggle.focus();
+    const opened = afterShow();
+    await toggle.press('Enter');
+    await opened;
     await expect(popup).toBeVisible();
+    await expect(language).toBeVisible();
+    await expect(page.locator('.agent-speech-hint')).toHaveText(
+      'Your browser may send audio to an online recognition service. Text stays editable before sending.',
+    );
     await expect
       .poll(async () => {
         const anchor = (await toggle.boundingBox())!;
@@ -102,19 +145,64 @@ for (const width of [360, 1280]) {
     const panel = (await popup.boundingBox())!;
     expect(panel.x).toBeGreaterThanOrEqual(0);
     expect(panel.x + panel.width).toBeLessThanOrEqual(width);
-    await page.locator('.agent-runtime-panel').screenshot({ path: info.outputPath(`speech-${width}.png`) });
-    await language.click();
+    await page.screenshot({ path: info.outputPath(`voice-options-${width}.png`) });
+    await toggle.press('Tab');
+    await expect(language).toBeFocused();
+    await language.press('End');
     await expect(language).toHaveAttribute('open', '');
-    await expect(privacy).not.toHaveAttribute('open', '');
-    await expect(popup).not.toBeVisible();
+    await expect(privacy).toHaveAttribute('open', '');
+    await language.press('Enter');
+    // Reopen immediately during the select's exit transition; no animation wait.
+    await language.press('ArrowDown');
+    await expect(language).toHaveJSProperty('value', 'pt-BR');
+    await expect(popup).toBeVisible();
+    await expect(input).toHaveValue(draft);
+    await expect(language).toHaveAttribute('open', '');
     await language.press('Escape');
     await expect(language).not.toHaveAttribute('open', '');
-    await toggle.focus();
-    await toggle.press('Enter');
     await expect(privacy).toHaveAttribute('open', '');
-    await toggle.press('Escape');
+    await expect(language).toBeFocused();
+    await language.press('Escape');
     await expect(privacy).not.toHaveAttribute('open', '');
     await expect(toggle).toBeFocused();
+    await input.focus();
+    await expect(input).toHaveValue(draft);
+    await expect(page.locator('.cui-msg-user')).toHaveCount(0);
+
+    await page.locator('.agent-speech-mic').click();
+    await expect(page.locator('.agent-speech')).toHaveAttribute('data-state', 'listening');
+    expect(
+      await page.evaluate(
+        () => (window as unknown as { voiceOptionsRecognition: { lang: string } }).voiceOptionsRecognition.lang,
+      ),
+    ).toBe('pt-BR');
+    await page.evaluate(() => {
+      (
+        window as unknown as { voiceOptionsRecognition: { onerror: (event: { error: string }) => void } }
+      ).voiceOptionsRecognition.onerror({ error: 'not-allowed' });
+    });
+    const feedback = page.locator('.agent-speech-feedback');
+    await expect(feedback).toContainText('Microphone permission denied. Allow access in browser settings.');
+    await expect(page.locator('.agent-speech-notice')).toHaveText(
+      'Microphone permission denied. Allow access in browser settings.',
+    );
+    await expect(page.locator('.agent-speech-hint')).toContainText('Your browser may send audio');
+    await expect(input).toHaveValue(draft);
+    await toggle.focus();
+    await toggle.press('Escape');
+    await expect(popup).not.toBeVisible();
+    await expect(feedback).toBeVisible();
+    await expect(feedback).toContainText('Microphone permission denied');
+    await expect(toggle).toHaveAccessibleName('Voice options');
+    await expect(toggle).toHaveAttribute('aria-describedby', 'agent-speech-feedback');
+    const reopened = afterShow();
+    await toggle.press('Enter');
+    await reopened;
+    await expect(popup).toBeVisible();
+    await expect(page.locator('.agent-speech-notice')).toBeVisible();
+    await expect(page.locator('.agent-speech-hint')).toBeVisible();
+    await expect(input).toHaveValue(draft);
+    await page.screenshot({ path: info.outputPath(`voice-recovery-${width}.png`) });
   });
 }
 

@@ -12,6 +12,7 @@ interface CodePresentation {
   button: HTMLButtonElement;
   label: HTMLElement;
   language: HTMLElement;
+  pre: HTMLPreElement;
   named: boolean;
   state?: 'copied' | 'failed';
   timer?: ReturnType<typeof setTimeout>;
@@ -62,6 +63,7 @@ export class MarkdownPresentation {
     header.append(language, button);
     const pre = document.createElement('pre');
     pre.tabIndex = 0;
+    pre.setAttribute('role', 'region');
     const code = document.createElement('code');
     code.textContent = source;
     pre.append(code);
@@ -71,6 +73,7 @@ export class MarkdownPresentation {
       button,
       label,
       language,
+      pre,
       named: !!languageName,
       pending: false,
       abort: new AbortController(),
@@ -165,7 +168,9 @@ export class MarkdownPresentation {
     record.button.dataset.state = record.state ?? 'idle';
     record.button.firstElementChild!.innerHTML = record.state === 'copied' ? COPIED : COPY;
     record.button.setAttribute('aria-label', record.label.textContent);
-    if (!record.named) record.language.textContent = this.labels.codeBlock ?? 'Code';
+    const codeLabel = this.labels.codeBlock ?? 'Code';
+    if (!record.named) record.language.textContent = codeLabel;
+    record.pre.setAttribute('aria-label', record.named ? `${codeLabel}: ${record.language.textContent}` : codeLabel);
   }
   setDisabled(disabled: boolean): void {
     this.disabled = disabled;

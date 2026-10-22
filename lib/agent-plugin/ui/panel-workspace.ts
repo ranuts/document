@@ -21,9 +21,27 @@ export function createPanelWorkspace(options: {
   views: Record<Exclude<PanelWorkspaceView, 'chat'>, WorkspaceSurface>;
   beforeChange: (view: PanelWorkspaceView) => void;
   changed: (view: PanelWorkspaceView) => void;
+  layoutChanged?: () => void;
 }) {
   const { panel, chat, views, runtime, navigation } = options;
   let initialized = false;
+  // A width change changes presentation, never the selected route or its lifecycle.
+  const refreshLayout = (routeChange = false): void => {
+    const split = panel.dataset.view === 'artifacts' && panel.getBoundingClientRect().width >= 840;
+    const hideChat = panel.dataset.view !== 'chat' && !split;
+    const wasHidden = chat.el.hidden;
+    const losingFocus = hideChat && !chat.el.hidden && chat.el.contains(document.activeElement);
+    if (!routeChange && hideChat && !wasHidden) navigation.capture(options.conversation());
+    panel.dataset.split = String(split);
+    chat.el.hidden = hideChat;
+    if (!routeChange && !hideChat && wasHidden) navigation.restore(options.conversation());
+    options.layoutChanged?.();
+    if (!routeChange && losingFocus && options.isOpen())
+      views[panel.dataset.view as Exclude<PanelWorkspaceView, 'chat'>].focus();
+  };
+  panel.addEventListener('agentlayoutchange', () => refreshLayout());
+  const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(() => refreshLayout());
+  observer?.observe(panel);
   const reveal = (trigger?: HTMLElement): void => {
     trigger?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
   };
@@ -33,11 +51,11 @@ export function createPanelWorkspace(options: {
     if (initialized && panel.dataset.view === view) return;
     options.beforeChange(view);
     initialized = true;
-    if (panel.dataset.view === 'chat' && view !== 'chat') navigation.capture(options.conversation());
+    if (!chat.el.hidden && panel.dataset.view) navigation.capture(options.conversation());
     panel.dataset.view = view;
     if (view === 'settings') runtime.modelRow.insertBefore(runtime.row, runtime.modelActions);
     else panel.insertBefore(runtime.row, runtime.settings);
-    chat.el.hidden = view !== 'chat';
+    refreshLayout(true);
     if (options.chatTrigger) {
       if (view === 'chat') options.chatTrigger.setAttribute('aria-current', 'page');
       else options.chatTrigger.removeAttribute('aria-current');
@@ -70,5 +88,5 @@ export function createPanelWorkspace(options: {
     show('chat');
     surface.trigger.focus();
   });
-  return { show };
+  return { show, refreshLayout };
 }

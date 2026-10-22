@@ -19,7 +19,7 @@ class FakeRecognition {
   stop = vi.fn();
   abort = vi.fn();
 }
-function setup() {
+function setup(start = true) {
   Object.defineProperty(window, 'SpeechRecognition', { configurable: true, value: FakeRecognition });
   const el = document.createElement('div');
   el.innerHTML = '<textarea class="cui-input"></textarea><div class="actions"></div>';
@@ -36,7 +36,7 @@ function setup() {
     refreshSendAvailability: vi.fn(),
   };
   const speech = mountSpeechInput(chat as unknown as ChatView, () => true);
-  (el.querySelector('.agent-speech-mic') as HTMLButtonElement).click();
+  if (start) (el.querySelector('.agent-speech-mic') as HTMLButtonElement).click();
   return { el, speech, draft: () => draft, recognition: FakeRecognition.current };
 }
 afterEach(() => {
@@ -107,13 +107,18 @@ it('starts recognition with one microphone click, without a start form', () => {
   expect(recognition.start).toHaveBeenCalledOnce();
   expect(el.querySelector('.agent-speech-details')).toBeNull();
 });
-it('offers one language selector directly in the compose toolbar', () => {
+it('groups one visibly labelled language selector and privacy guidance in Voice options', () => {
   const { el, recognition } = setup();
   recognition.onend?.();
-  const selector = el.querySelector('r-select.agent-speech-language');
+  const selector = document.querySelector('r-select.agent-speech-language');
   expect(selector).not.toBeNull();
   expect(el.querySelector('button.agent-speech-language')).toBeNull();
   expect(el.querySelector('.agent-speech-language-picker')).toBeNull();
+  expect(selector!.closest('.agent-speech-options')).not.toBeNull();
+  expect(el.querySelector('.agent-speech')!.children).not.toContain(selector);
+  expect(selector!.getAttribute('label')).toBe('agentSpeechLanguage');
+  expect(el.querySelector('.agent-speech-privacy button')!.getAttribute('aria-label')).toBe('agentVoiceOptions');
+  expect(document.querySelector('.agent-speech-hint')!.textContent).toBe('agentSpeechPrivacy');
   expect(selector!.getAttribute('placement')).toBe('top');
   expect(selector!.getAttribute('aria-label')).toBe('agentSpeechLanguage');
 });
@@ -149,8 +154,7 @@ it('reports empty recognition instead of silently leaving the draft unchanged', 
 it('keeps the chosen recognition language across subsequent microphone clicks', () => {
   const { el, recognition } = setup();
   recognition.onend?.();
-  el.querySelector<HTMLButtonElement>('.agent-speech-language')!.click();
-  const language = el.querySelector('r-select') as HTMLElement & { value: string };
+  const language = document.querySelector('r-select.agent-speech-language') as HTMLElement & { value: string };
   language.value = 'en-US';
   language.dispatchEvent(new Event('change'));
   el.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
@@ -268,6 +272,12 @@ it('keeps one toolbar and stable microphone nodes across every recognition state
   const mic = root.querySelector<HTMLButtonElement>('.agent-speech-mic')!;
   const icons = Array.from(mic.querySelectorAll('svg'));
   expect(feedback.parentElement).toBe(root);
+  expect(Array.from(root.children, (child) => child.className)).toEqual([
+    'agent-speech-mic',
+    'agent-speech-privacy',
+    'agent-speech-feedback',
+    'agent-speech-cancel',
+  ]);
   expect(icons).toHaveLength(2);
   mic.click();
   FakeRecognition.current.onstart?.();
@@ -297,23 +307,24 @@ it('dismisses speech privacy with Escape before cancelling active dictation', ()
   expect(speech.isBusy()).toBe(false);
 });
 
-it('closes the speech disclosure as soon as the language menu opens', () => {
+it('retains Voice options when its nested language menu opens', () => {
   const { el, speech } = setup();
   const privacy = el.querySelector<HTMLElement>('.agent-speech-privacy')!;
-  const language = el.querySelector<HTMLElement>('.agent-speech-language')!;
+  const language = document.querySelector<HTMLElement>('.agent-speech-language')!;
   expect(privacy.hasAttribute('open')).toBe(true);
+  language.setAttribute('open', '');
   language.dispatchEvent(new Event('show'));
-  expect(privacy.hasAttribute('open')).toBe(false);
+  expect(privacy.hasAttribute('open')).toBe(true);
   expect(speech.isBusy()).toBe(true);
 });
 
-it('closes the language menu when the speech disclosure opens', () => {
+it('closes the nested language menu when Voice options closes', () => {
   const { el } = setup();
   const privacy = el.querySelector<HTMLElement>('.agent-speech-privacy')!;
-  const language = el.querySelector<HTMLElement>('.agent-speech-language')!;
-  privacy.removeAttribute('open');
+  const language = document.querySelector<HTMLElement>('.agent-speech-language')!;
   language.setAttribute('open', '');
-  privacy.dispatchEvent(new Event('show'));
+  privacy.removeAttribute('open');
+  privacy.dispatchEvent(new Event('hide'));
   expect(language.hasAttribute('open')).toBe(false);
 });
 
@@ -375,9 +386,120 @@ it('expires the error popover but retains the error and a readable detail entry'
     vi.advanceTimersByTime(3000);
     expect(privacy.hasAttribute('open')).toBe(false);
     expect(el.querySelector('[role="status"]')!.textContent).toBe('agentSpeechDenied');
-    expect(privacy.querySelector('button')!.getAttribute('aria-label')).toBe('agentSpeechDenied');
+    expect(privacy.querySelector('button')!.getAttribute('aria-label')).toBe('agentVoiceOptions');
+    expect(privacy.querySelector('button')!.getAttribute('aria-describedby')).toBe('agent-speech-feedback');
+    expect(document.querySelector('.agent-speech-notice')!.textContent).toBe('agentSpeechDenied');
+    expect(document.querySelector('.agent-speech-hint')!.textContent).toBe('agentSpeechPrivacy');
     expect(draft()).toBe('Original');
   } finally {
     vi.useRealTimers();
   }
+});
+
+it('lets Escape close the language menu before Voice options, retaining the draft and recognition', () => {
+  const { el, recognition, speech, draft } = setup();
+  recognition.onstart?.();
+  recognition.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'words' } }] });
+  const privacy = el.querySelector<HTMLElement>('.agent-speech-privacy')!;
+  const language = document.querySelector<HTMLElement>('.agent-speech-language')!;
+  const toggle = privacy.querySelector<HTMLButtonElement>('button')!;
+  language.setAttribute('open', '');
+  language.focus();
+  language.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  expect(language.hasAttribute('open')).toBe(false);
+  expect(privacy.hasAttribute('open')).toBe(true);
+  expect(document.activeElement).toBe(language);
+  language.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  expect(privacy.hasAttribute('open')).toBe(false);
+  expect(document.activeElement).toBe(toggle);
+  expect(speech.isBusy()).toBe(true);
+  expect(recognition.abort).not.toHaveBeenCalled();
+  expect(draft()).toBe('Original words');
+});
+
+it('pauses the brief disclosure timeout while the language menu is open', () => {
+  vi.useFakeTimers();
+  try {
+    const { el, recognition } = setup();
+    recognition.onstart?.();
+    const privacy = el.querySelector<HTMLElement>('.agent-speech-privacy')!;
+    const language = document.querySelector<HTMLElement>('.agent-speech-language')!;
+    language.setAttribute('open', '');
+    language.dispatchEvent(new Event('show'));
+    vi.advanceTimersByTime(5000);
+    expect(privacy.hasAttribute('open')).toBe(true);
+    language.removeAttribute('open');
+    language.dispatchEvent(new Event('hide'));
+    vi.advanceTimersByTime(3000);
+    expect(privacy.hasAttribute('open')).toBe(false);
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
+it('keeps unsupported-browser recovery visible outside Voice options and retains privacy guidance', () => {
+  const { el, speech, draft } = setup(false);
+  speech.close();
+  el.remove();
+  Object.defineProperty(window, 'SpeechRecognition', { configurable: true, value: undefined });
+  const chat = new ComposerView({ onSend: vi.fn() });
+  document.body.append(chat.el);
+  chat.setInput(draft());
+  const unsupported = mountSpeechInput(chat, () => true);
+  chat.el.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+  const feedback = chat.el.querySelector<HTMLElement>('.agent-speech-feedback')!;
+  const privacy = chat.el.querySelector<HTMLElement>('.agent-speech-privacy')!;
+  expect(feedback.hidden).toBe(false);
+  expect(feedback.textContent).toBe('agentSpeechUnsupported');
+  expect(feedback.closest('r-content,.agent-speech-popover')).toBeNull();
+  expect(document.querySelector('.agent-speech-hint')!.textContent).toBe('agentSpeechPrivacy');
+  expect(privacy.querySelector('button')!.getAttribute('aria-label')).toBe('agentVoiceOptions');
+  expect(unsupported.isBusy()).toBe(false);
+  expect(chat.getInput()).toBe('Original');
+  unsupported.close();
+  chat.dispose();
+});
+
+it('keeps the real nested ranui select reachable through keyboard choice and starts with that language', async () => {
+  const scrollIntoView = HTMLElement.prototype.scrollIntoView;
+  HTMLElement.prototype.scrollIntoView = vi.fn();
+  try {
+    const { el, draft } = setup(false);
+    const privacy = el.querySelector<HTMLElement>('.agent-speech-privacy')!;
+    const toggle = privacy.querySelector<HTMLButtonElement>('button')!;
+    toggle.focus();
+    toggle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await Promise.resolve();
+    const language = document.querySelector<HTMLElement & { value: string }>('.agent-speech-language')!;
+    language.focus();
+    language.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+    expect(privacy.hasAttribute('open')).toBe(true);
+    expect(language.hasAttribute('open')).toBe(true);
+    language.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(language.value).toBe('pt-BR');
+    expect(language.hasAttribute('open')).toBe(false);
+    expect(privacy.hasAttribute('open')).toBe(true);
+    expect(document.activeElement).toBe(language);
+    expect(draft()).toBe('Original');
+    el.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+    expect(FakeRecognition.current.lang).toBe('pt-BR');
+  } finally {
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
+  }
+});
+
+it('routes Tab from the open Voice options trigger to its portaled language field', async () => {
+  const { el, draft } = setup(false);
+  const privacy = el.querySelector<HTMLElement>('.agent-speech-privacy')!;
+  const toggle = privacy.querySelector<HTMLButtonElement>('button')!;
+  toggle.focus();
+  toggle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await Promise.resolve();
+  const language = document.querySelector<HTMLElement>('.agent-speech-language')!;
+  const tab = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+  toggle.dispatchEvent(tab);
+  expect(tab.defaultPrevented).toBe(true);
+  expect(document.activeElement).toBe(language);
+  expect(privacy.hasAttribute('open')).toBe(true);
+  expect(draft()).toBe('Original');
 });

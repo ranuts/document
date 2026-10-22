@@ -91,6 +91,8 @@ export const pt: Partial<I18nMessages> = {
   agentWorkspaceChat: 'Conversa',
   agentBackToChat: 'Voltar à conversa',
   agentExpand: 'Expandir assistente',
+  agentCollapse: 'Recolher assistente',
+  agentVoiceOptions: 'Opções de voz',
   agentSetupFailed: 'Não foi possível abrir o assistente. Tente novamente. O documento não mudou.',
   agentOffNote: 'Desativar interrompe a tarefa e mantém o documento e o rascunho.',
   agentResumeModel: 'Usar modelo baixado',

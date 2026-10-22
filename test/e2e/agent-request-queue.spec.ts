@@ -91,6 +91,9 @@ for (const ext of ['docx', 'pptx'] as const) {
       expect(toolbarBounds!.y).toBe(sendSize!.y);
       expect(await page.locator('.cui-composer').evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
       const language = page.locator('.agent-speech-language');
+      await expect(language).toBeHidden();
+      await page.locator('.agent-speech-privacy button').click();
+      await expect(language).toBeVisible();
       const languageMetrics = () =>
         language.evaluate((el) => {
           const root = el.shadowRoot ?? (el as HTMLElement & { _shadowDom: ShadowRoot })._shadowDom;
@@ -108,7 +111,7 @@ for (const ext of ['docx', 'pptx'] as const) {
       const english = await languageMetrics();
       expect(english.text).toBe('English');
       expect(english.width).toBeGreaterThanOrEqual(english.textWidth);
-      // Narrow Sources collapses to its icon, leaving both tested locale names readable.
+      // The disclosed field retains a full label without consuming the narrow execution row.
       await language.evaluate((el) => {
         (el as HTMLElement & { value: string }).value = 'pt-BR';
       });
@@ -119,6 +122,7 @@ for (const ext of ['docx', 'pptx'] as const) {
       await language.evaluate((el) => {
         (el as HTMLElement & { value: string }).value = 'en-US';
       });
+      await page.locator('.agent-speech-privacy button').press('Escape');
       await expect(page.locator('.agent-panel-title')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
       await expect(page.locator('.cui-progress')).toHaveCSS('border-top-width', '0px');
       await expect(page.locator('.cui-progress')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');

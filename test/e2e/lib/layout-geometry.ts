@@ -32,9 +32,9 @@ export async function textGeometry(locator: Locator) {
 }
 
 /** The same acceptance guard is exercised against deliberate live CSS regressions. */
-export async function assertTitleRail(title: Locator) {
+export async function assertTitleRail(title: Locator, rail = 24) {
   const geometry = await textGeometry(title);
-  expect(geometry.textLeft).toBeCloseTo(16, 1);
+  expect(geometry.textLeft).toBeCloseTo(rail, 1);
   expect(geometry.width).toBeLessThanOrEqual(geometry.textWidth + 17);
   return geometry;
 }
@@ -47,9 +47,10 @@ export async function contentGeometry(view: Locator) {
     const header = element.querySelector('.agent-view-header')!;
     const back = header.querySelector<HTMLButtonElement>('.agent-view-back');
     const heading = header.querySelector('h2')!;
-    const style = getComputedStyle(element);
+    const content = element.querySelector(':scope > .agent-artifacts-body') ?? element;
+    const style = getComputedStyle(content);
     return {
-      contentLeft: left(element) + Number.parseFloat(style.paddingLeft),
+      contentLeft: left(content) + Number.parseFloat(style.paddingLeft),
       headingLeft: left(heading),
       iconLeft: back ? left(back.querySelector('svg')!) : undefined,
       backLeft: back ? left(back) : undefined,

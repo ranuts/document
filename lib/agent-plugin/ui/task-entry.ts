@@ -237,7 +237,9 @@ export function createTaskEntry(options: {
             ? t('agentEntrySmaller')
             : readonly
               ? t('agentEntryReadOnly')
-              : t('agentEntryStaging');
+              : staged
+                ? t('agentEntryStaging')
+                : '';
   };
   return { el, update, inputChanged, check, consume };
 }

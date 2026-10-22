@@ -84,6 +84,8 @@ export const zhCN: I18nMessages = {
   agentWorkspaceChat: '对话',
   agentBackToChat: '返回对话',
   agentExpand: '展开助手',
+  agentCollapse: '收起助手',
+  agentVoiceOptions: '语音选项',
   agentSetupFailed: '暂时无法开启助手，请重试。你的文档没有改变。',
   agentOffNote: '关闭后停止当前任务，保留文档和未发送的输入。',
   agentResumeModel: '启用已下载模型',

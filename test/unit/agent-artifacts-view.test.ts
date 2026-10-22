@@ -705,8 +705,8 @@ it('imports a validated structured result, paginates preview, preserves JSON edi
   expect(view.el.querySelectorAll('table tr')).toHaveLength(11);
   expect(
     view.el
-      .querySelector('.agent-artifact-actions')!
-      .compareDocumentPosition(view.el.querySelector('.agent-artifact-presentation')!) &
+      .querySelector('.agent-artifact-presentation')!
+      .compareDocumentPosition(view.el.querySelector('.agent-artifact-footer .agent-artifact-actions')!) &
       Node.DOCUMENT_POSITION_FOLLOWING,
   ).toBeTruthy();
   expect((view.el.querySelector('[data-action=apply]') as HTMLButtonElement).hidden).toBe(true);
@@ -1085,5 +1085,27 @@ it('keeps discard prompts usable while typing for Cancel editing and pending res
   expect(await pending).toBe('cancelled');
   expect(text.value).toBe('Keep typing in pending confirmation');
   expect(await store.list()).toHaveLength(1);
+  view.dispose();
+});
+
+it('places explicit commit and transfer commands after the editable canvas in keyboard reading order', async () => {
+  const source = '# A user-authored title\n\nBody with\tspacing.\n';
+  const view = createArtifactsView({ store: createArtifactStore(), labels, onApply: vi.fn() });
+  document.body.append(view.el);
+  await view.save(source);
+  view.el.querySelector<HTMLButtonElement>('[data-action=edit]')!.click();
+  const text = view.el.querySelector<HTMLTextAreaElement>('[data-artifact-source]')!;
+  const save = view.el.querySelector<HTMLButtonElement>('[data-action=saveVersion]')!;
+  const review = view.el.querySelector<HTMLButtonElement>('[data-action=apply]')!;
+  const exports = view.el.querySelector('.agent-artifact-export')!;
+  expect(text.compareDocumentPosition(save) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(text.compareDocumentPosition(review) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(text.compareDocumentPosition(exports) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  text.value += '\nAn unsaved paragraph.';
+  text.dispatchEvent(new Event('input'));
+  view.el.querySelector<HTMLButtonElement>('[data-action=preview]')!.click();
+  expect(view.el.querySelector('[data-action=saveVersion]')).toBe(save);
+  expect(view.el.querySelector('.agent-artifact-export')).toBe(exports);
+  expect(text.value).toBe(source + '\nAn unsaved paragraph.');
   view.dispose();
 });

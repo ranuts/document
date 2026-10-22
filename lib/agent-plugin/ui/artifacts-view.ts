@@ -56,13 +56,14 @@ export function createArtifactsView(options: {
     stop(): void;
   };
 }) {
-  const el = View('section').class('agent-artifacts').build();
+  const el = View('section').class('agent-artifacts').attr('aria-label', options.labels.title).build();
   const heading = View('h2').build();
   heading.tabIndex = -1;
   const header = createViewHeader(heading);
   let backDestination: 'conversation' | 'list' = 'conversation';
   let backButton: HTMLButtonElement | undefined;
-  const body = Div().build();
+  // Layout changes retain this scroll owner and the mounted draft beneath it.
+  const body = Div().class('agent-artifacts-body').build();
   const status = View('p').class('agent-artifact-status').attr('role', 'status').build();
   el.append(header, body, status);
   let labels = options.labels;
@@ -279,7 +280,7 @@ export function createArtifactsView(options: {
       .build() as HTMLTextAreaElement;
     text.dataset.artifactSource = 'true';
     text.value = a.versions.at(-1)!.text;
-    const presentationHost = document.createElement('div');
+    const presentationHost = Div().class('agent-artifact-presentation-host').build();
     const source = document.createElement('details');
     const sourceSummary = document.createElement('summary');
     sourceSummary.textContent = label('sourceData') + ' · JSON';
@@ -411,14 +412,17 @@ export function createArtifactsView(options: {
     const modes = Div().class('agent-artifact-modes').children(previewButton, editButton, cancelEdit).build();
     modes.setAttribute('role', 'group');
     modes.setAttribute('aria-label', labels.preview);
-    const toolbar = Div().class('agent-artifact-toolbar').children(select, modes, dirtyNote).build();
+    const identity = Div().class('agent-artifact-identity').children(title, select).build();
+    const modebar = Div().class('agent-artifact-modebar').children(modes, dirtyNote).build();
+    const toolbar = Div().class('agent-artifact-toolbar').children(identity, modebar).build();
     const content = Div()
       .class('agent-artifact-content')
       .children(...(source.hidden ? [text] : []), presentationHost, source)
       .build();
+    const footer = View('footer').class('agent-artifact-footer').children(actions, deletePrompt, origin).build();
     const form = Div()
       .class('agent-artifact-editor agent-artifact-workbench')
-      .children(title, toolbar, actions, deletePrompt, content, origin)
+      .children(toolbar, content, footer)
       .build();
     function setMode(value: boolean, focus = true, invalidate = true): void {
       if (editing !== value && invalidate) invalidateDraft();
@@ -501,7 +505,7 @@ export function createArtifactsView(options: {
           return true;
         },
       });
-      form.append(workflow.el);
+      footer.insertBefore(workflow.el, origin);
       for (const event of ['select', 'click', 'keyup', 'input'])
         text.addEventListener(event, () => workflow?.refreshScope());
     }
@@ -707,6 +711,7 @@ export function createArtifactsView(options: {
     },
     setLabels(next: ArtifactsLabels): void {
       labels = next;
+      el.setAttribute('aria-label', labels.title);
       heading.textContent = labels.title;
       activePresentation?.setLabels(labels);
       body.querySelector('.agent-artifact-modes')?.setAttribute('aria-label', labels.preview);

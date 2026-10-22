@@ -152,13 +152,12 @@ export function mountPanelContext(options: {
   return { update, dispose };
 }
 
-/** Selection chips and the empty-composer hint share one bounded SDK snapshot. */
+/** Selection chips and contextual tasks share one bounded SDK snapshot. */
 export function syncPanelContext(options: {
   quoteContext: HTMLElement;
   quoteSummary: HTMLElement;
   quoteTrigger?: HTMLElement;
   quoteText: HTMLElement;
-  welcomeHint: HTMLElement;
   settings: HTMLElement;
   ready: () => boolean;
   onSnapshot?: (snapshot: ComposerContext) => void;
@@ -180,13 +179,4 @@ export function syncPanelContext(options: {
   if (options.quoteText.textContent !== snapshot.text) options.quoteText.textContent = snapshot.text;
   const release = options.settings.querySelector<HTMLElement>('.agent-release-memory');
   if (release) release.hidden = !options.ready();
-  const welcome =
-    context?.kind === 'cell'
-      ? 'agentWelcomeCell'
-      : context?.kind === 'pdf'
-        ? 'agentWelcomePdf'
-        : context?.kind === 'slide'
-          ? 'agentWelcomeSlide'
-          : 'agentWelcomeWord';
-  if (options.welcomeHint.textContent !== t(welcome)) options.welcomeHint.textContent = t(welcome);
 }

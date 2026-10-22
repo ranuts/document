@@ -282,7 +282,8 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       await expect(disclosure).not.toHaveAttribute('open', { timeout: 4500 });
       await expect(liveStatus).toContainText('Microphone permission denied');
       await privacyToggle.click();
-      await expect(page.locator('.agent-speech-hint')).toContainText('Microphone permission denied');
+      await expect(page.locator('.agent-speech-notice')).toContainText('Microphone permission denied');
+      await expect(page.locator('.agent-speech-hint')).toContainText('browser');
       // The anchored disclosure can cover the center of a tall draft. Click
       // the visible text inset to exercise an actual outside click.
       await input.click({ position: { x: 8, y: 8 } });
@@ -291,7 +292,11 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       await page.locator('.agent-speech-mic').click();
       await page.locator('.agent-speech-cancel').click();
       await expect(input).toHaveValue(longDraft);
+      await expect(page.locator('.agent-speech-language')).toBeHidden();
+      await privacyToggle.click();
       await expect(page.locator('.agent-speech-language')).toBeVisible();
+      await expect(page.locator('.agent-speech-language')).not.toHaveAttribute('disabled');
+      await privacyToggle.press('Escape');
       expect(await composer.boundingBox()).toEqual(compact);
       holdNextAnswer = true;
       await input.fill('Hello');

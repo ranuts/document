@@ -86,9 +86,10 @@ for (const variant of [
       const workbench = panel.locator('.agent-artifact-workbench');
       await expect(workbench).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
+      const rail = variant.width <= 380 ? 16 : 24;
       for (const theme of ['light', 'dark'] as const) {
         await page.emulateMedia({ colorScheme: theme });
-        expect((await textGeometry(workbench.locator('[data-action=refine]'))).textLeft).toBeCloseTo(16, 1);
+        expect((await textGeometry(workbench.locator('[data-action=refine]'))).textLeft).toBeCloseTo(rail, 1);
         // Select each wrapped row's first command using actual box tops, then
         // measure its visible text independently of the padded hit frame.
         const firstCommands = await workbench
@@ -113,24 +114,23 @@ for (const variant of [
                 parseFloat(getComputedStyle(panel).borderLeftWidth)
               );
             });
-            expect(markerStart).toBeCloseTo(16, 1);
+            expect(markerStart).toBeCloseTo(rail, 1);
             expect((await textGeometry(summary)).textLeft).toBeGreaterThan(markerStart);
           } else {
             expect(
               (await textGeometry(workbench.locator(`.agent-artifact-actions > [data-action="${action}"]`))).textLeft,
-            ).toBeCloseTo(16, 1);
+            ).toBeCloseTo(rail, 1);
           }
         }
-        const separatorStart = await workbench.locator('.agent-artifact-actions').evaluate((el) => {
+        const separatorStart = await workbench.locator('.agent-artifact-footer').evaluate((el) => {
           const panel = el.closest('.agent-panel')!;
           return (
-            el.getBoundingClientRect().left +
-            parseFloat(getComputedStyle(el, '::after').left) -
+            el.getBoundingClientRect().left -
             panel.getBoundingClientRect().left -
             parseFloat(getComputedStyle(panel).borderLeftWidth)
           );
         });
-        expect(separatorStart).toBeCloseTo(16, 1);
+        expect(separatorStart).toBeCloseTo(rail, 1);
         expect(await panel.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThan(2);
       }
       // Keep a real IndexedDB writer ahead of Save so the artifact owner is

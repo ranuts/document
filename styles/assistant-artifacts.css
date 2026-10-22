@@ -1,139 +1,200 @@
-/* Artifact workbench: source owns edits; the reader owns the reading surface. */
-.agent-artifact-workbench {
+/* The section is a column in the shell; only its body owns vertical scrolling.
+   Width changes move the existing section without replacing its draft or reader. */
+.agent-panel .agent-artifacts {
   display: flex;
   flex-direction: column;
-  gap: var(--ran-space-3);
   min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
 }
-.agent-artifact-workbench > .agent-artifact-title {
+.agent-panel .agent-artifacts[hidden] {
+  display: none;
+}
+.agent-artifacts > .agent-view-header {
+  flex: none;
   margin: 0;
-  border: 0;
-  border-radius: 0;
-  padding-inline: 0;
+  padding: var(--ran-space-4) var(--agent-content-inset);
+}
+.agent-artifacts-body {
+  flex: 1;
   min-width: 0;
-  font-size: var(--ran-text-heading-4);
-  font-weight: var(--ran-text-heading-weight);
-  line-height: 1.4;
-  padding-block: var(--ran-space-1);
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding: var(--ran-space-4) var(--agent-content-inset) var(--ran-space-6);
 }
-.agent-artifact-workbench > .agent-artifact-title[readonly] {
-  cursor: default;
+.agent-artifacts > .agent-artifact-status {
+  flex: none;
+  margin: 0;
+  padding: var(--ran-space-3) var(--agent-content-inset);
+  border-block-start: 1px solid var(--ran-color-border);
+  line-height: 1.5;
 }
-.agent-artifact-toolbar,
-.agent-artifact-workbench > .agent-artifact-actions,
+.agent-artifacts .agent-artifact-workbench {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-6);
+  min-width: 0;
+}
+.agent-artifact-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-2);
+  min-width: 0;
+}
+.agent-artifact-identity,
+.agent-artifact-modebar,
 .agent-artifact-modes,
 .agent-artifact-delete-prompt,
 .agent-artifact-pagination {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: var(--ran-space-2);
   min-width: 0;
 }
-.agent-artifact-toolbar > select {
+.agent-artifact-modebar,
+.agent-artifact-delete-prompt,
+.agent-artifact-pagination {
+  flex-wrap: wrap;
+}
+.agent-artifact-identity > .agent-artifact-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  border-color: transparent;
+  padding-inline: var(--ran-space-2);
+  font-size: var(--ran-text-label-2);
+  font-weight: var(--ran-text-heading-weight);
+  line-height: 1.5;
+  text-overflow: ellipsis;
+}
+.agent-artifact-identity > .agent-artifact-title[readonly] {
+  padding-inline-start: 0;
+  cursor: default;
+}
+.agent-artifact-identity > .agent-artifact-title:not([readonly]) {
+  border-color: var(--ran-color-border);
+}
+.agent-artifact-identity > select {
+  flex: none;
   width: auto;
-  max-width: 100%;
+  max-width: 50%;
   min-height: var(--app-control-height, 32px);
   border: 0;
-  padding-inline-start: var(--ran-space-2);
+  padding-inline: var(--ran-space-2);
   color: var(--ran-color-text-secondary);
+  font-variant-numeric: tabular-nums;
 }
 .agent-artifact-modes {
+  flex-wrap: wrap;
   gap: var(--ran-space-1);
 }
-.agent-artifact-modes > button[aria-pressed='true'] {
+.agent-artifacts .agent-artifact-modes > button {
+  border: 1px solid transparent;
+  padding-inline: var(--ran-space-2);
+}
+.agent-artifacts .agent-artifact-modes > button[aria-pressed='true'] {
+  border-color: var(--ran-color-border);
   background: var(--ran-color-bg-muted);
   font-weight: var(--ran-text-heading-weight);
 }
 .agent-artifact-unsaved {
+  margin-inline-start: auto;
   color: var(--ran-color-text-secondary);
   font-size: var(--ran-text-label-3);
-}
-.agent-artifact-workbench > .agent-artifact-actions {
-  position: relative;
-  padding-block-end: var(--ran-space-3);
-}
-/* Quiet commands retain their padded targets in a shared gutter. Each flex
-   line starts its visible text on the canvas rail, including wrapped rows. */
-.agent-artifact-workbench :is(.agent-artifact-toolbar, .agent-artifact-actions, .agent-artifact-command-group) {
-  margin-inline: calc(-1 * var(--ran-space-2));
-  min-width: 0;
-}
-.agent-artifact-workbench > .agent-artifact-actions::after {
-  content: '';
-  position: absolute;
-  inset-inline: var(--ran-space-2);
-  bottom: 0;
-  border-bottom: 1px solid var(--ran-color-border);
-  pointer-events: none;
-}
-.agent-artifact-actions > .agent-artifact-export > summary {
-  padding-inline: var(--ran-space-2);
-}
-.agent-artifact-workbench > .agent-artifact-actions > button,
-.agent-artifact-workbench .agent-artifact-delete-prompt > button {
-  flex: 0 1 auto;
-  width: auto;
-}
-.agent-artifact-delete-prompt {
-  padding-block: var(--ran-space-2);
-}
-.agent-artifact-delete-prompt > span {
-  flex: 1 1 100%;
-  font-size: var(--ran-text-label-2);
+  line-height: 1.5;
 }
 .agent-artifact-workbench .agent-artifact-content,
+.agent-artifact-workbench .agent-artifact-presentation-host,
 .agent-artifact-workbench .agent-artifact-presentation {
   min-width: 0;
 }
 .agent-artifact-workbench .agent-artifact-content > textarea,
 .agent-artifact-workbench .agent-artifact-source > textarea {
+  box-sizing: border-box;
   width: 100%;
-  min-height: 18em;
-  line-height: 1.65;
+  min-height: 22rem;
+  line-height: 1.75;
   resize: vertical;
   font-family: inherit;
-  font-size: var(--ran-text-label-1);
+  font-size: var(--ran-text-copy-1, 16px);
 }
 .agent-artifact-workbench .agent-artifact-content > textarea {
   border: 0;
   border-radius: 0;
-  padding-inline: 0;
+  padding: 0;
 }
 .agent-artifact-workbench .agent-artifact-source > textarea {
   font-family: var(--ran-font-mono, monospace);
+  font-size: var(--ran-text-copy-2, 14px);
   margin-block-start: var(--ran-space-2);
 }
-.agent-artifact-reader {
-  color: inherit;
+.agent-artifact-workbench .agent-artifact-reader {
+  color: var(--ran-color-text);
   font-weight: var(--ran-text-copy-weight);
-  font-size: var(--ran-text-label-1);
-  line-height: 1.7;
+  font-size: var(--ran-text-copy-1, 16px);
+  line-height: 1.75;
   overflow-wrap: anywhere;
   overflow-x: auto;
 }
 .agent-artifact-reader > :first-child {
   margin-block-start: 0;
 }
-.agent-artifact-reader > :last-child {
+.agent-artifact-workbench .agent-artifact-reader > :last-child {
   margin-block-end: 0;
 }
-.agent-artifact-reader :is(h2, h3, h4, h5, h6) {
-  margin-block: var(--ran-space-6) var(--ran-space-2);
+.agent-artifact-workbench .agent-artifact-reader :is(h2, h3, h4, h5, h6) {
+  margin-block: var(--ran-space-8) var(--ran-space-2);
+  font-size: inherit;
   line-height: 1.4;
   font-weight: var(--ran-text-heading-weight);
+  text-wrap: pretty;
 }
-.agent-artifact-reader :is(p, ul, ol, blockquote, pre) {
-  margin-block: var(--ran-space-3);
+.agent-artifact-workbench .agent-artifact-reader h2 {
+  font-size: var(--ran-text-heading-3, 20px);
+  letter-spacing: var(--ran-text-heading-tracking);
+}
+.agent-artifact-workbench .agent-artifact-reader h3 {
+  font-size: var(--ran-text-heading-4, 16px);
+}
+.agent-artifact-workbench .agent-artifact-reader > :is(h2, h3, h4, h5, h6):first-child {
+  margin-block-start: 0;
+}
+.agent-artifact-reader :is(p, ul, ol) {
+  margin-block: 0 var(--ran-space-4);
+}
+.agent-artifact-workbench .agent-artifact-reader > p {
+  color: inherit;
+  white-space: normal;
+}
+/* The text measure stays independent of table and code viewports. */
+.agent-artifact-reader :is(p, h2, h3, h4, h5, h6, ul, ol, blockquote) {
+  max-inline-size: 42.5rem;
 }
 .agent-artifact-reader :is(ul, ol) {
+  box-sizing: border-box;
   padding-inline-start: var(--ran-space-6);
+}
+.agent-artifact-reader li {
+  padding-inline-start: calc(var(--ran-space-1) / 2);
+  margin-block: var(--ran-space-1);
+}
+.agent-artifact-reader li > p {
+  margin-block: 0 var(--ran-space-2);
+}
+.agent-artifact-reader li > :last-child,
+.agent-artifact-reader li > :is(ul, ol) {
+  margin-block-end: 0;
 }
 .agent-artifact-reader a {
   color: var(--ran-color-link);
   text-decoration: underline;
 }
 .agent-artifact-reader blockquote {
+  box-sizing: border-box;
+  margin-block: var(--ran-space-4);
   margin-inline: 0;
   padding-inline-start: var(--ran-space-3);
   border-inline-start: 2px solid var(--ran-color-border);
@@ -141,56 +202,107 @@
 }
 .agent-artifact-reader code {
   font-family: var(--ran-font-mono, monospace);
+  font-size: 0.88em;
+  background: var(--ran-color-bg-muted);
+  padding: calc(var(--ran-space-1) / 2) var(--ran-space-1);
+  border-radius: var(--ran-radius-sm);
+}
+.agent-artifact-reader hr {
+  width: 100%;
+  margin-block: var(--ran-space-6);
+  border: 0;
+  border-block-start: 1px solid var(--ran-color-border);
 }
 .agent-artifact-field-value {
   white-space: pre-wrap;
 }
 .agent-artifact-reader > .agent-artifact-field-value:first-child {
+  margin-block-end: var(--ran-space-3);
   font-size: var(--ran-text-heading-4);
   font-weight: var(--ran-text-heading-weight);
 }
 .agent-artifact-pagination {
-  margin-block-start: var(--ran-space-3);
+  margin-block-start: var(--ran-space-4);
   color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+  font-variant-numeric: tabular-nums;
+}
+.agent-artifact-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-3);
+  padding-block-start: var(--ran-space-4);
+  border-block-start: 1px solid var(--ran-color-border);
+  min-width: 0;
+}
+.agent-artifact-footer > .agent-artifact-actions {
+  /* Padded commands extend their hit frame into the gutter; labels keep the reader rail. */
+  margin-inline: calc(-1 * var(--ran-space-2));
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ran-space-2);
+  min-width: 0;
+}
+.agent-artifact-footer > .agent-artifact-actions > button {
+  flex: 0 1 auto;
+  width: auto;
+}
+.agent-artifact-footer > .agent-artifact-actions > [data-action='delete'] {
+  margin-inline-start: auto;
+}
+.agent-artifact-footer .agent-artifact-workflow {
+  margin: 0;
+}
+.agent-artifact-footer [data-action='refine'] {
+  margin-inline-start: calc(-1 * var(--ran-space-2));
+}
+.agent-artifact-footer .agent-artifact-workflow form input {
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  padding-inline: var(--ran-space-2);
+}
+.agent-artifact-footer > .agent-artifact-provenance {
+  margin: 0;
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+  line-height: 1.6;
+}
+.agent-artifact-delete-prompt > span {
+  flex: 1 1 100%;
+  font-size: var(--ran-text-label-2);
 }
 .agent-artifact-export {
   max-width: 100%;
 }
 .agent-artifact-export > summary,
 .agent-artifact-source > summary {
+  box-sizing: border-box;
   cursor: pointer;
   font-size: var(--ran-text-label-3);
-  min-height: var(--ran-size-7);
+  min-height: var(--app-control-height, 32px);
+  padding: var(--ran-space-1) var(--ran-space-2);
   align-content: center;
+  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-sm);
+}
+.agent-artifact-export[open] {
+  flex-basis: 100%;
+}
+.agent-artifact-export[open] > summary {
+  width: fit-content;
+  margin-block-end: var(--ran-space-2);
 }
 .agent-artifact-workbench :is(.agent-artifact-reader, textarea, summary, select, input):focus-visible {
   outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
-.agent-artifact-workbench [hidden] {
+.agent-artifacts [hidden] {
   display: none;
 }
-.agent-artifact-workbench[data-mode='preview'] .agent-artifact-reader,
-.agent-artifact-workbench[data-mode='edit'] .agent-artifact-content {
-  animation: agent-artifact-reveal var(--ran-motion-duration-fast) ease-out;
-}
-@keyframes agent-artifact-reveal {
-  from {
-    opacity: 0.55;
-  }
-  to {
-    opacity: 1;
-  }
-}
 @media (pointer: coarse) {
-  .agent-artifact-workbench :is(button, summary, select) {
+  .agent-artifact-workbench :is(button, summary, select, input) {
     min-height: var(--app-control-touch, 44px);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .agent-artifact-workbench[data-mode] :is(.agent-artifact-reader, .agent-artifact-content) {
-    animation: none;
   }
 }
 

@@ -11,3 +11,16 @@ index d216365b8755f0054a7ffe5e894a5cd1ca9aa739..1913af7f979330a8f49ed71fb7b7db3d
    }
  };
  d("r-reasoning", b);
+diff --git a/dist/select-BhJCgX3Q.js b/dist/select-BhJCgX3Q.js
+index 03cf7bf150d0e5443ee03341675c7063136f36e3..10ae4066dec35c78887b56116dd3991a9bea1109 100644
+--- a/dist/select-BhJCgX3Q.js
++++ b/dist/select-BhJCgX3Q.js
+@@ -349,7 +349,7 @@ var L = 0, T = class extends f {
+       label: i
+     } }))));
+   };
+-  isDropdownOpen = () => this._selectionDropdown ? this._selectionDropdown.style.display === "block" : !1;
++  isDropdownOpen = () => this.open;
+   _nextEnabledIndex = (t, e) => {
+     const i = this.getDropdownOptions(), s = i.length;
+     if (s === 0) return -1;

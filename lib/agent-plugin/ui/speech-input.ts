@@ -1,4 +1,5 @@
 import 'ranui/popover';
+import 'ranui/select';
 import { getLanguage, t } from '@ranuts/shared/i18n';
 import type { ChatView } from '@ranuts/chat-ui';
 interface Recognition {
@@ -73,14 +74,20 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
   privacy.tabIndex = -1;
   const privacyToggle = document.createElement('button');
   privacyToggle.type = 'button';
+  privacyToggle.setAttribute('aria-haspopup', 'dialog');
   const privacyContent = document.createElement('r-content');
-  privacyContent.append(hint);
+  const options = document.createElement('div');
+  options.className = 'agent-speech-options';
+  const noticeEl = document.createElement('p');
+  noticeEl.className = 'agent-speech-notice';
+  options.append(language, noticeEl, hint);
+  privacyContent.append(options);
   privacyToggle.innerHTML =
-    '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v1"/></svg>';
+    '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 7h9m4 0h3M4 17h3m4 0h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>';
   privacy.append(privacyToggle, privacyContent);
   feedback.append(status);
   // Every state shares one toolbar; disclosures must not resize the draft.
-  root.append(mic, language, feedback, cancel, privacy);
+  root.append(mic, privacy, feedback, cancel);
   chat.actionsEl.append(root);
   let disclosed = false;
   let notice = '';
@@ -93,8 +100,30 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
   const pauseDisclosure = () => clearTimeout(disclosureTimer);
   const scheduleDisclosure = () => {
     pauseDisclosure();
-    if (!privacy.hasAttribute('open') || triggerHovered || popupHovered || isDisclosureFocused()) return;
+    if (
+      !privacy.hasAttribute('open') ||
+      language.hasAttribute('open') ||
+      triggerHovered ||
+      popupHovered ||
+      isDisclosureFocused()
+    )
+      return;
     disclosureTimer = setTimeout(() => privacy.removeAttribute('open'), 3000);
+  };
+  // The installed ranui floating owner recognizes nested portaled select panels.
+  // Escape unwinds one disclosure at a time through public `open` attributes.
+  const dismissDisclosure = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape' || event.isComposing || !privacy.hasAttribute('open')) return;
+    event.preventDefault();
+    event.stopPropagation();
+    pauseDisclosure();
+    if (language.hasAttribute('open')) {
+      language.removeAttribute('open');
+      language.focus({ preventScroll: true });
+    } else {
+      privacy.removeAttribute('open');
+      privacyToggle.focus({ preventScroll: true });
+    }
   };
   const bindPopup = () => {
     const popup = privacy.popoverContent;
@@ -102,6 +131,8 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     if (popup === boundPopup) return;
     boundPopup = popup;
     popup.classList.add('agent-speech-popover');
+    popup.setAttribute('role', 'dialog');
+    popup.setAttribute('aria-label', t('agentVoiceOptions'));
     popup.addEventListener('pointerenter', () => {
       popupHovered = true;
       pauseDisclosure();
@@ -112,13 +143,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     });
     popup.addEventListener('focusin', pauseDisclosure);
     popup.addEventListener('focusout', () => queueMicrotask(scheduleDisclosure));
-    popup.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape') return;
-      event.preventDefault();
-      event.stopPropagation();
-      privacy.removeAttribute('open');
-      privacyToggle.focus({ preventScroll: true });
-    });
+    popup.addEventListener('keydown', dismissDisclosure, { capture: true });
   };
   const showDisclosure = () => {
     privacy.setAttribute('open', '');
@@ -126,13 +151,14 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     scheduleDisclosure();
   };
   privacy.addEventListener('show', () => {
-    language.removeAttribute('open');
     privacyToggle.setAttribute('aria-expanded', 'true');
     bindPopup();
     scheduleDisclosure();
   });
-  language.addEventListener('show', () => privacy.removeAttribute('open'));
+  language.addEventListener('show', pauseDisclosure);
+  language.addEventListener('hide', scheduleDisclosure);
   privacy.addEventListener('hide', () => {
+    language.removeAttribute('open');
     privacyToggle.setAttribute('aria-expanded', 'false');
     pauseDisclosure();
     popupHovered = false;
@@ -148,6 +174,13 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
   privacy.addEventListener('focusin', pauseDisclosure);
   privacy.addEventListener('focusout', () => queueMicrotask(scheduleDisclosure));
   privacyToggle.addEventListener('keydown', (event) => {
+    if (event.key === 'Tab' && !event.shiftKey && privacy.hasAttribute('open') && !language.disabled) {
+      // The dialog is portaled after the composer, outside its native tab order.
+      event.preventDefault();
+      event.stopPropagation();
+      language.focus({ preventScroll: true });
+      return;
+    }
     if (event.key !== 'Enter' && event.key !== ' ') return;
     event.preventDefault();
     event.stopPropagation();
@@ -183,10 +216,17 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     feedback.hidden = !busy && !status.textContent;
     cancel.tabIndex = busy ? 0 : -1;
     mic.disabled = stopping;
+    language.setAttribute('label', t('agentSpeechLanguage'));
     language.setAttribute('aria-label', t('agentSpeechLanguage'));
     language.disabled = busy;
-    hint.textContent = notice || t('agentSpeechPrivacy');
-    privacyToggle.setAttribute('aria-label', hint.textContent);
+    hint.textContent = t('agentSpeechPrivacy');
+    noticeEl.textContent = notice;
+    noticeEl.hidden = !notice;
+    privacyToggle.setAttribute('aria-label', t('agentVoiceOptions'));
+    privacyToggle.title = t('agentVoiceOptions');
+    if (notice) privacyToggle.setAttribute('aria-describedby', feedback.id);
+    else privacyToggle.removeAttribute('aria-describedby');
+    boundPopup?.setAttribute('aria-label', t('agentVoiceOptions'));
     privacyToggle.setAttribute('aria-expanded', String(privacy.hasAttribute('open')));
     cancel.setAttribute('aria-label', t('agentSpeechCancel'));
     cancel.title = t('agentSpeechCancel');
@@ -205,6 +245,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     stopping = false;
     listening = false;
     pauseDisclosure();
+    language.removeAttribute('open');
     privacy.removeAttribute('open');
     notice = '';
     status.textContent = '';
@@ -356,19 +397,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
       mic.focus();
     }
   });
-  privacy.addEventListener(
-    'keydown',
-    (event) => {
-      if (event.key === 'Escape' && privacy.hasAttribute('open')) {
-        event.preventDefault();
-        event.stopPropagation();
-        pauseDisclosure();
-        privacy.removeAttribute('open');
-        privacyToggle.focus({ preventScroll: true });
-      }
-    },
-    { capture: true },
-  );
+  privacy.addEventListener('keydown', dismissDisclosure, { capture: true });
   feedback.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && !event.defaultPrevented && !event.isComposing && busy) {
       close(true);
@@ -380,6 +409,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     if (busy) close(false, true);
     else if (status.textContent) {
       status.textContent = '';
+      notice = '';
       render();
     }
   });

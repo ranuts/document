@@ -91,6 +91,8 @@ export const ja: Partial<I18nMessages> = {
   agentWorkspaceChat: 'チャット',
   agentBackToChat: '会話に戻る',
   agentExpand: 'アシスタントを広げる',
+  agentCollapse: 'アシスタントを縮小',
+  agentVoiceOptions: '音声オプション',
   agentSetupFailed: '開けませんでした。再試行してください。文書は変更されていません。',
   agentOffNote: 'オフにすると現在の作業を停止し、文書と下書きを保持します。',
   agentResumeModel: 'ダウンロード済みモデルを使う',

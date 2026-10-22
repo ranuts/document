@@ -89,6 +89,8 @@ export const en: I18nMessages = {
   agentWorkspaceChat: 'Chat',
   agentBackToChat: 'Back to conversation',
   agentExpand: 'Expand assistant',
+  agentCollapse: 'Collapse assistant',
+  agentVoiceOptions: 'Voice options',
   agentSetupFailed: 'Could not open the assistant. Try again; your document is unchanged.',
   agentOffNote: 'Turning off stops the current task and keeps your document and draft.',
   agentResumeModel: 'Use downloaded model',

@@ -213,168 +213,158 @@ Two rules are mechanical because both fail silently in review:
 
 ## Assistant application layout contract
 
-The canonical composition rules are owned by
-[ranui DESIGN section 11](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/DESIGN.md#11-composition--the-page-not-the-component).
-This section supplies the application's geometry and browser acceptance; the site's marketing
-column widths do not apply inside the assistant. `styles/assistant.css` owns the shared values.
+ranui DESIGN (composition), INTERACTION and ACCEPTANCE supply the component and interaction
+rules. This section owns Document's assistant geometry and task acceptance; marketing column
+widths do not apply inside the editor. Shared application values belong in `styles/assistant.css`;
+ChatView and artifact presentation keep their existing owners.
 
-| Geometry          | Product contract                                                                                                                     | Acceptance subject                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| Content rail      | 16px from the panel's inside edge                                                                                                    | Header title text, onboarding copy, unframed copy, section labels, field/list outer frames      |
-| Header title      | Text-sized Chat/home target with 8px inline padding; secondary pages add a leading chevron                                           | Text/icon rail, actual target width, hover/focus area and neighboring actions                   |
-| Navigation        | One header: Chat/home, Artifacts, Conversations, New and Close; Sources beside composition and Models beneath it                     | Accessible names/current states, real destination paths, draft/focus return and narrow overflow |
-| Nested navigation | One shell return slot: artifact detail/import returns to its list; root secondary views return to displayed Chat                     | Actual composed return count, destination, Escape, target bounds, dirty/busy guards and focus   |
-| View heading      | Top-level h2 text follows the 16px content rail; nested artifacts show their document title without repeating the collection heading | Actual visible heading/text Range, including long labels                                        |
-| Quiet commands    | Shared command groups extend padded hit frames into the gutter so every wrapped row begins on the content rail                       | Visible text and disclosure marker starts, row wrapping and separator edges measured separately |
-| Framed fields     | Outer frame follows the content rail; internal text retains its control inset                                                        | Native frame and real ranui shadow parts are separate subjects                                  |
-| Vertical groups   | 8px internal, 16px group and 24px section spacing                                                                                    | Actual related-region edges; empty status paragraphs reserve no anonymous margins               |
+| Geometry           | Product contract                                                                                                                                                      | Acceptance subject                                                                               |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Dock and expansion | Default dock 480px, minimum 320px; temporary expansion up to 1040px while retaining at least 360px for Office on desktop                                              | Actual panel/editor bounds, resize separator, saved dock preference and narrow viewport clamping |
+| Content rail       | 24px inside normal desktop surfaces; 16px on narrow 320px/360px layouts                                                                                               | Header title text, unframed copy, section labels and field/list outer frames within each surface |
+| Header             | One 48px fine-input / 52px coarse-input row: content-sized Chat/home, Artifacts, Conversations, New, Expand/Collapse and Close                                        | Text/icon rail, target bounds, current context, accessible names and overflow                    |
+| Split workbench    | Only the selected Artifacts route at assistant width >=840px: Chat left, artifact list/detail right; minima 320px/480px, one 1px divider, extra width distributed 2:3 | Independent scroll regions, column bounds, focused surface and preserved artifact state          |
+| Reading measure    | Single-surface Chat centers a column capped at 680px; prose caps at 68ch, with 16px body copy on ordinary desktop panes                                               | Actual text measure, heading/list rhythm, wide code/table containment and long localized content |
+| Nested return      | Artifact-owned guarded Back lives in the artifact region in split mode and the single shell return slot in compact mode                                               | One operation/control, destination, Escape, dirty/busy guards and focus restoration              |
+| Quiet commands     | Visible leading content follows the surface rail; padded hit frames may extend into its gutter                                                                        | Text/icon/disclosure starts, wrapped rows and separators measured separately from hit frames     |
+| Fields and groups  | Field frames follow the surface rail and retain internal control insets; 8px internal, 16px group, 24px section gaps                                                  | Real frames/shadow parts and painted region edges; empty statuses reserve no anonymous margins   |
 
-The title's flexible trailing filler is layout space, not a clickable/hovering title surface.
-Use one compact header rather than another row of destinations. Its Artifacts and Conversations
-icons have accessible names and selected states. Sources and the selected model/settings trigger
-belong beside composition. On narrow panes Sources becomes an icon with the same accessible
-name, keeping room for the voice language, Stop and Send. At 360px and below, coarse input
-places voice tools and execution in two stable rows so language remains readable. Coarse input
-retains 44px targets.
-Chat restores the displayed conversation and draft; it must not switch to the latest session
-while returning from a secondary page. Open Chat even without a configured model, preserving
-the draft through explicit preparation/settings. Runtime preparation does not precede unrelated views.
-Content views have no Back row. The artifact view mounts its existing guarded button in the
-shell return slot and hides the generic Chat return while it is mounted. Its localized label,
-busy registry and dirty confirmation remain owned by the artifact view. Escape uses the same
-return operation, including from the header button, and consumes a disabled or pending return.
-Cancel restores focus to its initiator; discard returns to the list heading. A nested artifact
-does not repeat the generic collection heading above its actual title. Focus outlines remain
-inside their targets.
-Populated result lists keep a 16px boundary before Import. Centered empty
-states remain centered within their content frame. Frame, text, icon viewport and hit area
-must not be substituted for each other during review. CSS token compliance alone cannot prove
-these relationships. Do not nudge individual pages or SVG paths to compensate for a shared
-layout error.
+Expansion never overwrites the dock preference. Manual pointer/keyboard resize exits expansion
+and deliberately updates that preference; window resize clamps presentation only. At narrow
+widths use the viewport when a 360px document remainder cannot fit. Hide Expand when it cannot
+increase useful space. At 320px touch the remaining four icon commands and content-sized title
+must fit with non-overlapping 44px targets. Fine-input header commands use 32px targets; coarse
+input uses at least 44px. The title's trailing filler is layout space, not a clickable surface.
+Keep focus separate from route selection; there is no second destination strip.
 
-Apply this contract to onboarding/chat, Models, Conversations, Sources and Artifacts, including
-list/import/editor, empty/populated states, statuses and disclosures. Layout owners retain
-callbacks, focus return, busy guards and drafts. New sibling views must join the same checks.
+Artifacts remains the selected route while Chat is its visible companion. Selecting Chat
+explicitly returns to the centered single-surface reading view. Below the split threshold show
+the selected surface. Width-only transitions do not run route-leave cancellation or artifact
+refresh: retain the mounted owner, selected artifact/version, mode, drafts, text selection and
+reading position. If collapse hides the focused Chat surface, move focus to a visible destination
+without discarding its saved selection. Sources, Models and Conversations retain their routes.
+Returning to Chat restores the displayed conversation and draft rather than switching sessions.
+Open Chat without a configured model; loading/downloading/connecting remains explicit and does
+not precede unrelated views. Preserve source/consent and request/session lifetimes.
 
-`test/e2e/agent-layout-rails.spec.ts` and `test/e2e/lib/layout-geometry.ts` read actual text
-Ranges and layout frames after fonts and async view content settle. They cover 432px desktop
-panels, 360px/320px windows, English/Portuguese, both themes and coarse input, with nested
-artifact import/editor/return paths. The existing sidebar test also measures title text rather
-than its padded button rectangle. Relevant focus, navigation, workspace and source/artifact
-suites remain required alongside the geometry assertions.
+An artifact list returns to displayed Chat. Artifact detail/import returns to its list using the
+existing artifact-owned button, relocated rather than cloned. In split mode this local Back does
+not replace the global Chat identity; in compact mode it occupies the shell return slot and
+suppresses the competing generic return. Its localized label, busy registry and dirty confirmation
+stay with the artifact owner. Escape invokes the same guarded operation and consumes a disabled
+or pending return. Cancel restores its initiator; discard returns to the list heading. Nested
+artifacts show their object identity without a redundant collection heading. Keep user-authored
+body headings intact. Focus outlines remain inside their targets.
 
-Acceptance must reject a text-only 8px drift even when the outer frame stays fixed, a title
-target expanded into free toolbar space, and a sibling view shifted off its content rail.
-Review screenshots with these measured relationships; a stored screenshot without assertions
-or inspection is not acceptance evidence.
+### Composer and commands
 
-### Assistant header and settings commands
+The composer is one framed draft with attachment context, Sources, microphone and stable Send.
+Stop is independently reachable, and the reader can prepare the next draft during generation.
+Sending clears only the submitted draft. Preserve IME, selection, queue promotion, cancellation
+and focus. The model/settings trigger belongs beside composition; narrow Sources may become an
+icon with the same accessible name. Do not add redundant setup/helper rows or hide recovery.
 
-The fine-input title row is 40px: 32px targets with 4px above and below. Coarse input retains
-44px targets and a 52px row. Keep the assistant identity at the 13px label role and medium
-weight. Header actions remain quiet 32px targets on desktop, expanding to 44px for coarse input;
-a fine-pointer pane at 360px or narrower also gives the home command a 44px target. Five destinations
-remain reachable through their task contexts. There is no tab strip, inset underline or raised
-shadow. Keep keyboard focus separate from selection. The secondary-page home chevron stays on
-the content spine; its label follows after the icon and gap.
+Voice options extends the privacy disclosure to include language. Its trigger has a meaningful
+accessible name, and the language picker works without dismissing its parent. Keep live recording
+status and Cancel outside the disclosure. Permission errors and privacy guidance appear at the
+point of need; keyboard focus, Escape, nested popup selection and active dictation remain usable.
+The permanent language/privacy strip is replaced by this disclosure. Narrow/coarse layouts retain
+readable feedback and at least 44px targets without moving Send/Stop unpredictably.
 
-History & data is a named command-list context. Restore, Import, Export and deletion commands
-use equal-width native button rows with visible verb labels and leading icons. The resting
-rows use the pane's canvas, without repeated frames, fills or separators. Hover/pressed states
-supply restrained feedback; focus remains visible on keyboard input. This composition is specific
-to a recognizable command group, not a rule to strip affordance from standalone commands.
-Keep 8px between commands and 16px before deletion commands.
+History & data remains a named command-list context. Restore, Import, Export and deletion use
+equal-width rows with visible verbs and leading icons. Resting rows use the pane canvas; enabled
+hover/press and keyboard focus provide feedback. Each command's 16px leading glyph follows the
+surface rail, with an 8px gap to its label; padded hit areas extend into the gutter. Keep 8px
+between commands and 16px before destructive actions. Long labels wrap within their targets.
+Use the actual pane canvas for resting text-contrast checks and the painted surface for interaction
+states. Disabled commands retain their disabled role.
 
-Header/page/section text, saving checkbox and command icon viewports share the 16px leading
-content spine. A 16px leading glyph and 8px gap put the command label at 40px; saving text and
-its status use the same label column. Each row's 8px padding extends the invisible hit surface
-into the existing gutter, while content stays on the declared spine. Targets remain equal width,
-32px for fine input or 44px for coarse input, inside the pane and non-overlapping. Long labels
-wrap naturally. Do not align only the button frames and leave visible leading content inset.
+Import and Attach open workflows with secondary affordance. Save version commits a local version;
+accepting a refinement changes the draft; Review in document opens native review. Their labels
+and feedback must communicate these different outcomes. Primary fill marks a form commit or
+reviewed acceptance. Quiet destructive labels/icons use application danger roles; only explicit
+confirmation has a solid danger fill. Deletion reveals and focuses Cancel; cancellation returns
+to Delete. Confirmation actions retain an 8px gap, including when wrapped.
 
-Deletion commands use readable danger text/icons; only explicit confirmation has a solid danger
-fill. Preserve draft, confirmation, busy and focus-return behavior. Acceptance checks text/icon
-coordinates against the independently declared page spine, not just sibling equality. For
-transparent resting rows, measure text contrast against the actual pane canvas; hover/press
-contrast uses the painted control surface. Verify complete pane screenshots, resizing and input density.
+Model pickers, endpoint/custom-model fields, Sources search/attachment controls and artifact
+fields keep their functional boundaries. Device/service containers, cached entries and preferences
+use headings and group gaps rather than nested decorative cards. Related model/attachment helper
+copy sits 8px from its control; separate model actions/custom fields use 16px. Block-layout select
+hosts avoid anonymous baseline space. Sources keeps a 16px gap between attachment list and search;
+removal stays beside the filename while excerpts expand in a bounded region. Removing a source
+focuses the next Remove, then the previous one, then Attach if empty. Filename/Remove share their
+first-line center and label role. Populated artifact lists keep 16px before Import; empty states
+remain centered within their content frame. Do not remove boundaries globally or add transparent
+borders to reproduce obsolete card insets.
 
-Related model/attachment helper copy sits 8px from its control. Separate model actions and
-adjacent custom-model fields use 16px. Block-layout select hosts avoid anonymous inline baseline
-space; verify painted region edges rather than adding declared margins. Source removal moves
-keyboard focus to the next visible Remove action, then the previous one, or Attach when the
-filtered list is empty. Source filenames and Remove use the same label role and first-line text
-center; the expanded excerpt does not move the Remove action. Chat starter actions use the
-adaptive control-height role, including 44px coarse targets. Artifact deletion reveals and focuses
-Cancel; cancellation returns to Delete. Confirmation actions retain an 8px gap, including wrapping.
+### Conversation, public reasoning and artifact canvas
 
-Import and Attach open a workflow and retain secondary command affordance. Primary fill is
-reserved for committing a form or accepting a reviewed result. A brief opacity-only heading
-entry can mark navigation with the existing fast motion token; it must not delay focus,
-move hit targets or animate overlay ancestors. Reduced motion disables this cue.
-
-Review boundaries in the full pane. The panel/editor edge owns the independent sidebar;
-the search/input frames identify editable values; the single History & data section divider
-separates task regions; named command rows identify history actions; standalone button surfaces identify workflow actions; keyboard outlines identify focus.
-An inner card or more row rules
-would repeat those relationships. Models picker frames, Sources search/attachment controls
-and Artifacts form fields keep their functional control boundaries. Do not remove every
-border globally, add transparent borders to preserve obsolete card insets, or require a
-decorative group outline in acceptance.
-
-### Models, Sources and Artifacts
-
-Apply the same boundary review to each complete view and its expanded states:
-
-| Surface   | Flat composition                                                                                                                                 | Functional boundaries retained                                                                                                                                       |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Models    | Device/service containers, cached entries and preferences use headings and the existing group gap; no extra disclosure/row rules                 | Model/source pickers, endpoint/custom fields, focus and explicit load/connect/delete states                                                                          |
-| Sources   | Separate the attached list from search by 16px; keep removal beside the title while the excerpt expands; no result card or remove-button outline | Search input, native disclosure and bounded excerpt scrolling; Attach file uses a recognizable secondary command                                                     |
-| Artifacts | Full-width saved-result rows; quiet ordinary review/export/page/revision controls; no blanket button outlines                                    | Secondary Import, primary Save/accept commits, editable fields, structured table row relationships, revision input/diff, focus and explicit destructive confirmation |
-
-Use application danger foreground roles for quiet destructive labels and their hover/active
-states. Disabled commands keep their own disabled role and do not inherit an enabled fill.
-Do not infer that every control is a secondary outlined button from its ancestor view class.
-Role-specific styling belongs to the actual action. The full state inventory, renders and
-verification are recorded in [the workspace boundary audit](explorations/2026-10-20-workspace-boundary-audit.md).
-
-### Conversation, public reasoning and artifact workbench
-
-The composer owns the draft, attachment chips and input actions. Sending clears only the submitted
-draft; the reader may prepare the next draft while generation continues. Stop remains a stable,
-separate action. Preserve IME composition, queue promotion, selection and focus. Never replay
-already received tokens as decoration. Keep answer actions quiet and in a stable reading surface.
-
-Render only public reasoning explicitly returned by the configured provider, using native
-`r-reasoning`. It is separate from answer text, copy, saved history/artifacts, document review and
+Use compact user messages, quiet answer actions and coherent heading/list/table rhythm. Never
+replay received tokens as decoration. Render only provider-exposed public reasoning in native
+`r-reasoning`; keep it separate from answers, copy, saved history/artifacts, document review and
 subsequent requests. Do not enable extra provider thinking by default. Cap transient reasoning
-at 64KiB UTF-8 per run, preserving Unicode chunk boundaries. A reader's disclosure choice takes
-precedence over later stream updates. Expanded content must not repeat its summary in the header;
-collapsed content may show the latest summary. End reasoning on answer/settlement/Stop, under
-the same generation and conversation lifetime guards as answer delivery.
+at 64KiB UTF-8 per run, preserving Unicode chunk boundaries. Reader disclosure choice takes
+precedence over streaming updates. Expanded content does not repeat its summary in the header;
+collapsed content may show the latest summary. End reasoning on answer/settlement/Stop under
+the same generation and conversation guards as answer delivery.
 
-Chat and artifact Markdown share one table/code presentation owner. Tables use a quiet
-header, restrained row separators and tabular numerals; preserve explicit Markdown column
-alignment and keep wide content in a named keyboard-scroll region. Code uses one compact
-language/Copy header and a readable monospace viewport. Copy reports actual clipboard
-success/failure. Only completed supported blocks up to 8000 characters are lazily highlighted;
-unknown or unfinished code stays literal. Token colors may change with the theme, while font
-metrics, selection and scroll stay stable. Release copy timers and late token work on unmount;
-localization updates controls in place. Do not add execution controls without an actual engine.
+Chat and artifacts share one bounded safe Markdown table/code presentation. Preserve safe-link
+and literal-media policy: no passive remote media or invented execution capability. Tables use
+quiet headers, restrained row separators and tabular numerals, preserving explicit column
+alignment. Wide tables/code stay in named keyboard-scroll regions without document-wide overflow.
+Code uses a compact language/Copy toolbar and readable mono viewport. Preserve tabs, blank lines,
+trailing newline, native selection and scroll across streaming. Clipboard feedback reports actual
+success/failure and belongs to its source snapshot; a delayed result cannot mark changed content
+as copied. Only completed supported blocks up to 8000 characters are lazily highlighted; unknown
+or unfinished code remains literal. Theme changes preserve font metrics and selection. Release
+copy timers/late token work on unmount and update localized controls in place.
 
-Artifacts open in Preview. Use the existing bounded safe chat Markdown renderer for text;
-structured content has a readable presentation with source JSON behind a disclosure. Explicit Edit
-reveals the canonical input/textarea. Preview may reflect that unsaved draft but does not save it.
-Saving creates an explicit version and returns to Preview. Keep dirty navigation/version guards,
-late-save cancellation and document review separate. Multiline AI comparisons use separately labeled Original/Proposed blocks with preserved line breaks,
-bounded readable regions and explicit expansion; short changes retain inline differences.
-AI refinement produces an editable draft;
-applying it to a document still requires the native review. Deletion asks a nearby question with
-short Delete/Cancel controls and safe focus return. Export is a disclosure of actual export formats.
+Artifacts open in Preview with a compact object/title/version/mode toolbar, readable canvas and
+coherent command/footer region. Structured content retains a readable presentation and disclosed
+source JSON. Explicit Edit reveals canonical input/textarea. Preview may reflect an unsaved draft
+without saving it. Save version creates an explicit version and returns to Preview. Preserve
+version conflicts, dirty navigation/version guards, late-save cancellation and raw source data.
+Multiline AI comparisons use labeled Original/Proposed blocks with line breaks, bounded reading
+regions and explicit expansion; short changes retain inline differences. Refinement produces an
+editable draft; applying it still requires native document review. Export discloses real formats.
+Keep deletion confirmation nearby and preserve native Review/Apply/Undo guards.
 
-Use existing ran fast/base motion roles only where they explain a state change. Native reasoning
-height/disclosure motion owns interruption and reversal. Reduced motion removes interpolation;
-focus and content availability never wait for decoration. Do not animate palette properties on
-theme changes or transform ancestors of portaled overlays. Actual screenshots and frame-inspected
-recordings of waiting, streaming, interruption, error, reader disclosure, preview/edit/dirty/save,
-export and document review are required alongside behavioral tests. Fixture streams prove UI
-behavior and isolation, not real-model quality or precise parity with another product.
+Use existing ran fast/base motion roles for meaningful state changes. Native reasoning disclosure
+owns interruption/reversal; expansion and press feedback remain interruptible. Reduced motion
+preserves every state/action without interpolation. Focus/content never wait for decoration.
+Do not animate palette properties on theme change, shimmer streamed text or transform ancestors
+of portaled overlays.
+
+### Browser and task acceptance
+
+Apply the contract across Chat/onboarding, Models, Conversations, Sources and artifact list/import/
+editor, including empty/populated, busy, error, confirmation and disclosure states. Keep independent
+geometry expectations ahead of implementation-derived assertions. The geometry helpers in
+`test/e2e/agent-layout-rails.spec.ts` and `test/e2e/lib/layout-geometry.ts` measure actual text Ranges
+and frames after fonts and async content settle. Update obsolete 432px/40px expectations against
+this contract. Cover 480px dock, expanded Chat/Artifacts, resize across 840px, 320px/360px touch,
+English/Chinese/Portuguese, both themes, keyboard/focus and reduced motion. Preserve source,
+security, streaming, reasoning, queue, dictation, navigation and artifact behavioral regressions.
+
+Acceptance must reject text-only 8px drift while its frame stays fixed, a title target consuming
+free toolbar space, sibling rail drift, overflow and stale asynchronous copy feedback. Measure
+text, glyph, frame and hit region as different subjects. Token compliance or sibling equality
+alone is insufficient. Inspect full-editor and pane screenshots and continuous recordings of
+waiting/streaming/Stop/error, disclosure, preview/edit/dirty/save, refinement, export and native
+review. Bind evidence to source/dependency/build/media hashes and viewport/theme/locale/state.
+Disclosed transport fixtures prove real UI behavior and isolation, not real-model quality.
+Screenshots stored without inspection do not establish acceptance.
+
+Use task walkthroughs informed by _Don't Make Me Think_: identify the current conversation/
+artifact/version, find the next destination, resume a draft, choose voice language, distinguish
+Save version from refinement acceptance and document review, and recover from cancellation/error.
+Observe whether context, destinations and action outcomes are understandable without explanation;
+put guidance beside the decision that needs it. Report the top three observed task problems with
+the triggering task, evidence, user impact and correction; report fewer if fewer were observed.
+Do not substitute arbitrary click budgets or counts of visual elements for task evidence.
+
+Label agent/automation walkthroughs as such. They can expose navigation, wording and state
+problems but do not constitute human usability tests or user acceptance. Record human test results
+only when real participants performed the tasks; distinguish them from automated checks and agent
+visual/code review. Retain relevant test/build/lint gates and head-specific CI inspection alongside
+media review, without inferring human approval from passing automation.

@@ -170,13 +170,16 @@ export function createAgentPanel(
     .attr('role', 'complementary')
     .attr('aria-label', t('agentTitle'))
     .build();
-  let disposeResize = mountPanelResize(panel);
+  const expandBtn = ButtonBuilder().class('agent-panel-expand').attr('type', 'button').build();
+  expandBtn.innerHTML =
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3H3v5M16 21h5v-5M3 3l6 6m12 12-6-6M16 3h5v5M3 16v5h5"/></svg>';
+  let disposeResize = mountPanelResize(panel, { expandButton: expandBtn });
   let disposeViewport = mountPanelViewport(panel);
   window.addEventListener('pagehide', () => disposeViewport());
   window.addEventListener('pageshow', (event) => {
     if (!event.persisted || !panel.isConnected) return;
     disposeResize();
-    disposeResize = mountPanelResize(panel);
+    disposeResize = mountPanelResize(panel, { expandButton: expandBtn });
     disposeViewport();
     disposeViewport = mountPanelViewport(panel);
     sidebar.dispose();
@@ -733,9 +736,6 @@ export function createAgentPanel(
     syncRuntimeStatus();
   });
   speech = mountSpeechInput(chat, () => enabled);
-  const welcomeHint = document.createElement('p');
-  welcomeHint.className = 'agent-welcome-hint';
-  welcomeHint.textContent = t('agentWelcomeHint');
   const taskEntry = createTaskEntry({
     getInput: () => chat.getInput(),
     setInput: (text) => chat.setInput(text),
@@ -775,7 +775,7 @@ export function createAgentPanel(
   window.addEventListener('pagehide', (event) => {
     if (!event.persisted) resultActions.dispose();
   });
-  chat.emptyActionsEl.prepend(welcomeHint, taskEntry.el);
+  chat.emptyActionsEl.prepend(taskEntry.el);
   chat.el.querySelector('textarea')!.addEventListener('input', (event) => {
     if (event.isTrusted || chat.getInput()) taskEntry.inputChanged(chat.getInput());
   });
@@ -941,7 +941,6 @@ export function createAgentPanel(
       quoteSummary,
       quoteTrigger: selectionContext.trigger,
       quoteText,
-      welcomeHint,
       settings,
       ready: () => !!webllmProvider?.isReady(),
       onSnapshot: (snapshot) => taskEntry.update(snapshot),
@@ -2849,7 +2848,6 @@ export function createAgentPanel(
     syncSidebar();
     title.textContent = t('agentTitle');
     panel.setAttribute('aria-label', t('agentTitle'));
-    welcomeHint.textContent = t('agentWelcomeHint');
     syncRuntimeStatus();
     configuration.syncLabels();
     closeBtn.title = t('agentClose');
@@ -2881,6 +2879,7 @@ export function createAgentPanel(
   const artifactsBtn = View<HTMLButtonElement>('button').class('agent-workspace-toggle').attr('type', 'button').build();
   const artifactStore = createArtifactStore();
   let artifactBack: HTMLButtonElement | undefined;
+  const artifactReturnSlot = Div().class('agent-artifact-return-slot').attr('hidden', '').build();
   const artifactsView = createArtifactsView({
     store: artifactStore,
     refinement: {
@@ -3133,6 +3132,8 @@ export function createAgentPanel(
 
   const composerMeta = Div().class('agent-composer-meta').children(settingsBtn).build();
   chat.el.querySelector('.cui-footer')!.append(composerMeta, readiness, writeDestination);
+  artifactsView.el.prepend(artifactReturnSlot);
+  header.insertBefore(expandBtn, closeBtn);
   const workspace = createPanelWorkspace({
     panel,
     chat,
@@ -3166,6 +3167,7 @@ export function createAgentPanel(
       syncHistoryActivity();
       syncRuntimeStatus();
     },
+    layoutChanged: () => syncHeaderIdentity(),
   });
   function showView(view: PanelWorkspaceView): void {
     workspace.show(view);
@@ -3177,16 +3179,24 @@ export function createAgentPanel(
       '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11a9 9 0 1 1 3 8M3 5v6h6M12 7v6l4 2"/></svg>',
   };
   function syncHeaderIdentity(): void {
-    const inChat = panel.dataset.view === 'chat';
+    const split = panel.dataset.split === 'true';
+    const inChat = panel.dataset.view === 'chat' || split;
     const nested = panel.dataset.view === 'artifacts' && !!artifactBack;
-    title.hidden = nested;
+    title.hidden = nested && !split;
+    artifactReturnSlot.hidden = !nested || !split;
     if (artifactBack) {
       artifactBack.classList.add('agent-panel-return');
       // The chevron already expresses Back; keep its parent destination readable.
       const caption = artifactBack.querySelector('span');
       if (caption) caption.textContent = t('agentArtifactTitle');
       artifactBack.hidden = !nested;
-      workspaceNav.prepend(artifactBack);
+      const destination = split ? artifactReturnSlot : workspaceNav;
+      if (artifactBack.parentElement !== destination || (!split && destination.firstElementChild !== artifactBack)) {
+        const focused = document.activeElement === artifactBack;
+        if (split) destination.append(artifactBack);
+        else destination.prepend(artifactBack);
+        if (focused) artifactBack.focus({ preventScroll: true });
+      }
     }
     title.textContent = inChat ? t('agentTitle') : t('agentWorkspaceChat');
     if (!inChat) {

@@ -90,6 +90,8 @@ export const ko: Partial<I18nMessages> = {
   agentWorkspaceChat: '채팅',
   agentBackToChat: '대화로 돌아가기',
   agentExpand: '도우미 확대',
+  agentCollapse: '도우미 축소',
+  agentVoiceOptions: '음성 옵션',
   agentSetupFailed: '도우미를 열 수 없습니다. 다시 시도하세요. 문서는 바뀌지 않았습니다.',
   agentOffNote: '끄면 현재 작업이 중지되고 문서와 초안은 유지됩니다.',
   agentResumeModel: '다운로드한 모델 사용',

@@ -189,3 +189,94 @@ it.each([
   expect(highlight).toHaveBeenCalledOnce();
   window.getSelection()!.removeAllRanges();
 });
+
+it.each(['resolve', 'reject'] as const)(
+  'does not attach delayed clipboard %s feedback to a changed streaming fence',
+  async (outcome) => {
+    vi.useFakeTimers();
+    highlight.mockResolvedValue(tokens);
+    let finish!: () => void;
+    const writeText = vi.fn(
+      () =>
+        new Promise<void>((resolve, reject) => {
+          finish = () => (outcome === 'resolve' ? resolve() : reject(new Error('denied')));
+        }),
+    );
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+    const { target, owner } = mount('');
+    const stream = new StreamingMarkdown(target, owner);
+    stream.update('```text\nfirst\n');
+    const first = target.querySelector<HTMLButtonElement>('.cui-code-copy')!;
+    first.click();
+    expect(writeText).toHaveBeenCalledWith('first');
+    stream.update('```text\nfirst\n\tsecond\n\n```');
+    const current = target.querySelector<HTMLButtonElement>('.cui-code-copy')!;
+    expect(current).not.toBe(first);
+    finish();
+    await Promise.resolve();
+    expect(current.dataset.state).toBe('idle');
+    expect(current.disabled).toBe(false);
+    expect(first.dataset.state).toBe('idle');
+    expect(vi.getTimerCount()).toBe(0);
+    current.click();
+    expect(writeText).toHaveBeenLastCalledWith('first\n\tsecond\n');
+    finish();
+    await Promise.resolve();
+    expect(current.dataset.state).toBe(outcome === 'resolve' ? 'copied' : 'failed');
+    expect(vi.getTimerCount()).toBe(1);
+  },
+);
+
+it.each(['resolve', 'reject'] as const)(
+  'keeps clipboard %s feedback with an unchanged fence while the following answer streams',
+  async (outcome) => {
+    vi.useFakeTimers();
+    highlight.mockResolvedValue(tokens);
+    let finish!: () => void;
+    const writeText = vi.fn(
+      () =>
+        new Promise<void>((resolve, reject) => {
+          finish = () => (outcome === 'resolve' ? resolve() : reject(new Error('denied')));
+        }),
+    );
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+    const { target, owner } = mount('');
+    const stream = new StreamingMarkdown(target, owner);
+    const source = '```text\n\texact\n\n```\n\nFollowing answer';
+    stream.update(source);
+    const button = target.querySelector<HTMLButtonElement>('.cui-code-copy')!;
+    button.focus();
+    button.click();
+    stream.update(source + ' continues');
+    stream.update(source + ' continues', true);
+    expect(target.querySelector('.cui-code-copy')).toBe(button);
+    finish();
+    await Promise.resolve();
+    expect(writeText).toHaveBeenCalledWith('\texact\n');
+    expect(button.dataset.state).toBe(outcome === 'resolve' ? 'copied' : 'failed');
+    expect(document.activeElement).toBe(button);
+    expect(button.disabled).toBe(false);
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(button.dataset.state).toBe('idle');
+    expect(vi.getTimerCount()).toBe(0);
+  },
+);
+
+it('names keyboard-scrollable code with its language and updates translated names without replacing source', () => {
+  highlight.mockResolvedValue(tokens);
+  const { target, owner } = mount('```ts\nconst x = 1;\n```\n\n```\nplain\n```');
+  const regions = target.querySelectorAll('pre');
+  expect(regions[0].getAttribute('role')).toBe('region');
+  expect(regions[0].getAttribute('aria-label')).toBe('Code: TypeScript');
+  expect(regions[1].getAttribute('aria-label')).toBe('Code');
+  regions[0].focus();
+  const code = regions[0].querySelector('code')!;
+  window.getSelection()!.setBaseAndExtent(code.firstChild!, 0, code.firstChild!, 5);
+  owner.setLabels({ codeBlock: 'Código' });
+  expect(regions[0].getAttribute('aria-label')).toBe('Código: TypeScript');
+  expect(regions[1].getAttribute('aria-label')).toBe('Código');
+  expect(document.activeElement).toBe(regions[0]);
+  expect(window.getSelection()!.toString()).toBe('const');
+  expect(regions[0].querySelector('code')).toBe(code);
+  window.getSelection()!.removeAllRanges();
+});
