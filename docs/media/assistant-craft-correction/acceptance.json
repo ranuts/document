@@ -1,0 +1,50 @@
+{
+  "status": "accepted",
+  "runtime": {
+    "schema": 1,
+    "revision": "bd0e8c146bbde9b55a53ba04db1d95ff60affcd9",
+    "contentSha256": "89f8d8bf62aaa8d1f594cad6fedbb3e9bc6c4d26ced2674b58dc0e21af58395d"
+  },
+  "summary": "Corrective visual acceptance passed original-image and decoded continuous-recording review; the previous missed approval is withdrawn.",
+  "capture": {
+    "before": 44,
+    "after": 92,
+    "recordings": 8,
+    "environments": [
+      "desktop English light",
+      "desktop English dark/reduced motion",
+      "320px Portuguese touch/light",
+      "360px Portuguese touch/dark/reduced motion"
+    ],
+    "fixture": "Deterministic public provider NDJSON; no product CSS/DOM injection."
+  },
+  "tests": {
+    "unit": "6915 tests / 258 files passed with coverage thresholds unchanged",
+    "coverage": {
+      "statements": 88.16,
+      "branches": 84.24,
+      "functions": 89.02,
+      "lines": 90.54
+    },
+    "browser": "38 distinct related cases verified: 33 initial passes +2 corrected visible-route cases +3 reasoning/touch cases; no retries or assertion/overflow tolerance relaxation.",
+    "types": "Root noEmit and workspace builds passed",
+    "lint": "Archive-aware lint and immutable1511 evaluation checks passed",
+    "format": "Full archive-aware Prettier check and changed-authored-file formatting passed",
+    "build": "Production build passed; exact identity recorded above"
+  },
+  "review": {
+    "spec": "passed",
+    "code": "passed",
+    "visual": "Root and independent reviewer inspected all8 state sheets, all8 updated decoded recording sheets and critical original panes across the four declared environments. No blocking composition or legibility defect remained."
+  },
+  "limits": [
+    "Fixtures verify UI behavior, not real-model quality or exact competitor parity.",
+    "Native Word insertion retains its documented Markdown table limit.",
+    "Selection preservation covers completed/reused blocks and late highlighting; growing unfinished fences retain existing streaming behavior.",
+    "ran reasoning/guidance changes remain in PR436; this correction belongs to application composition/shared safe rendering."
+  ],
+  "reportQA": "1280px and320px:94images decoded,8video metadata loaded,zero overflow or JavaScript errors.",
+  "remoteCI": {
+    "status": "pending after approved PR update"
+  }
+}

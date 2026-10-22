@@ -1,8 +1,8 @@
 {
-  "status": "accepted",
+  "status": "superseded",
   "sourceCommit": "d6c0411372e168a5a1c124c82408b7499e7e3cc2",
   "ranCommit": "72c44840707ee5dc88a3e60e5a4906f73a7fc98d",
-  "summary": "Complete conversation and artifact workflows passed independent screenshot and decoded recording review.",
+  "summary": "The prior visual approval missed duplicate artifact return controls and an 8px visible command-text offset. Its approval is withdrawn; original screenshots, recordings and executed checks remain historical evidence.",
   "tests": {
     "unit": "6,878 passed; 255 suites; final source",
     "e2e": "125 executed assistant cases covered across full + affected runs; 3 existing skips. Final affected run: 37/37 passed.",
@@ -14,5 +14,6 @@
     "Deterministic public NDJSON proves UI behavior and isolation, not real-model quality or exact competitor parity.",
     "Native Word insertion still rejects Markdown tables; the recording demonstrates localized guidance and recovery into real native review with a plain-text draft.",
     "Nonblocking P3: artifact-related failures still use Chat error/recovery presentation; their artifact association could be clearer."
-  ]
+  ],
+  "correctiveAcceptance": "../../explorations/2026-10-22-assistant-craft-correction.md"
 }

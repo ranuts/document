@@ -1,9 +1,9 @@
 # Assistant conversation and artifact craft acceptance
 
-Accepted runtime source: `d6c0411372e168a5a1c124c82408b7499e7e3cc2`.
+Historical runtime source: `d6c0411372e168a5a1c124c82408b7499e7e3cc2`.
 Build SHA-256: `23a96f4182123707557f63f43762b563cdfcd91f25f9a9aaccb20561081123b0`.
 Upstream ran source: `72c44840707ee5dc88a3e60e5a4906f73a7fc98d` ([PR436](https://github.com/chaxus/ran/pull/436)).
-Subsequent documentation/media commits do not change this accepted runtime.
+This visual approval is superseded: it missed duplicate artifact return controls and an 8px visible command-text offset. The original media and executed checks remain historical evidence. See the [corrective acceptance](2026-10-22-assistant-craft-correction.md).
 
 ## Result and ownership
 
@@ -40,7 +40,7 @@ Native header pointer clicks 60ms apart interrupt the normal disclosure transiti
 - Final comparison/related unit subset: 77 passed. TypeScript, archive-aware lint, Prettier and immutable evaluation-archive checks passed. Production build passed with the identity above.
 - Docker configuration passed using installed standalone `docker-compose -f docker-compose.yaml config --quiet`; the local Docker CLI lacks its compose subcommand. This does not claim a local Docker-image run.
 - Upstream reasoning: 34 unit, 76 SSR and 10 Chromium/WebKit browser cases passed. Guidance/documentation/link/design checks passed; earlier guidance acceptance remains in PR436.
-- Independent spec/code reviews and final screenshot/decoded-recording review approved this runtime.
+- The prior review approval was withdrawn after the visible defects above were reported.
 
 ## Limits and remaining observation
 

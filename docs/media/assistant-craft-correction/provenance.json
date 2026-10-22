@@ -1,0 +1,143 @@
+{
+  "runtime": {
+    "schema": 1,
+    "revision": "bd0e8c146bbde9b55a53ba04db1d95ff60affcd9",
+    "contentSha256": "89f8d8bf62aaa8d1f594cad6fedbb3e9bc6c4d26ced2674b58dc0e21af58395d"
+  },
+  "completeLocalCaptureCount": 92,
+  "committedFiles": [
+    {
+      "file": "return-detail-desktop-light.png",
+      "source": "assistant-return-correction/after/detail-desktop-light.png",
+      "sha256": "318e26e28b838eea40b11ecaddab2f0a957a0848ab96d865aca09324ba385281",
+      "bytes": 25337
+    },
+    {
+      "file": "return-detail-desktop-dark.png",
+      "source": "assistant-return-correction/after/detail-desktop-dark.png",
+      "sha256": "f252309274ef12a16293d00656dc31cdf4e9cf365e795e12d389b64f0115497d",
+      "bytes": 24940
+    },
+    {
+      "file": "return-detail-pt-320-light.png",
+      "source": "assistant-return-correction/after/detail-pt-320-light.png",
+      "sha256": "d34132c6f1799f2ab6a03ef804181d70c730ac1197964bdf535138cbad61a8e8",
+      "bytes": 26244
+    },
+    {
+      "file": "return-escape-question-pt-320-light.png",
+      "source": "assistant-return-correction/after/escape-question-pt-320-light.png",
+      "sha256": "07a46c689b082f060630530cfb213978405c3cb93fbb23215000104910284c7e",
+      "bytes": 35209
+    },
+    {
+      "file": "return-saved-version-pt-360-dark.png",
+      "source": "assistant-return-correction/after/saved-version-pt-360-dark.png",
+      "sha256": "de9bc5671483bdae63cd3bca64de7d9d81178d4752cd1d3efe28e2de9cfa87cd",
+      "bytes": 28380
+    },
+    {
+      "file": "return-structured-table-pt-320-light.png",
+      "source": "assistant-return-correction/after/structured-table-pt-320-light.png",
+      "sha256": "19fb69529b976de039e4783a933a53be58e1ed5d1de8148bcaf42037b4f34440",
+      "bytes": 25196
+    },
+    {
+      "file": "markdown-chat-table-desktop-light.png",
+      "source": "assistant-markdown-craft/after/chat-table-desktop-light.png",
+      "sha256": "1ad9cd625ab305b9e2bbe6b6409b9f938b318b3d2d3dba1a2a4d03cc9ebb34d1",
+      "bytes": 67617
+    },
+    {
+      "file": "markdown-chat-code-desktop-dark.png",
+      "source": "assistant-markdown-craft/after/chat-code-desktop-dark.png",
+      "sha256": "718dc46f3d6c6e853ed31ac3ac9879bd60e2045f4d776fec643e5b0b16e3a122",
+      "bytes": 66238
+    },
+    {
+      "file": "markdown-chat-code-copied-pt-320-light.png",
+      "source": "assistant-markdown-craft/after/chat-code-copied-pt-320-light.png",
+      "sha256": "b62be9a1990dbc6251bd8df1378f58afaeffe3cf0a9e18269b4677897310fa8f",
+      "bytes": 53789
+    },
+    {
+      "file": "markdown-artifact-code-desktop-light.png",
+      "source": "assistant-markdown-craft/after/artifact-code-desktop-light.png",
+      "sha256": "0ca77609129a3e8f0d10bf44e38260b8015dd421bb28b391a7b08fc62da790a9",
+      "bytes": 66473
+    },
+    {
+      "file": "markdown-artifact-code-copy-failed-pt-360-dark.png",
+      "source": "assistant-markdown-craft/after/artifact-code-copy-failed-pt-360-dark.png",
+      "sha256": "0df9ed712c7450370a64c756f5942417ad8af0fb0a3d2c9cf7d993868aee7be7",
+      "bytes": 59752
+    },
+    {
+      "file": "markdown-artifact-wide-table-pt-360-dark.png",
+      "source": "assistant-markdown-craft/after/artifact-wide-table-pt-360-dark.png",
+      "sha256": "20a2f0dc4df53496e0a39d7d94a427bae2fdefdaf8f3611236513a41c41a9b41",
+      "bytes": 54730
+    },
+    {
+      "file": "before-return-detail-desktop-dark.png",
+      "source": "assistant-return-correction/before/detail-desktop-dark.png",
+      "sha256": "788d3ce9b86bc8a8675f312ce304be4e3ff4f1fc180d3573b91cc9234ca659f9",
+      "bytes": 27374
+    },
+    {
+      "file": "before-chat-code-desktop-light.png",
+      "source": "assistant-markdown-craft/before/chat-code-desktop-light.png",
+      "sha256": "56ebd1d0f6432fce6ef01c962a41aff8df8ca26a8e7efcd6f9a241e3d0e61aee",
+      "bytes": 56726
+    },
+    {
+      "file": "return-desktop-light.webm",
+      "source": "assistant-return-correction/recordings/desktop-light-pane.webm",
+      "sha256": "e6a9ae8494386c3615ef172e0875b52b33ac582be6f95ed09e500ce50e5b79e5",
+      "bytes": 176602
+    },
+    {
+      "file": "return-desktop-dark.webm",
+      "source": "assistant-return-correction/recordings/desktop-dark-pane.webm",
+      "sha256": "f617d38e1a89fd695b4475d73d9e74f1c89ecb9afe8e6acb4ead53bd4d5e5e67",
+      "bytes": 141509
+    },
+    {
+      "file": "return-pt-320-light.webm",
+      "source": "assistant-return-correction/recordings/pt-320-light-pane.webm",
+      "sha256": "1bad42096cf5daad88b764a26721aa7edd8b8bdf88cfe1b12f38a753fb8bc61b",
+      "bytes": 202435
+    },
+    {
+      "file": "return-pt-360-dark.webm",
+      "source": "assistant-return-correction/recordings/pt-360-dark-pane.webm",
+      "sha256": "e6ea4f3d4643d1058f23217efde09a1a076eb44c3708a8659e933ed6d540f38e",
+      "bytes": 190746
+    },
+    {
+      "file": "markdown-desktop-light.webm",
+      "source": "assistant-markdown-craft/recordings/desktop-light-pane.webm",
+      "sha256": "93847fad12430906f51402082ed68ebbe8b59774ab64845de08b8f23877f5a73",
+      "bytes": 276583
+    },
+    {
+      "file": "markdown-desktop-dark.webm",
+      "source": "assistant-markdown-craft/recordings/desktop-dark-pane.webm",
+      "sha256": "ddb06e8f731d5e89c0bd6a7156fb114432c764cdee25b1ed86301a7c697d90bb",
+      "bytes": 241527
+    },
+    {
+      "file": "markdown-pt-320-light.webm",
+      "source": "assistant-markdown-craft/recordings/pt-320-light-pane.webm",
+      "sha256": "b5cee7e75b666e437df0767b33d466828605569433593b57567d9441b5acd339",
+      "bytes": 246074
+    },
+    {
+      "file": "markdown-pt-360-dark.webm",
+      "source": "assistant-markdown-craft/recordings/pt-360-dark-pane.webm",
+      "sha256": "a2172d77421c358520f9807f65f05d5303c3a54b22c4f8ffbe8613fa41a02d76",
+      "bytes": 245942
+    }
+  ],
+  "note": "Representative unmodified pane screenshots and spatially cropped continuous recordings; complete inventory and full-browser originals remain in the local report."
+}
