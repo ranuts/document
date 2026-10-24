@@ -186,9 +186,12 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
-- The editor page fetches about a fifth less JavaScript before it can start
-  (281 KB instead of 350 KB compressed). Browser-agent text reading and the
-  install prompt now load when they are first needed.
+- The editor page fetches less than half the JavaScript it did before it can
+  start (163 KB instead of 350 KB compressed). Browser-agent text reading and
+  the install prompt load when first needed, and an unused character-set
+  detector is no longer shipped.
+- The local history page no longer downloads the editor to show its list
+  (122 KB instead of 148 KB compressed).
 - Voice controls stay in place while recording or finishing. Explanations appear
   without moving the draft, and cancelling preserves the text typed before dictation.
 - **Configured assistants reopen in chat.** Enable a downloaded model or reconnect

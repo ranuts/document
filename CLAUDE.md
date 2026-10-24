@@ -98,6 +98,8 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
     session.ts            # 会话身份：mint docId 并写进 ?saved=<id>
     recovery.ts           # 启动恢复条（Office Document Recovery 模型）
     types.ts / index.ts   # 记录形状与保留期工具 / 对外装配（含 savedToDisk 回调注入）
+    preferences.ts / relative-time.ts  # 自动保存开关与"5 分钟前"——/history 只能从这两个、types、store 取东西；
+                          # import recovery / autosave 会把整套编辑器拉进历史页（editor-startup-payload.spec 钉住）
   history-page.ts       # /history 页面（第三个 vite entry，见 history.html）
   sw-update.ts          # SW 更新策略的编辑器一侧（有文档打开时不提升 worker）；落地页一侧在 public/sw-register.js
   agent-plugin/         # Agent 协同编辑：editor-bridge（直调 window.editor）、tools、ui/
