@@ -200,8 +200,7 @@ notes. Entries describe what users experience, not internal refactors.
   than all seven, so the editor starts on 105 KB instead of 162 KB compressed,
   and the history page on 61 KB instead of 121 KB.
 - The editor no longer loads the assistant's dropdown control or an unused
-  file-type table at startup (84 KB instead of 105 KB compressed), and the
-  history page drops the same table (55 KB instead of 61 KB).
+  file-type table at startup (84 KB instead of 105 KB compressed).
 - Voice controls stay in place while recording or finishing. Explanations appear
   without moving the draft, and cancelling preserves the text typed before dictation.
 - **Configured assistants reopen in chat.** Enable a downloaded model or reconnect
