@@ -15,6 +15,12 @@ const JSCHARDET = { owner: 'jschardet', probe: 'windows-1255' };
 // An error the save pipeline (lib/onlyoffice/save-stream.ts) raises: the
 // history page lists and reopens records, it never saves through the editor.
 const EDITOR_STACK = { owner: 'editor save pipeline', probe: 'Save conversion failed' };
+// Two message tables the page does not speak: only English and the active
+// locale belong at startup (packages/shared/src/i18n.ts awaits the latter).
+const OTHER_LOCALES = [
+  { owner: 'ja message table', probe: 'ドキュメントを開く / 編集' },
+  { owner: 'de message table', probe: 'Dokument öffnen / bearbeiten' },
+];
 
 /** Vite writes an entry and its whole static import graph into the HTML as the
  *  module script plus modulepreload links: that is the startup payload. */
@@ -37,14 +43,23 @@ async function expectAbsent(page: Page, deferred: Array<{ owner: string; probe: 
   }
 }
 
-test('the editor startup scripts leave the agent tools, the PWA prompt and jschardet out', async ({ page }) => {
+test('the editor startup scripts leave the agent tools, the PWA prompt, jschardet and other locales out', async ({
+  page,
+}) => {
   await page.goto('/editor?new=docx');
-  await expectAbsent(page, [AGENT_TOOLS, PWA_INSTALL, JSCHARDET]);
+  await expectAbsent(page, [AGENT_TOOLS, PWA_INSTALL, JSCHARDET, ...OTHER_LOCALES]);
 });
 
-test('the history page startup scripts leave the editor stack and jschardet out', async ({ page }) => {
+test('the history page startup scripts leave the editor stack, jschardet and other locales out', async ({ page }) => {
   await page.goto('/history');
-  await expectAbsent(page, [EDITOR_STACK, JSCHARDET]);
+  await expectAbsent(page, [EDITOR_STACK, JSCHARDET, ...OTHER_LOCALES]);
+});
+
+test('a page opened in another language renders that language without reloading', async ({ page }) => {
+  await page.goto('/history?locale=de');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'de');
+  // Rendered once, at startup: a table that arrived late would leave it English.
+  await expect(page.locator('h1.history-title')).toHaveText('Gespeicherte Dokumente');
 });
 
 test('the PWA install element is still defined and mounted after startup', async ({ page }) => {
