@@ -12,6 +12,9 @@ import {
   type I18nMessages,
   type Language,
 } from '@ranuts/shared/i18n';
+import { loadAllLocales } from './lib/locales';
+
+await loadAllLocales();
 
 /**
  * Shell locales beyond en/zh (roadmap direction eight, layer 2). All eight

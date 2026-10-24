@@ -3,6 +3,9 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { createTaskEntry } from '../../lib/agent-plugin/ui/task-entry';
 import type { ComposerContext } from '../../lib/agent-plugin/ui/composer-context';
 import type { DocumentToolTarget } from '../../lib/agent-plugin/document-tool-action';
+import { loadAllLocales } from './lib/locales';
+
+await loadAllLocales();
 let context: ComposerContext;
 let draft = '';
 let session = 'one';

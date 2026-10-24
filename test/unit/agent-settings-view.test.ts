@@ -1,6 +1,9 @@
 import { getLanguage, setLanguage, t, LanguageCode } from '@ranuts/shared/i18n';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createPanelSettingsView } from '../../lib/agent-plugin/ui/settings-view';
+import { loadAllLocales } from './lib/locales';
+
+await loadAllLocales();
 
 function setup(selectedSource: string) {
   const control = () => document.createElement('div');

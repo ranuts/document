@@ -1,7 +1,11 @@
 import { requestErrorKey } from './request-error';
 import { isDocumentToolName } from '../document-tool-plan';
-import { t, getLanguage, i18n, SHELL_LOCALES } from '@ranuts/shared/i18n';
+import { t, getLanguage, i18n, loadLocale, SHELL_LOCALES } from '@ranuts/shared/i18n';
 import type { AgentEvent, AgentRunResult } from '@ranuts/agent-core/runtime';
+
+// `displayError` recognises error text saved in any shell language (restored
+// history), so the assistant holds every table, not only the page's one.
+await Promise.allSettled(SHELL_LOCALES.map(loadLocale));
 
 /** Count host-verified mutations, never read results or a model's completion prose. */
 export function isVerifiedDocumentChange(event: AgentEvent): boolean {

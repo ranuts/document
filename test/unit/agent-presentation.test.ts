@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import {
   assistantPresentation,
   AssistantDisplayStream,
@@ -7,6 +7,10 @@ import {
 } from '../../lib/agent-plugin/ui/presentation';
 import { historyToTurns } from '../../lib/agent-plugin/ui/storage';
 import { LanguageCode, setLanguage, SHELL_LOCALES, t } from '@ranuts/shared/i18n';
+import { ja } from '../../packages/shared/src/i18n/messages/ja';
+import { loadAllLocales } from './lib/locales';
+
+await loadAllLocales();
 
 it.each(SHELL_LOCALES)('restores actionable model guidance saved in %s after a language switch', (language) => {
   try {
@@ -334,4 +338,17 @@ it('retains service categories after runtime error events serialize owned provid
   expect(displayError('Ollama request failed: 503 private response')).toBe(t('agentServiceUnavailable'));
   expect(displayError('OpenAI request failed: 429 private response')).toBe(t('agentServiceRateLimited'));
   expect(displayError('a private unrecognized 503 response')).toBe(t('agentRequestFailed'));
+});
+
+it('recognises an error saved in a language this page did not start in', async () => {
+  window.history.pushState({}, '', '/?locale=de');
+  try {
+    vi.resetModules();
+    const { displayError: fresh } = await import('../../lib/agent-plugin/ui/presentation');
+    const { t: freshT } = await import('@ranuts/shared/i18n');
+    expect(fresh(ja.agentModelQuota ?? '')).toBe(freshT('agentModelQuota'));
+    expect(freshT('agentModelQuota')).not.toBe(ja.agentModelQuota);
+  } finally {
+    window.history.pushState({}, '', '/');
+  }
 });
