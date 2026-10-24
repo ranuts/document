@@ -25,7 +25,6 @@ import { initWebMcp } from './lib/web-mcp';
 import { createAgentEntry } from './lib/agent-entry';
 import { hasUnsavedChanges, installUnsavedChangesGuard } from './lib/unsaved-guard';
 import { initDocumentHistory } from './lib/history';
-import '@khmyznikov/pwa-install';
 import './styles/base.css';
 
 declare global {
@@ -338,5 +337,9 @@ const initPwaInstall = () => {
   document.body.appendChild(builder.build());
 };
 
-// Start PWA initialization after short delay to ensure everything is settled
-setTimeout(initPwaInstall, 1000);
+// Start PWA initialization after short delay to ensure everything is settled.
+// The element is optional and mounted late, so its ~110 KB definition stays
+// off the editor's startup chunk.
+setTimeout(() => {
+  import('@khmyznikov/pwa-install').then(initPwaInstall, () => {});
+}, 1000);
