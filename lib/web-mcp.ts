@@ -22,11 +22,6 @@ import { getDocmentObj } from '@ranuts/shared/store';
 import { DOCUMENT_TYPE_MAP, getDocumentType } from '@ranuts/shared/document-utils';
 import { getReadonlyMode, requestSaveDocument, setReadonlyMode } from './onlyoffice-editor';
 import { onCreateNew, openDocumentFromUrl, openLocalFile } from './document';
-// The tool layer is transport-agnostic by design (see @ranuts/agent-core types):
-// the same definitions back the in-page agent panel. Reused rather than
-// reimplemented -- editor-bridge has no imports of its own, so this costs
-// nothing in the bundle and cannot drift from the panel's behaviour.
-import { getDocumentTextTool } from './agent-plugin/tools';
 
 /** Minimal shape of the WebMCP surface this adapter uses. */
 export interface ModelContextLike {
@@ -240,6 +235,10 @@ export function buildTools(): WebMcpTool[] {
             note: `Full text is only available for word-processing documents; this is a ${kind || 'non-word'} document. Use save_document (targetExt TXT, CSV or PDF) and read the exported file instead.`,
           });
         }
+        // Reuse the panel's transport-agnostic tool so the two cannot drift, but
+        // load it here: tools.ts pulls the whole agent tool layer (and marked),
+        // which a static import put on every editor load for one optional call.
+        const { getDocumentTextTool } = await import('./agent-plugin/tools');
         const { text, truncated } = await getDocumentTextTool.execute(maxChars ? { maxChars } : {});
         return ok({ ok: true, text, truncated, supported: true });
       },
