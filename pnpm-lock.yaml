@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  dompurify: 3.4.16
+  dompurify: 3.4.17
   katex: 0.18.2
   source-map-js: 1.2.2
   undici: 8.10.2
@@ -37,11 +37,11 @@ importers:
         specifier: 5.4.624
         version: 5.4.624
       ranui:
-        specifier: 0.5.1
-        version: 0.5.1
+        specifier: 0.5.2
+        version: 0.5.2
       ranuts:
-        specifier: 0.5.1
-        version: 0.5.1
+        specifier: 0.5.2
+        version: 0.5.2
     devDependencies:
       '@playwright/test':
         specifier: ^1.64.0
@@ -108,11 +108,11 @@ importers:
         specifier: 16.4.2
         version: 16.4.2
       ranui:
-        specifier: 0.5.1
-        version: 0.5.1
+        specifier: 0.5.2
+        version: 0.5.2
       ranuts:
-        specifier: 0.5.1
-        version: 0.5.1
+        specifier: 0.5.2
+        version: 0.5.2
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -124,11 +124,11 @@ importers:
         specifier: workspace:*
         version: link:../shared
       ranui:
-        specifier: 0.5.1
-        version: 0.5.1
+        specifier: 0.5.2
+        version: 0.5.2
       ranuts:
-        specifier: 0.5.1
-        version: 0.5.1
+        specifier: 0.5.2
+        version: 0.5.2
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -137,8 +137,8 @@ importers:
   packages/shared:
     dependencies:
       ranuts:
-        specifier: 0.5.1
-        version: 0.5.1
+        specifier: 0.5.2
+        version: 0.5.2
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -146,8 +146,8 @@ importers:
 
 packages:
 
-  '@alixex/ranview@0.2.1':
-    resolution: {integrity: sha512-cAzNX3+sXayjEg8TBWaWD7u6CoSYtAFJ2T4I7AJFOF9gCLMqnnhXr1nmcfudJERmQ1wJ3T36PtT92nRME3/SOQ==}
+  '@alixex/ranview@0.2.2':
+    resolution: {integrity: sha512-PNzlwvi44s2mN7fbUd4BaVxt4X3SGHRkHn6+90XtM0VywBQyd51xWhWurzDPodiXgDWC6xsyc8BQJRUupsi04Q==}
     engines: {node: '>=24.0.0'}
 
   '@anthropic-ai/sdk@0.106.0':
@@ -874,8 +874,8 @@ packages:
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
 
-  dompurify@3.4.16:
-    resolution: {integrity: sha512-sqo+pNp3qRhCIpbgRi1y8Tgk27Bo2Ry7w0dC1NBeNTdZChWjz9Xb/KOoZbRP/R6pQZ80Qw8YhXw13hWWBbMRnQ==}
+  dompurify@3.4.17:
+    resolution: {integrity: sha512-B/pSlYVHQ58kqISD/yDjuJ1yfzI34m1gF4lAod2bwSRhiN4K5Cl3H8Af7hqB2PmTL911tdEudnnXn5FnhRoz0w==}
 
   entities@8.1.0:
     resolution: {integrity: sha512-kxL7msIffSuh9aaFAMD7rxAIuTRMAHMeBtgHW2yUdWw732ZNh4MehkF2gdjvtdmikkaIP9bFDDJOPlsvm7avrA==}
@@ -1173,12 +1173,12 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  ranui@0.5.1:
-    resolution: {integrity: sha512-kvqSdrCbLOjfIuqiGNUv1lBl01VTLRy0UMr65mX1GLy8uSUmN5dy+DUZ3eQEgysfGnbRiO9Speni5PcC38NzuQ==}
+  ranui@0.5.2:
+    resolution: {integrity: sha512-NMmDNiggT5In+u+syj27mnsPeG7cN+nUrNo47mHbggxBdV6eDI1YNQLjV5D/ZrK8wHPL8I1jQq5EfXzk+d6JeA==}
     engines: {node: '>=24.0.0'}
 
-  ranuts@0.5.1:
-    resolution: {integrity: sha512-ohiVcoyRPouymZmzpJ/sawJ6QtZh66Lypx/n8l8Qt7y7QDGP3Y4+JWX7by+Yx7e0sEDgrz/qx6qk9rVbOEZomA==}
+  ranuts@0.5.2:
+    resolution: {integrity: sha512-Ab95R9EzviMP5MdhpkxDpOCRptA8MmKMhAJ6BqOhiqTCqE+YaDmqapDQ5POOOlIEsygJgij/UulMdC4ub4fqpw==}
     engines: {node: '>=24.0.0'}
 
   regex-recursion@6.0.2:
@@ -1436,9 +1436,9 @@ packages:
 
 snapshots:
 
-  '@alixex/ranview@0.2.1':
+  '@alixex/ranview@0.2.2':
     dependencies:
-      ranuts: 0.5.1
+      ranuts: 0.5.2
 
   '@anthropic-ai/sdk@0.106.0':
     dependencies:
@@ -1945,7 +1945,7 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  dompurify@3.4.16:
+  dompurify@3.4.17:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -2237,17 +2237,17 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  ranui@0.5.1:
+  ranui@0.5.2:
     dependencies:
-      '@alixex/ranview': 0.2.1
-      dompurify: 3.4.16
+      '@alixex/ranview': 0.2.2
+      dompurify: 3.4.17
       marked: 18.0.9
-      ranuts: 0.5.1
+      ranuts: 0.5.2
       remend: 1.3.0
       shiki: 4.4.3
       temml: 0.13.4
 
-  ranuts@0.5.1:
+  ranuts@0.5.2:
     dependencies:
       jschardet: 3.1.4
 
