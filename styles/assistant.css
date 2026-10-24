@@ -443,10 +443,13 @@ body.agent-panel-resizing #app iframe {
 /* (Review / quote / clear moved into ChatView's `.cui-actions` slot above the
    input; the old top toolbar is gone.) */
 
-/* ranui renders select dropdowns as a body-level <r-dropdown> portal at z-index
-   10, which the agent panel (z-index 10000) would otherwise cover — lift it. */
+/* ranui renders select dropdowns and popovers as body-level <r-dropdown>
+   portals, which the agent panel (z-index 10000) would otherwise cover. Since
+   ranui 0.5.1 the floating controller writes the layer inline as
+   var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100)), so lift it
+   through that property; a plain z-index rule loses to the inline style. */
 r-dropdown[role='listbox'] {
-  z-index: 100000;
+  --ran-dropdown-host-z-index: 100000;
 }
 
 /* r-select / r-button below render themselves — host carries layout only. */
@@ -1604,9 +1607,9 @@ r-dropdown[role='listbox'] {
   --ran-popover-host-display: block;
   --ran-popover-content-padding: var(--ran-space-3);
 }
-/* Match the existing select portal layer above the assistant panel. */
+/* Match the select portal layer above the assistant panel (see r-dropdown above). */
 .agent-speech-popover {
-  z-index: 100000;
+  --ran-dropdown-host-z-index: 100000;
 }
 .agent-speech-hint {
   box-sizing: border-box;
