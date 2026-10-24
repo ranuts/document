@@ -23,7 +23,7 @@ import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 ## What each module is for
 
 - **document-utils** — pure helpers: classify a file (`getDocumentType`), MIME from
-  extension, the deployment `BASE_PATH` (handles `/document/` on GitHub Pages vs `/`),
+  extension and back (`getDocumentMimeType` / `getDocumentExtension`), the deployment `BASE_PATH` (handles `/document/` on GitHub Pages vs `/`),
   and `parseReadonly` for the `?readonly` query flag.
 - **document-types** — shared interfaces, incl. x2t/Emscripten module shapes.
 - **i18n** — `t(key)` over the 7 complete shell locales in `SHELL_LOCALES`
