@@ -55,9 +55,9 @@ export {
   beginAutosaveSession,
   clearDocumentSession,
   getActiveDocumentId,
-  isAutosaveEnabled,
   setAutosaveEnabled,
   stopAutosaveSession,
 } from './autosave';
+export { isAutosaveEnabled } from './preferences';
 export { clearAllHistory, deleteDoc, getLatestSnapshot, listDocs } from './store';
 export type { HistoryDoc } from './types';

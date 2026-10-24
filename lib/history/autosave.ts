@@ -19,13 +19,13 @@
  * never clear the unsaved-changes warning, and never touch the user's file.
  */
 import { t } from '@ranuts/shared/i18n';
-import { localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
 import { requestSaveDocument } from '../onlyoffice/save-stream';
 import { getReadonlyMode } from '../onlyoffice/readonly';
 import { getLastEditAt, hasUnsavedChanges } from '../unsaved-guard';
 import { isEmbedMode } from '../embed-mode';
 import { captureSavePoint, type SavePoint } from '../onlyoffice/save-point';
 import { extensionOf, markOpened, putSnapshot } from './store';
+import { isAutosaveEnabled, writeAutosavePreference } from './preferences';
 import type { HistoryDoc, HistoryOrigin } from './types';
 
 /**
@@ -65,8 +65,6 @@ export const TICK_MS = 15_000;
 export const IDLE_GRACE_MS = 2_000;
 /** Consecutive export failures before this session gives up. */
 export const MAX_CONSECUTIVE_FAILURES = 3;
-
-const AUTOSAVE_PREF_KEY = 'document-autosave-enabled';
 
 export interface AutosaveSessionInput {
   /**
@@ -110,15 +108,8 @@ export function shouldSnapshot(state: SnapshotDecision): boolean {
   return state.now - state.lastEditAt >= IDLE_GRACE_MS;
 }
 
-export function isAutosaveEnabled(): boolean {
-  // Default on. Off by default would mean the feature does not exist for
-  // almost everyone, and the loss it prevents happens before anyone goes
-  // looking through settings.
-  return localStorageGetItem(AUTOSAVE_PREF_KEY) !== 'false';
-}
-
 export function setAutosaveEnabled(enabled: boolean): void {
-  localStorageSetItem(AUTOSAVE_PREF_KEY, enabled ? 'true' : 'false');
+  writeAutosavePreference(enabled);
   if (!enabled) stopAutosaveSession();
 }
 

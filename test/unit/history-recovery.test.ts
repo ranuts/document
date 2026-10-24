@@ -8,7 +8,8 @@ vi.mock('../../lib/document', () => ({ openLocalFile }));
 
 import { DB_NAME, resetHistoryDbForTests } from '../../lib/history/db';
 import { putSnapshot, resetHistoryClockForTests } from '../../lib/history/store';
-import { formatRelativeTime, restoreDocument } from '../../lib/history/recovery';
+import { restoreDocument } from '../../lib/history/recovery';
+import { formatRelativeTime } from '../../lib/history/relative-time';
 
 async function wipe(): Promise<void> {
   resetHistoryDbForTests();

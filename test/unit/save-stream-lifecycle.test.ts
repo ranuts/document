@@ -7,7 +7,6 @@ vi.mock('../../lib/history/autosave', () => ({
   getActiveDocumentId: () => 'save-document',
   clearDocumentSession: vi.fn(),
   beginAutosaveSession: vi.fn(),
-  isAutosaveEnabled: () => true,
   setAutosaveEnabled: vi.fn(),
   stopAutosaveSession: vi.fn(),
   cancelPendingSnapshot: vi.fn(),
