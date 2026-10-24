@@ -78,7 +78,13 @@ test('the select element is defined once the assistant opens, without being in s
   await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
   expect(await page.evaluate(() => Boolean(customElements.get('r-select')))).toBe(false);
   await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
-  await page.locator('.agent-panel-settings-toggle').click();
+  // With no saved model the panel checks the model cache and may switch to
+  // settings by itself; the gear toggles, so only press it when it would open them.
+  const panel = page.locator('.agent-runtime-panel');
+  await expect(page.locator('.agent-model-cache > summary')).toContainText('(0)');
+  if ((await panel.getAttribute('data-view')) !== 'settings')
+    await page.locator('.agent-panel-settings-toggle').click();
+  await expect(panel).toHaveAttribute('data-view', 'settings');
   await expect.poll(() => page.evaluate(() => Boolean(customElements.get('r-select')))).toBe(true);
   await expect(page.locator('.agent-panel-settings r-select:visible').first()).toBeVisible();
 });
