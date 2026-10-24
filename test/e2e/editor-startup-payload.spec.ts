@@ -1,18 +1,24 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from './lib/l0';
 
 // Code that only serves an optional, later interaction must not ride on the
-// scripts every editor load fetches before it can run. Each probe is a string
-// found only inside the module in question: an error message thrown in
-// lib/agent-plugin/tools.ts, and an element the PWA library defines for itself.
-const DEFERRED = [
-  { owner: 'agent tool layer (lib/agent-plugin/tools.ts)', probe: 'replace_selection requires a nonempty string' },
-  { owner: '@khmyznikov/pwa-install', probe: 'pwa-bottom-sheet' },
-];
+// scripts a page fetches before it can run. Each probe is a string found only
+// inside the module in question.
+const AGENT_TOOLS = {
+  owner: 'agent tool layer (lib/agent-plugin/tools.ts)',
+  probe: 'replace_selection requires a nonempty string',
+};
+const PWA_INSTALL = { owner: '@khmyznikov/pwa-install', probe: 'pwa-bottom-sheet' };
+// jschardet's charset table; ranuts keeps it out of str.ts since 0.5.1, and
+// nothing in this app sniffs charsets statistically.
+const JSCHARDET = { owner: 'jschardet', probe: 'windows-1255' };
+// An error the save pipeline (lib/onlyoffice/save-stream.ts) raises: the
+// history page lists and reopens records, it never saves through the editor.
+const EDITOR_STACK = { owner: 'editor save pipeline', probe: 'Save conversion failed' };
 
-test('the editor startup scripts leave the agent tools and the PWA prompt out', async ({ page }) => {
-  await page.goto('/editor?new=docx');
-  // Vite writes the entry and its whole static import graph into the HTML as
-  // the module script plus modulepreload links: that is the startup payload.
+/** Vite writes an entry and its whole static import graph into the HTML as the
+ *  module script plus modulepreload links: that is the startup payload. */
+async function startupScripts(page: Page): Promise<string[]> {
   const urls = await page.evaluate(() =>
     [
       ...document.querySelectorAll<HTMLScriptElement | HTMLLinkElement>(
@@ -21,10 +27,24 @@ test('the editor startup scripts leave the agent tools and the PWA prompt out', 
     ].map((node) => (node instanceof HTMLScriptElement ? node.src : node.href)),
   );
   expect(urls.length).toBeGreaterThan(0);
-  for (const url of urls) {
+  return urls;
+}
+
+async function expectAbsent(page: Page, deferred: Array<{ owner: string; probe: string }>) {
+  for (const url of await startupScripts(page)) {
     const body = await (await page.request.get(url)).text();
-    for (const { owner, probe } of DEFERRED) expect(body.includes(probe), `${owner} is in ${url}`).toBe(false);
+    for (const { owner, probe } of deferred) expect(body.includes(probe), `${owner} is in ${url}`).toBe(false);
   }
+}
+
+test('the editor startup scripts leave the agent tools, the PWA prompt and jschardet out', async ({ page }) => {
+  await page.goto('/editor?new=docx');
+  await expectAbsent(page, [AGENT_TOOLS, PWA_INSTALL, JSCHARDET]);
+});
+
+test('the history page startup scripts leave the editor stack and jschardet out', async ({ page }) => {
+  await page.goto('/history');
+  await expectAbsent(page, [EDITOR_STACK, JSCHARDET]);
 });
 
 test('the PWA install element is still defined and mounted after startup', async ({ page }) => {
