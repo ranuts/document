@@ -45,6 +45,7 @@ pnpm run test:coverage           # 带覆盖率的单元测试
 pnpm run test:e2e                # E2E 测试（Playwright，自动 build+preview）——不含 @serial
 pnpm run test:e2e:serial         # 时序预算用例（@serial），单 worker 独占跑；本地要跑全须两条都跑
 pnpm run test:e2e:docker         # 同套 E2E 跑在生产 Docker 镜像上（bin/test-e2e-docker.sh）
+pnpm run clean:e2e               # 删掉 E2E_PORT 隔离跑留下的 dist-e2e-* / test-results-* / playwright-report-*
 CORPUS_DIR=<本地语料目录> pnpm run test:e2e:corpus   # 真实文档回归矩阵（本地/夜间，语料不入库）
 pnpm run lint                    # lint:ts + lint:docker
 ```
@@ -222,7 +223,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 单一配置 `playwright.config.ts`（端口 4173，webServer 自动 build + preview，
 不需要手动先 build；`E2E_PORT=<port>` 另起一套并隔离 `dist-e2e-<port>/` 与
 `test-results-<port>/`，`E2E_BASE_URL=<站点>` 则不起本地服务、直接打线上）。
-`test/e2e/` 现有 55 个 spec，下面先说三条主线，再给全量清单：
+`test/e2e/` 现有 95 个 spec，下面先说三条主线，再给全量清单：
 
 - `app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟
 - `embed-api.spec.ts` — embed postMessage 协议
@@ -260,7 +261,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 
 | 面向              | spec                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）                                                                                                                                                                                                                                                                                                 |
+| 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）、`editor-startup-payload`（启动脚本不含 agent 工具层与 PWA 安装组件）                                                                                                                                                                                                                           |
 | embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）、`embed-dirty-state`（未保存标志：保存后的编辑要再报，docx/xlsx/pptx）                                                                                                                                                                                                                                                                                                               |
 | 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读）                                                                                                                                 |
 | 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 14：x2t 跑在 worker 里、流式实例化、闲置后连堆一起回收）、`offline-seam`（vendor 的进程内服务端应答器 + x2t 的唯一接缝 + 跨 realm 安全）、`plugin-availability`（插件框架经 `editorConfig.plugins` 可达）、`font-picker-scroll`（字体列表滑到底不炸，#218）、`open-url-failure`（`?src=` 取不到文件时给的是本地化 toast 而不是 alert）、`bad-image-url-locale`（守卫 13） |
@@ -732,7 +733,9 @@ WebMCP 让页面向浏览器内的 AI Agent 注册结构化工具，Agent 直接
 5. **工具层是共用的**。`get_document_text` 直接复用
    `lib/agent-plugin/tools.ts` 的实现（`@ranuts/agent-core` 的类型注释里写明
    工具是 transport-agnostic 的），不要在 web-mcp 里另写一份。
-   `editor-bridge.ts` 零 import，所以复用不带来 bundle 成本。
+   但 `tools.ts` 自己会拉进整层 agent 工具和 `marked`，所以 web-mcp 只在 handler 里
+   `import()` 它——改回顶层 import 会让每次打开编辑器多下 ~107 KB，
+   `editor-startup-payload.spec.ts` 会红。
 
 **已知缺口（实测 v9，见 docs/explorations/2026-08-21-webmcp-completion.md）**：
 引擎只对文字文档提供全文读取，表格和演示文稿返回空字符串。空字符串是有歧义的
