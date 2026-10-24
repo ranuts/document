@@ -4,6 +4,9 @@ import { ChatView } from '@ranuts/chat-ui';
 import type { EditorApi } from '../../lib/agent-plugin/editor-bridge';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createAgentPanel, setAgentPanelOpen, setAgentPanelEnabled } from '../../lib/agent-plugin/ui/panel';
+import { loadAllLocales } from './lib/locales';
+
+await loadAllLocales();
 HTMLElement.prototype.scrollTo = vi.fn();
 const editorState = vi.hoisted(() => ({ api: null as null | Partial<EditorApi> }));
 vi.mock('@ranuts/agent-core/llm/local', () => ({

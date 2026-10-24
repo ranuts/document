@@ -1,11 +1,5 @@
 import type { I18nMessages } from './i18n/types';
-import { zhCN } from './i18n/messages/zh-CN';
 import { en } from './i18n/messages/en';
-import { ja } from './i18n/messages/ja';
-import { ko } from './i18n/messages/ko';
-import { de } from './i18n/messages/de';
-import { es } from './i18n/messages/es';
-import { pt } from './i18n/messages/pt';
 import { getAllQueryString, getCookie, localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
 
 /**
@@ -193,29 +187,48 @@ export function resolveEditorLocale(tag: string | null | undefined): string | nu
 export type { I18nMessages } from './i18n/types';
 
 /**
- * Which languages promise a complete table.
+ * English is the only table in the startup bundle: it is the per-key fallback
+ * every other locale needs anyway. The other six are separate chunks, and the
+ * module awaits the active one at the bottom of this file, so nothing that
+ * imports `t()` runs before its table is in place.
  *
- * en and zh-CN are the reference pair: every key exists in both, so a new UI
- * string is a two-language change rather than an eight-language one, and a
- * missing translation elsewhere shows in English rather than as a raw key.
- * The rest are complete too today; the type stays Partial so that staying
- * complete is a choice the i18n tests enforce rather than one the compiler
- * makes impossible to relax.
+ * en and zh-CN are the reference pair: every key exists in both (both files
+ * are typed `I18nMessages`), so a new UI string is a two-language change, and
+ * a missing translation elsewhere shows in English rather than as a raw key.
  */
-const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> = {
-  [LanguageCode.ZH]: zhCN,
-  [LanguageCode.EN]: en,
+const loaders: Record<Exclude<Language, LanguageCode.EN>, () => Promise<Partial<I18nMessages>>> = {
+  [LanguageCode.ZH]: () => import('./i18n/messages/zh-CN').then((m) => m.zhCN),
+  [LanguageCode.JA]: () => import('./i18n/messages/ja').then((m) => m.ja),
+  [LanguageCode.KO]: () => import('./i18n/messages/ko').then((m) => m.ko),
+  [LanguageCode.DE]: () => import('./i18n/messages/de').then((m) => m.de),
+  [LanguageCode.ES]: () => import('./i18n/messages/es').then((m) => m.es),
+  [LanguageCode.PT]: () => import('./i18n/messages/pt').then((m) => m.pt),
 };
 
-const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.EN>, Partial<I18nMessages>> = {
-  [LanguageCode.JA]: ja,
-  [LanguageCode.KO]: ko,
-  [LanguageCode.DE]: de,
-  [LanguageCode.ES]: es,
-  [LanguageCode.PT]: pt,
-};
+const messages: Partial<Record<Language, Partial<I18nMessages>>> = { [LanguageCode.EN]: en };
+const pending = new Map<Language, Promise<void>>();
 
-const messages: Record<Language, Partial<I18nMessages>> = { ...completeMessages, ...partialMessages };
+/**
+ * Fetch a locale's table; a no-op once it is loaded. Rejects when the chunk
+ * cannot be fetched. Until then `getMessages(lang)` and `t()` read English.
+ */
+export function loadLocale(lang: Language): Promise<void> {
+  if (messages[lang] || lang === LanguageCode.EN) return Promise.resolve();
+  let load = pending.get(lang);
+  if (!load) {
+    load = loaders[lang]().then(
+      (table) => {
+        messages[lang] = table;
+      },
+      (error: unknown) => {
+        pending.delete(lang);
+        throw error;
+      },
+    );
+    pending.set(lang, load);
+  }
+  return load;
+}
 
 /**
  * Values for a message's `{name}` placeholders.
@@ -289,19 +302,29 @@ class I18n {
   }
 
   /**
-   * Set language
+   * Set language. Takes effect at once; strings of a table that is not loaded
+   * yet read in English until it arrives, then `languagechange` fires again.
    */
   setLanguage(lang: Language): void {
     if ((SHELL_LOCALES as readonly string[]).includes(lang)) {
+      if (!messages[lang] && !pending.has(lang)) {
+        void loadLocale(lang).then(
+          () => this.currentLanguage === lang && this.announce(lang),
+          () => undefined,
+        );
+      }
       this.currentLanguage = lang;
       // An explicit shell choice also decides the editor language (falling back
       // to English when the vendor ships no locale for it, e.g. fa).
       this.editorLocale = resolveEditorLocale(lang) || OnlyOfficeLanguageCode.EN;
       localStorageSetItem('document-lang', lang);
-      // Trigger language change event
-      // eslint-disable-next-line n/no-unsupported-features/node-builtins
-      window.dispatchEvent(new CustomEvent('languagechange', { detail: { language: lang } }));
+      this.announce(lang);
     }
+  }
+
+  private announce(lang: Language): void {
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    window.dispatchEvent(new CustomEvent('languagechange', { detail: { language: lang } }));
   }
 
   /**
@@ -309,7 +332,7 @@ class I18n {
    */
   t(key: keyof I18nMessages, vars?: TemplateVars): string {
     // Partial locales fall back to English key by key (see `messages`).
-    const text = messages[this.currentLanguage]?.[key] || completeMessages[LanguageCode.EN][key] || key;
+    const text = messages[this.currentLanguage]?.[key] || en[key] || key;
     return vars ? interpolate(text, vars) : text;
   }
 
@@ -317,7 +340,7 @@ class I18n {
    * Get all messages
    */
   getMessages(language: Language = this.currentLanguage): I18nMessages {
-    return { ...completeMessages[LanguageCode.EN], ...messages[language] };
+    return { ...en, ...messages[language] };
   }
 
   /**
@@ -335,6 +358,14 @@ class I18n {
 
 // Export singleton
 export const i18n = new I18n();
+
+// Hold every importer until the active table is in. A chunk that fails to load
+// must not keep the page from starting: the shell then reads in English.
+try {
+  await loadLocale(i18n.getLanguage());
+} catch {
+  // English is already in place.
+}
 
 // Export convenience functions
 export const t = (key: keyof I18nMessages, vars?: TemplateVars): string => i18n.t(key, vars);

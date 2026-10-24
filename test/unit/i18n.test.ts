@@ -8,6 +8,9 @@ import {
   t,
   withLocale,
 } from '@ranuts/shared/i18n';
+import { loadAllLocales } from './lib/locales';
+
+await loadAllLocales();
 
 describe('i18n', () => {
   it('carries an explicit English choice into the editor despite a previous Chinese preference', async () => {
@@ -296,5 +299,54 @@ describe('editor UI locale (getOnlyOfficeLang) follows the visitor beyond en/zh'
     } finally {
       spy.mockRestore();
     }
+  });
+});
+
+describe('only the active table is loaded at startup', () => {
+  afterEach(() => {
+    window.history.pushState({}, '', '/');
+    localStorage.clear();
+    vi.doUnmock('../../packages/shared/src/i18n/messages/ja');
+  });
+
+  it('a page opened in Japanese reads Japanese as soon as the module resolves', async () => {
+    window.history.pushState({}, '', '/?locale=ja');
+    vi.resetModules();
+    const m = await import('@ranuts/shared/i18n');
+    expect(m.t('uploadDocument')).not.toBe('View/Edit Document');
+    expect(m.t('uploadDocument')).toBeTruthy();
+  });
+
+  it('switching to a table not loaded yet reads English, then announces the translation', async () => {
+    vi.resetModules();
+    const m = await import('@ranuts/shared/i18n');
+    const announced = new Promise<void>((resolve) => {
+      let calls = 0;
+      const onChange = () => {
+        calls += 1;
+        if (calls === 2) {
+          window.removeEventListener('languagechange', onChange);
+          resolve();
+        }
+      };
+      window.addEventListener('languagechange', onChange);
+    });
+    m.setLanguage(LanguageCode.DE);
+    expect(m.getLanguage()).toBe(LanguageCode.DE);
+    expect(m.t('uploadDocument')).toBe('View/Edit Document');
+    await announced;
+    expect(m.t('uploadDocument')).not.toBe('View/Edit Document');
+  });
+
+  it('a table that cannot be fetched leaves the page starting in English', async () => {
+    vi.doMock('../../packages/shared/src/i18n/messages/ja', () => {
+      throw new Error('chunk failed');
+    });
+    window.history.pushState({}, '', '/?locale=ja');
+    vi.resetModules();
+    const m = await import('@ranuts/shared/i18n');
+    expect(m.getLanguage()).toBe(LanguageCode.JA);
+    expect(m.t('uploadDocument')).toBe('View/Edit Document');
+    await expect(m.loadLocale(LanguageCode.JA)).rejects.toThrow();
   });
 });
