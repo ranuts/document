@@ -15,6 +15,9 @@ const JSCHARDET = { owner: 'jschardet', probe: 'windows-1255' };
 // An error the save pipeline (lib/onlyoffice/save-stream.ts) raises: the
 // history page lists and reopens records, it never saves through the editor.
 const EDITOR_STACK = { owner: 'editor save pipeline', probe: 'Save conversion failed' };
+// ranuts' full MIME table. ranui stopped holding it in 0.5.2, and the app looks
+// MIME types up in its own document table (getDocumentExtension).
+const MIME_TABLE = { owner: 'ranuts mimeType table', probe: 'application/vnd.lotus-approach' };
 // ranui's select; only the assistant renders one, and it imports the element itself.
 const RANUI_SELECT = { owner: 'ranui select', probe: 'ran-select-dropdown-option' };
 // Two message tables the page does not speak: only English and the active
@@ -47,12 +50,12 @@ async function expectAbsent(page: Page, deferred: Array<{ owner: string; probe: 
 
 test('the editor startup scripts leave optional modules and other locales out', async ({ page }) => {
   await page.goto('/editor?new=docx');
-  await expectAbsent(page, [AGENT_TOOLS, PWA_INSTALL, JSCHARDET, RANUI_SELECT, ...OTHER_LOCALES]);
+  await expectAbsent(page, [AGENT_TOOLS, PWA_INSTALL, JSCHARDET, MIME_TABLE, RANUI_SELECT, ...OTHER_LOCALES]);
 });
 
 test('the history page startup scripts leave the editor stack, jschardet and other locales out', async ({ page }) => {
   await page.goto('/history');
-  await expectAbsent(page, [EDITOR_STACK, JSCHARDET, ...OTHER_LOCALES]);
+  await expectAbsent(page, [EDITOR_STACK, JSCHARDET, MIME_TABLE, ...OTHER_LOCALES]);
 });
 
 test('a page opened in another language renders that language without reloading', async ({ page }) => {
