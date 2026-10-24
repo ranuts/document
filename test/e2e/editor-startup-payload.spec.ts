@@ -15,6 +15,8 @@ const JSCHARDET = { owner: 'jschardet', probe: 'windows-1255' };
 // An error the save pipeline (lib/onlyoffice/save-stream.ts) raises: the
 // history page lists and reopens records, it never saves through the editor.
 const EDITOR_STACK = { owner: 'editor save pipeline', probe: 'Save conversion failed' };
+// ranui's select; only the assistant renders one, and it imports the element itself.
+const RANUI_SELECT = { owner: 'ranui select', probe: 'ran-select-dropdown-option' };
 // Two message tables the page does not speak: only English and the active
 // locale belong at startup (packages/shared/src/i18n.ts awaits the latter).
 const OTHER_LOCALES = [
@@ -43,11 +45,9 @@ async function expectAbsent(page: Page, deferred: Array<{ owner: string; probe: 
   }
 }
 
-test('the editor startup scripts leave the agent tools, the PWA prompt, jschardet and other locales out', async ({
-  page,
-}) => {
+test('the editor startup scripts leave optional modules and other locales out', async ({ page }) => {
   await page.goto('/editor?new=docx');
-  await expectAbsent(page, [AGENT_TOOLS, PWA_INSTALL, JSCHARDET, ...OTHER_LOCALES]);
+  await expectAbsent(page, [AGENT_TOOLS, PWA_INSTALL, JSCHARDET, RANUI_SELECT, ...OTHER_LOCALES]);
 });
 
 test('the history page startup scripts leave the editor stack, jschardet and other locales out', async ({ page }) => {
@@ -66,4 +66,16 @@ test('the PWA install element is still defined and mounted after startup', async
   await page.goto('/editor?new=docx');
   await expect(page.locator('pwa-install#pwa-install')).toBeAttached({ timeout: 15_000 });
   await expect.poll(() => page.evaluate(() => Boolean(customElements.get('pwa-install')))).toBe(true);
+});
+
+test('the select element is defined once the assistant opens, without being in startup', async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.addInitScript(() => localStorage.setItem('document-assistant-enabled', 'true'));
+  await page.goto('/editor?new=docx&locale=en');
+  await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
+  expect(await page.evaluate(() => Boolean(customElements.get('r-select')))).toBe(false);
+  await page.frameLocator('iframe[name="frameEditor"]').locator('.agent-sidebar-entry').click();
+  await page.locator('.agent-panel-settings-toggle').click();
+  await expect.poll(() => page.evaluate(() => Boolean(customElements.get('r-select')))).toBe(true);
+  await expect(page.locator('.agent-panel-settings r-select:visible').first()).toBeVisible();
 });
