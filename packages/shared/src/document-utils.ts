@@ -66,6 +66,11 @@ export function getDocumentMimeType(fileNameOrExt: string): string {
   return DOCUMENT_MIME_MAP[ext] || 'application/octet-stream';
 }
 
+/** The document extension a MIME type names; '' outside the supported document formats. */
+export function getDocumentExtension(mimeType: string): string {
+  return Object.keys(DOCUMENT_MIME_MAP).find((ext) => DOCUMENT_MIME_MAP[ext] === mimeType) ?? '';
+}
+
 /**
  * Document type mapping
  */

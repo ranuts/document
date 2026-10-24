@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { DOCUMENT_TYPE_MAP, getBasePath, getDocumentType, parseReadonly } from '@ranuts/shared/document-utils';
+import {
+  DOCUMENT_TYPE_MAP,
+  getBasePath,
+  getDocumentExtension,
+  getDocumentMimeType,
+  getDocumentType,
+  parseReadonly,
+} from '@ranuts/shared/document-utils';
 
 describe('document utils', () => {
   it('classifies common document extensions', () => {
@@ -19,6 +26,18 @@ describe('document utils', () => {
     ['unknown', null],
   ])('classifies supported import format %s for editor and tool routing', (extension, kind) => {
     expect(getDocumentType(extension)).toBe(kind);
+  });
+
+  it.each(['docx', 'doc', 'odt', 'rtf', 'txt', 'pdf', 'xlsx', 'xls', 'ods', 'csv', 'pptx', 'ppt', 'odp'])(
+    'names %s back from its own MIME type',
+    (extension) => {
+      expect(getDocumentExtension(getDocumentMimeType(extension))).toBe(extension);
+    },
+  );
+
+  it('names no extension for a MIME type outside the document formats', () => {
+    expect(getDocumentExtension('image/png')).toBe('');
+    expect(getDocumentExtension('')).toBe('');
   });
 
   it('parses the readonly query value for preview mode', () => {
