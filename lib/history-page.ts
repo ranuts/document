@@ -20,10 +20,10 @@ import '../styles/history.css';
 import { saveFileToDisk } from 'ranuts/utils';
 import { applyDocumentLanguage, getLanguage, localeHomePath, t, withLocale } from '@ranuts/shared/i18n';
 import { getDocumentMimeType } from '@ranuts/shared/document-utils';
-import { formatRelativeTime } from './history/recovery';
+import { formatRelativeTime } from './history/relative-time';
 import { clearAllHistory, deleteDoc, getLatestSnapshot, historyUsage, listDocs, pruneExpired } from './history/store';
 import { stashPendingFile } from './pending-open';
-import { isAutosaveEnabled, setAutosaveEnabled } from './history/autosave';
+import { isAutosaveEnabled, writeAutosavePreference } from './history/preferences';
 import { daysUntilExpiry, hasUnsavedWork, type HistoryDoc } from './history/types';
 import { confirmDialog } from './confirm-dialog';
 
@@ -280,7 +280,7 @@ function buildAutosaveToggle(refresh: () => void): HTMLElement {
     .attr('type', 'checkbox')
     .attr('role', 'switch')
     .on('change', (event: Event) => {
-      setAutosaveEnabled((event.target as HTMLInputElement).checked);
+      writeAutosavePreference((event.target as HTMLInputElement).checked);
       refresh();
     })
     .build() as HTMLInputElement;
