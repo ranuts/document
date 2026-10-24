@@ -1,4 +1,4 @@
-# Startup payload, round four: ranui select, and why the MIME table stays
+# Startup payload, round four: ranui select and the MIME table
 
 Follow-up to `2026-10-24-active-locale-only.md`. After the locale split, two
 more startup items were found by attributing startup bytes to their source
@@ -6,6 +6,22 @@ packages through the sourcemaps. ranui's `select` is about 7.6 KB gzip on its
 own and is on the editor page. ranuts' full MIME table
 (`ranuts/dist/src/utils/mimeType.js`, 30 KB raw / 6.8 KB gzip) is on both
 pages.
+
+## Result
+
+The static startup graph, summed per chunk from `.vite/manifest.json`
+(gzip -9):
+
+| Page       | Before (main `ee33a4ef`) | After                   |
+| ---------- | ------------------------ | ----------------------- |
+| `/editor`  | 337 KB raw / 105 KB gzip | 241 KB raw / 84 KB gzip |
+| `/history` | 198 KB raw / 61 KB gzip  | 169 KB raw / 55 KB gzip |
+
+Measured step by step on the same base:
+
+- Removing the select import takes the editor from 105 KB to 90 KB gzip.
+- Upgrading ranui to 0.5.2 takes history from 62 KB to 55 KB gzip.
+- Replacing `getExtensions` takes the editor from 90 KB to 84 KB gzip.
 
 ## ranui select: moved off the editor startup
 
@@ -18,32 +34,26 @@ now registers when the assistant panel loads, which is the first use.
 
 The saving is larger than the select chunk alone. ranui's floating controller
 and other helpers that only select needed leave the startup graph with it.
+History does not import `index.ts`, so its bytes stay the same. Its gzip sum
+still grows by about 1 KB at this step, only because Rolldown now emits ranui's
+button as a file of its own, and each file is compressed separately.
 
-| Page       | Before (PR #293)         | After                   |
-| ---------- | ------------------------ | ----------------------- |
-| `/editor`  | 337 KB raw / 105 KB gzip | 271 KB raw / 90 KB gzip |
-| `/history` | 198 KB raw / 61 KB gzip  | 199 KB raw / 62 KB gzip |
-
-History does not import `index.ts`, so its bytes stay the same (+0.2 KB raw).
-The gzip sum grows by about 1 KB only because Rolldown now emits ranui's button
-as a file of its own, and each file is compressed separately.
-
-## The MIME table: not removable from this repo
+## The MIME table: held by ranui, then by our own fallback
 
 `packages/shared/src/document-utils.ts` was the expected holder, through
 `getMimeTypeFromExtension` → `getMime`. That function had no production caller
 (the final `rg` returned zero outside `docs/` and an unrelated method of the
 same name in the vendored `x2t_helper.js`). Only its unit tests used it, and it
-was deleted.
+was deleted. That alone saved nothing.
 
-The table stayed, in both pages. The cause is ranui's packaged
-`dist/utils-*.js`, which builds a namespace object over all of ranui's utils,
-including its own `getMimeTypeFromExtension`
+The real holder was in ranui 0.5.1's packaged `dist/utils-*.js`, which built a
+namespace object over all of ranui's utils, including an uncalled
+`getMimeTypeFromExtension` of its own
 (`getMime(\`.${ext}\`) || 'application/octet-stream'`). A namespace object
 references every member, so a bundler cannot drop any of them. Minimal Vite
-builds in this repo confirm it:
+builds in this repo confirmed it:
 
-| Entry                                  | MIME table in output |
+| Entry (ranui 0.5.1)                    | MIME table in output |
 | -------------------------------------- | -------------------- |
 | `import 'ranui/button'`                | no                   |
 | `import 'ranui/icon'` / `ranui/modal`  | no                   |
@@ -51,25 +61,52 @@ builds in this repo confirm it:
 | `import 'ranui/message'`               | yes                  |
 | `saveFileToDisk` / `createSignal` only | no                   |
 
-Both pages need `ranui/input` and `ranui/message`. The editor also calls
-`getExtensions(file.type)` from `lib/converter.ts` and `packages/converter` (as
-the fallback for a file with no extension), which keeps the table on the editor
-regardless of ranui. Removing it from both pages therefore needs a ranui change
-first (no namespace object over utils, or ranui's own MIME helper moved out of
-it). After that, the editor's two `getExtensions` calls can be replaced with a
-lookup derived from `DOCUMENT_MIME_MAP`. Neither is done here.
+Both pages need `ranui/input` and `ranui/message`. The function was deleted
+upstream in ranui 0.5.2 (published with ranuts 0.5.2 and ranview 0.2.2), which
+also adds size budgets for those two entries. This repo upgrades to it. The
+minimum-release-age exclusion follows ranview to 0.2.2: the install needs both
+versions listed once, because pnpm verifies the old lockfile entry before
+resolving, and then a frozen install passes with only 0.2.2. As in the 0.5.1
+upgrade, `public/ran-tokens.css` was re-synced. The IIFEs did not change.
+
+The editor also kept the table through its own code. `lib/converter.ts` and
+`packages/converter` fell back to `getExtensions(file.type)` for a file with
+an empty name. Both now call `getDocumentExtension`, which reverses
+`DOCUMENT_MIME_MAP` in `@ranuts/shared/document-utils`. For every supported
+format it returns the same extension `getExtensions` did, except `ppt`:
+`getExtensions` answered `pot`, which is not in `DOCUMENT_TYPE_MAP`.
 
 ## Tests
 
 `test/e2e/editor-startup-payload.spec.ts`:
 
-- The editor's startup scripts do not contain a string unique to ranui's select
-  chunk (`ran-select-dropdown-option`).
+- The editor's startup scripts contain no string unique to ranui's select chunk
+  (`ran-select-dropdown-option`).
 - On a fresh editor, `customElements.get('r-select')` is undefined until the
   assistant opens. After the settings view opens, it is defined and a select is
   visible.
+- Neither page's startup scripts contain a string unique to the MIME table
+  (`application/vnd.lotus-approach`).
 
-Reverse validation: with `import 'ranui/select'` back in `index.ts`, both cases
-fail (`ranui select is in …/panel-viewport-*.js`, and the element is defined
-before the assistant opens). With the import removed, all five cases in the
-spec pass.
+`test/unit/document-utils.test.ts`: every supported extension round-trips
+through `getDocumentMimeType` → `getDocumentExtension`, and a MIME type outside
+the document formats gives `''`.
+
+Reverse validation, each run against a variant with one fix undone:
+
+1. With `import 'ranui/select'` back in `index.ts`, both select cases fail
+   (`ranui select is in …/panel-viewport-*.js`, and the element is defined
+   before the assistant opens).
+2. With `getExtensions` back in `lib/converter.ts`, the editor case fails
+   (`ranuts mimeType table is in …/document-*.js`).
+3. With ranui and ranuts back at 0.5.1, both pages' cases fail
+   (`ranuts mimeType table is in …/utils-*.js`).
+
+With all fixes in place: `lint:ts`, `format:check`, all 252 unit files (6817
+tests), and 82 E2E cases pass. The E2E cases cover startup payload, entry
+paths, the filename matrix, app smoke, the main site, history, the language
+menu, assistant layout and workspace, and the embed API.
+
+One full unit run failed on two tests under machine load:
+`agent-artifacts-view` and the 8.9 s `wllama-bounded-file-read`. Both pass on
+their own, and they passed in a second full run.
