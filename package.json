@@ -18,6 +18,7 @@
     "test:e2e": "playwright test --grep-invert @serial",
     "test:e2e:serial": "playwright test --grep @serial --workers=1",
     "test:e2e:ui": "playwright test --ui",
+    "clean:e2e": "rm -rf dist-e2e-* test-results-* playwright-report-*",
     "docker:build": "docker build -t document:e2e .",
     "test:e2e:docker": "sh ./bin/test-e2e-docker.sh",
     "format": "node bin/archive-quality.mjs format",
