@@ -1,8 +1,7 @@
-import { getExtensions } from 'ranuts/utils';
 import { t } from '@ranuts/shared/i18n';
 import { X2TConverter, isHtmlDocument, preprocessDocxRuby } from '@ranuts/converter';
 import { createEditorInstance, loadEditorApi } from './onlyoffice-editor';
-import { getDocumentType } from '@ranuts/shared/document-utils';
+import { getDocumentExtension, getDocumentType } from '@ranuts/shared/document-utils';
 
 // Export types
 export type {
@@ -42,7 +41,7 @@ export async function handleDocumentOperation(options: {
     await loadEditorApi();
     if (options.isCurrent && !options.isCurrent()) throw new DOMException('Document open superseded', 'AbortError');
     const { isNew, fileName, file, readonly = false } = options;
-    const fileType = fileName.split('.').pop() || getExtensions(file?.type || '')[0] || '';
+    const fileType = fileName.split('.').pop() || getDocumentExtension(file?.type || '');
     const _docType = getDocumentType(fileType);
     // The type the editor is asked to open as; differs from the file's own
     // extension only for the CSV case below.

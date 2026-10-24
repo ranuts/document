@@ -1,11 +1,11 @@
-import { createObjectURL, getExtensions, isZipContainer, scriptOnLoad } from 'ranuts/utils';
+import { createObjectURL, isZipContainer, scriptOnLoad } from 'ranuts/utils';
 import type {
   BinConversionResult,
   ConversionResult,
   DocumentType,
   EmscriptenModule,
 } from '@ranuts/shared/document-types';
-import { BASE_PATH, DOCUMENT_TYPE_MAP } from '@ranuts/shared/document-utils';
+import { BASE_PATH, DOCUMENT_TYPE_MAP, getDocumentExtension } from '@ranuts/shared/document-utils';
 import { extractDocxMediaUrls } from './docx-zip';
 import { MIME_MAP, hasEditorBinSignature, saveFileToDisk } from './file-meta';
 import { canStreamWasm, fetchWasmResponse, x2tInstantiateError } from './x2t-loading';
@@ -474,7 +474,7 @@ export class X2TConverter {
     await this.initialize();
 
     const fileName = file.name;
-    const fileExt = fileName.split('.').pop() || getExtensions(file?.type)[0] || '';
+    const fileExt = fileName.split('.').pop() || getDocumentExtension(file?.type);
     const documentType = this.getDocumentType(fileExt);
 
     try {
