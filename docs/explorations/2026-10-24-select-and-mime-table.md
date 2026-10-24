@@ -110,3 +110,18 @@ menu, assistant layout and workspace, and the embed API.
 One full unit run failed on two tests under machine load:
 `agent-artifacts-view` and the 8.9 s `wllama-bounded-file-read`. Both pass on
 their own, and they passed in a second full run.
+
+## CI race in the select case
+
+The first CI run failed this case on `E2E (Docker image) shard 1`, with no
+visible `r-select` in settings. With no saved model, the panel checks the local
+model cache asynchronously and switches itself to settings when nothing is
+cached (`lib/agent-plugin/ui/panel.ts`, the `externalEntry` block at the end).
+The gear button toggles. When the check finished before the click, the click
+toggled the panel back to chat. Forcing that ordering locally (waiting for
+`data-view="settings"` before the click) reproduces the CI error exactly.
+
+The case now waits for the cache summary to settle, then presses the gear only
+when the panel is not already in settings, as `agent-portal-layer.spec.ts`
+does. With the same forced ordering it passes, and 40 repeated runs of the spec
+pass.
