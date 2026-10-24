@@ -24,12 +24,12 @@ import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 
 ## Modules
 
-| Subpath            | Exports                                                                                                                            |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `./document-utils` | `getDocumentType`, `getDocumentMimeType`, `getDocumentExtension`, `getBasePath`, `BASE_PATH`, `DOCUMENT_TYPE_MAP`, `parseReadonly` |
-| `./document-types` | `DocumentType`, `ConversionResult`, `BinConversionResult`, `SaveEvent`, `EmscriptenModule`, `EmscriptenFileSystem`                 |
-| `./i18n`           | `t`, `getLanguage`, `setLanguage`, `getOnlyOfficeLang`, `Language`, `I18nMessages` (zh/en/ja/ko/de/fr/es/pt/ru)                    |
-| `./store`          | `getDocmentObj`, `setDocmentObj` (ranuts signal over `{ fileName, file?, url? }`)                                                  |
+| Subpath            | Exports                                                                                                                                         |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `./document-utils` | `getDocumentType`, `getDocumentMimeType`, `getDocumentExtension`, `getBasePath`, `BASE_PATH`, `DOCUMENT_TYPE_MAP`, `parseReadonly`              |
+| `./document-types` | `DocumentType`, `ConversionResult`, `BinConversionResult`, `SaveEvent`, `EmscriptenModule`, `EmscriptenFileSystem`                              |
+| `./i18n`           | `t`, `getLanguage`, `setLanguage`, `getOnlyOfficeLang`, `Language`, `I18nMessages` (en/zh-CN/ja/ko/de/es/pt; non-English tables load on demand) |
+| `./store`          | `getDocmentObj`, `setDocmentObj` (ranuts signal over `{ fileName, file?, url? }`)                                                               |
 
-Depends on `ranuts` (getMime, createSignal, cookie/query/localStorage helpers).
+Depends on `ranuts` (createSignal, cookie/query/localStorage helpers).
 Builds to `dist/` via `prepare` on install.
