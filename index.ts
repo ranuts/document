@@ -20,7 +20,6 @@ import { initAnalytics } from './lib/analytics';
 import { createControlPanel, hideControlPanel, hideLanding, showControlPanel } from './lib/ui';
 import 'ranui/button';
 import 'ranui/card';
-import 'ranui/select';
 import { initWebMcp } from './lib/web-mcp';
 import { createAgentEntry } from './lib/agent-entry';
 import { hasUnsavedChanges, installUnsavedChangesGuard } from './lib/unsaved-guard';
