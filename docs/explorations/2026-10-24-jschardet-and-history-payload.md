@@ -82,3 +82,25 @@ All seven site languages' message tables (about 215 KB of source in one shared
 chunk) load on both pages, though each page uses one. Loading them per locale
 changes `@ranuts/shared/i18n`, whose `t()` is synchronous and is used by three
 sites. That is a shared-contract change, not a payload fix.
+
+## The ranui upgrade hid the assistant's portals under the panel
+
+The first CI run of this PR failed one case: `agent-dictation.spec.ts`, docx.
+Hovering the voice privacy hint timed out because the composer textarea was on
+top of it.
+
+- **Cause:** in ranui 0.5.1 the floating controller writes the portal layer
+  inline, as `z-index: var(--ran-dropdown-host-z-index, var(--ran-z-dropdown,
+1100))`. Our `.agent-speech-popover` and `r-dropdown[role='listbox']` rules
+  set a plain `z-index: 100000`, and an inline style beats a stylesheet rule.
+  So both portals dropped to 1100, under the assistant panel at 10000.
+- **Bisected:** main with only ranui moved to 0.5.1 fails the same way. With
+  0.5.0 the hint's portal sits at 100000.
+- **Fix:** set `--ran-dropdown-host-z-index: 100000` instead, which ranui's
+  own inline value reads.
+- **Second victim:** select lists opened from the panel go through the same
+  controller, so they were also drawn under it, and no test noticed.
+  `agent-portal-layer.spec.ts` now opens a settings select and asserts its
+  list is the topmost element at its centre.
+- **Reverse validation:** with the stylesheet change reverted, both the new
+  case and the dictation case fail.
