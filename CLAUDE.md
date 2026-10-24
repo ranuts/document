@@ -110,7 +110,10 @@ packages/             # pnpm workspace，供 ran 生态三处站点共享（包�
     src/i18n/messages/    # 一个语言一个文件：zh-CN / en / ja / ko / de / es / pt，
                           # 七张表都是完整的（编辑器 UI 语言另由 vendor 45 语言包提供）。
                           # 2026-09-12 从 1263 行的单文件拆开：加一条文案是改七个文件而
-                          # 不是同一个文件的七处，加一种语言就是加一个文件
+                          # 不是同一个文件的七处，加一种语言就是加一个文件（外加 i18n.ts
+                          # `loaders` 一行）。启动包里只有 en；当前语言由 i18n.ts 顶层 await
+                          # 按需加载，所以 `t()` 仍是同步的——别改回静态 import，也别改成
+                          # 入口里显式 init（见 docs/explorations/2026-10-24-active-locale-only.md）
   converter/            # 格式转换（2026-09-12 从 1130 行的单文件拆开，公开导出面不变）
     document-converter.ts # X2TConverter 本体：加载、转换、媒体、退出码分类
     x2t-loading.ts        # canStreamWasm / fetchWasmResponse（含重试）/ x2tInstantiateError
@@ -639,7 +642,7 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
    类型决定**——需要横向比较属性的表格/卡片网格用宽版，竖向找目标的列表用读式
    （`/history` 就是后者：按"它是列表页"归到 1152 时实测每行有 236px 死空隙）；
    **正文行宽 45–75 字符**（用 `max-width: 60–72ch` 限制段落，不是限制容器）、
-   **内容页有顶栏+页脚，应用页有顶栏无页脚**（`/history`、`/embed-demo` 属后者）、
+   **内容页有顶栏 + 页脚，应用页有顶栏无页脚**（`/history`、`/embed-demo` 属后者）、
    **顶栏页脚只有一份样式**（`landing.css`，页面复用其类名而不是抄数值）。取值与业界依据见
    [docs/design-system.md](docs/design-system.md)，`node bin/design-audit.mjs <baseUrl>`
    渲染所有页面打印这些数字，`test/unit/design-contract.test.ts` 把宽度与顶栏钉死。
