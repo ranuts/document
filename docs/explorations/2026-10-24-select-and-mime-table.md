@@ -12,15 +12,16 @@ pages.
 The static startup graph, summed per chunk from `.vite/manifest.json`
 (gzip -9):
 
-| Page       | Before (main `ee33a4ef`) | After                   |
+| Page       | Before (main `75c2cd96`) | After                   |
 | ---------- | ------------------------ | ----------------------- |
 | `/editor`  | 337 KB raw / 105 KB gzip | 241 KB raw / 84 KB gzip |
-| `/history` | 198 KB raw / 61 KB gzip  | 169 KB raw / 55 KB gzip |
+| `/history` | 168 KB raw / 55 KB gzip  | 169 KB raw / 56 KB gzip |
 
-Measured step by step on the same base:
+The ranui 0.5.2 upgrade landed separately in #294. Measured on #293's main
+(`ee33a4ef`), it is what took history from 62 KB to 55 KB gzip. On top of it,
+this change moves only the editor:
 
 - Removing the select import takes the editor from 105 KB to 90 KB gzip.
-- Upgrading ranui to 0.5.2 takes history from 62 KB to 55 KB gzip.
 - Replacing `getExtensions` takes the editor from 90 KB to 84 KB gzip.
 
 ## ranui select: moved off the editor startup
@@ -63,11 +64,7 @@ builds in this repo confirmed it:
 
 Both pages need `ranui/input` and `ranui/message`. The function was deleted
 upstream in ranui 0.5.2 (published with ranuts 0.5.2 and ranview 0.2.2), which
-also adds size budgets for those two entries. This repo upgrades to it. The
-minimum-release-age exclusion follows ranview to 0.2.2: the install needs both
-versions listed once, because pnpm verifies the old lockfile entry before
-resolving, and then a frozen install passes with only 0.2.2. As in the 0.5.1
-upgrade, `public/ran-tokens.css` was re-synced. The IIFEs did not change.
+also adds size budgets for those two entries. This repo picked it up in #294.
 
 The editor also kept the table through its own code. `lib/converter.ts` and
 `packages/converter` fell back to `getExtensions(file.type)` for a file with
