@@ -15,6 +15,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- The language menu no longer flashes open and stretches the page header while
+  the page is still loading.
+- Select lists and the dictation privacy note open above the AI assistant panel
+  instead of behind it.
 - Local references attached while saved chat history is loading remain attached
   when the conversation finishes restoring.
 - Reloading after a completed save restores the saved document instead of an
