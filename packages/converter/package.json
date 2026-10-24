@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@ranuts/shared": "workspace:*",
-    "ranui": "0.5.1",
-    "ranuts": "0.5.1"
+    "ranui": "0.5.2",
+    "ranuts": "0.5.2"
   },
   "devDependencies": {
     "typescript": "^6.0.3"

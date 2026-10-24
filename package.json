@@ -82,7 +82,7 @@
     "@ranuts/converter": "workspace:*",
     "@ranuts/shared": "workspace:*",
     "pdfjs-dist": "5.4.624",
-    "ranui": "0.5.1",
-    "ranuts": "0.5.1"
+    "ranui": "0.5.2",
+    "ranuts": "0.5.2"
   }
 }
