@@ -1,4 +1,3 @@
-import { getMime } from 'ranuts/utils';
 import type { DocumentType } from './document-types';
 
 /**
@@ -37,17 +36,6 @@ export const parseReadonly = (value: string | undefined): boolean => {
 export function getDocumentType(fileType: string): string | null {
   const type = fileType.toLowerCase();
   return Object.hasOwn(DOCUMENT_TYPE_MAP, type) ? DOCUMENT_TYPE_MAP[type] : null;
-}
-
-/**
- * Get MIME type from file extension (using ranuts getMime utility)
- * @param extension - File extension
- * @returns string - MIME type
- */
-export function getMimeTypeFromExtension(extension: string): string {
-  // Use ranuts getMime for common image types, fallback to image/png
-  const mime = getMime(extension?.toLowerCase() || '');
-  return mime || 'image/png';
 }
 
 // Canonical MIME map for the document formats this project saves/exports.

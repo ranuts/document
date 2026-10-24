@@ -13,10 +13,6 @@ vi.mock('@ranuts/shared/i18n', () => ({
   // caller passed; that the real locale strings fill them is i18n.test.ts.
   t: vi.fn((key: string, vars?: Record<string, unknown>) => (vars ? `${key}${JSON.stringify(vars)}` : key)),
 }));
-vi.mock(import('@ranuts/shared/document-utils'), async (importOriginal) => {
-  const actual = await importOriginal();
-  return { ...actual, getMimeTypeFromExtension: vi.fn().mockReturnValue('image/png') };
-});
 
 import {
   awaitFontSystem,
