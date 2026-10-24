@@ -16,7 +16,7 @@ pnpm add @ranuts/shared
 Prefer subpaths; `.` is a barrel that re-exports all of them.
 
 ```ts
-import { getDocumentType, getMimeTypeFromExtension, parseReadonly, BASE_PATH } from '@ranuts/shared/document-utils';
+import { getDocumentType, parseReadonly, BASE_PATH } from '@ranuts/shared/document-utils';
 import type { DocumentType, ConversionResult } from '@ranuts/shared/document-types';
 import { t, getLanguage, setLanguage, getOnlyOfficeLang } from '@ranuts/shared/i18n';
 import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
@@ -26,7 +26,7 @@ import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 
 | Subpath            | Exports                                                                                                            |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `./document-utils` | `getDocumentType`, `getMimeTypeFromExtension`, `getBasePath`, `BASE_PATH`, `DOCUMENT_TYPE_MAP`, `parseReadonly`    |
+| `./document-utils` | `getDocumentType`, `getDocumentMimeType`, `getBasePath`, `BASE_PATH`, `DOCUMENT_TYPE_MAP`, `parseReadonly`         |
 | `./document-types` | `DocumentType`, `ConversionResult`, `BinConversionResult`, `SaveEvent`, `EmscriptenModule`, `EmscriptenFileSystem` |
 | `./i18n`           | `t`, `getLanguage`, `setLanguage`, `getOnlyOfficeLang`, `Language`, `I18nMessages` (zh/en/ja/ko/de/fr/es/pt/ru)    |
 | `./store`          | `getDocmentObj`, `setDocmentObj` (ranuts signal over `{ fileName, file?, url? }`)                                  |

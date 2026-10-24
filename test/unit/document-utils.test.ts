@@ -1,11 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  DOCUMENT_TYPE_MAP,
-  getBasePath,
-  getDocumentType,
-  getMimeTypeFromExtension,
-  parseReadonly,
-} from '@ranuts/shared/document-utils';
+import { DOCUMENT_TYPE_MAP, getBasePath, getDocumentType, parseReadonly } from '@ranuts/shared/document-utils';
 
 describe('document utils', () => {
   it('classifies common document extensions', () => {
@@ -25,15 +19,6 @@ describe('document utils', () => {
     ['unknown', null],
   ])('classifies supported import format %s for editor and tool routing', (extension, kind) => {
     expect(getDocumentType(extension)).toBe(kind);
-  });
-
-  it('normalizes extension casing for MIME lookup', () => {
-    expect(getMimeTypeFromExtension('XLSX')).toBe('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  });
-
-  it('uses image/png fallback for unknown MIME extensions', () => {
-    expect(getMimeTypeFromExtension('unknown')).toBe('image/png');
-    expect(getMimeTypeFromExtension('')).toBe('image/png');
   });
 
   it('parses the readonly query value for preview mode', () => {

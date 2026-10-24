@@ -7,13 +7,7 @@ not generic. Editor / converter / agent layers all import from here.
 ## Import (prefer subpaths)
 
 ```ts
-import {
-  getDocumentType,
-  getMimeTypeFromExtension,
-  parseReadonly,
-  BASE_PATH,
-  DOCUMENT_TYPE_MAP,
-} from '@ranuts/shared/document-utils';
+import { getDocumentType, parseReadonly, BASE_PATH, DOCUMENT_TYPE_MAP } from '@ranuts/shared/document-utils';
 import type {
   DocumentType,
   ConversionResult,
