@@ -32,8 +32,10 @@ const ASSETS_TO_CACHE = [
   './editor.html',
   './manifest.json',
   './theme-presentation.js',
-  // Deploy-coupled (network-first), so its offline copy lives with this build's core.
+  // CSV and HTML-table opens convert through these. Not vendor assets, so the
+  // runtime cache's activation prune would drop them; core keeps them offline.
   './libs/sheetjs/convert.worker.js',
+  './libs/sheetjs/xlsx.full.min.js',
   './icons/document-light.svg',
   './icons/document-dark.svg',
   './icons/document-light-32.png',
@@ -252,7 +254,6 @@ self.addEventListener('install', (event) => {
               (density) => `/sdkjs/common/Images/fonts_thumbnail${locale}${density}.png.bin`,
             ),
           ),
-          '/libs/sheetjs/xlsx.full.min.js',
           '/web-apps/vendor/xregexp/xregexp-all-min.js',
           '/web-apps/vendor/socketio/socket.io.min.js',
           '/sdkjs/common/wasm/x2t/x2t_helper.js',

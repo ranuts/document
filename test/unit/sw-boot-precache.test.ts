@@ -117,9 +117,10 @@ it('installs native export runtime before the editor is used offline', async () 
   expect(runtime.has('/sdkjs/common/wasm/x2t/x2t.js')).toBe(true);
   expect(runtime.has('/sdkjs/common/wasm/x2t/x2t.wasm.br')).toBe(true);
   expect(runtime.has('/sdkjs/common/wasm/x2t/x2t.worker.js')).toBe(true);
-  expect(runtime.has('/libs/sheetjs/xlsx.full.min.js')).toBe(true);
-  // Deploy-coupled and network-first: its offline copy belongs to this build's core.
+  // Not vendor assets: activation prunes them from the runtime cache, so their
+  // offline copies belong to this build's core.
   expect(core.has('/libs/sheetjs/convert.worker.js')).toBe(true);
+  expect(core.has('/libs/sheetjs/xlsx.full.min.js')).toBe(true);
 });
 
 it('precaches local file-open controls from the offline homepage', async () => {
