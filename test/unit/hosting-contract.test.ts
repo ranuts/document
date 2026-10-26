@@ -63,6 +63,8 @@ describe('public/_headers', () => {
       '/open-local.js',
       '/landing-prefetch.js',
       '/ranui-iife/*',
+      // Its message protocol changes with the app bundle that posts to it.
+      '/libs/sheetjs/convert.worker.js',
     ];
     for (const p of deployCoupled) {
       expect(cc(p), p).toBe('no-cache');
