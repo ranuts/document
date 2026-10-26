@@ -41,3 +41,35 @@ test('large spreadsheet conversion leaves the main thread responsive and round t
   expect(result.last).toBe(true);
   expect(result.htmlBytes).toBeGreaterThan(100);
 });
+
+test('first spreadsheet conversion is available offline after app preparation', async ({ page, context }) => {
+  test.setTimeout(120_000);
+  await page.goto('/');
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await page.reload();
+  await page.waitForFunction(() => !!navigator.serviceWorker.controller);
+  await context.setOffline(true);
+  try {
+    const magic = await page.evaluate(
+      () =>
+        new Promise<number[]>((resolve, reject) => {
+          const worker = new Worker('/libs/sheetjs/convert.worker.js');
+          worker.onmessage = (event) => {
+            worker.terminate();
+            if (!event.data.ok) reject(new Error(event.data.error));
+            else resolve([...new Uint8Array(event.data.data).slice(0, 2)]);
+          };
+          worker.onerror = (event) => {
+            worker.terminate();
+            reject(new Error(event.message));
+          };
+          worker.postMessage({ operation: 'csv-to-xlsx', data: 'name,value\n离线,12' });
+        }),
+    );
+    expect(magic).toEqual([0x50, 0x4b]);
+  } finally {
+    await context.setOffline(false);
+  }
+});
