@@ -47,3 +47,32 @@ describe('converter open currency', () => {
     expect(mount).not.toHaveBeenCalled();
   });
 });
+
+it('cancels spreadsheet preprocessing when another document takes over', async () => {
+  let worker!: { terminate: ReturnType<typeof vi.fn>; postMessage: ReturnType<typeof vi.fn> };
+  vi.stubGlobal(
+    'Worker',
+    class {
+      terminate = vi.fn();
+      postMessage = vi.fn();
+      constructor() {
+        worker = { terminate: this.terminate, postMessage: this.postMessage };
+      }
+    },
+  );
+  const alert = vi.spyOn(window, 'alert').mockImplementation(() => {});
+  const controller = new AbortController();
+  try {
+    const file = new File(['name,value\nitem,12'], 'old.csv');
+    const pending = handleDocumentOperation({ isNew: false, fileName: file.name, file, signal: controller.signal });
+    const rejected = expect(pending).rejects.toMatchObject({ name: 'AbortError' });
+    await vi.waitFor(() => expect(worker?.postMessage).toHaveBeenCalled());
+    controller.abort();
+    await rejected;
+    expect(worker.terminate).toHaveBeenCalledOnce();
+    expect(mount).not.toHaveBeenCalled();
+    expect(alert).not.toHaveBeenCalled();
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});

@@ -1,3 +1,4 @@
+import { runSpreadsheetWorker } from './spreadsheet-worker';
 import { decodeTextBytes } from 'ranuts/utils';
 import { BASE_PATH } from '@ranuts/shared/document-utils';
 
@@ -40,13 +41,19 @@ export async function loadXlsxLibrary(): Promise<any> {
 }
 
 /** CSV in, a real XLSX File out, because the engine will not read CSV. */
-export async function convertCsvToXlsx(csvData: Uint8Array, fileName: string): Promise<File> {
+export async function convertCsvToXlsx(csvData: Uint8Array, fileName: string, signal?: AbortSignal): Promise<File> {
   try {
+    signal?.throwIfAborted();
+    if (typeof Worker !== 'undefined') {
+      const bytes = await runSpreadsheetWorker('csv-to-xlsx', decodeTextBytes(csvData), signal);
+      return new File([bytes], fileName.replace(/\.csv$/i, '.xlsx'), { type: XLSX_MIME });
+    }
     const XLSX = await loadXlsxLibrary();
     const workbook = XLSX.read(decodeTextBytes(csvData), { type: 'string', raw: false });
     const xlsxBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
     return new File([xlsxBuffer], fileName.replace(/\.csv$/i, '.xlsx'), { type: XLSX_MIME });
   } catch (error) {
+    if (signal?.aborted) throw signal.reason;
     throw new Error(
       `Failed to convert CSV to XLSX: ${error instanceof Error ? error.message : 'Unknown error'}. ` +
         'Please convert your CSV file to XLSX format manually and try again.',
@@ -59,14 +66,24 @@ export async function convertCsvToXlsx(csvData: Uint8Array, fileName: string): P
  * from web systems) into a real XLSX. SheetJS parses `<table>` markup
  * natively; x2t cannot import it at all.
  */
-export async function convertHtmlTableToXlsx(htmlData: Uint8Array, fileName: string): Promise<File> {
+export async function convertHtmlTableToXlsx(
+  htmlData: Uint8Array,
+  fileName: string,
+  signal?: AbortSignal,
+): Promise<File> {
   try {
+    signal?.throwIfAborted();
+    if (typeof Worker !== 'undefined') {
+      const bytes = await runSpreadsheetWorker('html-to-xlsx', decodeTextBytes(htmlData), signal);
+      return new File([bytes], fileName.replace(/\.[^.]+$/, '') + '.xlsx', { type: XLSX_MIME });
+    }
     const XLSX = await loadXlsxLibrary();
     const workbook = XLSX.read(decodeTextBytes(htmlData), { type: 'string', raw: false });
     if (!workbook.SheetNames || workbook.SheetNames.length === 0) throw new Error('no table found');
     const xlsxBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
     return new File([xlsxBuffer], fileName.replace(/\.[^.]+$/, '') + '.xlsx', { type: XLSX_MIME });
   } catch (error) {
+    if (signal?.aborted) throw signal.reason;
     throw new Error(
       `Failed to convert HTML table to XLSX: ${error instanceof Error ? error.message : 'Unknown error'}. ` +
         'The file is an HTML page saved with a spreadsheet extension; open it in a spreadsheet application and save it as XLSX.',

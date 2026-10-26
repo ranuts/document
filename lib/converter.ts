@@ -32,8 +32,10 @@ export async function handleDocumentOperation(options: {
   file?: File;
   readonly?: boolean;
   isCurrent?: () => boolean;
+  signal?: AbortSignal;
 }): Promise<void> {
   try {
+    options.signal?.throwIfAborted();
     // The DocsAPI loader is no longer a render-blocking <script> in
     // index.html (it cost ~0.5 s of homepage LCP for visitors who never open
     // a document); every open path funnels through here, so load it on
@@ -63,7 +65,7 @@ export async function handleDocumentOperation(options: {
         // and open the resulting real XLSX; saves come back as .xlsx.
         const raw = new Uint8Array(await file.arrayBuffer());
         if (isHtmlDocument(raw)) {
-          const xlsxFile = await x2tConverter.convertHtmlTableToXlsx(raw, fileName);
+          const xlsxFile = await x2tConverter.convertHtmlTableToXlsx(raw, fileName, options.signal);
           binData = await xlsxFile.arrayBuffer();
           openFileType = 'xlsx';
         } else {
@@ -82,7 +84,7 @@ export async function handleDocumentOperation(options: {
         // to CSV in handleFileStreamMessage so the user still gets a .csv
         // out (GitHub #13/#33).
         const csvData = new Uint8Array(await file.arrayBuffer());
-        const xlsxFile = await x2tConverter.convertCsvToXlsx(csvData, fileName);
+        const xlsxFile = await x2tConverter.convertCsvToXlsx(csvData, fileName, options.signal);
         binData = await xlsxFile.arrayBuffer();
         openFileType = 'xlsx';
       } else {

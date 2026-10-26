@@ -51,7 +51,7 @@ export const onCreateNew = async (ext: string, options?: { docId?: string }): Pr
     const fileName = 'Untitled' + ext;
     await loadEditorApi();
     opening.assertCurrent();
-    await handleDocumentOperation({ fileName, isNew: true, isCurrent: opening.isCurrent });
+    await handleDocumentOperation({ fileName, isNew: true, signal: opening.signal, isCurrent: opening.isCurrent });
     if (!commitDocumentOpen(operation)) return;
     setDocmentObj({ fileName, file: undefined });
     clearDocumentSession();
@@ -94,6 +94,7 @@ export const openLocalFile = async (
       fileName: file.name,
       isNew: false,
       readonly: options?.readonly,
+      signal: opening.signal,
       isCurrent: opening.isCurrent,
     });
     if (!commitDocumentOpen(operation)) throw new DOMException('Document open superseded', 'AbortError');
@@ -214,6 +215,7 @@ export const openDocumentFromUrl = async (
       fileName: finalFileName,
       isNew: false,
       readonly: options?.readonly,
+      signal: opening.signal,
       isCurrent: opening.isCurrent,
     });
     if (!commitDocumentOpen(operation)) throw new DOMException('Document open superseded', 'AbortError');

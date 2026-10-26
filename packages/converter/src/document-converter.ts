@@ -1,3 +1,4 @@
+import { runSpreadsheetWorker } from './spreadsheet-worker';
 import { createObjectURL, isZipContainer, scriptOnLoad } from 'ranuts/utils';
 import type {
   BinConversionResult,
@@ -458,13 +459,13 @@ export class X2TConverter {
    * Load xlsx library from local file
    */
   /** CSV in, a real XLSX File out; see ./spreadsheet.ts. */
-  async convertCsvToXlsx(csvData: Uint8Array, fileName: string): Promise<File> {
-    return convertCsvToXlsx(csvData, fileName);
+  async convertCsvToXlsx(csvData: Uint8Array, fileName: string, signal?: AbortSignal): Promise<File> {
+    return convertCsvToXlsx(csvData, fileName, signal);
   }
 
   /** An HTML table wearing a spreadsheet extension; see ./spreadsheet.ts. */
-  async convertHtmlTableToXlsx(htmlData: Uint8Array, fileName: string): Promise<File> {
-    return convertHtmlTableToXlsx(htmlData, fileName);
+  async convertHtmlTableToXlsx(htmlData: Uint8Array, fileName: string, signal?: AbortSignal): Promise<File> {
+    return convertHtmlTableToXlsx(htmlData, fileName, signal);
   }
 
   /**
@@ -740,7 +741,10 @@ export class X2TConverter {
   /**
    * Convert XLSX bytes to CSV bytes (UTF-8 with BOM) via SheetJS.
    */
-  async xlsxToCsvBytes(xlsxArray: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
+  async xlsxToCsvBytes(xlsxArray: Uint8Array, signal?: AbortSignal): Promise<Uint8Array<ArrayBuffer>> {
+    signal?.throwIfAborted();
+    if (typeof Worker !== 'undefined')
+      return new Uint8Array(await runSpreadsheetWorker('xlsx-to-csv', xlsxArray, signal));
     const XLSX = await loadXlsxLibrary();
     const workbook = XLSX.read(xlsxArray, { type: 'array' });
     const firstSheetName = workbook.SheetNames[0];
