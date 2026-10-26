@@ -337,7 +337,10 @@ export const es: Partial<I18nMessages> = {
   agentHistoryBusy: 'Actualizando el historial de chat…',
   agentHistorySaveFailed:
     'No se pudo guardar el historial. La conversación sigue en esta página; expórtala antes de cerrarla.',
-  agentHistoryConflict: 'Otra pestaña cambió el historial guardado. Exporta esta conversación antes de restaurarlo.',
+  agentHistoryConflict:
+    'Otra pestaña cambió el historial. Conserva copias locales y restaura para mantener ambas versiones.',
+  agentRecoverHistory: 'Conservar copias locales y restaurar',
+  agentHistoryLocalCopy: 'Copia local',
   agentRestoreHistory: 'Restaurar historial guardado',
   agentImportHistory: 'Importar historial de chat anterior',
   agentExportHistory: 'Exportar conversaciones',

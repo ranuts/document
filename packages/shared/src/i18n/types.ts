@@ -323,6 +323,8 @@ export interface I18nMessages {
   agentHistoryBusy: string;
   agentHistorySaveFailed: string;
   agentHistoryConflict: string;
+  agentRecoverHistory: string;
+  agentHistoryLocalCopy: string;
   agentRestoreHistory: string;
   agentImportHistory: string;
   agentExportHistory: string;

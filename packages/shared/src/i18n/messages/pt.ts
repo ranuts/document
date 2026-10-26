@@ -334,7 +334,9 @@ export const pt: Partial<I18nMessages> = {
   agentHistorySaveFailed:
     'Não foi possível guardar o histórico. A conversa continua nesta página; exporte-a antes de fechar.',
   agentHistoryConflict:
-    'Outro separador alterou o histórico guardado. Exporte esta conversa antes de restaurar o histórico.',
+    'Outro separador alterou o histórico. Mantenha cópias locais e restaure para preservar ambas as versões.',
+  agentRecoverHistory: 'Manter cópias locais e restaurar',
+  agentHistoryLocalCopy: 'Cópia local',
   agentRestoreHistory: 'Restaurar histórico guardado',
   agentImportHistory: 'Importar histórico de chat anterior',
   agentExportHistory: 'Exportar conversas',

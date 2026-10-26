@@ -405,3 +405,56 @@ it('retains only explicitly owned volatile sessions while merging saved history'
   expect(store.activeId).toBe(savedId);
   expect(store.list().some((item) => item.id === initial)).toBe(false);
 });
+
+it('explicit conflict recovery preserves every local edit without overwriting saved originals', async () => {
+  const first = createConversationStore();
+  first.history().save([{ role: 'user', content: 'first original' }]);
+  const firstId = first.activeId;
+  const secondId = first.create().id;
+  first.history().save([{ role: 'user', content: 'second original' }]);
+  await first.setSaving(true);
+  const stale = createConversationStore();
+  await stale.restoreSaved();
+  await stale.setSaving(true);
+  first.history(firstId).save([{ role: 'user', content: 'remote edit' }]);
+  await first.flush();
+  stale.history(firstId).save([{ role: 'user', content: 'local first' }]);
+  stale.history(secondId).save([{ role: 'user', content: 'local second' }]);
+  await expect(stale.flush()).rejects.toThrow(/another tab/i);
+  const oldHandle = stale.history(firstId);
+  await stale.recoverSaved();
+  expect(stale.saving).toBe(false);
+  expect(stale.history(firstId).load()[0].content).toBe('remote edit');
+  expect(stale.history(secondId).load()[0].content).toBe('second original');
+  expect(stale.list()).toHaveLength(4);
+  const localIds = stale
+    .list()
+    .filter((item) => item.id !== firstId && item.id !== secondId)
+    .map((item) => item.id);
+  expect(localIds.map((id) => stale.history(id).load()[0].content).sort()).toEqual(['local first', 'local second']);
+  expect(localIds).toContain(stale.activeId);
+  oldHandle.save([{ role: 'assistant', content: 'late old controller' }]);
+  expect(stale.history(firstId).load()[0].content).toBe('remote edit');
+  await stale.recoverSaved();
+  expect(stale.list()).toHaveLength(4);
+  await stale.setSaving(true);
+  const restored = createConversationStore();
+  await restored.restoreSaved();
+  expect(restored.list()).toHaveLength(4);
+  expect(restored.history(firstId).load()[0].content).toBe('remote edit');
+});
+
+it('failed explicit recovery leaves local conversations intact for retry', async () => {
+  const repository = createConversationRepository();
+  const store = createConversationStore(undefined, { repository });
+  store.history().save([{ role: 'user', content: 'local work' }]);
+  const id = store.activeId;
+  const load = vi.spyOn(repository, 'load').mockRejectedValueOnce(new Error('Read unavailable'));
+  await expect(store.recoverSaved()).rejects.toThrow('Read unavailable');
+  expect(store.activeId).toBe(id);
+  expect(store.history().load()[0].content).toBe('local work');
+  load.mockRestore();
+  await store.recoverSaved();
+  expect(store.activeId).toBe(id);
+  expect(store.list()).toHaveLength(1);
+});
