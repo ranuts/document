@@ -28,6 +28,10 @@ import { daysUntilExpiry, hasUnsavedWork, type HistoryDoc } from './history/type
 import { confirmDialog } from './confirm-dialog';
 
 const SEARCH_DEBOUNCE_MS = 200;
+const EXPIRY_SWEEP_INTERVAL_MS = 60_000;
+let renderRevision = 0;
+let lastSweepAt = -Infinity;
+let sweep: Promise<void> | undefined;
 
 let query = '';
 let page = 1;
@@ -217,9 +221,12 @@ function buildToolbar(refresh: () => void): HTMLElement {
     .attr('value', query)
     .on('input', (event: Event) => {
       const value = (event as CustomEvent<{ value?: string }>).detail?.value ?? '';
+      // Invalidate pending reads immediately, not only after the debounce.
+      renderRevision++;
+      query = value;
+      page = 1;
       window.clearTimeout(searchTimer);
       searchTimer = window.setTimeout(() => {
-        query = value;
         // A new search starts at the top; staying on page 4 of the previous
         // result set shows an empty page more often than not.
         page = 1;
@@ -293,53 +300,68 @@ function buildAutosaveToggle(refresh: () => void): HTMLElement {
     .build();
 }
 
-async function render(): Promise<void> {
-  // Sweep before reading: a row the user is shown must not be one the seven-day
-  // rule already deleted, and this page is the most likely thing to be open
-  // when that boundary is crossed.
-  await pruneExpired();
+async function sweepExpired(force: boolean): Promise<void> {
+  if (sweep) return sweep;
+  if (!force && Date.now() - lastSweepAt < EXPIRY_SWEEP_INTERVAL_MS) return;
+  sweep = pruneExpired().then(() => {
+    lastSweepAt = Date.now();
+  });
+  try {
+    await sweep;
+  } finally {
+    sweep = undefined;
+  }
+}
+
+async function render(forceSweep = false): Promise<void> {
+  const revision = ++renderRevision;
+  await sweepExpired(forceSweep);
+  if (revision !== renderRevision) return;
   const [{ items, total, page: current, pageSize }, usage] = await Promise.all([
     listDocs({ query, page, unsavedOnly }),
     historyUsage(),
   ]);
+  if (revision !== renderRevision) return;
   page = current;
   syncUrl();
 
   const pages = Math.max(1, Math.ceil(total / pageSize));
   const refresh = () => void render();
 
-  const header = Div()
-    .class('history-header')
-    .children(
-      // chip -> title -> intro: the homepage hero's own opening, so the page a
-      // visitor reaches from it is recognisably the same product rather than
-      // an admin screen that happens to share a header.
-      Div()
-        .class('history-chip')
-        .children(View('i').class('history-chip-dot').build(), View('span').text(t('historyChip')).build())
-        .build(),
-      Div()
-        .class('history-title-row')
-        .children(
-          View('h1').class('history-title').text(t('historyTitle')).build(),
-          Div()
-            .class('history-header-actions')
-            .children(
-              button(
-                t('historyBack'),
-                () => {
-                  // Back to the homepage the reader came from, not to English.
-                  window.location.href = localeHomePath(getLanguage());
-                },
-                { type: 'text', class: 'history-back' },
-              ),
-            )
-            .build(),
-        )
-        .build(),
-      View('p').class('history-intro').text(t('historyIntro')).build(),
-    )
-    .build();
+  const header =
+    root().querySelector<HTMLElement>('.history-header') ??
+    Div()
+      .class('history-header')
+      .children(
+        // chip -> title -> intro: the homepage hero's own opening, so the page a
+        // visitor reaches from it is recognisably the same product rather than
+        // an admin screen that happens to share a header.
+        Div()
+          .class('history-chip')
+          .children(View('i').class('history-chip-dot').build(), View('span').text(t('historyChip')).build())
+          .build(),
+        Div()
+          .class('history-title-row')
+          .children(
+            View('h1').class('history-title').text(t('historyTitle')).build(),
+            Div()
+              .class('history-header-actions')
+              .children(
+                button(
+                  t('historyBack'),
+                  () => {
+                    // Back to the homepage the reader came from, not to English.
+                    window.location.href = localeHomePath(getLanguage());
+                  },
+                  { type: 'text', class: 'history-back' },
+                ),
+              )
+              .build(),
+          )
+          .build(),
+        View('p').class('history-intro').text(t('historyIntro')).build(),
+      )
+      .build();
 
   const list = items.length
     ? Div()
@@ -368,6 +390,7 @@ async function render(): Promise<void> {
             ? button(
                 t('historyClearSearch'),
                 () => {
+                  window.clearTimeout(searchTimer);
                   query = '';
                   unsavedOnly = false;
                   page = 1;
@@ -402,66 +425,96 @@ async function render(): Promise<void> {
    * these are controls, not navigation) -- it falls to the bottom of the
    * column, which is where it already was.
    */
-  const rail = View('aside')
-    .class('history-rail')
-    .children(
-      // How much is being kept is a fact about the store, not about the
-      // search, so it sits at the top of the rail rather than beside the
-      // search box, where it competed with the filter for the same row.
-      Div()
-        .class('history-usage')
-        .text(
-          total
-            ? `${t('historyCount', { count: String(total) })} · ${t('historyUsage', { size: formatBytes(usage) })}`
-            : '',
-        )
-        .build(),
-      Div()
-        .class('history-rail-block')
-        .children(
-          Div().class('history-rail-label').text(t('historyRailSettings')).build(),
-          buildAutosaveToggle(refresh),
-          ...(isAutosaveEnabled()
-            ? []
-            : [Div().class('history-note history-note-warn').text(t('historyAutosaveOff')).build()]),
-          button(
-            t('historyClearAll'),
-            () => {
-              void confirmDialog({
-                title: t('historyClearTitle'),
-                body: t('historyClearConfirm'),
-                confirmLabel: t('historyClearAll'),
-                cancelLabel: t('historyCancel'),
-                danger: true,
-              }).then((ok) => (ok ? clearAllHistory().then(refresh) : undefined));
-            },
-            { native: true, id: 'history-clear-all', class: 'history-clear' },
-          ),
-        )
-        .build(),
-      Div()
-        .class('history-rail-block')
-        .children(
-          Div().class('history-rail-label').text(t('historyRailRetention')).build(),
-          Div().class('history-note').text(t('historyRetention')).build(),
-          Div().class('history-note').text(t('historyNotBackup')).build(),
-        )
-        .build(),
-    )
-    .build();
+  const rail =
+    root().querySelector<HTMLElement>('.history-rail') ??
+    View('aside')
+      .class('history-rail')
+      .children(
+        // How much is being kept is a fact about the store, not about the
+        // search, so it sits at the top of the rail rather than beside the
+        // search box, where it competed with the filter for the same row.
+        Div()
+          .class('history-usage')
+          .text(
+            total
+              ? `${t('historyCount', { count: String(total) })} · ${t('historyUsage', { size: formatBytes(usage) })}`
+              : '',
+          )
+          .build(),
+        Div()
+          .class('history-rail-block')
+          .children(
+            Div().class('history-rail-label').text(t('historyRailSettings')).build(),
+            buildAutosaveToggle(refresh),
+            ...(isAutosaveEnabled()
+              ? []
+              : [Div().class('history-note history-note-warn').text(t('historyAutosaveOff')).build()]),
+            button(
+              t('historyClearAll'),
+              () => {
+                void confirmDialog({
+                  title: t('historyClearTitle'),
+                  body: t('historyClearConfirm'),
+                  confirmLabel: t('historyClearAll'),
+                  cancelLabel: t('historyCancel'),
+                  danger: true,
+                }).then((ok) => (ok ? clearAllHistory().then(refresh) : undefined));
+              },
+              { native: true, id: 'history-clear-all', class: 'history-clear' },
+            ),
+          )
+          .build(),
+        Div()
+          .class('history-rail-block')
+          .children(
+            Div().class('history-rail-label').text(t('historyRailRetention')).build(),
+            Div().class('history-note').text(t('historyRetention')).build(),
+            Div().class('history-note').text(t('historyNotBackup')).build(),
+          )
+          .build(),
+      )
+      .build();
 
-  const pageEl = Div()
-    .class('history-shell')
-    .children(
-      Div()
-        .class('history-page')
-        .children(header, buildToolbar(refresh), list, ...(pages > 1 ? [buildPager(page, pages, refresh)] : []))
-        .build(),
-      rail,
-    )
-    .build();
+  const usageText = total
+    ? `${t('historyCount', { count: String(total) })} · ${t('historyUsage', { size: formatBytes(usage) })}`
+    : '';
+  rail.querySelector('.history-usage')!.textContent = usageText;
+  const autosave = rail.querySelector<HTMLInputElement>('#history-autosave')!;
+  autosave.checked = isAutosaveEnabled();
+  const warning = rail.querySelector('.history-note-warn');
+  if (autosave.checked) warning?.remove();
+  else if (!warning) {
+    rail
+      .querySelector('#history-clear-all')!
+      .before(Div().class('history-note history-note-warn').text(t('historyAutosaveOff')).build());
+  }
 
-  root().replaceChildren(pageEl);
+  const existing = root().querySelector('.history-page');
+  if (existing) {
+    existing.querySelector('#history-list, #history-empty')!.replaceWith(list);
+    existing.querySelector('.history-pager')?.remove();
+    if (pages > 1) existing.append(buildPager(page, pages, refresh));
+  } else {
+    root().append(
+      Div()
+        .class('history-shell')
+        .children(
+          Div()
+            .class('history-page')
+            .children(header, buildToolbar(refresh), list, ...(pages > 1 ? [buildPager(page, pages, refresh)] : []))
+            .build(),
+          rail,
+        )
+        .build(),
+    );
+  }
+  const search = document.getElementById('history-search') as HTMLElement & { value: string };
+  // Leave the live input alone while typing: even assigning its current value
+  // can reset selection in a custom input's shadow root.
+  if (search.value !== query) search.setAttribute('value', query);
+  const filter = document.getElementById('history-filter-unsaved')!;
+  filter.classList.toggle('is-on', unsavedOnly);
+  filter.setAttribute('aria-pressed', String(unsavedOnly));
 }
 
 /**
@@ -493,4 +546,7 @@ function syncPageChrome(): void {
 applyDocumentLanguage();
 syncPageChrome();
 readUrl();
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) void render(true);
+});
 void render();

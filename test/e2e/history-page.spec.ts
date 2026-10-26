@@ -138,6 +138,26 @@ test.describe('local history page', () => {
     await expect(page.locator('#history-empty')).toBeVisible();
   });
 
+  test('keeps keyboard focus and the caret while search results refresh', async ({ page }) => {
+    await seed(page, [
+      { id: 'budget', title: 'Budget.docx' },
+      { id: 'other', title: 'Report.docx' },
+    ]);
+    await page.reload();
+    await expect(titles(page)).toHaveCount(2);
+    const input = page.locator('#history-search');
+    await input.click();
+    await page.keyboard.type('Bud');
+    await expect(titles(page)).toHaveText(['Budget.docx']);
+    await expect(input).toBeFocused();
+    // No re-click: the original shadow input must still own focus and caret.
+    await page.keyboard.type('get');
+    await expect(input).toHaveJSProperty('value', 'Budget');
+    await page.waitForURL(/q=Budget/);
+    await expect(titles(page)).toHaveText(['Budget.docx']);
+    await expect(input).toBeFocused();
+  });
+
   test('marks the rows whose only copy is in this browser', async ({ page }) => {
     await seed(page, [
       { id: 'only-here', title: 'OnlyHere.docx' },
