@@ -36,3 +36,45 @@ This measures reduced repeated serialization work in a controlled harness, not b
 Physical microphone recognition and actual GPU generation latency were not measured. CPU-model cancellation teardown and the existing full-format offline preparation contract remain unchanged. They require separate lifecycle/network measurements before changing their guarantees. The worker improves responsiveness, not necessarily total conversion duration; decoding still runs on the main thread. Conflict recovery copies remain in memory until saving is explicitly re-enabled.
 
 Source and caller review covered save ownership, stale view results, conflict-copy ownership, mutable external records, worker cleanup and static offline dependencies.
+
+## Follow-up review
+
+A second pass over this branch found two problems in how the new SheetJS worker
+ships. Neither affects the conversion logic.
+
+### The worker was served stale after a deploy
+
+`public/libs/sheetjs/convert.worker.js` has a fixed name, and its message
+protocol (`operation`, `data`, `{ ok, data | error }`) changes with the app
+bundle that posts to it.
+
+- **Before:** the Service Worker precached it into the runtime cache and served
+  it stale-while-revalidate. The first CSV or HTML-table conversion after a
+  deploy that changed the protocol would run against the previous worker. This
+  is the deploy-coupled case CLAUDE.md describes.
+- **After:** the worker is in `DEPLOY_COUPLED`, in the `public/_headers`
+  no-cache group, and in the core precache list. Network-first's offline
+  fallback reads only the core cache, so offline conversion keeps working.
+  `xlsx.full.min.js` is vendored, rarely changes and is versioned with the
+  vendor tree, so it stays on the runtime path.
+- **Tests:** `sw-routing.test.ts` asserts network-first for the worker, and
+  `sw-boot-precache.test.ts` now records cache entries by cache name and asserts
+  the worker lands in core. Both fail with the previous `sw.js`.
+  `spreadsheet-worker.spec.ts`, including the first offline conversion, still
+  passes.
+
+### The worker was never linted
+
+- **Before:** `.oxlintrc.json` ignored `public/libs/**`, which took the
+  repository's own worker out of the lint along with the vendored bundle.
+- **After:** only `public/libs/sheetjs/xlsx.full.min.js` is ignored, and the
+  worker lints clean.
+- **Test:** `workflow-contract.test.ts` checks that `public/sw.js` and the
+  worker match no ignore pattern. It fails against the old configuration.
+
+### Checked and left as is
+
+`recoverSaved` compares the local and saved records with `JSON.stringify`. Both
+build their keys in the same order (`id, title, createdAt, updatedAt,
+messages`), and saving updates through an object spread that keeps that order.
+An unchanged conversation therefore never becomes a spurious local copy.
