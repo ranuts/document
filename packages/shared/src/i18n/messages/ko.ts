@@ -31,6 +31,7 @@ export const ko: Partial<I18nMessages> = {
   agentSpeechDenied: '마이크 권한이 거부되었습니다. 브라우저 설정에서 허용하세요.',
   agentSpeechFailed: '음성 인식 실패. 마이크, 언어 및 연결을 확인하세요.',
   agentSpeechFinishing: '인식 완료 중…',
+  agentSpeechLimit: '음성 입력 제한 시간에 도달했습니다. 다시 시작할 수 있습니다.',
   agentSpeechUnsupported: '이 브라우저는 음성 입력을 지원하지 않습니다.',
   agentDownloadIncomplete: '다운로드 미완료',
   agentModelInUse: '사용 중',

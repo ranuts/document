@@ -31,6 +31,7 @@ export const es: Partial<I18nMessages> = {
   agentSpeechDenied: 'Permiso del micrófono denegado. Actívalo en los ajustes del navegador.',
   agentSpeechFailed: 'Error de reconocimiento. Comprueba el micrófono, idioma y conexión.',
   agentSpeechFinishing: 'Finalizando…',
+  agentSpeechLimit: 'Se alcanzó el límite de dictado. Puedes volver a empezar.',
   agentSpeechUnsupported: 'Este navegador no admite entrada de voz.',
   agentDownloadIncomplete: 'Descarga incompleta',
   agentModelInUse: 'En uso',

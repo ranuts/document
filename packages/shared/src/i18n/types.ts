@@ -26,6 +26,7 @@ export interface I18nMessages {
   agentSpeechDenied: string;
   agentSpeechFailed: string;
   agentSpeechFinishing: string;
+  agentSpeechLimit: string;
   agentSpeechUnsupported: string;
 
   agentDownloadIncomplete: string;

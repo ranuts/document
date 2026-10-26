@@ -156,6 +156,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
   });
   let stopping = false;
   let listening = false;
+  let limitReached = false;
   let recognition: Recognition | undefined;
   let busy = false;
   let original = '';
@@ -204,6 +205,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     busy = false;
     stopping = false;
     listening = false;
+    limitReached = false;
     pauseDisclosure();
     privacy.removeAttribute('open');
     notice = '';
@@ -224,11 +226,21 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     clearTimeout(deadline);
     // Some services never emit end after stop. Keep the visible transcript and
     // release the microphone rather than stranding an explicit send indefinitely.
-    deadline = setTimeout(() => close(false, false, true), 2000);
+    const finishWithoutEnd = () => {
+      const limited = limitReached;
+      close(false, false, true);
+      if (limited) {
+        status.textContent = t('agentSpeechLimit');
+        notice = status.textContent;
+        render();
+        showDisclosure();
+      }
+    };
+    deadline = setTimeout(finishWithoutEnd, 2000);
     try {
       recognition?.stop();
     } catch {
-      close(false, false, true);
+      finishWithoutEnd();
     }
     return pending;
   };
@@ -241,6 +253,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
     notice = '';
     stopping = false;
     listening = false;
+    limitReached = false;
     pauseDisclosure();
     privacy.removeAttribute('open');
     const token = ++revision;
@@ -292,7 +305,7 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
         status.textContent === t('agentSpeechListening') ||
         status.textContent === t('agentSpeechFinishing')
       ) {
-        status.textContent = transcript ? '' : t('agentSpeechNoResult');
+        status.textContent = limitReached ? t('agentSpeechLimit') : transcript ? '' : t('agentSpeechNoResult');
       }
       stopping = false;
       busy = false;
@@ -311,6 +324,11 @@ export function mountSpeechInput(chat: SpeechComposer, allowed: () => boolean) {
       }
       deadline = setTimeout(() => {
         if (token === revision && busy) {
+          if (listening) {
+            limitReached = true;
+            void finish();
+            return;
+          }
           close();
           status.textContent = t('agentSpeechFailed');
           notice = status.textContent;

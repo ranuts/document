@@ -32,6 +32,7 @@ export const de: Partial<I18nMessages> = {
   agentSpeechDenied: 'Mikrofonzugriff verweigert. Bitte in den Browsereinstellungen erlauben.',
   agentSpeechFailed: 'Erkennung fehlgeschlagen. Mikrofon, Sprache und Verbindung prüfen.',
   agentSpeechFinishing: 'Erkennung wird beendet…',
+  agentSpeechLimit: 'Die Diktierzeit ist abgelaufen. Sie können erneut starten.',
   agentSpeechUnsupported: 'Spracheingabe ist in diesem Browser nicht verfügbar.',
   agentDownloadIncomplete: 'Download unvollständig',
   agentModelInUse: 'Wird verwendet',

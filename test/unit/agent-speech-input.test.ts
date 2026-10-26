@@ -381,3 +381,30 @@ it('expires the error popover but retains the error and a readable detail entry'
     vi.useRealTimers();
   }
 });
+
+it.each(['end', 'timeout'] as const)('finishes healthy dictation at the duration limit (%s)', (ending) => {
+  vi.useFakeTimers();
+  try {
+    const { el, recognition, speech, draft } = setup();
+    recognition.onstart?.();
+    vi.advanceTimersByTime(59000);
+    recognition.onresult?.({ results: [{ isFinal: false, 0: { transcript: 'Visible words' } }] });
+    vi.advanceTimersByTime(1000);
+    expect(recognition.stop).toHaveBeenCalledOnce();
+    expect(recognition.abort).not.toHaveBeenCalled();
+    expect(speech.isBusy()).toBe(true);
+    if (ending === 'end') {
+      recognition.onresult?.({ results: [{ isFinal: true, 0: { transcript: 'Final words' } }] });
+      recognition.onend?.();
+    } else vi.advanceTimersByTime(2000);
+    expect(speech.isBusy()).toBe(false);
+    expect(draft()).toBe(ending === 'end' ? 'Original Final words' : 'Original Visible words');
+    expect(el.querySelector('[role="status"]')!.textContent).toBe('agentSpeechLimit');
+    el.querySelector<HTMLButtonElement>('.agent-speech-mic')!.click();
+    expect(speech.isBusy()).toBe(true);
+    expect(el.querySelector('[role="status"]')!.textContent).toBe('agentSpeechStarting');
+    speech.close();
+  } finally {
+    vi.useRealTimers();
+  }
+});
