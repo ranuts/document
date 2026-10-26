@@ -24,6 +24,30 @@ export interface ConversationRepository {
   clear(): Promise<number>;
 }
 
+// Only detached, recursively immutable plain data may skip repeated validation.
+// Object.freeze(Date/Map) does not freeze their contents: those remain uncached.
+const preparedRecords = new WeakMap<ConversationRecord, string>();
+function freezePlainData(value: unknown, seen = new WeakSet<object>()): boolean {
+  if (value === null || typeof value !== 'object') return true;
+  if (seen.has(value)) return true;
+  const prototype = Object.getPrototypeOf(value);
+  if (!Array.isArray(value) && prototype !== Object.prototype && prototype !== null) return false;
+  seen.add(value);
+  const plain = Object.values(value)
+    .map((child) => freezePlainData(child, seen))
+    .every(Boolean);
+  if (plain) Object.freeze(value);
+  return plain;
+}
+
+/** Prepare an owned snapshot once; arbitrary repository callers remain mutable. */
+export function prepareConversationRecord(record: ConversationRecord): ConversationRecord {
+  if (!isConversationRecord(record)) throw new Error('Saved conversation data is invalid');
+  const copy = structuredClone(normalizeRecord(record));
+  if (freezePlainData(copy)) preparedRecords.set(copy, JSON.stringify(copy));
+  return copy;
+}
+
 export const CONVERSATION_DB_NAME = 'document-ai-conversations';
 export function validConversationId(value: unknown): value is string {
   return typeof value === 'string' && /^(?:default|[a-f0-9-]{36})$/.test(value);
@@ -32,6 +56,7 @@ export function validConversationId(value: unknown): value is string {
 export function isConversationRecord(value: unknown): value is ConversationRecord {
   if (typeof value !== 'object' || value === null) return false;
   const item = value as ConversationRecord;
+  if (preparedRecords.has(item)) return true;
   return (
     validConversationId(item.id) &&
     typeof item.title === 'string' &&
@@ -42,7 +67,9 @@ export function isConversationRecord(value: unknown): value is ConversationRecor
   );
 }
 
-function normalizeRecord({ id, title, createdAt, updatedAt, messages }: ConversationRecord): ConversationRecord {
+function normalizeRecord(record: ConversationRecord): ConversationRecord {
+  if (preparedRecords.has(record)) return record;
+  const { id, title, createdAt, updatedAt, messages } = record;
   return { id, title, createdAt, updatedAt, messages };
 }
 
@@ -216,7 +243,9 @@ export function createConversationRepository(): ConversationRepository {
             if ((index?.revision ?? 0) !== expectedRevision) throw new ConversationConflictError();
             // Normalize host records too, so unrelated properties never enter saved history.
             result = validateStored({ ...data, revision: (index?.revision ?? 0) + 1 })!;
-            serialized = new Map(result.sessions.map((item) => [item.id, JSON.stringify(item)]));
+            serialized = new Map(
+              result.sessions.map((item) => [item.id, preparedRecords.get(item) ?? JSON.stringify(item)]),
+            );
             const nextIds = new Set(serialized.keys());
             for (const id of index?.sessionIds ?? []) if (!nextIds.has(id)) sessions.delete(id);
             for (const item of result.sessions) {

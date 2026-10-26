@@ -4,6 +4,7 @@ import { createHistoryStorage, type HistoryStorage } from './storage';
 import {
   ConversationConflictError,
   createConversationRepository,
+  prepareConversationRecord,
   validConversationId,
   type Conversation,
   type ConversationData,
@@ -102,7 +103,7 @@ export function createConversationStore(onChange?: () => void, options: Conversa
     sessions: sessions.map((item) => {
       let copy = detached.get(item);
       if (!copy) {
-        copy = structuredClone(item);
+        copy = prepareConversationRecord(item);
         detached.set(item, copy);
       }
       return copy;
