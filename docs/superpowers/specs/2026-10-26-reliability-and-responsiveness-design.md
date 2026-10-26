@@ -17,3 +17,9 @@ CPU model restart and offline caching require benchmark-backed changes: retain c
 ## Verification
 
 Regression tests must fail before fixes for the five confirmed bugs. Run relevant unit tests, full type/lint/format/coverage gates, production build and focused real-browser history/open/conversion/assistant acceptance. Run independent specification and code-quality reviews. Publish English PR text and preserve separate commits; do not merge.
+
+## Review constraints
+
+- Conflict recovery preserves all locally modified conversations, revalidates remote revisions and remains safe to retry without duplicate copies.
+- History expiry cleanup is throttled and runs on page restoration as well as initialization. Stale results never publish.
+- Worker load failure, timeout, cancellation and document replacement settle the caller and release resources. Offline manifests retain the worker and its local dependencies.

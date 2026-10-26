@@ -335,9 +335,15 @@ it('does not brand mutable exotic objects as immutable prepared data', async () 
     ],
   });
   await repository.save({ ...data, sessions: [record] }, 0);
-  const blocks = record.messages[0].content as Array<{ input: { date: Date } }>;
-  blocks[0].input.date.setTime(1000);
+  const blocks = record.messages[0].content;
+  if (typeof blocks === 'string' || blocks[0].type !== 'tool_use') throw new Error('Expected tool input');
+  const date = blocks[0].input.date;
+  if (!(date instanceof Date)) throw new Error('Expected a Date');
+  date.setTime(1000);
   await repository.save({ ...data, sessions: [record] }, 1);
-  const saved = (await repository.load())!.sessions[0].messages[0].content as Array<{ input: { date: Date } }>;
-  expect(saved[0].input.date.getTime()).toBe(1000);
+  const saved = (await repository.load())!.sessions[0].messages[0].content;
+  if (typeof saved === 'string' || saved[0].type !== 'tool_use') throw new Error('Expected saved tool input');
+  const savedDate = saved[0].input.date;
+  expect(savedDate).toBeInstanceOf(Date);
+  expect((savedDate as Date).getTime()).toBe(1000);
 });

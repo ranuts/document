@@ -15,6 +15,14 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Exporting a PDF or another format keeps unsaved changes in the editable original visible until the original is saved.
+- Failed file opens restore usable file controls, including keyboard access.
+- Document history search keeps focus and ignores outdated results while typing.
+- Chat history conflicts offer an explicit way to keep local copies and restore saved conversations.
+- Dictation reaching its time limit finishes normally and preserves the final recognized words.
+- Spreadsheet conversions run in a background worker where supported, keeping the page responsive and canceling superseded opens.
+- Saving long chat histories avoids repeatedly processing unchanged conversations.
+
 - The language menu no longer flashes open and stretches the page header while
   the page is still loading.
 - Select lists and the dictation privacy note open above the AI assistant panel
