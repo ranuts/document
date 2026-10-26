@@ -28,7 +28,7 @@ test.beforeAll(async () => {
       res.end(Buffer.from(DOC));
       return;
     }
-    res.writeHead(404);
+    res.writeHead(404, { 'Access-Control-Allow-Origin': '*' });
     res.end();
   });
   await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
@@ -59,6 +59,28 @@ test.describe('entry paths (real editor)', () => {
     expect(download.suggestedFilename()).toBe('url-open.docx');
     const bytes = new Uint8Array(readFileSync(await download.path()));
     expect(ooxmlText((await zipEntryText(bytes, 'word/document.xml')) || '')).toContain('opened from a URL');
+  });
+
+  test('a failed URL open restores keyboard-accessible local file controls', async ({ page, l0 }) => {
+    l0.allowConsole(/Error opening document from URL:.*Failed to fetch document: 404/);
+    const missing = new URL('/missing.docx', docUrl).href;
+    await page.goto(`/editor?file=${encodeURIComponent(missing)}`);
+    const upload = page.locator('#upload-button');
+    await expect(upload).toBeVisible();
+    await expect(upload).toBeFocused();
+    // Exercise the real control with the keyboard, then recover in the same page.
+    const chooser = page.waitForEvent('filechooser');
+    await page.keyboard.press('Enter');
+    await (
+      await chooser
+    ).setFiles({
+      name: 'recovered.docx',
+      mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      buffer: Buffer.from(DOC),
+    });
+    await settleEditor(page);
+    await expect(page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk')).toBeVisible();
+    await expect(page.locator('#control-panel-container')).toBeHidden();
   });
 
   test('embed document:open-url fetches, opens and round-trips the document', async ({ page }) => {

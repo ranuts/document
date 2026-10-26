@@ -20,8 +20,8 @@ let landingHero: HTMLElement | null = null;
 const getLandingHero = (): HTMLElement | null => (landingHero ??= document.getElementById('landing-hero'));
 
 export const showLanding = (): void => {
-  document.body.classList.add('landing-active');
   const hero = getLandingHero();
+  document.body.classList.toggle('landing-active', !!hero);
   if (hero) hero.style.display = '';
 };
 
@@ -37,6 +37,7 @@ export const hideLanding = (): void => {
 // create* wrapper at boot, so in practice it is built up front; the laziness
 // just makes call order a non-issue.)
 let controlPanel: HTMLElement | null = null;
+let visibilityTimer: ReturnType<typeof setTimeout> | undefined;
 
 const getControlPanel = (): HTMLElement => (controlPanel ??= buildControlPanel());
 
@@ -45,12 +46,14 @@ export const hideControlPanel = (): void => {
   // Dismiss the crawlable landing hero with the panel.
   hideLanding();
 
+  clearTimeout(visibilityTimer);
   const panel = getControlPanel();
+  panel.inert = true;
   // Immediately disable pointer events to prevent blocking
   panel.style.pointerEvents = 'none';
   panel.style.opacity = '0';
   // Hide after transition for smooth animation
-  setTimeout(() => {
+  visibilityTimer = setTimeout(() => {
     panel.style.display = 'none';
   }, 300);
 };
@@ -65,10 +68,15 @@ export const showControlPanel = (): void => {
   // screen (index.ts sets it before the panel is built).
   document.body.classList.remove('opening-document');
 
+  clearTimeout(visibilityTimer);
   const panel = getControlPanel();
+  const hasHero = !!getLandingHero();
+  panel.inert = hasHero;
+  panel.style.pointerEvents = hasHero ? 'none' : 'auto';
   panel.style.display = 'flex';
-  setTimeout(() => {
+  visibilityTimer = setTimeout(() => {
     panel.style.opacity = '1';
+    if (!hasHero) panel.querySelector<HTMLElement>('#upload-button')?.focus();
   }, 10);
 };
 
