@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { matchesGlob, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
@@ -542,6 +542,12 @@ describe('.github/workflows/nightly-corpus.yml', () => {
     expect(oxlint.ignorePatterns).not.toContain('**/public/**');
     for (const vendored of ['public/sdkjs/**', 'public/web-apps/**', 'public/fonts/**']) {
       expect(oxlint.ignorePatterns, vendored).toContain(vendored);
+    }
+    // Our own scripts can sit next to a vendored bundle (the SheetJS worker beside
+    // xlsx.full.min.js); a directory-wide ignore there silently drops them.
+    for (const own of ['public/sw.js', 'public/libs/sheetjs/convert.worker.js']) {
+      const ignoredBy = oxlint.ignorePatterns.filter((pattern) => matchesGlob(own, pattern));
+      expect(ignoredBy, own).toEqual([]);
     }
   });
 

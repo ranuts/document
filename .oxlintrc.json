@@ -10,7 +10,7 @@
     "public/sdkjs/**",
     "public/web-apps/**",
     "public/fonts/**",
-    "public/libs/**",
+    "public/libs/sheetjs/xlsx.full.min.js",
     "public/ranui-iife/**",
     "public/ran-iife/**",
     "public/help/**",
