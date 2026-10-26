@@ -27,6 +27,7 @@ export const zhCN: I18nMessages = {
   agentSpeechDenied: '麦克风权限被拒绝，请在浏览器设置中允许访问。',
   agentSpeechFailed: '语音识别失败，请检查麦克风、语言和网络后重试。',
   agentSpeechFinishing: '正在完成识别…',
+  agentSpeechLimit: '已达到单次听写时长，可以继续听写。',
   agentSpeechUnsupported: '当前浏览器不支持语音输入。',
   agentDownloadIncomplete: '下载未完成',
   agentModelInUse: '正在使用',

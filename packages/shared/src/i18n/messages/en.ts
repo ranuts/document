@@ -28,6 +28,7 @@ export const en: I18nMessages = {
   agentSpeechDenied: 'Microphone permission denied. Allow access in browser settings.',
   agentSpeechFailed: 'Speech recognition failed. Check your microphone, language and connection, then retry.',
   agentSpeechFinishing: 'Finishing…',
+  agentSpeechLimit: 'Dictation limit reached. You can start again.',
   agentSpeechUnsupported: 'Voice input is unavailable in this browser.',
   agentDownloadIncomplete: 'Incomplete download',
   agentModelInUse: 'In use',

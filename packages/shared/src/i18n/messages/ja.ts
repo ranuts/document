@@ -31,6 +31,7 @@ export const ja: Partial<I18nMessages> = {
   agentSpeechDenied: 'マイクの許可が拒否されました。ブラウザー設定で許可してください。',
   agentSpeechFailed: '認識に失敗しました。マイク、言語、接続を確認してください。',
   agentSpeechFinishing: '認識を終了中…',
+  agentSpeechLimit: '音声入力の制限時間に達しました。もう一度開始できます。',
   agentSpeechUnsupported: 'このブラウザーでは音声入力を利用できません。',
   agentDownloadIncomplete: 'ダウンロード未完了',
   agentModelInUse: '使用中',

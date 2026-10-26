@@ -30,6 +30,7 @@ export const pt: Partial<I18nMessages> = {
   agentSpeechDenied: 'Permissão do microfone negada. Permita o acesso nas configurações do navegador.',
   agentSpeechFailed: 'Falha no reconhecimento. Verifique microfone, idioma e conexão.',
   agentSpeechFinishing: 'Finalizando…',
+  agentSpeechLimit: 'O limite de ditado foi atingido. Pode começar novamente.',
   agentSpeechUnsupported: 'Este navegador não suporta entrada de voz.',
   agentDownloadIncomplete: 'Download incompleto',
   agentModelInUse: 'Em uso',
