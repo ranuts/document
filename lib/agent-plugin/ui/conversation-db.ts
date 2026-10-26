@@ -70,7 +70,9 @@ function validateStored(value: unknown): StoredConversations | null {
 
 export class ConversationConflictError extends Error {
   constructor() {
-    super('Saved conversations changed in another tab. Export this conversation before restoring saved history.');
+    super(
+      'Saved conversations changed in another tab. Keep local copies and restore saved history to preserve both versions.',
+    );
     this.name = 'ConversationConflictError';
   }
 }

@@ -359,3 +359,22 @@ it('settles clear-all exactly once only on successful retry while preserving con
   expect(restored).toHaveBeenCalledExactlyOnceWith('all');
   expect(document.activeElement).toBe(trigger);
 });
+
+it('offers explicit preserve-local recovery only after a conflict', async () => {
+  const store = createConversationStore();
+  store.history().save([{ role: 'user', content: 'local' }]);
+  const before = vi.fn();
+  const restored = vi.fn();
+  const controls = createHistoryControls({ store, onBeforeRestore: before, onRestore: restored });
+  document.body.append(controls.el);
+  const recover = controls.el.querySelector<HTMLButtonElement>('.agent-history-recover')!;
+  expect(recover.hidden).toBe(true);
+  controls.showError(new ConversationConflictError());
+  expect(recover.hidden).toBe(false);
+  recover.click();
+  await vi.waitFor(() => expect(restored).toHaveBeenCalledOnce());
+  expect(before).toHaveBeenCalledOnce();
+  expect(store.history().load()[0].content).toBe('local');
+  expect(store.saving).toBe(false);
+  expect(recover.hidden).toBe(true);
+});

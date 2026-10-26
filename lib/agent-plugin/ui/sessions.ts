@@ -43,6 +43,7 @@ export function createConversationStore(onChange?: () => void, options: Conversa
   let epoch = 0;
   let knownRevision: number | undefined;
   let memoryRevision = 0;
+  let historyGeneration = 0;
   let dirty = false;
   const touched = new Set<string>();
   const removed = new Set<string>();
@@ -191,7 +192,9 @@ export function createConversationStore(onChange?: () => void, options: Conversa
       .sort((a, b) => Number(b.id === active) - Number(a.id === active) || b.updatedAt - a.updatedAt);
   const history = (id = active): HistoryStorage => {
     if (!sessions.some((item) => item.id === id)) throw new Error('Unknown conversation');
+    const generation = historyGeneration;
     const save = (messages: LLMMessage[]) => {
+      if (generation !== historyGeneration) return;
       const item = sessions.find((item) => item.id === id);
       // A detached controller may finish after deletion. It must never resurrect history.
       if (!item) return;
@@ -271,6 +274,47 @@ export function createConversationStore(onChange?: () => void, options: Conversa
         lastError = undefined;
         mergeSaved(await repository.load());
       }),
+    // Explicit recovery keeps local variants in memory; saving remains opt-in.
+    // Do not mutate local state until the read succeeds. A later save still
+    // compares the loaded database revision, including races with another tab.
+    recoverSaved: (copyLabel = 'Local copy'): Promise<void> => {
+      saving = false;
+      savePending = false;
+      epoch++;
+      return enqueue(async () => {
+        const stored = await repository.load();
+        const merged = structuredClone(stored?.sessions ?? []);
+        const localIds = new Set<string>();
+        let nextActive = active;
+        for (const item of sessions) {
+          if (!touched.has(item.id) && savedIds.has(item.id)) continue;
+          if (!item.messages.length && !item.title && !touched.has(item.id)) continue;
+          const remote = merged.find((entry) => entry.id === item.id);
+          if (remote && JSON.stringify(remote) === JSON.stringify(item)) continue;
+          const copy = structuredClone(item);
+          if (remote) {
+            copy.id = crypto.randomUUID();
+            copy.title = `${copy.title || copyLabel} (${copyLabel})`;
+            if (active === item.id) nextActive = copy.id;
+          }
+          merged.push(copy);
+          localIds.add(copy.id);
+        }
+        if (!merged.length) merged.push(blankConversation());
+        sessions = merged;
+        active = merged.some((item) => item.id === nextActive) ? nextActive : merged[0].id;
+        knownRevision = stored?.revision ?? 0;
+        savedIds = new Set(stored?.sessions.map((item) => item.id) ?? []);
+        touched.clear();
+        for (const id of localIds) touched.add(id);
+        removed.clear();
+        dirty = localIds.size > 0;
+        memoryRevision++;
+        historyGeneration++;
+        lastError = undefined;
+        onChange?.();
+      });
+    },
     setSaving: async (enabled: boolean): Promise<void> => {
       if (!enabled) {
         saving = false;

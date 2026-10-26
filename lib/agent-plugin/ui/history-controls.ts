@@ -65,6 +65,7 @@ export function createHistoryControls(options: HistoryControlsOptions) {
     return item;
   };
   const restore = button('agent-history-restore', 'M3 11a9 9 0 1 1 3 8M3 5v6h6M12 7v5l3 2');
+  const recover = button('agent-history-recover', 'M3 11a9 9 0 1 1 3 8M3 5v6h6');
   const legacy = button('agent-history-import', 'M12 3v12m-4-4 4 4 4-4M4 15v5h16v-5');
   const exported = button('agent-history-export', 'M12 15V3m-4 4 4-4 4 4M4 15v5h16v-5');
   const remove = button('agent-history-delete-current', 'M9 8l6 6m0-6-6 6M20 11a8 8 0 0 1-8 8H4v-8a8 8 0 0 1 16 0Z');
@@ -73,7 +74,7 @@ export function createHistoryControls(options: HistoryControlsOptions) {
     actionLabels.get(item)!.textContent = t(key);
   };
   actions.append(
-    Div().class('agent-history-transfer-actions').children(restore, legacy, exported).build(),
+    Div().class('agent-history-transfer-actions').children(restore, recover, legacy, exported).build(),
     Div().class('agent-history-danger-actions').children(remove, clear).build(),
   );
   const confirmation = document.createElement('div');
@@ -100,6 +101,8 @@ export function createHistoryControls(options: HistoryControlsOptions) {
     legend.textContent = t('agentHistoryDataControls');
     saveText.textContent = t('agentSaveHistory');
     labelAction(restore, 'agentRestoreHistory');
+    labelAction(recover, 'agentRecoverHistory');
+    recover.hidden = failure !== 'agentHistoryConflict';
     labelAction(legacy, 'agentImportHistory');
     labelAction(exported, 'agentExportHistory');
     labelAction(remove, 'agentDeleteConversation');
@@ -162,6 +165,16 @@ export function createHistoryControls(options: HistoryControlsOptions) {
         restoreView();
       }),
   );
+  recover.addEventListener('click', () => {
+    if (busy) return;
+    void run(async () => {
+      options.onBeforeRestore?.();
+      await store.recoverSaved(t('agentHistoryLocalCopy'));
+      localStorageSetItem(SAVE_PREFERENCE, 'false');
+      restoreView();
+      restore.focus();
+    });
+  });
   legacy.addEventListener(
     'click',
     () =>

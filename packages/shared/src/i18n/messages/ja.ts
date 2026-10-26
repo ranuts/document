@@ -334,7 +334,9 @@ export const ja: Partial<I18nMessages> = {
   agentHistoryBusy: 'チャット履歴を更新中…',
   agentHistorySaveFailed:
     '履歴を保存できませんでした。会話はこのページに残っています。閉じる前にエクスポートしてください。',
-  agentHistoryConflict: '別のタブで保存済み履歴が変更されました。復元する前に現在の会話をエクスポートしてください。',
+  agentHistoryConflict: '別のタブで履歴が変更されました。ローカルコピーを残して復元すると両方の版を保持できます。',
+  agentRecoverHistory: 'ローカルコピーを残して復元',
+  agentHistoryLocalCopy: 'ローカルコピー',
   agentRestoreHistory: '保存済み履歴を復元',
   agentImportHistory: '以前のチャット履歴をインポート',
   agentExportHistory: '会話をエクスポート',

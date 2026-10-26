@@ -348,7 +348,9 @@ export const de: Partial<I18nMessages> = {
   agentHistorySaveFailed:
     'Der Verlauf konnte nicht gespeichert werden. Die Unterhaltung bleibt auf dieser Seite; exportieren Sie sie vor dem Schließen.',
   agentHistoryConflict:
-    'Ein anderer Tab hat den gespeicherten Verlauf geändert. Exportieren Sie diese Unterhaltung vor dem Wiederherstellen.',
+    'Ein anderer Tab hat den Verlauf geändert. Behalten Sie lokale Kopien und stellen Sie den Verlauf wieder her.',
+  agentRecoverHistory: 'Lokale Kopien behalten und wiederherstellen',
+  agentHistoryLocalCopy: 'Lokale Kopie',
   agentRestoreHistory: 'Gespeicherten Verlauf wiederherstellen',
   agentImportHistory: 'Früheren Chatverlauf importieren',
   agentExportHistory: 'Unterhaltungen exportieren',
