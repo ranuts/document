@@ -250,6 +250,8 @@ self.addEventListener('install', (event) => {
               (density) => `/sdkjs/common/Images/fonts_thumbnail${locale}${density}.png.bin`,
             ),
           ),
+          '/libs/sheetjs/convert.worker.js',
+          '/libs/sheetjs/xlsx.full.min.js',
           '/web-apps/vendor/xregexp/xregexp-all-min.js',
           '/web-apps/vendor/socketio/socket.io.min.js',
           '/sdkjs/common/wasm/x2t/x2t_helper.js',

@@ -47,7 +47,13 @@ export const events: Record<string, MessageHandler<any, unknown>> = {
       try {
         const file = await MessageCodec.decodeFileChunked(chunks);
         opening.assertCurrent();
-        await handleDocumentOperation({ file, fileName: file.name, isNew: false, isCurrent: opening.isCurrent });
+        await handleDocumentOperation({
+          file,
+          fileName: file.name,
+          isNew: false,
+          signal: opening.signal,
+          isCurrent: opening.isCurrent,
+        });
         if (commitDocumentOpen(opening.id)) {
           setDocmentObj({ fileName: file.name, file });
           clearDocumentSession();

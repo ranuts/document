@@ -136,6 +136,7 @@ async function openFile(file: File, readonly = false): Promise<void> {
     file,
     isNew: false,
     readonly,
+    signal: opening.signal,
     isCurrent: opening.isCurrent,
   });
   if (!commitDocumentOpen(opening.id)) throw new DOMException('Document open superseded', 'AbortError');
