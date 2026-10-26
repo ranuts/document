@@ -55,8 +55,13 @@ bundle that posts to it.
 - **After:** the worker is in `DEPLOY_COUPLED`, in the `public/_headers`
   no-cache group, and in the core precache list. Network-first's offline
   fallback reads only the core cache, so offline conversion keeps working.
-  `xlsx.full.min.js` is vendored, rarely changes and is versioned with the
-  vendor tree, so it stays on the runtime path.
+  `xlsx.full.min.js` rarely changes, so it stays stale-while-revalidate.
+- **Precache location:** both files are precached into the core cache. They are
+  not under the vendor trees (`sdkjs`, `web-apps`, `fonts`), so when a deploy
+  that leaves vendor unchanged activates with no window open,
+  `pruneAppAssets` would delete them from the runtime cache, and the first
+  offline CSV conversion would fail. The stale-while-revalidate branch reads
+  through `caches.match`, which also finds the core copy.
 - **Tests:** `sw-routing.test.ts` asserts network-first for the worker, and
   `sw-boot-precache.test.ts` now records cache entries by cache name and asserts
   the worker lands in core. Both fail with the previous `sw.js`.
