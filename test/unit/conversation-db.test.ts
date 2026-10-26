@@ -4,6 +4,7 @@ import { beforeEach, expect, it, vi } from 'vitest';
 import {
   CONVERSATION_DB_NAME,
   createConversationRepository,
+  prepareConversationRecord,
   type ConversationData,
 } from '../../lib/agent-plugin/ui/conversation-db';
 
@@ -291,4 +292,52 @@ it('a racing erase cannot be undone by a save from the previous revision', async
   expect(erased?.activeId).toBe('');
   expect(erased?.revision).toBeGreaterThanOrEqual(2);
   await expect(writer.save(data, 1)).rejects.toThrow(/another tab/i);
+});
+
+it('reuses only owned immutable prepared records across saves', async () => {
+  const repository = createConversationRepository();
+  const original = structuredClone(data.sessions[0]);
+  const prepared = prepareConversationRecord(original);
+  original.messages[0].content = 'changed outside';
+  expect(prepared.messages[0].content).toBe('private');
+  expect(() => {
+    prepared.messages[0].content = 'mutated';
+  }).toThrow();
+  const stringify = vi.spyOn(JSON, 'stringify');
+  try {
+    await repository.save({ ...data, sessions: [prepared] }, 0);
+    await repository.save({ ...data, sessions: [prepared] }, 1);
+    expect(stringify).not.toHaveBeenCalled();
+    const changed = prepareConversationRecord({ ...prepared, title: 'new title' });
+    await repository.save({ ...data, sessions: [changed] }, 2);
+    expect(stringify).toHaveBeenCalledOnce();
+  } finally {
+    stringify.mockRestore();
+  }
+  expect((await repository.load())?.sessions[0].title).toBe('new title');
+});
+
+it('never trusts identity caching for mutable external records', async () => {
+  const repository = createConversationRepository();
+  const mutable = structuredClone(data);
+  await repository.save(mutable, 0);
+  mutable.sessions[0].messages[0].content = 'nested change';
+  await repository.save(mutable, 1);
+  expect((await repository.load())?.sessions[0].messages[0].content).toBe('nested change');
+});
+
+it('does not brand mutable exotic objects as immutable prepared data', async () => {
+  const repository = createConversationRepository();
+  const record = prepareConversationRecord({
+    ...data.sessions[0],
+    messages: [
+      { role: 'assistant', content: [{ type: 'tool_use', id: 'tool', name: 'read', input: { date: new Date(0) } }] },
+    ],
+  });
+  await repository.save({ ...data, sessions: [record] }, 0);
+  const blocks = record.messages[0].content as Array<{ input: { date: Date } }>;
+  blocks[0].input.date.setTime(1000);
+  await repository.save({ ...data, sessions: [record] }, 1);
+  const saved = (await repository.load())!.sessions[0].messages[0].content as Array<{ input: { date: Date } }>;
+  expect(saved[0].input.date.getTime()).toBe(1000);
 });
