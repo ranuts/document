@@ -304,14 +304,20 @@ it('keeps a prior recovery point when saving the reload source fails', async () 
   expect(new Uint8Array(await opened.mock.calls[0][0].arrayBuffer())).toEqual(new Uint8Array([1]));
 });
 
-it('keeps the editable source after saving an export in another format', async () => {
+it('keeps the editable source unsaved after exporting another format', async () => {
   await rememberActiveSource('save-document', new File(['editable source'], 'Report.docx'));
-  setDiskWriter(async () => 'written');
+  const writer = vi.fn(async () => 'written' as const);
+  setDiskWriter(writer);
   await sendFile(true, 0, 'pdf');
-  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
+  await vi.waitFor(() => expect(writer).toHaveBeenCalledOnce());
   await new Promise((resolve) => setTimeout(resolve, 30));
+  expect(hasUnsavedChanges()).toBe(true);
+  expect(history.Reset_SavedIndex).not.toHaveBeenCalled();
   expect(await (await readActiveSource('save-document'))?.text()).toBe('editable source');
   expect((await getDoc('save-document'))?.savedToDiskAt).toBeUndefined();
+  await sendFile();
+  await vi.waitFor(() => expect(hasUnsavedChanges()).toBe(false));
+  expect(history.Reset_SavedIndex).toHaveBeenCalledWith(true);
 });
 
 it('publishes save completion only after the saved reload bytes are durable', async () => {

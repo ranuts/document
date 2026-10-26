@@ -241,7 +241,8 @@ function routeSavedFile(file: File, state: ReturnType<typeof standaloneExportSta
     if (regularSave && isCurrent() && isSavePointCurrent(state.point)) await savedToDiskListener?.(file, isCurrent);
     // Clearing dirty also makes reload look safe. Retain the saved bytes before
     // publishing completion, then recheck for edits made while storage waited.
-    if (state.isCurrent() && commitSavePoint(state.point)) markDocumentSaved();
+    // A PDF or other-format export does not save the editable source.
+    if (regularSave && state.isCurrent() && commitSavePoint(state.point)) markDocumentSaved();
   };
 
   // Write back to the document's own file where that is possible, and download
