@@ -47,6 +47,8 @@
   Cache-Control: no-cache
 /ranui-iife/*
   Cache-Control: no-cache
+/libs/sheetjs/convert.worker.js
+  Cache-Control: no-cache
 
 # Self-hosted fonts: unhashed but they only change with a ranui release; a
 # week of browser cache with revalidation after is a fine trade.

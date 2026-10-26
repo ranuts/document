@@ -19,7 +19,7 @@ const FONT_REGEX = /\.(ttf|woff2?|otf|eot)(\?.*)?$/;
 
 /** Keep in sync with DEPLOY_COUPLED in public/sw.js and the no-cache group in public/_headers. */
 const DEPLOY_COUPLED =
-  /^\/(?:home|landing|app-tokens)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch|history-recent|theme-presentation)\.js$|^\/ranui-iife\//;
+  /^\/(?:home|landing|app-tokens)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch|history-recent|theme-presentation)\.js$|^\/ranui-iife\/|^\/libs\/sheetjs\/convert\.worker\.js$/;
 
 const isHtmlRequest = (mode: string, pathname: string): boolean =>
   mode === 'navigate' || pathname.endsWith('.html') || pathname === '/' || pathname.endsWith('/');
@@ -187,6 +187,9 @@ describe('deploy-coupled assets use network-first', () => {
       '/history-recent.js',
       '/ranui-iife/button.iife.js',
       '/ranui-iife/card.iife.js',
+      // The SheetJS worker's message protocol changes with the app bundle that
+      // posts to it; a stale copy fails the first conversion after a deploy.
+      '/libs/sheetjs/convert.worker.js',
     ]) {
       expect(strategyFor(path)).toBe('network-first');
     }

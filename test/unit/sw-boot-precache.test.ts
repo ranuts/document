@@ -81,13 +81,16 @@ it('caches vendor bootstrap script and style tags without evaluating inline scri
 
 it('installs native export runtime before the editor is used offline', async () => {
   const listeners = new Map<string, (event: any) => void>();
-  const stored = new Set<string>();
-  const cache = {
+  // Per cache name: the network-first offline fallback only reads the core cache.
+  const stored = new Map<string, Set<string>>();
+  const cacheFor = (name: string) => ({
     addAll: async (urls: string[]) => {
-      for (const url of urls) stored.add(url);
+      const entries = stored.get(name) ?? new Set<string>();
+      for (const url of urls) entries.add(new URL(url, 'https://editor.example/').pathname);
+      stored.set(name, entries);
     },
     match: async () => ({ text: async () => '<html></html>' }),
-  };
+  });
   runInNewContext(readFileSync('public/sw.js', 'utf8'), {
     URL,
     Promise,
@@ -98,7 +101,7 @@ it('installs native export runtime before the editor is used offline', async () 
       addEventListener: (name: string, callback: (event: any) => void) => listeners.set(name, callback),
       skipWaiting: () => {},
     },
-    caches: { open: async () => cache, keys: async () => [] },
+    caches: { open: async (name: string) => cacheFor(name), keys: async () => [] },
   });
   let installed!: Promise<unknown>;
   listeners.get('install')!({
@@ -107,11 +110,16 @@ it('installs native export runtime before the editor is used offline', async () 
     },
   });
   await installed;
-  expect(stored.has('/sdkjs/common/wasm/x2t/x2t.js')).toBe(true);
-  expect(stored.has('/sdkjs/common/wasm/x2t/x2t.wasm.br')).toBe(true);
-  expect(stored.has('/sdkjs/common/wasm/x2t/x2t.worker.js')).toBe(true);
-  expect(stored.has('/libs/sheetjs/convert.worker.js')).toBe(true);
-  expect(stored.has('/libs/sheetjs/xlsx.full.min.js')).toBe(true);
+  const cached = (prefix: string) =>
+    new Set([...stored].filter(([name]) => name.startsWith(prefix)).flatMap(([, urls]) => [...urls]));
+  const runtime = cached('document-editor-runtime-');
+  const core = cached('document-editor-core-');
+  expect(runtime.has('/sdkjs/common/wasm/x2t/x2t.js')).toBe(true);
+  expect(runtime.has('/sdkjs/common/wasm/x2t/x2t.wasm.br')).toBe(true);
+  expect(runtime.has('/sdkjs/common/wasm/x2t/x2t.worker.js')).toBe(true);
+  expect(runtime.has('/libs/sheetjs/xlsx.full.min.js')).toBe(true);
+  // Deploy-coupled and network-first: its offline copy belongs to this build's core.
+  expect(core.has('/libs/sheetjs/convert.worker.js')).toBe(true);
 });
 
 it('precaches local file-open controls from the offline homepage', async () => {
