@@ -198,6 +198,7 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- Every site page's footer links to the author's site, chaxus.com.
 - The editor page fetches less than half the JavaScript it did before it can
   start (163 KB instead of 350 KB compressed). Browser-agent text reading and
   the install prompt load when first needed, and an unused character-set
