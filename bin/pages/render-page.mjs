@@ -2,7 +2,7 @@
  * The template every generated page other than a homepage uses: prose from
  * markdown, dropped into the shared shell.
  */
-import { ORIGIN, REPO } from './constants.mjs';
+import { ORIGIN, REPO, authorHome } from './constants.mjs';
 import { ID, appEntity, appStub, siteEntities, sourceEntity } from './entities.mjs';
 import { DEFAULT_LOCALE, LOCALES } from './locales.mjs';
 import { langMenu, routeFor } from './chrome.mjs';
@@ -223,6 +223,7 @@ ${aside}    </div>
     <footer class="page-foot">
 ${footer}
       <a href="${REPO}" rel="noopener">GitHub</a>
+      <a href="${authorHome(locale)}" rel="author">${escapeHtml(ui.byAuthor)}</a>
       <r-theme-switch class="theme-switch" label="${ui.themeLabel}"></r-theme-switch>
       <p class="tm">${escapeHtml(ui.trademark)}</p>
     </footer>

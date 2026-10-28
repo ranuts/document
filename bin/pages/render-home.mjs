@@ -5,7 +5,7 @@
  * the decoration around them is layout. content/<locale>/home.json holds the
  * strings; this holds the structure.
  */
-import { ORIGIN, REPO } from './constants.mjs';
+import { ORIGIN, REPO, authorHome } from './constants.mjs';
 import { ID, appEntity, siteEntities, sourceEntity } from './entities.mjs';
 import { DEFAULT_LOCALE, LOCALES } from './locales.mjs';
 import { langMenu } from './chrome.mjs';
@@ -330,6 +330,7 @@ ${faq}
         <span>${e(data.foot.copy)}</span>
         <nav>
 ${footLinks}
+          <a href="${authorHome(locale)}" rel="author">${e(ui.byAuthor)}</a>
         </nav>
         <r-theme-switch class="theme-switch" label="${e(ui.themeLabel)}"></r-theme-switch>
         <span class="lic">${e(data.foot.license)}</span>
