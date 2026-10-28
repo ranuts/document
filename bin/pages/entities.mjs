@@ -2,7 +2,7 @@
  * The JSON-LD entity graph: the three things this site is about, named once
  * and referred to by `@id` from every page.
  */
-import { ORIGIN, REPO, SITE_NAME } from './constants.mjs';
+import { AUTHOR, ORIGIN, REPO, SITE_NAME } from './constants.mjs';
 import { LOCALES } from './locales.mjs';
 
 /**
@@ -22,6 +22,7 @@ export const ID = {
   site: `${ORIGIN}/#website`,
   app: `${ORIGIN}/#app`,
   source: `${ORIGIN}/#source`,
+  person: AUTHOR.id,
 };
 
 /** The site identity is shared by every page, without promotional publisher branding. */
@@ -35,7 +36,11 @@ export const siteEntities = () => [
     // and not about whichever page is being read. Each page states its own
     // language on its WebPage node.
     inLanguage: Object.keys(LOCALES),
+    author: { '@id': ID.person },
+    publisher: { '@id': ID.person },
   },
+  // Defined here, once per page, so every reference to it resolves locally.
+  { '@type': 'Person', '@id': ID.person, name: AUTHOR.name, url: AUTHOR.url, sameAs: AUTHOR.sameAs },
 ];
 
 /**
@@ -56,6 +61,8 @@ export const appEntity = (extra = {}) => ({
   // The repository is the editor's other public identity, not the org's.
   sameAs: [REPO],
   isPartOf: { '@id': ID.site },
+  author: { '@id': ID.person },
+  publisher: { '@id': ID.person },
   ...extra,
 });
 
