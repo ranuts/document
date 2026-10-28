@@ -348,6 +348,10 @@ index.html）的 canonical/hreflang/JSON-LD/sitemap/双语互指契约——新�
 页面级 id。**app 节点的 `url` 恒为站点根**，语言写在 `WebPage.inLanguage`；
 改成当前页 URL 就等于宣称七种语言是七个产品。文档页只发 app 的 stub（`appStub()`），
 落地页才发完整节点。上面那个测试会拒绝重复 `@id` 与解析不到定义的 `@id` 引用。
+**作者是站外的同一个人**（2026-10-28）：`WebSite` 与完整 app 节点的 `author` / `publisher` 都引用
+`https://chaxus.com/#person`，Person 节点每页定义一次；`@id` / `name` / `url` 必须和 chaxus.com、
+ran 写的逐字一致（它们靠 `@id` 合并），唯一来源是 `bin/pages/constants.mjs` 的 `AUTHOR`。
+页脚的 `rel="author"` 链接 zh-CN 指 `chaxus.com/zh/`、其余指英文根。
 见 docs/explorations/2026-08-23-entity-graph-from-apple.md。**线上冒烟** `.github/workflows/prod-smoke.yml`：每次 push main 等部署
 上线后即跑 + 每日；`E2E_BASE_URL=<站点>` 可把任意 spec 打到部署站。CF 面板里
 的 Cache Rules 等不在仓库、CI 复现不了，只能靠冒烟兜底。
