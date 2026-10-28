@@ -1,5 +1,7 @@
 # Online Document Editor
 
+By chaxus (https://chaxus.com/).
+
 > A free, privacy-first document editor that runs entirely in the browser. Edit
 > Microsoft Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files, and open
 > PDF files, with no required document upload or sign-up. Core editing and
