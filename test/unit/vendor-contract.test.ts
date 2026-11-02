@@ -50,6 +50,18 @@ describe('vendor contract sentinel', () => {
     }
   });
 
+  it.each(['documenteditor', 'spreadsheeteditor', 'presentationeditor', 'pdfeditor'])(
+    'web-apps %s still locks its chrome through the stacked editing:disable event (readonly UI, #298)',
+    (app) => {
+      const src = read(`public/web-apps/apps/${app}/main/app.js`);
+      expect(src).toContain('Common.NotificationCenter.on("editing:disable",_.bind(this.onEditingDisable,this)');
+      expect(src).toContain('stackDisableActions');
+      // DisableToolbar(disable, viewMode) stores viewMode as editMode; the
+      // unlock in lib/onlyoffice/readonly.ts depends on passing it back false.
+      expect(src).toMatch(/DisableToolbar:function\(t,e[,)][^}]*this\.editMode=!e/);
+    },
+  );
+
   it('slide SDK still loads the theme catalog from <themesPath>/themes.js (our stub relies on it)', () => {
     const src = read('public/sdkjs/slide/sdk-all-min.js');
     expect(src).toContain('SetThemesPath');
