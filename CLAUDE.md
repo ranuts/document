@@ -81,7 +81,8 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
     save-stream.ts        # 保存通道：请求生命周期、asc_DownloadAs 触发、file-stream 回收、CSV 往返
     viewport.ts           # 紧凑视口判定与布局同步（#145）
     sdk-api.ts            # 同源 iframe 里的 Asc.editor 访问、restriction 常量
-    readonly.ts           # 运行时只读（挂载永远可编辑，加载后加 restriction）
+    readonly.ts           # 运行时只读（挂载永远可编辑，加载后加 restriction，并经 vendor 的
+                          # editing:disable 锁界面；解锁时 viewMode 必须传 false，见 #298）
     save-point.ts         # embed 保存后移动 SDK 的 SavedIndex（导出期间历史没动才移），让之后的编辑重新触发 onDocumentStateChange
     ui-theme.ts           # 默认经典主题与站点主题跟随
     file-helpers.ts       # 文件名/MIME/字节形状小工具

@@ -15,6 +15,7 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Read-only documents now show it: the editing toolbar and side panels are dimmed and locked, while search, zoom and navigation stay available. Switching read-only off restores them.
 - Exporting a PDF or another format keeps unsaved changes in the editable original visible until the original is saved.
 - Failed file opens restore usable file controls, including keyboard access.
 - Document history search keeps focus and ignores outdated results while typing.
