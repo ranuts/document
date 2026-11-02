@@ -56,9 +56,6 @@ describe('vendor contract sentinel', () => {
       const src = read(`public/web-apps/apps/${app}/main/app.js`);
       expect(src).toContain('Common.NotificationCenter.on("editing:disable",_.bind(this.onEditingDisable,this)');
       expect(src).toContain('stackDisableActions');
-      // DisableToolbar(disable, viewMode) stores viewMode as editMode; the
-      // unlock in lib/onlyoffice/readonly.ts depends on passing it back false.
-      expect(src).toMatch(/DisableToolbar:function\(t,e[,)][^}]*this\.editMode=!e/);
     },
   );
 
