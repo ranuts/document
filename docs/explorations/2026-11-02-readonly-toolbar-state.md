@@ -1,5 +1,7 @@
 # 只读模式下工具栏看起来仍可编辑（#298）
 
+> 后续：工具栏遮罩已改为隐藏编辑页签与按钮，见 [2026-11-02-readonly-hide-edit-tabs.md](2026-11-02-readonly-hide-edit-tabs.md)。
+
 ## 现象
 
 以只读打开文档（`?readonly=1`，或 embed 的 `readonly: true` / `document:set-readonly`）后，
