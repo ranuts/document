@@ -64,14 +64,3 @@ export function getSdkEditorApi(): SdkEditorApi | null {
   }
   return null;
 }
-
-// v9.3.0 renamed sendCommand -> serviceCommand; keep the fallback for safety.
-export function editorSendCommand(params: { command: string; data: Record<string, any> }): void {
-  const editor = window.editor as any;
-  if (!editor) return;
-  if (typeof editor.serviceCommand === 'function') {
-    editor.serviceCommand(params);
-  } else if (typeof editor.sendCommand === 'function') {
-    editor.sendCommand(params);
-  }
-}

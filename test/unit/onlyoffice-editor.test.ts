@@ -73,26 +73,6 @@ describe('onlyoffice-editor', () => {
       expect(getReadonlyMode()).toBe(false);
     });
 
-    it('sends processRightsChange command to the editor when one exists', () => {
-      const editor = makeEditor();
-      (window as any).editor = editor;
-
-      setReadonlyMode(true);
-
-      expect(editor.sendCommand).toHaveBeenCalledWith(expect.objectContaining({ command: 'processRightsChange' }));
-    });
-
-    it('prefers serviceCommand over sendCommand when the editor exposes both (v9 renamed it)', () => {
-      const serviceCommand = vi.fn();
-      const editor = makeEditor({ serviceCommand });
-      (window as any).editor = editor;
-
-      setReadonlyMode(true);
-
-      expect(serviceCommand).toHaveBeenCalledWith(expect.objectContaining({ command: 'processRightsChange' }));
-      expect(editor.sendCommand).not.toHaveBeenCalled();
-    });
-
     it('does not throw when no editor is present', () => {
       expect(() => setReadonlyMode(true)).not.toThrow();
     });
