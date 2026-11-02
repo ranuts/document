@@ -3,12 +3,15 @@ on:
   # The editor now lives at https://edit.chaxus.com (Cloudflare Pages).
   # GitHub Pages publishes ONLY a client-side redirector (redirect/), so old
   # ranuts.github.io/document/* links keep working (path + query preserved).
-  # The app now deploys to Cloudflare Pages from `main`, so GitHub Pages is
-  # main-based too: any push to main republishes the redirector. workflow_dispatch
-  # lets you trigger the first redirector deploy by hand once Cloudflare is live.
+  # GitHub Pages keeps serving the last published artifact, so the redirector
+  # only needs republishing when it changes; every other push to main used to
+  # redeploy the same two files. workflow_dispatch republishes by hand.
   push:
     branches:
       - main
+    paths:
+      - "redirect/**"
+      - ".github/workflows/pages-build-site.yml"
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
