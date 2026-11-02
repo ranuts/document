@@ -48,3 +48,15 @@
   （本地 vite dev）。
 - `vendor-contract.test.ts` 新增：四个 app.js 仍订阅 `editing:disable`、仍有 `stackDisableActions`、
   `DisableToolbar` 仍把 viewMode 存成 editMode。vendor 升级改了这些会先红。
+
+## 截图（#300 之后的最终效果）
+
+2026-11-02 在 #300 的 Cloudflare Pages 预览部署上用 `/embed-demo` 拍摄，编辑器区域 1260×789。
+
+| 状态          | 截图                                                |
+| ------------- | --------------------------------------------------- |
+| docx 只读     | ![docx 只读](../media/readonly/readonly-docx.png)   |
+| docx 解锁之后 | ![docx 可编辑](../media/readonly/editable-docx.png) |
+| xlsx 只读     | ![xlsx 只读](../media/readonly/readonly-xlsx.png)   |
+| pptx 只读     | ![pptx 只读](../media/readonly/readonly-pptx.png)   |
+| pdf 只读      | ![pdf 只读](../media/readonly/readonly-pdf.png)     |
