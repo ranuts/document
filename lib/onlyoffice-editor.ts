@@ -23,8 +23,7 @@ import {
   setOpenRunner,
 } from './onlyoffice/open-failure';
 import { markDocumentDirty, markDocumentSaved, resetUnsavedChanges } from './unsaved-guard';
-import { getSdkEditorApi, ASC_RESTRICTION_VIEW } from './onlyoffice/sdk-api';
-import { getReadonlyMode, setReadonlyState } from './onlyoffice/readonly';
+import { getReadonlyMode, setReadonlyMode, setReadonlyState } from './onlyoffice/readonly';
 import { resolveUiTheme } from './onlyoffice/ui-theme';
 import {
   describeMemoryVerdict,
@@ -264,9 +263,7 @@ function createPersonalEditorInstance(config: {
         // here instead (asc_setRestriction only works once the document is
         // loaded). Read the live flag rather than the captured config value:
         // setReadonlyMode may have been called while the document loaded.
-        if (getReadonlyMode()) {
-          getSdkEditorApi()?.asc_setRestriction?.(ASC_RESTRICTION_VIEW);
-        }
+        if (getReadonlyMode()) setReadonlyMode(true);
         console.log(`${t('documentLoaded')}${fileName}`);
       },
       // The editor's modified flag. This is the only signal the app has that
