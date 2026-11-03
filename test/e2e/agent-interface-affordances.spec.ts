@@ -59,9 +59,12 @@ for (const width of [360, 1280]) {
       expect(surface.background).not.toBe('rgba(0, 0, 0, 0)');
       expect(surface.background).not.toBe(surface.canvas);
       expect(surface.contrast).toBeGreaterThanOrEqual(4.5);
+      // Arrive from the previous control: the command is the last tabbable
+      // element on the page, and Firefox leaves focus on it when Tab runs off
+      // the end, so Tab then Shift+Tab lands on the control before it.
       await command.focus();
-      await page.keyboard.press('Tab');
       await page.keyboard.press('Shift+Tab');
+      await page.keyboard.press('Tab');
       await expect(command).toBeFocused();
       await expect(command).toHaveCSS('outline-style', 'solid');
       await expect(command).toHaveCSS('outline-width', '2px');
