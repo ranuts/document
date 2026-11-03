@@ -35,17 +35,21 @@ runs:
         BROWSERS: ${{ inputs.browsers }}
       run: |
         echo "version=$(pnpm exec playwright --version | awk '{ print $NF }')" >>"$GITHUB_OUTPUT"
+        echo "distro=$(. /etc/os-release && echo "$ID$VERSION_ID")" >>"$GITHUB_OUTPUT"
         echo "slug=${BROWSERS// /-}" >>"$GITHUB_OUTPUT"
 
-    # The browser binaries are the slow half of the install and they only ever
-    # change with the Playwright version, so a hit leaves just the apt step.
+    # The browser binaries are the slow half of the install. Playwright ships a
+    # separate build per distro release (WebKit links against that release's
+    # ICU), so the key carries the distro too: when ubuntu-latest moved to
+    # 26.04 a key without it restored the 24.04 WebKit, which cannot start
+    # there (libicudata.so.74 missing).
     - name: Restore the Playwright browser cache
       if: inputs.browsers != ''
       id: browser-cache
       uses: actions/cache@v6
       with:
         path: ~/.cache/ms-playwright
-        key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-${{ steps.playwright.outputs.slug }}
+        key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.distro }}-${{ runner.arch }}-${{ steps.playwright.outputs.version }}-${{ steps.playwright.outputs.slug }}
 
     - name: Install Playwright browsers
       if: inputs.browsers != ''
