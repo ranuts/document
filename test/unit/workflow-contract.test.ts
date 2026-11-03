@@ -105,10 +105,15 @@ describe('the shared setup action', () => {
     expect(action).not.toMatch(/run: pnpm exec playwright install/);
   });
 
-  it('caches the browsers against the Playwright version, not the lockfile', () => {
+  it('caches the browsers against the distro and Playwright version, not the lockfile', () => {
     // Keying on the lockfile would evict the cache on every dependency bump
-    // and re-download the browsers for no reason.
-    expect(action).toMatch(/key: playwright-\$\{\{ runner\.os \}\}-\$\{\{ steps\.playwright\.outputs\.version \}\}/);
+    // and re-download the browsers for no reason. The distro is part of the
+    // key because Playwright builds per release: without it the 24.04 WebKit
+    // was restored onto the 26.04 runner and could not start.
+    expect(action).toMatch(/distro=\$\(\. \/etc\/os-release && echo "\$ID\$VERSION_ID"\)/);
+    expect(action).toMatch(
+      /key: playwright-\$\{\{ runner\.os \}\}-\$\{\{ steps\.playwright\.outputs\.distro \}\}-\$\{\{ runner\.arch \}\}-\$\{\{ steps\.playwright\.outputs\.version \}\}/,
+    );
   });
 });
 

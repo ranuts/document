@@ -434,7 +434,7 @@ apt-get，而 hosted runner 上的 apt 有过**拉完 release 索引后彻底停
 每次挂在不同的 job（三个 e2e job 跑的是同一步，谁中枪是随机的），每次都要人工
 重跑。apt 自身没有总时长上限，所以 `.github/scripts/install-playwright.sh` 给
 每次尝试套 `timeout` 并重试，重试前清掉被杀的 apt 留下的锁；浏览器二进制
-按 Playwright 版本号进 `actions/cache`，命中时只跑 `install-deps`。
+按"发行版 + 架构 + Playwright 版本号"进 `actions/cache`（Playwright 每个 Ubuntu 版本一套构建，2026-11-03 漏了发行版，26.04 的机器取回 24.04 的 WebKit 起不来），命中时只跑 `install-deps`。
 
 **缓存命中时直接不跑 apt**（2026-08-19 起）。读健康 run 的日志才看清 `install-deps`
 到底在干什么：Chromium 要的库（libnss3 / libgbm1 / libasound2t64 / libcairo2 …）
