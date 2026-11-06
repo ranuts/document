@@ -51,6 +51,22 @@ describe('public/_headers', () => {
     expect(rules['/*']?.['cross-origin-embedder-policy']).toBe('require-corp');
   });
 
+  it('serves the WebMCP Origin Trial token on every static response', () => {
+    // Bound to https://edit.chaxus.com:443, feature WebMCP, expiry 2027-03-30.
+    // Without this header, document.modelContext stays undefined on stable Chrome
+    // and lib/web-mcp.ts registers nothing for production visitors.
+    const token = rules['/*']?.['origin-trial'];
+    expect(token).toBeTruthy();
+    // Chrome OT format: signature bytes + trailing base64 JSON (`eyJ…`).
+    const json = JSON.parse(Buffer.from(token!.match(/eyJ[A-Za-z0-9+/=]+$/)![0], 'base64').toString());
+    expect(json).toEqual({
+      origin: 'https://edit.chaxus.com:443',
+      feature: 'WebMCP',
+      expiry: 1806364800,
+    });
+    expect(read('sws.toml')).toContain(token!);
+  });
+
   it('keeps deploy-coupled files uncacheable (a stale one breaks the shell)', () => {
     const deployCoupled = [
       '/sw.js',

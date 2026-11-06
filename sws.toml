@@ -27,6 +27,8 @@ source = "**"
 Cache-Control = "no-cache"
 Cross-Origin-Opener-Policy = "same-origin"
 Cross-Origin-Embedder-Policy = "require-corp"
+# Mirrors public/_headers: Chrome WebMCP origin trial for edit.chaxus.com (expires 2027-03-30).
+Origin-Trial = "AoTQnso1/o/QqeuQm3gH09lR4HmxWJUQxRSUYnkQjbMWdpd+HLLxif1WgCRuWLGkSGLeJ9w21/lxYCQkkdJ3twoAAABPeyJvcmlnaW4iOiJodHRwczovL2VkaXQuY2hheHVzLmNvbTo0NDMiLCJmZWF0dXJlIjoiV2ViTUNQIiwiZXhwaXJ5IjoxODA2MzY0ODAwfQ=="
 
 # Keep the vendored editor trees out of search indexes (mirrors _headers).
 [[advanced.headers]]
