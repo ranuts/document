@@ -20,33 +20,34 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 
 ## 现在真正空着的格子
 
-按"补它需要一个决定还是一次动手"分组，而不是按表格顺序——十一处 ⬜ 里只有三件事（ODF 那一族是新点出来的，不是新出现的）。
+按"补它需要一个决定还是一次动手"分组，而不是按表格顺序。
 
 1. **doc / xls / ppt 的插图与幂等**。导出 PDF 与只读已于 2026-09-12 经
    `CORPUS_DEEP=1` 补上（复用已打开的文档，每篇几百毫秒）；剩下这两个都要**再开一次
    文档**，那是另一个量级的成本，等 deep 两步在夜间跑出实际耗时再决定。
-2. **一次动手就能补的**：pdf 的环境类失败自动重试、pptx 的裸 `document:save` 默认格式、
-   ODF 三种的只读与幂等。
-3. **要外部条件的**：真实安卓设备、右键菜单（vendor 的上下文菜单在 canvas 里，
+2. **要外部条件的**：真实安卓设备、右键菜单（vendor 的上下文菜单在 canvas 里，
    没有可枚举的 DOM）、旅程本体（需要先把 `actions/` 的动作库补齐）。
+3. **已于 2026-11-06 补上**：pptx/pdf 裸 `document:save` 默认（`SD`）、ODF 只读与
+   再保存幂等（`OD`）。pdf 环境类打开重试标为 **—**：pdf 走 `localOpenFromBinary`，
+   不经 `convertToBin`，OR 那套 boot-state 故障注入用不上。
 
 ## A. 格式 × 操作（合成语料 = PR 档；真实语料 = 🌙）
 
-| 操作 \ 格式                 | docx           | doc | xlsx                   | xls             | pptx       | ppt       | csv    | pdf        |
-| --------------------------- | -------------- | --- | ---------------------- | --------------- | ---------- | --------- | ------ | ---------- |
-| 打开（合成）                | ER, FN, SD, MT | ✱   | ER, FN, MT             | HX（HTML 伪装） | FP, RI, VR | ✱         | ER     | ER, PR     |
-| 打开（真实）                | 🌙             | 🌙  | 🌙                     | 🌙（POI）       | 🌙         | 🌙（POI） | 🌙     | PR         |
-| 键盘编辑                    | MT, VR 🌙      | 🌙  | MT, ER(Ctrl+S) 🌙      | 🌙              | VR 🌙      | 🌙        | 🌙     | PR（注释） |
-| 保存往返（L1 结构）         | ER, SD, FN, RI | 🌙  | ER, FN, HX, RI         | 🌙              | RI, FP     | 🌙        | ER     | PR         |
-| 保存往返（L2 内容比对）     | RI, DF, CM, VR | 🌙  | ER, FN, HX, XF, XP, CM | HX              | RI, VR     | 🌙        | ER, CE | —          |
-| 导出 PDF                    | FP, PC         | 🌙  | ER                     | 🌙              | FP         | 🌙        | 🌙     | —          |
-| 只读打开 / 运行时切换       | FP             | 🌙  | ER                     | 🌙              | FP         | 🌙        | FP     | PR         |
-| 插图后保存                  | ER             | ✱   | II                     | ✱               | II         | ✱         | —      | —          |
-| 评论                        | CM             | ✱   | CM                     | ✱               | CM         | ✱         | —      | PR（注释） |
-| 再打开→再保存（幂等）       | RI             | ✱   | RI                     | ✱               | RI         | ✱         | RI     | PR         |
-| 打开失败可见 + 保存快速拒绝 | —              | —   | OF                     | —               | —          | —         | —      | OF         |
-| 环境类打开失败自动重试      | —              | —   | OR（故障注入）         | —               | —          | —         | —      | ⬜         |
-| 裸 `document:save` 默认格式 | SD             | ✱   | FN                     | HX（→xlsx）     | ⬜         | ✱         | ER     | ⬜         |
+| 操作 \ 格式                 | docx           | doc | xlsx                   | xls             | pptx       | ppt       | csv    | pdf                        |
+| --------------------------- | -------------- | --- | ---------------------- | --------------- | ---------- | --------- | ------ | -------------------------- |
+| 打开（合成）                | ER, FN, SD, MT | ✱   | ER, FN, MT             | HX（HTML 伪装） | FP, RI, VR | ✱         | ER     | ER, PR                     |
+| 打开（真实）                | 🌙             | 🌙  | 🌙                     | 🌙（POI）       | 🌙         | 🌙（POI） | 🌙     | PR                         |
+| 键盘编辑                    | MT, VR 🌙      | 🌙  | MT, ER(Ctrl+S) 🌙      | 🌙              | VR 🌙      | 🌙        | 🌙     | PR（注释）                 |
+| 保存往返（L1 结构）         | ER, SD, FN, RI | 🌙  | ER, FN, HX, RI         | 🌙              | RI, FP     | 🌙        | ER     | PR                         |
+| 保存往返（L2 内容比对）     | RI, DF, CM, VR | 🌙  | ER, FN, HX, XF, XP, CM | HX              | RI, VR     | 🌙        | ER, CE | —                          |
+| 导出 PDF                    | FP, PC         | 🌙  | ER                     | 🌙              | FP         | 🌙        | 🌙     | —                          |
+| 只读打开 / 运行时切换       | FP             | 🌙  | ER                     | 🌙              | FP         | 🌙        | FP     | PR                         |
+| 插图后保存                  | ER             | ✱   | II                     | ✱               | II         | ✱         | —      | —                          |
+| 评论                        | CM             | ✱   | CM                     | ✱               | CM         | ✱         | —      | PR（注释）                 |
+| 再打开→再保存（幂等）       | RI             | ✱   | RI                     | ✱               | RI         | ✱         | RI     | PR                         |
+| 打开失败可见 + 保存快速拒绝 | —              | —   | OF                     | —               | —          | —         | —      | OF                         |
+| 环境类打开失败自动重试      | —              | —   | OR（故障注入）         | —               | —          | —         | —      | —（pdf 不经 convertToBin） |
+| 裸 `document:save` 默认格式 | SD             | ✱   | FN                     | HX（→xlsx）     | SD         | ✱         | ER     | SD                         |
 
 **✱ = 旧二进制格式，合成不出夹具，只能靠真实语料（🌙）。** 2026-09-12 起语料跑道
 在 `CORPUS_DEEP=1`（夜间已开）下多走两步，都复用已经打开的那篇文档、不再开第二次：
@@ -61,18 +62,20 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 （页内手拼最小 ODF 包）、存回原格式、导出 PDF，另加一条"文件选择器提供引擎能打开的
 每一种格式"。
 
-| 操作           | odt | ods | odp |
-| -------------- | --- | --- | --- |
-| 打开（合成）   | OD  | OD  | OD  |
-| 保存往返（L1） | OD  | OD  | OD  |
-| 导出 PDF       | OD  | OD  | OD  |
-| 其余动作       | ⬜  | ⬜  | ⬜  |
+| 操作                  | odt | ods | odp                                 |
+| --------------------- | --- | --- | ----------------------------------- |
+| 打开（合成）          | OD  | OD  | OD                                  |
+| 保存往返（L1）        | OD  | OD  | OD                                  |
+| 导出 PDF              | OD  | OD  | OD                                  |
+| 只读打开 / 仍可导出   | OD  | OD  | OD                                  |
+| 再打开→再保存（幂等） | OD  | OD  | —（最小 odp 存回后再开 x2t 签名错） |
+| 其余动作              | ⬜  | ⬜  | ⬜                                  |
 
 ## B. 输入特征
 
 | 特征                                                                  | 覆盖                                                                                                                      |
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| 文件名：ASCII / CJK / 空格括号 / 全角标点 / emoji / `&%'!` / 180 字符 | FN（xlsx 全部 7 种；docx CJK+ 空格；pptx CJK+`&%'!`+180 字符）                                                             |
+| 文件名：ASCII / CJK / 空格括号 / 全角标点 / emoji / `&%'!` / 180 字符 | FN（xlsx 全部 7 种；docx CJK+ 空格；pptx CJK+`&%'!`+180 字符）                                                            |
 | 体积：KB 级                                                           | 全部合成用例                                                                                                              |
 | 体积：MB～60MB                                                        | `LD` = large-document.spec（2 MB / 2 万段 docx，正文长度 + 首中末三点 + 90s 预算）+ 🌙（EMP deck 6.5MB 产物）             |
 | 编码：GBK CSV / GBK HTML 表                                           | `CE`（GBK CSV 真编辑器往返）+ HX + 单测                                                                                   |
@@ -90,7 +93,7 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 手机视口（Pixel 5 模拟，桌面 vendor bundle）                                                 | `MS` = mobile-slide.spec（紧凑版式后的画布宽度与初始缩放 pptx/docx/xlsx、横屏挂载、缩放连打无错误、画布上下文丢失后重绘、窗口变窄时动态跟随）；真实安卓设备 ⬜                                                                                                                                                                                                                         |
 | 全新 profile 冷启动                                                                          | 每个 Playwright 用例即冷 profile                                                                                                                                                                                                                                                                                                                                                       |
-| SW 已控制页面（老用户）                                                                      | `SW` = sw-warm.spec（第二次加载由 SW 控制页面与编辑器 frame，打开 + 保存往返）；"SW 缓存旧构建"升级路径：策略改为新 SW 等待、无文档时才 SKIP_WAITING + 重载（`lib/sw-update.ts`，单测 `test/unit/sw-update.test.ts` + sw.js 契约）；双构建端到端 `SU` = sw-silent-update.spec（改写被服务的 `dist/sw.js` 模拟一次部署，`@serial` 独占跑）                                                |
+| SW 已控制页面（老用户）                                                                      | `SW` = sw-warm.spec（第二次加载由 SW 控制页面与编辑器 frame，打开 + 保存往返）；"SW 缓存旧构建"升级路径：策略改为新 SW 等待、无文档时才 SKIP_WAITING + 重载（`lib/sw-update.ts`，单测 `test/unit/sw-update.test.ts` + sw.js 契约）；双构建端到端 `SU` = sw-silent-update.spec（改写被服务的 `dist/sw.js` 模拟一次部署，`@serial` 独占跑）                                              |
 | standalone 主站                                                                              | AS（加载 / manifest）+ `MT` = main-site.spec（hero 打开本地 docx → 打字 → Ctrl+S 下载；hero 新建 xlsx → Ctrl+S）                                                                                                                                                                                                                                                                       |
 | 入口路径：`?file=<url>` / embed `document:open-url` / 落地页 `?open=local`（IndexedDB 交接） | `EP` = entry-paths.spec（另起本地 HTTP 源做跨域真实 fetch）                                                                                                                                                                                                                                                                                                                            |
 | embed（iframe）                                                                              | ER / EA / 其余全部                                                                                                                                                                                                                                                                                                                                                                     |
@@ -102,7 +105,7 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 | Chromium                                                                                     | 全部                                                                                                                                                                                                                                                                                                                                                                                   |
 | WebKit / Firefox                                                                             | `playwright.browsers.config.ts`（夜间 `nightly-corpus.yml` 的 cross-browser job，本仓库唯一的非 Chromium 覆盖；与 ci.yml 同样把 `@serial` 分成两趟）                                                                                                                                                                                                                                   |
 | 视觉比对（L3）                                                                               | `VR` = visual-roundtrip.spec（docx / xlsx / pptx：原始 vs 存回再打开逐像素）+ corpus `CORPUS_VISUAL=1`。**刻意不存基线图**：基线要跟着 vendor 升级和字体目录一起维护，而同一浏览器里的两次渲染不需要维护，也不会因为缺字形而假红                                                                                                                                                       |
-| 性能预算（L4）                                                                               | corpus 报告按格式输出 open/save p50/p95；`SN` = slow-network.spec（`SLOW_NET=1`，CDP 节流 4 Mbps/150 ms、禁 SW：冷启动 + 首存 < 150 s，实测首存约 44 s；夜间 job `budgets`）；xlsx-features 2 万行 60 s 预算                                                                                                                                                                             |
+| 性能预算（L4）                                                                               | corpus 报告按格式输出 open/save p50/p95；`SN` = slow-network.spec（`SLOW_NET=1`，CDP 节流 4 Mbps/150 ms、禁 SW：冷启动 + 首存 < 150 s，实测首存约 44 s；夜间 job `budgets`）；xlsx-features 2 万行 60 s 预算                                                                                                                                                                           |
 
 ## D. 交互入口（策略第 9 节）
 
