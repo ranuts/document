@@ -304,3 +304,48 @@ jobs:
         env:
           SLOW_NET: "1"
         run: pnpm exec playwright test test/e2e/slow-network.spec.ts
+
+  # Strategy §9 interaction sweeps. Documented as "nightly" for a long time,
+  # but only UI crawl + slow-net actually ran. Keep them off the PR gate
+  # (opt-in env) and off the cross-browser shards (too long / Chromium-shaped);
+  # fail the night when they go red so the coverage claim stays honest.
+  sweeps:
+    name: Interaction sweeps (api / shortcut / monkey)
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    needs: gate
+    if: needs.gate.outputs.browsers == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up the toolchain
+        uses: ./.github/actions/setup
+        with:
+          browsers: chromium
+
+      - name: API surface sweep
+        env:
+          API_SWEEP: "1"
+        run: pnpm exec playwright test test/e2e/api-surface.spec.ts --workers=1
+
+      - name: Shortcut surface sweep
+        env:
+          SHORTCUT_SWEEP: "1"
+        run: pnpm exec playwright test test/e2e/shortcut-surface.spec.ts --workers=1
+
+      - name: Seeded monkey
+        env:
+          MONKEY: "1"
+        run: pnpm exec playwright test test/e2e/monkey.spec.ts --workers=1
+
+      - name: Upload sweep reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: interaction-sweep-reports
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14

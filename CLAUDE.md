@@ -66,14 +66,15 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   editor-theme.ts       # 站点主题 → 编辑器 uiTheme 的跟随
   onlyoffice-editor.ts  # 编辑器生命周期门面：挂载/重建/loadEditorApi，并对外统一导出下面这些模块
   onlyoffice/           # 编辑器周边（2026-08-19 从 1975 行的单文件拆出，公开导出面不变）
-    iframe-guards.ts      # 16 条运行时守卫的编排；每条守卫一个文件在 guards/，
+    iframe-guards.ts      # 运行时守卫的编排（guards/ 现 18 个文件）；每条守卫一个文件，
                           # 文件头注释开头的编号就是它的身份（文档和提交信息里说
                           # "守卫 8" 指的就是那个号），guards-numbering.test.ts 钉住不重号
     guards/               # chrome / shared-worker / fetch-fonts / image-pipeline /
                           # serverless-save / long-action / series-settings /
                           # font-loading / comment-selection / canvas-loss /
-                          # wasm-binary-release / unload-prompt / hint-fallback /
-                          # about-source / bad-image-url / x2t-worker
+                          # wasm-binary-release / unload-prompt / unload-pagehide /
+                          # hint-fallback / about-source / bad-image-url /
+                          # x2t-worker / assistant-focus
     open-state.ts         # 就绪、打开失败、frame 首个错误（三处共用的单一状态源）
     open-failure.ts       # 失败分类、-82 guard、环境类失败重开一次（经 setOpenRunner 注入避免环）
     font-system.ts        # 字体系统就绪判定 + awaitFontSystem（#144）
@@ -168,7 +169,6 @@ history.html          # `/history`：本地历史页（noindex，只读 IndexedD
 - `createEditorInstance(config)` — 创建/重建编辑器，内部有操作队列防并发
 - `setReadonlyMode(bool)` / `getReadonlyMode()` — 只读模式（实现在 `onlyoffice/readonly.ts`）
 - `requestSaveDocument(targetExt, options)` — 触发编辑器保存并返回 File，180s 超时（慢链路首存要先下 10 MB wasm；打开失败会立即拒绝；实现在 `onlyoffice/save-stream.ts`）
-- `setConverterCallbacks(...)` — 注入转换器（解耦循环依赖）
 
 **改这一块前先看清归属**：本文件只剩挂载/重建/加载 API 三件事，其余按上面的目录
 各有其主；跨模块状态一律只有一个持有者（就绪与打开失败在 `open-state.ts`，只读在
@@ -272,7 +272,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 | 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读）                                                                                                                                 |
 | 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 14：x2t 跑在 worker 里、流式实例化、闲置后连堆一起回收）、`offline-seam`（vendor 的进程内服务端应答器 + x2t 的唯一接缝 + 跨 realm 安全）、`plugin-availability`（插件框架经 `editorConfig.plugins` 可达）、`font-picker-scroll`（字体列表滑到底不炸，#218）、`open-url-failure`（`?src=` 取不到文件时给的是本地化 toast 而不是 alert）、`bad-image-url-locale`（守卫 13） |
 | 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                                                                                                                                                             |
-| 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                                                                                                                                                   |
+| 交互面（策略 §9） | `api-surface`（`API_SWEEP=1`）、`shortcut-surface`（`SHORTCUT_SWEEP=1`）、`monkey`（`MONKEY=1`）——PR 档 skip，**夜间 `sweeps` job** 跑；`ui-crawl`（`UI_CRAWL=1`）在夜间 `budgets` job                                                                                                                                                                                                                                                                                                         |
 | 字体              | `font-substitution`（被替换的名字与背后的开源 family 指着同一位置，两次渲染逐像素相同）、`pdf-cjk-export`（纯中文文档导出 PDF 后墨迹不得消失——CFF 字体会让它变空白）                                                                                                                                                                                                                                                                                                                     |
 | 本地历史          | `history-page`（分页/中文子串搜索/删除/清空/七天过期/首页披露）、`autosave-recovery`（真实编辑器：编辑→隐藏页面→快照→恢复条→存回；`?saved=` 刷新回同一篇；embed 不写历史）                                                                                                                                                                                                                                                                                                               |
 | 真实语料          | `corpus` _opt-in_ `CORPUS_DIR=…`（见上）                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -686,7 +686,7 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
       节拍是 90s 间隔 + 2s 空闲 + 脏位三重条件，另加 `visibilitychange → hidden` 补一刀
       （`beforeunload` 里发起导出来不及）。**E2E 等快照的窗口必须小于 90s**，否则周期 tick
       会替你把用例变绿，测不到它声称测的分支（踩过）。
-7. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
+7. **循环依赖处理**：靠窄注入打破环——`setUICallbacks`（`document.ts` ↔ `ui.ts`）、`setEventUICallbacks`（`events.ts`）、`setOpenRunner`（`open-failure.ts` ↔ 门面）、`setDiskWriter` / `setSavedToDiskListener`（`save-stream.ts` ↔ history）。converter 已拆到 `@ranuts/converter`，不再需要旧的 `setConverterCallbacks`
 8. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
 9. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
 10. **ONLYOFFICE 署名不许再动（2026-08-23）**：本站是 ONLYOFFICE 的衍生作品，vendor
@@ -1122,7 +1122,7 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   数字、缺陷清单、文件位置、怎么跑、下一步）**与 docs/changelogs/2026-08-16-roadmap-sprint.md**（路线图冲刺一页纸：路由拆分 / 帮助中心 / 多语言 / WebMCP / PR 流程变化）**与 docs/changelogs/2026-08-20-issue-144-memory-and-delivery.md**（issue #144 一页纸：x2t 的 283 MB 内存要求为什么动不了、"别再试这些"负面清单、SW 更新投递为什么曾经完全失效、等报告人截图里的哪串字）**与 docs/changelogs/2026-08-22-font-licensing.md**（字体版权一页纸：那条唯一的规则、"别再试这些"负面清单、上线后的实测数字、唯一未完成的 Purge Cache）。战役进展：第 1 天的"非 ASCII 文件名 P0"已被第 2 天推翻
   （跑道被 SW 击穿，见 docs/explorations/2026-08-15-corpus-harness-sw-route-bug-and-open-failure-guard.md），
   真正修掉的是"打开失败永久转圈"（`installOpenFailureGuard`）与
-  "Save 按钮常灰"（守卫 5）。v9 release 公告冻结至战役通过。
+  "Save 按钮常灰"（守卫 5）。版本以常规 tag / GitHub release 发布，不再单独卡「v9 release 公告」。
 
 ---
 

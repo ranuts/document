@@ -7,6 +7,11 @@ notes. Entries describe what users experience, not internal refactors.
 
 ## [Unreleased]
 
+### Changed
+
+- Nightly CI now runs the API surface, keyboard shortcut, and seeded monkey
+  sweeps (previously documented as nightly but never scheduled).
+
 ### Removed
 
 - External MCP and Google Drive connections in the AI assistant. Local file
