@@ -12,7 +12,7 @@ howTo: 自分のサイトにドキュメントエディタを埋め込む方法
 appDescription: 'iframe と postMessage でエディタを埋め込み、ファイルのアクセスやアップロードは埋め込み先が管理します。'
 ---
 
-基本のローカル編集では：エディタは OnlyOffice の WebAssembly エンジンでブラウザ内だけで動作するため、ドキュメントはクライアント側で描画・編集されます——ドキュメントサーバーを立てる必要はありません。推奨する構成は境界をきれいに保ちます: **親アプリが認証・取得・保存を担当し、iframe は編集だけを担当する。** トークンも Cookie も業務 API も、あなたのアプリの中に留まります。
+基本のローカル編集では：エディタは OnlyOffice の WebAssembly エンジンでブラウザ内だけで動作するため、ドキュメントはクライアント側で描画・編集されます——ドキュメントサーバーを立てる必要はありません。推奨する構成は境界をきれいに保ちます：**親アプリが認証・取得・保存を担当し、iframe は編集だけを担当する。** トークンも Cookie も業務 API も、あなたのアプリの中に留まります。
 
 ## 一つの iframe で追加する
 
@@ -24,7 +24,7 @@ appDescription: 'iframe と postMessage でエディタを埋め込み、ファ�
 ></iframe>
 ```
 
-そのあとは `postMessage` で通信します。各コマンドは返信と対応づけるための `id` を持ち、エディタのイベントはすべて `document:*` メッセージです:
+そのあとは `postMessage` で通信します。各コマンドは返信と対応づけるための `id` を持ち、エディタのイベントはすべて `document:*` メッセージです：
 
 ```js
 // open a file your app already fetched (auth stays with you)
@@ -56,7 +56,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 
 ## 読み取り専用・プレビューモード
 
-ビューア、レビュー工程、ロックされたレコードなど、読み取り専用で開きたいときは open コマンドに `readonly: true` を渡します。`document:set-readonly` でいつでも切り替えられます——再読み込みは不要で、ユーザーが見ていた位置も保たれます。読み取り専用のあいだは編集が無効になり、`document:save` は `document:error` を返します。`document:get-state` は現在の `readonly` フラグを報告します。
+ビューア、レビュー工程、ロックされたレコードなど、読み取り専用で開きたいときは open コマンドに `readonly: true` を渡します。`document:set-readonly` でいつでも切り替えられます——再読み込みは不要で、ユーザーが見ていた位置も保たれます。読み取り専用のあいだは編集が無効ですが、`document:save` は `document:saved` 経由で現在のバイト列を返します（エクスポートは可能、ロックされるのは編集だけ）。`document:get-state` は現在の `readonly` フラグを報告します。
 
 ```js
 // open locked, unlock later
@@ -88,4 +88,4 @@ iframe の URL に `embedOrigin` を付けてメッセージのやり取りを�
 
 ### ドキュメントを読み取り専用で表示したり、途中からロックしたりできますか？
 
-はい。開くときに `readonly: true` を渡すか、いつでも `document:set-readonly` を送ってください——再読み込みなしにその場で切り替わり、ロック中の保存は拒否されます。
+はい。開くときに `readonly: true` を渡すか、いつでも `document:set-readonly` を送ってください——再読み込みなしにその場で切り替わります。ロック中も編集はできませんが、`document:save` によるエクスポートは可能です。

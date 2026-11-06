@@ -48,7 +48,7 @@ test.describe('format parity: docx / pptx / csv (real editor)', () => {
       expect(result.size).toBeGreaterThan(500);
     });
 
-    test(`${doc.label}: readonly open reports readonly and refuses to save`, async ({ page }) => {
+    test(`${doc.label}: readonly open reports readonly and still allows export (#307)`, async ({ page }) => {
       const result = await page.evaluate(
         async ({ name, b64 }) => {
           const bin = atob(b64);
@@ -56,19 +56,21 @@ test.describe('format parity: docx / pptx / csv (real editor)', () => {
           for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
           const opened = await post('document:open-buffer', { fileName: name, buffer: bytes.buffer, readonly: true });
           const state = await post('document:get-state', {});
-          let saveError = '';
-          try {
-            await post('document:save', {});
-          } catch (e) {
-            saveError = String((e as Error).message || e);
-          }
-          return { opened, state, saveError };
+          const saved = await post('document:save', {});
+          const out = new Uint8Array(await saved.file.arrayBuffer());
+          return {
+            opened,
+            state,
+            savedName: saved.file.name as string,
+            magic: Array.from(out.slice(0, 2)),
+          };
         },
         { name: doc.name, b64: doc.b64() },
       );
       expect(result.opened.readonly).toBe(true);
       expect(result.state).toEqual({ readonly: true, hasDocument: true, dirty: false });
-      expect(result.saveError).not.toBe('');
+      expect(result.savedName).toBe(doc.name);
+      expect(result.magic).toEqual([0x50, 0x4b]);
     });
   }
 
@@ -81,27 +83,29 @@ test.describe('format parity: docx / pptx / csv (real editor)', () => {
     return btoa(raw);
   };
 
-  test('csv: readonly open reports readonly and refuses to save', async ({ page }) => {
+  test('csv: readonly open reports readonly and still allows export (#307)', async ({ page }) => {
     const result = await page.evaluate(
-      async ({ name, b64, source }) => {
+      async ({ name, b64 }) => {
         const bin = atob(b64);
         const bytes = new Uint8Array(bin.length);
         for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
         const opened = await post('document:open-buffer', { fileName: name, buffer: bytes.buffer, readonly: true });
         const state = await post('document:get-state', {});
-        let saveError = '';
-        try {
-          await post('document:save', {});
-        } catch (e) {
-          saveError = String((e as Error).message || e);
-        }
-        return { opened, state, saveError, source };
+        const saved = await post('document:save', {});
+        const out = new Uint8Array(await saved.file.arrayBuffer());
+        return {
+          opened,
+          state,
+          savedName: saved.file.name as string,
+          text: new TextDecoder('utf-8').decode(out).trim(),
+        };
       },
-      { name: CSV_NAME, b64: csvB64(), source: CSV_SOURCE },
+      { name: CSV_NAME, b64: csvB64() },
     );
     expect(result.opened.readonly).toBe(true);
     expect(result.state).toEqual({ readonly: true, hasDocument: true, dirty: false });
-    expect(result.saveError).not.toBe('');
+    expect(result.savedName).toBe(CSV_NAME);
+    expect(result.text).toBe(CSV_SOURCE);
   });
 
   test('csv: runtime readonly toggle locks and unlocks, and the unlocked save is still a CSV', async ({ page }) => {
@@ -130,26 +134,25 @@ test.describe('format parity: docx / pptx / csv (real editor)', () => {
         await waitFor(0);
         await post('document:set-readonly', { readonly: true });
         await waitFor(128);
-        let lockedSaveError = '';
-        try {
-          await post('document:save', {});
-        } catch (e) {
-          lockedSaveError = String((e as Error).message || e);
-        }
+        const lockedSaved = await post('document:save', {});
         await post('document:set-readonly', { readonly: false });
         await waitFor(0);
         const saved = await post('document:save', {});
         const out = new Uint8Array(await saved.file.arrayBuffer());
+        const lockedOut = new Uint8Array(await lockedSaved.file.arrayBuffer());
         return {
-          lockedSaveError,
+          lockedName: lockedSaved.file.name as string,
+          lockedText: new TextDecoder('utf-8').decode(lockedOut).trim(),
           name: saved.file.name as string,
           text: new TextDecoder('utf-8').decode(out).trim(),
         };
       },
       { name: CSV_NAME, b64: csvB64() },
     );
-    expect(result.lockedSaveError).not.toBe('');
-    // Still a CSV on the way out, not the workbook it was opened as.
+    // Still a CSV on the way out, not the workbook it was opened as — including
+    // while the editor was locked (#307).
+    expect(result.lockedName).toBe(CSV_NAME);
+    expect(result.lockedText).toBe(CSV_SOURCE);
     expect(result.name).toBe(CSV_NAME);
     expect(result.text).toBe(CSV_SOURCE);
   });
@@ -185,21 +188,23 @@ test.describe('format parity: docx / pptx / csv (real editor)', () => {
           await waitFor(0);
           await post('document:set-readonly', { readonly: true });
           await waitFor(128);
-          let lockedSaveError = '';
-          try {
-            await post('document:save', {});
-          } catch (e) {
-            lockedSaveError = String((e as Error).message || e);
-          }
+          const lockedSaved = await post('document:save', {});
           await post('document:set-readonly', { readonly: false });
           await waitFor(0);
           const saved = await post('document:save', {});
           const out = new Uint8Array(await saved.file.arrayBuffer());
-          return { lockedSaveError, name: saved.file.name as string, magic: Array.from(out.slice(0, 2)) };
+          const lockedOut = new Uint8Array(await lockedSaved.file.arrayBuffer());
+          return {
+            lockedName: lockedSaved.file.name as string,
+            lockedMagic: Array.from(lockedOut.slice(0, 2)),
+            name: saved.file.name as string,
+            magic: Array.from(out.slice(0, 2)),
+          };
         },
         { name: doc.name, b64: doc.b64() },
       );
-      expect(result.lockedSaveError).not.toBe('');
+      expect(result.lockedName).toBe(doc.name);
+      expect(result.lockedMagic).toEqual([0x50, 0x4b]);
       expect(result.name).toBe(doc.name);
       expect(result.magic).toEqual([0x50, 0x4b]);
     });

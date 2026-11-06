@@ -15,6 +15,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Read-only embeds can export again: `document:save` returns the file while
+  editing stays locked, and the File tab's download control inside an iframe
+  starts a real download instead of silently dropping the bytes ([#307](https://github.com/ranuts/document/issues/307)).
 - Read-only documents now look read-only: the toolbar keeps only the File and View tabs, editing buttons such as paste and macros are hidden, and the side panels are locked, while search, zoom and navigation stay available. Switching read-only off restores the full toolbar.
 - Exporting a PDF or another format keeps unsaved changes in the editable original visible until the original is saved.
 - Failed file opens restore usable file controls, including keyboard access.

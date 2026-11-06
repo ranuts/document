@@ -4,7 +4,6 @@ import { X2TConverter, saveFileToDisk } from '@ranuts/converter';
 import { oAscFileType } from '../file-types';
 import { getFileExtension, getNormalizedFile, getSavedFileMimeType } from './file-helpers';
 import { getDocumentLifetimeSignal, getDocumentOpenError, waitForDocumentContentReady } from './open-state';
-import { getReadonlyMode } from './readonly';
 import { isEmbedMode } from '../embed-mode';
 import { markDocumentSaved } from '../unsaved-guard';
 import type { SaveOutcome } from '../save-target';
@@ -220,8 +219,13 @@ function routeSavedFile(file: File, state: ReturnType<typeof standaloneExportSta
     return;
   }
 
+  // No pending document:save: this stream came from the File tab (or an
+  // equivalent UI export). In embed mode, deliver a local download without
+  // clearing the host's dirty flag — the parent still has not received
+  // document:saved. Previously embed mode dropped the bytes entirely, which
+  // left the download control looking broken (#307).
   if (isEmbedMode()) {
-    console.warn('Local save is disabled in iframe embed mode. Use document:save from the parent page.');
+    void saveFileToDisk(file, file.name).catch((error) => notifyOperationFailed(error));
     return;
   }
 
@@ -412,9 +416,9 @@ export function requestSaveDocument(
     return Promise.reject(new Error('No document is open'));
   }
 
-  if (getReadonlyMode()) {
-    return Promise.reject(new Error('Current document is readonly'));
-  }
+  // Read-only blocks editing, not exporting. Embed hosts call document:save
+  // for the bytes, and the File tab's download uses the same stream — both
+  // must work on a locked document (#307). Autosave still skips read-only.
 
   const openError = getDocumentOpenError();
   if (openError) {

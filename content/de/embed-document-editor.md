@@ -56,7 +56,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 
 ## Schreibgeschützt und Vorschau
 
-Öffnen Sie ein Dokument schreibgeschützt (als Betrachter, als Prüfschritt, als gesperrter Datensatz), indem Sie `readonly: true` an den Öffnen-Befehl übergeben, und wechseln Sie jederzeit mit `document:set-readonly` — ohne Neuladen, das Dokument bleibt an der Stelle des Nutzers. Im schreibgeschützten Modus ist Bearbeiten deaktiviert und `document:save` antwortet mit `document:error`; `document:get-state` meldet das aktuelle `readonly`-Flag.
+Öffnen Sie ein Dokument schreibgeschützt (als Betrachter, als Prüfschritt, als gesperrter Datensatz), indem Sie `readonly: true` an den Öffnen-Befehl übergeben, und wechseln Sie jederzeit mit `document:set-readonly` — ohne Neuladen, das Dokument bleibt an der Stelle des Nutzers. Im schreibgeschützten Modus ist Bearbeiten deaktiviert, aber `document:save` liefert die aktuellen Bytes weiterhin über `document:saved` (Export ist erlaubt; gesperrt ist nur das Bearbeiten); `document:get-state` meldet das aktuelle `readonly`-Flag.
 
 ```js
 // gesperrt öffnen, später entsperren
@@ -88,4 +88,4 @@ Ergänzen Sie die iframe-URL um `embedOrigin`, um den Nachrichtenaustausch auf e
 
 ### Kann ich ein Dokument schreibgeschützt zeigen oder später sperren?
 
-Ja. Übergeben Sie beim Öffnen `readonly: true` oder senden Sie jederzeit `document:set-readonly` — es wechselt im laufenden Editor ohne Neuladen, und Speichern wird währenddessen abgelehnt.
+Ja. Übergeben Sie beim Öffnen `readonly: true` oder senden Sie jederzeit `document:set-readonly` — es wechselt im laufenden Editor ohne Neuladen. Bearbeiten bleibt gesperrt, der Export über `document:save` funktioniert weiterhin.

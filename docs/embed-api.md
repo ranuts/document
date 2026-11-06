@@ -145,7 +145,10 @@ Set at open time via the `readonly` field, or toggle at any time:
 sendEditorCommand('document:set-readonly', { readonly: true });
 ```
 
-In read-only mode, editing is disabled and `document:save` returns `document:error`.
+In read-only mode, editing is disabled. Export still works: `document:save`
+returns the current bytes via `document:saved` (read-only blocks edits, not
+downloads). The File tab's download control inside an embed iframe also
+triggers a local download when the host has not armed a `document:save`.
 
 ---
 

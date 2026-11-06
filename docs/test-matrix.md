@@ -50,11 +50,11 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 
 **✱ = 旧二进制格式，合成不出夹具，只能靠真实语料（🌙）。** 2026-09-12 起语料跑道
 在 `CORPUS_DEEP=1`（夜间已开）下多走两步，都复用已经打开的那篇文档、不再开第二次：
-**导出 PDF**（判 `%PDF-` magic）与**运行时只读**（上锁后保存必须被拒、解锁后必须还回来）。
+**导出 PDF**（判 `%PDF-` magic）与**运行时只读**（上锁后仍可导出、解锁后必须还回来；#307）。
 所以 ✱ 里的这两个动作现在是覆盖的，剩下没覆盖的是**插图**与**幂等**——两者都要再开一次
 文档，成本是另一回事，等这两步的实际耗时有数据了再决定。
 
-### A2. ODF（odt / ods / odp）
+### A2. ODF (odt / ods / odp)
 
 引擎读得了、文件选择器也提供，但上面那张表按 OOXML 的格式分列，把它们整族漏在外面
 ——这正是台账自己会过期的样子。它们由 `OD` = odf-formats.spec 覆盖：三种各自打开
@@ -72,7 +72,7 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 
 | 特征                                                                  | 覆盖                                                                                                                      |
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| 文件名：ASCII / CJK / 空格括号 / 全角标点 / emoji / `&%'!` / 180 字符 | FN（xlsx 全部 7 种；docx CJK+空格；pptx CJK+`&%'!`+180 字符）                                                             |
+| 文件名：ASCII / CJK / 空格括号 / 全角标点 / emoji / `&%'!` / 180 字符 | FN（xlsx 全部 7 种；docx CJK+ 空格；pptx CJK+`&%'!`+180 字符）                                                             |
 | 体积：KB 级                                                           | 全部合成用例                                                                                                              |
 | 体积：MB～60MB                                                        | `LD` = large-document.spec（2 MB / 2 万段 docx，正文长度 + 首中末三点 + 90s 预算）+ 🌙（EMP deck 6.5MB 产物）             |
 | 编码：GBK CSV / GBK HTML 表                                           | `CE`（GBK CSV 真编辑器往返）+ HX + 单测                                                                                   |
@@ -90,7 +90,7 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 手机视口（Pixel 5 模拟，桌面 vendor bundle）                                                 | `MS` = mobile-slide.spec（紧凑版式后的画布宽度与初始缩放 pptx/docx/xlsx、横屏挂载、缩放连打无错误、画布上下文丢失后重绘、窗口变窄时动态跟随）；真实安卓设备 ⬜                                                                                                                                                                                                                         |
 | 全新 profile 冷启动                                                                          | 每个 Playwright 用例即冷 profile                                                                                                                                                                                                                                                                                                                                                       |
-| SW 已控制页面（老用户）                                                                      | `SW` = sw-warm.spec（第二次加载由 SW 控制页面与编辑器 frame，打开+保存往返）；"SW 缓存旧构建"升级路径：策略改为新 SW 等待、无文档时才 SKIP_WAITING + 重载（`lib/sw-update.ts`，单测 `test/unit/sw-update.test.ts` + sw.js 契约）；双构建端到端 `SU` = sw-silent-update.spec（改写被服务的 `dist/sw.js` 模拟一次部署，`@serial` 独占跑）                                                |
+| SW 已控制页面（老用户）                                                                      | `SW` = sw-warm.spec（第二次加载由 SW 控制页面与编辑器 frame，打开 + 保存往返）；"SW 缓存旧构建"升级路径：策略改为新 SW 等待、无文档时才 SKIP_WAITING + 重载（`lib/sw-update.ts`，单测 `test/unit/sw-update.test.ts` + sw.js 契约）；双构建端到端 `SU` = sw-silent-update.spec（改写被服务的 `dist/sw.js` 模拟一次部署，`@serial` 独占跑）                                                |
 | standalone 主站                                                                              | AS（加载 / manifest）+ `MT` = main-site.spec（hero 打开本地 docx → 打字 → Ctrl+S 下载；hero 新建 xlsx → Ctrl+S）                                                                                                                                                                                                                                                                       |
 | 入口路径：`?file=<url>` / embed `document:open-url` / 落地页 `?open=local`（IndexedDB 交接） | `EP` = entry-paths.spec（另起本地 HTTP 源做跨域真实 fetch）                                                                                                                                                                                                                                                                                                                            |
 | embed（iframe）                                                                              | ER / EA / 其余全部                                                                                                                                                                                                                                                                                                                                                                     |
@@ -102,7 +102,7 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 | Chromium                                                                                     | 全部                                                                                                                                                                                                                                                                                                                                                                                   |
 | WebKit / Firefox                                                                             | `playwright.browsers.config.ts`（夜间 `nightly-corpus.yml` 的 cross-browser job，本仓库唯一的非 Chromium 覆盖；与 ci.yml 同样把 `@serial` 分成两趟）                                                                                                                                                                                                                                   |
 | 视觉比对（L3）                                                                               | `VR` = visual-roundtrip.spec（docx / xlsx / pptx：原始 vs 存回再打开逐像素）+ corpus `CORPUS_VISUAL=1`。**刻意不存基线图**：基线要跟着 vendor 升级和字体目录一起维护，而同一浏览器里的两次渲染不需要维护，也不会因为缺字形而假红                                                                                                                                                       |
-| 性能预算（L4）                                                                               | corpus 报告按格式输出 open/save p50/p95；`SN` = slow-network.spec（`SLOW_NET=1`，CDP 节流 4 Mbps/150 ms、禁 SW：冷启动+首存 < 150 s，实测首存约 44 s；夜间 job `budgets`）；xlsx-features 2 万行 60 s 预算                                                                                                                                                                             |
+| 性能预算（L4）                                                                               | corpus 报告按格式输出 open/save p50/p95；`SN` = slow-network.spec（`SLOW_NET=1`，CDP 节流 4 Mbps/150 ms、禁 SW：冷启动 + 首存 < 150 s，实测首存约 44 s；夜间 job `budgets`）；xlsx-features 2 万行 60 s 预算                                                                                                                                                                             |
 
 ## D. 交互入口（策略第 9 节）
 

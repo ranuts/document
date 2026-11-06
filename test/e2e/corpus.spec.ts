@@ -107,7 +107,7 @@ type Row = {
   // saved output, both re-opened readonly.
   visual: string;
   // CORPUS_DEEP: PDF export of the pristine document, and whether a runtime
-  // readonly lock actually refuses a save.
+  // readonly lock still allows export while blocking edits (#307).
   exportPdf: string;
   readonly: string;
   ascErrors: unknown[];
@@ -472,25 +472,22 @@ test.describe('real-document corpus matrix', () => {
       }
 
       // ---- runtime readonly (CORPUS_DEEP) ----
-      // Locking has to actually refuse a save, and unlocking has to give the
-      // document back. Both directions matter: a lock that does not hold loses
-      // the guarantee, and a lock that will not lift strands the document.
+      // Locking must keep the document read-only and still allow export (#307),
+      // and unlocking must give editing back. A lock that does not hold loses
+      // the guarantee; a lock that will not lift strands the document; a lock
+      // that blocks export leaves download controls looking broken.
       if (DEEP && !row.fatalDialog && load.loaded) {
         row.readonly = await page.evaluate(async () => {
           try {
             await post('document:set-readonly', { readonly: true });
             const state = await post('document:get-state', {});
             if (!state.readonly) return 'fail: set-readonly reported not readonly';
-            let refused = false;
-            try {
-              await post('document:save', {});
-            } catch {
-              refused = true;
-            }
+            const saved = await post('document:save', {});
+            if (!saved?.file?.size) return 'fail: export while locked returned empty file';
             await post('document:set-readonly', { readonly: false });
             const back = await post('document:get-state', {});
             if (back.readonly) return 'fail: still readonly after unlocking';
-            return refused ? 'ok' : 'fail: save went through while locked';
+            return 'ok';
           } catch (e) {
             return `inconclusive: ${String((e as Error).message || e).slice(0, 80)}`;
           }

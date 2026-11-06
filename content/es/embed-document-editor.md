@@ -56,7 +56,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 
 ## Solo lectura y modo vista previa
 
-Abre un documento en solo lectura (un visor, un paso de revisión, un registro bloqueado) pasando `readonly: true` con el comando de apertura, y cambia cuando quieras con `document:set-readonly`: sin recargar, y el documento se queda donde estaba la persona. En modo de solo lectura la edición se desactiva y `document:save` responde con `document:error`; `document:get-state` informa del valor actual de `readonly`.
+Abre un documento en solo lectura (un visor, un paso de revisión, un registro bloqueado) pasando `readonly: true` con el comando de apertura, y cambia cuando quieras con `document:set-readonly`: sin recargar, y el documento se queda donde estaba la persona. En modo de solo lectura la edición se desactiva, pero `document:save` sigue devolviendo los bytes actuales mediante `document:saved` (se permite exportar; solo se bloquea la edición); `document:get-state` informa del valor actual de `readonly`.
 
 ```js
 // ábrelo bloqueado, desbloquéalo después
@@ -88,4 +88,4 @@ Añade `embedOrigin` a la URL del iframe para limitar los mensajes a un origen c
 
 ### ¿Puedo mostrar un documento en solo lectura, o bloquearlo más tarde?
 
-Sí. Pasa `readonly: true` al abrirlo, o envía `document:set-readonly` cuando quieras: cambia el editor en vivo sin recargar, y los guardados se rechazan mientras está bloqueado.
+Sí. Pasa `readonly: true` al abrirlo, o envía `document:set-readonly` cuando quieras: cambia el editor en vivo sin recargar. La edición permanece bloqueada, pero la exportación con `document:save` sigue funcionando.
