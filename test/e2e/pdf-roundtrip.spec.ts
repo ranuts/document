@@ -159,7 +159,7 @@ test.describe('pdf open / annotate / save (real pdf editor)', () => {
     expect(result.second.freeText).toBe(result.first.freeText);
   });
 
-  test('a PDF opened readonly refuses to save', async ({ page }) => {
+  test('a PDF opened readonly still allows export (#307)', async ({ page }) => {
     const result = await page.evaluate(async (docxB64) => {
       const bin = atob(docxB64);
       const docx = new Uint8Array(bin.length);
@@ -168,15 +168,16 @@ test.describe('pdf open / annotate / save (real pdf editor)', () => {
       const exported = await post('document:save', { targetExt: 'PDF' });
       const pdf = new Uint8Array(await exported.file.arrayBuffer());
       const opened = await post('document:open-buffer', { fileName: 'ro.pdf', buffer: pdf.buffer, readonly: true });
-      let saveError = '';
-      try {
-        await post('document:save', {});
-      } catch (e) {
-        saveError = String((e as Error).message || e);
-      }
-      return { opened, saveError };
+      const saved = await post('document:save', {});
+      const out = new Uint8Array(await saved.file.arrayBuffer());
+      return {
+        opened,
+        savedName: saved.file.name as string,
+        magic: new TextDecoder('ascii').decode(out.slice(0, 5)),
+      };
     }, DOCX_B64);
     expect(result.opened.readonly).toBe(true);
-    expect(result.saveError).not.toBe('');
+    expect(result.savedName).toBe('ro.pdf');
+    expect(result.magic).toBe('%PDF-');
   });
 });

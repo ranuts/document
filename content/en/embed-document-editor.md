@@ -56,7 +56,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 
 ## Read-only and preview mode
 
-Open a document read-only (a viewer, a review step, a locked record) by passing `readonly: true` with the open command, and switch at any time with `document:set-readonly` — no reload, the document stays where the user was. In read-only mode editing is disabled and `document:save` answers with `document:error`; `document:get-state` reports the current `readonly` flag.
+Open a document read-only (a viewer, a review step, a locked record) by passing `readonly: true` with the open command, and switch at any time with `document:set-readonly` — no reload, the document stays where the user was. In read-only mode editing is disabled, but `document:save` still returns the current bytes via `document:saved` (export is allowed; only edits are locked); `document:get-state` reports the current `readonly` flag.
 
 ```js
 // open locked, unlock later
@@ -88,4 +88,4 @@ Add `embedOrigin` to the iframe URL to lock messaging to a specific origin, and 
 
 ### Can I show a document read-only, or lock it after a while?
 
-Yes. Pass `readonly: true` when opening, or send `document:set-readonly` at any time — it switches the live editor without reloading, and saves are refused while locked.
+Yes. Pass `readonly: true` when opening, or send `document:set-readonly` at any time — it switches the live editor without reloading. Editing stays locked, but export via `document:save` still works.

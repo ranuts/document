@@ -127,11 +127,20 @@ describe('onlyoffice-editor', () => {
       await expect(requestSaveDocument()).rejects.toThrow('No document is open');
     });
 
-    it('rejects when the document is readonly', async () => {
+    it('allows export when the document is readonly (#307)', async () => {
+      // Read-only blocks editing, not exporting: embed hosts and File → Download
+      // both need the bytes of a locked document.
+      const { iframe, requestedFileTypes } = installEditorFrame();
       (window as any).editor = makeEditor({ downloadAs: vi.fn() });
       setReadonlyMode(true);
 
-      await expect(requestSaveDocument()).rejects.toThrow('readonly');
+      const promise = requestSaveDocument('xlsx').catch(() => {});
+      await vi.advanceTimersByTimeAsync(150_000);
+
+      expect(requestedFileTypes).toEqual([257]); // oAscFileType.XLSX
+      iframe.remove();
+      vi.runAllTimers();
+      await promise;
     });
 
     it('rejects when editor does not support downloadAs', async () => {

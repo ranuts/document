@@ -56,7 +56,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 
 ## Somente leitura e modo prévia
 
-Abra um documento somente leitura (um visualizador, uma etapa de revisão, um registro travado) passando `readonly: true` no comando de abertura, e alterne quando quiser com `document:set-readonly` — sem recarregar, e o documento continua onde a pessoa estava. No modo somente leitura a edição fica desativada e `document:save` responde com `document:error`; `document:get-state` informa o valor atual de `readonly`.
+Abra um documento somente leitura (um visualizador, uma etapa de revisão, um registro travado) passando `readonly: true` no comando de abertura, e alterne quando quiser com `document:set-readonly` — sem recarregar, e o documento continua onde a pessoa estava. No modo somente leitura a edição fica desativada, mas `document:save` ainda devolve os bytes atuais via `document:saved` (exportar é permitido; só a edição fica bloqueada); `document:get-state` informa o valor atual de `readonly`.
 
 ```js
 // abrir travado, destravar depois
@@ -88,4 +88,4 @@ Acrescente `embedOrigin` à URL do iframe para limitar as mensagens a uma origem
 
 ### Dá para mostrar um documento somente leitura, ou travá-lo depois?
 
-Sim. Passe `readonly: true` ao abrir, ou envie `document:set-readonly` quando quiser — ele alterna o editor ao vivo sem recarregar, e os salvamentos são recusados enquanto está travado.
+Sim. Passe `readonly: true` ao abrir, ou envie `document:set-readonly` quando quiser — ele alterna o editor ao vivo sem recarregar. A edição permanece bloqueada, mas a exportação via `document:save` continua a funcionar.

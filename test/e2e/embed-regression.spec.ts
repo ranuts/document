@@ -107,7 +107,7 @@ test.describe('embed regression (real editor)', () => {
     expect(result.text.trim()).toBe(original);
   });
 
-  test('readonly open reports readonly state and refuses to save (#25, #87)', async ({ page }) => {
+  test('readonly open reports readonly state and still allows export (#25, #87, #307)', async ({ page }) => {
     const result = await page.evaluate(async () => {
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['view only']]), 'Sheet1');
@@ -119,18 +119,17 @@ test.describe('embed regression (real editor)', () => {
         readonly: true,
       });
       const state = await post('document:get-state', {});
-      let saveError = '';
-      try {
-        await post('document:save', {});
-      } catch (error) {
-        saveError = String((error as Error).message || error);
-      }
-      return { opened, state, saveError };
+      // Read-only blocks editing, not exporting (#307).
+      const saved = await post('document:save', {});
+      const parsed = XLSX.read(new Uint8Array(await saved.file.arrayBuffer()), { type: 'array' });
+      const text = XLSX.utils.sheet_to_csv(parsed.Sheets[parsed.SheetNames[0]]).trim();
+      return { opened, state, savedName: saved.file.name as string, text };
     });
 
     expect(result.opened.readonly).toBe(true);
     expect(result.state).toEqual({ readonly: true, hasDocument: true, dirty: false });
-    expect(result.saveError).not.toBe('');
+    expect(result.savedName).toBe('readonly.xlsx');
+    expect(result.text).toBe('view only');
   });
 
   test('runtime readonly toggle locks and unlocks the live editor without a rebuild', async ({ page }) => {
@@ -178,12 +177,8 @@ test.describe('embed regression (real editor)', () => {
 
       await post('document:set-readonly', { readonly: true });
       await waitForRestriction(128);
-      let lockedSaveError = '';
-      try {
-        await post('document:save', {});
-      } catch (error) {
-        lockedSaveError = String((error as Error).message || error);
-      }
+      // Export still works while locked (#307).
+      const lockedSaved = await post('document:save', {});
 
       await post('document:set-readonly', { readonly: false });
       await waitForRestriction(0);
@@ -191,10 +186,16 @@ test.describe('embed regression (real editor)', () => {
       const parsed = XLSX.read(new Uint8Array(await saved.file.arrayBuffer()), { type: 'array' });
       const text = XLSX.utils.sheet_to_csv(parsed.Sheets[parsed.SheetNames[0]]).trim();
 
-      return { lockedSaveError, savedFileName: saved.file.name as string, text };
+      return {
+        lockedSavedName: lockedSaved.file.name as string,
+        lockedSize: lockedSaved.file.size as number,
+        savedFileName: saved.file.name as string,
+        text,
+      };
     });
 
-    expect(result.lockedSaveError).not.toBe('');
+    expect(result.lockedSavedName).toBe('toggle.xlsx');
+    expect(result.lockedSize).toBeGreaterThan(0);
     expect(result.savedFileName).toBe('toggle.xlsx');
     expect(result.text).toBe('toggle,1');
   });

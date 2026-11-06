@@ -56,7 +56,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 
 ## 只读与预览模式
 
-需要"只看不改"（预览器、审阅环节、已归档记录）时，在打开命令里传 `readonly: true`；随时可以用 `document:set-readonly` 切换——不重新加载，文档停在用户原来的位置。只读期间禁止编辑， `document:save` 返回 `document:error`；`document:get-state` 会报告当前的 `readonly` 状态。
+需要"只看不改"（预览器、审阅环节、已归档记录）时，在打开命令里传 `readonly: true`；随时可以用 `document:set-readonly` 切换——不重新加载，文档停在用户原来的位置。只读期间禁止编辑，但 `document:save` 仍会通过 `document:saved` 返回当前字节（允许导出，只锁编辑）；`document:get-state` 会报告当前的 `readonly` 状态。
 
 ```js
 // 锁定打开，稍后解锁
@@ -88,4 +88,4 @@ DOCX、XLSX、PPTX 和 CSV，用 OnlyOffice WebAssembly 引擎在客户端编辑
 
 ### 能只读展示文档，或者过一会儿再锁定吗？
 
-能。打开时传 `readonly: true`，或随时发送 `document:set-readonly`——它直接切换正在运行的编辑器、不重新加载，锁定期间保存会被拒绝。
+能。打开时传 `readonly: true`，或随时发送 `document:set-readonly`——它直接切换正在运行的编辑器、不重新加载。锁定期间禁止编辑，但通过 `document:save` 导出仍然可用。

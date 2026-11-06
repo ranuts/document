@@ -240,9 +240,9 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 - 多 sheet 工作簿 open-buffer 打开 + 保存往返数据完整（#113、#31）
 - xlsx → PDF 导出（canvas 渲染管线，#28 / 错误码 80 的场景）
 - CSV 打开 + 存回 CSV 内容一致（#13、#33）
-- 只读打开：状态正确且保存被拒（#25、#87）
+- 只读打开：状态正确且仍可导出（#25、#87、#307；只读禁编辑不禁下载）
 - 运行时只读切换：restriction 真实生效（iframe 内 `restrictions` 属性）、
-  锁定期保存被拒、解锁后保存往返完整
+  锁定期仍可导出、解锁后保存往返完整（#307）
 - docx open-buffer 打开 + 存回 docx（页内零依赖手拼最小 OOXML zip，#113 直接钉死）
 - PDF 打开：真实挂载 pdfeditor（断言 iframe URL 路由），页内手拼合法最小 PDF
 - URL 插图后保存：产物 zip 含 media 条目且字节完整（守护 serverless image
@@ -1152,7 +1152,7 @@ E2E 回归套件覆盖**（`pnpm run test:e2e` 的 embed-regression.spec：打�
 
 - `getSavedFileMimeType` / `getNormalizedFile` / `toUint8Array` — 纯计算逻辑
 - `setReadonlyMode` / `getReadonlyMode` — 状态读写
-- `requestSaveDocument` — 所有拒绝路径（无编辑器、只读、并发、超时、不支持 downloadAs）
+- `requestSaveDocument` — 拒绝路径（无编辑器、并发、超时、不支持 downloadAs；只读允许导出，见 #307）
 
 ### AI assistant product entry
 

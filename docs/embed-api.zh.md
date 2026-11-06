@@ -130,7 +130,9 @@ sendEditorCommand('document:open-buffer', { fileName: 'demo.xlsx', buffer, reado
 sendEditorCommand('document:set-readonly', { readonly: true });
 ```
 
-只读模式下编辑权限关闭，`document:save` 会返回 `document:error`。
+只读模式下编辑权限关闭，但导出仍然可用：`document:save` 会通过 `document:saved`
+返回当前字节（只读禁止的是编辑，不是下载）。embed iframe 内 File 页签的下载
+控件在父页没有发起 `document:save` 时，也会触发本地下载。
 
 ---
 
