@@ -64,7 +64,7 @@ curl -sI https://edit.chaxus.com/editor | grep -i origin-trial
 Then Chrome ≥ 149 → `/editor?new=docx` → console:
 
 ```js
-Boolean(document.modelContext ?? navigator.modelContext)
+Boolean(document.modelContext ?? navigator.modelContext);
 ```
 
 ## Done when
