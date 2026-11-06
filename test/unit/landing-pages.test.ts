@@ -193,7 +193,7 @@ describe('landing pages', () => {
           ...person,
           name: 'chaxus',
           url: 'https://chaxus.com/',
-          sameAs: ['https://github.com/chaxus'],
+          sameAs: ['https://github.com/chaxus', 'https://ran.chaxus.com'],
         });
         expect([site.author, site.publisher]).toEqual([person, person]);
         const app = graph.find((n) => n['@type'] === 'WebApplication' && n.applicationCategory);
@@ -362,11 +362,11 @@ describe('landing pages', () => {
     // copy edit would cost the answer, not just the wording.
     for (const [rel, ask, days] of [
       ['index.html', /tab|refresh/i, `${retentionDays} days`],
-      ['zh-CN/index.html', /标签页|刷新/, `${retentionDays} 天`],
-      ['ja/index.html', /タブ|再読み込み/, `${retentionDays} 日間`],
+      ['zh-CN/index.html', /标签页 | 刷新/, `${retentionDays} 天`],
+      ['ja/index.html', /タブ | 再読み込み/, `${retentionDays} 日間`],
       ['de/index.html', /Tab|neu lade/i, `${retentionDays} Tage`],
       ['es/index.html', /pestaña|recargo/i, `${retentionDays} días`],
-      ['ko/index.html', /탭|새로고침/, `${retentionDays}일`],
+      ['ko/index.html', /탭 | 새로고침/, `${retentionDays}일`],
       ['pt/index.html', /aba|recarreg/i, `${retentionDays} dias`],
     ] as Array<[string, RegExp, string]>) {
       const html = generated(rel);
