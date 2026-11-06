@@ -20,7 +20,8 @@ export const AUTHOR = {
   id: 'https://chaxus.com/#person',
   name: 'chaxus',
   url: 'https://chaxus.com/',
-  sameAs: ['https://github.com/chaxus'],
+  // Soft Brand Kit cross-links: personal site + ran design system home.
+  sameAs: ['https://github.com/chaxus', 'https://ran.chaxus.com'],
 };
 
 /** chaxus.com has an English root and a Chinese section; other locales get English. */
