@@ -507,7 +507,7 @@ describe('.github/workflows/nightly-corpus.yml', () => {
     // one cheap gate job so a quiet night still leaves a run explaining itself.
     const jobs = parseJobs(src);
     expect(jobs.map(({ name }) => name)).toContain('gate');
-    for (const name of ['browsers-shard', 'budgets']) {
+    for (const name of ['browsers-shard', 'budgets', 'sweeps']) {
       const job = jobs.find((candidate) => candidate.name === name);
       expect(job, name).toBeDefined();
       expect(job!.body, name).toMatch(/^ {4}if: needs\.gate\.outputs\.browsers == 'true'$/m);
@@ -554,6 +554,22 @@ describe('.github/workflows/nightly-corpus.yml', () => {
       const ignoredBy = oxlint.ignorePatterns.filter((pattern) => matchesGlob(own, pattern));
       expect(ignoredBy, own).toEqual([]);
     }
+  });
+
+  it('runs the interaction sweeps that the docs call nightly', () => {
+    // CLAUDE.md / test-matrix used to claim API_SWEEP / SHORTCUT_SWEEP / MONKEY
+    // ran at night while only UI crawl + slow-net were wired. The dedicated
+    // sweeps job is what makes that claim true.
+    const sweeps = jobs.find(({ name }) => name === 'sweeps');
+    expect(sweeps).toBeDefined();
+    expect(sweeps!.body).toMatch(/timeout-minutes: 120/);
+    const env = sweeps!.body;
+    expect(env).toContain('API_SWEEP: "1"');
+    expect(env).toContain('SHORTCUT_SWEEP: "1"');
+    expect(env).toContain('MONKEY: "1"');
+    expect(env).toContain('test/e2e/api-surface.spec.ts');
+    expect(env).toContain('test/e2e/shortcut-surface.spec.ts');
+    expect(env).toContain('test/e2e/monkey.spec.ts');
   });
 
   it('drops the corpus fuzzer output without dropping real bug-report files', () => {

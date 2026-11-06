@@ -59,6 +59,87 @@ test.describe('OpenDocument formats (real editor)', () => {
       expect(result.nativeMagic).toBe('PK');
       expect(result.pdfMagic).toBe('%PDF');
     });
+
+    test(`${doc.label}: readonly open still allows export`, async ({ page }) => {
+      await page.goto('/embed-demo.html');
+      await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
+
+      const result = await page.evaluate(
+        async ([b64, ext]) => {
+          const bin = atob(b64 as string);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          const opened = await post('document:open-buffer', {
+            fileName: `readonly.${ext}`,
+            buffer: bytes.buffer,
+            readonly: true,
+          });
+          const state = await post('document:get-state', {});
+          const saved = await post('document:save', {});
+          return {
+            openedReadonly: Boolean(opened.readonly),
+            state,
+            savedName: saved.file.name as string,
+            savedSize: saved.file.size as number,
+          };
+        },
+        [toBase64(buildOdf(doc)), doc.ext] as const,
+      );
+
+      expect(result.openedReadonly).toBe(true);
+      expect(result.state).toEqual({ readonly: true, hasDocument: true, dirty: false });
+      expect(result.savedName).toBe(`readonly.${doc.ext}`);
+      expect(result.savedSize).toBeGreaterThan(0);
+    });
+
+    // Minimal ODP after one x2t round-trip fails to reopen with a wasm
+    // signature mismatch; odt/ods reopen cleanly. Cover the reopen path where
+    // it works; odp keeps the native+PDF coverage above.
+    if (doc.ext !== 'odp') {
+      test(`${doc.label}: save then reopen then save stays a zip`, async ({ page }) => {
+        await page.goto('/embed-demo.html');
+        await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
+
+        const result = await page.evaluate(
+          async ([b64, ext]) => {
+            const bin = atob(b64 as string);
+            const bytes = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+            await post('document:open-buffer', {
+              fileName: `idempotent.${ext}`,
+              buffer: bytes.buffer,
+              readonly: false,
+            });
+            const first = await post('document:save', {});
+            const firstBytes = new Uint8Array(await first.file.arrayBuffer());
+            await post('document:open-buffer', {
+              fileName: `idempotent.${ext}`,
+              buffer: firstBytes.buffer,
+              readonly: false,
+            });
+            const second = await post('document:save', {});
+            const secondBytes = new Uint8Array(await second.file.arrayBuffer());
+            const magic = (buf: Uint8Array) => String.fromCharCode(...buf.slice(0, 4));
+            return {
+              firstName: first.file.name as string,
+              secondName: second.file.name as string,
+              firstMagic: magic(firstBytes),
+              secondMagic: magic(secondBytes),
+              firstSize: firstBytes.byteLength,
+              secondSize: secondBytes.byteLength,
+            };
+          },
+          [toBase64(buildOdf(doc)), doc.ext] as const,
+        );
+
+        expect(result.firstName).toBe(`idempotent.${doc.ext}`);
+        expect(result.secondName).toBe(`idempotent.${doc.ext}`);
+        expect(result.firstMagic).toBe('PK');
+        expect(result.secondMagic).toBe('PK');
+        expect(result.firstSize).toBeGreaterThan(0);
+        expect(result.secondSize).toBeGreaterThan(0);
+      });
+    }
   }
 });
 

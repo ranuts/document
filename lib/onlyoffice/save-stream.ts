@@ -13,8 +13,8 @@ import { captureSavePoint, commitSavePoint, isSavePointCurrent } from './save-po
  * Notified when bytes actually reach the user's disk.
  *
  * Injected rather than imported: the history layer exports through this
- * module, so importing it back would close a cycle. Same shape as
- * setConverterCallbacks elsewhere in the app.
+ * module, so importing it back would close a cycle. Same shape as the other
+ * narrow injectors (setUICallbacks, setOpenRunner, setDiskWriter).
  */
 type SavedToDiskListener = (file: File, isCurrent: () => boolean) => void | Promise<void>;
 let savedToDiskListener: SavedToDiskListener | null = null;
