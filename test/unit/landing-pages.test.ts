@@ -360,6 +360,7 @@ describe('landing pages', () => {
     // or an assistant ("I closed the tab -- did I lose my work?"), and the one
     // place the seven-day promise has to be machine-readable. Losing it to a
     // copy edit would cost the answer, not just the wording.
+    // prettier-ignore -- spaces around `|` would become part of the pattern
     for (const [rel, ask, days] of [
       ['index.html', /tab|refresh/i, `${retentionDays} days`],
       ['zh-CN/index.html', /标签页 | 刷新/, `${retentionDays} 天`],
