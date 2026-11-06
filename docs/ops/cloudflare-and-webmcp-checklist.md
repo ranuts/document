@@ -47,33 +47,29 @@ Details and numbers: `docs/changelogs/2026-08-22-font-licensing.md`.
 
 ## 3. WebMCP Origin Trial token
 
-**Why:** `lib/web-mcp.ts` is shipped and registers tools when
-`document.modelContext` / `navigator.modelContext` exists. Without an Origin
-Trial token in response headers, Chromium never exposes the API to visitors.
+**Status (2026-11-06):** registered for `https://edit.chaxus.com:443`, feature
+`WebMCP`, expiry **2027-03-30**. Served from `public/_headers` (`/*`) and the
+Docker twin `sws.toml`; `hosting-contract.test.ts` pins origin/feature/expiry.
+Origin Trial tokens are public by design (every browser sees the header).
 
-**Where:**
+**Renew before 2027-03-30** at https://developer.chrome.com/origintrials — paste
+the new token into both `_headers` and `sws.toml`, keep the contract test in sync.
 
-1. Register a token for `https://edit.chaxus.com` in Chrome’s Origin Trials
-   console for the WebMCP / Model Context trial (name may change with the
-   draft).
-2. Add the token to Cloudflare → Rules → Transform Rules / Headers, or to
-   `public/_headers` as:
+**Verify after deploy to edit.chaxus.com:**
 
-   ```http
-   /*
-     Origin-Trial: <token>
-   ```
+```bash
+curl -sI https://edit.chaxus.com/editor | grep -i origin-trial
+```
 
-   Prefer the edge injection if the token must not be committed; if it is
-   safe to commit, `_headers` keeps Pages and Docker in sync (update
-   `sws.toml` / hosting-contract tests the same way as other header changes).
+Then Chrome ≥ 149 → `/editor?new=docx` → console:
 
-**Verify:** Chromium with the trial → `/editor` → `document.modelContext` (or
-`navigator.modelContext`) is defined; the seven tools from `lib/web-mcp.ts`
-appear to the agent.
+```js
+Boolean(document.modelContext ?? navigator.modelContext)
+```
 
 ## Done when
 
 - [ ] Cache Rule live; second cold font fetch is HIT
 - [ ] Font purge done; deleted proprietary slots no longer serve old bytes
-- [ ] WebMCP token live; modelContext present on production
+- [x] WebMCP token in `_headers` / `sws.toml` (live after next production deploy)
+- [ ] Production `curl -sI` shows `Origin-Trial` and console `modelContext` is truthy
