@@ -69,7 +69,13 @@ Boolean(document.modelContext ?? navigator.modelContext)
 
 ## Done when
 
-- [ ] Cache Rule live; second cold font fetch is HIT
-- [ ] Font purge done; deleted proprietary slots no longer serve old bytes
+- [x] Cache Rule live (2026-11-06 via `cf`): zone `chaxus.com` phase
+      `http_request_cache_settings`, rules `edit_fonts_edge_cache` +
+      `edit_x2t_wasm_edge_cache`. Verified `/fonts/103` and `x2t.wasm.br` →
+      `cf-cache-status: HIT` on repeat.
+- [x] Font purge done (2026-11-06 via `cf cache purge`): prefix
+      `edit.chaxus.com/fonts` + wasm URL. Deleted slot `/fonts/017` no longer
+      serves old proprietary bytes.
 - [x] WebMCP token in `_headers` / `sws.toml` (live after next production deploy)
 - [ ] Production `curl -sI` shows `Origin-Trial` and console `modelContext` is truthy
+      (needs #309 / token commit deployed to `edit.chaxus.com`)
