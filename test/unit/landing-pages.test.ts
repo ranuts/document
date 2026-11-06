@@ -360,15 +360,16 @@ describe('landing pages', () => {
     // or an assistant ("I closed the tab -- did I lose my work?"), and the one
     // place the seven-day promise has to be machine-readable. Losing it to a
     // copy edit would cost the answer, not just the wording.
-    // String RegExp sources: prettier inserts spaces around `|` in `/…|…/`
-    // literals for CJK patterns, which then fail to match the FAQ questions.
+    // Join keeps prettier / editors from inserting spaces around `|` inside
+    // CJK patterns (those spaces become part of the match and miss the FAQ).
+    const askPat = (parts: string[]) => new RegExp(parts.join('|'));
     for (const [rel, ask, days] of [
       ['index.html', /tab|refresh/i, `${retentionDays} days`],
-      ['zh-CN/index.html', new RegExp('标签页 | 刷新'), `${retentionDays} 天`],
-      ['ja/index.html', new RegExp('タブ | 再読み込み'), `${retentionDays} 日間`],
+      ['zh-CN/index.html', askPat(['标签页', '刷新']), `${retentionDays} 天`],
+      ['ja/index.html', askPat(['タブ', '再読み込み']), `${retentionDays} 日間`],
       ['de/index.html', /Tab|neu lade/i, `${retentionDays} Tage`],
       ['es/index.html', /pestaña|recargo/i, `${retentionDays} días`],
-      ['ko/index.html', new RegExp('탭 | 새로고침'), `${retentionDays}일`],
+      ['ko/index.html', askPat(['탭', '새로고침']), `${retentionDays}일`],
       ['pt/index.html', /aba|recarreg/i, `${retentionDays} dias`],
     ] as Array<[string, RegExp, string]>) {
       const html = generated(rel);
