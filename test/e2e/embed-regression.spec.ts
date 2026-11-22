@@ -1,5 +1,5 @@
 import { expect, test } from './lib/l0';
-import { toBase64 } from './lib/ooxml';
+import { buildDocx, toBase64 } from './lib/ooxml';
 import { buildPptx, buildXlsx } from './actions/fixtures';
 import { waitForEditorReady, saveAndCapture, SAVE_FORMAT_CODE } from './actions/editor';
 
@@ -714,6 +714,51 @@ test.describe('embed regression (real editor)', () => {
     // alone would still serialize them. Generous bound: everything requested
     // inside 1.5s regardless of family count.
     expect(stats.dispatchSpreadMs).toBeLessThan(1500);
+  });
+
+  test('open-time NeedStyles is clamped from Document_CreateFontMap (font-load 15c)', async ({ page, l0 }) => {
+    // Without the clamp, CheckFontNeeds builds CFont(name) so NeedStyles is
+    // always 15 and every face file of every family is queued. Reverse: disable
+    // installNeedStylesClamp / LoadDocumentFonts rewrite in font-loading.ts and
+    // this asserts __ooFontNeedStylesClamped false or Arial stays at 15.
+    l0.allowConsole(/font prefetch|font-load acceleration|NeedStyles clamp/);
+    const body =
+      '<w:p><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/>' +
+      '<w:b/></w:rPr><w:t>Bold Arial</w:t></w:r></w:p>' +
+      '<w:p><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/>' +
+      '</w:rPr><w:t>Regular Arial</w:t></w:r></w:p>';
+    await page.evaluate(
+      async ({ b64 }) => {
+        const bin = atob(b64);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        await post('document:open-buffer', { fileName: 'need-styles.docx', buffer: arr.buffer, readonly: false });
+      },
+      { b64: toBase64(buildDocx('need styles', body)) },
+    );
+    const ready = await waitForEditorReady(page);
+    expect(ready.kind).toBe('word');
+
+    const stats = await page.evaluate(() => {
+      const win = window.__ooFrames.editor() as any;
+      if (!win) return { clamped: false, hooked: false, arial: null as number | null };
+      const infos: Array<{ Name?: string; NeedStyles?: number }> = win.AscFonts?.g_font_infos || [];
+      const arial = infos.find((info) => info?.Name === 'Arial');
+      return {
+        clamped: !!win.__ooFontNeedStylesClamped,
+        hooked: !!win.__ooFontNeedStylesHooked,
+        arial: typeof arial?.NeedStyles === 'number' ? arial.NeedStyles : null,
+      };
+    });
+    expect(stats.hooked).toBe(true);
+    expect(stats.clamped).toBe(true);
+    // CreateFontMap saw Regular + Bold; clamp also keeps Italic for chrome.
+    // Regular (1) | Italic (2) | Bold (4) = 7; must not stay at all-faces 15.
+    expect(stats.arial).not.toBeNull();
+    expect(stats.arial! & 1).toBe(1);
+    expect(stats.arial! & 2).toBe(2);
+    expect(stats.arial! & 4).toBe(4);
+    expect(stats.arial).toBe(7);
   });
 
   test('opens a PDF through the vendor pdf editor', async ({ page }) => {
