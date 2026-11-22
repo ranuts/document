@@ -132,6 +132,25 @@ test('all seven localized generated headers keep their localized accessible home
   }
 });
 
+test('top bar stays pinned to the viewport while the page scrolls', async ({ page }) => {
+  // Homepage and a long content page: without sticky the bar's y leaves 0 after
+  // scroll. Reverse: remove position:sticky from home.css / landing.css and this
+  // goes red (bar.top jumps with scrollY).
+  await page.setViewportSize({ width: 1280, height: 800 });
+  for (const route of ['/', '/help']) {
+    await page.goto(route);
+    const header = page.locator('header.bar');
+    await expect(header).toBeVisible();
+    await expect(header).toHaveCSS('position', 'sticky');
+    const before = (await header.boundingBox())!;
+    expect(before.y).toBeLessThanOrEqual(1);
+    await page.evaluate(() => window.scrollBy(0, 900));
+    const after = (await header.boundingBox())!;
+    expect(after.y, `${route} bar left the viewport top after scroll`).toBeLessThanOrEqual(1);
+    await expect(header.locator('.brand')).toBeVisible();
+  }
+});
+
 for (const scheme of ['light', 'dark'] as const) {
   test(`history uses the actual modal heading and semantic danger states in ${scheme}`, async ({ page }) => {
     await observeComponents(page);

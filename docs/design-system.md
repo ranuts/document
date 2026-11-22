@@ -73,15 +73,21 @@ Notion 正文 708）。**不存在"一个正确的宽度"，只存在按内容�
 | ----------------- | ------------------------ | -------------------------------- | -------------------------- |
 | h1                | 64/700（hero，刻意更重） | 40/700，`letter-spacing: -1.2px` | 同内容页                   |
 | body              | 16px / 1.65              | 16px / 1.65                      | 16px / 1.65                |
-| 顶栏 `header.bar` | 有                       | 有                               | 有                         |
+| 顶栏 `header.bar` | 有（sticky）             | 有（sticky）                     | 有（sticky）               |
 | 页脚              | 有                       | 有                               | **无**                     |
 
 **"应用页有顶栏、无页脚"是有意的**：`/history` 和 `/embed-demo.html` 是来办事的地方，
 不是浏览站点的地方；页脚的站内导航在那里只会挡路。这与 Gmail / Notion / Linear 一致。
 但顶栏必须有——用户是从首页走过来的，顶栏消失会让人以为跳到了别的站。
 
+**顶栏滚动时固定**（`position: sticky; top: 0`）：首页与内容页都够长，滚过首屏后
+仍要够得到语言切换与 GitHub。背景用 `--ran-color-bg` 实底，不透内容。首页的
+`#landing-hero` **不能**设 `overflow-x`（非 visible 的 overflow 会让 sticky 贴在
+区块上而不是视口上）。内容页右侧目录栏的 `top` 要清过这条约 4.5rem 的固定顶栏。
+
 顶栏和页脚的样式**只有一份**（`landing.css`），页面复用它的类名与结构，
-而不是抄一遍数值。`/history` 因此直接 `<link>` 了 `landing.css`。
+而不是抄一遍数值。`/history` 因此直接 `<link>` 了 `landing.css`。首页自己的那份
+在 `home.css`（不加载 `landing.css`），两份由 `design-contract` 钉住一致。
 
 ## 四、按钮两档
 
