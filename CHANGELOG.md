@@ -9,6 +9,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- Opening a Word or PowerPoint file downloads only the font faces the document
+  actually uses (regular / bold / italic), instead of every face of every
+  family up front. Pasting or applying a new style still fetches what it needs.
 - The site top bar stays fixed while you scroll the homepage and content pages,
   so language, GitHub and brand links remain reachable past the first screen.
 - Nightly CI now runs the API surface, keyboard shortcut, and seeded monkey

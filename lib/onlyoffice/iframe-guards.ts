@@ -54,7 +54,7 @@ export function prepareEditorIframe(): boolean {
       const longActionGuarded = installLongActionLeakGuard(win);
 
       installSeriesSettingsGuard(win);
-      installFontLoadAcceleration(win);
+      const fontLoadAccelerated = installFontLoadAcceleration(win);
       installCommentSelectionGuard(win);
       installCanvasLossGuard(win, doc);
       installSingleUnloadPrompt(win);
@@ -75,7 +75,11 @@ export function prepareEditorIframe(): boolean {
         longActionGuarded &&
         x2tWorkerProxied &&
         wasmBinaryHandled &&
-        assistantFocusGuarded
+        assistantFocusGuarded &&
+        // Font acceleration also attaches the NeedStyles clamp once
+        // DrawingDocument exists; stopping the poll before that leaves open
+        // on the unclamped path (NeedStyles 15 forever).
+        fontLoadAccelerated
       ) {
         fullyApplied = true;
       }

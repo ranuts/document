@@ -54,6 +54,14 @@ const FONT_STYLE_SUFFIX: Record<string, string> = {
   indexI: '_Italic',
 };
 
+/** NeedStyles face bits (same as AscFonts / font-loading guard 15c). */
+const FONT_FACE_NEED_BIT: Record<string, number> = {
+  indexR: 1,
+  indexI: 2,
+  indexB: 4,
+  indexBI: 8,
+};
+
 type FontSource = { fileName: string; url: string; bytes?: Uint8Array };
 type MediaPayload = { bytes: Uint8Array; mime: string };
 
@@ -185,8 +193,13 @@ export function fontSources(win: FrameScope): FontSource[] {
   const base = loader.fontFilesPath || '';
   const sources: FontSource[] = [];
   for (const info of infos) {
-    if (!info || !info.NeedStyles) continue;
+    const needStyles = Number(info?.NeedStyles);
+    if (!info || !needStyles) continue;
     for (const field of Object.keys(FONT_STYLE_SUFFIX)) {
+      const bit = FONT_FACE_NEED_BIT[field] ?? 0;
+      // Guard 15c clamps NeedStyles to used faces on open; without this bit
+      // check, conversion still pulled every indexR/I/B/BI file for the family.
+      if (!(needStyles & bit)) continue;
       const index = info[field];
       if (typeof index !== 'number' || index === -1) continue;
       const file = loader.fontFiles[index];
