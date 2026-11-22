@@ -77,5 +77,6 @@ Boolean(document.modelContext ?? navigator.modelContext);
       `edit.chaxus.com/fonts` + wasm URL. Deleted slot `/fonts/017` no longer
       serves old proprietary bytes.
 - [x] WebMCP token in `_headers` / `sws.toml` (live after next production deploy)
-- [ ] Production `curl -sI` shows `Origin-Trial` and console `modelContext` is truthy
-      (needs #309 / token commit deployed to `edit.chaxus.com`)
+- [x] Production `curl -sI https://edit.chaxus.com/editor` shows `Origin-Trial`
+      (verified 2026-11-22). Console `modelContext` still needs a Chrome ≥ 149
+      hand check on `/editor?new=docx`.

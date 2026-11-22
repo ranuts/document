@@ -9,6 +9,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- The site top bar stays fixed while you scroll the homepage and content pages,
+  so language, GitHub and brand links remain reachable past the first screen.
 - Nightly CI now runs the API surface, keyboard shortcut, and seeded monkey
   sweeps (previously documented as nightly but never scheduled).
 

@@ -66,7 +66,10 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  /* Do not set overflow-x here: any non-visible overflow on this ancestor
+     makes position:sticky on .bar stick to #landing-hero instead of the
+     viewport, so the top bar scrolls away with the page. Horizontal spill is
+     contained on the sections that can overflow (main / foot / docwin). */
 }
 #landing-hero * {
   box-sizing: border-box;
@@ -245,9 +248,17 @@ body {
   --ran-dropdown-arrow-display: none;
 }
 
-/* ---------- top bar ---------- */
+/* ---------- top bar ----------
+   Sticky on scroll so Open / language / GitHub stay reachable past the hero.
+   Opaque site background (not translucent blur): content must not read through
+   the bar, and the rest of the chrome is flat token surfaces. Kept in step with
+   landing.css `header.bar` — design-contract pins both. */
 #landing-hero .bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   border-bottom: 1px solid var(--ran-color-border);
+  background: var(--ran-color-bg);
 }
 #landing-hero .bar .wrap {
   display: flex;

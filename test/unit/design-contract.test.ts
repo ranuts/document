@@ -112,6 +112,23 @@ describe('page width scale', () => {
     expect(declaration(landing, 'body', 'line-height')).toBe('1.65');
     expect(declaration(home, '#landing-hero', 'line-height')).toBe('1.65');
   });
+
+  it('keeps the top bar sticky and opaque in both chrome stylesheets', () => {
+    // Long pages (home, help, convert) scroll past the first viewport; without
+    // sticky the brand / language / GitHub controls disappear. Both bars must
+    // stick the same way -- the homepage does not load landing.css.
+    for (const [name, css, selector] of [
+      ['home.css', home, '#landing-hero .bar'],
+      ['landing.css', landing, 'header.bar'],
+    ] as Array<[string, string, string]>) {
+      expect(declaration(css, selector, 'position'), `${name} sticky`).toBe('sticky');
+      expect(declaration(css, selector, 'top'), `${name} top`).toBe('0');
+      expect(declaration(css, selector, 'background'), `${name} opaque`).toBe('var(--ran-color-bg)');
+    }
+    // overflow-x on #landing-hero would make sticky stick to the section, not
+    // the viewport -- the bar would still scroll away.
+    expect(declaration(home, '#landing-hero', 'overflow-x')).toBeUndefined();
+  });
 });
 
 describe('page chrome', () => {

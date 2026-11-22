@@ -33,14 +33,21 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-/* ---------- top bar (mirrors the homepage bar) ---------- */
+/* ---------- top bar (mirrors the homepage bar) ----------
+   Sticky on scroll so brand / GitHub / language stay reachable on long pages.
+   Opaque site background (not translucent blur). Kept in step with
+   `#landing-hero .bar` in home.css — design-contract pins both. */
 header.bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--ran-space-4);
   padding: var(--ran-space-4) clamp(20px, 5vw, 56px);
   border-bottom: 1px solid var(--ran-color-border);
+  background: var(--ran-color-bg);
 }
 header.bar .brand {
   display: inline-flex;
@@ -299,13 +306,15 @@ header.bar nav a:hover {
   .side {
     display: block;
     position: sticky;
-    /* clears the top bar and leaves the same air the article has */
-    top: var(--ran-space-8);
+    /* Clears the sticky top bar (~4.5rem / 72px measured) then leaves the same
+       air the article has. Before the bar stuck, `top: space-8` was enough;
+       under a sticky bar that value parks the rail behind the chrome. */
+    top: calc(4.5rem + var(--ran-space-4));
     align-self: start;
     padding-top: var(--ran-space-6);
     /* /help lists nine sections; a rail taller than the viewport would clip
-       its last links with no way to reach them. */
-    max-height: calc(100vh - var(--ran-space-16));
+       its last links with no way to reach them. Subtract the sticky bar too. */
+    max-height: calc(100vh - 4.5rem - var(--ran-space-8));
     overflow-y: auto;
     scrollbar-width: thin;
   }
