@@ -7,6 +7,12 @@ notes. Entries describe what users experience, not internal refactors.
 
 ## [Unreleased]
 
+### Added
+
+- AI assistant settings: when connecting your own AI service, "Fetch models"
+  lists the models that service offers in a searchable dropdown, so you no
+  longer have to type the exact model name. Typing a name still works.
+
 ### Changed
 
 - Opening a Word or PowerPoint file downloads only the font faces the document

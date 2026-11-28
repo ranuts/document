@@ -222,6 +222,11 @@ export const de: Partial<I18nMessages> = {
   agentEndpointConfigured: 'Konfiguriert (Erreichbarkeit nicht geprüft)',
   agentEndpointFailed: 'Dieses Schreibziel ist nicht nutzbar',
   agentEndpointModelRequired: 'Bitte zuerst einen Modellnamen eingeben',
+  agentEndpointFetchModels: 'Modelle abrufen',
+  agentEndpointModelsLoading: 'Modelle werden geladen …',
+  agentEndpointModelsEmpty: 'Der Dienst hat keine Modelle gemeldet. Bitte einen Modellnamen eingeben.',
+  agentEndpointModelsFailed:
+    'Die Modellliste konnte nicht geladen werden. Adresse und Schlüssel prüfen oder einen Modellnamen eingeben.',
   agentEndpointUrlRequired: 'Bitte zuerst die Endpunktadresse eingeben',
   agentWriteDestinationTitle: 'Schreiben geht an',
   agentWriteDestinationDevice: 'dieses Gerät (nichts wird hochgeladen)',

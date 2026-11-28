@@ -15,7 +15,7 @@ import { fetchProviderJson, type ProviderHttpOptions } from './provider-http';
 import type { LLMContent, LLMMessage, LLMProvider, LLMResponse, LLMToolDef } from './types';
 
 const DEFAULT_MODEL = 'gemini-2.0-flash';
-const DEFAULT_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
+export const GEMINI_DEFAULT_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
 
 interface GeminiPart {
   thought?: boolean;
@@ -176,7 +176,7 @@ export class GeminiProvider implements LLMProvider {
     this.apiKey = options.apiKey ?? getApiKey('gemini');
     this.model = options.geminiModel ?? DEFAULT_MODEL;
     this.systemPrompt = options.systemPrompt ?? DEFAULT_SYSTEM_PROMPT;
-    this.baseURL = options.geminiBaseURL ?? DEFAULT_BASE_URL;
+    this.baseURL = options.geminiBaseURL ?? GEMINI_DEFAULT_BASE_URL;
     this.requestOptions = {
       fetchImpl: options.fetchImpl,
       timeoutMs: options.timeoutMs,

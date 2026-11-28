@@ -7,7 +7,11 @@ import { t, type I18nMessages } from '@ranuts/shared/i18n';
 import type { ProviderId } from '@ranuts/agent-core/llm/factory';
 import { DEFAULT_WEBLLM_MODEL, WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
 import { clearEndpointKey, getEndpointKey, setEndpointKey } from '@ranuts/agent-core/llm/keys';
-import { DEFAULT_LOOPBACK_ENDPOINT, type WritingEndpointKind } from '@ranuts/agent-core/llm/endpoint';
+import {
+  DEFAULT_LOOPBACK_ENDPOINT,
+  listEndpointModels,
+  type WritingEndpointKind,
+} from '@ranuts/agent-core/llm/endpoint';
 import { resolveModelArtifactUrl } from '@ranuts/agent-core/llm/model-source';
 import { readTaskModelPreferences } from './task-model-preferences';
 import {
@@ -220,6 +224,20 @@ export function createModelConfigurationForm(options: {
   endpointModel.value = endpointSettings.model;
   endpointModel.placeholder = 'qwen3:8b';
   endpointModel.setAttribute('aria-label', t('agentEndpointModel'));
+  // Filled from the service's own model list; picking one writes the text field,
+  // which stays the single source of the configured model.
+  const endpointModelList = View('r-select')
+    .class('agent-panel-endpoint-model-list')
+    .attr('showsearch', '')
+    .build() as ValueEl;
+  endpointModelList.setAttribute('aria-label', t('agentEndpointModel'));
+  endpointModelList.hidden = true;
+  const endpointModelFetch = ranButton(t('agentEndpointFetchModels'), 'agent-panel-endpoint-model-fetch');
+  focusableAction(endpointModelFetch);
+  const endpointModelField = Div()
+    .class('agent-panel-endpoint-model-field')
+    .children(endpointModel, endpointModelList, endpointModelFetch)
+    .build();
   const endpointKey = ranInput('agent-panel-endpoint-key', 'password');
   endpointKey.placeholder = t('agentEndpointKey');
   endpointKey.setAttribute('aria-label', t('agentEndpointKey'));
@@ -229,7 +247,7 @@ export function createModelConfigurationForm(options: {
     .attr('role', 'status')
     .id('agent-endpoint-status')
     .build();
-  for (const control of [endpointKind, endpointBaseUrl, endpointModel, endpointKey])
+  for (const control of [endpointKind, endpointBaseUrl, endpointModel, endpointModelList, endpointKey])
     control.setAttribute('aria-describedby', 'agent-endpoint-status');
   const writeDestination = Span().class('agent-panel-write-destination').attr('role', 'status').build();
   const writePreference = ranSelect(
@@ -254,7 +272,7 @@ export function createModelConfigurationForm(options: {
       Span().class('agent-panel-endpoint-title').text(t('agentWriteDestinationTitle')).build(),
       endpointKind,
       endpointBaseUrl,
-      endpointModel,
+      endpointModelField,
       endpointKey,
       endpointConnect,
       endpointStatus,
@@ -302,6 +320,71 @@ export function createModelConfigurationForm(options: {
     endpointKey.value = slot ? (getEndpointKey(slot) ?? '') : '';
   };
 
+  let modelListRequest: AbortController | null = null;
+  const resetModelList = (): void => {
+    modelListRequest?.abort();
+    modelListRequest = null;
+    endpointModelFetch.removeAttribute('disabled');
+    endpointModelList.hidden = true;
+    endpointModelList.replaceChildren();
+    endpointModel.hidden = false;
+  };
+  const fetchModelList = async (): Promise<void> => {
+    const kind = endpointKindValue();
+    if (kind === 'openai-compatible' && !endpointBaseUrl.value.trim()) {
+      endpointStatus.textContent = t('agentEndpointUrlRequired');
+      return;
+    }
+    const slot = isCloudEndpointKind(kind) ? endpointKeySlot(kind) : '';
+    const apiKey = endpointKey.value.trim() || (slot ? getEndpointKey(slot) : undefined) || undefined;
+    if (isCloudEndpointKind(kind) && kind !== 'openai-compatible' && !apiKey) {
+      endpointStatus.textContent = t('agentEndpointKeyRequired');
+      return;
+    }
+    resetModelList();
+    const request = new AbortController();
+    modelListRequest = request;
+    endpointModelFetch.setAttribute('disabled', '');
+    const previousStatus = endpointStatus.textContent ?? '';
+    endpointStatus.textContent = t('agentEndpointModelsLoading');
+    try {
+      const models = await listEndpointModels({ kind, baseUrl: endpointBaseUrl.value }, apiKey, {
+        signal: request.signal,
+      });
+      if (request.signal.aborted) return;
+      if (!models.length) {
+        endpointStatus.textContent = t('agentEndpointModelsEmpty');
+        return;
+      }
+      const current = endpointModel.value.trim();
+      endpointModelList.replaceChildren(
+        ...models.map((model) => View('r-option').attr('value', model).text(model).build()),
+      );
+      endpointModelList.setAttribute('value', models.includes(current) ? current : '');
+      endpointModelList.hidden = false;
+      endpointModel.hidden = true;
+      // A connected endpoint keeps saying so until a different model is picked.
+      endpointStatus.textContent = previousStatus;
+    } catch {
+      if (request.signal.aborted) return;
+      endpointStatus.textContent = t('agentEndpointModelsFailed');
+    } finally {
+      if (modelListRequest === request) {
+        modelListRequest = null;
+        endpointModelFetch.removeAttribute('disabled');
+      }
+    }
+  };
+  endpointModelFetch.addEventListener('click', () => void fetchModelList());
+  endpointModelList.addEventListener('change', () => {
+    if (!endpointModelList.value || endpointModelList.value === endpointModel.value.trim()) return;
+    endpointModel.value = endpointModelList.value;
+    // The host stores and reconnects on the text field's change, as if typed.
+    endpointModel.dispatchEvent(new Event('change'));
+  });
+  // A different service has a different list.
+  for (const control of [endpointKind, endpointBaseUrl]) control.addEventListener('change', resetModelList);
+
   const syncLabels = (): void => {
     providerSelect.setAttribute('aria-label', t('agentProviderLabel'));
     modelSelect.setAttribute('aria-label', t('agentModelLabel'));
@@ -310,6 +393,8 @@ export function createModelConfigurationForm(options: {
       option.textContent = t(PROVIDER_LABEL_KEY[(option.getAttribute('value') as ProviderId) ?? 'anthropic']);
     providerSelect.setAttribute('value', selected);
     syncFileChoice();
+    endpointModelFetch.textContent = t('agentEndpointFetchModels');
+    endpointModelList.setAttribute('aria-label', t('agentEndpointModel'));
     loadStop.textContent = t('agentStop');
     ggufStop.textContent = t('agentStop');
     for (const option of modelSelect.querySelectorAll('r-option')) {
@@ -341,6 +426,7 @@ export function createModelConfigurationForm(options: {
     endpointKind,
     endpointBaseUrl,
     endpointModel,
+    endpointModelField,
     endpointKey,
     endpointConnect,
     endpointStatus,

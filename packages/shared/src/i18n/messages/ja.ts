@@ -213,6 +213,11 @@ export const ja: Partial<I18nMessages> = {
   agentEndpointConfigured: '設定済み（到達性は未検証）',
   agentEndpointFailed: 'この書き込み先を使用できません',
   agentEndpointModelRequired: '先にモデル名を入力してください',
+  agentEndpointFetchModels: 'モデルを取得',
+  agentEndpointModelsLoading: 'モデル一覧を取得中…',
+  agentEndpointModelsEmpty: 'サービスにモデルがありません。モデル名を入力してください。',
+  agentEndpointModelsFailed:
+    'モデル一覧を取得できませんでした。アドレスとキーを確認するか、モデル名を入力してください。',
   agentEndpointUrlRequired: '先にエンドポイントのアドレスを入力してください',
   agentWriteDestinationTitle: '書き込み先',
   agentWriteDestinationDevice: 'この端末（何もアップロードしません）',

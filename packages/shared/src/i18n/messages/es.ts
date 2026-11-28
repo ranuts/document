@@ -216,6 +216,11 @@ export const es: Partial<I18nMessages> = {
   agentEndpointConfigured: 'Configurado (sin verificar la conexión)',
   agentEndpointFailed: 'No se puede usar este destino de escritura',
   agentEndpointModelRequired: 'Introduce primero un nombre de modelo',
+  agentEndpointFetchModels: 'Obtener modelos',
+  agentEndpointModelsLoading: 'Cargando modelos…',
+  agentEndpointModelsEmpty: 'El servicio no devolvió ningún modelo. Escribe un nombre de modelo.',
+  agentEndpointModelsFailed:
+    'No se pudo cargar la lista de modelos. Revisa la dirección y la clave, o escribe un nombre de modelo.',
   agentEndpointUrlRequired: 'Introduce primero la dirección del endpoint',
   agentWriteDestinationTitle: 'La escritura va a',
   agentWriteDestinationDevice: 'este dispositivo (no se sube nada)',
