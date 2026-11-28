@@ -1301,6 +1301,25 @@ r-dropdown[role='listbox'] {
 .agent-panel-endpoint-connect {
   align-self: flex-start;
 }
+.agent-panel-endpoint-model-field {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+}
+.agent-panel-endpoint-model-field > :not(r-button) {
+  flex: 1 1 auto;
+}
+.agent-panel-endpoint-model-field > [hidden] {
+  display: none;
+}
+.agent-panel-settings .agent-panel-endpoint-model-fetch {
+  flex: none;
+}
+.agent-panel-settings .agent-panel-endpoint-model-fetch::part(content) {
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  white-space: nowrap;
+}
 .agent-panel-endpoint-status:empty {
   display: none;
 }

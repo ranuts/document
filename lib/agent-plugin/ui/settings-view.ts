@@ -10,7 +10,7 @@ interface SettingsControls {
   endpointRow: HTMLElement;
   endpointKind: HTMLElement;
   endpointBaseUrl: HTMLElement;
-  endpointModel: HTMLElement;
+  endpointModelField: HTMLElement;
   endpointKey: HTMLElement;
   endpointConnect: HTMLElement;
   endpointStatus: HTMLElement;
@@ -35,7 +35,7 @@ export function createPanelSettingsView(controls: SettingsControls) {
     endpointRow,
     endpointKind,
     endpointBaseUrl,
-    endpointModel,
+    endpointModelField,
     endpointKey,
     endpointConnect,
     endpointStatus,
@@ -76,7 +76,7 @@ export function createPanelSettingsView(controls: SettingsControls) {
   endpointRow.replaceChildren(
     field(endpointKind, 'agentEndpointKind'),
     field(endpointBaseUrl, 'agentEndpointUrl'),
-    field(endpointModel, 'agentEndpointModel'),
+    field(endpointModelField, 'agentEndpointModel'),
     field(endpointKey, 'agentEndpointKey'),
     endpointConnect,
     endpointStatus,

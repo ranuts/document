@@ -16,7 +16,7 @@ function setup(selectedSource: string) {
     endpointRow: control(),
     endpointKind: control(),
     endpointBaseUrl: control(),
-    endpointModel: control(),
+    endpointModelField: control(),
     endpointKey: control(),
     endpointConnect: control(),
     endpointStatus: control(),

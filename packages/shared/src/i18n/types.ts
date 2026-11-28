@@ -205,6 +205,10 @@ export interface I18nMessages {
   agentEndpointConfigured: string;
   agentEndpointFailed: string;
   agentEndpointModelRequired: string;
+  agentEndpointFetchModels: string;
+  agentEndpointModelsLoading: string;
+  agentEndpointModelsEmpty: string;
+  agentEndpointModelsFailed: string;
   agentEndpointUrlRequired: string;
   agentWriteDestinationTitle: string;
   agentWriteDestinationDevice: string;
